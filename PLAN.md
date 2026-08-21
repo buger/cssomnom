@@ -3037,3 +3037,17 @@ Grizz rejected `60f3ecb` (reify-first + `tryParsePosition` as the transform-orig
 - [x] Preflight typecheck: dummy `dimension`/`percentage` tokens in `tests/mcdc-hotspot-url-position.test.ts` now include `numberType`/`sign`.
 - [x] `pnpm run preflight` green (Node 24). Did not `proof approve`.
 
+---
+
+## Phase: parser/tokenizer/CSSOM/MediaParser/matcher MC/DC branch tests (Champ)
+
+Increase decision coverage on `src/parser.ts`, `src/tokenizer.ts`, `src/CSSOM.ts`, `src/MediaParser.ts`, `src/matcher.ts` without lowering 100% floors and without bare `//mcdc:ignore`.
+
+- [x] `tests/mcdc-branch-tokenizer.test.ts` — preprocess (CR/CRLF/FF/NUL/lone surrogates), astral peek/reconsume, empty/EOF, unicode-range.
+- [x] `tests/mcdc-branch-parser.test.ts` — dropped @charset/@mediaall, vendor keyframes, @import url()/layer/supports, @namespace, @property, nested grouping, var()/custom props, unicode-range, page/font-feature-values/counter-style/scope/container.
+- [x] `tests/mcdc-branch-cssom.test.ts` — MediaList/StyleSheetList, origin-clean SecurityError, insertRule hierarchy, replaceSync @import strip, keyframes/page/import/namespace/counter-style/font-feature-values maps.
+- [x] `tests/mcdc-branch-media.test.ts` — custom media Map/object/boolean/string, color-gamut/video-color-gamut, inverted range ops, aspect-ratio n/1, calc() resolution units, resizable, boolean min- prefix unknown.
+- [x] `tests/mcdc-branch-matcher.test.ts` — :has combinators, namespaces, empty attr operators, :dir/:lang/:heading/:disabled fieldset legend, :focus-within, :has-slotted, mock matches().
+- [x] Product fix: `isElementDisabled` no longer treats a disabled ancestor fieldset as disabling descendants of its first `legend` (html#selector-disabled). Regression in matcher branch tests.
+- [x] No floors lowered. No `//mcdc:ignore`. Exclude `src/data/gen`.
+

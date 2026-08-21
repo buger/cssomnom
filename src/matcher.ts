@@ -828,18 +828,24 @@ function getElementLanguage(element: DOMElement): string {
 }
 
 function isElementDisabled(element: DOMElement): boolean {
+  // html#selector-disabled / html#concept-fe-disabled:
+  // a control is disabled if it has the disabled content attribute, or if it is a
+  // descendant of a disabled fieldset except for descendants of that fieldset's
+  // first legend child. Do not treat the ancestor fieldset's own disabled
+  // attribute as inheriting when walking past the first legend.
   if (element.hasAttribute?.('disabled')) return true;
-  if (element.parentElement) {
-    const tag = toAsciiLowerCase(element.parentElement.localName || element.parentElement.tagName || '');
-    if (tag === 'fieldset' && element.parentElement.hasAttribute?.('disabled')) {
-      const firstLegend = (element.parentElement.children ? Array.from(element.parentElement.children) : []).find(
+  let ancestor = element.parentElement;
+  while (ancestor) {
+    const tag = toAsciiLowerCase(ancestor.localName || ancestor.tagName || '');
+    if (tag === 'fieldset' && ancestor.hasAttribute?.('disabled')) {
+      const firstLegend = (ancestor.children ? Array.from(ancestor.children) : []).find(
         c => toAsciiLowerCase(c.localName || c.tagName || '') === 'legend'
       );
       if (!firstLegend || !firstLegend.contains?.(element)) {
         return true;
       }
     }
-    return isElementDisabled(element.parentElement);
+    ancestor = ancestor.parentElement;
   }
   return false;
 }
