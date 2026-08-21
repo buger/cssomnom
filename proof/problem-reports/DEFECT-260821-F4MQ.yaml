@@ -1,23 +1,24 @@
 schema_version: 1
 id: DEFECT-260821-F4MQ
-title: CSS.registerProperty after @property skipped InvalidModificationError
+title: Retracted — CSS.registerProperty after @property IME was a false hole
 introduced_in: inception
 source:
     type: audit_finding
 classification:
     surface: runtime_code
-    severity: medium
+    severity: low
     defect_class: duplicate_register_skips_ime
 description: |
-    css-properties-values-api-1 registerProperty must throw InvalidModificationError when the
-    name is already registered, including names introduced by @property. PropertyRegistry.register
-    only threw when existing.origin === 'js'. Product fix: JS origin always throws IME if the
-    name exists; CSS origin is ignored when the name is already registered (JS wins; earlier CSS wins).
+    Retracted. css-properties-values-api-1 §4.1 throws InvalidModificationError only when the
+    name is already in [[registeredPropertySet]] (JS). @property is a separate source; a later
+    CSS.registerProperty succeeds and JS wins (§3). This report closed a false hole introduced
+    by treating CSS-then-JS as a duplicate JS register. Product origin gating restored.
+    Live tracker is withdrawn KI-4; residual L-KI4 parks the overlay-wrong angle.
 root_cause:
     missing_requirement: false
-    missing_test_partition: true
+    missing_test_partition: false
     missing_mcdc_variable: false
-    notes: V5GA/EGCP named IME on duplicate JS register; the CSS-then-JS partition was unwitnessed.
+    notes: V5GA/EGCP IME is JS-then-JS. CSS-then-JS is not duplicate_js_register.
 impact_analysis:
     affected_requirements:
         - SW-REQ-260821-V5GA
@@ -26,10 +27,16 @@ impact_analysis:
         - src/PropertyRegistry.ts
         - src/CSSOM.ts
 disposition:
-    status: open
+    status: not_in_scope
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    next_action: None. Retracted; residual L-KI4 is the non-issue parking lot.
     review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T20:30:00Z"
+    rationale: |
+        Not a product defect. Houdini §4.1 IME is JS-slot only. §3 requires CSS.registerProperty
+        to win over @property, which is impossible if the first JS register after @property throws.
+        This DEFECT hardened the wrong contract and is retracted.
 affects:
     - SW-REQ-260821-V5GA
     - SYS-REQ-260821-EGCP
@@ -41,14 +48,14 @@ hardening:
         - requirement: SW-REQ-260821-V5GA
           obligation_class: error_handling
     regression_tests:
-        - "tests/register-property.test.ts:CSS.registerProperty: throws InvalidModificationError after @property of the same name"
-        - "tests/register-property.test.ts:later @property of an already-registered name is ignored"
-        - "proof/reproducers/KI-4-register-after-at-property.ts:KI-4: JS register after @property throws InvalidModificationError"
+        - "tests/register-property.test.ts:CSS.registerProperty after @property succeeds and JS wins"
+        - "tests/register-property.test.ts:later @property of a JS-registered name is ignored"
+        - "proof/reproducers/KI-4-register-after-at-property.ts:KI-4 residual: CSS.registerProperty after @property succeeds and JS wins"
     mcdc_witnesses:
         - requirement: SW-REQ-260821-V5GA
-          witness: "duplicate_js_register=T, invalid_modification_error=T => TRUE"
+          witness: "duplicate_js_register=T, invalid_modification_error=T => TRUE (JS-then-JS only)"
         - requirement: SYS-REQ-260821-EGCP
-          witness: "bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE"
+          witness: "bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE (JS-then-JS only)"
 history:
     - at: "2026-08-21T20:13:40Z"
       by: agent:grok-4.6
@@ -57,3 +64,7 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: Filled class-closure hardening after the product fix for KI-4.
+    - at: "2026-08-21T20:30:00Z"
+      by: agent:grok-4.6
+      action: retracted
+      detail: False hole. CSS-then-JS must succeed. Disposition not_in_scope. Residual L-KI4. KI-4 withdrawn.

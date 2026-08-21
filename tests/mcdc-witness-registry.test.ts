@@ -33,7 +33,28 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
     });
     // Verifies: SYS-REQ-260821-EGCP
     // MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE
-    test('duplicate JS register after CSS @property throws InvalidModificationError', () => {
+    test('duplicate JS register throws InvalidModificationError', () => {
+      PropertyRegistry.clear();
+      try {
+        CSS.registerProperty({
+          name: '--mcdc-egcp-dup-js',
+          syntax: '*',
+          inherits: false,
+        });
+        assert.throws(() => {
+          CSS.registerProperty({
+            name: '--mcdc-egcp-dup-js',
+            syntax: '*',
+            inherits: false,
+          });
+        }, (err: unknown) => err instanceof DOMException && err.name === 'InvalidModificationError');
+      } finally {
+        PropertyRegistry.clear();
+      }
+    });
+    // Verifies: SYS-REQ-260821-EGCP
+    // MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=F, register_throws=F => TRUE
+    test('JS register after CSS @property succeeds and does not throw', () => {
       PropertyRegistry.clear();
       try {
         const sheet = parse('@property --mcdc-egcp-css { syntax: "*"; inherits: false; }');
@@ -41,20 +62,20 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
         assert.ok(sheet.cssRules[0] instanceof CSSPropertyRule);
         assert.ok(PropertyRegistry.get('--mcdc-egcp-css'));
 
-        assert.throws(() => {
-          CSS.registerProperty({
-            name: '--mcdc-egcp-css',
-            syntax: '*',
-            inherits: false,
-          });
-        }, (err: unknown) => err instanceof DOMException && err.name === 'InvalidModificationError');
+        CSS.registerProperty({
+          name: '--mcdc-egcp-css',
+          syntax: '<color>',
+          inherits: true,
+          initialValue: 'red',
+        });
         const after = PropertyRegistry.get('--mcdc-egcp-css');
-        assert.ok(after);
+        assert.equal(after?.syntax, '<color>');
+        assert.equal(after?.inherits, true);
       } finally {
         PropertyRegistry.clear();
       }
     });
-    //mcdc:ignore:defensive SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=F => FALSE — JS registerProperty after @property throws InvalidModificationError [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=F => FALSE — a second CSS.registerProperty for a name already in [[registeredPropertySet]] throws InvalidModificationError (JS-then-JS); @property is not that slot [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260821-EGCP: bad_dictionary=T, duplicate_js_register=F, register_throws=F => FALSE — CSS.registerProperty throws SyntaxError or TypeError on a bad dictionary [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260821-EGCP: bad_dictionary=T, duplicate_js_register=T, register_throws=F => FALSE — CSS.registerProperty.validate throws on a bad dictionary before the register returns [reviewed: agent:grok-4.6]
 
@@ -193,23 +214,31 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
       PropertyRegistry.clear();
     });
     // Verifies: SW-REQ-260821-V5GA
-    // MCDC SW-REQ-260821-V5GA: duplicate_js_register=T, invalid_modification_error=T => TRUE
-    test('duplicate JS register after CSS @property throws InvalidModificationError', () => {
+    // MCDC SW-REQ-260821-V5GA: duplicate_js_register=F, invalid_modification_error=F => TRUE
+    test('JS register after CSS @property does not throw InvalidModificationError', () => {
       PropertyRegistry.clear();
       try {
         parse('@property --mcdc-v5ga-css { syntax: "*"; inherits: false; }');
-        assert.throws(() => {
+        let ime = 0;
+        try {
           CSS.registerProperty({
             name: '--mcdc-v5ga-css',
-            syntax: '*',
-            inherits: false,
+            syntax: '<color>',
+            inherits: true,
+            initialValue: 'red',
           });
-        }, (err: unknown) => err instanceof DOMException && err.name === 'InvalidModificationError');
+        } catch (err) {
+          if (err instanceof DOMException && err.name === 'InvalidModificationError') ime++;
+          else throw err;
+        }
+        assert.equal(ime, 0);
+        const after = PropertyRegistry.get('--mcdc-v5ga-css');
+        assert.equal(after?.syntax, '<color>');
       } finally {
         PropertyRegistry.clear();
       }
     });
-    //mcdc:ignore:defensive SW-REQ-260821-V5GA: duplicate_js_register=T, invalid_modification_error=F => FALSE — JS registerProperty after @property throws InvalidModificationError [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-V5GA: duplicate_js_register=T, invalid_modification_error=F => FALSE — a second CSS.registerProperty for a name already in [[registeredPropertySet]] throws InvalidModificationError (JS-then-JS); @property is not that slot [reviewed: agent:grok-4.6]
 
     // Verifies: SW-REQ-260821-V5GA
     // MCDC SW-REQ-260821-V5GA: duplicate_js_register=T, invalid_modification_error=T => TRUE

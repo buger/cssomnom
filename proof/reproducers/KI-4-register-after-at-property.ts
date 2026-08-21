@@ -1,9 +1,10 @@
 /**
- * Overlay reproducer for KI-4. Not a product-suite test.
- * Asserts the intended contract (JS registerProperty after @property throws
- * InvalidModificationError) so this command FAILS while the bug is present.
+ * Spec test for withdrawn KI-4 (false hole).
+ * css-properties-values-api-1 § 4.1 throws InvalidModificationError only when
+ * the name is already in [[registeredPropertySet]]. @property does not fill
+ * that slot; a later CSS.registerProperty succeeds and JS wins (§ 3).
  *
- * Reproduces: KI-4
+ * Residual: L-KI4
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,7 +12,7 @@ import { parse } from '../../src/parser.ts';
 import { CSS } from '../../src/typed-om.ts';
 import { PropertyRegistry } from '../../src/PropertyRegistry.ts';
 
-function ki4Contract(): { setupOk: boolean; holds: boolean; message: string } {
+function ki4SpecContract(): { setupOk: boolean; holds: boolean; message: string } {
   PropertyRegistry.clear();
   const sheet = parse('@property --mcdc-ki4 { syntax: "*"; inherits: false; }');
   const stored = PropertyRegistry.get('--mcdc-ki4');
@@ -26,38 +27,60 @@ function ki4Contract(): { setupOk: boolean; holds: boolean; message: string } {
   try {
     CSS.registerProperty({
       name: '--mcdc-ki4',
-      syntax: '*',
-      inherits: false,
+      syntax: '<color>',
+      inherits: true,
+      initialValue: 'red',
     });
-    const after = PropertyRegistry.get('--mcdc-ki4');
+  } catch (err) {
     return {
       setupOk: true,
       holds: false,
-      message: `KI-4: CSS.registerProperty after @property did not throw; origin=${JSON.stringify(after && 'origin' in after ? (after as { origin?: string }).origin : undefined)}`,
+      message: `KI-4: CSS.registerProperty after @property threw ${err instanceof Error ? err.name : typeof err}; spec requires succeed+JS-wins`,
+    };
+  }
+
+  const after = PropertyRegistry.get('--mcdc-ki4');
+  if (!after || after.syntax !== '<color>' || after.inherits !== true || after.initialValue !== 'red') {
+    return {
+      setupOk: true,
+      holds: false,
+      message: `KI-4: JS register after @property did not overwrite; after=${JSON.stringify(after)}`,
+    };
+  }
+
+  try {
+    CSS.registerProperty({
+      name: '--mcdc-ki4',
+      syntax: '*',
+      inherits: false,
+    });
+    return {
+      setupOk: true,
+      holds: false,
+      message: 'KI-4: second JS registerProperty did not throw InvalidModificationError',
     };
   } catch (err) {
     if (err instanceof DOMException && err.name === 'InvalidModificationError') {
       return {
         setupOk: true,
         holds: true,
-        message: 'KI-4 contract holds: JS register after @property threw InvalidModificationError',
+        message: 'KI-4 spec holds: CSS-then-JS succeeds and JS wins; JS-then-JS throws InvalidModificationError',
       };
     }
     return {
       setupOk: true,
       holds: false,
-      message: `KI-4: JS register after @property threw ${err instanceof Error ? err.name : typeof err} instead of InvalidModificationError`,
+      message: `KI-4: second JS register threw ${err instanceof Error ? err.name : typeof err} instead of InvalidModificationError`,
     };
   }
 }
 
-// Reproduces: KI-4
 // Verifies: SW-REQ-260821-V5GA
-// MCDC SW-REQ-260821-V5GA: duplicate_js_register=T, invalid_modification_error=T => TRUE
+// MCDC SW-REQ-260821-V5GA: duplicate_js_register=F, invalid_modification_error=F => TRUE
 // Verifies: SYS-REQ-260821-EGCP
-// MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE
-test('KI-4: JS register after @property throws InvalidModificationError', () => {
-  const outcome = ki4Contract();
+// MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=F, register_throws=F => TRUE
+test('KI-4 residual: CSS.registerProperty after @property succeeds and JS wins', () => {
+  const outcome = ki4SpecContract();
   assert.equal(outcome.setupOk, true, outcome.message);
   assert.equal(outcome.holds, true, outcome.message);
 });

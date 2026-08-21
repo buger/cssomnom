@@ -1,7 +1,6 @@
 id: KI-4
-title: CSS.registerProperty after @property overwrites without InvalidModificationError
-description: |
-    CSS Properties and Values API registerProperty must throw InvalidModificationError when the name is already registered, including names introduced by @property. PropertyRegistry.register only throws when existing.origin === 'js'. A CSS-origin registration is overwritten by a later JS registerProperty with no throw. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+title: CSS.registerProperty after @property IME is not a product defect
+description: 'False KI. css-properties-values-api-1 §4.1 throws InvalidModificationError only when the name is already in the Document [[registeredPropertySet]] (JS slot). @property is a separate registration source and does not fill that slot. §3: CSS.registerProperty further wins over any @property for the same name. Overlay IME-after-@property was spec-wrong. Commit 62aacd7 that threw IME on any existing origin is reverted for this path only. JS-then-JS still throws IME.'
 affected_requirements:
     - SW-REQ-260821-V5GA
     - SYS-REQ-260821-EGCP
@@ -16,17 +15,19 @@ sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts
 reproduction_steps:
     - 'PropertyRegistry.clear() then parse(''@property --x { syntax: "*"; inherits: false; }'').'
-    - 'Call CSS.registerProperty({ name: ''--x'', syntax: ''*'', inherits: false }).'
-    - Observe no throw; registry origin becomes js.
-    - 'Intended contract: InvalidModificationError because the name is already registered.'
-    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts'
+    - 'Call CSS.registerProperty({ name: ''--x'', syntax: ''<color>'', inherits: true, initialValue: ''red'' }).'
+    - Observe no throw; JS syntax/inherits/initialValue overwrite the @property registration.
+    - 'Spec contract (css-properties-values-api-1 §3 / §4.1): CSS-then-JS succeeds and JS wins. A second JS register of --x throws InvalidModificationError.'
+    - 'Passing spec runner: node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: JS registerProperty throws InvalidModificationError if the name is already registered regardless of origin.
-remediation: Landed in src/PropertyRegistry.ts. Class-closure DEFECT-260821-F4MQ.
+mitigation: 'Not a product defect. Restored origin gating: IME only when existing.origin is js and origin is js. CSS-then-JS overwrites; JS wins.'
+remediation: Withdrawn as overlay-wrong. Overlay proof/reproducers/KI-4-register-after-at-property.ts is a passing spec test (CSS-then-JS succeeds, JS-then-JS IME). Residual L-KI4 parks the angle. DEFECT-260821-F4MQ retracted.
+notes:
+    - 'Scrutineer verdict: do not throw after @property. Restored CSS-then-JS succeed+JS-wins. JS-then-JS IME retained. KI-1,2,3,5,6 untouched.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: fixed
+status: withdrawn
 history:
     - at: "2026-08-21T21:00:00Z"
       by: agent:grok-4.6
@@ -39,6 +40,18 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+    - at: "2026-08-21T20:20:16Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-4.yaml
+    - at: "2026-08-21T20:24:47Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-title,set-description,set-mitigation,set-remediation,append-note,set-status=withdrawn
+    - at: "2026-08-21T20:25:32Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: remove-evidence-manifest
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -72,10 +85,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest can hit the hole. Rule 4 is Web3-only.
 template_class: duplicate_register_skips_ime
 isomorphic_sites:
-    - src/PropertyRegistry.ts:349 #fixed
-    - src/PropertyRegistry.ts:351 #fixed
-    - src/PropertyRegistry.ts:353 #fixed
-    - src/PropertyRegistry.ts:358 #fixed
-    - src/CSSOM.ts:250 #na
+    - src/PropertyRegistry.ts:349
+    - src/PropertyRegistry.ts:351
+    - src/PropertyRegistry.ts:353
+    - src/PropertyRegistry.ts:358
+    - src/CSSOM.ts:250
 dedup_armor: |
     Only existing.origin !== 'js' falls through to registry.set on a later JS registerProperty. The JS-then-JS path still throws InvalidModificationError. Do not merge this KI into a generic duplicate-register defect without a second live hole.

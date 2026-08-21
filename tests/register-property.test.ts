@@ -149,11 +149,24 @@ test('CSS.registerProperty: throws InvalidModificationError on duplicate registr
   }, { name: 'InvalidModificationError' });
 });
 
-test('CSS.registerProperty: throws InvalidModificationError after @property of the same name', () => {
+test('CSS.registerProperty after @property succeeds and JS wins', () => {
   PropertyRegistry.clear();
   const sheet = parse('@property --from-at-property { syntax: "*"; inherits: false; }');
   assert.equal(sheet.cssRules.length, 1);
   assert.ok(PropertyRegistry.get('--from-at-property'));
+
+  CSS.registerProperty({
+    name: '--from-at-property',
+    syntax: '<color>',
+    inherits: true,
+    initialValue: 'red'
+  });
+
+  const after = PropertyRegistry.get('--from-at-property');
+  assert.ok(after);
+  assert.equal(after.syntax, '<color>');
+  assert.equal(after.inherits, true);
+  assert.equal(after.initialValue, 'red');
 
   assert.throws(() => {
     CSS.registerProperty({
@@ -166,15 +179,30 @@ test('CSS.registerProperty: throws InvalidModificationError after @property of t
   PropertyRegistry.clear();
 });
 
-test('later @property of an already-registered name is ignored', () => {
+test('later @property of a JS-registered name is ignored', () => {
+  PropertyRegistry.clear();
+  CSS.registerProperty({
+    name: '--js-then-css',
+    syntax: '*',
+    inherits: false
+  });
+  parse('@property --js-then-css { syntax: "<color>"; inherits: true; initial-value: red; }');
+  const stored = PropertyRegistry.get('--js-then-css');
+  assert.equal(stored?.syntax, '*');
+  assert.equal(stored?.inherits, false);
+  PropertyRegistry.clear();
+});
+
+test('later @property of a CSS-registered name last-wins', () => {
   PropertyRegistry.clear();
   parse('@property --css-then-css { syntax: "*"; inherits: false; }');
   const first = PropertyRegistry.get('--css-then-css');
   assert.ok(first);
   parse('@property --css-then-css { syntax: "<color>"; inherits: true; initial-value: red; }');
   const second = PropertyRegistry.get('--css-then-css');
-  assert.equal(second?.syntax, '*');
-  assert.equal(second?.inherits, false);
+  assert.equal(second?.syntax, '<color>');
+  assert.equal(second?.inherits, true);
+  assert.equal(second?.initialValue, 'red');
   PropertyRegistry.clear();
 });
 

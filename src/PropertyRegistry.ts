@@ -348,15 +348,19 @@ export const PropertyRegistry = {
     this.validate(definition);
     const existing = registry.get(definition.name);
     if (existing) {
-      // css-properties-values-api-1 § 3.2 #the-registerproperty-function
-      // If the name is already registered, JS registerProperty throws InvalidModificationError
-      // regardless of whether the prior registration came from JS or @property.
-      if (origin === 'js') {
-        throw new DOMException(`Property "${definition.name}" is already registered`, 'InvalidModificationError');
+      // css-properties-values-api-1 § 4.1 #the-registerproperty-function
+      // IME only if the Document's [[registeredPropertySet]] already contains the name
+      // (JS origin). @property does not populate that slot.
+      if (existing.origin === 'js') {
+        if (origin === 'js') {
+          throw new DOMException(`Property "${definition.name}" is already registered`, 'InvalidModificationError');
+        }
+        // css-properties-values-api-1 § 3 #at-property-rule
+        // CSS.registerProperty() wins over any later @property for the same name.
+        return;
       }
-      // css-properties-values-api-1 § 2 #at-property-rule
-      // A later @property for an already-registered name is ignored (JS wins; earlier CSS wins).
-      return;
+      // CSS-then-JS: slot does not contain the name yet → no IME; JS overwrites.
+      // CSS-then-CSS: last valid @property in document order wins (§ 2.1 #determining-registration).
     }
     registry.set(definition.name, { ...definition, origin });
   },

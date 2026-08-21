@@ -2983,9 +2983,9 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 - [x] **KI-1**: `setProperty('all')` no longer deletes stored `all` before `expandAll`. Invalid `all` after `all: var(--x)` / `env()` is a no-op. Regression: `tests/cssom-all-shorthand.test.ts`. DEFECT-260821-XZAS.
 - [x] **KI-2**: `CSSStyleSheet.replace` parses via `replaceSync` then `Promise.resolve(this)` (README). Regression: `tests/constructable-stylesheets.test.ts`. DEFECT-260821-QHWP.
 - [x] **KI-3**: `CSSStyleValue.parse` throws TypeError on invalid `<position>` (`object-position` and sibling POSITION_PROPERTIES). Regression: `tests/typed-om-position.test.ts`. DEFECT-260821-KESF.
-- [x] **KI-4**: `CSS.registerProperty` after `@property` throws InvalidModificationError; later CSS `@property` of an existing name is ignored. Regression: `tests/register-property.test.ts`. DEFECT-260821-F4MQ.
+- [x] **KI-4**: **false KI — reverted.** Houdini css-properties-values-api-1 §4.1 IME is only when the name is already in JS `[[registeredPropertySet]]`. §3: `CSS.registerProperty()` wins over `@property`. Restored origin gating: JS-then-JS still throws InvalidModificationError; CSS-then-JS succeeds and JS overwrites. Overlay `proof/reproducers/KI-4-register-after-at-property.ts` is a passing spec test (not a failing tripwire). Regression: `tests/register-property.test.ts`. KI-4 status `withdrawn`. Residual `L-KI4` parks the overlay-wrong IME-after-@property angle. DEFECT-260821-F4MQ retracted (`not_in_scope` — closed a false hole). SW-REQ-260821-V5GA / SYS-REQ-260821-EGCP descriptions retuned to JS-then-JS IME.
 - [x] **KI-5**: Unbalanced media `((` / unclosed blocks serialize as `not all`. Regression: `tests/media-validation.test.ts`. DEFECT-260821-H3KB.
 - [x] **KI-6**: `toParserRule` maps CSSOM type-0 `@layer`/`@container`/`@scope` to `CSSParserAtRule` with nested qualified rules. Regression: `tests/parser-api.test.ts`. DEFECT-260821-NYAR.
-- [x] Overlay reproducers `proof/reproducers/KI-{1..6}-*.ts` pass (exit 0). KI-1..6 status `fixed`. KI-7 remains open (documented offline `@import`, no fetch).
+- [x] Overlay reproducers `proof/reproducers/KI-{1..6}-*.ts` pass (exit 0). KI-1,2,3,5,6 status `fixed`. KI-4 withdrawn (false hole). KI-7 remains open (documented offline `@import`, no fetch).
 - [x] `pnpm run preflight` green (Node 24).
 

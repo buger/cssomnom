@@ -1,0 +1,8 @@
+id: L-KI4
+title: CSS-then-JS registerProperty IME is not a product defect
+description: Houdini css-properties-values-api-1 §4.1 throws InvalidModificationError only if the name is already in [[registeredPropertySet]]. @property is a separate source (§2.1). CSS.registerProperty after @property succeeds and JS wins (§3). Overlay KI-4 IME-after-@property was spec-wrong, not a product hole. JS-then-JS IME remains required.
+status: closed
+severity: info
+kill_domain: houdini-registerproperty-css-then-js-ime
+related_known_issues:
+    - KI-4
