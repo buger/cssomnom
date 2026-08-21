@@ -5,3 +5,10 @@ node_modules
 .worktrees/
 scratch/
 .wpt-cache/
+
+# ReqProof local-only state (versionable .proof/ audit objects stay tracked).
+.proof/
+
+# Structure-aware CSS fuzzer artifacts
+fuzz/css-fuzz/crashes/
+fuzz/css-fuzz/corpus_export/

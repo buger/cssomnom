@@ -2888,3 +2888,32 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
   - Add tests in `tests/selectors-scope-relative.test.ts`.
   - Run `pnpm run preflight` and `pnpm run wpt:verify`.
 
+
+---
+
+## Phase 120: Structure-aware CSS fuzzer (css-fuzz)
+
+**Goal**: Add a standalone, importable, structure-aware CSS fuzzer modeled on Probe Labs [graphql-fuzz](https://github.com/probelabs/graphql-fuzz) / [xml-fuzz](https://github.com/probelabs/xml-fuzz). This **supplements** (does not replace) the Phase 4 blind byte-mutation fuzzer in `tests/fuzz.test.ts`.
+
+### Five pillars
+
+| Pillar | Module | Role |
+|--------|--------|------|
+| **Generate** | `fuzz/css-fuzz/src/generator.ts` | Grammar-based well-formed + controlled malformed CSS |
+| **Mutate** | `fuzz/css-fuzz/src/mutate.ts` | 28 CSS-aware operators (`MUTATION_OPS.length === 28`) |
+| **Corpus** | `fuzz/css-fuzz/src/corpus.ts` | Seed bank by bug-class family (`REQUIRED_FAMILIES`) |
+| **Gates** | `fuzz/css-fuzz/src/gates.ts` | no-panic, clean-fail, output-valid, round-trip, determinism, deep-nesting-safe, within-budget |
+| **Orchestrate** | `fuzz/css-fuzz/src/fuzz.ts` | `runStructureAware` + `CssParseTarget` (stub + cssomnom) |
+
+### Tasks
+
+- [x] **Library modules** under `fuzz/css-fuzz/src/`: `rng`, `gates`, `corpus`, `generator`, `mutate`, `fuzz`, `stub-parser`, `target-cssomnom`, `differential`, `apis`, `index`.
+- [x] **AFL/libFuzzer dictionary** `fuzz/css-fuzz/css-fuzz.dict` (at-keywords, functions, selectors, structural tokens).
+- [x] **README** with the same pillar/bug-class/quick-start/gates/corpus/API sections as xml-fuzz.
+- [x] **Examples**: `fuzz-loop.ts` (generate → mutate → no-panic against cssomnom), `long-campaign.ts` (`CSS_FUZZ_SECONDS` / `CSS_FUZZ_ITERS` / `CSS_FUZZ_CRASH_DIR`), `export-seeds.ts`.
+- [x] **Integration tests** `tests/css-fuzz-integration.test.ts` against the stub (MUTATION_OPS length, REQUIRED_FAMILIES, generators, mutations, gates, `runStructureAware`).
+- [x] **cssomnom harness** `tests/css-fuzz-cssomnom.test.ts` with modest CI iters (`CSS_FUZZ_ITERS`, default 32): generate+mutate+no-panic, corpus, deep nesting, determinism, `runStructureAware`.
+- [x] **package.json scripts**: `fuzz`, `fuzz:campaign`, `fuzz:export`.
+- [x] **gitignore** `fuzz/css-fuzz/crashes/` and `fuzz/css-fuzz/corpus_export/`.
+- [x] Product parser (`src/**`) is **not** patched to make the fuzzer green. Unexpected throws are findings (KI + crash dump), not swallowed.
+
