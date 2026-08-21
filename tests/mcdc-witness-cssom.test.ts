@@ -541,7 +541,6 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       }
     });
     // Verifies: SYS-REQ-260821-GR67
-    // MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
     test('documented constructor and AST deviations are honored', () => {
       const constructed = new CSSImportRule('foo.css');
       assert.equal(constructed.cssText, '@import url("foo.css");');
@@ -558,7 +557,6 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       assert.ok(Array.isArray(list.mediaQueriesAST));
       assert.equal(list.mediaText, 'screen');
     });
-    //mcdc:ignore:defensive SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=F => FALSE — replace() honors the README Promise.resolve after replaceSync deviation [reviewed: agent:grok-4.6]
     // Verifies: SYS-REQ-260821-GR67
     // MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
     test('replace() parses synchronously via replaceSync then Promise.resolve', async () => {
@@ -582,7 +580,9 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       }
     });
     // Verifies: SW-REQ-260821-PAKB
+    // Verifies: SYS-REQ-260821-GR67
     // MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE
+    // MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
     test('replace() populates cssRules before the returned promise is awaited', async () => {
       const original = ParseHooks.consumeListOfRules;
       let parseRuns = 0;
@@ -605,6 +605,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
         ParseHooks.consumeListOfRules = original;
       }
     });
+    //mcdc:ignore:defensive SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=F => FALSE — replace() honors the README Promise.resolve after replaceSync deviation [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=F, replace_sync_parse_runs=T => FALSE — replace() honors README Promise.resolve after replaceSync so cssRules is populated before return [reviewed: agent:grok-4.6]
 
     // Verifies: SYS-REQ-260821-GR67

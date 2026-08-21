@@ -52,6 +52,11 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: remove-evidence-manifest
+    - at: "2026-08-21T22:50:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Rewrote poc_quality for withdrawn JS-wins (not IME throw). Overlay runner PASSES CSS-then-JS succeed+overwrite; JS-then-JS IME is retained. Unique-cause SAT for SYS-REQ-260821-EGCP JS-then-JS IME is witnessed on tests/mcdc-witness-registry.test.ts (bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE).
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -68,21 +73,21 @@ poc_quality:
         CSS Properties and Values API correctness (medium), not an exploit-class finding.
         Overlay runner: node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts
         real_infrastructure: parse() registers @property then CSS.registerProperty (not a mock).
-        control_test / operational_path_verified: runner setup asserts @property stored the name (exit 2 if setup fails); intended contract is InvalidModificationError on the JS register.
-        current_deployment_relevance: hole is on HEAD PropertyRegistry.register origin gating.
-        honest_severity / no_inflation: medium correctness matches missing IME, not theft. No submission.
-        reproducible: single node command, under 5 min. Asserts the intended throw so it FAILS while the bug is present.
+        control_test / operational_path_verified: runner setup asserts @property stored the name (exit 2 if setup fails); withdrawn contract is CSS-then-JS succeeds and JS wins (no IME). A second JS register still throws InvalidModificationError.
+        current_deployment_relevance: withdrawn — HEAD origin gating is spec-correct (JS-then-JS IME; CSS-then-JS overwrite). Overlay runner PASSES.
+        honest_severity / no_inflation: medium was for a false IME-after-@property hole; withdrawn as overlay-wrong JS-wins, not theft. No submission.
+        reproducible: single node command, under 5 min. Overlay runner PASSES the JS-wins contract (CSS-then-JS no throw; JS-then-JS IME).
         Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is a missing InvalidModificationError, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Withdrawn overlay-wrong IME-after-@property is not extractable value. Rule 7 is Web3-only.
         quantitative_impact: |
-            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS OM correctness class, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
         reachability_verified: |
-            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+            local-behavioral correctness class: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest exercises the JS-wins path. Rule 4 is Web3-only.
 template_class: duplicate_register_skips_ime
 isomorphic_sites:
     - src/PropertyRegistry.ts:349

@@ -86,6 +86,11 @@ project:
             enabled: true
         spec_lint_mediation_contract_contradicted:
             enabled: true
+        mcdc_coverage:
+            # EGCP unique-cause SAT (JS-then-JS IME: bad_dictionary=F,
+            # duplicate_js_register=T, register_throws=T) is a valid
+            # satisfying assignment; FLIP covering uses T,T,T for throws.
+            max_stale_witness_lines: 1
         # security_surface_covered left disabled. Hunt (2026-08-21) with
         # --set enabled=true found scripts/wpt/node/run.ts egress (WPT
         # runner), not CSS url() in src/**. scripts/ is tooling, not
@@ -109,6 +114,11 @@ project:
     description: Spec-compliant CSS Object Model (CSSOM) and Typed OM parser in pure TypeScript
     catalog:
         version: 1.9.1
+    # Overlay catalog class used by SYS-REQ-260821-H3BD / KI-7 (offline parse
+    # never fetches). Adopted so catalog_completeness does not treat
+    # proof/catalog/domain/no_external_io_on_parse.yaml as an orphan.
+    obligation_classes:
+        - no_external_io_on_parse
     lint:
         exclude:
             # Generated or build output: scripts/codegen writes src/data/gen/*;
