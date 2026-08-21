@@ -81,31 +81,56 @@ test('AC-001 getCascadedStyle winning color', function acD7wx001() {
     .box { color: red; }
     .box.highlight { color: blue; }
   `;
-  const { document } = parseHTML('<html><body><div class="box highlight"></div></body></html>');
-  const el = document.querySelector('.box');
+  const { document } = parseHTML(
+    '<html><body><div id="win" class="box highlight"></div><div id="lose" class="box"></div></body></html>'
+  );
+  const winner = document.getElementById('win');
+  const loser = document.getElementById('lose');
+  assert.ok(winner);
+  assert.ok(loser);
   const stylesheet = CSSOM.parse(css);
-  const style = CSSOM.getCascadedStyle(el, stylesheet.cssRules);
-  assert.equal(style.getPropertyValue('color') || style.color, 'rgb(0, 0, 255)');
+  assert.equal(typeof CSSOM.getCascadedStyle, 'function');
+  const winStyle = CSSOM.getCascadedStyle(winner, stylesheet.cssRules);
+  const loseStyle = CSSOM.getCascadedStyle(loser, stylesheet.cssRules);
+  assert.ok(winStyle instanceof CSSOM.CSSStyleDeclaration);
+  assert.ok(loseStyle instanceof CSSOM.CSSStyleDeclaration);
+  assert.equal(winStyle.getPropertyValue('color'), 'rgb(0, 0, 255)');
+  assert.equal(loseStyle.getPropertyValue('color'), 'rgb(255, 0, 0)');
 });
 
 // STK-REQ-260821-D7WX:AC-002:acceptance
 test('AC-002 getComputedStyle is not exported', function acD7wx002() {
+  assert.equal(typeof CSSOM.getCascadedStyle, 'function');
   assert.equal('getComputedStyle' in CSSOM, false);
+  assert.equal(Object.hasOwn(CSSOM, 'getComputedStyle'), false);
   const keys = Object.keys(CSSOM).filter((k) => k !== 'default');
   assert.equal(keys.includes('getComputedStyle'), false);
+  assert.equal(Object.getOwnPropertyNames(CSSOM).includes('getComputedStyle'), false);
 });
 
 // STK-REQ-260821-D7WX:AC-003:acceptance
 test('AC-003 matches and querySelectorAll empty for bad selector', function acD7wx003() {
   const { document } = parseHTML('<html><body><div class="box"></div></body></html>');
   const el = document.querySelector('div');
+  assert.ok(el);
+  assert.equal(CSSOM.matches(el, 'div'), true);
+  assert.equal(CSSOM.querySelectorAll(document.body, 'div').length, 1);
+  assert.doesNotThrow(() => {
+    CSSOM.matches(el, '[');
+    CSSOM.querySelectorAll(document.body, '[');
+    CSSOM.querySelector(document.body, '[');
+  });
   assert.equal(CSSOM.matches(el, '['), false);
-  assert.equal(CSSOM.querySelectorAll(document.body, '[').length, 0);
+  const empty = CSSOM.querySelectorAll(document.body, '[');
+  assert.ok(Array.isArray(empty));
+  assert.equal(empty.length, 0);
+  assert.equal(CSSOM.querySelector(document.body, '['), null);
 });
 
 // STK-REQ-260821-AMK6:AC-001:acceptance
 test('AC-001 CSSNumericValue.parse 10px is CSSUnitValue 10 px', function acAmk6001() {
   const val = CSSOM.CSSNumericValue.parse('10px');
+  assert.ok(val instanceof CSSOM.CSSNumericValue);
   if (!(val instanceof CSSOM.CSSUnitValue)) {
     assert.fail('expected CSSUnitValue');
     return;
@@ -126,16 +151,30 @@ test('AC-002 registerProperty invalid dict throws', function acAmk6002() {
     },
     (err: unknown) => err instanceof Error && err.name === 'SyntaxError'
   );
+  assert.throws(
+    () => {
+      CSSOM.CSS.registerProperty({
+        name: '--stk-amk6-bad-syntax',
+        syntax: 'not-a-syntax',
+        inherits: false
+      });
+    },
+    (err: unknown) => err instanceof Error && err.name === 'SyntaxError'
+  );
 });
 
 // STK-REQ-260821-AMK6:AC-003:acceptance
 test('AC-003 CSS.supports returns boolean and does not throw', function acAmk6003() {
+  let twoArg: unknown;
+  let oneArg: unknown;
   assert.doesNotThrow(() => {
-    CSSOM.CSS.supports('display', 'grid');
-    CSSOM.CSS.supports('(((((');
+    twoArg = CSSOM.CSS.supports('display', 'grid');
+    oneArg = CSSOM.CSS.supports('(((((');
   });
-  assert.equal(typeof CSSOM.CSS.supports('display', 'grid'), 'boolean');
-  assert.equal(typeof CSSOM.CSS.supports('((((('), 'boolean');
+  assert.equal(typeof twoArg, 'boolean');
+  assert.equal(typeof oneArg, 'boolean');
+  assert.equal(twoArg, true);
+  assert.equal(oneArg, false);
 });
 
 // STK-REQ-260821-DKBQ:AC-001:acceptance

@@ -1,0 +1,30 @@
+version: 1
+updated_at: "2026-08-21T22:40:00Z"
+updated_by: agent:ac-sweep
+items:
+  - id: STK-REQ-260821-BQKD
+    status: done
+    acceptance_review: true
+    ac_count: 4
+    notes: "cssom_consumer parse/getPropertyValue/invalid-drop/insertRule. Dual-surface N/A."
+  - id: STK-REQ-260821-D7WX
+    status: done
+    acceptance_review: true
+    ac_count: 3
+    notes: "grader_operator cascaded color, no getComputedStyle, empty bad selector. Dual-surface N/A."
+  - id: STK-REQ-260821-AMK6
+    status: done
+    acceptance_review: true
+    ac_count: 3
+    notes: "houdini_consumer Typed OM parse, registerProperty throw, CSS.supports boolean. Dual-surface N/A."
+  - id: STK-REQ-260821-DKBQ
+    status: done
+    acceptance_review: true
+    ac_count: 3
+    notes: "tooling_integrator streaming tokens, CSSImportRule styleSheet null or empty no fetch (README), CSS namespace methods. Dual-surface N/A."
+  - id: STK-REQ-260821-556N
+    status: done
+    acceptance_review: true
+    ac_count: 2
+    notes: "conformance_owner README deviations (ImportRule/getComputedStyle) and dedicated acceptance lock of api-surface snapshot plus public keys. Dual-surface N/A. Did not dual-tag api-surface.test.ts."
+
