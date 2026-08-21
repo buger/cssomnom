@@ -247,6 +247,10 @@ test('Matcher: :disabled matches only actually-disabled form controls (html#sele
         <fieldset id="nested-in-legend">
           <input id="nested-legend-input">
         </fieldset>
+        <fieldset id="nested-in-legend-own-disabled" disabled></fieldset>
+      </legend>
+      <legend>
+        <fieldset id="nested-in-second-legend"></fieldset>
       </legend>
       <div id="div-in-fs">wrap<span id="span-in-fs">x</span></div>
       <input id="in-fs">
@@ -272,8 +276,14 @@ test('Matcher: :disabled matches only actually-disabled form controls (html#sele
   assert.strictEqual(matches(document.getElementById('og')!, ':disabled'), true);
   assert.strictEqual(matches(document.getElementById('opt-enabled')!, ':disabled'), false);
 
-  assert.strictEqual(matches(document.getElementById('nested-in-legend')!, ':disabled'), true,
-    'nested fieldset inside first legend is still a disabled fieldset (html#concept-fieldset-disabled)');
+  assert.strictEqual(matches(document.getElementById('nested-in-legend')!, ':disabled'), false,
+    'nested fieldset inside first legend of disabled ancestor, with no own disabled, is not concept-fieldset-disabled');
+  assert.strictEqual(matches(document.getElementById('nested-legend-input')!, ':disabled'), false,
+    'input in nested fieldset inside first legend is not concept-fe-disabled');
+  assert.strictEqual(matches(document.getElementById('nested-in-legend-own-disabled')!, ':disabled'), true,
+    'fieldset inside first legend with own disabled attribute is still concept-fieldset-disabled');
+  assert.strictEqual(matches(document.getElementById('nested-in-second-legend')!, ':disabled'), true,
+    'nested fieldset inside a non-first legend is concept-fieldset-disabled');
 
   assert.strictEqual(matches(document.getElementById('in-legend')!, ':disabled'), false,
     'input in first legend of disabled fieldset is not concept-fe-disabled');

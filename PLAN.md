@@ -3074,6 +3074,17 @@ Reviewer+Grizz rejected leftovers from `6fff645` / `6adcf05`. Did **not** `proof
 
 ---
 
+## Phase: fieldset first-legend + perspective-origin 4-value (Champ)
+
+Grizz REJECTED leftover from `81cacb3`. Did **not** `proof approve`.
+
+- [x] **html `#concept-fieldset-disabled`**: a fieldset is disabled if it has `disabled` **or** is a descendant of another fieldset whose `disabled` is specified **and is not a descendant of that fieldset's first `legend` child**. `#nested-in-legend` (no own `disabled`) is **not** `:disabled`. `isDisabledFieldset` skips first-legend descendants (same first-legend walk as `#concept-fe-disabled`).
+- [x] **css-transforms-2 `#perspective-origin-property`**: Value is `<position>` including 4-value (`left 10px top 20px`). Do not reuse transform-origin grammar (no 4-value, optional z). Gate with `isValidCssPosition` / `tryParsePosition`; reject z (`10px 20px 5px`).
+- [x] RED tests first: `tests/matcher.test.ts`, `tests/typed-om-position.test.ts`.
+- [x] `pnpm run preflight` on Node 24. Did not `proof approve`.
+
+---
+
 ## Phase: restore spec MC/DC unique-cause witnesses after overlay FRETish edits (Champ)
 
 Overlay FRETish conjuncts after `1efd7ed` (HNRG `set_property_ignored`, HHVE `stylesheet_returned`, HW77 `css_namespace_object_bound`/`supports_throws`, 5W6X `external_sheet_fetched`, 6951 XOR SecurityError) stale'd unique-cause `// MCDC` lines. 20 uncovered / 10 stale.

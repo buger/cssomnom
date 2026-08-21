@@ -287,14 +287,6 @@ function isTwoValueTransformOrigin(a: ComponentValue, b: ComponentValue): boolea
   return false;
 }
 
-function isValidPerspectiveOrigin(tokens: ComponentValue[]): boolean {
-  // css-transforms-2 #perspective-origin-property: 1-value or 2-value (including &&). No z, no 4-value <position>.
-  const components = nonWs(tokens);
-  if (components.length === 1) return isSingleValueTransformOrigin(components[0]);
-  if (components.length === 2) return isTwoValueTransformOrigin(components[0], components[1]);
-  return false;
-}
-
 function isValidCssPosition(tokens: ComponentValue[]): boolean {
   // css-values-4 § 10.1 #position: grammar gate distinct from CSSPositionValue reification.
   const components = nonWs(tokens);
@@ -342,7 +334,10 @@ export function matchesPositionPropertyGrammar(property: string, tokens: Compone
     return isValidTransformOrigin(tokens);
   }
   if (prop === 'perspective-origin') {
-    return isValidPerspectiveOrigin(tokens);
+    // css-transforms-2 #perspective-origin-property: Value is <position>.
+    // css-values-4 § 10.1 #position: includes 4-value form; no z.
+    // Distinct from transform-origin, which has no 4-value and optional <length> z.
+    return isValidCssPosition(tokens);
   }
   if (prop === 'background-position' || prop === 'mask-position' || prop === '-webkit-mask-position') {
     return splitCommaList(tokens).every(seg => {

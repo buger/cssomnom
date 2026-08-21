@@ -883,14 +883,15 @@ function isFormControlDisabled(element: DOMElement): boolean {
 }
 
 function isDisabledFieldset(element: DOMElement): boolean {
-  // html#concept-fieldset-disabled: own disabled attribute, or descendant of a
-  // fieldset whose disabled attribute is set. First-legend exemption is for
-  // form controls (concept-fe-disabled), not nested fieldset.
+  // html#concept-fieldset-disabled: a fieldset is disabled if its disabled
+  // attribute is specified, or if it is a descendant of another fieldset
+  // whose disabled attribute is specified and is not a descendant of that
+  // fieldset element's first legend element child, if any.
   if (element.hasAttribute?.('disabled')) return true;
   let ancestor = element.parentElement;
   while (ancestor) {
     if (elementLocalName(ancestor) === 'fieldset' && ancestor.hasAttribute?.('disabled')) {
-      return true;
+      if (!isInsideFirstLegend(element, ancestor)) return true;
     }
     ancestor = ancestor.parentElement;
   }

@@ -229,3 +229,34 @@ test('transform-origin && overlapping center: center left / center left 5px pars
   }, TypeError, '4-value <position> is still invalid transform-origin');
 });
 
+test('perspective-origin is <position> including 4-value, not transform-origin z', () => {
+  // css-transforms-2 #perspective-origin-property: Value is <position>.
+  // css-values-4 § 10.1 #position: 1-/2-/3-/4-value forms; no z component.
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('perspective-origin', 'left 10px top 20px');
+  }, '4-value <position> must parse as perspective-origin');
+  const four = CSSStyleValue.parse('perspective-origin', 'left 10px top 20px');
+  assert.ok(four instanceof CSSPositionValue, '4-value perspective-origin reifies as CSSPositionValue');
+  assert.ok(four.x instanceof CSSUnitValue);
+  assert.strictEqual((four.x as CSSUnitValue).value, 10);
+  assert.strictEqual((four.x as CSSUnitValue).unit, 'px');
+  assert.ok(four.y instanceof CSSUnitValue);
+  assert.strictEqual((four.y as CSSUnitValue).value, 20);
+  assert.strictEqual((four.y as CSSUnitValue).unit, 'px');
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('perspective-origin', 'left 10px top');
+  }, '3-value <position> must parse as perspective-origin');
+  const three = CSSStyleValue.parse('perspective-origin', 'left 10px top');
+  assert.ok(three instanceof CSSPositionValue, '3-value <position> reifies as CSSPositionValue');
+
+  assert.throws(() => {
+    CSSStyleValue.parse('perspective-origin', '10px 20px 5px');
+  }, TypeError, 'z is invalid for perspective-origin (css-transforms-2 #perspective-origin-property)');
+
+  assert.throws(() => {
+    CSSStyleValue.parse('transform-origin', 'left 10px top 20px');
+  }, TypeError, '4-value <position> remains invalid transform-origin');
+});
+
