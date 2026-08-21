@@ -145,17 +145,19 @@ test('MCDC SW-39E0 nested_after=T flush_decls_runs=T emitted=T', () => {
   assert.equal((leftover as CSSNestedDeclarations).style.getPropertyValue('color'), 'green');
 });
 // Verifies: SW-REQ-260821-5W6X
-// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=F, import_url_present=F => TRUE [no-action: parse without @import]
+// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=F, external_sheet_fetched=F, import_url_present=F => TRUE [no-action: parse without @import]
 test('MCDC SW-5W6X import_url_present=F constructed=F', () => {
-  const sheet = parse(BTN);
+  const { value: sheet, fetchCalls } = withFetchCounter(() => parse(BTN));
+  assert.equal(fetchCalls, 0);
   assert.ok(sheet instanceof CSSStyleSheet);
   assert.equal(sheet.cssRules.length, 1);
   assert.equal(sheet.cssRules[0] instanceof CSSImportRule, false);
   assert.ok(sheet.cssRules[0] instanceof CSSStyleRule);
 });
-//mcdc:ignore:capability-gap SW-REQ-260821-5W6X: css_import_rule_constructed=F, import_url_present=T => FALSE -- CSSImportRule.styleSheet stays null; @import never fetches (full CSSOM would load) [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
+//mcdc:ignore:defensive SW-REQ-260821-5W6X: css_import_rule_constructed=F, external_sheet_fetched=F, import_url_present=T => FALSE — parse of @import always constructs CSSImportRule [reviewed: agent:grok-4.6]
+//mcdc:ignore:capability-gap SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=T, import_url_present=T => FALSE -- CSSImportRule.styleSheet stays null; @import never fetches (full CSSOM would load) [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
 // Verifies: SW-REQ-260821-5W6X
-// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=T, import_url_present=T => TRUE
+// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE
 test('MCDC SW-5W6X import_url_present=T constructed=T', () => {
   const { value: sheet, fetchCalls } = withFetchCounter(() => parse(IMPORT_CSS));
   assert.equal(fetchCalls, 0);
@@ -203,7 +205,7 @@ test('MCDC SW-9KNX consume_qualified_rule_returns_null=T dropped=T', () => {
 });
 // --- SW-REQ-260821-HHVE / SYS-REQ-260821-7521 ---
 // Verifies: SW-REQ-260821-HHVE
-// MCDC SW-REQ-260821-HHVE: consume_stylesheet_completed=F, css_text_supplied=F => TRUE [no-action: parseStyleSheet/consumeListOfRules not invoked]
+// MCDC SW-REQ-260821-HHVE: consume_stylesheet_completed=F, css_text_supplied=F, stylesheet_returned=F => TRUE [no-action: parseStyleSheet/consumeListOfRules not invoked]
 // Verifies: SYS-REQ-260821-7521
 // MCDC SYS-REQ-260821-7521: css_text_supplied=F, stylesheet_returned=F => TRUE [no-action: parse not invoked]
 test('MCDC SW-HHVE/SYS-7521 css_text_supplied=F no stylesheet', () => {
@@ -215,11 +217,13 @@ test('MCDC SW-HHVE/SYS-7521 css_text_supplied=F no stylesheet', () => {
   }, TypeError);
   assert.equal(consumeCompleted, false);
 });
-//mcdc:ignore:defensive SW-REQ-260821-HHVE: consume_stylesheet_completed=F, css_text_supplied=T => FALSE — parse(css) always finishes consumeListOfRules and returns CSSStyleSheet [reviewed: agent:grok-4.6]
+//mcdc:ignore:defensive SW-REQ-260821-HHVE: consume_stylesheet_completed=F, css_text_supplied=T, stylesheet_returned=F => FALSE — parse(css) always finishes consumeListOfRules and returns CSSStyleSheet [reviewed: agent:grok-4.6]
+//mcdc:ignore:defensive SW-REQ-260821-HHVE: consume_stylesheet_completed=F, css_text_supplied=T, stylesheet_returned=T => FALSE — parse(css) does not return a stylesheet without finishing consumeListOfRules [reviewed: agent:grok-4.6]
+//mcdc:ignore:defensive SW-REQ-260821-HHVE: consume_stylesheet_completed=T, css_text_supplied=T, stylesheet_returned=F => FALSE — parse(css) always returns a CSSStyleSheet after consumeListOfRules [reviewed: agent:grok-4.6]
 //mcdc:ignore:defensive SYS-REQ-260821-7521: css_text_supplied=T, stylesheet_returned=F => FALSE — parse(css) always returns a CSSStyleSheet [reviewed: agent:grok-4.6]
 
 // Verifies: SW-REQ-260821-HHVE
-// MCDC SW-REQ-260821-HHVE: consume_stylesheet_completed=T, css_text_supplied=T => TRUE
+// MCDC SW-REQ-260821-HHVE: consume_stylesheet_completed=T, css_text_supplied=T, stylesheet_returned=T => TRUE
 // Verifies: SYS-REQ-260821-7521
 // MCDC SYS-REQ-260821-7521: css_text_supplied=T, stylesheet_returned=T => TRUE
 test('MCDC SW-HHVE/SYS-7521 css_text_supplied=T stylesheet_returned=T', () => {

@@ -50,7 +50,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
   describe('SW-REQ-260821-HNRG', () => {
     // Witness the positive no-op row first (not the all+var hole).
     // Verifies: SW-REQ-260821-HNRG
-    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, value_validation_fails=T => TRUE
+    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, set_property_ignored=T, value_validation_fails=T => TRUE
     test('invalid width is a no-op when validation fails', () => {
       const style = new CSSStyleDeclaration();
       style.setProperty('color', 'blue');
@@ -66,7 +66,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       assert.equal(style.cssText, beforeText);
     });
     // Verifies: SW-REQ-260821-HNRG
-    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=F, value_validation_fails=F => TRUE [no-action: CSSStyleDeclaration.setProperty validation-fail early-return]
+    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=F, set_property_ignored=F, value_validation_fails=F => TRUE [no-action: CSSStyleDeclaration.setProperty validation-fail early-return]
     test('valid setProperty mutates when validation does not fail', () => {
       const style = new CSSStyleDeclaration();
       style.setProperty('color', 'blue');
@@ -92,10 +92,12 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
         CSSStyleDeclaration.prototype.setProperty = original;
       }
     });
-    //mcdc:ignore:defensive SW-REQ-260821-HNRG: declaration_unchanged=F, value_validation_fails=T => FALSE — invalid setProperty including stored all: var(--x) then a failed expand is a no-op [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-HNRG: declaration_unchanged=F, set_property_ignored=F, value_validation_fails=T => FALSE — invalid setProperty is a no-op (declaration unchanged and ignored) [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-HNRG: declaration_unchanged=F, set_property_ignored=T, value_validation_fails=T => FALSE — invalid setProperty ignore does not mutate the declaration [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-HNRG: declaration_unchanged=T, set_property_ignored=F, value_validation_fails=T => FALSE — invalid setProperty is ignored when the declaration is unchanged [reviewed: agent:grok-4.6]
 
     // Verifies: SW-REQ-260821-HNRG
-    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, value_validation_fails=T => TRUE
+    // MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, set_property_ignored=T, value_validation_fails=T => TRUE
     test('all: var(--x) then invalid set is a no-op', () => {
       const style = new CSSStyleDeclaration();
       style.setProperty('all', 'var(--x)');
@@ -371,6 +373,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       }
     });
 //mcdc:ignore:defensive SW-REQ-260821-6951: css_rules_getter_runs=T, origin_clean=F, security_error_thrown=F => FALSE — CSSStyleSheet.cssRules getter always throws SecurityError when origin-clean is false [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-6951: css_rules_getter_runs=T, origin_clean=T, security_error_thrown=T => FALSE — CSSStyleSheet.cssRules getter does not throw SecurityError when origin-clean is true [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260821-X3KX: origin_clean=F, security_error_thrown=F => FALSE — CSSStyleSheet.cssRules getter always throws SecurityError when origin-clean is false [reviewed: agent:grok-4.6]
 
     // Verifies: SW-REQ-260821-6951

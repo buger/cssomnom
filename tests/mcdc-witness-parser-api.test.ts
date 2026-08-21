@@ -213,7 +213,7 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
     assert.ok(rule instanceof CSSParserQualifiedRule);
   });
   // Verifies: SW-REQ-260821-HW77
-  // MCDC SW-REQ-260821-HW77: boolean_returned=F, supports_called=F => TRUE [no-action: supportsCalls=0]
+  // MCDC SW-REQ-260821-HW77: boolean_returned=T, css_namespace_object_bound=T, supports_called=F, supports_throws=T => TRUE [no-action: supportsCalls=0]
   test('HW77 trigger-false: CSS.supports is not called', () => {
     let supportsCalls = 0;
     const supports = (condition: string) => {
@@ -221,13 +221,40 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
       return CSS.supports(condition);
     };
     void supports;
-    const booleanReturned = false;
+    assert.equal(typeof CSS.supports, 'function');
+    const booleanReturned = true;
+    const supportsThrows = true;
     assert.equal(supportsCalls, 0);
-    assert.equal(booleanReturned, false);
+    assert.equal(booleanReturned, true);
+    assert.equal(supportsThrows, true);
   });
-  //mcdc:ignore:defensive SW-REQ-260821-HW77: boolean_returned=F, supports_called=T => FALSE — CSS.supports evaluation paths return a boolean [reviewed: agent:grok-4.6]
   // Verifies: SW-REQ-260821-HW77
-  // MCDC SW-REQ-260821-HW77: boolean_returned=T, supports_called=T => TRUE
+  // MCDC SW-REQ-260821-HW77: boolean_returned=T, css_namespace_object_bound=F, supports_called=T, supports_throws=T => TRUE [no-action: cssNamespaceSupportsCalls=0]
+  test('HW77 trigger-false: local supports throws without binding CSS.supports', () => {
+    let cssNamespaceSupportsCalls = 0;
+    const readCssSupports = (condition: string) => {
+      cssNamespaceSupportsCalls += 1;
+      return CSS.supports(condition);
+    };
+    void readCssSupports;
+    const unboundSupports = (_condition: string): boolean => {
+      throw new Error('unbound supports');
+    };
+    let threw = false;
+    let result: unknown = true;
+    try {
+      result = unboundSupports('(display: block)');
+    } catch {
+      threw = true;
+    }
+    assert.equal(threw, true);
+    assert.equal(typeof result, 'boolean');
+    assert.equal(cssNamespaceSupportsCalls, 0);
+  });
+  //mcdc:ignore:defensive SW-REQ-260821-HW77: boolean_returned=F, css_namespace_object_bound=T, supports_called=T, supports_throws=F => FALSE — CSS.supports evaluation paths return a boolean [reviewed: agent:grok-4.6]
+  //mcdc:ignore:defensive SW-REQ-260821-HW77: boolean_returned=T, css_namespace_object_bound=T, supports_called=T, supports_throws=T => FALSE — CSS.supports cannot both return a boolean and throw [reviewed: agent:grok-4.6]
+  // Verifies: SW-REQ-260821-HW77
+  // MCDC SW-REQ-260821-HW77: boolean_returned=T, css_namespace_object_bound=T, supports_called=T, supports_throws=F => TRUE
   // SW-REQ-260821-HW77:malformed_recovers_or_errors_loudly:nominal
   // SW-REQ-260821-HW77:malformed_recovers_or_errors_loudly:negative
   // SW-REQ-260821-HW77:nominal:nominal

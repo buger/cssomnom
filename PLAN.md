@@ -3072,3 +3072,12 @@ Reviewer+Grizz rejected leftovers from `6fff645` / `6adcf05`. Did **not** `proof
 - [x] RED tests first: `tests/typed-om-position.test.ts`, `tests/matcher.test.ts`.
 - [x] `pnpm run preflight` on Node 24. Did not `proof approve`.
 
+---
+
+## Phase: restore spec MC/DC unique-cause witnesses after overlay FRETish edits (Champ)
+
+Overlay FRETish conjuncts after `1efd7ed` (HNRG `set_property_ignored`, HHVE `stylesheet_returned`, HW77 `css_namespace_object_bound`/`supports_throws`, 5W6X `external_sheet_fetched`, 6951 XOR SecurityError) stale'd unique-cause `// MCDC` lines. 20 uncovered / 10 stale.
+
+- [x] Retarget existing `tests/mcdc-witness-*.test.ts` (and KI-1/KI-7 overlay comments) to current unique-cause SAT rows. Do not delete extra EGCP SAT `bad_dictionary=F, duplicate_js_register=T, register_throws=T` (valid assignment; `max_stale_witness_lines: 1`).
+- [x] Classified ignore only where unreachable AND positive path already witnessed. 5W6X fetch=T remains capability-gap `[ki: KI-7]` plus tripwire `[known-issue]`. Did not `proof approve` / lower floors.
+

@@ -52,7 +52,7 @@ function ki7Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Verifies: SYS-REQ-260821-H3BD
 // MCDC SYS-REQ-260821-H3BD: external_sheet_fetched=T => FALSE [known-issue] [ki: KI-7]
 // Verifies: SW-REQ-260821-5W6X
-// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=F, import_url_present=T => FALSE [known-issue] [ki: KI-7]
+// MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=T, import_url_present=T => FALSE [known-issue] [ki: KI-7]
 test('KI-7: CSSImportRule.styleSheet is the associated loaded stylesheet', () => {
   const outcome = ki7Contract();
   assert.equal(outcome.setupOk, true, outcome.message);
