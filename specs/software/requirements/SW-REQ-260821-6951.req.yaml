@@ -34,13 +34,35 @@ verification:
         reviewed_at: "2026-08-21T13:53:27Z"
         ai_generated: true
     not_modeled:
+        - predicate: 2 < tokens.length
+          reason: "Shorthand slash-split / component-list arity guard; structural CSS value parse, not an origin-clean domain [structural]"
+        - predicate: data.length > 2
+          reason: "Shorthand box/radius component-list arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: data.length > 3
+          reason: "Shorthand box/radius component-list arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: data.length > 4
+          reason: "Shorthand box/radius component-list arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: filtered.length > 2
+          reason: "Shorthand filtered-token arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: filtered.length > 3
+          reason: "Shorthand filtered-token arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: hValues.length > 4
+          reason: "border-radius horizontal value-list arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: i < 4
+          reason: "DOMMatrix 4x4 index loop bound inherited via CSSOM Implements; structural linear-algebra helper, not an origin-clean domain [structural]"
+        - predicate: positionTokens.length > 4
+          reason: "background-position token-list arity guard; structural parse, not an origin-clean domain [structural]"
+        - predicate: token.value <= 1000
+          reason: "Incidental font-weight numeric cap in shorthand expand; not an origin-clean contract domain [structural]"
+        - predicate: vValues.length > 4
+          reason: "border-radius vertical value-list arity guard; structural parse, not an origin-clean domain [structural]"
         - predicate: val > 100
           reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
     last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T21:24:52Z"
+    last_modified_at: "2026-08-22T14:00:00Z"
 obligation_checklist:
     - access_denied
     - error_handling

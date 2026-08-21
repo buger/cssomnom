@@ -3176,3 +3176,13 @@ Close the last `denial_of_service_resistant:fuzz` cell (`SW-REQ-260821-QV2H`) wi
 - [x] `obligation_evidence_complete` 1→0 (168/66 covered). `obligation_profile_evidence_complete` 5 cells covered.
 - [x] `proof req verification --propose` for 7521/HHVE/SBJ7/7M07/QV2H → `passing` (css-fuzz evidence_profile). `--auto --changed-by agent:grok-4.6` applied. Lifecycle stayed `review`.
 
+---
+
+## Phase: close leftover `code_predicates_modeled` arity compares (Champ overlay)
+
+11 leftover numeric compares on `SW-REQ-260821-6951` after file-level `Implements:` on `src/shorthands.ts` / `src/CSSOM.ts`. Did **not** invent ranged FRETish vars. Did **not** `proof approve`.
+
+- [x] Sample: `2 < tokens.length` (`slashIdx + 2 < tokens.length` background slash-split). Also `data.length > 2/3/4`, `filtered.length > 2/3`, `hValues.length > 4`, `i < 4`, `positionTokens.length > 4`, `token.value <= 1000`, `vValues.length > 4`.
+- [x] `verification.not_modeled` with `[structural]` reasons (Unicode/length/arity). CLI has no `--not-modeled`; YAML edit + `proof req show SW-REQ-260821-6951`.
+- [x] `/tmp/proof-dx/proof audit --check code_predicates_modeled --fail-level warn` → **Errors: 0, Warnings: 0**.
+
