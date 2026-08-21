@@ -3004,3 +3004,15 @@ Patched `/tmp/probe-labs/reqproof` (PR-worthy). Overlay recapture uses `/tmp/pro
 - [x] **known_issue_complete**: `proof evidence capture <KI>` stamps red/fixed reproducers. Overlay `proof/evidence/ki-{1,2,3,5,6,7}.yaml`. Check **pass** (KI-7 open+reproduced; KI-1..6 fixed+not_reproduced; KI-4 withdrawn).
 - [x] **verify_passes realize**: Kind2 now sees managed Z3 on PATH; cached `realize_result=error` is not reused. Realize **28/28 realizable**. Remaining verify warn: 65 unconstrained outputs (honest; no fake Z3 domains).
 
+---
+
+## Phase: JS/TS code MC/DC hotspots (Champ)
+
+Increase decision coverage on `src/**` (exclude `src/data/gen`) without lowering 100% floors and without bare `//mcdc:ignore`.
+
+- [x] Real tests for `expandFont` / `contractBackground` (`tests/mcdc-hotspot-shorthands.test.ts`).
+- [x] Real tests for `CSSStyleValue.parseAll` / `_parseAll` (`tests/mcdc-hotspot-parse-all.test.ts`).
+- [x] Real tests for `serializeUrlToken` and `tryParsePosition` (`tests/mcdc-hotspot-url-position.test.ts`).
+- [x] Extra recovery / KI-1 / KI-5 tests (`tests/mcdc-hotspot-ki-recovery.test.ts`).
+- [x] Targeted `node --test` on those files is green. No product-code KI reverts.
+
