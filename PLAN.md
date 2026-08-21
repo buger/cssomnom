@@ -3102,3 +3102,36 @@ Overlay FRETish conjuncts after `1efd7ed` (HNRG `set_property_ignored`, HHVE `st
 - [x] Retarget existing `tests/mcdc-witness-*.test.ts` (and KI-1/KI-7 overlay comments) to current unique-cause SAT rows. Do not delete extra EGCP SAT `bad_dictionary=F, duplicate_js_register=T, register_throws=T` (valid assignment; `max_stale_witness_lines: 1`).
 - [x] Classified ignore only where unreachable AND positive path already witnessed. 5W6X fetch=T remains capability-gap `[ki: KI-7]` plus tripwire `[known-issue]`. Did not `proof approve` / lower floors.
 
+---
+
+## Phase: ground spec_conformance citations (citation-file-unannotated)
+
+`spec_lint_spec_conformance_review_grounded` 14 `citation-file-unannotated` issues. Reviews cited files that lacked `// Implements:` / `// Verifies:` for that req. Did **not** `proof approve`. Did **not** un-approve 7AKJ (KI-3 product fix is live: `CSSStyleValue.parse('object-position','not-a-position')` throws TypeError; overlay reproducer passes).
+
+- [x] File-level and cited-symbol `// Implements:` on REVIEW-1/5/6/7/8/13/18/28 citation files: `css-escape.ts` (3553), `CSSStyleValue.ts` (7AKJ), `AbstractTokenizer.ts`/`tokenizer.ts` (7M07, QV2H), `streaming-tokenizer.ts` (QV2H), `numeric-methods.ts`/`CSSUnitValue.ts` (E5D5), `cascade-sorter.ts`/`cascade/index.ts` (FWNH), `cascade.ts`/`cascade/index.ts` (RPSA). `style-value-parser.ts` already had 7AKJ. No YAML review/spec edits. No waive.
+
+---
+
+## Phase: more typed-om / shorthand / serializer MC/DC branch tests (Champ)
+
+Add branch tests for `src/shorthands.ts`, `src/serializer.ts`, and `src/typed-om/**` not already covered by `tests/mcdc-hotspot-*.test.ts`. Drive real APIs. No product changes. No `//mcdc:ignore`.
+
+- [x] `tests/mcdc-hotspot-shorthands-more.test.ts` — `expandBackground`, `expandBox`/`contractBox`, two-value, border/outline/border-image, font-variant/`contractFont`, list-style, flex, overflow, line-clamp, border-radius, `all`.
+- [x] `tests/mcdc-hotspot-serializer-more.test.ts` — `requiresTokenSeparator`, identifier/string/token arms, `counter()`/`url()`/`attr()`, `serializeDeclarations` combining, `serializeSelectorList`/`serializeFontFamily`.
+- [x] `tests/mcdc-hotspot-typed-om-more.test.ts` — numeric parse/arithmetic/`to`/`equals`, math types, color constructors/`CSSColorValue.parse`, transforms, unparsed/var, `StylePropertyMap`, factory/`CSSPositionValue`.
+- [x] Node 24: 60 passed, 0 failed. Did not `proof approve`.
+
+---
+
+## Phase: overlay audit close-3 (remaining honest WARN)
+
+Close remaining `proof audit --fail-level warn` findings from audit-full-4 without theater. Did **not** `proof approve` (66), `proof waive`, fake Z3 ranges, or lower `code_mcdc` 100% floors.
+
+- [x] `known_issue_complete`: `proof evidence refresh KI-7` (Node 24). Tripwire still fails (`CSSImportRule.styleSheet` null). Re-stamped after parser.ts Implements.
+- [x] `obligation_evidence_complete` 11→5: `:negative` triples on existing throw/error tests (JTY2 DOMMatrix SyntaxError, ZMZR grouping insertRule SyntaxError, ZP03 registerProperty SyntaxError, WTPD parseRule trailing garbage, N2VE unexpected-EOF parse errors). Remaining 5 are `denial_of_service_resistant:fuzz` — need an evidence-profile provenance lane, not a JS comment.
+- [x] `obligation_decomposition_complete`: source_native covering via `// Implements:` on the 8 leaves (HJVC/JTY2/N2VE/WQX9/6D9T/1E5K/37RC/YTV6). Did not mint empty `proof req decompose` drafts.
+- [x] `spec_lint_plan_of_record_current`: `proof req edit --review-reviewed-at` children 2026-08-22T12:00:00Z then parents 8TGB/HGFK 12:00:01Z.
+- [x] `authored_delta_expected`: `proof review impact --all-pending` sidecar `proof/impact-reviews/cssomnom-audit.yaml` (Implements-only; no product change).
+- [x] Side-effect of Implements: N2VE/WQX9 `verification.not_modeled` for `tokens.length >= 2` / `val > 100` (`[structural]`, same prose as sibling INT). No fake ranges.
+- [x] Full audit: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full-5.log` — Errors 0, Warnings 13. Left: status_vs_review 34, suspect 202, nonbool 76, under_modeled 27, code_mcdc 51.7%/53.7% vs 100%, lint_clean 581, process_checklist 5 pending, fuzz evidence 5.
+

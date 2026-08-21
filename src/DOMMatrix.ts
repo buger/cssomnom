@@ -122,6 +122,7 @@ function parseMatrix3D(str: string): { is2D: boolean; values: Float64Array } | n
   return { is2D: false, values: new Float64Array(numbers) };
 }
 
+// Implements: INT-REQ-260821-JTY2
 function parseTransformHook(str: string): { is2D: boolean; values: Float64Array } | null {
   if (parseTransformListHook) {
     return parseTransformListHook(str);
@@ -149,6 +150,7 @@ function parseMatrixString(str: string): { is2D: boolean; values: Float64Array }
 
 export let parseTransformListHook: ((str: string) => { is2D: boolean; values: Float64Array }) | null = null;
 
+// Implements: INT-REQ-260821-JTY2
 export function setParseTransformListHook(hook: (str: string) => { is2D: boolean; values: Float64Array }) {
   parseTransformListHook = hook;
 }

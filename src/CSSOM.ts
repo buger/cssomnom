@@ -765,6 +765,7 @@ export class CSSStyleRule extends CSSGroupingRule {
   private _selectorText: string;
   private _selectorAST: import('./types.ts').SelectorList | null = null;
   private _style: CSSStyleDeclaration;
+  // Implements: INT-REQ-260821-WQX9
   readonly styleMap: StylePropertyMap;
 
   constructor(selectorText: string, styleDeclarations: Declaration[], rules: Rule[], parseRuleInBlock: (text: string) => Rule, selectorAST: import('./types.ts').SelectorList | null = null) {

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-E5D5
 
 import type { CSSNumericType } from './CSSNumericType.ts';
 import { CSSNumericValue } from './CSSNumericValue.ts';
@@ -21,6 +22,7 @@ import { unitToBase, unitToPixels, unitToRadians, unitToSeconds, type CSSUnit } 
 import { formatNumber } from '../../utils/format.ts';
 
 // Spec: CSS Typed OM Level 1 § 4.2 #unitvalue-objects
+// Implements: SW-REQ-260821-E5D5
 export class CSSUnitValue extends CSSNumericValue {
   value: number;
   unit: CSSUnit;

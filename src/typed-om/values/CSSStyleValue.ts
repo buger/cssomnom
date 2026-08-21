@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7AKJ
 
 import { privateToken } from '../utils/validation.ts';
 
@@ -43,6 +44,7 @@ export class CSSStyleValue {
     throw new Error("CSSStyleValue.parseAll not initialized");
   }
 
+  // Implements: SW-REQ-260821-7AKJ
   static parse(_property: string, _css: string): CSSStyleValue {
     if (arguments.length < 2) {
       throw new TypeError("Failed to execute 'parse' on 'CSSStyleValue': 2 arguments required, but only " + arguments.length + " present.");

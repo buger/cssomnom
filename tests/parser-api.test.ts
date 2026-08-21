@@ -139,6 +139,7 @@ describe('CSS Parser API', () => {
     // SYS-REQ-260821-KA02:malformed_input:negative
     // SW-REQ-260821-2Z0N:error_handling:negative
     // SW-REQ-260821-2Z0N:malformed_input:negative
+    // INT-REQ-260821-WTPD:malformed_recovers_or_errors_loudly:negative
     test('CSS.parseRule with trailing garbage throws SyntaxError', () => {
         const css = 'div { color: green; } trailing garbage';
         assert.throws(() => {

@@ -98,6 +98,7 @@ function parseSelector(selector: string | ComplexSelector | SelectorList): Selec
  * Evaluates whether a given DOM element matches a CSS selector.
  * selectors-4 § 15 #match-against-element
  */
+// Implements: SW-REQ-260821-6D9T
 export function matches(element: unknown, selector: string | ComplexSelector | SelectorList, scopeElement?: unknown): boolean {
   if (!isElement(element)) return false;
   const list = parseSelector(selector);

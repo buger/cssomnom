@@ -18,6 +18,7 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { CSSStyleSheet, CSSMediaRule, CSSNestedDeclarations, CSSStyleRule } from '../src/index.ts';
 
+// INT-REQ-260821-ZMZR:error_handling:negative
 test('CSSGroupingRule: insertRule fallback to declaration', () => {
   const sheet = new CSSStyleSheet();
   sheet.replaceSync('.container { @media (width > 0px) {} }');

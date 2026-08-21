@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-5
+evidence_type: known_issue_tripwire
+requirements:
+    - SW-REQ-260821-W8S1
+    - SYS-REQ-260821-5283
+command: node --experimental-strip-types proof/reproducers/KI-5-media-unbalanced.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-21T20:21:40Z"
+input_set:
+    - proof/reproducers/KI-5-media-unbalanced.ts
+freshness_hashes:
+    proof/reproducers/KI-5-media-unbalanced.ts: sha256:b8890cecc22fdd40f9a1b6de00ad717da9cd2345bf15d59dfd54dbf65bdd8ca1
+known_issues:
+    - KI-5

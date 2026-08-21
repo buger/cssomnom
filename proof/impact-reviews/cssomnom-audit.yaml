@@ -1,0 +1,534 @@
+schema_version: 1
+branch: cssomnom-audit
+generated_at: "2026-08-21T22:19:22Z"
+reviews:
+    - requirement: INT-REQ-260821-30ZA
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:223796f16b5f1a68f4320bae706174da0448ec5cae1871bbf54f6f03fc594925
+      approval_fingerprint: sha256:1984561d7f85b8ea6a185e23316364cc3444be22d8fde4890bbecd80cb7e0e18
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-30ZA
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:223796f16b5f1a68f4320bae706174da0448ec5cae1871bbf54f6f03fc594925
+      approval_fingerprint: sha256:1984561d7f85b8ea6a185e23316364cc3444be22d8fde4890bbecd80cb7e0e18
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-9SGA
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:069bc1fe099c64cccd0a03038ca081690160b54c4dbd38af9044bf59373b8cdf
+      approval_fingerprint: sha256:9dd092dc751657a34a333a69da9016eb98e38ecefe0e7fb9aa85870753447a94
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-HJVC
+      artifact: src/cascade/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:8a917d1a8662e5561b28a4bacbc71a92abf09215597e3af8db13042f642d8467
+      approval_fingerprint: sha256:b735779d296017534bf929fa457d2a908659517abdf4da2fe4f4f3dc41f42785
+      artifact_fingerprint: sha256:721c26097d29db45d99cda8933a417f7825346cafad8067787ac0a2b487f6fc3
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-JTY2
+      artifact: src/typed-om/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:b305f7a66f92271d215d85335d9a5a440514178d7d1b37fdfedb9b4f31aa06f7
+      approval_fingerprint: sha256:c39926c294f1ed274967c0fbc3965dcaad3b481124eecf21cdcaaae52e68ab81
+      artifact_fingerprint: sha256:6de06f873c8f99e5e165c40f392630b8d3bc0c317b3ef8e4e308b17caf07afe7
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-MZW3
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:67e9ccb567791b80022c8f3f5cde1802dfc2419d220d1d2d8468bdecb01cea21
+      approval_fingerprint: sha256:844be21009ca079d384bbb96eeda01d9ab219e4ded91dde39da07706e728da16
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-N2VE
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:229ab920077fca207f40772c34e72c32e7f29e92817c260e9af202ce72913315
+      approval_fingerprint: sha256:32e25a9955c95bd20c3b43357e6fdde44f7ab44cb0d3290685a60bf1d60c1345
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-WQX9
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:0c174bb02ad5d761fc201a65929ec42916e0e84326b8057ee8bd58b049853a76
+      approval_fingerprint: sha256:abcefd56f858e3c4c0b14c1c5410dfb4ce71755a23c01a4f0e49e50260e79bae
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-WQX9
+      artifact: src/typed-om/style-map/StylePropertyMap.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:0c174bb02ad5d761fc201a65929ec42916e0e84326b8057ee8bd58b049853a76
+      approval_fingerprint: sha256:abcefd56f858e3c4c0b14c1c5410dfb4ce71755a23c01a4f0e49e50260e79bae
+      artifact_fingerprint: sha256:6700e7716788441002186aa13fcc9335e816e21c5af1995962347a39cbd6e3df
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-ZMZR
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:4a6003d4dad0528f8a53e328774d22d24b847f22c15264ed1ab24ee05a14fda6
+      approval_fingerprint: sha256:6615333cb0af1c31c3cb86fa927da63d19b747f80ea613e115f35f441120adc6
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-ZMZR
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:4a6003d4dad0528f8a53e328774d22d24b847f22c15264ed1ab24ee05a14fda6
+      approval_fingerprint: sha256:6615333cb0af1c31c3cb86fa927da63d19b747f80ea613e115f35f441120adc6
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-ZP03
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:52aebdc5641787c23d2e0e556f17559821cb1ca09a2a2f4b753487e7356d2e99
+      approval_fingerprint: sha256:6e29a88e7b2bdbfdbda332960f2d9980aec7632cb82d5530ac7e07ff4a6c46c9
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-1E5K
+      artifact: src/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:c58f653760314291d4f4c407edf2accf25ecb7db57dd5ae05297cbd52def0612
+      approval_fingerprint: sha256:5efb3457b998464dd932a06a6a8504d5de1908943ca105969f1f784efdb82b55
+      artifact_fingerprint: sha256:29121e7692d25b5e713c52d4d45bcc5c20b32182fd9a8b6d5243cf821f245e85
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-37RC
+      artifact: src/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:59c8774a04b0ee719a136527debf2c839748996c2e99d7113f62d6fb22197f28
+      approval_fingerprint: sha256:eafde8243bd0ae57e7b2a27fc1a668ff824cb922be1b272d76988e2629a88715
+      artifact_fingerprint: sha256:29121e7692d25b5e713c52d4d45bcc5c20b32182fd9a8b6d5243cf821f245e85
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-39E0
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:780e1d08b4a3bcc111fcffb0c6945d98e4c28fa1493443c614d27c1900003e0c
+      approval_fingerprint: sha256:e744fe87be109c2de698a9c30bdb61bfc75e8e826e566b9c7f60e9e5952fff0d
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-5W6X
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:e029b07c4267a9709d63b987500c09b43e6df63f984d9bdeaff90e20aaf7db7d
+      approval_fingerprint: sha256:9ed16b1dc8314e45cf9700c3d82c67f112cdda875749cd0168bfc98b1e6a1c00
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-5W6X
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:e029b07c4267a9709d63b987500c09b43e6df63f984d9bdeaff90e20aaf7db7d
+      approval_fingerprint: sha256:9ed16b1dc8314e45cf9700c3d82c67f112cdda875749cd0168bfc98b1e6a1c00
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-6951
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:a9b78f68fec40886aa77901ae823de683c83c01944f17c5609ef2ec34e64afb0
+      approval_fingerprint: sha256:85a1e203e952a21fd5b7976cd4a4ee627c62e81d25c72a5f60bd6e4bd99d2125
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-6D9T
+      artifact: src/SelectorParser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:e449b1d7495be707be9e150eee1b7fe84fe076a25c4d359088aa0e6a1c2a102c
+      approval_fingerprint: sha256:19ac8263a1c78b3e5e7c53ac46d27d254f7bfaea71f55c497c8606674d267ecb
+      artifact_fingerprint: sha256:d5608f9b99171df28ed17bee797a8aaa69720d99db76c7e20f1262f27d6419a6
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-7AKJ
+      artifact: src/typed-om/position/position-parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:d97450d5789718e7e1544470f029448d0708c8cfa0cd8d93cc53f413c0caf212
+      approval_fingerprint: sha256:9583d763305c53319d3d34e64466dffc84d643aeb01d41f1ca9aaa3425fefd86
+      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-7AKJ
+      artifact: src/typed-om/values/CSSStyleValue.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:d97450d5789718e7e1544470f029448d0708c8cfa0cd8d93cc53f413c0caf212
+      approval_fingerprint: sha256:9583d763305c53319d3d34e64466dffc84d643aeb01d41f1ca9aaa3425fefd86
+      artifact_fingerprint: sha256:7ce15cf4a4026fa2e954ab0cd9c4259adeeac093babbe16e4a561c20fb681e2b
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-7M07
+      artifact: src/AbstractTokenizer.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:cdc59ab9347e459667534abca678fd4886a2ba8e8fdbc7dc93d56d9a6c81a49f
+      approval_fingerprint: sha256:c85c4d7119cc8f30e00b58d5405279b4fa5fb09f579049be48046cbaa9876c08
+      artifact_fingerprint: sha256:22182e4e2f284388d24d753d8b571789311c955952d88c5d541b66f893abea7d
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-7M07
+      artifact: src/tokenizer.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:cdc59ab9347e459667534abca678fd4886a2ba8e8fdbc7dc93d56d9a6c81a49f
+      approval_fingerprint: sha256:c85c4d7119cc8f30e00b58d5405279b4fa5fb09f579049be48046cbaa9876c08
+      artifact_fingerprint: sha256:6111f81cf451e4a3f1a8902ebdcea0e6516b9388960d72074f3dbeeca3755427
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-9KNX
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:2cfa683e97238b40224eafc5259e36304f927ed2d3f449bcddf6322d0320824b
+      approval_fingerprint: sha256:3077f64150303bf2f26ec5fead2b194cdca4512b12ccf80f4801629fd1583a9b
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-ARC1
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:9dedfe6b34c8c222fde19762ac11a7d58d21b9c3e2536947d4bf2df17fe404a6
+      approval_fingerprint: sha256:ca992cf8e5cb097c0457a07df0fcb08779bc4150c50352b004ffe0aa77b4fd64
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-E5D5
+      artifact: src/typed-om/numeric/CSSUnitValue.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:33bd150ad5781910b9f2007ee083ea3b6713334853ff3a888af6fb67fa5a722a
+      approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
+      artifact_fingerprint: sha256:9e3e332583517b07e2357de0c107aea8863beba6fd53677ca8993e6daf73a3e7
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-E5D5
+      artifact: src/typed-om/numeric/numeric-methods.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:33bd150ad5781910b9f2007ee083ea3b6713334853ff3a888af6fb67fa5a722a
+      approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
+      artifact_fingerprint: sha256:614abdbafe389bd08b4218ae89f074a919d213b5e6d78c601e80eb3092767965
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-E5D5
+      artifact: src/typed-om/position/position-parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:33bd150ad5781910b9f2007ee083ea3b6713334853ff3a888af6fb67fa5a722a
+      approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
+      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-FWNH
+      artifact: src/cascade/cascade-sorter.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:09bc67a64c7322b4089bfc574714b1d42aa926a55b85c4648f9d905b8b5b040f
+      approval_fingerprint: sha256:aa2e075ac64f6caab778c282deb4f16dbbce3d9af447bd3a0c44c15637ad072b
+      artifact_fingerprint: sha256:d234edb52d5afff4094610e7643c84b785cbe66393e3be331e13055bac493f46
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-FWNH
+      artifact: src/cascade/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:09bc67a64c7322b4089bfc574714b1d42aa926a55b85c4648f9d905b8b5b040f
+      approval_fingerprint: sha256:aa2e075ac64f6caab778c282deb4f16dbbce3d9af447bd3a0c44c15637ad072b
+      artifact_fingerprint: sha256:721c26097d29db45d99cda8933a417f7825346cafad8067787ac0a2b487f6fc3
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-HHVE
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:81ad3c696bb9a23f9936f946140fda90fdf7b9e6f4c76b3f457d32ec1ea39e91
+      approval_fingerprint: sha256:c3f8697cf500e07d32e91298e02c88a630ac6ba6b2be8e648fe3980cc509c4d1
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-HNRG
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:738ca8b31e984eb91433738e36a26fec60ff6bcdcd217eca3f7f94ff690cb75d
+      approval_fingerprint: sha256:15042caab5a6e2faae29568c49680de0381fd9f2cda309e0371fdc29a9eb6187
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-PAKB
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:bcc12301fc6fd0f098f7e1f32d1e506831c3e776c711298efb4be4ca4b7c8496
+      approval_fingerprint: sha256:9b9d6b5d49511f1ba7d8a9df413266145d9b02d2217ab8d5fa6352d02afa6ce9
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-QV2H
+      artifact: src/AbstractTokenizer.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:d544e40319862d55297782bf39d628c04ec2acad72bd27f0cffeef489a8bff88
+      approval_fingerprint: sha256:be425667e4f262b58669c8218b841ccdd790e34a53f50a1853aa03442d574915
+      artifact_fingerprint: sha256:22182e4e2f284388d24d753d8b571789311c955952d88c5d541b66f893abea7d
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-QV2H
+      artifact: src/streaming-tokenizer.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:d544e40319862d55297782bf39d628c04ec2acad72bd27f0cffeef489a8bff88
+      approval_fingerprint: sha256:be425667e4f262b58669c8218b841ccdd790e34a53f50a1853aa03442d574915
+      artifact_fingerprint: sha256:d4b174c714c16cc4d2c131dee90c49e9b01f84a6f56ba2fce96f16787a3711b8
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-QV2H
+      artifact: src/tokenizer.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:d544e40319862d55297782bf39d628c04ec2acad72bd27f0cffeef489a8bff88
+      approval_fingerprint: sha256:be425667e4f262b58669c8218b841ccdd790e34a53f50a1853aa03442d574915
+      artifact_fingerprint: sha256:6111f81cf451e4a3f1a8902ebdcea0e6516b9388960d72074f3dbeeca3755427
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-RPSA
+      artifact: src/cascade.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:bc49a6dee46eb43cdf71267f1e2c14e392b461443b27fcb6d9e3300e4d9f7ea0
+      approval_fingerprint: sha256:49e14a84434c46debb524b53c9e4fa9d3924556c79c580fad151e95e0e3638e1
+      artifact_fingerprint: sha256:bf2562bf564ebdc2238d54028ec52c9f3aa1bf9e6f728f14a16423fcb9dd450f
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-RPSA
+      artifact: src/cascade/index.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:bc49a6dee46eb43cdf71267f1e2c14e392b461443b27fcb6d9e3300e4d9f7ea0
+      approval_fingerprint: sha256:49e14a84434c46debb524b53c9e4fa9d3924556c79c580fad151e95e0e3638e1
+      artifact_fingerprint: sha256:721c26097d29db45d99cda8933a417f7825346cafad8067787ac0a2b487f6fc3
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-TF5T
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:0ccb3a33e484dfe03e7135533c17142b3de402cdba23c61ddd158bbdbb1eb8f0
+      approval_fingerprint: sha256:a7a879cb230da519a7bfcf2e868f48bf4b992eb0a2b2bd3bc0e863f409b549d3
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-YG9J
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:511d3494553f25fb57d5eb8d3b515a7f56ddd9bac28a628de7167931148871bc
+      approval_fingerprint: sha256:b9131f7ecdba7cac65da8609d2d03019134d374f619e9abeb5cab2d1ff516936
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-03VA
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:8c56b5e34a05762d9b233c47fad5e31baec2b3c1f405ec865fa835d93579b498
+      approval_fingerprint: sha256:52476230c35fab75956e0537d2dfe16fd2efae37ba662cfed827cc0eb641f697
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-5283
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:0bc4e9c5fc079885b7d2be3cfe46f569f394f5a787dccadb4a75c1c41de0d301
+      approval_fingerprint: sha256:eaf3629057231c9a3853ef762ded7a8c27b78f00002dc0f8091a72510b32c569
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-7521
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:12f8cee174c4eafdc7a9fe954a741cf682094b0054a90861a1fc283acf713802
+      approval_fingerprint: sha256:9740f9cc05daae14aeb5e7f24ca9ef8b753bcd09385fc178c8df85303385c434
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-8TGB
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:a93bf627d63179bf1e4ad8f820e24cf2e32f92213480fba6b4f9bfffe68ceca2
+      approval_fingerprint: sha256:8183494a7278d205a03566bf58ded471d40e8b1dadb0c4f0ed300cfdcd295ff3
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-9YM3
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:c6121c33f2340a275d47e7a28c03813bdd02a72c5fb6c0378e148a07cc5350b0
+      approval_fingerprint: sha256:f49fb21e83b46547f71f118e16ecb63cd883409dc7a831b95667936f14fdac0f
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-GR67
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:6b043bde8e5a37571bda7dd7a45320c66f0f576096b37fe46c2b84b593033d70
+      approval_fingerprint: sha256:1192f69d47e6b4b8bc31545d21138900d8a7503a86e7342fb5e3bb365ffb29d9
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-H3BD
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:25ac4f5905bea9afa7a44ffab19246889a1edf35e187d20de9cd52645b84659f
+      approval_fingerprint: sha256:9b441b73e7f63f83a8de3754f23c010c3bfd38d47ef5c244bd0a2747b38d9243
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-H3BD
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:25ac4f5905bea9afa7a44ffab19246889a1edf35e187d20de9cd52645b84659f
+      approval_fingerprint: sha256:9b441b73e7f63f83a8de3754f23c010c3bfd38d47ef5c244bd0a2747b38d9243
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-HGFK
+      artifact: src/typed-om/position/position-parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:aa8cf7051293deb66a9de00cc8b346467f4f72ed39fe7195c57a8b2d981d1da0
+      approval_fingerprint: sha256:6765df8cb6c3df2e297b44dbe7374ef186aec28d92779b7d20054b1e41fd83bf
+      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-NHZ8
+      artifact: src/parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:45eed5d1fac6423cc423c8b54e06562ff6e83bc34461e5a5b8784a1e2f7633d6
+      approval_fingerprint: sha256:b1beb8030ef04a0ceddf13c66537d11778e50960c917401a9a2ac98b8a9c59f0
+      artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-X3KX
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:5314ebc0b8cd8db1a4fb3c9bc59f2087868f12c9f46a9518d0bf1bda9b9ec8dd
+      approval_fingerprint: sha256:ba824c8c73011de77ab0cd3ec4ac54edebc1c327dd4301674933a324e2243677
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-Y6R3
+      artifact: src/typed-om/position/position-parser.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:8502c004fc8e1de6e0c818de1bf0d83553eda88fd78cd677d6515057df66b2b2
+      approval_fingerprint: sha256:a764547c3d5c6afae73720f19088d7e1e3e0ebf35b76acf57f02f99c4517c390
+      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
+      reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-YMEY
+      artifact: src/CSSOM.ts
+      decision: no-authored-change
+      reviewer: dev
+      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      base: HEAD~1
+      requirement_fingerprint: sha256:63e20f9bd25faa303862a2bcaf416a82aec6b5d918fe6ed039e50394d4b9341b
+      approval_fingerprint: sha256:3ff86ce53fa412046b9e2a3949fe6b40e88eaf120fb16c6241e87c67064b13a9
+      artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
+      reviewed_at: "2026-08-21T22:19:22Z"

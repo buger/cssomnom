@@ -30,6 +30,9 @@ traces:
 verification:
     assurance_level: C
     formalization_status: valid
+    not_modeled:
+        - predicate: "val > 100"
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
     review:
         status: pending
         reviewer: ""

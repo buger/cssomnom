@@ -90,6 +90,7 @@ import './color/color-reify.ts';
 import { CSSTransformValue } from './transform/CSSTransformValue.ts';
 import { setParseTransformListHook } from '../DOMMatrix.ts';
 
+// Implements: INT-REQ-260821-JTY2
 setParseTransformListHook((str) => {
   try {
     const transformVal = CSSTransformValue.parse(str);

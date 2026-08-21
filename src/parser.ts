@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Implements: SYS-REQ-260821-7521, SYS-REQ-260821-03VA, SYS-REQ-260821-NHZ8, SYS-REQ-260821-H3BD, SW-REQ-260821-HHVE, SW-REQ-260821-9KNX, SW-REQ-260821-YG9J, SW-REQ-260821-39E0, SW-REQ-260821-5W6X, INT-REQ-260821-30ZA, INT-REQ-260821-9SGA, INT-REQ-260821-ZMZR
+// Implements: SYS-REQ-260821-7521, SYS-REQ-260821-03VA, SYS-REQ-260821-NHZ8, SYS-REQ-260821-H3BD, SW-REQ-260821-HHVE, SW-REQ-260821-9KNX, SW-REQ-260821-YG9J, SW-REQ-260821-39E0, SW-REQ-260821-5W6X, INT-REQ-260821-30ZA, INT-REQ-260821-9SGA, INT-REQ-260821-ZMZR, INT-REQ-260821-N2VE
 import type { Token, TokenStream, ComponentValue, ComponentValueStream, SimpleBlock, CSSFunction, Declaration, ASTAtRule, Rule, ParseError, StringToken, FunctionToken, CustomMediaQuery } from './types.ts';
 
 
@@ -44,7 +44,7 @@ import { PropertyRegistry, matchesSyntax } from './PropertyRegistry.ts';
  * @note We recommend a more ergonomic entry point like `CSS.parseStylesheet` 
  * or `CSS.parseStylesheetSync` for standard usage.
  */
-// Implements: SYS-REQ-260821-7521, SW-REQ-260821-HHVE, SYS-REQ-260821-03VA, SW-REQ-260821-9KNX, SW-REQ-260821-YG9J, SYS-REQ-260821-NHZ8, SW-REQ-260821-39E0, SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X, INT-REQ-260821-ZMZR
+// Implements: SYS-REQ-260821-7521, SW-REQ-260821-HHVE, SYS-REQ-260821-03VA, SW-REQ-260821-9KNX, SW-REQ-260821-YG9J, SYS-REQ-260821-NHZ8, SW-REQ-260821-39E0, SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X, INT-REQ-260821-ZMZR, INT-REQ-260821-N2VE
 export class Parser {
   private tokens: TokenStream;
   public errors: ParseError[] = [];
@@ -171,7 +171,7 @@ export class Parser {
    * @see https://drafts.csswg.org/css-syntax-3/#parse-a-stylesheet
    */
   // 5.4.3 Parse a stylesheet https://drafts.csswg.org/css-syntax/#parse-stylesheet
-  // Implements: SYS-REQ-260821-7521, SW-REQ-260821-HHVE, INT-REQ-260821-ZMZR
+  // Implements: SYS-REQ-260821-7521, SW-REQ-260821-HHVE, INT-REQ-260821-ZMZR, INT-REQ-260821-N2VE
   public parseStyleSheet(): CSSStyleSheet {
     const rules = this.consumeListOfRules(true);
     return CSSStyleSheet.createInternal(rules, parseRule);
@@ -285,7 +285,7 @@ export class Parser {
    * @see https://drafts.csswg.org/css-syntax-3/#consume-list-of-rules
    */
   // 5.5.1 Consume a stylesheet's contents https://drafts.csswg.org/css-syntax/#consume-stylesheet-contents
-  // Implements: SYS-REQ-260821-03VA, SW-REQ-260821-YG9J
+  // Implements: SYS-REQ-260821-03VA, SW-REQ-260821-YG9J, INT-REQ-260821-N2VE
   public consumeListOfRules(topLevel: boolean): Rule[] {
     const rules: Rule[] = [];
     while (true) {

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-3
+evidence_type: known_issue_tripwire
+requirements:
+    - SW-REQ-260821-7AKJ
+    - SYS-REQ-260821-HGFK
+command: node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-21T20:21:40Z"
+input_set:
+    - proof/reproducers/KI-3-object-position-parse.ts
+freshness_hashes:
+    proof/reproducers/KI-3-object-position-parse.ts: sha256:bc306ba1db1a296e98cf49e8bf756bcc2d2776b85fb332206ddb3861bf30cd24
+known_issues:
+    - KI-3

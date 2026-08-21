@@ -128,6 +128,7 @@ export class StylePropertyMap extends StylePropertyMapReadOnly {
     return getPropertyValueSafe(this._style, property) !== '';
   }
 
+  // Implements: INT-REQ-260821-WQX9
   set(property: string, ...values: (CSSStyleValue | string)[]): void {
     validateProperty(property);
     this._checkPendingSubstitution(property);

@@ -17,6 +17,7 @@
 import type { Token, TokenStream, ComponentValue, ComponentValueStream } from './types.ts';
 import { NeedMoreDataError, type StreamingTokenizer } from './streaming-tokenizer.ts';
 
+// Implements: INT-REQ-260821-N2VE
 export class ArrayTokenStream implements TokenStream {
   private tokens: Token[];
   private index: number = 0;

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-E5D5
 
 import type { CSSFunction, Token } from '../../types.ts';
 import type { CSSUnit } from '../../data/gen/units.ts';
@@ -271,6 +272,7 @@ export function numericToSum(self: CSSNumericValue, ...units: string[]): CSSMath
   return new CSSMathSum(...result);
 }
 
+// Implements: SW-REQ-260821-E5D5
 export function parseNumericValue(css: string): CSSNumericValue {
   if (arguments.length < 1) {
     throw new TypeError("Failed to execute 'parse' on 'CSSNumericValue': 1 argument required, but only 0 present.");

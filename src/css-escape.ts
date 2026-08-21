@@ -7,6 +7,7 @@
  */
 // cssom-1 § 3 #the-css.escape()-method
 // cssom-1 § 2.3 #serialize-an-identifier
+// Implements: SW-REQ-260821-3553
 export function escape(ident: unknown): string {
   if (arguments.length === 0) {
     throw new TypeError("Failed to execute 'escape' on 'CSS': 1 argument required, but only 0 present.");

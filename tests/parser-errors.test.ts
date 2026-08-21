@@ -22,6 +22,7 @@ import type { ParseError, ComponentValue } from '../src/types.ts';
 import { CSSStyleRule } from '../src/index.ts';
 import { ArrayComponentValueStream } from '../src/TokenStream.ts';
 
+// INT-REQ-260821-N2VE:error_handling:negative
 test('Parser reports error on unexpected EOF in qualified rule', () => {
   const tokens = tokenize('a');
   const parser = new Parser(tokens);

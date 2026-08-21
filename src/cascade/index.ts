@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-FWNH, SW-REQ-260821-RPSA, INT-REQ-260821-HJVC
 
 import { CSSStyleDeclaration } from '../CSSStyleDeclaration.ts';
 import { tokenize } from '../tokenizer.ts';
@@ -153,6 +154,7 @@ export function normalizePseudoElement(pseudo: string): { valid: boolean; normal
  * css-cascade-5 § 7 #cascaded-values
  * css-variables-1 § 4 #resolving-var-functions
  */
+// Implements: SW-REQ-260821-FWNH, SW-REQ-260821-RPSA, INT-REQ-260821-HJVC
 export function getCascadedStyle(
   element: unknown,
   rules?: Rule[] | CSSRuleList,

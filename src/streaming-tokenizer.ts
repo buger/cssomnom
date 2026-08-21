@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-QV2H
 import { AbstractTokenizer } from './AbstractTokenizer.ts';
 import type { Token } from './types.ts';
 
@@ -58,6 +59,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
     super();
   }
 
+  // Implements: SW-REQ-260821-QV2H
   appendChunk(chunk: string): void {
     const text = this.preprocessChunk(chunk, false);
     if (text.length > 0) {
@@ -94,6 +96,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
     this.tokenizeLoop();
   }
 
+  // Implements: SW-REQ-260821-QV2H
   getTokens(): Token[] {
     const result = [...this.tokens];
     this.tokens = [];

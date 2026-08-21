@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-RPSA
 
 // Spec-Aligned Cascade Pipeline Architecture (CSS Cascade 5, CSS Variables 1, CSS Env 1, CSS Color 4)
 export * from './cascade/index.ts';

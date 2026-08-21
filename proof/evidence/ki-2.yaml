@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-2
+evidence_type: known_issue_tripwire
+requirements:
+    - SW-REQ-260821-PAKB
+    - SYS-REQ-260821-GR67
+command: node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-21T20:21:40Z"
+input_set:
+    - proof/reproducers/KI-2-replace-sync.ts
+freshness_hashes:
+    proof/reproducers/KI-2-replace-sync.ts: sha256:8d9b736ccad7aa21b9340aaa857051d0b4f29654d05f9d8dc18917f3b1580fa6
+known_issues:
+    - KI-2

@@ -140,6 +140,7 @@ function getLastToken(node: ComponentValue): Token | null {
   return t;
 }
 
+// Implements: SW-REQ-260821-YTV6
 export function serialize(nodes: ComponentValue[], preserveCase: boolean = false, propertyName?: string): string {
   if (propertyName === 'font-family') {
     return serializeFontFamily(nodes);

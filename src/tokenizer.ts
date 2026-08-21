@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
 import { AbstractTokenizer } from './AbstractTokenizer.ts';
 import type { Token, ParseError } from './types.ts';
 
+// Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
 export function tokenize(input: string, unicodeRangesAllowed: boolean = false, errors?: ParseError[]): Token[] {
   const tokenizer = new Tokenizer(input);
   tokenizer.unicodeRangesAllowed = unicodeRangesAllowed;
@@ -49,6 +51,7 @@ class Tokenizer extends AbstractTokenizer {
       .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '\uFFFD');
   }
 
+  // Implements: SW-REQ-260821-7M07
   tokenize(): Token[] {
     const tokens: Token[] = [];
     while (true) {

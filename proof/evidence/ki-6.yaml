@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-6
+evidence_type: known_issue_tripwire
+requirements:
+    - INT-REQ-260821-WTPD
+command: node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-21T20:21:41Z"
+input_set:
+    - proof/reproducers/KI-6-parser-api-type0.ts
+freshness_hashes:
+    proof/reproducers/KI-6-parser-api-type0.ts: sha256:63c83b077e3f6b868ed8b607af7bda34dda66a2fff581ac74fa465a7f007e0b2
+known_issues:
+    - KI-6

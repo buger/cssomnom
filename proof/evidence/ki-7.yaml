@@ -1,0 +1,19 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-7
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260821-H3BD
+    - SW-REQ-260821-5W6X
+command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-21T22:19:35Z"
+input_set:
+    - proof/reproducers/KI-7-import-stylesheet-null.ts
+    - src/parser.ts
+    - parser.ts
+freshness_hashes:
+    proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:7b9554a00b0a13881c95e4b541cc651357a181acb759011a767c6211bb900cb1
+    src/parser.ts: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+known_issues:
+    - KI-7

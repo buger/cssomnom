@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-FWNH
 
 import { compareSpecificity } from '../specificity.ts';
 import type { MatchedDeclaration } from './types.ts';
@@ -25,6 +26,7 @@ import type { MatchedDeclaration } from './types.ts';
  * 3. Specificity (selectors-4 § 4 #specificity-rules)
  * 4. Order of Appearance / Source Order (ascending)
  */
+// Implements: SW-REQ-260821-FWNH
 export function compareCascadeDeclarations(a: MatchedDeclaration, b: MatchedDeclaration): number {
   const getPrecedence = (decl: MatchedDeclaration): number => {
     if (decl.important) {

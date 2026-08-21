@@ -131,6 +131,7 @@ export interface SelectorParserOptions {
  * Selector Parser according to Selectors Level 4.
  * @see https://drafts.csswg.org/selectors-4/#grammar
  */
+// Implements: SW-REQ-260821-6D9T
 export class SelectorParser {
   public static readonly PSEUDO_CLASSES = PSEUDO_CLASSES;
   public static readonly PSEUDO_ELEMENTS = PSEUDO_ELEMENTS;
@@ -164,6 +165,7 @@ export class SelectorParser {
     });
   }
 
+  // Implements: SW-REQ-260821-6D9T
   public parse(): SelectorList {
     const selectors: (ComplexSelector | InvalidSelector)[] = [];
     

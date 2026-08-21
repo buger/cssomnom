@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
 import type { Token, ParseError } from './types.ts';
 
 export abstract class AbstractTokenizer {
@@ -33,6 +34,7 @@ export abstract class AbstractTokenizer {
   }
 
   // 4.3.1 Consume a token
+  // Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
   protected consumeToken(): Token {
     while (true) {
       this.consumeComments();
