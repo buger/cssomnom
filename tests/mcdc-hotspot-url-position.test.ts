@@ -202,6 +202,16 @@ describe('MC/DC hotspot: tryParsePosition / toPositionCoord', () => {
     assert.ok(centerPx);
     unit(centerPx.x, 50, 'percent');
     unit(centerPx.y, 8, 'em');
+
+    // css-values-4 #position: [ left | center | right ] && [ top | center | bottom ]
+    const centerLeft = tryParsePosition([ident('center'), ident('left')]);
+    assert.ok(centerLeft);
+    unit(centerLeft.x, 0, 'percent');
+    unit(centerLeft.y, 50, 'percent');
+    const parsed = CSSStyleValue.parse('object-position', 'center left');
+    assert.ok(parsed instanceof CSSPositionValue);
+    unit(parsed.x, 0, 'percent');
+    unit(parsed.y, 50, 'percent');
   });
 
   test('2-value invalid: top+length, length+left, unknown keyword', () => {

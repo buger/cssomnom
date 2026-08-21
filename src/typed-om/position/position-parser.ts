@@ -99,6 +99,18 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
       }
     }
 
+    // css-values-4 § 10.1 #position / css-transforms-1 § 5 #transform-origin-property:
+    // [ left | center | right ] && [ top | center | bottom ] — `center` is in both
+    // groups, so `center left` / `center right` are valid (vertical center, then x).
+    if (isToken(c0) && c0.type === 'ident' && c0.value.toLowerCase() === 'center' &&
+        isToken(c1) && c1.type === 'ident' && ['left', 'right'].includes(c1.value.toLowerCase())) {
+      const yCoord = toPositionCoord(new CSSKeywordValue(c0.value));
+      const xCoord = toPositionCoord(new CSSKeywordValue(c1.value));
+      if (xCoord && yCoord) {
+        return new CSSPositionValue(xCoord, yCoord);
+      }
+    }
+
     // Option A: Horizontal component followed by Vertical component
     // Disallow vertical keyword followed by length or length followed by horizontal keyword
     if (isToken(c0) && c0.type === 'ident' && ['top', 'bottom'].includes(c0.value.toLowerCase())) {
@@ -250,12 +262,44 @@ function isSingleValueTransformOrigin(c: ComponentValue): boolean {
   return isIdentKeyword(c, ['left', 'center', 'right', 'top', 'bottom']) || isHorizontalOrigin(c);
 }
 
+function identKeyword(c: ComponentValue): string | null {
+  return isToken(c) && c.type === 'ident' ? c.value.toLowerCase() : null;
+}
+
+function isKeywordAndPair(a: ComponentValue, b: ComponentValue): boolean {
+  // css-values-4 § 2.2 #comb-all: && requires both, in either order.
+  // css-transforms-1 § 5 #transform-origin-property / css-values-4 § 10.1 #position:
+  // [ [ center | left | right ] && [ center | top | bottom ] ]
+  // `center` is in both groups, so `center left` and `center right` assign center to y.
+  const ka = identKeyword(a);
+  const kb = identKeyword(b);
+  if (!ka || !kb) return false;
+  const horiz = (k: string) => k === 'center' || k === 'left' || k === 'right';
+  const vert = (k: string) => k === 'center' || k === 'top' || k === 'bottom';
+  return (horiz(ka) && vert(kb)) || (vert(ka) && horiz(kb));
+}
+
 function isTwoValueTransformOrigin(a: ComponentValue, b: ComponentValue): boolean {
+  // [ [ center | left | right ] && [ center | top | bottom ] ]
+  if (isKeywordAndPair(a, b)) return true;
   // [ left | center | right | <length-percentage> ] [ top | center | bottom | <length-percentage> ]
   if (isHorizontalOrigin(a) && isVerticalOrigin(b)) return true;
-  // [ [ center | left | right ] && [ center | top | bottom ] ] — remaining order: vertical then horizontal keyword
-  if (isIdentKeyword(a, ['top', 'bottom']) && isIdentKeyword(b, ['left', 'right', 'center'])) return true;
   return false;
+}
+
+function isValidPerspectiveOrigin(tokens: ComponentValue[]): boolean {
+  // css-transforms-2 #perspective-origin-property: 1-value or 2-value (including &&). No z, no 4-value <position>.
+  const components = nonWs(tokens);
+  if (components.length === 1) return isSingleValueTransformOrigin(components[0]);
+  if (components.length === 2) return isTwoValueTransformOrigin(components[0], components[1]);
+  return false;
+}
+
+function isValidCssPosition(tokens: ComponentValue[]): boolean {
+  // css-values-4 § 10.1 #position: grammar gate distinct from CSSPositionValue reification.
+  const components = nonWs(tokens);
+  if (components.length === 2 && isKeywordAndPair(components[0], components[1])) return true;
+  return tryParsePosition(tokens) !== null;
 }
 
 function isValidTransformOrigin(tokens: ComponentValue[]): boolean {
@@ -288,20 +332,23 @@ export function matchesPositionPropertyGrammar(property: string, tokens: Compone
 
   if (prop === 'offset-position') {
     if (components.length === 1 && isIdentKeyword(components[0], ['auto', 'normal'])) return true;
-    return tryParsePosition(tokens, property) !== null;
+    return isValidCssPosition(tokens);
   }
   if (prop === 'offset-anchor') {
     if (components.length === 1 && isIdentKeyword(components[0], ['auto'])) return true;
-    return tryParsePosition(tokens, property) !== null;
+    return isValidCssPosition(tokens);
   }
   if (prop === 'transform-origin') {
     return isValidTransformOrigin(tokens);
   }
+  if (prop === 'perspective-origin') {
+    return isValidPerspectiveOrigin(tokens);
+  }
   if (prop === 'background-position' || prop === 'mask-position' || prop === '-webkit-mask-position') {
     return splitCommaList(tokens).every(seg => {
       const s = nonWs(seg);
-      return s.length > 0 && tryParsePosition(s, property) !== null;
+      return s.length > 0 && isValidCssPosition(s);
     });
   }
-  return tryParsePosition(tokens, property) !== null;
+  return isValidCssPosition(tokens);
 }

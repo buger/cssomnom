@@ -3052,3 +3052,23 @@ Increase decision coverage on `src/parser.ts`, `src/tokenizer.ts`, `src/CSSOM.ts
 - [x] Product fix: `isElementDisabled` no longer treats a disabled ancestor fieldset as disabling descendants of its first `legend` (html#selector-disabled). Regression in matcher branch tests.
 - [x] No floors lowered. No `//mcdc:ignore`. Exclude `src/data/gen`.
 
+---
+
+## Phase: transform-origin && leftovers + :disabled HTML matching (Champ)
+
+Reviewer+Grizz rejected leftovers from `6fff645` / `6adcf05`. Did **not** `proof approve`.
+
+- [x] **transform-origin `&&` overlapping `center`** (`src/typed-om/position/position-parser.ts`):
+  - css-transforms-1 § 5 `#transform-origin-property`: `[ [ center | left | right ] && [ center | top | bottom ] ] <length>?`
+  - css-values-4 § 2.2 `#comb-all`: order-independent; both groups include `center`, so `center left` / `center right` are valid.
+  - `isKeywordAndPair` is the grammar gate; `tryParsePosition` is not the only gate for `object-position` / `perspective-origin`.
+  - 2-value `center left` reifies as `CSSPositionValue` (x=0%, y=50%). 3-value `center left 5px` is raw `CSSStyleValue`. 4-value still TypeError.
+- [x] **`:disabled` actually-disabled only** (`src/matcher.ts`):
+  - html `#selector-disabled` / `#concept-element-disabled`: form controls, fieldset, optgroup/option, form-associated custom elements.
+  - html `#concept-fe-disabled`: first-legend exemption for form controls.
+  - html `#concept-fieldset-disabled`: nested fieldset inside first legend is still disabled.
+  - html `#concept-option-disabled`: option in `optgroup[disabled]` is disabled.
+  - div/span inside `fieldset[disabled]` do **not** match `:disabled`.
+- [x] RED tests first: `tests/typed-om-position.test.ts`, `tests/matcher.test.ts`.
+- [x] `pnpm run preflight` on Node 24. Did not `proof approve`.
+

@@ -228,6 +228,7 @@ describe('MC/DC branch: pseudo-classes', () => {
     `);
     assert.equal(matches(document.getElementById('in-fs')!, ':disabled'), true);
     assert.equal(matches(document.getElementById('in-legend')!, ':disabled'), false);
+    assert.equal(matches(document.getElementById('fs')!, ':disabled'), true);
     assert.equal(matches(document.getElementById('cb')!, ':checked'), true);
     assert.equal(matches(document.getElementById('opt')!, ':checked'), true);
     assert.equal(matches(document.getElementById('in-fs')!, ':enabled'), false);

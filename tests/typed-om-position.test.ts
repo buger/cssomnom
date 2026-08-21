@@ -181,3 +181,51 @@ test('transform-origin grammar is checked before CSSPositionValue reification', 
   }, TypeError, '4-value <position> is invalid transform-origin');
 });
 
+test('transform-origin && overlapping center: center left / center left 5px parse', () => {
+  // css-transforms-1 § 5 #transform-origin-property:
+  // [ [ center | left | right ] && [ center | top | bottom ] ] <length>?
+  // css-values-4 § 2.2 #comb-all: && is order-independent; both groups include center.
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('transform-origin', 'center left');
+  }, 'center left is a valid && keyword pair');
+  const centerLeft = CSSStyleValue.parse('transform-origin', 'center left');
+  assert.ok(centerLeft instanceof CSSStyleValue);
+  assert.ok(!(centerLeft instanceof CSSKeywordValue));
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('transform-origin', 'center left 5px');
+  }, 'center left 5px is valid && + z');
+  const centerLeftZ = CSSStyleValue.parse('transform-origin', 'center left 5px');
+  assert.ok(centerLeftZ instanceof CSSStyleValue);
+  assert.ok(!(centerLeftZ instanceof CSSPositionValue), '3-value transform-origin must not reify as CSSPositionValue');
+  assert.ok(!(centerLeftZ instanceof CSSKeywordValue));
+  assert.ok(centerLeftZ.toString().includes('5px'), `z offset lost: ${centerLeftZ.toString()}`);
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('transform-origin', 'center right 5px');
+  }, 'center right 5px is valid && + z');
+  const centerRightZ = CSSStyleValue.parse('transform-origin', 'center right 5px');
+  assert.ok(centerRightZ instanceof CSSStyleValue);
+  assert.ok(!(centerRightZ instanceof CSSPositionValue));
+  assert.ok(!(centerRightZ instanceof CSSKeywordValue));
+  assert.ok(centerRightZ.toString().includes('5px'), `z offset lost: ${centerRightZ.toString()}`);
+
+  const objCenterLeft = CSSStyleValue.parse('object-position', 'center left');
+  assert.ok(objCenterLeft instanceof CSSPositionValue, 'center left is valid <position> (css-values-4 #position)');
+  assert.ok(objCenterLeft.x instanceof CSSUnitValue);
+  assert.strictEqual((objCenterLeft.x as CSSUnitValue).value, 0);
+  assert.strictEqual((objCenterLeft.x as CSSUnitValue).unit, 'percent');
+  assert.ok(objCenterLeft.y instanceof CSSUnitValue);
+  assert.strictEqual((objCenterLeft.y as CSSUnitValue).value, 50);
+  assert.strictEqual((objCenterLeft.y as CSSUnitValue).unit, 'percent');
+
+  const perspCenterLeft = CSSStyleValue.parse('perspective-origin', 'center left');
+  assert.ok(perspCenterLeft instanceof CSSStyleValue);
+  assert.ok(!(perspCenterLeft instanceof CSSKeywordValue));
+
+  assert.throws(() => {
+    CSSStyleValue.parse('transform-origin', 'left 10px top 20px');
+  }, TypeError, '4-value <position> is still invalid transform-origin');
+});
+

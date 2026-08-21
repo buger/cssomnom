@@ -235,6 +235,55 @@ test('Matcher: :dir() and :heading() pseudo-classes', () => {
   assert.strictEqual(matches(h2, ':heading(1, 2)'), true);
 });
 
+test('Matcher: :disabled matches only actually-disabled form controls (html#selector-disabled)', () => {
+  // html#selector-disabled / html#concept-element-disabled:
+  // :disabled matches button/input/select/textarea that are concept-fe-disabled,
+  // optgroup/option that are disabled, disabled fieldsets, and form-associated custom
+  // elements — not every descendant of fieldset[disabled].
+  const { document } = parseHTML(`
+    <fieldset id="fs" disabled>
+      <legend>
+        <input id="in-legend">
+        <fieldset id="nested-in-legend">
+          <input id="nested-legend-input">
+        </fieldset>
+      </legend>
+      <div id="div-in-fs">wrap<span id="span-in-fs">x</span></div>
+      <input id="in-fs">
+      <fieldset id="nested-outside">
+        <input id="nested-out-input">
+      </fieldset>
+    </fieldset>
+    <select id="sel">
+      <optgroup id="og" disabled>
+        <option id="opt-in-og">a</option>
+      </optgroup>
+      <option id="opt-enabled">b</option>
+    </select>
+  `);
+
+  assert.strictEqual(matches(document.getElementById('div-in-fs')!, ':disabled'), false,
+    'div inside fieldset[disabled] is not actually disabled');
+  assert.strictEqual(matches(document.getElementById('span-in-fs')!, ':disabled'), false,
+    'span inside fieldset[disabled] is not actually disabled');
+
+  assert.strictEqual(matches(document.getElementById('opt-in-og')!, ':disabled'), true,
+    'option in optgroup[disabled] is concept-option-disabled');
+  assert.strictEqual(matches(document.getElementById('og')!, ':disabled'), true);
+  assert.strictEqual(matches(document.getElementById('opt-enabled')!, ':disabled'), false);
+
+  assert.strictEqual(matches(document.getElementById('nested-in-legend')!, ':disabled'), true,
+    'nested fieldset inside first legend is still a disabled fieldset (html#concept-fieldset-disabled)');
+
+  assert.strictEqual(matches(document.getElementById('in-legend')!, ':disabled'), false,
+    'input in first legend of disabled fieldset is not concept-fe-disabled');
+  assert.strictEqual(matches(document.getElementById('in-fs')!, ':disabled'), true,
+    'input outside first legend of disabled fieldset is concept-fe-disabled');
+
+  assert.strictEqual(matches(document.getElementById('fs')!, ':disabled'), true);
+  assert.strictEqual(matches(document.getElementById('nested-outside')!, ':disabled'), true);
+});
+
 test('Matcher: querySelectorAll', () => {
   const { document } = parseHTML(`
     <div id="container">
