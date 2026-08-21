@@ -1,0 +1,72 @@
+id: INT-REQ-260821-HJVC
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when cascaded_style_requested the cascade shall always satisfy matcher_and_media_consulted
+description: The cascade shall walk CSSOM rules and call matcher, MediaParser, and supports.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-ZXZW
+component: cascade
+rationale: getCascadedStyle shall consult selectors, media, and supports before it picks a winner.
+tags: []
+variables:
+    - cascaded_style_requested
+    - matcher_and_media_consulted
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-ZXZW
+    components:
+        - cascade
+        - cssom
+        - selectors
+        - media
+        - parser_api
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:48Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:14Z"
+obligation_checklist:
+    - malformed_recovers_or_errors_loudly
+obligation_hazards:
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: Cascade that throws on unmatched selectors or invalid @media/@supports aborts style resolution instead of skipping those rules.
+      severity: medium
+interface:
+    caller: cascade
+    callee: cssom
+    type: function_call
+    signature: getCascadedStyle(element, rules) walks CSSRule; matches(element, selector); MediaParser.evaluate(mediaText); supports(conditionText)
+    assumptions: "getCascadedStyle is given CSSOM rules and a DOM-like element. While walking, cascade calls matches() (selectors), MediaParser.evaluate() (media), and parser_api supports() — not CSS.supports sidecar."
+    guarantees: "An unmatched selector that would win if applied does not win. A later same-specificity rule inside @media not all does not win. A later failing @supports does not win; a passing @supports can change the color."
+    producer: cssom
+    consumer:
+        - cascade
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

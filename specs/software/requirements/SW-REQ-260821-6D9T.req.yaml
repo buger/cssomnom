@@ -1,0 +1,54 @@
+id: SW-REQ-260821-6D9T
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when bad_selector_supplied & parse_selector_rejects the selectors shall always satisfy empty_match
+description: The selector parser shall reject a bad selector and the matcher shall return empty.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-PJ76
+component: selectors
+rationale: matches and querySelector shall not crash on a bad selector.
+tags: []
+variables:
+    - bad_selector_supplied
+    - parse_selector_rejects
+    - empty_match
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-PJ76
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:58Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:41Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+obligation_hazards:
+    - class: malformed_input
+      worst_case: A malformed selector that still matches paints rules that CSS Selectors would reject as invalid.
+      severity: medium
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

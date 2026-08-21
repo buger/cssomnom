@@ -1,0 +1,87 @@
+id: STK-REQ-260821-BQKD
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: The library shall give the consumer a CSSStyleSheet for CSS text. The consumer shall read declarations through standard CSSOM methods.
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: cssom_consumer
+rationale: A Node.js caller needs CSSOM objects without a browser engine.
+tags: []
+variables: []
+references:
+    - type: document
+      id: README.md
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:31:43Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:15Z"
+obligation_checklist:
+    - error_handling
+    - malformed_recovers_or_errors_loudly
+    - nominal
+obligation_hazards:
+    - class: error_handling
+      worst_case: A CSS consumer that sees a thrown exception on ordinary invalid stylesheet text cannot ingest author CSS the way browsers recover.
+      severity: high
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: parse() that aborts on one invalid rule drops later valid rules from the CSSStyleSheet the consumer depends on.
+      severity: high
+acceptance_review:
+    reviewed_at: "2026-08-21T14:03:48Z"
+    reviewed_by: agent:ac-sweep
+    disposition: reviewed
+    notes: cssom_consumer parse/getPropertyValue/invalid-drop/insertRule SyntaxError. Dual-surface N/A (library API, not authz enforce/project).
+stakeholder:
+    persona: Node.js library consumer
+    story: As a Node.js caller I parse CSS text into a CSSStyleSheet and read declarations through CSSOM methods.
+    acceptance_criteria:
+        - id: AC-001
+          text: The library shall return a CSSStyleSheet when the caller supplies CSS text.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-7521
+            - SYS-REQ-260821-SBJ7
+            - SYS-REQ-260821-KV30
+        - id: AC-002
+          text: The library shall return the specified color red for a body color red rule.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-7521
+        - id: AC-003
+          text: The library shall drop an invalid rule and still return a stylesheet.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-03VA
+            - SYS-REQ-260821-NHZ8
+            - SYS-REQ-260821-5283
+        - id: AC-004
+          text: The library shall throw SyntaxError when insertRule receives a bad rule.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-YMEY
+            - SYS-REQ-260821-8TGB
+            - SYS-REQ-260821-X3KX
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

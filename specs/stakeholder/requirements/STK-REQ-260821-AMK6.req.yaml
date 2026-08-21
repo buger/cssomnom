@@ -1,0 +1,76 @@
+id: STK-REQ-260821-AMK6
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: The library shall parse CSS values into Typed OM objects. The library shall validate registerProperty dictionaries.
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: houdini_consumer
+rationale: A Houdini caller needs typed values and custom property registration.
+tags: []
+variables: []
+references:
+    - type: document
+      id: README.md
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:31:43Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:16Z"
+obligation_checklist:
+    - error_handling
+    - nominal
+obligation_hazards:
+    - class: error_handling
+      worst_case: registerProperty that swallows invalid dictionary input registers a broken custom property; supports() that throws breaks feature probes.
+      severity: high
+acceptance_review:
+    reviewed_at: "2026-08-21T14:03:48Z"
+    reviewed_by: agent:ac-sweep
+    disposition: reviewed
+    notes: houdini_consumer CSSNumericValue.parse 10px, registerProperty invalid throws, CSS.supports boolean no throw. Dual-surface N/A.
+stakeholder:
+    persona: Typed OM / Houdini caller
+    story: As a Houdini caller I parse typed values and register custom properties with syntax checks.
+    acceptance_criteria:
+        - id: AC-001
+          text: The library shall return CSSUnitValue 10 px for CSSNumericValue.parse of 10px.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-Y6R3
+            - SYS-REQ-260821-HGFK
+        - id: AC-002
+          text: The library shall throw when registerProperty receives an invalid dictionary.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-EGCP
+            - SYS-REQ-260821-9YM3
+        - id: AC-003
+          text: The library shall return a boolean from CSS.supports and shall not throw.
+          verification_method: test
+          derived_reqs:
+            - SYS-REQ-260821-SMW6
+            - SYS-REQ-260821-NGJH
+            - SYS-REQ-260821-KA02
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

@@ -1,0 +1,73 @@
+id: INT-REQ-260821-JTY2
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when transform_string_parsed the geometry shall always satisfy typed_om_transform_hook_used
+description: The geometry DOMMatrix constructor shall call the typed_om transform parse hook.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-HGFK
+component: geometry
+rationale: DOMMatrix string construction shall reuse typed OM transform parse.
+tags: []
+variables:
+    - transform_string_parsed
+    - typed_om_transform_hook_used
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-HGFK
+    components:
+        - geometry
+        - typed_om
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:48Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:43Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+obligation_hazards:
+    - class: error_handling
+      worst_case: Invalid transform list strings that do not throw SyntaxError produce a DOMMatrix with garbage components used as geometry.
+      severity: medium
+    - class: malformed_input
+      worst_case: DOMMatrix that accepts a garbage transform list produces geometry with invalid components instead of SyntaxError.
+      severity: medium
+interface:
+    caller: geometry
+    callee: typed_om
+    type: function_call
+    signature: setParseTransformListHook((str) => { is2D, values }) ; DOMMatrix(string) -> matrix
+    assumptions: "typed-om/index.ts registers setParseTransformListHook with CSSTransformValue.parse. Native matrix()/matrix3d() parse does not need the hook."
+    guarantees: "DOMMatrix string construction of transform lists (translate/rotate) uses the typed_om hook. Invalid transform lists throw SyntaxError."
+    producer: typed_om
+    consumer:
+        - geometry
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

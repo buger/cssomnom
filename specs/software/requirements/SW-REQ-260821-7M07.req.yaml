@@ -1,11 +1,11 @@
-id: SW-REQ-260821-QV2H
+id: SW-REQ-260821-7M07
 version: 1
 status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when chunk_appended & complete_token_in_chunk the tokenizer shall always satisfy tokens_available_after_get_tokens
-description: The tokenizer shall yield tokens after appendChunk and getTokens when the chunk contains a complete token. Incomplete chunks correctly yield no tokens until more data or close(); peek must not fabricate EOF.
+fretish: when css_text_supplied & consume_token_loop_runs the tokenizer shall always satisfy token_list_returned
+description: The tokenizer shall emit CSS Syntax-3 tokens for CSS text.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -13,12 +13,12 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260821-SBJ7
 component: tokenizer
-rationale: StreamingTokenizer owns chunked token production. NeedMoreData on an incomplete chunk is correct; tokens_available is only required after a complete token is produced.
+rationale: tokenize shall own the token list for a complete string.
 tags: []
 variables:
-    - chunk_appended
-    - complete_token_in_chunk
-    - tokens_available_after_get_tokens
+    - css_text_supplied
+    - consume_token_loop_runs
+    - token_list_returned
 references:
     - type: document
       id: README.md
@@ -43,7 +43,7 @@ obligation_checklist:
     - nominal
 obligation_hazards:
     - class: denial_of_service_resistant
-      worst_case: StreamingTokenizer.appendChunk without a bound on accumulated chunks lets a stream exhaust heap.
+      worst_case: tokenize() with no time or memory bound on CSS text lets a hostile string exhaust heap during lexing.
       severity: high
 lifecycle:
     change_history:

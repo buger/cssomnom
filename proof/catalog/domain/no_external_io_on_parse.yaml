@@ -1,0 +1,124 @@
+id: no_external_io_on_parse
+catalog_version: 1
+category: domain
+domains: [parser]
+order: 110
+status: draft
+evidence:
+  - negative
+
+frameworks:
+  - id: CWE
+    refs: ["CWE-918", "CWE-73"]
+    severity: HIGH
+  - id: NIST-800-53
+    refs: ["SC-7"]
+  - id: OWASP-ASVS-v4
+    refs: ["V14.4.1", "V12.3.1"]
+    levels: ["1", "2", "3"]
+
+name: No external I/O on parse
+summary: Parse/tokenize shall not perform network or filesystem I/O for @import or any other URL.
+plain_english: |
+  A CSS parser that follows @import, url(), or similar URL tokens by
+  opening a network connection or reading a local file is no longer a
+  pure in-process library: it becomes an SSRF and path-traversal
+  client. cssomnom's contract is stricter than an HTTP-client
+  allowlist — parse and tokenize shall perform no network and no
+  filesystem I/O at all. @import constructs CSSImportRule; the
+  stylesheet is not fetched.
+
+description: |
+  Offline CSS parse/tokenize must remain hermetic. Seeing an @import
+  URL, url() token, or any other URL-shaped value shall construct the
+  corresponding CSSOM object (CSSImportRule, CSSStyleValue, etc.)
+  without fetch, http.request, fs.readFile, or equivalent. Existing
+  shipped classes do not name this contract: ssrf_protection assumes
+  an HTTP client with an allowlist; no_filesystem_in_trust_boundary
+  is framed for enclaves/TEEs/signers. This class is the CSS-parser
+  gap.
+
+applies_when:
+  description: |
+    In-process CSS (or similar stylesheet) parsers and tokenizers
+    whose input may contain @import, url(), or other URL tokens, and
+    whose documented contract is offline / no-fetch.
+  tag_match_all: [parser]
+  trigger_phrases:
+    - "@import"
+    - "fetch"
+    - "import URL"
+    - "no network"
+    - "offline parse"
+
+example_req: |
+  When parse() consumes @import url("https://evil.example/x.css"),
+  the parser shall construct CSSImportRule and shall not open a
+  network connection or read a filesystem path; CSSImportRule.styleSheet
+  shall be null or empty.
+
+example_obligations_complement:
+  - malformed_recovers_or_errors_loudly
+  - denial_of_service_resistant
+
+if_missing: |
+  A stylesheet with @import url("http://169.254.169.254/") or a
+  traversing file: URL turns parse() into an SSRF / path-traversal
+  primitive. Tooling integrators who parse untrusted CSS offline
+  would leak credentials or local files.
+
+guidance: |
+  Evidence is negative: stub global fetch and fs.readFile, parse a
+  sheet that contains @import and url() tokens, and assert the stubs
+  were never called and CSSImportRule.styleSheet is null or empty.
+  Do not force-fit ssrf_protection (there is no client) or
+  no_filesystem_in_trust_boundary (this is not an enclave).
+
+recommended_evidence:
+  - kind: negative
+    note: "Stub fetch and filesystem reads; parse CSS with @import/url(); assert neither stub is called."
+  - kind: example
+    note: "CSSImportRule.styleSheet is null or an empty sheet after parse of @import url(...)."
+  - kind: review
+    note: "Grep src/** for fetch, http, net, readFile, createReadStream; no parse-path hits."
+
+related_classes:
+  - id: ssrf_protection
+    relationship: near_miss
+  - id: no_filesystem_in_trust_boundary
+    relationship: near_miss
+
+default_assurance: C
+default_obligation_severity: shall
+
+versioning:
+  introduced_in_catalog_version: 1
+
+agent_hints:
+  trigger_phrases_high_confidence:
+    - "shall not fetch"
+    - "no network"
+    - "offline parse"
+    - "@import"
+  trigger_phrases_review_needed:
+    - "url()"
+    - "href"
+
+fit_examples:
+  - text: "The parser shall not fetch an import URL from network or disk; CSSImportRule.styleSheet shall be null or empty."
+    provenance: "cssomnom:SYS-REQ-260821-H3BD"
+    why: "offline CSS parse must not become an HTTP or filesystem client when @import is present"
+  - text: "The library shall not fetch an import URL. CSSImportRule.styleSheet shall be null or empty."
+    provenance: "cssomnom:STK-REQ-260821-DKBQ#AC-002"
+    why: "tooling-integrator acceptance is no-fetch, not an allowlisted HTTP client"
+
+antifit_examples:
+  - text: "When CallWebhook fetches a user-supplied URL, the client shall reject RFC 1918 / loopback / metadata addresses."
+    provenance: "sibling:ssrf_protection"
+    why: "ssrf_protection assumes there is an HTTP client with an allowlist; this class forbids the client"
+  - text: "The signing enclave shall not open or read any local filesystem path."
+    provenance: "sibling:no_filesystem_in_trust_boundary"
+    why: "enclave/TEE hermeticity, not an in-process CSS parser that never starts I/O"
+  - text: "The parser shall construct CSSImportRule when an import URL is present."
+    provenance: "cssomnom:SW-REQ-260821-5W6X"
+    why: "construction of CSSImportRule is the happy path; never-fetch is owned by the parent SYS-H3BD"

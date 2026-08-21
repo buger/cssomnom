@@ -1,0 +1,69 @@
+id: INT-REQ-260821-N2VE
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when consume_step the parser shall always satisfy token_stream_peek_next_used
+description: The parser consume path shall call TokenStream peek and next. The tokenizer shall supply the EOF sentinel.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-7521
+component: parser
+rationale: Consume algorithms shall stay in sync with the tokenizer stream.
+tags: []
+variables:
+    - consume_step
+    - token_stream_peek_next_used
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-7521
+    components:
+        - parser
+        - tokenizer
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:47Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:14Z"
+obligation_checklist:
+    - error_handling
+obligation_hazards:
+    - class: error_handling
+      worst_case: Consume past the token stream end that throws instead of returning the EOF sentinel crashes stylesheet parse.
+      severity: medium
+interface:
+    caller: parser
+    callee: tokenizer
+    type: function_call
+    signature: 'TokenStream.peek() -> Token ; TokenStream.next() -> Token ; EOF sentinel { type: ''EOF'' }'
+    assumptions: "Parser constructor wraps Token[] in ArrayTokenStream or accepts a TokenStream. Consume loops terminate on EOF."
+    guarantees: "parseStyleSheet consume path calls peek and next. The stream supplies an EOF sentinel rather than throwing past the end."
+    producer: tokenizer
+    consumer:
+        - parser
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: breaking-allowed-with-migration
+    risk_tier: 3
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

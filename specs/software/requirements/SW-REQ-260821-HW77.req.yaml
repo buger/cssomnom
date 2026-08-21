@@ -1,0 +1,53 @@
+id: SW-REQ-260821-HW77
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when supports_called the parser_api shall always satisfy boolean_returned
+description: The parser_api CSS.supports path shall return a boolean.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-SMW6
+component: parser_api
+rationale: CSS.supports shall own the boolean probe. Throws are a separate error_handling path already witnessed on SYS-REQ-260821-SMW6.
+tags: []
+variables:
+    - supports_called
+    - boolean_returned
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-SMW6
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:59Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:42Z"
+obligation_checklist:
+    - malformed_recovers_or_errors_loudly
+    - nominal
+obligation_hazards:
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: CSS.supports that throws on junk conditions instead of returning boolean false aborts feature detection.
+      severity: high
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

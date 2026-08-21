@@ -30,10 +30,20 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:31:43Z"
-    last_modified_by: agent:ac-sweep
-    last_modified_at: "2026-08-21T22:40:00Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:14Z"
 obligation_checklist:
+    - no_external_io_on_parse
     - nominal
+obligation_hazards:
+    - class: no_external_io_on_parse
+      worst_case: A tooling integrator that tokenizes or parses CSS with @import would leak network or disk I/O if the library fetched the URL.
+      severity: high
+acceptance_review:
+    reviewed_at: "2026-08-21T22:40:00Z"
+    reviewed_by: agent:ac-sweep
+    disposition: reviewed
+    notes: tooling_integrator StreamingTokenizer tokens, CSSImportRule no fetch and styleSheet null or empty (README offline contract), CSS.escape/supports/registerProperty/parse. Dual-surface N/A.
 stakeholder:
     persona: Bundler and tooling integrator
     story: As a tooling integrator I tokenize streams and parse without fetching import urls.
@@ -61,9 +71,3 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
-acceptance_review:
-    reviewed_at: "2026-08-21T22:40:00Z"
-    reviewed_by: agent:ac-sweep
-    disposition: reviewed
-    templates_applied: []
-    notes: "tooling_integrator StreamingTokenizer tokens, CSSImportRule no fetch and styleSheet null or empty (README offline contract), CSS.escape/supports/registerProperty/parse. Dual-surface N/A."

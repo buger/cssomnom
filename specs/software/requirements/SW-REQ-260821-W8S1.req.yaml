@@ -1,0 +1,54 @@
+id: SW-REQ-260821-W8S1
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when media_query_invalid & serialize_media_query_runs the media shall always satisfy serialized_as_not_all
+description: The media parser shall replace an invalid query with the not-all media query.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-5283
+component: media
+rationale: MediaParser.parse shall own the invalid-to-not-all mapping.
+tags: []
+variables:
+    - media_query_invalid
+    - serialize_media_query_runs
+    - serialized_as_not_all
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-5283
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:58Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:41Z"
+obligation_checklist:
+    - error_handling
+    - malformed_recovers_or_errors_loudly
+obligation_hazards:
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: Invalid media that is not mapped to not all lets enclosed rules apply when they must not.
+      severity: medium
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

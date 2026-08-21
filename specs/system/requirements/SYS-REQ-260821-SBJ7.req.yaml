@@ -1,30 +1,30 @@
-id: SW-REQ-260821-QV2H
+id: SYS-REQ-260821-SBJ7
 version: 1
 status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when chunk_appended & complete_token_in_chunk the tokenizer shall always satisfy tokens_available_after_get_tokens
-description: The tokenizer shall yield tokens after appendChunk and getTokens when the chunk contains a complete token. Incomplete chunks correctly yield no tokens until more data or close(); peek must not fabricate EOF.
+fretish: when css_text_supplied the tokenizer shall always satisfy token_list_returned
+description: The tokenizer shall return a token list for CSS text. The StreamingTokenizer shall accept chunks.
 formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SYS-REQ-260821-SBJ7
+parent: STK-REQ-260821-BQKD
 component: tokenizer
-rationale: StreamingTokenizer owns chunked token production. NeedMoreData on an incomplete chunk is correct; tokens_available is only required after a complete token is produced.
+rationale: A caller shall receive tokens from a string and from a stream.
 tags: []
 variables:
-    - chunk_appended
-    - complete_token_in_chunk
-    - tokens_available_after_get_tokens
+    - css_text_supplied
+    - token_list_returned
 references:
     - type: document
       id: README.md
 traces:
     satisfies:
-        - SYS-REQ-260821-SBJ7
+        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-DKBQ
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,15 +35,15 @@ verification:
         ai_generated: true
 history:
     created_by: agent:grok-4.6
-    created_at: "2026-08-21T12:35:57Z"
+    created_at: "2026-08-21T12:34:49Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:42Z"
+    last_modified_at: "2026-08-21T20:20:29Z"
 obligation_checklist:
     - denial_of_service_resistant
     - nominal
 obligation_hazards:
     - class: denial_of_service_resistant
-      worst_case: StreamingTokenizer.appendChunk without a bound on accumulated chunks lets a stream exhaust heap.
+      worst_case: Unbounded tokenize or StreamingTokenizer.appendChunk on hostile CSS exhausts heap or event-loop time.
       severity: high
 lifecycle:
     change_history:

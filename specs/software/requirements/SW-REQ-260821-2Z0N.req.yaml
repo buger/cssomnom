@@ -1,0 +1,55 @@
+id: SW-REQ-260821-2Z0N
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when parse_rule_called & trailing_garbage & ensure_eof_runs the parser_api shall always satisfy parse_rule_throws
+description: The parser_api parseRule path shall throw when tokens remain after one rule.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-KA02
+component: parser_api
+rationale: parseRule shall reject trailing garbage after the consumed rule.
+tags: []
+variables:
+    - parse_rule_called
+    - trailing_garbage
+    - ensure_eof_runs
+    - parse_rule_throws
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-KA02
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:59Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:20:40Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+obligation_hazards:
+    - class: malformed_input
+      worst_case: parseRule that keeps a rule when trailing tokens remain after consumeRule accepts illegal CSS.
+      severity: high
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6
