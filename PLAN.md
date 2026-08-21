@@ -3085,6 +3085,16 @@ Grizz REJECTED leftover from `81cacb3`. Did **not** `proof approve`.
 
 ---
 
+## Phase: reject 3-value perspective-origin; keep 4-value (Champ)
+
+Reviewer REJECTED `32ee8e3`. Did **not** `proof approve`.
+
+- [x] **css-values-4 `#position` / css-transforms-2 `#perspective-origin-property`**: generic `<position>` is 1-/2-/4-value only. 3-value `left 10px top` is invalid (csswg-drafts#2140; WPT `perspective-origin-invalid.html`). 4-value `left 10px top 20px` stays valid. `isValidCssPosition` rejects length-3; `matchesPositionPropertyGrammar` for `perspective-origin` uses that gate. `background-position` still accepts 3-value (`css-backgrounds-3 #background-position`).
+- [x] RED first: `tests/typed-om-position.test.ts` `parse('perspective-origin','left 10px top')` TypeError. Fixed `tests/mcdc-hotspot-url-position.test.ts` object-position 3-value parse assertions.
+- [x] `pnpm run preflight` on Node 24. Did not `proof approve`.
+
+---
+
 ## Phase: restore spec MC/DC unique-cause witnesses after overlay FRETish edits (Champ)
 
 Overlay FRETish conjuncts after `1efd7ed` (HNRG `set_property_ignored`, HHVE `stylesheet_returned`, HW77 `css_namespace_object_bound`/`supports_throws`, 5W6X `external_sheet_fetched`, 6951 XOR SecurityError) stale'd unique-cause `// MCDC` lines. 20 uncovered / 10 stale.

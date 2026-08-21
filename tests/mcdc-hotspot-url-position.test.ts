@@ -235,10 +235,11 @@ describe('MC/DC hotspot: tryParsePosition / toPositionCoord', () => {
     assert.ok(rightOffBottom.x);
     unit(rightOffBottom.y, 100, 'percent');
 
-    const leftOffCenter = CSSStyleValue.parse('object-position', 'left 10px center');
-    assert.ok(leftOffCenter instanceof CSSPositionValue);
-    unit(leftOffCenter.x, 10, 'px');
-    unit(leftOffCenter.y, 50, 'percent');
+    assert.throws(
+      () => CSSStyleValue.parse('object-position', 'left 10px center'),
+      TypeError,
+      '3-value is invalid generic <position> (css-values-4 #position)',
+    );
   });
 
   test('3-value: [left|right|center] [top|bottom] offset', () => {
@@ -265,8 +266,11 @@ describe('MC/DC hotspot: tryParsePosition / toPositionCoord', () => {
     assert.ok(bottomOffCenter);
     unit(bottomOffCenter.x, 50, 'percent');
 
-    const parsed = CSSStyleValue.parse('object-position', 'top 20px right');
-    assert.ok(parsed instanceof CSSPositionValue);
+    assert.throws(
+      () => CSSStyleValue.parse('object-position', 'top 20px right'),
+      TypeError,
+      '3-value is invalid generic <position> (css-values-4 #position)',
+    );
   });
 
   test('3-value invalid offsets and unknown keywords', () => {

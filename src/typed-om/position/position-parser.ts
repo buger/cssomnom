@@ -289,7 +289,11 @@ function isTwoValueTransformOrigin(a: ComponentValue, b: ComponentValue): boolea
 
 function isValidCssPosition(tokens: ComponentValue[]): boolean {
   // css-values-4 § 10.1 #position: grammar gate distinct from CSSPositionValue reification.
+  // <position> is 1-value | 2-value | 4-value. 3-value is not generic <position>
+  // (csswg-drafts#2140; WPT perspective-origin-invalid.html `left 4px top`).
+  // background-position alone still accepts 3-value (css-backgrounds-3).
   const components = nonWs(tokens);
+  if (components.length === 3) return false;
   if (components.length === 2 && isKeywordAndPair(components[0], components[1])) return true;
   return tryParsePosition(tokens) !== null;
 }
@@ -335,14 +339,20 @@ export function matchesPositionPropertyGrammar(property: string, tokens: Compone
   }
   if (prop === 'perspective-origin') {
     // css-transforms-2 #perspective-origin-property: Value is <position>.
-    // css-values-4 § 10.1 #position: includes 4-value form; no z.
+    // css-values-4 § 10.1 #position: 4-value yes; 3-value no (csswg-drafts#2140).
     // Distinct from transform-origin, which has no 4-value and optional <length> z.
     return isValidCssPosition(tokens);
   }
   if (prop === 'background-position' || prop === 'mask-position' || prop === '-webkit-mask-position') {
     return splitCommaList(tokens).every(seg => {
       const s = nonWs(seg);
-      return s.length > 0 && isValidCssPosition(s);
+      if (s.length === 0) return false;
+      // css-backgrounds-3 #background-position: 3-value <bg-position> is valid.
+      // css-values-4 #position: 3-value is disallowed for generic <position>.
+      if (prop === 'background-position' && s.length === 3) {
+        return tryParsePosition(s) !== null;
+      }
+      return isValidCssPosition(s);
     });
   }
   return isValidCssPosition(tokens);
