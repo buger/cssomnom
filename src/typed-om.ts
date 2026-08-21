@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7AKJ
 
 // Barrel export for backwards compatibility
 export * from './typed-om/index.ts';

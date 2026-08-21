@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-FWNH
 
 import { DEFAULT_PROPERTY_VALUES, BLOCK_TAGS } from '../data/gen/cascade-data.ts';
 import { SHORTHANDS } from '../shorthands.ts';

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-6951
 import { serialize } from './serializer.ts';
 import type { ComponentValue } from './types.ts';
 import { SHORTHANDS_DATA } from './data/gen/shorthands.ts';

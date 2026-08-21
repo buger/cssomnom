@@ -1,5 +1,6 @@
 /** @license Copyright 2026 Google LLC. SPDX-License-Identifier: Apache-2.0 */
 
+// Implements: SW-REQ-260821-YTV6
 const formatter = new Intl.NumberFormat('en-US', {
   useGrouping: false,
   minimumFractionDigits: 0,

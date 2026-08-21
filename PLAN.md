@@ -3145,3 +3145,11 @@ Close remaining `denial_of_service_resistant:fuzz` cells by annotating an existi
 - [x] Side-effect of Implements: N2VE/WQX9 `verification.not_modeled` for `tokens.length >= 2` / `val > 100` (`[structural]`, same prose as sibling INT). No fake ranges.
 - [x] Full audit: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full-5.log` — Errors 0, Warnings 13. Left: status_vs_review 34, suspect 202, nonbool 76, under_modeled 27, code_mcdc 51.7%/53.7% vs 100%, lint_clean 581, process_checklist 5 pending, fuzz evidence 5.
 
+---
+
+## Phase: file-level Implements on remaining non-gen src (Champ overlay)
+
+`lint_clean` / `orphan_code_clean` warned ~581 untraced functions. Earlier traces-light had file-level `Implements:` on all 67 non-gen `src/**/*.ts`; many helpers later lacked a file-level ID so Probe could not inherit.
+
+- [x] Add file-level `// Implements: <existing REQ>` after the license on every `src/**/*.ts` except `src/data/gen/**` that lacked one. Reused folder IDs only (parser `HHVE`, CSSOM `6951`, typed-om `7AKJ`, cascade `FWNH`, selectors `6D9T`, serializer `YTV6`, library `1E5K`/`37RC`, geometry `JTY2`). Did not invent reqs. Did not `proof approve`.
+

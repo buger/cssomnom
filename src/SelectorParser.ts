@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-6D9T
 import type { 
   SelectorList, ComplexSelector, CompoundSelector, SimpleSelector, 
   Combinator, ComponentValue, Token, SimpleBlock, CSSFunction,

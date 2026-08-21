@@ -1,6 +1,7 @@
 /* eslint-disable */
 /** @license Copyright 2026 Google LLC. SPDX-License-Identifier: Apache-2.0 */
 
+// Implements: SW-REQ-260821-1E5K, SW-REQ-260821-37RC
 import * as TypedOM from './typed-om.ts';
 import * as CSSOM from './CSSOM.ts';
 import { CSSStyleDeclaration } from './CSSStyleDeclaration.ts';

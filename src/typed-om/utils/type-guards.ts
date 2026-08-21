@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7AKJ
 
 import type { CSSNumericType } from '../numeric/CSSNumericType.ts';
 import type { CSSNumericValue } from '../numeric/CSSNumericValue.ts';

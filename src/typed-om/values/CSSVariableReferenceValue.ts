@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-7AKJ
 
 import { serializeIdentifier } from '../../serializer.ts';
 import type { CSSUnparsedValue } from './CSSUnparsedValue.ts';

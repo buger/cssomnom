@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-HHVE
 import type { Token, Rule, ComponentValue, SelectorList, MediaQuery } from './types.ts';
 import type { CSSStyleDeclaration } from './CSSStyleDeclaration.ts';
 

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-6951
 import type { Rule } from './types.ts';
 
 export function camelToDashed(str: string): string {

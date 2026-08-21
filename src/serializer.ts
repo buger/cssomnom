@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SW-REQ-260821-YTV6
 import type { Token, ComponentValue, Declaration, CSSFunction, SimpleBlock, SelectorList, ComplexSelector, SimpleSelector } from './types.ts';
 import { SHORTHANDS, ALL_SHORTHAND_LONGHANDS, isInitialBorderImage } from './shorthands.ts';
 import { formatNumber } from './utils/format.ts';
