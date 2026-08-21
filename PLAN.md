@@ -3208,3 +3208,12 @@ Drive remaining code MC/DC hotspots through public APIs. Did **not** add `//mcdc
 - [x] Same file — `getCascadedStyle` covers nested style rules, comma/string selectors, `::before`/`:before`/`::after`/`::first-line`/`::first-letter`/`::marker`, `@layer` named/nested/anonymous, `@media` match/fail/window/iframe, `@supports` match/fail, `@scope` start/implied/miss, nested `@media`/`@supports`/`@layer` declarations, `@container`/`@starting-style` grouping, url() baseURL, AST dual-representation rules.
 - [x] Node 24: `node --test tests/mcdc-hotspot-math-walk.test.ts` — 21 pass. oxlint 0 warnings.
 
+---
+
+## Phase: leftover tokenizer/serializer branch tests (Champ)
+
+Drive leftover `AbstractTokenizer` / `serializeToken` / at-rule `cssText` branches through public APIs. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-branch-tokenizer-serializer.test.ts` — unicode escapes (`consumeEscapedCodePoint` hex/0/surrogate/>10FFFF/EOF/non-hex, string line-continuation, dash-plus-escape ident/`@`), bad-url (`"`, `'`, `(`, non-printable, whitespace then `)`/junk/EOF, valid vs invalid escape, remnants-with-escape, serialize default arm), CDO/CDC unique-cause prefixes (`<!--` / `<!` / `<!-` / `-->` / `--` / `-` / `->`), hash id vs unrestricted vs delim (`#id` / `#123` / `#-a` / `#-1` / `#--` / `#\31` / `#\` / `#.` / `#\n`), scientific numbers (`1e2`/`1E2`/`1e+2`/`1e-2` vs `1e`/`1e+`/`1ex`, `.5e2`, signed, dim/%, `1.e2`, `.foo`, `+.`), serialize of at-rules (`CSSAtRule` statement/empty/decls/nested, `serializeGroupingRule` empty media vs keyframes/scope, import/namespace/supports/font-face/page/starting-style).
+- [x] Node 24: `node --test tests/mcdc-branch-tokenizer-serializer.test.ts` — 25 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
