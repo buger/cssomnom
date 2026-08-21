@@ -73,6 +73,11 @@ export class StreamingTokenizer extends AbstractTokenizer {
     this.tokenizeLoop();
   }
 
+  /** True after close(); incomplete input must not be treated as EOF until then. */
+  get closed(): boolean {
+    return this.isEOF;
+  }
+
   close(): void {
     this.isEOF = true;
     const text = this.preprocessChunk('', true);

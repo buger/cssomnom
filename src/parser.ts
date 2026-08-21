@@ -737,16 +737,17 @@ export class Parser {
     
     if (i < prelude.length) {
       const first = prelude[i];
-      if (first.type === 'string') {
+      // css-syntax-3 § 4.3.6 #consume-url-token: unquoted url(foo.css) is a <url-token>.
+      // css-syntax-3 § 4.3.4 #consume-an-ident-like-token: quoted url("foo") is a function.
+      // cssom-1 § 6.4.4 #dom-cssimportrule-href: href is the URL specified by the @import prelude.
+      if (first.type === 'string' || first.type === 'url') {
         href = first.value;
         i++;
       } else if (first.type === 'function' && (first as CSSFunction).name === 'url') {
-         // handle url()
          const urlArg = (first as CSSFunction).value.find(v => v.type === 'string');
          if (urlArg) href = (urlArg as StringToken).value;
 
          else {
-            // raw url
             const raw = (first as CSSFunction).value.map(v => serialize([v])).join('');
             href = raw.trim();
          }

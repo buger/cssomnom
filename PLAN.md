@@ -2877,6 +2877,14 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ---
 
+## Phase 121: Import href, streaming peek, KI-7 README-null
+
+- [x] **@import url-token href** (`handleImportRule`): unquoted `url(foo.css)` copies the `<url-token>` value so `href === 'foo.css'` (css-syntax-3 § 4.3.6 `#consume-url-token`, cssom-1 § 6.4.4 `#dom-cssimportrule-href`).
+- [x] **StreamingTokenizerStream.peek**: incomplete chunks throw `NeedMoreDataError` instead of fabricating EOF (css-syntax-3 § 4.3.1 `#consume-token`). QV2H FRETish requires tokens only when `complete_token_in_chunk`.
+- [x] **KI-7 README-null**: `CSSImportRule.styleSheet` returns `null` (offline parser, no fetch). Overlay KI-7 still open vs full CSSOM loaded sheet.
+
+---
+
 ## Phase 118: `:scope`, `@scope` & Complex Relative Selectors
 **Goal**: Implement relative selector matching starting with combinators (`> .child`, `+ .sibling`, `~ .sibling`) anchored to the active scope element and resolve `:scope` pseudo-class resolution within `matches(el, sel, scopeNode)`.
 

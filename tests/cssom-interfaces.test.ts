@@ -16,7 +16,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { Parser } from '../src/parser.ts';
+import { Parser, parse } from '../src/parser.ts';
 import { CSSPageRule, CSSImportRule, CSSNamespaceRule, CSSMarginRule, CSSFontFaceRule, CSSCounterStyleRule, CSSFontFeatureValuesRule } from '../src/index.ts';
 import { tokenize } from '../src/tokenizer.ts';
 import {
@@ -340,12 +340,28 @@ test('CSSFontFaceRule.style PutForwards=cssText', () => {
   assert.strictEqual(rule.style.getPropertyValue('src').trim(), 'url("bar.woff")');
 });
 
+// SYS-REQ-260821-H3BD:nominal:nominal
+// SW-REQ-260821-5W6X:nominal:nominal
 test('CSSImportRule interface', () => {
   const ast = Parser.parseStyleSheetText('@import url("foo.css") print;');
   const rule = ast[0] as unknown as CSSImportRule;
   assert.equal(rule.type, 3);
   assert.equal(rule.href, 'foo.css');
   assert.equal(rule.media.mediaText, 'print');
+});
+
+// SYS-REQ-260821-H3BD:nominal:nominal
+// SW-REQ-260821-5W6X:nominal:nominal
+// Verifies: SW-REQ-260821-5W6X
+test('CSSImportRule href copies url-token from unquoted url()', () => {
+  // css-syntax-3 § 4.3.6 #consume-url-token: unquoted url(foo.css) is a <url-token>.
+  // cssom-1 § 6.4.4 #dom-cssimportrule-href: href is the URL specified by the @import prelude.
+  const sheet = parse('@import url(foo.css);');
+  const rule = sheet.cssRules[0] as CSSImportRule;
+  assert.ok(rule instanceof CSSImportRule);
+  assert.equal(rule.href, 'foo.css');
+  // README documented offline parser: no associated fetched sheet.
+  assert.equal(rule.styleSheet, null);
 });
 
 test('CSSImportRule cssText serialization', () => {

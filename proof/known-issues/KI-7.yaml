@@ -1,0 +1,82 @@
+id: KI-7
+title: CSSImportRule.styleSheet is always null; @import never fetches (documented offline parser)
+description: 'README documents CSSImportRule.styleSheet as null because the library is a static offline parser with no network or disk I/O to load external stylesheets. Full CSSOM associates the imported CSSStyleSheet on CSSImportRule.styleSheet. HEAD never fetches the href. The public getter now returns null to match README (no empty placeholder sheet). The user-observable capability gap remains: @import never loads. This KnownIssue tracks SYS-REQ-260821-H3BD (external_sheet_fetched=T => FALSE) and SW-REQ-260821-5W6X (css_import_rule_constructed=F, import_url_present=T => FALSE).'
+affected_requirements:
+    - SYS-REQ-260821-H3BD
+    - SW-REQ-260821-5W6X
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSImportRule.styleSheet
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
+reproduction_steps:
+    - 'Import parser.ts then parse(''@import url("sheet.css"); body { color: red; }'').'
+    - Find the CSSImportRule in cssRules.
+    - Observe styleSheet is null (README) or an empty never-fetched placeholder (HEAD cssRules.length 0). Fetch/network I/O is not used.
+    - 'Intended contract (full CSSOM): CSSImportRule.styleSheet is the associated loaded stylesheet (not null).'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts'
+introduced_in: inception
+defect_class: latent
+remediation: Load the imported href so CSSImportRule.styleSheet is the associated CSSStyleSheet (or keep the documented offline contract and treat full CSSOM import loading as out of scope). Close this KI only after the product change lands. Overlay cannot land that change.
+notes:
+    - Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-21T18:24:24Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Documented offline-parser capability gap vs full CSSOM import loading: CSSImportRule.styleSheet is README-null / HEAD empty placeholder; @import never fetches. Filed against SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X, and every requirement that currently carries a defensive unique-cause FALSE ignore so those rows are KI-tracked, not silent. Distinct from KI-1 (setProperty all), KI-2 (replace queueMicrotask), KI-3 (typed OM object-position), KI-4 (registerProperty after @property), KI-5 (invalid media not-all), and KI-6 (parser-api type 0). No product change.
+    - at: "2026-08-21T21:10:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Narrowed affected_requirements to SYS-REQ-260821-H3BD and SW-REQ-260821-5W6X only. Removed dumpster tracking of unrelated defensive unique-cause FALSE ignores. KI-7 is solely the offline @import / CSSImportRule.styleSheet-null hole. No product change.
+    - at: "2026-08-21T20:11:54Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-description,append-note
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS OM documented-offline-parser capability gap (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
+        real_infrastructure: constructs parse() from src/parser.ts and reads public CSSImportRule.styleSheet (not a mock).
+        control_test / operational_path_verified: runner setup asserts @import produced a CSSImportRule (exit 2 if setup fails).
+        current_deployment_relevance: hole is on HEAD CSSImportRule.styleSheet / handleImportRule; never fetches; README documents null; getter currently returns empty placeholder.
+        honest_severity / no_inflation: medium correctness matches missing imported sheet, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the full CSSOM associated-loaded-sheet contract so it FAILS while the hole is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is a never-fetched @import associated sheet, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS OM documented-offline-parser hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral capability gap: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of parse() with @import can hit the hole. Rule 4 is Web3-only.
+template_class: offline_import_never_fetches
+isomorphic_sites:
+    - src/CSSOM.ts:1469
+    - src/CSSOM.ts:1502
+    - src/CSSOM.ts:1504
+    - src/parser.ts:734
+    - src/parser.ts:800
+dedup_armor: |
+    Only CSSImportRule.styleSheet / handleImportRule skip fetch of the imported href. Distinct from KI-2 (replace queueMicrotask) and from generic parse-recovery holes. Do not merge this KI into a generic @import prelude parse issue.

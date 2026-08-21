@@ -1455,7 +1455,6 @@ export class CSSMarginRule extends CSSRule {
 export class CSSImportRule extends CSSRule {
   private _href: string;
   private _media: MediaList;
-  private _styleSheet: CSSStyleSheet | null = null;
   private _layerName: string | null = null;
   private _supportsText: string | null = null;
 
@@ -1487,18 +1486,11 @@ export class CSSImportRule extends CSSRule {
     }
   }
 
-  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet
+  // cssom-1 § 6.4.4 #dom-cssimportrule-stylesheet
+  // The attribute returns the associated sheet if any, or null otherwise.
+  // README documented offline parser: no network/disk I/O, so no associated sheet.
   get styleSheet(): CSSStyleSheet | null {
-    if (!this._styleSheet) {
-      this._styleSheet = CSSStyleSheet.createInternal([], (text: string) => {
-        const tokens = tokenize(text);
-        return ParseHooks.consumeRule(tokens) as unknown as Rule;
-      });
-      (this._styleSheet as unknown as { _ownerRule: CSSRule | null })._ownerRule = this;
-      (this._styleSheet as unknown as { _parentStyleSheet: StyleSheet | null })._parentStyleSheet = this.parentStyleSheet;
-      (this._styleSheet as unknown as { _href: string | null })._href = this._href;
-    }
-    return this._styleSheet;
+    return null;
   }
 
   // cssom-1 § 6.4.3 #dom-cssimportrule-layername

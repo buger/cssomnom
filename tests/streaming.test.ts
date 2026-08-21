@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Verifies: SYS-REQ-260821-SBJ7, SW-REQ-260821-QV2H, SW-REQ-260821-7M07
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { tokenize } from '../src/tokenizer.ts';
-import { StreamingTokenizer } from '../src/streaming-tokenizer.ts';
+import { StreamingTokenizer, NeedMoreDataError } from '../src/streaming-tokenizer.ts';
 import type { Token } from '../src/types.ts';
 import { Parser } from '../src/parser.ts';
 import { StreamingTokenizerStream } from '../src/TokenStream.ts';
@@ -29,6 +30,8 @@ function assertTokensEqual(actual: Token[], expected: Token[]) {
   }
 }
 
+// SYS-REQ-260821-SBJ7:nominal:nominal
+// SW-REQ-260821-QV2H:nominal:nominal
 test('streaming: single chunk', () => {
   const input = 'div { color: red; }';
   const expectedTokens = tokenize(input);
@@ -144,6 +147,44 @@ test('streaming: character by character', () => {
   const actualTokens = tokenizer.getTokens();
   
   assertTokensEqual(actualTokens, expectedTokens);
+});
+
+// SW-REQ-260821-QV2H:nominal:nominal
+test('streaming: incomplete chunk getTokens yields no tokens (NeedMoreData, not EOF)', () => {
+  // css-syntax-3 § 4.3.6 #consume-url-token / § 4.3.5 #consume-a-string-token:
+  // an unclosed url( or "string is not a completed token until ) / closing quote or true EOF.
+  const tokenizer = new StreamingTokenizer();
+  tokenizer.appendChunk('url(foo');
+  const tokens = tokenizer.getTokens();
+  assert.equal(tokens.length, 0);
+  assert.equal(tokens.some((t) => t.type === 'EOF'), false);
+});
+
+// SW-REQ-260821-QV2H:nominal:nominal
+test('streaming: peek on incomplete chunk is NeedMoreData, not a fabricated EOF', () => {
+  const tokenizer = new StreamingTokenizer();
+  const stream = new StreamingTokenizerStream(tokenizer);
+  tokenizer.appendChunk('"hello');
+  assert.throws(
+    () => {
+      stream.peek();
+    },
+    (err: unknown) => err instanceof NeedMoreDataError,
+    'peek must not invent EOF while the tokenizer is still open and the token is incomplete',
+  );
+
+  tokenizer.appendChunk(' world"');
+  const token = stream.peek();
+  assert.notEqual(token.type, 'EOF');
+  assert.equal(token.type, 'string');
+  if (token.type === 'string') {
+    assert.equal(token.value, 'hello world');
+  }
+
+  tokenizer.close();
+  stream.next();
+  const eof = stream.peek();
+  assert.equal(eof.type, 'EOF');
 });
 
 test('streaming: parser integration', () => {
