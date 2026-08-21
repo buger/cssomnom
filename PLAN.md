@@ -3004,6 +3004,7 @@ Patched `/tmp/probe-labs/reqproof` (PR-worthy). Overlay recapture uses `/tmp/pro
 - [x] **code_mcdc_measure stale latest.json**: same-cohort instrumented run refreshed `.proof/mcdc/js/latest.json` (package.json/tsconfig fingerprints current). 100% code MC/DC floors still unmet (~44% decision / ~45% condition).
 - [x] **known_issue_complete**: `proof evidence capture <KI>` stamps red/fixed reproducers. Overlay `proof/evidence/ki-{1,2,3,5,6,7}.yaml`. Check **pass** (KI-7 open+reproduced; KI-1..6 fixed+not_reproduced; KI-4 withdrawn).
 - [x] **verify_passes realize**: Kind2 now sees managed Z3 on PATH; cached `realize_result=error` is not reused. Realize **28/28 realizable**. Remaining verify warn: 65 unconstrained outputs (honest; no fake Z3 domains).
+- [x] **overlay audit closure (Champ)**: Split per-layer vars (0 unconstrained outputs). `verify_passes` **pass** (28/28 realizable). Dropped extra HJVC/ZP03 `traces.components`. `cross_component_clean` / `interface_coverage` **pass** (library/serializer/selectors `no_interface`). `code_predicates_modeled` **pass** via `verification.not_modeled` `[structural]` Unicode/hex/arity helpers (no fake Z3 domains). `consistency_pair_coverage` **pass** (18 independence attestations). `verification_state_consistent` **pass** (SW-5W6X / SYS-H3BD `failing` via KI-7). Adopted `no_external_io_on_parse` in `proof.yaml`. Full audit: **0 errors / 19 warnings**. Left red honestly: `spec_lint_status_vs_review` 39 (no mass-stamp), `process_checklist` (spec-review-1 blocked on `under_modeled`; coverage blocked on standalone `code_mcdc_measure`), `nonbool_inputs_constrained` 154, `suspect_clean` 630, `authored_delta_expected` 36, `under_modeled` 52, `code_mcdc_coverage` ~45%/47% vs 100% floors. Did not `proof approve` / `waive` / `workflow`. See `/tmp/grok-goal-47e8a9f6b740/implementer/audit-close.md`.
 
 ---
 
@@ -3016,4 +3017,23 @@ Increase decision coverage on `src/**` (exclude `src/data/gen`) without lowering
 - [x] Real tests for `serializeUrlToken` and `tryParsePosition` (`tests/mcdc-hotspot-url-position.test.ts`).
 - [x] Extra recovery / KI-1 / KI-5 tests (`tests/mcdc-hotspot-ki-recovery.test.ts`).
 - [x] Targeted `node --test` on those files is green. No product-code KI reverts.
+
+---
+
+## Phase: transform-origin grammar-first parse (Champ)
+
+Grizz rejected `60f3ecb` (reify-first + `tryParsePosition` as the transform-origin grammar gate). Did **not** `proof approve`.
+
+- [x] **Red tests first** (`tests/typed-om-position.test.ts`) that fail on HEAD `60f3ecb` behavior:
+  - `transform-origin: left top 5px` must **not** be `CSSPositionValue` (z dropped). Valid grammar → raw `CSSStyleValue`.
+  - `transform-origin: top left 5px` must **not** throw. Valid `&&` + z → raw `CSSStyleValue`.
+  - `transform-origin: left 10px top 20px` **must** TypeError (4-value `<position>` is invalid transform-origin).
+- [x] **Grammar first, then reify** (`src/typed-om/values/style-value-parser.ts`, `src/typed-om/position/position-parser.ts`):
+  - `matchesPositionPropertyGrammar` / `isValidTransformOrigin` do **not** use `tryParsePosition` as the only gate.
+  - css-transforms-1 § 5 `#transform-origin-property`: 1-value, x-then-y, keyword `&&`, optional `<length>` z. Not 4-value `<position>`.
+  - css-typed-om-1 § 6.6 `#parse-a-cssstylevalue`: TypeError only on grammar failure.
+  - Then reify: `tryParsePosition` (2D only; transform-origin with ≥3 components returns null so z is not dropped) / `CSSKeywordValue` / raw `CSSStyleValue`.
+- [x] **KI-6 duck-typed adapter test** (`tests/parser-api.test.ts`): `{ type: 0, cssText: '@container (style(--x: "{")) { .x { color: red } }' }` through exported `toParserRule` — cannot take `instanceof CSSContainerRule`. Prelude keeps quoted `{`. Also `@keyframes "x{"` via `CSS.parseStylesheetSync`.
+- [x] Preflight typecheck: dummy `dimension`/`percentage` tokens in `tests/mcdc-hotspot-url-position.test.ts` now include `numberType`/`sign`.
+- [x] `pnpm run preflight` green (Node 24). Did not `proof approve`.
 

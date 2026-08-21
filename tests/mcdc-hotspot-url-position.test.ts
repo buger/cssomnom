@@ -97,11 +97,11 @@ function ident(value: string): ComponentValue {
 }
 
 function dim(value: number, unit: string): ComponentValue {
-  return { type: 'dimension', value, unit };
+  return { type: 'dimension', value, unit, numberType: 'number', sign: null };
 }
 
 function pct(value: number): ComponentValue {
-  return { type: 'percentage', value };
+  return { type: 'percentage', value, sign: null };
 }
 
 function unit(v: CSSStyleValue, expected: number, unitName: string): void {

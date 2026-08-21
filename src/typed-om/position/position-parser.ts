@@ -49,6 +49,13 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
   const components = trimmed.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
   if (components.length === 0) return null;
 
+  // css-typed-om-1 § 3.3 #positionvalue-objects: CSSPositionValue reifies 2D <position>.
+  // css-transforms-1 § 5 #transform-origin-property: 3-value form is x y <length> (z),
+  // not the 3-/4-value <position> offset syntax. Do not drop z.
+  if (property && property.toLowerCase() === 'transform-origin' && components.length >= 3) {
+    return null;
+  }
+
   // 1-value syntax: [ left | center | right | top | bottom | <length-percentage> ]
   if (components.length === 1) {
     const c0 = components[0];
@@ -238,14 +245,33 @@ function isIdentKeyword(c: ComponentValue, keywords: string[]): boolean {
   return isToken(c) && c.type === 'ident' && keywords.includes(c.value.toLowerCase());
 }
 
+function isSingleValueTransformOrigin(c: ComponentValue): boolean {
+  // [ left | center | right | top | bottom | <length-percentage> ]
+  return isIdentKeyword(c, ['left', 'center', 'right', 'top', 'bottom']) || isHorizontalOrigin(c);
+}
+
+function isTwoValueTransformOrigin(a: ComponentValue, b: ComponentValue): boolean {
+  // [ left | center | right | <length-percentage> ] [ top | center | bottom | <length-percentage> ]
+  if (isHorizontalOrigin(a) && isVerticalOrigin(b)) return true;
+  // [ [ center | left | right ] && [ center | top | bottom ] ] — remaining order: vertical then horizontal keyword
+  if (isIdentKeyword(a, ['top', 'bottom']) && isIdentKeyword(b, ['left', 'right', 'center'])) return true;
+  return false;
+}
+
 function isValidTransformOrigin(tokens: ComponentValue[]): boolean {
+  // css-transforms-1 § 5 #transform-origin-property (grammar, not CSSPositionValue reification):
+  // [ left | center | right | top | bottom | <length-percentage> ]
+  // | [ left | center | right | <length-percentage> ] [ top | center | bottom | <length-percentage> ] <length>?
+  // | [ [ center | left | right ] && [ center | top | bottom ] ] <length>?
   const components = nonWs(tokens);
-  if (components.length === 1 || components.length === 2) {
-    return tryParsePosition(tokens, 'transform-origin') !== null;
+  if (components.length === 1) {
+    return isSingleValueTransformOrigin(components[0]);
   }
-  // css-transforms-1 § 8 #transform-origin-property: x y <length>
+  if (components.length === 2) {
+    return isTwoValueTransformOrigin(components[0], components[1]);
+  }
   if (components.length === 3) {
-    return isHorizontalOrigin(components[0]) && isVerticalOrigin(components[1]) && isLengthCoord(components[2]);
+    return isTwoValueTransformOrigin(components[0], components[1]) && isLengthCoord(components[2]);
   }
   return false;
 }

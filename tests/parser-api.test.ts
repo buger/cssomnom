@@ -18,7 +18,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { CSS } from '../src/index.ts';
-import { CSSParserAtRule, CSSParserDeclaration, CSSParserQualifiedRule, CSSParserFunction, CSSParserToken } from '../src/parser-api.ts';
+import { CSSParserAtRule, CSSParserDeclaration, CSSParserQualifiedRule, CSSParserFunction, CSSParserToken, toParserRule } from '../src/parser-api.ts';
 
 describe('CSS Parser API', () => {
     // SYS-REQ-260821-NGJH:nominal:nominal
@@ -77,6 +77,33 @@ describe('CSS Parser API', () => {
         assert.ok(at.body?.[0] instanceof CSSParserQualifiedRule);
     });
 
+    test('duck-typed type-0 cssText with quoted { cannot take CSSContainerRule instanceof path', () => {
+        // css-syntax-3 § 4.3.4 #consume-string-token / § 5.5.8 #consume-a-component-value
+        // Duck-typed UNKNOWN_RULE is not instanceof CSSContainerRule, so cssomAtRuleFromFields
+        // must re-tokenize cssText instead of slicing at the first `{`.
+        const duck = { type: 0, cssText: '@container (style(--x: "{")) { .x { color: red } }' };
+        const rule = toParserRule(duck);
+        assert.ok(rule instanceof CSSParserAtRule);
+        const at = rule as CSSParserAtRule;
+        assert.strictEqual(at.name, 'container');
+        const preludeStr = at.prelude.map(v => v.toString()).join('');
+        assert.ok(preludeStr.includes('{'), `prelude lost quoted '{': ${JSON.stringify(preludeStr)}`);
+        assert.ok(!preludeStr.includes('.x'), `prelude swallowed body: ${JSON.stringify(preludeStr)}`);
+    });
+
+    test('quoted { in @keyframes prelude is not truncated via cssText adapter', () => {
+        // CSSKeyframesRule.type === 7 is not instanceof CSSContainerRule.
+        const css = '@keyframes "x{" { from { color: red } }';
+        const rules = CSS.parseStylesheetSync(css);
+        assert.strictEqual(rules.length, 1);
+        assert.ok(rules[0] instanceof CSSParserAtRule);
+        const at = rules[0] as CSSParserAtRule;
+        assert.strictEqual(at.name, 'keyframes');
+        const preludeStr = at.prelude.map(v => v.toString()).join('');
+        assert.ok(preludeStr.includes('{'), `prelude lost '{': ${JSON.stringify(preludeStr)}`);
+        assert.ok(!preludeStr.includes('from'), `prelude swallowed body: ${JSON.stringify(preludeStr)}`);
+    });
+
     test('CSS.parseStylesheet (Async)', async () => {
         const css = 'div { color: blue; }';
         const rules = await CSS.parseStylesheet(css);
@@ -85,7 +112,9 @@ describe('CSS Parser API', () => {
     });
 
     // SYS-REQ-260821-KA02:error_handling:nominal
+    // SYS-REQ-260821-KA02:malformed_input:nominal
     // SW-REQ-260821-2Z0N:error_handling:nominal
+    // SW-REQ-260821-2Z0N:malformed_input:nominal
     test('CSS.parseRule', () => {
         const css = 'div { color: green; }';
         const rule = CSS.parseRule(css);

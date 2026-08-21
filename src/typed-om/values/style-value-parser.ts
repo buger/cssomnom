@@ -79,6 +79,23 @@ function validateMathFunctions(tokens: ComponentValue[]): boolean {
   return true;
 }
 
+/**
+ * css-typed-om-1 § 6.6 #parse-a-cssstylevalue: grammar first; TypeError only if it fails.
+ * § 3.3 #positionvalue-objects: then reify as CSSPositionValue / CSSKeywordValue / raw CSSStyleValue.
+ */
+function parseThenReifyPosition(property: string, trimmed: ComponentValue[], fallbackCss: string): CSSStyleValue {
+  if (!matchesPositionPropertyGrammar(property, trimmed)) {
+    throw new TypeError(`Invalid value for property '${property}': '${fallbackCss}'`);
+  }
+  const posVal = tryParsePosition(trimmed, property);
+  if (posVal) return posVal;
+  const components = trimmed.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
+  if (components.length === 1 && components[0].type === 'ident') {
+    return new CSSKeywordValue((components[0] as IdentToken).value);
+  }
+  return new CSSStyleValue(fallbackCss, privateToken);
+}
+
 function createValueFromTokens(values: ComponentValue[], property?: string): CSSStyleValue {
   let start = 0;
   while (start < values.length && (values[start].type === 'whitespace' || values[start].type === 'comment')) {
@@ -103,17 +120,7 @@ function createValueFromTokens(values: ComponentValue[], property?: string): CSS
   }
 
   if (property && POSITION_PROPERTIES.has(property.toLowerCase())) {
-    const posVal = tryParsePosition(trimmed, property);
-    if (posVal) return posVal;
-    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: throw only when the property grammar fails.
-    // § 3.3 #positionvalue-objects: values that parse but do not reify as CSSPositionValue stay CSSStyleValue.
-    if (matchesPositionPropertyGrammar(property, trimmed)) {
-      if (trimmed.length === 1 && trimmed[0].type === 'ident') {
-        return new CSSKeywordValue((trimmed[0] as IdentToken).value);
-      }
-      return new CSSStyleValue(serialize(trimmed).trim(), privateToken);
-    }
-    throw new TypeError(`Invalid <position> value for property '${property}'`);
+    return parseThenReifyPosition(property, trimmed, serialize(trimmed).trim());
   }
 
   if (trimmed.length === 1) {
@@ -210,14 +217,7 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
       for (const seg of segments) {
         const segTrimmed = seg.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
         if (segTrimmed.length === 0) continue;
-        const posVal = tryParsePosition(segTrimmed, property);
-        if (posVal) {
-          values.push(posVal);
-        } else if (matchesPositionPropertyGrammar(property, segTrimmed)) {
-          values.push(createValueFromTokens(seg, property));
-        } else {
-          throw new TypeError(`Invalid value for property '${property}': '${css}'`);
-        }
+        values.push(parseThenReifyPosition(property, segTrimmed, serialize(seg).trim() || css));
       }
       if (values.length === 0) {
         throw new TypeError(`Invalid value for property '${property}': '${css}'`);
@@ -225,15 +225,7 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
       return values;
     }
 
-    const posVal = tryParsePosition(trimmed, property);
-    if (posVal) return [posVal];
-    if (!matchesPositionPropertyGrammar(property, trimmed)) {
-      throw new TypeError(`Invalid value for property '${property}': '${css}'`);
-    }
-    if (trimmed.length === 1 && trimmed[0].type === 'ident') {
-      return [new CSSKeywordValue((trimmed[0] as IdentToken).value)];
-    }
-    return [new CSSStyleValue(css.trim(), privateToken)];
+    return [parseThenReifyPosition(property, trimmed, css.trim())];
   }
 
   if (propLower === 'transform') {

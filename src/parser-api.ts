@@ -290,7 +290,7 @@ function cssomAtRuleFromFields(r: unknown): CSSParserAtRule | null {
 }
 
 // Implements: SYS-REQ-260821-NGJH, SW-REQ-260821-MZ8P, INT-REQ-260821-WTPD
-function toParserRule(rule: unknown): CSSParserRule {
+export function toParserRule(rule: unknown): CSSParserRule {
   const r = rule as Record<string, unknown>;
   // Handle internal AST at-rule
   if (r.type === 'at-rule') {

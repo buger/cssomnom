@@ -152,3 +152,32 @@ test('CSSStyleValue.parse does not throw when grammar is valid but CSSPositionVa
   assert.ok(!(origin3 instanceof CSSKeywordValue));
 });
 
+test('transform-origin grammar is checked before CSSPositionValue reification', () => {
+  // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: TypeError only when property grammar fails.
+  // css-transforms-1 § 5 #transform-origin-property:
+  //   [ left | center | right | top | bottom | <length-percentage> ]
+  //   | [ left | center | right | <length-percentage> ]
+  //     [ top | center | bottom | <length-percentage> ] <length>?
+  //   | [ [ center | left | right ] && [ center | top | bottom ] ] <length>?
+  // css-typed-om-1 § 3.3 #positionvalue-objects: CSSPositionValue is 2D <position>; z is not dropped.
+
+  const leftTopZ = CSSStyleValue.parse('transform-origin', 'left top 5px');
+  assert.ok(leftTopZ instanceof CSSStyleValue);
+  assert.ok(!(leftTopZ instanceof CSSPositionValue), '3-value transform-origin must not reify as CSSPositionValue (z dropped)');
+  assert.ok(!(leftTopZ instanceof CSSKeywordValue));
+  assert.ok(leftTopZ.toString().includes('5px'), `z offset lost: ${leftTopZ.toString()}`);
+
+  assert.doesNotThrow(() => {
+    CSSStyleValue.parse('transform-origin', 'top left 5px');
+  }, 'valid && + z transform-origin must not throw');
+  const topLeftZ = CSSStyleValue.parse('transform-origin', 'top left 5px');
+  assert.ok(topLeftZ instanceof CSSStyleValue);
+  assert.ok(!(topLeftZ instanceof CSSPositionValue));
+  assert.ok(!(topLeftZ instanceof CSSKeywordValue));
+  assert.ok(topLeftZ.toString().includes('5px'), `z offset lost: ${topLeftZ.toString()}`);
+
+  assert.throws(() => {
+    CSSStyleValue.parse('transform-origin', 'left 10px top 20px');
+  }, TypeError, '4-value <position> is invalid transform-origin');
+});
+
