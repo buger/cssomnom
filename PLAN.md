@@ -3129,6 +3129,16 @@ Close remaining `proof audit --fail-level warn` findings from audit-full-4 witho
 
 - [x] `known_issue_complete`: `proof evidence refresh KI-7` (Node 24). Tripwire still fails (`CSSImportRule.styleSheet` null). Re-stamped after parser.ts Implements.
 - [x] `obligation_evidence_complete` 11→5: `:negative` triples on existing throw/error tests (JTY2 DOMMatrix SyntaxError, ZMZR grouping insertRule SyntaxError, ZP03 registerProperty SyntaxError, WTPD parseRule trailing garbage, N2VE unexpected-EOF parse errors). Remaining 5 are `denial_of_service_resistant:fuzz` — need an evidence-profile provenance lane, not a JS comment.
+
+---
+
+## Phase: attach denial_of_service_resistant:fuzz triples on existing deep-nest tests
+
+Close remaining `denial_of_service_resistant:fuzz` cells by annotating an existing carrier that already drives deep nesting / large nested CSS. Did **not** `proof approve`. Did **not** invent a fuzz evidence-profile lane.
+
+- [x] `tests/css-fuzz-cssomnom.test.ts` `deep nesting gate against cssomnom` — `genDeepNesting(DEEP_NEST_DEPTH)` closed+open → `CssomnomTarget('stylesheet').parse` (`parse` → `tokenize` + consume stylesheet). Triples: `SYS-REQ-260821-7521`, `SW-REQ-260821-HHVE`, `SYS-REQ-260821-SBJ7`, `SW-REQ-260821-7M07` `:denial_of_service_resistant:fuzz`.
+- [x] Did **not** stamp `SW-REQ-260821-QV2H` — neither candidate file uses `StreamingTokenizer.appendChunk`.
+- [x] Did **not** stamp `tests/mcdc-hotspot-ki-recovery.test.ts` — unclosed-media cases are hand-written MC/DC, not a fuzz target.
 - [x] `obligation_decomposition_complete`: source_native covering via `// Implements:` on the 8 leaves (HJVC/JTY2/N2VE/WQX9/6D9T/1E5K/37RC/YTV6). Did not mint empty `proof req decompose` drafts.
 - [x] `spec_lint_plan_of_record_current`: `proof req edit --review-reviewed-at` children 2026-08-22T12:00:00Z then parents 8TGB/HGFK 12:00:01Z.
 - [x] `authored_delta_expected`: `proof review impact --all-pending` sidecar `proof/impact-reviews/cssomnom-audit.yaml` (Implements-only; no product change).
