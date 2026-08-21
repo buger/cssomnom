@@ -11,11 +11,7 @@ variables:
     - name: duplicate_js_register
       type: bool
       direction: input
-      description: True when CSS.registerProperty is invoked for a name already present in the JS [[registeredPropertySet]] (JS-then-JS duplicate). False for a first JS register after @property, because @property does not populate that slot.
-    - name: invalid_modification_error
-      type: bool
-      direction: output
-      description: Boolean flag invalid modification error for component property_registry.
+      description: "True when CSS.registerProperty is invoked for a name already present in the JS [[registeredPropertySet]] (JS-then-JS duplicate). False for a first JS register after @property, because @property does not populate that slot."
     - name: property_rule_dropped
       type: bool
       direction: output
@@ -24,7 +20,6 @@ variables:
       type: bool
       direction: output
       description: Boolean flag register throws for component property_registry.
-    - name: at_property_validate_fails
-      type: bool
-      direction: internal
-      description: True when PropertyRegistry.validate fails for an at-property rule.
+independence:
+    declared: true
+    reason: "SYS property_registry pairs (register throw vs at-property drop) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

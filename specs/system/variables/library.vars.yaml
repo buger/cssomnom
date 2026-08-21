@@ -1,0 +1,24 @@
+component: library
+variables:
+    - name: api_surface_test_updated
+      type: bool
+      direction: output
+      description: Boolean flag api surface test updated for component library.
+    - name: cssomnom_or_cssomnom_ts_imported
+      type: bool
+      direction: input
+      description: "True when the caller imports the cssomnom path or the cssomnom/ts path."
+    - name: dual_package_exports_exist
+      type: bool
+      direction: output
+      description: Boolean flag dual package exports exist for component library.
+    - name: export_changed
+      type: bool
+      direction: input
+      description: Boolean flag export changed for component library.
+independence:
+    declared: true
+    reason: "SYS library pairs (dual exports vs api-surface) skip as cross-component; they govern disjoint package-manifest vs test-lock outputs."
+no_interface:
+    declared: true
+    reason: "package.json dual exports and the api-surface snapshot lock are package metadata, not a caller/callee runtime interface between cssomnom components"

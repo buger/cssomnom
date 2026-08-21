@@ -1,0 +1,57 @@
+component: parser
+variables:
+    - name: consume_qualified_rule_returns_null
+      type: bool
+      direction: internal
+      description: Boolean flag consume qualified rule returns null for component parser.
+    - name: consume_stylesheet_completed
+      type: bool
+      direction: output
+      description: Boolean flag consume stylesheet completed for component parser.
+    - name: css_import_rule_constructed
+      type: bool
+      direction: internal
+      description: "True when handleImportRule constructs CSSImportRule from an import URL."
+    - name: css_nested_declarations_emitted
+      type: bool
+      direction: output
+      description: Boolean flag css nested declarations emitted for component parser.
+    - name: css_text_supplied
+      type: bool
+      direction: input
+      description: Boolean flag css text supplied for component parser.
+    - name: flush_decls_runs
+      type: bool
+      direction: internal
+      description: "True when consumeBlockContents flushDecls wraps leftover declarations."
+    - name: import_url_present
+      type: bool
+      direction: input
+      description: Boolean flag import url present for component parser.
+    - name: invalid_rule_consumed
+      type: bool
+      direction: internal
+      description: Boolean flag invalid rule consumed for component parser.
+    - name: nested_declarations_after_nested_rule
+      type: bool
+      direction: input
+      description: Boolean flag nested declarations after nested rule for component parser.
+    - name: ordinary_invalid_css
+      type: bool
+      direction: input
+      description: Boolean flag ordinary invalid css for component parser.
+    - name: parse_does_not_throw
+      type: bool
+      direction: output
+      description: Boolean flag parse does not throw for component parser.
+    - name: qualified_rule_dropped
+      type: bool
+      direction: output
+      description: Boolean flag qualified rule dropped for component parser.
+    - name: rule_dropped
+      type: bool
+      direction: output
+      description: Boolean flag rule dropped for component parser.
+independence:
+    declared: true
+    reason: "SW parser pairs (stylesheet consume, nesting, invalid-rule drop, import construct) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

@@ -1,0 +1,33 @@
+component: cssom
+variables:
+    - name: insert_rule_path
+      type: bool
+      direction: internal
+      description: Boolean flag insert rule path for component cssom.
+    - name: media_parser_parse_called
+      type: bool
+      direction: output
+      description: Boolean flag media parser parse called for component cssom.
+    - name: media_text_set
+      type: bool
+      direction: input
+      description: Boolean flag media text set for component cssom.
+    - name: parse_hooks_consume_rule_called
+      type: bool
+      direction: output
+      description: Boolean flag parse hooks consume rule called for component cssom.
+    - name: parser_imported
+      type: bool
+      direction: output
+      description: Boolean flag parser imported for component cssom.
+    - name: style_declaration_duck_typed
+      type: bool
+      direction: output
+      description: Boolean flag style declaration duck typed for component cssom.
+    - name: style_map_mutated
+      type: bool
+      direction: input
+      description: Boolean flag style map mutated for component cssom.
+independence:
+    declared: true
+    reason: "INT cssom pairs (insertRule ParseHooks, MediaList, StylePropertyMap) skip as cross-component contracts with parser/media/typed_om; no intra-component shared-output pair remains to check."

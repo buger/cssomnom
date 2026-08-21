@@ -1,0 +1,13 @@
+component: serializer
+variables:
+    - name: serialized_equals_source
+      type: bool
+      direction: output
+      description: Boolean flag serialized equals source for component serializer.
+    - name: tokens_from_btn_rule
+      type: bool
+      direction: input
+      description: Boolean flag tokens from btn rule for component serializer.
+no_interface:
+    declared: true
+    reason: "serialize walks a token list as a pure function; SYS/SW guarantees are the README round-trip example, not a caller/callee INT contract"

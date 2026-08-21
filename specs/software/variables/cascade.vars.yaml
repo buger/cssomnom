@@ -1,0 +1,29 @@
+component: cascade
+variables:
+    - name: cascade_public_exports_read
+      type: bool
+      direction: internal
+      description: "True when the cascade module or index public export list is read."
+    - name: cascaded_style_returned
+      type: bool
+      direction: output
+      description: Boolean flag cascaded style returned for component cascade.
+    - name: compare_cascade_declarations_runs
+      type: bool
+      direction: internal
+      description: "True when compareCascadeDeclarations sorts matched declarations without layout."
+    - name: element_and_rules_supplied
+      type: bool
+      direction: input
+      description: Boolean flag element and rules supplied for component cascade.
+    - name: get_computed_style_exported
+      type: bool
+      direction: output
+      description: Boolean flag get computed style exported for component cascade.
+    - name: layout_performed
+      type: bool
+      direction: output
+      description: Boolean flag layout performed for component cascade.
+independence:
+    declared: true
+    reason: "SW cascade pairs (sorter vs public exports) skip as cross-component; guarantees do not share an intra-component output vocabulary the solver can pair."

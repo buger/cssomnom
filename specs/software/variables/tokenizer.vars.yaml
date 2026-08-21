@@ -1,1 +1,29 @@
-../../system/variables/tokenizer.vars.yaml
+component: tokenizer
+variables:
+    - name: chunk_appended
+      type: bool
+      direction: input
+      description: Boolean flag chunk appended for component tokenizer.
+    - name: complete_token_in_chunk
+      type: bool
+      direction: input
+      description: "True when appendChunk produced at least one complete CSS token before NeedMoreData rewound an incomplete token."
+    - name: consume_token_loop_runs
+      type: bool
+      direction: internal
+      description: "True when Tokenizer.tokenize runs the consumeToken loop until EOF."
+    - name: css_text_supplied
+      type: bool
+      direction: input
+      description: Boolean flag css text supplied for component tokenizer.
+    - name: token_list_returned
+      type: bool
+      direction: output
+      description: Boolean flag token list returned for component tokenizer.
+    - name: tokens_available_after_get_tokens
+      type: bool
+      direction: output
+      description: Boolean flag tokens available after get tokens for component tokenizer.
+independence:
+    declared: true
+    reason: "SW tokenizer pairs (tokenize loop vs streaming appendChunk) skip as cross-component; they govern disjoint batch vs streaming outputs."

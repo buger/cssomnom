@@ -1,0 +1,28 @@
+component: library
+variables:
+    - name: api_surface_snapshot_compared
+      type: bool
+      direction: internal
+      description: "True when the api-surface test compares public export keys to the snapshot."
+    - name: api_surface_test_updated
+      type: bool
+      direction: output
+      description: Boolean flag api surface test updated for component library.
+    - name: dual_package_exports_exist
+      type: bool
+      direction: output
+      description: Boolean flag dual package exports exist for component library.
+    - name: export_changed
+      type: bool
+      direction: input
+      description: Boolean flag export changed for component library.
+    - name: package_json_exports_map_read
+      type: bool
+      direction: internal
+      description: "True when the package.json exports map is read for dual entry points."
+independence:
+    declared: true
+    reason: "SW library pairs (dual package exports vs api-surface snapshot) skip as cross-component; they govern disjoint package-manifest vs test-lock outputs."
+no_interface:
+    declared: true
+    reason: "package.json dual exports and the api-surface snapshot lock are package metadata, not a caller/callee runtime interface between cssomnom components"

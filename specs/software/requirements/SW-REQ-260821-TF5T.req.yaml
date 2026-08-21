@@ -1,0 +1,63 @@
+id: SW-REQ-260821-TF5T
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when consume_rule_fails the cssom shall always satisfy syntax_error_thrown
+description: The cssom insertRule path shall throw SyntaxError when consumeRule fails.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-YMEY
+component: cssom
+rationale: insertRule shall fail loudly when the consume hook rejects the rule.
+tags: []
+variables:
+    - consume_rule_fails
+    - syntax_error_thrown
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-YMEY
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:53:27Z"
+        ai_generated: true
+    not_modeled:
+        - predicate: val > 100
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:57Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:42Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+    - malformed_recovers_or_errors_loudly
+obligation_hazards:
+    - class: error_handling
+      worst_case: consumeRule failure that is mapped to a non-SyntaxError DOMException breaks CSSOM-1 callers that catch SyntaxError specifically.
+      severity: medium
+    - class: malformed_input
+      worst_case: When consumeRule fails, a missing SyntaxError leaves CSSStyleSheet.cssRules mutated with an incomplete or bogus rule.
+      severity: high
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: consumeRule failure that is ignored lets insertRule succeed and insert a partial rule instead of throwing SyntaxError with no mutation.
+      severity: high
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

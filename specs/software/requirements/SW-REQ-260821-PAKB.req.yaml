@@ -1,0 +1,52 @@
+id: SW-REQ-260821-PAKB
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when deviation_applies & replace_sync_parse_runs the cssom shall always satisfy documented_deviation_honored
+description: The cssom replace path shall parse synchronously when a documented deviation applies.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-GR67
+component: cssom
+rationale: replace shall honor the documented sync-parse deviation.
+tags: []
+variables:
+    - deviation_applies
+    - replace_sync_parse_runs
+    - documented_deviation_honored
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-GR67
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:53:27Z"
+        ai_generated: true
+    not_modeled:
+        - predicate: val > 100
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:00Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:41Z"
+obligation_checklist:
+    - nominal
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

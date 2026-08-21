@@ -30,6 +30,15 @@ traces:
 verification:
     assurance_level: C
     formalization_status: valid
+    not_modeled:
+        - predicate: "count < 6"
+          reason: "Unicode escaped-code-point hex digit counter (max 6); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "endHex.length < 6"
+          reason: "urange end-hex length cap (css-syntax); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "hex.length < 6"
+          reason: "Unicode/urange hex length cap (css-syntax max 6); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "questionMarks.length < 6"
+          reason: "urange wildcard hex-digit cap; structural tokenizer helper, not a requirement domain [structural]"
     review:
         status: pending
         reviewer: ""

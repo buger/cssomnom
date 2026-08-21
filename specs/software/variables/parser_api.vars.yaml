@@ -1,0 +1,49 @@
+component: parser_api
+variables:
+    - name: boolean_returned
+      type: bool
+      direction: output
+      description: Boolean flag boolean returned for component parser_api.
+    - name: css_namespace_methods_exported
+      type: bool
+      direction: output
+      description: Boolean flag css namespace methods exported for component parser_api.
+    - name: css_namespace_object_bound
+      type: bool
+      direction: internal
+      description: "True when the CSS namespace object binds escape, supports, registerProperty, and parse."
+    - name: css_parser_rule_returned
+      type: bool
+      direction: output
+      description: Boolean flag css parser rule returned for component parser_api.
+    - name: ensure_eof_runs
+      type: bool
+      direction: internal
+      description: "True when parseRuleSync runs Parser.ensureEOF after consumeRule."
+    - name: parse_rule_called
+      type: bool
+      direction: input
+      description: Boolean flag parse rule called for component parser_api.
+    - name: parse_rule_throws
+      type: bool
+      direction: output
+      description: Boolean flag parse rule throws for component parser_api.
+    - name: parse_stylesheet_sync_called
+      type: bool
+      direction: input
+      description: Boolean flag parse stylesheet sync called for component parser_api.
+    - name: supports_called
+      type: bool
+      direction: input
+      description: Boolean flag supports called for component parser_api.
+    - name: to_parser_rule_maps_ast
+      type: bool
+      direction: internal
+      description: "True when toParserRule maps consumeListOfRules output to CSSParserRule nodes."
+    - name: trailing_garbage
+      type: bool
+      direction: input
+      description: Boolean flag trailing garbage for component parser_api.
+independence:
+    declared: true
+    reason: "SW parser_api pairs (parseRule throw, CSS namespace, supports, AST map) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

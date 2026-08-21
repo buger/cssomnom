@@ -30,6 +30,11 @@ traces:
 verification:
     assurance_level: C
     formalization_status: valid
+    not_modeled:
+        - predicate: "i < 4"
+          reason: "DOMMatrix 4x4 index loop bound; structural linear-algebra helper, not a requirement domain [structural]"
+        - predicate: "j < 4"
+          reason: "DOMMatrix 4x4 index loop bound; structural linear-algebra helper, not a requirement domain [structural]"
     review:
         status: pending
         reviewer: ""

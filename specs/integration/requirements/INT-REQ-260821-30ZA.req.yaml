@@ -31,6 +31,13 @@ traces:
 verification:
     assurance_level: C
     formalization_status: valid
+    not_modeled:
+        - predicate: "length <= 6"
+          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "tokens.length >= 2"
+          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
+        - predicate: "val > 100"
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
     review:
         status: pending
         reviewer: ""

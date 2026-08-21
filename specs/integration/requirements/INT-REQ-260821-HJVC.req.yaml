@@ -27,12 +27,26 @@ traces:
     components:
         - cascade
         - cssom
-        - selectors
-        - media
-        - parser_api
 verification:
     assurance_level: C
     formalization_status: valid
+    not_modeled:
+        - predicate: "h < 120"
+          reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"
+        - predicate: "h < 180"
+          reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"
+        - predicate: "h < 240"
+          reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"
+        - predicate: "h < 300"
+          reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"
+        - predicate: "h < 60"
+          reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"
+        - predicate: "nonEofTokens.length < 3"
+          reason: "Selector/color component-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: "parts.length < 3"
+          reason: "rgb()/color() slash-separated parts arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: "parts.length > 4"
+          reason: "rgb()/color() slash-separated parts arity guard; structural parse, not a requirement domain [structural]"
     review:
         status: pending
         reviewer: ""

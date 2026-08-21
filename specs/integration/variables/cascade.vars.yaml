@@ -1,0 +1,10 @@
+component: cascade
+variables:
+    - name: cascaded_style_requested
+      type: bool
+      direction: input
+      description: Boolean flag cascaded style requested for component cascade.
+    - name: matcher_and_media_consulted
+      type: bool
+      direction: output
+      description: Boolean flag matcher and media consulted for component cascade.

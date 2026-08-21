@@ -1,0 +1,21 @@
+component: parser_api
+variables:
+    - name: parse_stylesheet_sync_called
+      type: bool
+      direction: input
+      description: Boolean flag parse stylesheet sync called for component parser_api.
+    - name: parser_ast_adapted
+      type: bool
+      direction: output
+      description: Boolean flag parser ast adapted for component parser_api.
+    - name: property_registry_updated
+      type: bool
+      direction: output
+      description: Boolean flag property registry updated for component parser_api.
+    - name: register_property_called
+      type: bool
+      direction: input
+      description: Boolean flag register property called for component parser_api.
+independence:
+    declared: true
+    reason: "INT parser_api pairs (AST adapter vs registerProperty) skip as cross-component contracts with parser/property_registry; no intra-component shared-output pair remains to check."

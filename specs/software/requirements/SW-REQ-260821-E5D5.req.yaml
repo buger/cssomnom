@@ -1,0 +1,58 @@
+id: SW-REQ-260821-E5D5
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when ten_px_parsed & parse_numeric_value_runs the typed_om shall always satisfy css_unit_value_returned
+description: The typed_om numeric parser shall construct CSSUnitValue with value 10 and unit px.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-Y6R3
+component: typed_om
+rationale: CSSNumericValue.parse shall reify a simple length as CSSUnitValue.
+tags: []
+variables:
+    - ten_px_parsed
+    - parse_numeric_value_runs
+    - css_unit_value_returned
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-Y6R3
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:55:39Z"
+        ai_generated: true
+    not_modeled:
+        - predicate: arguments.length < 2
+          reason: "JS builtin arity guard on Typed OM parse helpers; structural, not a requirement domain [structural]"
+        - predicate: arguments.length < 3
+          reason: "JS builtin arity guard on Typed OM parse helpers; structural, not a requirement domain [structural]"
+        - predicate: extractedArgs.length < 2
+          reason: "Typed OM transform/function argument arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: parts.length > 3
+          reason: "Typed OM slash-separated dimension arity guard; structural parse, not a requirement domain [structural]"
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:59Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:40Z"
+obligation_checklist:
+    - nominal
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

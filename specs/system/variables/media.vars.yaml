@@ -1,0 +1,10 @@
+component: media
+variables:
+    - name: media_query_invalid
+      type: bool
+      direction: input
+      description: Boolean flag media query invalid for component media.
+    - name: serialized_as_not_all
+      type: bool
+      direction: output
+      description: Boolean flag serialized as not all for component media.

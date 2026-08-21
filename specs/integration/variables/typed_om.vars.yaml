@@ -1,0 +1,14 @@
+component: typed_om
+variables:
+    - name: parse_hooks_component_values_called
+      type: bool
+      direction: output
+      description: Boolean flag parse hooks component values called for component typed_om.
+    - name: parse_style_value
+      type: bool
+      direction: input
+      description: Boolean flag parse style value for component typed_om.
+    - name: parser_imported
+      type: bool
+      direction: output
+      description: Boolean flag parser imported for component typed_om.

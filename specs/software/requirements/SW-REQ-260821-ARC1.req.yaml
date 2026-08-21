@@ -29,15 +29,22 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:51:23Z"
         ai_generated: true
+    not_modeled:
+        - predicate: length <= 6
+          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: tokens.length >= 2
+          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
+        - predicate: val > 100
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:59Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:41Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:40Z"
 obligation_checklist:
     - error_handling
     - malformed_recovers_or_errors_loudly

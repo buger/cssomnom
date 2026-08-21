@@ -1,9 +1,5 @@
 component: cascade
 variables:
-    - name: cascaded_style_requested
-      type: bool
-      direction: input
-      description: Boolean flag cascaded style requested for component cascade.
     - name: cascaded_style_returned
       type: bool
       direction: output
@@ -20,15 +16,6 @@ variables:
       type: bool
       direction: output
       description: Boolean flag layout performed for component cascade.
-    - name: matcher_and_media_consulted
-      type: bool
-      direction: output
-      description: Boolean flag matcher and media consulted for component cascade.
-    - name: compare_cascade_declarations_runs
-      type: bool
-      direction: internal
-      description: True when compareCascadeDeclarations sorts matched declarations without layout.
-    - name: cascade_public_exports_read
-      type: bool
-      direction: internal
-      description: True when the cascade module or index public export list is read.
+independence:
+    declared: true
+    reason: "SYS cascade pairs (cascaded style vs getComputedStyle export) skip as cross-component; no intra-component shared-output pair remains to check."

@@ -43,10 +43,16 @@ obligation_hazards:
     - class: no_external_io_on_parse
       worst_case: parse() that follows @import with fetch or readFile turns CSS ingest into SSRF or path traversal against the host.
       severity: high
+verification_state: failing
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
           from: draft
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6
+        - date: "2026-08-21T20:43:31Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=1; known_issue:KI-7=failing
           changed_by: agent:grok-4.6

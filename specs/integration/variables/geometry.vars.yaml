@@ -1,0 +1,10 @@
+component: geometry
+variables:
+    - name: transform_string_parsed
+      type: bool
+      direction: input
+      description: Boolean flag transform string parsed for component geometry.
+    - name: typed_om_transform_hook_used
+      type: bool
+      direction: output
+      description: Boolean flag typed om transform hook used for component geometry.

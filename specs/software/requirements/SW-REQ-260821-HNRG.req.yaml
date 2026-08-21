@@ -28,15 +28,38 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:55:39Z"
         ai_generated: true
+    not_modeled:
+        - predicate: 2 < tokens.length
+          reason: "setProperty / parse component-list arity guard; structural CSS value parse, not a requirement domain [structural]"
+        - predicate: data.length > 2
+          reason: "Position/color component-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: data.length > 3
+          reason: "Position/color component-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: data.length > 4
+          reason: "Position/color component-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: filtered.length > 2
+          reason: "Color/position filtered-token arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: filtered.length > 3
+          reason: "Color/position filtered-token arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: hValues.length > 4
+          reason: "HSL value-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: i < 4
+          reason: "DOMMatrix 4x4 index loop bound; structural linear-algebra helper, not a requirement domain [structural]"
+        - predicate: positionTokens.length > 4
+          reason: "object-position token-list arity guard; structural parse, not a requirement domain [structural]"
+        - predicate: token.value <= 1000
+          reason: "Incidental numeric display/parse cap in CSS value helpers; not a setProperty contract domain [structural]"
+        - predicate: vValues.length > 4
+          reason: "HSV/HWB value-list arity guard; structural parse, not a requirement domain [structural]"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:40Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:40Z"
 obligation_checklist:
     - error_handling
     - malformed_recovers_or_errors_loudly

@@ -1,0 +1,21 @@
+component: parser
+variables:
+    - name: consume_step
+      type: bool
+      direction: internal
+      description: Boolean flag consume step for component parser.
+    - name: cssom_rule_constructed
+      type: bool
+      direction: output
+      description: Boolean flag cssom rule constructed for component parser.
+    - name: grouping_rule_built
+      type: bool
+      direction: internal
+      description: Boolean flag grouping rule built for component parser.
+    - name: token_stream_peek_next_used
+      type: bool
+      direction: output
+      description: Boolean flag token stream peek next used for component parser.
+independence:
+    declared: true
+    reason: "INT parser pairs (TokenStream consume vs CSSOM rule construction) skip as cross-component contracts with tokenizer/cssom; no intra-component shared-output pair remains to check."

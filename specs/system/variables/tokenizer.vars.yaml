@@ -1,9 +1,5 @@
 component: tokenizer
 variables:
-    - name: chunk_appended
-      type: bool
-      direction: input
-      description: Boolean flag chunk appended for component tokenizer.
     - name: css_text_supplied
       type: bool
       direction: input
@@ -12,15 +8,3 @@ variables:
       type: bool
       direction: output
       description: Boolean flag token list returned for component tokenizer.
-    - name: tokens_available_after_get_tokens
-      type: bool
-      direction: output
-      description: Boolean flag tokens available after get tokens for component tokenizer.
-    - name: consume_token_loop_runs
-      type: bool
-      direction: internal
-      description: True when Tokenizer.tokenize runs the consumeToken loop until EOF.
-    - name: complete_token_in_chunk
-      type: bool
-      direction: input
-      description: True when appendChunk produced at least one complete CSS token before NeedMoreData rewound an incomplete token.

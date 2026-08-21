@@ -29,15 +29,24 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: agent:grok-4.6
+        reviewed_at: "2026-08-21T13:46:46Z"
         ai_generated: true
+    not_modeled:
+        - predicate: count < 6
+          reason: "Unicode escaped-code-point hex digit counter (max 6); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: endHex.length < 6
+          reason: "urange end-hex length cap (css-syntax); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: hex.length < 6
+          reason: "Unicode/urange hex length cap (css-syntax max 6); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: questionMarks.length < 6
+          reason: "urange wildcard hex-digit cap; structural tokenizer helper, not a requirement domain [structural]"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:42Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:43:39Z"
 obligation_checklist:
     - denial_of_service_resistant
     - nominal

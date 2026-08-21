@@ -1,0 +1,33 @@
+component: property_registry
+variables:
+    - name: at_property_validate_fails
+      type: bool
+      direction: internal
+      description: "True when PropertyRegistry.validate fails for an at-property rule."
+    - name: bad_at_property
+      type: bool
+      direction: input
+      description: Boolean flag bad at property for component property_registry.
+    - name: bad_dictionary
+      type: bool
+      direction: input
+      description: Boolean flag bad dictionary for component property_registry.
+    - name: duplicate_js_register
+      type: bool
+      direction: input
+      description: "True when CSS.registerProperty is invoked for a name already present in the JS [[registeredPropertySet]] (JS-then-JS duplicate). False for a first JS register after @property, because @property does not populate that slot."
+    - name: invalid_modification_error
+      type: bool
+      direction: output
+      description: Boolean flag invalid modification error for component property_registry.
+    - name: property_rule_dropped
+      type: bool
+      direction: output
+      description: Boolean flag property rule dropped for component property_registry.
+    - name: register_throws
+      type: bool
+      direction: output
+      description: Boolean flag register throws for component property_registry.
+independence:
+    declared: true
+    reason: "SW property_registry pairs (register throw, at-property drop, InvalidModificationError) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

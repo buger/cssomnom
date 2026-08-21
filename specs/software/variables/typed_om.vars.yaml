@@ -1,0 +1,29 @@
+component: typed_om
+variables:
+    - name: css_unit_value_returned
+      type: bool
+      direction: output
+      description: Boolean flag css unit value returned for component typed_om.
+    - name: invalid_typed_input
+      type: bool
+      direction: input
+      description: Boolean flag invalid typed input for component typed_om.
+    - name: parse_numeric_value_runs
+      type: bool
+      direction: internal
+      description: "True when parseNumericValue constructs a CSSUnitValue from a numeric token."
+    - name: parse_style_value
+      type: bool
+      direction: input
+      description: Boolean flag parse style value for component typed_om.
+    - name: parse_throws
+      type: bool
+      direction: output
+      description: Boolean flag parse throws for component typed_om.
+    - name: ten_px_parsed
+      type: bool
+      direction: input
+      description: Boolean flag ten px parsed for component typed_om.
+independence:
+    declared: true
+    reason: "SW typed_om pairs (parse throw vs 10px CSSUnitValue) skip as cross-component; they govern disjoint invalid vs nominal parse outputs."

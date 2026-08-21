@@ -1,0 +1,79 @@
+id: INT-REQ-260821-9SGA
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when parse_style_value the typed_om shall always satisfy parse_hooks_component_values_called & !parser_imported
+description: The typed_om parse path shall call ParseHooks.parseComponentValues. The typed_om module shall not import Parser.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-HGFK
+component: typed_om
+rationale: Typed OM parse shall use injected hooks and shall avoid a parser import cycle.
+tags: []
+variables:
+    - parse_hooks_component_values_called
+    - parse_style_value
+    - parser_imported
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-HGFK
+    components:
+        - typed_om
+        - parser
+verification:
+    assurance_level: C
+    formalization_status: valid
+    not_modeled:
+        - predicate: "arguments.length < 2"
+          reason: "JS builtin arity guard on Typed OM parse helpers; structural, not a requirement domain [structural]"
+        - predicate: "length <= 6"
+          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "tokens.length >= 2"
+          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
+        - predicate: "val > 100"
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:47Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:04:26Z"
+obligation_checklist:
+    - error_handling
+obligation_hazards:
+    - class: error_handling
+      worst_case: Missing ParseHooks.parseComponentValues injection makes Typed OM parse import Parser or return undefined instead of a typed error.
+      severity: medium
+interface:
+    caller: typed_om
+    callee: parser
+    type: function_call
+    signature: 'ParseHooks.parseComponentValues(tokens: Token[]) -> ComponentValue[]'
+    assumptions: "parser.ts injects ParseHooks.parseComponentValues at module load. typed_om parse paths must not import Parser."
+    guarantees: "CSSStyleValue.parse calls ParseHooks.parseComponentValues. typed-om parse modules do not import Parser. Missing injection throws 'parseComponentValues not injected'."
+    producer: parser
+    consumer:
+        - typed_om
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: breaking-allowed-with-migration
+    risk_tier: 3
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

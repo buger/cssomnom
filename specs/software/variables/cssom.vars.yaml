@@ -1,0 +1,45 @@
+component: cssom
+variables:
+    - name: consume_rule_fails
+      type: bool
+      direction: internal
+      description: Boolean flag consume rule fails for component cssom.
+    - name: css_rules_getter_runs
+      type: bool
+      direction: internal
+      description: "True when the CSSStyleSheet cssRules getter runs the origin-clean check."
+    - name: declaration_unchanged
+      type: bool
+      direction: output
+      description: Boolean flag declaration unchanged for component cssom.
+    - name: deviation_applies
+      type: bool
+      direction: input
+      description: Boolean flag deviation applies for component cssom.
+    - name: documented_deviation_honored
+      type: bool
+      direction: output
+      description: Boolean flag documented deviation honored for component cssom.
+    - name: origin_clean
+      type: bool
+      direction: input
+      description: Boolean flag origin clean for component cssom.
+    - name: replace_sync_parse_runs
+      type: bool
+      direction: internal
+      description: "True when CSSStyleSheet.replace parses stylesheet contents through ParseHooks locally."
+    - name: security_error_thrown
+      type: bool
+      direction: output
+      description: Boolean flag security error thrown for component cssom.
+    - name: syntax_error_thrown
+      type: bool
+      direction: output
+      description: Boolean flag syntax error thrown for component cssom.
+    - name: value_validation_fails
+      type: bool
+      direction: internal
+      description: Boolean flag value validation fails for component cssom.
+independence:
+    declared: true
+    reason: "SW cssom pairs (setProperty, insertRule, origin-clean, documented deviation) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

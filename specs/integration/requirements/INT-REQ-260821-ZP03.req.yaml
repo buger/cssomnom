@@ -1,0 +1,77 @@
+id: INT-REQ-260821-ZP03
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when register_property_called the parser_api shall always satisfy property_registry_updated
+description: The parser_api CSS.registerProperty path shall update PropertyRegistry. The cssom at-property path shall use the same registry.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-EGCP
+component: parser_api
+rationale: JS register and at-property shall share one property registry.
+tags: []
+variables:
+    - property_registry_updated
+    - register_property_called
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-EGCP
+    components:
+        - parser_api
+        - property_registry
+verification:
+    assurance_level: C
+    formalization_status: valid
+    not_modeled:
+        - predicate: "length <= 6"
+          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: "tokens.length >= 2"
+          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
+        - predicate: "val > 100"
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:36:48Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:04:26Z"
+obligation_checklist:
+    - error_handling
+obligation_hazards:
+    - class: error_handling
+      worst_case: Duplicate JS registerProperty that does not throw InvalidModificationError lets a second definition overwrite a live custom property.
+      severity: high
+interface:
+    caller: parser_api
+    callee: property_registry
+    type: function_call
+    signature: CSS.registerProperty(definition) -> PropertyRegistry.register(definition, 'js') ; @property -> PropertyRegistry.register(..., 'css')
+    assumptions: "A JS registration (origin 'js') is not overwritten by a later @property of the same name. Duplicate JS register throws InvalidModificationError."
+    guarantees: "CSS.registerProperty and the cssom @property path share one PropertyRegistry. JS registration wins over a later @property; a CSS-only @property is stored."
+    producer: property_registry
+    consumer:
+        - parser_api
+        - cssom
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

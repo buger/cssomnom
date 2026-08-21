@@ -1,0 +1,17 @@
+component: selectors
+variables:
+    - name: bad_selector_supplied
+      type: bool
+      direction: input
+      description: Boolean flag bad selector supplied for component selectors.
+    - name: empty_match
+      type: bool
+      direction: output
+      description: Boolean flag empty match for component selectors.
+    - name: parse_selector_rejects
+      type: bool
+      direction: internal
+      description: "True when matcher parseSelector rejects a bad selector and returns an empty list."
+no_interface:
+    declared: true
+    reason: "selectors SYS/SW guarantees are parseSelector-reject/empty-match in-process matcher behavior; this overlay does not declare a separately versioned caller/callee INT (cascade consult is described on INT-REQ-260821-HJVC). Minting cascade→selectors without an integration witness would be theater."
