@@ -25,7 +25,8 @@
  *   brace, declaration, function, string, comment, and UTF-8 boundaries.
  * - **Corpus** ({@link corpus}): curated seeds for major CSS parser bug-class families.
  * - **Gates** ({@link gates}): no-panic, clean-fail, determinism, deep-nesting-safe,
- *   round-trip, output-valid, within-budget.
+ *   output-valid, within-budget. Round-trip is opt-in via {@link runSuite} or
+ *   `CssParseTarget.print` (wired by {@link runStructureAware} when present).
  * - **Orchestration** ({@link fuzz}): {@link runStructureAware} + {@link CssParseTarget}.
  */
 

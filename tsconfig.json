@@ -17,10 +17,15 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "fuzz/**/*.ts",
+    "scripts/**/*.ts"
+  ],
   "exclude": [
     "submodules",
     "dist",
-    "src/browser-entry.ts",
-    "proof"
+    "src/browser-entry.ts"
   ]
 }

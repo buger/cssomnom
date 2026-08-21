@@ -17,9 +17,15 @@
 /**
  * Real cssomnom adapter (xml-fuzz `libxml2_target.rs` analog).
  *
- * Typed TypeError / SyntaxError / DOMException are clean rejects.
- * RangeError (stack overflow) and other throws are findings — rethrown so
- * gates record Panic. This adapter does not swallow unexpected throws.
+ * Per-API classification:
+ * - stylesheet / tokenizer / selector / media / parser_api: TypeError is a
+ *   **finding** (css-syntax-3 parsers return a stylesheet/tokens/error list,
+ *   they do not throw TypeError). Selector/parser_api DOMException/SyntaxError
+ *   remain clean spec throws.
+ * - typed_om / declaration: TypeError / SyntaxError / DOMException are clean
+ *   IDL rejects (css-typed-om-1 `CSSStyleValue.parse`).
+ * - RangeError (stack overflow) is always a finding — rethrown so gates
+ *   record Panic.
  */
 
 import { parse } from '../../../src/parser.ts';
@@ -33,16 +39,52 @@ import type { CssApi } from './apis.ts';
 import { CssApi as CssApiId } from './apis.ts';
 import type { CssParseTarget, ParseOutcome } from './fuzz.ts';
 import { accepted, rejected } from './fuzz.ts';
-import { decodeUtf8Lossy } from './rng.ts';
+import { decodeUtf8Lossy, encodeUtf8 } from './rng.ts';
 
-/** TypeError, SyntaxError, DOMException — clean CSS API rejects. RangeError is a finding. */
-export function isCleanError(err: unknown): boolean {
+const SYNTAX_APIS: ReadonlySet<CssApi> = new Set([
+  CssApiId.Stylesheet,
+  CssApiId.Tokenizer,
+  CssApiId.Selector,
+  CssApiId.Media,
+  CssApiId.ParserApi,
+]);
+
+function isTypeError(err: Error): boolean {
+  return err instanceof TypeError || err.name === 'TypeError';
+}
+
+function isSyntaxOrDom(err: Error): boolean {
+  if (err instanceof SyntaxError || err.name === 'SyntaxError') return true;
+  if (typeof DOMException !== 'undefined' && err instanceof DOMException) return true;
+  return err.name === 'DOMException';
+}
+
+/**
+ * Whether `err` is a clean, spec-defined reject for `api` (not a fuzzer finding).
+ * RangeError is never clean. TypeError is a finding on CSS Syntax surfaces.
+ */
+export function isCleanError(err: unknown, api: CssApi): boolean {
   if (!(err instanceof Error)) return false;
   if (err instanceof RangeError) return false;
-  if (err instanceof TypeError || err instanceof SyntaxError) return true;
-  if (typeof DOMException !== 'undefined' && err instanceof DOMException) return true;
-  const name = err.name;
-  return name === 'TypeError' || name === 'SyntaxError' || name === 'DOMException';
+  if (SYNTAX_APIS.has(api)) {
+    // css-syntax-3: TypeError (e.g. "Cannot read properties of undefined") is a finding.
+    if (isTypeError(err)) return false;
+    return isSyntaxOrDom(err);
+  }
+  // typed_om / declaration: spec IDL throws.
+  return isTypeError(err) || isSyntaxOrDom(err);
+}
+
+/** Cycle-safe JSON fingerprint. Re-throws non-cycle errors (BigInt, etc.). */
+function fingerprintJson(value: unknown): string {
+  const seen = new WeakSet<object>();
+  return JSON.stringify(value, (_key, v: unknown) => {
+    if (typeof v === 'object' && v !== null) {
+      if (seen.has(v)) return '[Circular]';
+      seen.add(v);
+    }
+    return v;
+  });
 }
 
 function errorCode(err: unknown): string {
@@ -71,11 +113,24 @@ function rootHintSheet(sheet: { cssRules: { length: number; item(i: number): obj
   return first.constructor?.name ?? 'CSSRule';
 }
 
+/** Fingerprint is `${ruleCount}\\n${cssText…}`; drop the count line for re-parse. */
+function serializeAcceptedStylesheet(outcome: ParseOutcome): Uint8Array {
+  if (outcome.kind !== 'accepted') return encodeUtf8('');
+  const nl = outcome.textFingerprint.indexOf('\n');
+  const css = nl === -1 ? '' : outcome.textFingerprint.slice(nl + 1);
+  return encodeUtf8(css);
+}
+
 export class CssomnomTarget implements CssParseTarget {
   readonly api: CssApi;
+  /** Stylesheet-only serializer; omitted on tokenizer/media/… so runStructureAware skips RT. */
+  print?: (outcome: ParseOutcome) => Uint8Array;
 
   constructor(api: CssApi = CssApiId.Stylesheet) {
     this.api = api;
+    if (api === CssApiId.Stylesheet) {
+      this.print = (outcome) => serializeAcceptedStylesheet(outcome);
+    }
   }
 
   /**
@@ -87,7 +142,7 @@ export class CssomnomTarget implements CssParseTarget {
     try {
       return this.parseApi(data, start);
     } catch (err) {
-      if (isCleanError(err)) {
+      if (isCleanError(err, this.api)) {
         return rejected({
           code: errorCode(err),
           textFingerprint: fingerprintSlice(data),
@@ -126,12 +181,7 @@ export class CssomnomTarget implements CssParseTarget {
         const tokens = tokenize(text);
         const values = ParseHooks.parseComponentValues(tokens);
         const ast = new SelectorParser(values).parse();
-        let fp = '';
-        try {
-          fp = JSON.stringify(ast);
-        } catch {
-          fp = String(ast);
-        }
+        const fp = fingerprintJson(ast);
         return accepted({
           rootHint: 'selector',
           textFingerprint: fp.slice(0, 512),
@@ -141,12 +191,7 @@ export class CssomnomTarget implements CssParseTarget {
       }
       case 'media': {
         const queries = MediaParser.parse(text);
-        let fp = '';
-        try {
-          fp = JSON.stringify(queries);
-        } catch {
-          fp = String(queries.length);
-        }
+        const fp = fingerprintJson(queries);
         return accepted({
           rootHint: queries.length === 0 ? 'empty' : 'media',
           textFingerprint: fp.slice(0, 512),

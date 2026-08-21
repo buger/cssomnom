@@ -10,7 +10,7 @@ browser engines, …). It is the CSS counterpart of
 | **Generate** | `generator` | Grammar-based well-formed + controlled malformed CSS |
 | **Mutate** | `mutate` | **28** CSS-aware operators (`MUTATION_OPS.length`, asserted in tests) |
 | **Corpus** | `corpus` | Seed bank for encoding, names, nesting, strings/comments, selectors, at-rules, values, structural |
-| **Gates** | `gates` | no-panic, clean-fail, determinism, deep-nesting, round-trip, output-valid, within-budget |
+| **Gates** | `gates` | no-panic, clean-fail, determinism, deep-nesting, output-valid, within-budget; round-trip via `runSuite` / optional `print` |
 | **Orchestrate** | `fuzz` | `runStructureAware` + `CssParseTarget` |
 
 **Standalone library** (like xml-fuzz / graphql-fuzz): not tied to cssomnom.
@@ -87,7 +87,9 @@ runStructureAware(new TextEncoder().encode('a{color:red}'), target);
 
 `runStructureAware` does: grammar work (if empty/short or 55% of the time) →
 0–3 mutations → clean-fail parse → determinism → deep nesting (closed + open)
-→ a random corpus seed → amplification sketch under a 3s budget.
+→ a random corpus seed → amplification sketch under a 3s budget → **optional
+round-trip** if the target implements `print` (graphql-fuzz `run_suite` analog;
+xml-fuzz also omits round-trip from the default loop unless a serializer exists).
 
 ## Generators
 
@@ -148,15 +150,24 @@ Documents are `Uint8Array` so invalid UTF-8 mutations stay bytes.
 |---|---|---|
 | `noPanic` | Function returns; does not throw unexpected exceptions | Truncation panics, assertion throws, stack overflow |
 | `cleanFail` | Alias of no-panic (accept or typed reject, never crash) | Error-recovery crashes |
-| `outputValid` | Validator returns Ok or typed Err, never throws | Validator panics on malformed input |
-| `roundTrip` | Parse → print → parse is equivalent | Printer/parser asymmetry |
+| `outputValid` | `{ ok: true }` passes; `{ ok: false }` is OutputInvalid; throw is Panic | Validator panics or reports invalid output |
+| `roundTrip` | Parse → print → parse is equivalent (**opt-in**: `runSuite` / `target.print`) | Printer/parser asymmetry |
 | `determinism` | Two parses of identical input match | Stale state / non-deterministic errors |
 | `deepNestingSafe` | Deeply nested input errors cleanly | Unbounded-recursion DoS |
 | `withinBudgetSync` | Completes within a wall-clock budget | Amplification / hang |
 
-JS analog of `catch_unwind` is `try/catch`. Typed `TypeError` / `SyntaxError` /
-`DOMException` from CSS APIs are clean rejects **inside the cssomnom target**,
-not inside the raw `noPanic` gate. `RangeError` (stack overflow) is a **finding**.
+JS analog of `catch_unwind` is `try/catch`. Clean vs finding is **per-API**
+inside `CssomnomTarget.isCleanError`:
+
+- `stylesheet` / `tokenizer` / `selector` / `media` / `parser_api`: `TypeError`
+  is a **finding** (css-syntax-3 returns a stylesheet/tokens/error list).
+- `typed_om` / `declaration`: `TypeError` / `SyntaxError` / `DOMException` are
+  clean IDL rejects.
+- `RangeError` (stack overflow) is always a **finding**.
+
+`roundTrip` is **not** an unconditional `runStructureAware` pillar. Call
+`gates.roundTrip` / `runSuite` directly, or implement `CssParseTarget.print`
+(`CssomnomTarget` does this for `stylesheet`).
 
 ## Corpus inventory
 
@@ -173,7 +184,7 @@ Size is ≥ 30 seeds (currently ~80).
 | `tokenizer` | `tokenize()` | token types joined |
 | `selector` | `ParseHooks.parseComponentValues` + `SelectorParser.parse` | AST JSON |
 | `media` | `MediaParser.parse` | query JSON |
-| `typed_om` | `CSSStyleValue.parse('color', text)` | `toString()`; TypeError → Rejected |
+| `typed_om` | `CSSStyleValue.parse('color', text)` | `toString()`; TypeError/SyntaxError/DOMException → Rejected |
 | `parser_api` | `CSS.parseStylesheetSync` | rule count + `String(rule)` |
 | `declaration` | `CSS.parseDeclaration` | name + `toString()` |
 

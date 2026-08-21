@@ -28,6 +28,7 @@ export const DiffResult = {
   Match: 'Match',
   AcceptMismatch: 'AcceptMismatch',
   TextMismatch: 'TextMismatch',
+  Timeout: 'Timeout',
 } as const;
 export type DiffResult = (typeof DiffResult)[keyof typeof DiffResult];
 
@@ -58,13 +59,15 @@ export function compareOutcomes(a: ParseOutcome, b: ParseOutcome): DiffResult {
 
   const ta = parseOutcomeText(a);
   const tb = parseOutcomeText(b);
+  if (ca === OutcomeClass.Timeout) return DiffResult.Match;
   if (ca === OutcomeClass.Accept) {
     const na = normalizeText(ta);
     const nb = normalizeText(tb);
-    if (na.length > 0 && nb.length > 0 && na !== nb) {
-      if (Math.abs(na.length - nb.length) > 32 || na !== nb) {
-        return DiffResult.TextMismatch;
-      }
+    if (na.length > 0 && nb.length > 0) {
+      if (na !== nb) return DiffResult.TextMismatch;
+    } else if (ta !== tb) {
+      // Stripping all whitespace to empty is not a free Match.
+      return DiffResult.TextMismatch;
     }
   }
   return DiffResult.Match;
@@ -154,7 +157,9 @@ export function compareWithNaive(targetOut: ParseOutcome, data: Uint8Array): Dif
   const naive = NaiveStructuralParser.classify(data);
   const ca = outcomeClass(targetOut);
   const cb = outcomeClass(naive);
-  if (ca === OutcomeClass.Timeout) return DiffResult.Match;
+  if (ca === OutcomeClass.Timeout || cb === OutcomeClass.Timeout) {
+    return ca === cb ? DiffResult.Match : DiffResult.Timeout;
+  }
   if (ca !== cb) return DiffResult.AcceptMismatch;
   return DiffResult.Match;
 }

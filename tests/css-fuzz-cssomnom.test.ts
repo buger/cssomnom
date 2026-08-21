@@ -105,31 +105,90 @@ test('runStructureAware a handful of seeds', () => {
   }
 });
 
-test('tokenizer and media APIs accept simple input without panic', () => {
-  const tok = new cssfuzz.CssomnomTarget('tokenizer');
-  const media = new cssfuzz.CssomnomTarget('media');
-  const sample = cssfuzz.encodeUtf8('a{color:red}');
-  const mq = cssfuzz.encodeUtf8('screen and (min-width: 1px)');
-  assert.equal(cssfuzz.noPanic('tok', () => tok.parse(sample)).ok, true);
-  assert.equal(cssfuzz.noPanic('media', () => media.parse(mq)).ok, true);
-});
-
-test('typed_om TypeError is a clean reject not a panic', () => {
-  const target = new cssfuzz.CssomnomTarget('typed_om');
+test('stylesheet parse of a{color:red} is accepted with a style-rule fingerprint', () => {
+  const target = new cssfuzz.CssomnomTarget('stylesheet');
   const out = target.parse(cssfuzz.encodeUtf8('a{color:red}'));
-  assert.equal(out.kind, 'rejected');
-  const color = target.parse(cssfuzz.encodeUtf8('red'));
-  assert.ok(color.kind === 'accepted' || color.kind === 'rejected');
+  assert.equal(out.kind, 'accepted');
+  if (out.kind !== 'accepted') return;
+  assert.match(out.textFingerprint, /color|red/i);
+  const ruleCount = Number.parseInt(out.textFingerprint.split('\n')[0] ?? '0', 10);
+  assert.ok(
+    ruleCount >= 1 || /style/i.test(out.rootHint),
+    `expected a style rule, rootHint=${out.rootHint} fingerprint=${out.textFingerprint}`,
+  );
 });
 
-test('naive vs cssomnom is informational (do not fail CI on class mismatch)', () => {
+test('tokenizer fingerprint of a{color:red} includes ident and brace token types', () => {
+  const tok = new cssfuzz.CssomnomTarget('tokenizer');
+  const out = tok.parse(cssfuzz.encodeUtf8('a{color:red}'));
+  assert.equal(out.kind, 'accepted');
+  if (out.kind !== 'accepted') return;
+  assert.ok(out.textFingerprint.length > 0, 'tokenizer fingerprint must not be empty');
+  assert.match(out.textFingerprint, /ident/);
+  assert.match(out.textFingerprint, /\{/);
+});
+
+test('media on screen does not throw; kind is accepted or rejected with a string fingerprint', () => {
+  const media = new cssfuzz.CssomnomTarget('media');
+  const gated = cssfuzz.noPanic('media-screen', () => media.parse(cssfuzz.encodeUtf8('screen')));
+  assert.equal(gated.ok, true, gated.ok ? '' : gated.error.message);
+  if (!gated.ok) return;
+  const out = gated.value;
+  assert.ok(out.kind === 'accepted' || out.kind === 'rejected', `unexpected kind ${out.kind}`);
+  if (out.kind === 'accepted' || out.kind === 'rejected') {
+    assert.equal(typeof out.textFingerprint, 'string');
+  }
+});
+
+test('typed_om parses red for color; not-a-color is a clean reject; stylesheet garbage does not throw', () => {
+  const typed = new cssfuzz.CssomnomTarget('typed_om');
+  const color = typed.parse(cssfuzz.encodeUtf8('red'));
+  assert.equal(color.kind, 'accepted', 'CSSStyleValue.parse("color", "red") must be accepted');
+
+  const bad = typed.parse(cssfuzz.encodeUtf8('not-a-color!!!'));
+  assert.equal(bad.kind, 'rejected');
+
+  const sheet = new cssfuzz.CssomnomTarget('stylesheet');
+  const garbage = cssfuzz.noPanic('sheet-garbage', () =>
+    sheet.parse(cssfuzz.encodeUtf8('@@@ garbage {{{')),
+  );
+  assert.equal(garbage.ok, true, garbage.ok ? '' : garbage.error.message);
+  if (!garbage.ok) return;
+  assert.ok(garbage.value.kind === 'accepted' || garbage.value.kind === 'rejected');
+});
+
+test('well-formed a{color:red} is Match vs naive (both accept)', () => {
   const real = new cssfuzz.CssomnomTarget('stylesheet');
   const data = cssfuzz.encodeUtf8('a{color:red}');
   const out = real.parse(data);
+  assert.equal(out.kind, 'accepted');
   const diff = cssfuzz.compareWithNaive(out, data);
-  assert.ok(
-    diff === cssfuzz.DiffResult.Match ||
-      diff === cssfuzz.DiffResult.AcceptMismatch ||
-      diff === cssfuzz.DiffResult.TextMismatch,
+  // Naive brace/ident checker and cssomnom both accept this well-formed style rule.
+  assert.equal(diff, cssfuzz.DiffResult.Match);
+});
+
+test('stylesheet round-trip: parse a{color:red} → serialize → re-parse fingerprints equal', () => {
+  const target = new cssfuzz.CssomnomTarget('stylesheet');
+  const data = cssfuzz.encodeUtf8('a{color:red}');
+  const first = target.parse(data);
+  assert.equal(first.kind, 'accepted');
+  if (first.kind !== 'accepted') return;
+  assert.equal(typeof target.print, 'function', 'CssomnomTarget stylesheet must implement print');
+  const printed = target.print!(first);
+  const second = target.parse(printed);
+  assert.equal(second.kind, 'accepted');
+  if (second.kind !== 'accepted') return;
+  assert.equal(first.textFingerprint, second.textFingerprint);
+
+  const rt = cssfuzz.roundTrip(
+    'cssomnom-a-color-red',
+    data,
+    (bytes) => {
+      const o = target.parse(bytes);
+      return o.kind === 'accepted' ? { ok: true as const, ast: o } : { ok: false as const, error: o.kind };
+    },
+    (ast) => target.print!(ast),
+    (a, b) => a.textFingerprint === b.textFingerprint,
   );
+  assert.equal(rt.ok, true, rt.ok ? '' : rt.error.message);
 });

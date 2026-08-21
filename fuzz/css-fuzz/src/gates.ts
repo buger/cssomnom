@@ -24,7 +24,7 @@
  * |---|---|---|
  * | {@link noPanic} | Function returns; does not throw unexpected exceptions. | Truncation panics, assertion throws, stack overflow. |
  * | {@link cleanFail} | Alias of no-panic (accept or typed reject, never crash). | Error-recovery crashes. |
- * | {@link outputValid} | Validator returns Ok or typed Err, never throws. | Validator panics on malformed input. |
+ * | {@link outputValid} | Validator returns `{ ok: true }`. Throw → Panic; `{ ok: false }` → OutputInvalid. | Validator panics or reports invalid output. |
  * | {@link roundTrip} | Parse → print → parse is equivalent. | Printer/parser asymmetry. |
  * | {@link determinism} | Two parses of identical input match. | Stale state / non-deterministic errors. |
  * | {@link deepNestingSafe} | Deeply nested input errors cleanly. | Unbounded-recursion DoS. |
@@ -110,7 +110,14 @@ export function cleanFail<R>(label: string, f: () => R): GateResult<R> {
 }
 
 /**
- * Gate 3 — OUTPUT-VALID. `validate` must return Ok or typed Err without throwing.
+ * Gate 3 — OUTPUT-VALID.
+ *
+ * - throw → {@link GateKind.Panic} (same as {@link noPanic})
+ * - `{ ok: true }` → pass
+ * - `{ ok: false }` → {@link GateKind.OutputInvalid} finding
+ *
+ * graphql-fuzz analog: panic is a finding; a clean validation error is reported
+ * as output-invalid rather than swallowed.
  */
 export function outputValid(
   label: string,
@@ -118,6 +125,16 @@ export function outputValid(
 ): GateResult<void> {
   const ran = noPanic(label, validate);
   if (!ran.ok) return ran;
+  if (!ran.value.ok) {
+    return {
+      ok: false,
+      error: new GateFailure(
+        GateKind.OutputInvalid,
+        label,
+        ran.value.message ?? 'validator returned { ok: false }',
+      ),
+    };
+  }
   return { ok: true, value: undefined };
 }
 

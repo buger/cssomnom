@@ -2916,4 +2916,5 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 - [x] **package.json scripts**: `fuzz`, `fuzz:campaign`, `fuzz:export`.
 - [x] **gitignore** `fuzz/css-fuzz/crashes/` and `fuzz/css-fuzz/corpus_export/`.
 - [x] Product parser (`src/**`) is **not** patched to make the fuzzer green. Unexpected throws are findings (KI + crash dump), not swallowed.
+- [x] **Review follow-up (gates honesty)**: drop unrelated `proof/` tsconfig exclude (explicit `include` of src/tests/fuzz/scripts instead); `outputValid` fails on `{ ok: false }` as `OutputInvalid`; per-API `isCleanError` (TypeError is a finding on syntax surfaces, clean IDL reject on typed_om/declaration); cssomnom harness asserts structure (not tautologies); optional `CssParseTarget.print` round-trip wired in `runStructureAware`; mutation tests compare bytes not object identity.
 

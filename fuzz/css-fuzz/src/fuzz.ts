@@ -20,7 +20,7 @@
 
 import { CORPUS } from './corpus.ts';
 import type { GateResult } from './gates.ts';
-import { cleanFail, deepNestingSafe, determinism, withinBudgetSync } from './gates.ts';
+import { cleanFail, deepNestingSafe, determinism, roundTrip, withinBudgetSync } from './gates.ts';
 import { DEEP_NEST_DEPTH, genAmplificationSketch, genDeepNesting, genWork } from './generator.ts';
 import { applyMutations } from './mutate.ts';
 import type { Rng } from './rng.ts';
@@ -35,6 +35,12 @@ export { rngFromData } from './rng.ts';
 export interface CssParseTarget {
   parse(data: Uint8Array): ParseOutcome;
   sampleProfile?(rng: Rng): void;
+  /**
+   * Optional serializer for an accepted parse. When present, {@link runStructureAware}
+   * runs {@link roundTrip} (parse → print → re-parse). Like graphql-fuzz `run_suite`,
+   * this is opt-in — targets without `print` skip the round-trip pillar.
+   */
+  print?(outcome: ParseOutcome): Uint8Array;
 }
 
 /**
@@ -140,6 +146,7 @@ export function genWorkFromInput(data: Uint8Array): Uint8Array {
  * 5. deepNestingSafe closed + open
  * 6. random corpus seed cleanFail
  * 7. amplification sketch under withinBudgetSync ~3s
+ * 8. optional round-trip when `target.print` is implemented (graphql-fuzz `run_suite`)
  */
 export function runStructureAware(data: Uint8Array, target: CssParseTarget): GateResult<void> {
   const rng = rngFromData(data);
@@ -174,6 +181,28 @@ export function runStructureAware(data: Uint8Array, target: CssParseTarget): Gat
   const expand = genAmplificationSketch(rng);
   const budget = withinBudgetSync('ampl_budget', 3000, () => target.parse(expand));
   if (!budget.ok) return budget;
+
+  if (typeof target.print === 'function') {
+    const print = target.print.bind(target);
+    const rt = roundTrip(
+      'round_trip',
+      work,
+      (bytes) => {
+        const o = target.parse(bytes);
+        return o.kind === 'accepted'
+          ? { ok: true as const, ast: o }
+          : { ok: false as const, error: o.kind };
+      },
+      (ast) => print(ast),
+      (a, b) =>
+        a.kind === 'accepted' &&
+        b.kind === 'accepted' &&
+        a.rootHint === b.rootHint &&
+        a.textFingerprint === b.textFingerprint &&
+        a.mode === b.mode,
+    );
+    if (!rt.ok) return rt;
+  }
 
   return { ok: true, value: undefined };
 }

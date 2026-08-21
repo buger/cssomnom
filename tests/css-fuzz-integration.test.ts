@@ -53,14 +53,23 @@ test('two seeds can produce different documents', () => {
   }
 });
 
-test('mutations never throw on generated input; every MUTATION_OPS entry runs', () => {
+test('mutations never throw; some ops change bytes on a structural seed', () => {
   const rng = cssfuzz.rngFromSeed(7);
-  const doc = cssfuzz.genDocument(rng);
+  // Seed hits braces, colons, functions, comments, @media, url(), !important, custom props.
+  // Miss-path copy is allowed when a pattern is absent; object identity is not a mutation.
+  const doc = cssfuzz.encodeUtf8(
+    'a{color:red; background:url(x); /*c*/ @media (min-width:1px){x{--p:1 !important}}}',
+  );
+  let changed = 0;
   for (const op of cssfuzz.MUTATION_OPS) {
     const out = op(rng, doc);
     assert.ok(out instanceof Uint8Array);
-    assert.notEqual(out, doc);
+    if (Buffer.compare(out, doc) !== 0) changed += 1;
   }
+  assert.ok(
+    changed >= 8,
+    `expected several operators to change bytes, got ${changed}/${cssfuzz.MUTATION_OPS.length}`,
+  );
   for (let i = 0; i < 30; i++) {
     const m = cssfuzz.applyMutation(rng, doc);
     assert.ok(m instanceof Uint8Array);
@@ -92,6 +101,37 @@ test('noPanic catches throws', () => {
   });
   assert.equal(r.ok, false);
   if (!r.ok) assert.equal(r.error.kind, cssfuzz.GateKind.Panic);
+});
+
+test('outputValid: { ok: true } passes; { ok: false } is OutputInvalid; throw is Panic', () => {
+  const pass = cssfuzz.outputValid('ok', () => ({ ok: true }));
+  assert.equal(pass.ok, true);
+
+  const invalid = cssfuzz.outputValid('inv', () => ({ ok: false, message: 'nope' }));
+  assert.equal(invalid.ok, false);
+  if (!invalid.ok) {
+    assert.equal(invalid.error.kind, cssfuzz.GateKind.OutputInvalid);
+    assert.match(invalid.error.message, /nope|ok: false/i);
+  }
+
+  const panic = cssfuzz.outputValid('boom', () => {
+    throw new Error('validator exploded');
+  });
+  assert.equal(panic.ok, false);
+  if (!panic.ok) assert.equal(panic.error.kind, cssfuzz.GateKind.Panic);
+});
+
+test('isCleanError: TypeError is a finding on syntax APIs, clean IDL reject on typed_om/declaration', () => {
+  const te = new TypeError('Cannot read properties of undefined');
+  for (const api of ['stylesheet', 'tokenizer', 'selector', 'media', 'parser_api'] as const) {
+    assert.equal(cssfuzz.isCleanError(te, api), false, `${api} TypeError must be a finding`);
+  }
+  assert.equal(cssfuzz.isCleanError(te, 'typed_om'), true);
+  assert.equal(cssfuzz.isCleanError(te, 'declaration'), true);
+  assert.equal(cssfuzz.isCleanError(new SyntaxError('bad'), 'declaration'), true);
+  assert.equal(cssfuzz.isCleanError(new SyntaxError('bad'), 'typed_om'), true);
+  assert.equal(cssfuzz.isCleanError(new RangeError('Maximum call stack size exceeded'), 'typed_om'), false);
+  assert.equal(cssfuzz.isCleanError(new RangeError('stack'), 'stylesheet'), false);
 });
 
 test('determinism detects mismatch', () => {
@@ -193,6 +233,53 @@ test('compareOutcomes class mismatch vs match', () => {
   };
   assert.equal(cssfuzz.compareOutcomes(acc, acc), cssfuzz.DiffResult.Match);
   assert.equal(cssfuzz.compareOutcomes(acc, rej), cssfuzz.DiffResult.AcceptMismatch);
+});
+
+test('compareWithNaive maps timeout to a distinct result, not Match', () => {
+  const timedOut: ParseOutcome = { kind: 'timeout', elapsedMs: 50 };
+  const data = cssfuzz.encodeUtf8('a{color:red}');
+  const diff = cssfuzz.compareWithNaive(timedOut, data);
+  assert.notEqual(diff, cssfuzz.DiffResult.Match);
+  assert.equal(diff, cssfuzz.DiffResult.Timeout);
+});
+
+test('runStructureAware optional print round-trip succeeds when fingerprints match', () => {
+  class RoundTripTarget implements cssfuzz.CssParseTarget {
+    parse(data: Uint8Array): ParseOutcome {
+      return cssfuzz.accepted({
+        rootHint: 'rt',
+        textFingerprint: cssfuzz.decodeUtf8Lossy(data),
+        elapsedMs: 0,
+        mode: 'rt',
+      });
+    }
+    print(outcome: ParseOutcome): Uint8Array {
+      if (outcome.kind !== 'accepted') return cssfuzz.encodeUtf8('');
+      return cssfuzz.encodeUtf8(outcome.textFingerprint);
+    }
+  }
+  const r = cssfuzz.runStructureAware(cssfuzz.encodeUtf8('a{color:red}'), new RoundTripTarget());
+  assert.equal(r.ok, true, r.ok ? '' : r.error.message);
+});
+
+test('runStructureAware reports RoundTripMismatch when print is implemented but re-parse differs', () => {
+  class BadPrint implements cssfuzz.CssParseTarget {
+    parse(data: Uint8Array): ParseOutcome {
+      const text = cssfuzz.decodeUtf8Lossy(data);
+      return cssfuzz.accepted({
+        rootHint: 'rt',
+        textFingerprint: text.startsWith('X') ? 'printed' : 'original',
+        elapsedMs: 0,
+        mode: 'rt',
+      });
+    }
+    print(): Uint8Array {
+      return cssfuzz.encodeUtf8('X-mismatch');
+    }
+  }
+  const r = cssfuzz.runStructureAware(cssfuzz.encodeUtf8('a{color:red}'), new BadPrint());
+  assert.equal(r.ok, false, 'print must be invoked; a mismatch is a finding');
+  if (!r.ok) assert.equal(r.error.kind, cssfuzz.GateKind.RoundTripMismatch);
 });
 
 test('budget gate sync', () => {
