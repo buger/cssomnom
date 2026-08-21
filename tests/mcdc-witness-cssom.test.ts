@@ -558,10 +558,9 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       assert.ok(Array.isArray(list.mediaQueriesAST));
       assert.equal(list.mediaText, 'screen');
     });
+    //mcdc:ignore:defensive SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=F => FALSE — replace() honors the README Promise.resolve after replaceSync deviation [reviewed: agent:grok-4.6]
     // Verifies: SYS-REQ-260821-GR67
-    // Verifies: SW-REQ-260821-PAKB
     // MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
-    // MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE
     test('replace() parses synchronously via replaceSync then Promise.resolve', async () => {
       const original = ParseHooks.consumeListOfRules;
       let parseRuns = 0;
@@ -582,7 +581,31 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
         ParseHooks.consumeListOfRules = original;
       }
     });
-    //mcdc:ignore:defensive SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=F => FALSE — replace() honors the README Promise.resolve after replaceSync deviation [reviewed: agent:grok-4.6]
+    // Verifies: SW-REQ-260821-PAKB
+    // MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE
+    test('replace() populates cssRules before the returned promise is awaited', async () => {
+      const original = ParseHooks.consumeListOfRules;
+      let parseRuns = 0;
+      ParseHooks.consumeListOfRules = (tokens, topLevel) => {
+        parseRuns++;
+        return original(tokens, topLevel);
+      };
+      try {
+        const sheet = new CSSStyleSheet();
+        const pending = sheet.replace('div{color:red}');
+        assert.ok(pending instanceof Promise);
+        // README: replace() calls replaceSync then Promise.resolve; cssRules is
+        // populated on this turn, before the caller awaits.
+        assert.equal(sheet.cssRules.length, 1);
+        assert.equal(sheet.cssRules[0].cssText, 'div { color: red; }');
+        assert.ok(parseRuns >= 1);
+        const resolved = await pending;
+        assert.equal(resolved, sheet);
+      } finally {
+        ParseHooks.consumeListOfRules = original;
+      }
+    });
+    //mcdc:ignore:defensive SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=F, replace_sync_parse_runs=T => FALSE — replace() honors README Promise.resolve after replaceSync so cssRules is populated before return [reviewed: agent:grok-4.6]
 
     // Verifies: SYS-REQ-260821-GR67
     // MCDC SYS-REQ-260821-GR67: deviation_applies=F, documented_deviation_honored=F => TRUE [no-action: CSSStyleSheet.replace documented Promise.resolve sync parse]

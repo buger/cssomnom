@@ -2988,4 +2988,16 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 - [x] **KI-6**: `toParserRule` maps CSSOM type-0 `@layer`/`@container`/`@scope` to `CSSParserAtRule` with nested qualified rules. Regression: `tests/parser-api.test.ts`. DEFECT-260821-NYAR.
 - [x] Overlay reproducers `proof/reproducers/KI-{1..6}-*.ts` pass (exit 0). KI-1,2,3,5,6 status `fixed`. KI-4 withdrawn (false hole). KI-7 remains open (documented offline `@import`, no fetch).
 - [x] `pnpm run preflight` green (Node 24).
+- [x] **overlay MC/DC after KI-1,2,3,5,6 fixes**: unique PAKB SAT TRUE witness `tests/mcdc-witness-cssom.test.ts` drives `sheet.replace('div{color:red}')` and asserts `cssRules.length === 1` before await. PAKB/GR67 `honored=F` FALSE rows are `//mcdc:ignore:defensive` (unreachable after replaceSync+Promise.resolve). Overlay KI-1,2,3,5,6 reproducers PASS with no `[known-issue]`. KI-7 keeps capability-gap + failing tripwire `[known-issue] [ki: KI-7]`. `proof audit --check mcdc_coverage --fail-level warn`: 214/214 rows, 0 uncovered. Did not `proof approve`.
+
+---
+
+## Phase: ReqProof DX (Champ-for-ReqProof)
+
+Patched `/tmp/probe-labs/reqproof` (PR-worthy). Overlay recapture uses `/tmp/proof-dx/proof`. `proof.yaml` test wiring was not the bug.
+
+- [x] **tests_pass / code_mcdc traces**: JS MC/DC adapter now bootstraps `@babel/core` into `~/.proof/tools/mcdc-js-babel/` and runs `node --test` from the nearest `package.json` (not `scope: ./src`). Instrumented cohort: `tests_pass` + `code_mcdc_measure` pass (~73s).
+- [x] **code_mcdc_measure stale latest.json**: same-cohort instrumented run refreshed `.proof/mcdc/js/latest.json` (package.json/tsconfig fingerprints current). 100% code MC/DC floors still unmet (~44% decision / ~45% condition).
+- [x] **known_issue_complete**: `proof evidence capture <KI>` stamps red/fixed reproducers. Overlay `proof/evidence/ki-{1,2,3,5,6,7}.yaml`. Check **pass** (KI-7 open+reproduced; KI-1..6 fixed+not_reproduced; KI-4 withdrawn).
+- [x] **verify_passes realize**: Kind2 now sees managed Z3 on PATH; cached `realize_result=error` is not reused. Realize **28/28 realizable**. Remaining verify warn: 65 unconstrained outputs (honest; no fake Z3 domains).
 

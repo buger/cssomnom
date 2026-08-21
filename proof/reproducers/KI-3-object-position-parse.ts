@@ -1,8 +1,7 @@
 /**
  * Overlay reproducer for KI-3. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended contract
- * (invalid object-position throws TypeError) so this command FAILS while
- * the bug is present.
+ * (invalid object-position throws TypeError). PASSES after the KI-3 product fix.
  *
  * Reproduces: KI-3
  */

@@ -1,7 +1,7 @@
 /**
  * Overlay reproducer for KI-5. Not a product-suite test.
- * Asserts the intended contract (unbalanced (( serializes as not all) so
- * this command FAILS while the bug is present.
+ * Asserts the intended contract (unbalanced (( serializes as not all).
+ * PASSES after the KI-5 product fix.
  *
  * Reproduces: KI-5
  */

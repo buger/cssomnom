@@ -1,8 +1,8 @@
 /**
  * Overlay reproducer for KI-6. Not a product-suite test.
  * Asserts the intended contract (parseStylesheetSync adapts @layer/@container
- * to CSSParserAtRule with nested CSSParserQualifiedRule children) so this
- * command FAILS while the bug is present.
+ * to CSSParserAtRule with nested CSSParserQualifiedRule children).
+ * PASSES after the KI-6 product fix.
  *
  * Reproduces: KI-6
  */

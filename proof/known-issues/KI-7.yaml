@@ -4,6 +4,8 @@ description: 'README documents CSSImportRule.styleSheet as null because the libr
 affected_requirements:
     - SYS-REQ-260821-H3BD
     - SW-REQ-260821-5W6X
+evidence_manifests:
+    - proof/evidence/ki-7.yaml
 severity: medium
 severity_basis: risk
 risk: correctness
@@ -22,6 +24,7 @@ defect_class: latent
 remediation: Load the imported href so CSSImportRule.styleSheet is the associated CSSStyleSheet (or keep the documented offline contract and treat full CSSOM import loading as out of scope). Close this KI only after the product change lands. Overlay cannot land that change.
 notes:
     - Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.
+    - 'Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=F, import_url_present=T => FALSE. Do not ignore SAT for fetch=true. Status remains open (documented offline parser, no fetch).'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: open
@@ -40,6 +43,14 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-description,append-note
+    - at: "2026-08-21T20:20:17Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-7.yaml
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

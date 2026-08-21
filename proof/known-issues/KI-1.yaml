@@ -7,6 +7,8 @@ affected_requirements:
     - SYS-REQ-260821-8TGB
 commands:
     - node --test tests/cssom-all-shorthand.test.ts
+evidence_manifests:
+    - proof/evidence/ki-1.yaml
 severity: medium
 severity_basis: risk
 risk: correctness
@@ -24,6 +26,8 @@ introduced_in: inception
 defect_class: latent
 mitigation: Invalid all after stored var/env is a no-op; stored all is deleted only after expandAll succeeds.
 remediation: Landed in src/CSSStyleDeclaration.ts. Class-closure DEFECT-260821-XZAS.
+notes:
+    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: fixed
@@ -54,6 +58,14 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+    - at: "2026-08-21T20:20:15Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-1.yaml
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -87,9 +99,9 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleDeclaration.setProperty can hit the hole. Rule 4 is Web3-only / attacker-trust-model.
 template_class: shorthand_mutate_before_validate
 isomorphic_sites:
-    - src/CSSStyleDeclaration.ts:512 #fixed
-    - src/CSSStyleDeclaration.ts:514 #fixed
-    - src/shorthands.ts:1913 #na
-    - src/shorthands.ts:2216 #na
+    - src/CSSStyleDeclaration.ts:512
+    - src/CSSStyleDeclaration.ts:514
+    - src/shorthands.ts:1913
+    - src/shorthands.ts:2216
 dedup_armor: |
     Only property === 'all' deletes from _declarations/_declMap before expandAll. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.

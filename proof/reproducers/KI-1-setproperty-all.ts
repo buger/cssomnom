@@ -1,7 +1,7 @@
 /**
  * Overlay reproducer for KI-1. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended contract
- * (invalid `all` is a no-op) so this command FAILS while the bug is present.
+ * (invalid `all` is a no-op). PASSES after the KI-1 product fix.
  *
  * Reproduces: KI-1
  */

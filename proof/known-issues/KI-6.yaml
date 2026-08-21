@@ -6,6 +6,8 @@ affected_requirements:
     - INT-REQ-260821-WTPD
 commands:
     - node --test tests/parser-api.test.ts
+evidence_manifests:
+    - proof/evidence/ki-6.yaml
 severity: medium
 severity_basis: risk
 risk: correctness
@@ -23,6 +25,8 @@ introduced_in: inception
 defect_class: latent
 mitigation: toParserRule maps CSSOM type-0 at-rules whose cssText starts with @ to CSSParserAtRule and recurses cssRules.
 remediation: Landed in src/parser-api.ts. Class-closure DEFECT-260821-NYAR.
+notes:
+    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: fixed
@@ -40,6 +44,14 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+    - at: "2026-08-21T20:20:17Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-6.yaml
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -73,12 +85,12 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync can hit the hole. Rule 4 is Web3-only.
 template_class: adapter_type_zero_fallback
 isomorphic_sites:
-    - src/parser-api.ts:211 #fixed
-    - src/parser-api.ts:250 #na
-    - src/CSSOM.ts:1078 #fixed
-    - src/CSSOM.ts:1095 #fixed
-    - src/CSSOM.ts:1112 #fixed
-    - src/CSSOM.ts:1126 #fixed
-    - src/CSSOM.ts:1145 #fixed
+    - src/parser-api.ts:211
+    - src/parser-api.ts:250
+    - src/CSSOM.ts:1078
+    - src/CSSOM.ts:1095
+    - src/CSSOM.ts:1112
+    - src/CSSOM.ts:1126
+    - src/CSSOM.ts:1145
 dedup_armor: |
     Only CSSOM at-rules whose type getter returns 0 miss the toParserRule numeric at-rule branch (parser-api.ts:211 excludes type === 0) and fall through to CSSParserRawRule (parser-api.ts:250). Style rules (type 1) and legacy at-rules with non-zero type constants still adapt. Do not merge this KI into empty-stylesheet or unknown-at-rule cases.

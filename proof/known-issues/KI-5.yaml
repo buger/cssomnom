@@ -7,6 +7,8 @@ affected_requirements:
     - SYS-REQ-260821-5283
 commands:
     - node --test tests/media-validation.test.ts
+evidence_manifests:
+    - proof/evidence/ki-5.yaml
 severity: medium
 severity_basis: risk
 risk: correctness
@@ -23,6 +25,8 @@ introduced_in: inception
 defect_class: latent
 mitigation: Unclosed () / functions in a media query force invalid so serializeMediaQuery emits not all.
 remediation: Landed in src/parser.ts + src/MediaParser.ts. Class-closure DEFECT-260821-H3KB.
+notes:
+    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: fixed
@@ -38,6 +42,14 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+    - at: "2026-08-21T20:20:16Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-5.yaml
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -71,10 +83,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of MediaParser.parse can hit the hole. Rule 4 is Web3-only.
 template_class: invalid_mq_not_not_all
 isomorphic_sites:
-    - src/MediaParser.ts:109 #fixed
-    - src/MediaParser.ts:110 #fixed
-    - src/MediaParser.ts:119 #fixed
-    - src/MediaParser.ts:438 #na
-    - src/MediaParser.ts:797 #na
+    - src/MediaParser.ts:109
+    - src/MediaParser.ts:110
+    - src/MediaParser.ts:119
+    - src/MediaParser.ts:438
+    - src/MediaParser.ts:797
 dedup_armor: |
     serializeMediaQuery already returns 'not all' when query.invalid is true (&test, screen and, trailing comma). The hole is MediaQueryValidator accepting unbalanced '((' as general-enclosed so invalid stays unset. Do not merge this KI into a generic serializer defect without a second live recovered-invalid query.

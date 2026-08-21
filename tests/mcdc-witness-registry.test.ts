@@ -32,7 +32,6 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
       PropertyRegistry.clear();
     });
     // Verifies: SYS-REQ-260821-EGCP
-    // MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE
     test('duplicate JS register throws InvalidModificationError', () => {
       PropertyRegistry.clear();
       try {

@@ -2,7 +2,7 @@
  * Overlay reproducer for KI-2. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended contract
  * (replace() parses synchronously via replaceSync and returns
- * Promise.resolve(this)) so this command FAILS while the bug is present.
+ * Promise.resolve(this)). PASSES after the KI-2 product fix.
  *
  * Reproduces: KI-2
  */
