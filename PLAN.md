@@ -3186,3 +3186,15 @@ Close the last `denial_of_service_resistant:fuzz` cell (`SW-REQ-260821-QV2H`) wi
 - [x] `verification.not_modeled` with `[structural]` reasons (Unicode/length/arity). CLI has no `--not-modeled`; YAML edit + `proof req show SW-REQ-260821-6951`.
 - [x] `/tmp/proof-dx/proof audit --check code_predicates_modeled --fail-level warn` → **Errors: 0, Warnings: 0**.
 
+---
+
+## Phase: tests_pass cwd / Node 24 glob (not bare `tests` directory)
+
+Recaptured `tests_pass` ERROR `Could not find '/workspace/tests/**/*.test.ts'` was **Node 20** on PATH, not a missing package-root walk. Did **not** `proof approve`. Did **not** lower `code_mcdc` floors.
+
+- [x] Patched `/tmp/proof-dx/proof` still walks `target.scope` (`./src`) up to `package.json`. Progress: `running node tests for /workspace`.
+- [x] Bare `node --test tests` is **not** cwd-robust on Node 24: glob has no magic, runner imports the directory (`Cannot find module '/workspace/tests'`, `ERR_UNSUPPORTED_DIR_IMPORT`).
+- [x] Kept `commands.tests.node.command: node --test --test-reporter=dot tests/**/*.test.ts` (unquoted; Node 24 expands `**`). Comment in `proof.yaml` records why not a directory.
+- [x] Same-cohort Node 24: `/tmp/proof-dx/proof audit --check tests_pass --check code_mcdc_measure --verbose --fail-level warn` → **Errors: 0, Warnings: 0**. `tests_pass` 70408ms, traces merged. `code_mcdc_measure` pass.
+- [x] Full recapture `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`: **Errors: 0, Warnings: 9**. `tests_pass` pass. Writeup: `tests-pass-cwd.md`.
+

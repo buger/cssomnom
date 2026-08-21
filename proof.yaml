@@ -121,6 +121,12 @@ project:
         tests:
             node:
                 language: ts
+                # Scoped to tests/, not a quoted glob and not a bare
+                # directory. Node 24 `--test tests` treats `tests` as a
+                # file (ERR_UNSUPPORTED_DIR_IMPORT). `tests/**/*.test.ts`
+                # has glob magic so Node 24 expands it; POSIX sh does not
+                # (no globstar). Cwd is the package root: patched proof
+                # walks up from target.scope (./src) to package.json.
                 command: node --test --test-reporter=dot tests/**/*.test.ts
         # Opt-in DoS fuzz lane (proof audit --fuzz / evidence_type: fuzz).
         # Not on default tests_pass. Runs the annotated cssomnom css-fuzz
