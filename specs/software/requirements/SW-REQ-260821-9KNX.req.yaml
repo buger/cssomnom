@@ -1,0 +1,59 @@
+id: SW-REQ-260821-9KNX
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when consume_qualified_rule_returns_null the parser shall always satisfy invalid_rule_consumed & rule_dropped & qualified_rule_dropped
+description: The consume a qualified rule algorithm shall drop an invalid qualified rule when consume returns null.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260821-03VA
+component: parser
+rationale: CSS Syntax-3 consume a qualified rule shall discard a qualified rule that fails to consume. Parent SYS-REQ-260821-03VA owns the system drop-invalid invariant.
+tags: []
+variables:
+    - consume_qualified_rule_returns_null
+    - invalid_rule_consumed
+    - rule_dropped
+    - qualified_rule_dropped
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260821-03VA
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:35:57Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T20:08:12Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+    - malformed_recovers_or_errors_loudly
+obligation_hazards:
+    - class: malformed_input
+      worst_case: consumeQualifiedRule returning null that is still turned into a CSSStyleRule inserts a structurally invalid rule into the sheet.
+      severity: medium
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: A null consumeQualifiedRule result that is still inserted leaves a hole or bogus rule in the stylesheet instead of dropping it.
+      severity: medium
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6

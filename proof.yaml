@@ -1,0 +1,136 @@
+project:
+    name: cssomnom
+    specs:
+        - path: specs/stakeholder
+          prefix: STK-REQ
+          type: stakeholder
+        - path: specs/system
+          prefix: SYS-REQ
+          type: system
+          parent_spec: specs/stakeholder
+        - path: specs/software
+          prefix: SW-REQ
+          type: subsystem
+          parent_spec: specs/system
+        - path: specs/integration
+          prefix: INT-REQ
+          type: integration
+          parent_spec: specs/system
+          cross_component: true
+    id_format:
+        pattern: '{prefix}-{date:YYMMDD}-{rand:4}'
+        auto_increment: false
+    default_assurance_level: C
+    signals:
+        defaults: auto
+    verification_scope:
+        include:
+            - src/**
+            # Autolink (source_native) filters the annotation walk by this
+            # include list. tests/ and docs/ must be in-scope so Verifies:
+            # and Documents: are discovered; completeness.production_include
+            # stays src/** so orphan/MC/DC still treat only production code.
+            - tests/**
+            - README.md
+            - docs/**
+            # Spec-level // MCDC [known-issue] tripwires on failing overlay
+            # reproducers. Not production code; code_mcdc exclude_paths drops them.
+            - proof/reproducers/**
+        completeness:
+            production_include:
+                - src/**
+            production_exclude:
+                - '**/*_test.go'
+                - '**/testdata/**'
+            rationale: production_include is src/**. lint.exclude is src/data/gen/** (generated tables). tests/** and docs are verification_scope.include for autolink only so Verifies and Documents are discovered. dist/ is build output. scripts/ is tooling. tests/, dist/, and scripts/ are not production code.
+    checks:
+        slow_tests:
+            enabled: true
+        code_mcdc:
+            advisory: false
+            min_statement_percent: 100
+            min_decision_percent: 100
+            min_condition_percent: 100
+            languages:
+                ts:
+                    test_command: node
+            targets:
+                - id: cssomnom-src
+                  enabled: true
+                  language: ts
+                  runner: node
+                  js_glob: 'src/**/*.ts'
+                  scope: ./src
+                  exclude_paths:
+                    - src/data/gen/**
+                    - '**/*.test.ts'
+                    - proof/reproducers/**
+                    - scripts/**
+        property_fixtures_exist:
+            enabled: true
+        flip_fixtures_exist:
+            enabled: true
+        fixture_staleness_clean:
+            enabled: true
+        code_signal_obligations_reviewed:
+            enabled: true
+        code_signal_unbindable:
+            enabled: true
+        change_evidence_complete:
+            enabled: true
+        plan_of_record_current:
+            enabled: true
+        no_authored_change_surface_reviewed:
+            enabled: true
+        description_grammar_enumeration_complete:
+            enabled: true
+        spec_lint_mediation_contract_contradicted:
+            enabled: true
+        # security_surface_covered left disabled. Hunt (2026-08-21) with
+        # --set enabled=true found scripts/wpt/node/run.ts egress (WPT
+        # runner), not CSS url() in src/**. scripts/ is tooling, not
+        # production_include. DeFi/TVL/signal_fixtures stay off: this
+        # repo has none of those artifacts.
+        # security_surface_covered:
+        #     enabled: false
+    approval:
+        agent_autonomous_for:
+            all: true
+    trace_policy:
+        mode: source_native
+    commands:
+        build: pnpm run build
+        test: pnpm test:node
+        lint: pnpm lint
+        tests:
+            node:
+                language: ts
+                command: node --test --test-reporter=dot 'tests/**/*.test.ts'
+    description: Spec-compliant CSS Object Model (CSSOM) and Typed OM parser in pure TypeScript
+    catalog:
+        version: 1.9.1
+    lint:
+        exclude:
+            # Generated or build output: scripts/codegen writes src/data/gen/*;
+            # never hand-annotate generated tables (orphan/trace scanners would
+            # otherwise demand Implements: on regenerated files).
+            - src/data/gen/**
+    documentation:
+        sources:
+            - path: docs/
+              type: auto
+            - path: README.md
+              type: auto
+            - path: CONTRIBUTING.md
+              type: auto
+            - path: MAINTENANCE.md
+              type: auto
+            - path: PLAN.md
+              type: auto
+        roots:
+            - docs/**
+            - README.md
+            - CONTRIBUTING.md
+            - MAINTENANCE.md
+            - PLAN.md
+        threshold: 80
