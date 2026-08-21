@@ -3198,3 +3198,13 @@ Recaptured `tests_pass` ERROR `Could not find '/workspace/tests/**/*.test.ts'` w
 - [x] Same-cohort Node 24: `/tmp/proof-dx/proof audit --check tests_pass --check code_mcdc_measure --verbose --fail-level warn` → **Errors: 0, Warnings: 0**. `tests_pass` 70408ms, traces merged. `code_mcdc_measure` pass.
 - [x] Full recapture `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`: **Errors: 0, Warnings: 9**. `tests_pass` pass. Writeup: `tests-pass-cwd.md`.
 
+---
+
+## Phase: math-parser `simplify` and cascade `walkRules` MC/DC tests
+
+Drive remaining code MC/DC hotspots through public APIs. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-math-walk.test.ts` — `CSSNumericValue.parse` + `simplify()` / `CSSStyleValue.parse('width', 'calc(...)')` covers sum/product/negate/invert/min/max/clamp/round/trig/exp/log/sign/mod/rem/hypot.
+- [x] Same file — `getCascadedStyle` covers nested style rules, comma/string selectors, `::before`/`:before`/`::after`/`::first-line`/`::first-letter`/`::marker`, `@layer` named/nested/anonymous, `@media` match/fail/window/iframe, `@supports` match/fail, `@scope` start/implied/miss, nested `@media`/`@supports`/`@layer` declarations, `@container`/`@starting-style` grouping, url() baseURL, AST dual-representation rules.
+- [x] Node 24: `node --test tests/mcdc-hotspot-math-walk.test.ts` — 21 pass. oxlint 0 warnings.
+
