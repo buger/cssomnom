@@ -39,6 +39,16 @@ import { SHORTHANDS } from './shorthands.ts';
 import { SUPPORTED_PROPERTIES } from './data/gen/property-list.ts';
 import { STANDARD_PROPERTIES_SYNTAX } from './data/gen/standard-syntax.ts';
 import { SelectorParser } from './SelectorParser.ts';
+import {
+  CSSAtRule,
+  CSSContainerRule,
+  CSSLayerBlockRule,
+  CSSLayerStatementRule,
+  CSSMediaRule,
+  CSSScopeRule,
+  CSSStartingStyleRule,
+  CSSSupportsRule,
+} from './CSSOM.ts';
 
 
 
@@ -186,28 +196,96 @@ function toParserToken(val: ComponentValue): CSSToken {
   return res;
 }
 
-function cssomAtRuleFromCssText(r: Record<string, unknown>): CSSParserAtRule | null {
-  const cssText = typeof r.cssText === 'string' ? r.cssText : '';
-  const atMatch = /^@([A-Za-z_][\w-]*)([\s\S]*)$/.exec(cssText);
-  if (!atMatch) return null;
-  const name = atMatch[1].toLowerCase();
-  const rest = atMatch[2];
-  const brace = rest.indexOf('{');
-  let preludeText: string;
-  let body: CSSParserRule[] | null;
-  if (brace === -1) {
-    preludeText = rest.replace(/;?\s*$/, '').trim();
-    body = null;
-  } else {
-    preludeText = rest.slice(0, brace).trim();
-    body = r.cssRules
-      ? Array.from(r.cssRules as Iterable<unknown>).map(toParserRule)
-      : [];
+function tokensToPrelude(values: ComponentValue[]): CSSToken[] {
+  return values
+    .filter(v => v.type !== 'whitespace' && v.type !== 'comment')
+    .map(toParserToken);
+}
+
+function bodyFromCssRules(r: Record<string, unknown>): CSSParserRule[] | undefined {
+  if (!r.cssRules) return undefined;
+  return Array.from(r.cssRules as Iterable<unknown>).map(toParserRule);
+}
+
+/**
+ * Reconstruct an at-rule from cssText by re-tokenizing.
+ * css-syntax-3 § 4.3.4 #consume-string-token / § 5.5.8 #consume-a-component-value:
+ * a `{` inside a string is not the rule body delimiter.
+ */
+function atRulePartsFromCssText(cssText: string): { name: string; prelude: CSSToken[]; hasBody: boolean } | null {
+  const values = new Parser(tokenize(cssText)).parseComponentValues();
+  let i = 0;
+  while (i < values.length && (values[i].type === 'whitespace' || values[i].type === 'comment')) i++;
+  if (i >= values.length || values[i].type !== 'at-keyword') return null;
+  const name = String((values[i] as Token).value).toLowerCase();
+  i++;
+  const preludeVals: ComponentValue[] = [];
+  let hasBody = false;
+  for (; i < values.length; i++) {
+    const v = values[i];
+    if (v.type === 'semicolon') break;
+    if (v.type === 'simple-block' && (v as SimpleBlock).associatedToken.type === '{') {
+      hasBody = true;
+      break;
+    }
+    preludeVals.push(v);
   }
+  return { name, prelude: tokensToPrelude(preludeVals), hasBody };
+}
+
+function cssomAtRuleFromFields(r: unknown): CSSParserAtRule | null {
+  const rec = r as Record<string, unknown>;
+  const cssRules = bodyFromCssRules(rec);
+
+  if (r instanceof CSSLayerStatementRule) {
+    const list = r.nameList.join(', ');
+    return new CSSParserAtRule('layer', list ? [new CSSParserToken(list)] : [], null);
+  }
+  if (r instanceof CSSLayerBlockRule) {
+    return new CSSParserAtRule('layer', r.name ? [new CSSParserToken(r.name)] : [], cssRules ?? []);
+  }
+  if (r instanceof CSSContainerRule) {
+    const prelude = r.conditionText ? [new CSSParserToken(r.conditionText)] : [];
+    return new CSSParserAtRule('container', prelude, cssRules ?? []);
+  }
+  if (r instanceof CSSScopeRule) {
+    let preludeText = '';
+    if (r.startSelector) preludeText += r.startSelector;
+    if (r.endSelector) {
+      if (preludeText) preludeText += ' ';
+      preludeText += `to ${r.endSelector}`;
+    }
+    return new CSSParserAtRule('scope', preludeText ? [new CSSParserToken(preludeText)] : [], cssRules ?? []);
+  }
+  if (r instanceof CSSStartingStyleRule) {
+    return new CSSParserAtRule('starting-style', [], cssRules ?? []);
+  }
+  if (r instanceof CSSMediaRule) {
+    const mediaText = r.media.mediaText;
+    return new CSSParserAtRule('media', mediaText ? [new CSSParserToken(mediaText)] : [], cssRules ?? []);
+  }
+  if (r instanceof CSSSupportsRule) {
+    return new CSSParserAtRule(
+      'supports',
+      r.conditionText ? [new CSSParserToken(r.conditionText)] : [],
+      cssRules ?? []
+    );
+  }
+  if (r instanceof CSSAtRule) {
+    const prelude = tokensToPrelude(r.prelude as ComponentValue[]);
+    const body = r.childRules
+      ? r.childRules.map(toParserRule)
+      : (r.block ? (cssRules ?? []) : null);
+    return new CSSParserAtRule(r.name, prelude, body);
+  }
+
+  const cssText = typeof rec.cssText === 'string' ? rec.cssText : '';
+  const parts = cssText ? atRulePartsFromCssText(cssText) : null;
+  if (!parts) return null;
   return new CSSParserAtRule(
-    name,
-    preludeText ? [new CSSParserToken(preludeText)] : [],
-    body
+    parts.name,
+    parts.prelude,
+    parts.hasBody ? (cssRules ?? []) : null
   );
 }
 
@@ -235,8 +313,8 @@ function toParserRule(rule: unknown): CSSParserRule {
   // Handle CSSOM at-rules (Media, Keyframes, type-0 layer/container/scope, …)
   // cssom-1 § 6.4 #the-cssrule-interface: modern at-rules use type 0 (UNKNOWN_RULE).
   if (typeof r.type === 'number' && r.type !== 1 && r.type !== 17) {
-    const fromCssText = cssomAtRuleFromCssText(r);
-    if (fromCssText) return fromCssText;
+    const fromFields = cssomAtRuleFromFields(r);
+    if (fromFields) return fromFields;
     if (r.type !== 0) {
       const name = (r.name as string) ||
                    (r.type === 4 ? 'media' :
@@ -246,7 +324,8 @@ function toParserRule(rule: unknown): CSSParserRule {
       return new CSSParserAtRule(
         name,
         r.media ? [new CSSParserToken((r.media as {mediaText: string}).mediaText)] :
-                 (r.prelude ? [new CSSParserToken(r.prelude as string)] : []),
+                 (typeof r.prelude === 'string' ? [new CSSParserToken(r.prelude)] :
+                  Array.isArray(r.prelude) ? tokensToPrelude(r.prelude as ComponentValue[]) : []),
         r.cssRules ? Array.from(r.cssRules as Iterable<unknown>).map(toParserRule) : null
       );
     }

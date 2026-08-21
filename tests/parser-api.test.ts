@@ -63,6 +63,20 @@ describe('CSS Parser API', () => {
         assert.ok((scope[0] as CSSParserAtRule).body?.[0] instanceof CSSParserQualifiedRule);
     });
 
+    test('quoted { in at-rule prelude is not truncated', () => {
+        // css-syntax-3 § 4.3.4 #consume-string-token: `{` inside a string is not a block start.
+        const css = '@container (style(--x: "{")) { .x { color: red; } }';
+        const rules = CSS.parseStylesheetSync(css);
+        assert.strictEqual(rules.length, 1);
+        assert.ok(rules[0] instanceof CSSParserAtRule);
+        const at = rules[0] as CSSParserAtRule;
+        assert.strictEqual(at.name, 'container');
+        const preludeStr = at.prelude.map(v => v.toString()).join('');
+        assert.ok(preludeStr.includes('{'), `prelude lost quoted '{': ${JSON.stringify(preludeStr)}`);
+        assert.ok(!preludeStr.includes('.x'), `prelude swallowed body: ${JSON.stringify(preludeStr)}`);
+        assert.ok(at.body?.[0] instanceof CSSParserQualifiedRule);
+    });
+
     test('CSS.parseStylesheet (Async)', async () => {
         const css = 'div { color: blue; }';
         const rules = await CSS.parseStylesheet(css);

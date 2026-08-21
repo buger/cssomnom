@@ -30,7 +30,7 @@ import { CSSStyleValue } from './CSSStyleValue.ts';
 import { CSSKeywordValue } from './CSSKeywordValue.ts';
 import { CSSUnparsedValue, tokensToUnparsedSegments } from './CSSUnparsedValue.ts';
 import { createCSSStyleValue } from './style-value-factory.ts';
-import { tryParsePosition } from '../position/position-parser.ts';
+import { tryParsePosition, matchesPositionPropertyGrammar } from '../position/position-parser.ts';
 import { CSSTransformValue } from '../transform/CSSTransformValue.ts';
 import { parseTranslate, parseRotate, parseScale } from '../transform/transform-parser.ts';
 import { CSSColorValue } from '../color/CSSColorValue.ts';
@@ -105,7 +105,14 @@ function createValueFromTokens(values: ComponentValue[], property?: string): CSS
   if (property && POSITION_PROPERTIES.has(property.toLowerCase())) {
     const posVal = tryParsePosition(trimmed, property);
     if (posVal) return posVal;
-    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue / § 3.3 #positionvalue-objects
+    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: throw only when the property grammar fails.
+    // § 3.3 #positionvalue-objects: values that parse but do not reify as CSSPositionValue stay CSSStyleValue.
+    if (matchesPositionPropertyGrammar(property, trimmed)) {
+      if (trimmed.length === 1 && trimmed[0].type === 'ident') {
+        return new CSSKeywordValue((trimmed[0] as IdentToken).value);
+      }
+      return new CSSStyleValue(serialize(trimmed).trim(), privateToken);
+    }
     throw new TypeError(`Invalid <position> value for property '${property}'`);
   }
 
@@ -188,10 +195,45 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
   }
 
   if (POSITION_PROPERTIES.has(propLower)) {
+    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: TypeError only if the property grammar fails.
+    // § 3.3 #positionvalue-objects: reify <position> as CSSPositionValue; otherwise keyword/raw CSSStyleValue.
+    if (LIST_PROPERTIES.has(propLower) && componentValues.some(t => t.type === 'comma')) {
+      const segments: ComponentValue[][] = [[]];
+      for (const t of componentValues) {
+        if (t.type === 'comma') {
+          segments.push([]);
+        } else {
+          segments[segments.length - 1].push(t);
+        }
+      }
+      const values: CSSStyleValue[] = [];
+      for (const seg of segments) {
+        const segTrimmed = seg.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
+        if (segTrimmed.length === 0) continue;
+        const posVal = tryParsePosition(segTrimmed, property);
+        if (posVal) {
+          values.push(posVal);
+        } else if (matchesPositionPropertyGrammar(property, segTrimmed)) {
+          values.push(createValueFromTokens(seg, property));
+        } else {
+          throw new TypeError(`Invalid value for property '${property}': '${css}'`);
+        }
+      }
+      if (values.length === 0) {
+        throw new TypeError(`Invalid value for property '${property}': '${css}'`);
+      }
+      return values;
+    }
+
     const posVal = tryParsePosition(trimmed, property);
     if (posVal) return [posVal];
-    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue / § 3.3 #positionvalue-objects
-    throw new TypeError(`Invalid value for property '${property}': '${css}'`);
+    if (!matchesPositionPropertyGrammar(property, trimmed)) {
+      throw new TypeError(`Invalid value for property '${property}': '${css}'`);
+    }
+    if (trimmed.length === 1 && trimmed[0].type === 'ident') {
+      return [new CSSKeywordValue((trimmed[0] as IdentToken).value)];
+    }
+    return [new CSSStyleValue(css.trim(), privateToken)];
   }
 
   if (propLower === 'transform') {

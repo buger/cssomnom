@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-HGFK, SYS-REQ-260821-Y6R3, SW-REQ-260821-7AKJ, SW-REQ-260821-E5D5
 
 import type { ComponentValue } from '../../types.ts';
 import type { CSSStyleValue } from '../values/CSSStyleValue.ts';
@@ -24,7 +25,7 @@ import { CSSMathSum, CSSMathNegate } from '../numeric/math/CSSMathOperations.ts'
 import { simplify } from '../../math-parser.ts';
 import { createUnitValue } from '../utils/formatting.ts';
 import { isToken } from '../utils/validation.ts';
-import { isLengthPercentage } from '../utils/type-guards.ts';
+import { isLengthPercentage, matchesLength } from '../utils/type-guards.ts';
 import { createCSSStyleValue } from '../values/style-value-factory.ts';
 
 // Spec: CSS Typed OM Level 1 § 3.3 #positionvalue-objects
@@ -193,4 +194,88 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
   }
 
   return null;
+}
+
+function nonWs(tokens: ComponentValue[]): ComponentValue[] {
+  return tokens.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
+}
+
+function isHorizontalOrigin(c: ComponentValue): boolean {
+  if (isToken(c) && c.type === 'ident') {
+    const k = c.value.toLowerCase();
+    return k === 'left' || k === 'center' || k === 'right';
+  }
+  return toPositionCoord(createCSSStyleValue(c, 'left')) !== null;
+}
+
+function isVerticalOrigin(c: ComponentValue): boolean {
+  if (isToken(c) && c.type === 'ident') {
+    const k = c.value.toLowerCase();
+    return k === 'top' || k === 'center' || k === 'bottom';
+  }
+  return toPositionCoord(createCSSStyleValue(c, 'top')) !== null;
+}
+
+function isLengthCoord(c: ComponentValue): boolean {
+  if (isToken(c) && c.type === 'ident') return false;
+  const sv = createCSSStyleValue(c, 'width');
+  return sv instanceof CSSNumericValue && matchesLength(sv.type());
+}
+
+function splitCommaList(tokens: ComponentValue[]): ComponentValue[][] {
+  const segments: ComponentValue[][] = [[]];
+  for (const t of tokens) {
+    if (t.type === 'comma') {
+      segments.push([]);
+    } else {
+      segments[segments.length - 1].push(t);
+    }
+  }
+  return segments;
+}
+
+function isIdentKeyword(c: ComponentValue, keywords: string[]): boolean {
+  return isToken(c) && c.type === 'ident' && keywords.includes(c.value.toLowerCase());
+}
+
+function isValidTransformOrigin(tokens: ComponentValue[]): boolean {
+  const components = nonWs(tokens);
+  if (components.length === 1 || components.length === 2) {
+    return tryParsePosition(tokens, 'transform-origin') !== null;
+  }
+  // css-transforms-1 § 8 #transform-origin-property: x y <length>
+  if (components.length === 3) {
+    return isHorizontalOrigin(components[0]) && isVerticalOrigin(components[1]) && isLengthCoord(components[2]);
+  }
+  return false;
+}
+
+/**
+ * Property-grammar check for POSITION_PROPERTIES.
+ * Distinct from tryParsePosition (CSSPositionValue reification).
+ * css-typed-om-1 § 6.6 #parse-a-cssstylevalue / § 3.3 #positionvalue-objects
+ */
+export function matchesPositionPropertyGrammar(property: string, tokens: ComponentValue[]): boolean {
+  const prop = property.toLowerCase();
+  const components = nonWs(tokens);
+  if (components.length === 0) return false;
+
+  if (prop === 'offset-position') {
+    if (components.length === 1 && isIdentKeyword(components[0], ['auto', 'normal'])) return true;
+    return tryParsePosition(tokens, property) !== null;
+  }
+  if (prop === 'offset-anchor') {
+    if (components.length === 1 && isIdentKeyword(components[0], ['auto'])) return true;
+    return tryParsePosition(tokens, property) !== null;
+  }
+  if (prop === 'transform-origin') {
+    return isValidTransformOrigin(tokens);
+  }
+  if (prop === 'background-position' || prop === 'mask-position' || prop === '-webkit-mask-position') {
+    return splitCommaList(tokens).every(seg => {
+      const s = nonWs(seg);
+      return s.length > 0 && tryParsePosition(s, property) !== null;
+    });
+  }
+  return tryParsePosition(tokens, property) !== null;
 }

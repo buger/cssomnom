@@ -16,6 +16,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert';
+import '../src/parser.ts';
 import {
   CSSStyleValue,
   CSSPositionValue,
@@ -118,5 +119,36 @@ test('CSSPositionValue invalid position syntax throws TypeError', () => {
   assert.throws(() => {
     CSSStyleValue.parse('object-position', 'not-a-position');
   }, TypeError);
+
+  assert.throws(() => {
+    CSSStyleValue.parse('object-position', 'top 10px');
+  }, TypeError);
+});
+
+test('CSSStyleValue.parse does not throw when grammar is valid but CSSPositionValue cannot reify', () => {
+  // css-typed-om-1 § 6.6 #parse-a-cssstylevalue vs § 3.3 #positionvalue-objects:
+  // parse throws only when the *property grammar* fails; failed CSSPositionValue
+  // reification of a still-valid value returns CSSKeywordValue / CSSStyleValue.
+
+  const list = CSSStyleValue.parse('background-position', '0 0, 10px 10px');
+  assert.ok(list instanceof CSSStyleValue);
+  assert.ok(!(list instanceof CSSKeywordValue));
+  const listAll = CSSStyleValue.parseAll('background-position', '0 0, 10px 10px');
+  assert.strictEqual(listAll.length, 2);
+  assert.ok(listAll[0] instanceof CSSPositionValue);
+  assert.ok(listAll[1] instanceof CSSPositionValue);
+
+  const offsetPos = CSSStyleValue.parse('offset-position', 'auto');
+  assert.ok(offsetPos instanceof CSSKeywordValue);
+  assert.strictEqual((offsetPos as CSSKeywordValue).value, 'auto');
+
+  const offsetAnchor = CSSStyleValue.parse('offset-anchor', 'auto');
+  assert.ok(offsetAnchor instanceof CSSKeywordValue);
+  assert.strictEqual((offsetAnchor as CSSKeywordValue).value, 'auto');
+
+  const origin3 = CSSStyleValue.parse('transform-origin', '10px 20px 5px');
+  assert.ok(origin3 instanceof CSSStyleValue);
+  assert.ok(!(origin3 instanceof CSSPositionValue));
+  assert.ok(!(origin3 instanceof CSSKeywordValue));
 });
 
