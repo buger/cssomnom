@@ -3217,3 +3217,15 @@ Drive leftover `AbstractTokenizer` / `serializeToken` / at-rule `cssText` branch
 - [x] `tests/mcdc-branch-tokenizer-serializer.test.ts` — unicode escapes (`consumeEscapedCodePoint` hex/0/surrogate/>10FFFF/EOF/non-hex, string line-continuation, dash-plus-escape ident/`@`), bad-url (`"`, `'`, `(`, non-printable, whitespace then `)`/junk/EOF, valid vs invalid escape, remnants-with-escape, serialize default arm), CDO/CDC unique-cause prefixes (`<!--` / `<!` / `<!-` / `-->` / `--` / `-` / `->`), hash id vs unrestricted vs delim (`#id` / `#123` / `#-a` / `#-1` / `#--` / `#\31` / `#\` / `#.` / `#\n`), scientific numbers (`1e2`/`1E2`/`1e+2`/`1e-2` vs `1e`/`1e+`/`1ex`, `.5e2`, signed, dim/%, `1.e2`, `.foo`, `+.`), serialize of at-rules (`CSSAtRule` statement/empty/decls/nested, `serializeGroupingRule` empty media vs keyframes/scope, import/namespace/supports/font-face/page/starting-style).
 - [x] Node 24: `node --test tests/mcdc-branch-tokenizer-serializer.test.ts` — 25 pass. `tsc --noEmit` clean. oxlint 0 warnings.
 
+---
+
+## Phase: CSSStyleDeclaration / matcher remaining pseudos / parser at-rule handler MC/DC tests
+
+Drive remaining high-branch files through public `node:test` APIs. Did **not** lower `proof.yaml` floors. Did **not** add `//mcdc:ignore`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-branch-declaration.test.ts` — `CSSStyleDeclaration.setProperty` / `removeProperty` / `cssText`: readonly `NoModificationAllowedError`, `--` / unsupported / bad priority no-ops, empty/null remove, custom-property validation, `!important` ASCII, `all` later reorder, shorthand expand vs `var()`/`env()`, `notify=false`, `removeProperty('all')` keeps direction/unicode-bidi/custom, empty custom serializes as space, cssText expand/drop/`--` skip.
+- [x] `tests/mcdc-branch-matcher-pseudos.test.ts` — remaining matcher pseudos not in `mcdc-branch-matcher.test.ts`: `:only-child`, nth a=0/a>0/a<0 / `of S`, parentNode siblings, `:is` invalid skip, unknown `:hover`/`:active`/`:visited`/`:fullscreen`, `:heading` / quoted `:lang` / default `:dir`, radio `:checked`, `:enabled`/`:read-only` on non-controls, `:link` area/link, focus miss + contains false, `:focus-within` parent walk, optgroup/option/select/custom-element `:disabled`, `:has-slotted` selector-list argument.
+- [x] `tests/mcdc-branch-parser-atrules.test.ts` — at-rule handlers not covered by `mcdc-branch-parser.test.ts`: block-required statement drop, `@scope` prelude arms, `@keyframes` string/vendor/comma lists, all 16 `@page` margin names, `@font-feature-values` aliases, `@property` validation fail, `@import`/`@namespace`/`@custom-media` remaining arms, ASCII case-insensitive at-rule names.
+- [x] Product fix: `Parser.getAtRuleHandler` lowercases the at-keyword so `@MEDIA` / `@KEYFRAMES` / `@Import` dispatch to typed handlers (css-syntax-3 / css-conditional-3 ASCII case-insensitive at-rule names). Regression in `tests/mcdc-branch-parser-atrules.test.ts`.
+- [x] Node 24: 45 new tests pass. `tsc --noEmit` clean. oxlint 0 warnings.
+

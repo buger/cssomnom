@@ -79,14 +79,17 @@ export class Parser {
     'custom-media': (parser, rule) => parser.handleCustomMediaRule(rule),
   };
 
+  // css-syntax-3 § 2 / css-conditional-3 § 3 #at-ruledef-media:
+  // at-rule names are matched ASCII case-insensitively.
   private getAtRuleHandler(name: string): ((parser: Parser, rule: ASTAtRule, block?: SimpleBlock, nested?: boolean) => Rule | null) | undefined {
-    if (Parser.MARGIN_RULE_NAMES.has(name)) {
+    const lower = name.toLowerCase();
+    if (Parser.MARGIN_RULE_NAMES.has(lower)) {
       return (parser, rule, block) => block ? parser.handleMarginRule(rule, block) : null;
     }
-    if (name === 'keyframes' || name.endsWith('-keyframes')) {
+    if (lower === 'keyframes' || lower.endsWith('-keyframes')) {
       return (parser, rule, block) => block ? parser.handleKeyframesRule(rule, block) : null;
     }
-    return Parser.AT_RULE_HANDLERS[name];
+    return Parser.AT_RULE_HANDLERS[lower];
   }
 
   private static readonly NESTED_GROUP_AT_RULES = new Set([
