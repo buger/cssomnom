@@ -1,0 +1,9 @@
+id: V-MALFORMED-RECOVER
+title: Malformed CSS recover-or-loud-error hunt
+description: Hunt campaign for high-severity malformed_recovers_or_errors_loudly on media not-all, CSS.supports boolean, invalid @property drop, and Syntax-3 recovery. Not yet executed.
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - malformed_recovers_or_errors_loudly
+stacks:
+    - typescript

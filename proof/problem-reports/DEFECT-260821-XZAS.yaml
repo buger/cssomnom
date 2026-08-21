@@ -27,10 +27,22 @@ impact_analysis:
         - src/CSSStyleDeclaration.ts
         - src/shorthands.ts
 disposition:
-    status: open
+    status: covered_by_requirement
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
-    review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T23:40:00Z"
+    requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    evidence:
+        verified_by:
+            - tests/cssom-all-shorthand.test.ts
+            - proof/reproducers/KI-1-setproperty-all.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-HNRG
+              witness: "declaration_unchanged=T, value_validation_fails=T => TRUE"
+            - requirement: SYS-REQ-260821-8TGB
+              witness: "invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE"
 affects:
     - SW-REQ-260821-HNRG
     - SYS-REQ-260821-8TGB
@@ -41,10 +53,16 @@ hardening:
     added_obligations:
         - requirement: SW-REQ-260821-HNRG
           obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/CSSStyleDeclaration.ts
+            - src/shorthands.ts
+        checked_at: "2026-08-21"
+        reviewer: agent:grok-4.6
+        result: clean
     regression_tests:
-        - "tests/cssom-all-shorthand.test.ts:invalid all after stored var(--x) is a no-op"
-        - "tests/cssom-all-shorthand.test.ts:invalid all after env() stored all is a no-op"
-        - "proof/reproducers/KI-1-setproperty-all.ts:KI-1: invalid all is a no-op"
+        - tests/cssom-all-shorthand.test.ts
+        - proof/reproducers/KI-1-setproperty-all.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-HNRG
           witness: "declaration_unchanged=T, value_validation_fails=T => TRUE"

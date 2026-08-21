@@ -32,6 +32,10 @@ variables:
       type: bool
       direction: output
       description: Boolean flag security error thrown for component cssom.
+    - name: set_property_ignored
+      type: bool
+      direction: output
+      description: Boolean flag set property ignored for component cssom.
     - name: syntax_error_thrown
       type: bool
       direction: output

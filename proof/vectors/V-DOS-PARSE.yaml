@@ -1,0 +1,9 @@
+id: V-DOS-PARSE
+title: CSS parse/tokenize denial-of-service bound hunt
+description: 'Hunt campaign for high-severity denial_of_service_resistant on tokenizer/parser (SBJ7/7521/7M07/QV2H/HHVE): unbounded CSS text must not pin CPU or heap. Not yet executed.'
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - denial_of_service_resistant
+stacks:
+    - typescript

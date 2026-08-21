@@ -1,0 +1,11 @@
+id: V-NO-EXT-IO
+title: Offline parse never-fetch hunt
+description: 'Hunt campaign for high-severity no_external_io_on_parse on SYS-H3BD / STK-DKBQ: parse must not fetch or readFile for @import. Not yet executed. KI-7 is the live documented-null styleSheet tracker.'
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - no_external_io_on_parse
+stacks:
+    - typescript
+related_known_issues:
+    - KI-7

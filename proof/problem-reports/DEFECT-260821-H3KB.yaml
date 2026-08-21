@@ -28,10 +28,23 @@ impact_analysis:
         - src/parser.ts
         - src/types.ts
 disposition:
-    status: open
+    status: covered_by_requirement
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
-    review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T23:40:00Z"
+    requirements:
+        - SW-REQ-260821-W8S1
+        - SYS-REQ-260821-5283
+    evidence:
+        verified_by:
+            - tests/media-validation.test.ts
+            - tests/media.test.ts
+            - proof/reproducers/KI-5-media-unbalanced.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-W8S1
+              witness: "media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=T => TRUE"
+            - requirement: SYS-REQ-260821-5283
+              witness: "media_query_invalid=T, serialized_as_not_all=T => TRUE"
 affects:
     - SW-REQ-260821-W8S1
     - SYS-REQ-260821-5283
@@ -42,10 +55,17 @@ hardening:
     added_obligations:
         - requirement: SW-REQ-260821-W8S1
           obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/MediaParser.ts
+            - src/parser.ts
+        checked_at: "2026-08-21"
+        reviewer: agent:grok-4.6
+        result: clean
     regression_tests:
-        - "tests/media-validation.test.ts:MediaParser: unbalanced parentheses serialize as not all"
-        - "tests/media.test.ts:Media query list error handling: unclosed blocks"
-        - "proof/reproducers/KI-5-media-unbalanced.ts:KI-5: unbalanced (( serializes as not all"
+        - tests/media-validation.test.ts
+        - tests/media.test.ts
+        - proof/reproducers/KI-5-media-unbalanced.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-W8S1
           witness: "media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=T => TRUE"

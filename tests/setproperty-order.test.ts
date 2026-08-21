@@ -19,6 +19,10 @@ import assert from 'node:assert';
 import { Parser } from '../src/parser.ts';
 import { tokenize } from '../src/tokenizer.ts';
 
+// SYS-REQ-260821-8TGB:error_handling:nominal
+// SYS-REQ-260821-8TGB:malformed_recovers_or_errors_loudly:nominal
+// SW-REQ-260821-HNRG:error_handling:nominal
+// SW-REQ-260821-HNRG:malformed_recovers_or_errors_loudly:nominal
 test('CSSStyleDeclaration.setProperty preserves property order on update', () => {
   const css = 'color: red; display: block;';
   const tokens = tokenize(css);

@@ -20,6 +20,18 @@ import { Parser } from '../src/parser.ts';
 import { tokenize } from '../src/tokenizer.ts';
 import { CSSStyleSheet, CSSStyleRule, CSSMediaRule, CSSKeyframesRule, CSSKeyframeRule, parse } from '../src/index.ts';
 
+// SYS-REQ-260821-7521:nominal:nominal
+// SYS-REQ-260821-7521:denial_of_service_resistant:nominal
+// SYS-REQ-260821-7521:recursion_depth_bounded:nominal
+// SW-REQ-260821-HHVE:nominal:nominal
+// SW-REQ-260821-HHVE:denial_of_service_resistant:nominal
+// SW-REQ-260821-HHVE:recursion_depth_bounded:nominal
+// SYS-REQ-260821-YMEY:error_handling:nominal
+// SYS-REQ-260821-YMEY:malformed_input:nominal
+// SYS-REQ-260821-YMEY:malformed_recovers_or_errors_loudly:nominal
+// SW-REQ-260821-TF5T:error_handling:nominal
+// SW-REQ-260821-TF5T:malformed_input:nominal
+// SW-REQ-260821-TF5T:malformed_recovers_or_errors_loudly:nominal
 test('CSSStyleSheet.insertRule and deleteRule', () => {
   const parser = new Parser([]);
   const sheet = parser.parseStyleSheet();

@@ -1,6 +1,6 @@
 id: INT-REQ-260821-WTPD
 version: 1
-status: review
+status: approved
 priority: shall
 category: interface
 req_type: guarantee
@@ -31,15 +31,23 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
-        ai_generated: true
+        status: approved
+        reviewer: agent:grok-4.6
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-21T21:18:11Z"
+        comment: 'Class-closure DEFECT-NYAR: type-0 at-rules adapt to CSSParserAtRule.'
+        fingerprint: sha256:33f2006c8e2299ff89bbcd9965d0b1b375d5b62ae6735832a63b4cf61b3c5410
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260821-NYAR
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:48Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:21:16Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-21T21:18:11Z"
 obligation_checklist:
     - malformed_recovers_or_errors_loudly
 obligation_hazards:

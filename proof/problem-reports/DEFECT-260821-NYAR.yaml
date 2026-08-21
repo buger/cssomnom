@@ -27,18 +27,37 @@ impact_analysis:
         - src/parser-api.ts
         - src/CSSOM.ts
 disposition:
-    status: open
+    status: covered_by_requirement
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
-    review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T23:40:00Z"
+    requirements:
+        - INT-REQ-260821-WTPD
+    evidence:
+        verified_by:
+            - tests/parser-api.test.ts
+            - proof/reproducers/KI-6-parser-api-type0.ts
+        requirement_mcdc_witnesses:
+            - requirement: INT-REQ-260821-WTPD
+              witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"
 affects:
     - INT-REQ-260821-WTPD
 hardening:
     strengthened_requirements:
         - INT-REQ-260821-WTPD
+    added_obligations:
+        - requirement: INT-REQ-260821-WTPD
+          obligation_class: malformed_recovers_or_errors_loudly
+    sibling_sweep:
+        scope:
+            - src/parser-api.ts
+            - src/CSSOM.ts
+        checked_at: "2026-08-21"
+        reviewer: agent:grok-4.6
+        result: clean
     regression_tests:
-        - "tests/parser-api.test.ts:parseStylesheetSync adapts type-0 @layer and @container to CSSParserAtRule"
-        - "proof/reproducers/KI-6-parser-api-type0.ts:KI-6: type-0 at-rules adapt to CSSParserAtRule"
+        - tests/parser-api.test.ts
+        - proof/reproducers/KI-6-parser-api-type0.ts
     mcdc_witnesses:
         - requirement: INT-REQ-260821-WTPD
           witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"

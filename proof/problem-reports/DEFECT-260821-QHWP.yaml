@@ -25,10 +25,23 @@ impact_analysis:
     affected_code:
         - src/CSSOM.ts
 disposition:
-    status: open
+    status: covered_by_requirement
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
-    review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T23:40:00Z"
+    requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    evidence:
+        verified_by:
+            - tests/constructable-stylesheets.test.ts
+            - tests/cssom-rules-wave35.test.ts
+            - proof/reproducers/KI-2-replace-sync.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-PAKB
+              witness: "deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE"
+            - requirement: SYS-REQ-260821-GR67
+              witness: "deviation_applies=T, documented_deviation_honored=T => TRUE"
 affects:
     - SW-REQ-260821-PAKB
     - SYS-REQ-260821-GR67
@@ -39,10 +52,16 @@ hardening:
     added_obligations:
         - requirement: SW-REQ-260821-PAKB
           obligation_class: nominal
+    sibling_sweep:
+        scope:
+            - src/CSSOM.ts
+        checked_at: "2026-08-21"
+        reviewer: agent:grok-4.6
+        result: clean
     regression_tests:
-        - "tests/constructable-stylesheets.test.ts:sheet.replace(text) parses synchronously via replaceSync then Promise.resolve"
-        - "tests/cssom-rules-wave35.test.ts:replace() parses synchronously then returns Promise.resolve(this)"
-        - "proof/reproducers/KI-2-replace-sync.ts:KI-2: replace() parses synchronously"
+        - tests/constructable-stylesheets.test.ts
+        - tests/cssom-rules-wave35.test.ts
+        - proof/reproducers/KI-2-replace-sync.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-PAKB
           witness: "deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE"

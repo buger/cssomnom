@@ -197,6 +197,7 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
   //mcdc:ignore:defensive SW-REQ-260821-3553: css_namespace_methods_exported=F, css_namespace_object_bound=T => FALSE — the CSS namespace object binds escape, supports, registerProperty, and parse methods [reviewed: agent:grok-4.6]
 
   // Verifies: SW-REQ-260821-3553
+  // SW-REQ-260821-3553:nominal:nominal
   // MCDC SW-REQ-260821-3553: css_namespace_methods_exported=T, css_namespace_object_bound=T => TRUE
   test('3553 satisfied: CSS object binds escape, supports, registerProperty, and parse methods', () => {
     assert.equal(typeof CSS.escape, 'function');
@@ -227,6 +228,12 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
   //mcdc:ignore:defensive SW-REQ-260821-HW77: boolean_returned=F, supports_called=T => FALSE — CSS.supports evaluation paths return a boolean [reviewed: agent:grok-4.6]
   // Verifies: SW-REQ-260821-HW77
   // MCDC SW-REQ-260821-HW77: boolean_returned=T, supports_called=T => TRUE
+  // SW-REQ-260821-HW77:malformed_recovers_or_errors_loudly:nominal
+  // SW-REQ-260821-HW77:malformed_recovers_or_errors_loudly:negative
+  // SW-REQ-260821-HW77:nominal:nominal
+  // SYS-REQ-260821-SMW6:malformed_recovers_or_errors_loudly:nominal
+  // SYS-REQ-260821-SMW6:malformed_recovers_or_errors_loudly:negative
+  // SYS-REQ-260821-SMW6:nominal:nominal
   test('HW77 satisfied: CSS.supports evaluates a condition and returns a boolean', () => {
     let threw = false;
     let result: unknown;

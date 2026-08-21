@@ -36,6 +36,10 @@ variables:
       type: bool
       direction: input
       description: Boolean flag supports called for component parser_api.
+    - name: supports_throws
+      type: bool
+      direction: output
+      description: Boolean flag supports throws for component parser_api.
     - name: to_parser_rule_maps_ast
       type: bool
       direction: internal

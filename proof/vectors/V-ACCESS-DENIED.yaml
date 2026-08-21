@@ -1,0 +1,9 @@
+id: V-ACCESS-DENIED
+title: Origin-clean cssRules SecurityError hunt
+description: 'Hunt campaign for high-severity access_denied on SYS-X3KX / SW-6951: cssRules must throw SecurityError when origin-clean is false. Not yet executed.'
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - access_denied
+stacks:
+    - typescript

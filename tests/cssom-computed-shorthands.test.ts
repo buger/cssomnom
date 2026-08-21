@@ -127,6 +127,14 @@ test('CSSComputedStyleDeclaration: relative position auto offsets resolve to 0px
   assert.strictEqual(style.getPropertyValue('bottom'), '0px');
 });
 
+// SYS-REQ-260821-X3KX:error_handling:nominal
+// SYS-REQ-260821-X3KX:error_handling:negative
+// SYS-REQ-260821-X3KX:access_denied:nominal
+// SYS-REQ-260821-X3KX:access_denied:negative
+// SW-REQ-260821-6951:error_handling:nominal
+// SW-REQ-260821-6951:error_handling:negative
+// SW-REQ-260821-6951:access_denied:nominal
+// SW-REQ-260821-6951:access_denied:negative
 test('CSSStyleSheet: CORS origin-clean flag throws SecurityError on cssRules access', () => {
   // cssom-1 § 6.5.1
   const cleanSheet = CSSStyleSheet.createInternal([], () => null as unknown as CSSRule, true);

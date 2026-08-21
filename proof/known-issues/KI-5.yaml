@@ -83,10 +83,11 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of MediaParser.parse can hit the hole. Rule 4 is Web3-only.
 template_class: invalid_mq_not_not_all
 isomorphic_sites:
-    - src/MediaParser.ts:109
-    - src/MediaParser.ts:110
-    - src/MediaParser.ts:119
-    - src/MediaParser.ts:438
-    - src/MediaParser.ts:797
+    - "src/MediaParser.ts:109 #na"
+    - "src/MediaParser.ts:110 #na"
+    - "src/MediaParser.ts:119 #fixed"
+    - "src/MediaParser.ts:122 #fixed"
+    - "src/MediaParser.ts:438 #na"
+    - "src/MediaParser.ts:797 #na"
 dedup_armor: |
     serializeMediaQuery already returns 'not all' when query.invalid is true (&test, screen and, trailing comma). The hole is MediaQueryValidator accepting unbalanced '((' as general-enclosed so invalid stays unset. Do not merge this KI into a generic serializer defect without a second live recovered-invalid query.

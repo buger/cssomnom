@@ -61,6 +61,14 @@ test('Tokenizer reports error on unclosed comment', () => {
   assert.strictEqual(errors[0].message, 'EOF reached before comment was closed');
 });
 
+// SYS-REQ-260821-03VA:error_handling:negative
+// SYS-REQ-260821-03VA:malformed_input:negative
+// SYS-REQ-260821-03VA:malformed_recovers_or_errors_loudly:negative
+// SW-REQ-260821-YG9J:error_handling:negative
+// SW-REQ-260821-YG9J:malformed_recovers_or_errors_loudly:negative
+// SW-REQ-260821-9KNX:error_handling:negative
+// SW-REQ-260821-9KNX:malformed_input:negative
+// SW-REQ-260821-9KNX:malformed_recovers_or_errors_loudly:negative
 test('Parser recovers from invalid rule in block and does not drop subsequent declarations', () => {
   const css = `
     .container {

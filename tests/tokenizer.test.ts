@@ -18,6 +18,10 @@ import { test } from 'node:test';
 import assert from 'node:assert';
 import { tokenize } from '../src/tokenizer.ts';
 
+// SYS-REQ-260821-SBJ7:nominal:nominal
+// SYS-REQ-260821-SBJ7:denial_of_service_resistant:nominal
+// SW-REQ-260821-7M07:nominal:nominal
+// SW-REQ-260821-7M07:denial_of_service_resistant:nominal
 test('Tokenizer: Hash token id flag', () => {
   const tokens1 = tokenize('#id');
   assert.strictEqual(tokens1.length, 2); // hash, EOF

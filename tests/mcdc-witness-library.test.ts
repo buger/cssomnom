@@ -132,6 +132,7 @@ describe('requirement-level MC/DC witnesses (library)', { concurrency: 1 }, () =
     assert.equal(snapshotCompareCalls, 0);
   });
   // Verifies: SW-REQ-260821-37RC
+  // SW-REQ-260821-37RC:nominal:nominal
   // MCDC SW-REQ-260821-37RC: api_surface_snapshot_compared=T, api_surface_test_updated=F, export_changed=F => TRUE
   test('37RC satisfied: snapshot comparison matches live exports when nothing changed', () => {
     const live = livePublicExportKeys();
@@ -150,6 +151,7 @@ describe('requirement-level MC/DC witnesses (library)', { concurrency: 1 }, () =
   });
   // --- SYS-REQ-260821-2TXS ---
   // Verifies: SYS-REQ-260821-2TXS
+  // SYS-REQ-260821-2TXS:nominal:nominal
   // MCDC SYS-REQ-260821-2TXS: api_surface_test_updated=F, export_changed=F => TRUE [no-action: api-surface test file not rewritten; live keys equal snapshot]
   test('2TXS trigger-false: public exports are unchanged so the api-surface test is not updated', () => {
     const live = livePublicExportKeys();

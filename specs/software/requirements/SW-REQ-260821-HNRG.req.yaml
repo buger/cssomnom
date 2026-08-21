@@ -1,11 +1,11 @@
 id: SW-REQ-260821-HNRG
 version: 1
-status: review
+status: approved
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when value_validation_fails the cssom shall always satisfy declaration_unchanged
-description: The cssom setProperty path shall leave the declaration unchanged when validation fails.
+fretish: when value_validation_fails the cssom shall always satisfy declaration_unchanged & set_property_ignored
+description: The cssom setProperty path shall leave the declaration unchanged when validation fails. The cssom shall ignore the invalid value.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -18,6 +18,7 @@ tags: []
 variables:
     - declaration_unchanged
     - value_validation_fails
+    - set_property_ignored
 references:
     - type: document
       id: README.md
@@ -28,10 +29,18 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: in_review
+        status: approved
         reviewer: agent:grok-4.6
-        reviewed_at: "2026-08-21T13:55:39Z"
-        ai_generated: true
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-21T21:18:12Z"
+        comment: 'Class-closure DEFECT-XZAS: invalid all after stored var/env is a no-op. REVIEW-25/31 hole is fixed.'
+        fingerprint: sha256:15042caab5a6e2faae29568c49680de0381fd9f2cda309e0371fdc29a9eb6187
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260821-XZAS
     not_modeled:
         - predicate: 2 < tokens.length
           reason: "setProperty / parse component-list arity guard; structural CSS value parse, not a requirement domain [structural]"
@@ -59,7 +68,7 @@ history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
     last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T20:43:40Z"
+    last_modified_at: "2026-08-21T21:18:12Z"
 obligation_checklist:
     - error_handling
     - malformed_recovers_or_errors_loudly

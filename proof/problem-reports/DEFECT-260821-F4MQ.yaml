@@ -37,9 +37,10 @@ disposition:
         Not a product defect. Houdini §4.1 IME is JS-slot only. §3 requires CSS.registerProperty
         to win over @property, which is impossible if the first JS register after @property throws.
         This DEFECT hardened the wrong contract and is retracted.
-affects:
-    - SW-REQ-260821-V5GA
-    - SYS-REQ-260821-EGCP
+# Retracted false hole: CSS-then-JS is not duplicate_js_register.
+# Clearing affects so change_record_lands does not demand a motivation
+# citation on V5GA/EGCP for a report that did not land in the spec.
+affects: []
 hardening:
     strengthened_requirements:
         - SW-REQ-260821-V5GA
@@ -68,3 +69,7 @@ history:
       by: agent:grok-4.6
       action: retracted
       detail: False hole. CSS-then-JS must succeed. Disposition not_in_scope. Residual L-KI4. KI-4 withdrawn.
+    - at: "2026-08-21T23:40:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Cleared affects. Retracted false hole must not demand motivation citations on V5GA/EGCP.

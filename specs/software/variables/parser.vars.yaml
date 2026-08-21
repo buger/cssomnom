@@ -20,6 +20,10 @@ variables:
       type: bool
       direction: input
       description: Boolean flag css text supplied for component parser.
+    - name: external_sheet_fetched
+      type: bool
+      direction: output
+      description: Boolean flag external sheet fetched for component parser.
     - name: flush_decls_runs
       type: bool
       direction: internal
@@ -52,6 +56,10 @@ variables:
       type: bool
       direction: output
       description: Boolean flag rule dropped for component parser.
+    - name: stylesheet_returned
+      type: bool
+      direction: output
+      description: Boolean flag stylesheet returned for component parser.
 independence:
     declared: true
     reason: "SW parser pairs (stylesheet consume, nesting, invalid-rule drop, import construct) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

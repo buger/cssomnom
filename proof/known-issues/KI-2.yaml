@@ -102,9 +102,9 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleSheet.replace exercises the (now fixed) path. Rule 4 is Web3-only.
 template_class: documented_sync_parse_deferred
 isomorphic_sites:
-    - src/CSSOM.ts:341
-    - src/CSSOM.ts:351
-    - src/CSSOM.ts:352
-    - src/CSSOM.ts:401
+    - "src/CSSOM.ts:341 #fixed"
+    - "src/CSSOM.ts:351 #fixed"
+    - "src/CSSOM.ts:352 #fixed"
+    - "src/CSSOM.ts:401 #na"
 dedup_armor: |
     Only CSSStyleSheet.replace was the documented-sync-parse hole (queueMicrotask vs Promise.resolve after replaceSync). HEAD honors README: replace() calls replaceSync then Promise.resolve(this), so cssRules is populated before return. replaceSync at CSSOM.ts:401 still tokenizes and consumeListOfRules immediately. Do not merge this KI into a generic Promise/async stylesheet hole.

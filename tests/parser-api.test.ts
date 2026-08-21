@@ -37,6 +37,7 @@ describe('CSS Parser API', () => {
         assert.ok(atRule.body?.[0] instanceof CSSParserQualifiedRule);
     });
 
+    // INT-REQ-260821-WTPD:malformed_recovers_or_errors_loudly:nominal
     test('parseStylesheetSync adapts type-0 @layer and @container to CSSParserAtRule', () => {
         const layer = CSS.parseStylesheetSync('@layer foo;');
         assert.strictEqual(layer.length, 1);
@@ -135,7 +136,9 @@ describe('CSS Parser API', () => {
     });
 
     // SYS-REQ-260821-KA02:error_handling:negative
+    // SYS-REQ-260821-KA02:malformed_input:negative
     // SW-REQ-260821-2Z0N:error_handling:negative
+    // SW-REQ-260821-2Z0N:malformed_input:negative
     test('CSS.parseRule with trailing garbage throws SyntaxError', () => {
         const css = 'div { color: green; } trailing garbage';
         assert.throws(() => {

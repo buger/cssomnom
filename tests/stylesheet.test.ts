@@ -20,7 +20,20 @@ import { tokenize } from '../src/tokenizer.ts';
 import { Parser } from '../src/parser.ts';
 import { CSSStyleRule, StyleSheet, CSSImportRule } from '../src/index.ts';
 
-
+// SYS-REQ-260821-7521:nominal:nominal
+// SYS-REQ-260821-7521:denial_of_service_resistant:nominal
+// SYS-REQ-260821-7521:recursion_depth_bounded:nominal
+// SW-REQ-260821-HHVE:nominal:nominal
+// SW-REQ-260821-HHVE:denial_of_service_resistant:nominal
+// SW-REQ-260821-HHVE:recursion_depth_bounded:nominal
+// SYS-REQ-260821-03VA:error_handling:nominal
+// SYS-REQ-260821-03VA:malformed_input:nominal
+// SYS-REQ-260821-03VA:malformed_recovers_or_errors_loudly:nominal
+// SW-REQ-260821-9KNX:error_handling:nominal
+// SW-REQ-260821-9KNX:malformed_input:nominal
+// SW-REQ-260821-9KNX:malformed_recovers_or_errors_loudly:nominal
+// SW-REQ-260821-YG9J:error_handling:nominal
+// SW-REQ-260821-YG9J:malformed_recovers_or_errors_loudly:nominal
 test('parse simple stylesheet', () => {
   const input = 'div { color: red; }';
   const tokens = tokenize(input);
@@ -65,6 +78,9 @@ test('CSSStyleSheet is an instance of StyleSheet and setting media puts forwards
   assert.strictEqual(sheet.media.mediaText, 'print');
 });
 
+// SYS-REQ-260821-H3BD:nominal:nominal
+// SYS-REQ-260821-H3BD:no_external_io_on_parse:nominal
+// SW-REQ-260821-5W6X:nominal:nominal
 test('CSSImportRule.media setting puts forwards to mediaText', () => {
   const sheet = new Parser(tokenize('@import "foo.css" screen;')).parseStyleSheet();
   const importRule = sheet.cssRules[0] as CSSImportRule;

@@ -46,6 +46,8 @@ function generateSemiRandomCSS(length: number): string {
   return result;
 }
 
+// reqproof:proptest parseStyleSheet
+// reqproof:proptest tokenize
 test('Fuzz parser with random strings', () => {
   const iterations = 10000;
   let successCount = 0;

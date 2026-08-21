@@ -36,6 +36,8 @@ function urlToken(css: string): Token {
 }
 
 describe('MC/DC hotspot: serializeUrlToken', () => {
+  // SYS-REQ-260821-KV30:nominal:nominal
+  // SW-REQ-260821-YTV6:nominal:nominal
   test('preserveCase reuses originalText when it is a complete url() without U+FFFD', () => {
     const token = urlToken('url(http://example.com/path)');
     assert.equal(serialize([token], true), token.originalText);

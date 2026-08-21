@@ -1,0 +1,9 @@
+id: V-RECURSION-DEPTH
+title: Nested CSS recursion-depth bound hunt
+description: Hunt campaign for high-severity recursion_depth_bounded on nested grouping rules and CSSNestedDeclarations consume (NHZ8/39E0/7521/HHVE). Not yet executed.
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - recursion_depth_bounded
+stacks:
+    - typescript

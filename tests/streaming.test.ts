@@ -31,7 +31,9 @@ function assertTokensEqual(actual: Token[], expected: Token[]) {
 }
 
 // SYS-REQ-260821-SBJ7:nominal:nominal
+// SYS-REQ-260821-SBJ7:denial_of_service_resistant:nominal
 // SW-REQ-260821-QV2H:nominal:nominal
+// SW-REQ-260821-QV2H:denial_of_service_resistant:nominal
 test('streaming: single chunk', () => {
   const input = 'div { color: red; }';
   const expectedTokens = tokenize(input);

@@ -31,6 +31,12 @@ describe('Values & Typed OM', () => {
         assert.ok(eVal.toString().includes('2.71828'));
     });
 
+    // SYS-REQ-260821-Y6R3:nominal:nominal
+    // SW-REQ-260821-E5D5:nominal:nominal
+    // SYS-REQ-260821-HGFK:error_handling:nominal
+    // SYS-REQ-260821-HGFK:malformed_input:nominal
+    // SW-REQ-260821-7AKJ:error_handling:nominal
+    // SW-REQ-260821-7AKJ:malformed_input:nominal
     test('CSSNumericValue.parse', () => {
         const val = CSSNumericValue.parse('10px');
         assert.ok(val instanceof CSSUnitValue);
@@ -84,6 +90,10 @@ describe('Values & Typed OM', () => {
         }, (err: unknown) => err instanceof DOMException && err.name === 'SyntaxError');
     });
 
+    // SYS-REQ-260821-HGFK:error_handling:negative
+    // SYS-REQ-260821-HGFK:malformed_input:negative
+    // SW-REQ-260821-7AKJ:error_handling:negative
+    // SW-REQ-260821-7AKJ:malformed_input:negative
     test('CSSNumericValue.parse throws on invalid input', () => {
         assert.throws(() => {
             CSSNumericValue.parse('invalid');
@@ -106,6 +116,7 @@ describe('Values & Typed OM', () => {
         }, (err: unknown) => err instanceof DOMException && err.name === 'SyntaxError');
     });
 
+    // INT-REQ-260821-9SGA:error_handling:negative
     test('CSSStyleValue.parse throws on invalid input', () => {
         assert.throws(() => {
             CSSStyleValue.parse('color', '   ');

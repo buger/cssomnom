@@ -22,7 +22,9 @@ import { tokenize } from '../src/tokenizer.ts';
 import { CSSMediaRule } from '../src/index.ts';
 
 // SYS-REQ-260821-5283:error_handling:nominal
+// SYS-REQ-260821-5283:malformed_recovers_or_errors_loudly:nominal
 // SW-REQ-260821-W8S1:error_handling:nominal
+// SW-REQ-260821-W8S1:malformed_recovers_or_errors_loudly:nominal
 test('MediaList behavior', () => {
   const css = '@media screen, print { body { color: red; } }';
   const tokens = tokenize(css);
@@ -123,7 +125,9 @@ test('Inconsistent media range operators (100px < width > 200px) preserved in ge
 import { MediaParser, serializeMediaQuery } from '../src/MediaParser.ts';
 
 // SYS-REQ-260821-5283:error_handling:negative
+// SYS-REQ-260821-5283:malformed_recovers_or_errors_loudly:negative
 // SW-REQ-260821-W8S1:error_handling:negative
+// SW-REQ-260821-W8S1:malformed_recovers_or_errors_loudly:negative
 test('Media query list error handling: invalid queries are replaced with "not all"', () => {
   // Spec example 1 (general enclosed parenthesized):
   const queries1 = MediaParser.parse('(example, all,), speech').map(serializeMediaQuery);

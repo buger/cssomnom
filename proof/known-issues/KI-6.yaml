@@ -85,12 +85,12 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync can hit the hole. Rule 4 is Web3-only.
 template_class: adapter_type_zero_fallback
 isomorphic_sites:
-    - src/parser-api.ts:211
-    - src/parser-api.ts:250
-    - src/CSSOM.ts:1078
-    - src/CSSOM.ts:1095
-    - src/CSSOM.ts:1112
-    - src/CSSOM.ts:1126
-    - src/CSSOM.ts:1145
+    - "src/parser-api.ts:211 #fixed"
+    - "src/parser-api.ts:250 #fixed"
+    - "src/CSSOM.ts:1078 #fixed"
+    - "src/CSSOM.ts:1095 #fixed"
+    - "src/CSSOM.ts:1112 #fixed"
+    - "src/CSSOM.ts:1126 #fixed"
+    - "src/CSSOM.ts:1145 #na"
 dedup_armor: |
     Only CSSOM at-rules whose type getter returns 0 miss the toParserRule numeric at-rule branch (parser-api.ts:211 excludes type === 0) and fall through to CSSParserRawRule (parser-api.ts:250). Style rules (type 1) and legacy at-rules with non-zero type constants still adapt. Do not merge this KI into empty-stylesheet or unknown-at-rule cases.

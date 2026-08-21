@@ -23,6 +23,12 @@ import { CSSStyleRule, CSSMediaRule } from '../src/CSSOM.ts';
 import { CSSStyleDeclaration } from '../src/CSSStyleDeclaration.ts';
 
 describe('CSSOM Core Conformance - Index Boundaries & Hierarchy Validation', () => {
+  // SYS-REQ-260821-YMEY:error_handling:negative
+  // SYS-REQ-260821-YMEY:malformed_input:negative
+  // SYS-REQ-260821-YMEY:malformed_recovers_or_errors_loudly:negative
+  // SW-REQ-260821-TF5T:error_handling:negative
+  // SW-REQ-260821-TF5T:malformed_input:negative
+  // SW-REQ-260821-TF5T:malformed_recovers_or_errors_loudly:negative
   test('insertRule validates index bounds BEFORE parsing syntax (CSSOM 1 § 6.5.3 #insert-a-css-rule)', () => {
     const parser = new Parser([]);
     const sheet = parser.parseStyleSheet();

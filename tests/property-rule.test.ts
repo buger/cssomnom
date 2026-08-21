@@ -21,6 +21,10 @@ import { tokenize } from '../src/tokenizer.ts';
 import { CSSPropertyRule } from '../src/index.ts';
 
 describe('CSSPropertyRule', () => {
+  // SYS-REQ-260821-9YM3:error_handling:nominal
+  // SYS-REQ-260821-9YM3:malformed_recovers_or_errors_loudly:nominal
+  // SW-REQ-260821-ARC1:error_handling:nominal
+  // SW-REQ-260821-ARC1:malformed_recovers_or_errors_loudly:nominal
   it('should parse @property rule', () => {
     const css = `
       @property --my-color {
@@ -41,6 +45,10 @@ describe('CSSPropertyRule', () => {
     assert.strictEqual(rule.initialValue, 'red');
   });
 
+  // SYS-REQ-260821-9YM3:error_handling:negative
+  // SYS-REQ-260821-9YM3:malformed_recovers_or_errors_loudly:negative
+  // SW-REQ-260821-ARC1:error_handling:negative
+  // SW-REQ-260821-ARC1:malformed_recovers_or_errors_loudly:negative
   it('should be invalid if syntax is missing', () => {
     const css = `
       @property --my-color {

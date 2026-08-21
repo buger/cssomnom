@@ -84,9 +84,12 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleValue.parse can hit the hole. Rule 4 is Web3-only.
 template_class: invalid_parse_swallowed
 isomorphic_sites:
-    - src/typed-om/values/style-value-parser.ts:188
-    - src/typed-om/values/style-value-parser.ts:189
-    - src/typed-om/values/style-value-parser.ts:190
-    - src/typed-om/values/style-value-parser.ts:191
+    - "src/typed-om/values/style-value-parser.ts:188 #na"
+    - "src/typed-om/values/style-value-parser.ts:189 #na"
+    - "src/typed-om/values/style-value-parser.ts:190 #na"
+    - "src/typed-om/values/style-value-parser.ts:191 #na"
+    - "src/typed-om/values/style-value-parser.ts:219 #fixed"
+    - "src/typed-om/values/style-value-parser.ts:223 #fixed"
+    - "src/typed-om/values/style-value-parser.ts:231 #fixed"
 dedup_armor: |
     Only POSITION_PROPERTIES (object-position, background-position, …) return a generic CSSStyleValue when tryParsePosition fails. Color properties throw TypeError via matchesSyntax / CSSColorValue.parse. Do not merge this KI into a generic CSSStyleValue.parse defect without a second live hole.

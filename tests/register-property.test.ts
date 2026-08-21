@@ -23,8 +23,12 @@ import { PropertyRegistry } from '../src/PropertyRegistry.ts';
 
 // SYS-REQ-260821-EGCP:error_handling:nominal
 // SYS-REQ-260821-EGCP:error_handling:negative
+// SYS-REQ-260821-EGCP:malformed_input:nominal
+// SYS-REQ-260821-EGCP:malformed_input:negative
 // SW-REQ-260821-PD6M:error_handling:nominal
 // SW-REQ-260821-PD6M:error_handling:negative
+// SW-REQ-260821-PD6M:malformed_input:nominal
+// SW-REQ-260821-PD6M:malformed_input:negative
 test('CSS.registerProperty: validation', () => {
   PropertyRegistry.clear();
 

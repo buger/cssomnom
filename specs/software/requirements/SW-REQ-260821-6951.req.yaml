@@ -4,8 +4,8 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when css_rules_getter_runs & !origin_clean the cssom shall always satisfy security_error_thrown
-description: The cssom cssRules getter shall throw SecurityError when origin-clean is false.
+fretish: when css_rules_getter_runs the cssom shall always satisfy (origin_clean & !security_error_thrown) | (!origin_clean & security_error_thrown)
+description: The cssom cssRules getter shall throw SecurityError when origin-clean is false. The cssom shall not throw SecurityError when origin-clean is true.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -40,7 +40,7 @@ history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
     last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T20:43:39Z"
+    last_modified_at: "2026-08-21T21:24:52Z"
 obligation_checklist:
     - access_denied
     - error_handling

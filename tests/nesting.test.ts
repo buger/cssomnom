@@ -183,6 +183,10 @@ describe('CSS Nesting', () => {
         assert.strictEqual(childRule.selectorText, ':is(&) .child');
     });
 
+    // SYS-REQ-260821-NHZ8:nominal:nominal
+    // SYS-REQ-260821-NHZ8:recursion_depth_bounded:nominal
+    // SW-REQ-260821-39E0:nominal:nominal
+    // SW-REQ-260821-39E0:recursion_depth_bounded:nominal
     test('declarations separated by invalid rule are split', () => {
         const css = `
             .foo {

@@ -1,0 +1,9 @@
+id: V-ERROR-HANDLING
+title: CSSOM/parser error-handling contract hunt
+description: Hunt campaign for high-severity error_handling on insertRule, grouping parse callback, origin-clean, and STK BQKD/AMK6. Not yet executed.
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - error_handling
+stacks:
+    - typescript

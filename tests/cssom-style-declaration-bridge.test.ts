@@ -105,6 +105,10 @@ describe('CSSStyleDeclaration & DOM Style Bridge', () => {
       assert.equal(el.style.zIndex, '5');
     });
 
+    // SYS-REQ-260821-8TGB:error_handling:negative
+    // SYS-REQ-260821-8TGB:malformed_recovers_or_errors_loudly:negative
+    // SW-REQ-260821-HNRG:error_handling:negative
+    // SW-REQ-260821-HNRG:malformed_recovers_or_errors_loudly:negative
     it('rejects invalid property values on setProperty without mutating DOM style attribute', () => {
       const { document } = createDom();
       const el = document.createElement('div');

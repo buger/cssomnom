@@ -21,6 +21,10 @@ import { tokenize } from '../src/tokenizer.ts';
 import { Parser } from '../src/parser.ts';
 import type { CompoundSelector, ComplexSelector, Combinator } from '../src/types.ts';
 
+// SYS-REQ-260821-PJ76:error_handling:negative
+// SYS-REQ-260821-PJ76:malformed_input:negative
+// SW-REQ-260821-6D9T:error_handling:negative
+// SW-REQ-260821-6D9T:malformed_input:negative
 test('SelectorParser throws SyntaxError if list is unforgiving and empty', () => {
   const tokens = tokenize(''); // Empty input
   const parser = new SelectorParser(tokens); // unforgiving
@@ -93,6 +97,10 @@ test('SelectorParser rejects functional obsolete -webkit- quirks if unknown', ()
   });
 });
 
+// SYS-REQ-260821-PJ76:error_handling:nominal
+// SYS-REQ-260821-PJ76:malformed_input:nominal
+// SW-REQ-260821-6D9T:error_handling:nominal
+// SW-REQ-260821-6D9T:malformed_input:nominal
 test('SelectorParser allows :-webkit-autofill', () => {
   const tokens = tokenize(':-webkit-autofill');
   const parser = new SelectorParser(new Parser(tokens).parseComponentValues());

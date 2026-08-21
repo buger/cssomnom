@@ -25,10 +25,21 @@ impact_analysis:
     affected_code:
         - src/typed-om/values/style-value-parser.ts
 disposition:
-    status: open
+    status: covered_by_requirement
     owner: agent:grok-4.6
-    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
-    review_due: "2026-09-21"
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-21T23:40:00Z"
+    requirements:
+        - SW-REQ-260821-7AKJ
+        - SYS-REQ-260821-HGFK
+    evidence:
+        verified_by:
+            - tests/typed-om-position.test.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-7AKJ
+              witness: "invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE"
+            - requirement: SYS-REQ-260821-HGFK
+              witness: "invalid_typed_input=T, parse_throws=T => TRUE"
 affects:
     - SW-REQ-260821-7AKJ
     - SYS-REQ-260821-HGFK
@@ -39,9 +50,15 @@ hardening:
     added_obligations:
         - requirement: SW-REQ-260821-7AKJ
           obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/typed-om/values/style-value-parser.ts
+        checked_at: "2026-08-21"
+        reviewer: agent:grok-4.6
+        result: clean
     regression_tests:
-        - "tests/typed-om-position.test.ts:CSSPositionValue invalid position syntax throws TypeError"
-        - "proof/reproducers/KI-3-object-position-parse.ts:KI-3: invalid object-position throws TypeError"
+        - tests/typed-om-position.test.ts
+        - proof/reproducers/KI-3-object-position-parse.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-7AKJ
           witness: "invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE"

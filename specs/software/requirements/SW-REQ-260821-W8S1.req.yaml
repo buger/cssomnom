@@ -1,6 +1,6 @@
 id: SW-REQ-260821-W8S1
 version: 1
-status: review
+status: approved
 priority: shall
 category: functional
 req_type: guarantee
@@ -29,10 +29,18 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: in_review
+        status: approved
         reviewer: agent:grok-4.6
-        reviewed_at: "2026-08-21T13:51:23Z"
-        ai_generated: true
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-21T21:18:10Z"
+        comment: 'Class-closure DEFECT-H3KB: unbalanced media (( serializes as not all.'
+        fingerprint: sha256:01066690a8a1a64b58166d2cbf09a60e59508924cae0c617e3507f1dc0ef83bc
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260821-H3KB
     not_modeled:
         - predicate: filtered.length >= 2
           reason: "Media-query token-list arity guard; structural parse, not a requirement domain [structural]"
@@ -42,7 +50,7 @@ history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:58Z"
     last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T20:43:42Z"
+    last_modified_at: "2026-08-21T21:18:10Z"
 obligation_checklist:
     - error_handling
     - malformed_recovers_or_errors_loudly

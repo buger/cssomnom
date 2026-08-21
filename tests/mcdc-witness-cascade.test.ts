@@ -105,6 +105,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
     //mcdc:ignore:defensive SW-REQ-260821-FWNH: cascaded_style_returned=F, compare_cascade_declarations_runs=T, element_and_rules_supplied=T, layout_performed=F => FALSE — getCascadedStyle always returns a CSSStyleDeclaration when element and rules are supplied [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260821-FWNH: cascaded_style_returned=T, compare_cascade_declarations_runs=T, element_and_rules_supplied=T, layout_performed=T => FALSE — getCascadedStyle never calls getBoundingClientRect or a layout engine [reviewed: agent:grok-4.6]
     // Verifies: SW-REQ-260821-FWNH
+    // SW-REQ-260821-FWNH:nominal:nominal
     // MCDC SW-REQ-260821-FWNH: cascaded_style_returned=T, compare_cascade_declarations_runs=T, element_and_rules_supplied=T, layout_performed=F => TRUE
     test('compareCascadeDeclarations picks the specificity winner without layout', () => {
       const el = targetElement();
@@ -131,6 +132,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
       assert.equal(cascadePublicExportsRead, 0);
     });
     // Verifies: SW-REQ-260821-RPSA
+    // SW-REQ-260821-RPSA:nominal:nominal
     // MCDC SW-REQ-260821-RPSA: cascade_public_exports_read=T, get_computed_style_exported=F => TRUE
     test('reading cascade index exports does not export getComputedStyle', () => {
       assert.equal('getComputedStyle' in cascadeIndex, false);
@@ -144,6 +146,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
   describe('SYS-REQ-260821-MV44', () => {
     //mcdc:ignore:defensive SYS-REQ-260821-MV44: get_computed_style_exported=T => FALSE — cascade public surface does not export getComputedStyle [reviewed: agent:grok-4.6]
     // Verifies: SYS-REQ-260821-MV44
+    // SYS-REQ-260821-MV44:nominal:nominal
     // MCDC SYS-REQ-260821-MV44: get_computed_style_exported=F => TRUE [no-action: cascade getComputedStyle export]
     test('cascade public surface omits getComputedStyle', () => {
       assert.equal(Object.hasOwn(cascadeApi, 'getComputedStyle'), false);
@@ -168,6 +171,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
     //mcdc:ignore:defensive SYS-REQ-260821-ZXZW: cascaded_style_returned=T, element_and_rules_supplied=T, layout_performed=T => FALSE — getCascadedStyle never performs layout [reviewed: agent:grok-4.6]
 
     // Verifies: SYS-REQ-260821-ZXZW
+    // SYS-REQ-260821-ZXZW:nominal:nominal
     // MCDC SYS-REQ-260821-ZXZW: cascaded_style_returned=T, element_and_rules_supplied=T, layout_performed=F => TRUE
     test('element and rules yield a cascaded style without layout', () => {
       const el = targetElement();

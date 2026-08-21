@@ -42,7 +42,15 @@ project:
             production_exclude:
                 - '**/*_test.go'
                 - '**/testdata/**'
-            rationale: production_include is src/**. lint.exclude is src/data/gen/** (generated tables). tests/** and docs are verification_scope.include for autolink only so Verifies and Documents are discovered. dist/ is build output. scripts/ is tooling. tests/, dist/, and scripts/ are not production code.
+                # Omitted-root scan: these top-level trees contain .ts/.js but are
+                # not production. Name each root so verification_scope_complete
+                # does not treat them as missing production_include.
+                - tests/**
+                - dist/**
+                - scripts/**
+                - fuzz/**
+                - proof/**
+            rationale: production_include is src/** only (the cssomnom library). lint.exclude is src/data/gen/** (generated tables). tests/** is the unit/WPT harness (verification_scope.include for autolink Verifies only). dist/ is tsup build output. scripts/ is codegen, WPT runner, and CI tooling. fuzz/ is the optional css-fuzz corpus driver. proof/ holds overlay reproducers, evidence manifests, and System Truth Layer YAML — not library code. docs/ and README.md are documentation sources, not production. Those roots are intentionally out of the MC/DC and orphan production universe.
     checks:
         slow_tests:
             enabled: true
@@ -104,13 +112,16 @@ project:
     trace_policy:
         mode: source_native
     commands:
-        build: pnpm run build
-        test: pnpm test:node
-        lint: pnpm lint
+        # This agent PATH has Node 24 + npm, not a pnpm shim (corepack cannot
+        # write /usr/bin/pnpm on a read-only FS). npm run forwards to the
+        # package.json scripts; tests.node.command is the MC/DC evidence job.
+        build: npm run build
+        test: npm run test:node
+        lint: npm run lint
         tests:
             node:
                 language: ts
-                command: node --test --test-reporter=dot 'tests/**/*.test.ts'
+                command: node --test --test-reporter=dot tests/**/*.test.ts
     description: Spec-compliant CSS Object Model (CSSOM) and Typed OM parser in pure TypeScript
     catalog:
         version: 1.9.1

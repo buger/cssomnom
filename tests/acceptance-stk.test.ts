@@ -76,6 +76,7 @@ test('AC-004 insertRule bad rule throws SyntaxError', function acBqkd004() {
 });
 
 // STK-REQ-260821-D7WX:AC-001:acceptance
+// STK-REQ-260821-D7WX:nominal:nominal
 test('AC-001 getCascadedStyle winning color', function acD7wx001() {
   const css = `
     .box { color: red; }

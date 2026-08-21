@@ -1,30 +1,29 @@
-id: SYS-REQ-260821-8TGB
+id: SYS-REQ-260821-GR67
 version: 1
 status: approved
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when set_property_called & invalid_value the cssom shall always satisfy set_property_ignored
-description: The cssom shall ignore an invalid value on setProperty.
+fretish: when deviation_applies the cssom shall always satisfy documented_deviation_honored
+description: The cssom shall honor documented deviations when a deviation applies.
 formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: cssom
-rationale: Declaration mutate shall stay silent on an invalid value.
+rationale: The project shall treat README deviations as the contract.
 tags: []
 variables:
-    - invalid_value
-    - set_property_called
-    - set_property_ignored
+    - deviation_applies
+    - documented_deviation_honored
 references:
     - type: document
       id: README.md
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,24 +34,19 @@ verification:
         roles:
             - spec-conformance
         reviewed_at: "2026-08-21T21:18:11Z"
-        comment: 'Class-closure DEFECT-XZAS: invalid all after stored var/env is a no-op.'
-        fingerprint: sha256:8183494a7278d205a03566bf58ded471d40e8b1dadb0c4f0ed300cfdcd295ff3
+        comment: 'Class-closure DEFECT-QHWP: replace() parses via replaceSync then Promise.resolve.'
+        fingerprint: sha256:1192f69d47e6b4b8bc31545d21138900d8a7503a86e7342fb5e3bb365ffb29d9
         ai_generated: false
         motivation:
             kind: defect
-            ref: DEFECT-260821-XZAS
+            ref: DEFECT-260821-QHWP
 history:
     created_by: agent:grok-4.6
-    created_at: "2026-08-21T12:34:49Z"
+    created_at: "2026-08-21T12:34:51Z"
     last_modified_by: agent:grok-4.6
     last_modified_at: "2026-08-21T21:18:11Z"
 obligation_checklist:
-    - error_handling
-    - malformed_recovers_or_errors_loudly
-obligation_hazards:
-    - class: malformed_recovers_or_errors_loudly
-      worst_case: setProperty that throws on an invalid value instead of ignoring it breaks CSSOM-1 silent-failure callers.
-      severity: medium
+    - nominal
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
