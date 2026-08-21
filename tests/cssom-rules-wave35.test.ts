@@ -157,24 +157,20 @@ describe('Phase 83 - CSSOM Rules, Serialization & CSS.escape', () => {
 
   describe('Constructable CSSStyleSheet replace() and replaceSync()', () => {
     // cssom-1 § 6.5.1 #dom-cssstylesheet-replace
-    it('asynchronously replaces rules and locks modification during parallel parsing', async () => {
+    it('replace() parses synchronously then returns Promise.resolve(this)', async () => {
       const sheet = new CSSStyleSheet();
       const promise = sheet.replace('.async-test { color: green; }');
       assert.ok(promise instanceof Promise);
-
-      // Simultaneous synchronous modification should throw NotAllowedError while async replace is in progress
-      assert.throws(() => {
-        sheet.replaceSync('.disallowed {}');
-      }, /Modification is disallowed/);
-
-      const resolved = await promise;
-      assert.strictEqual(resolved, sheet);
+      // README deviation: parse via replaceSync on this turn, so cssRules is already set
+      // and replaceSync is allowed again (no in-flight disallow-modification lock).
       assert.strictEqual(sheet.cssRules.length, 1);
       assert.strictEqual((sheet.cssRules[0] as CSSStyleRule).selectorText, '.async-test');
 
-      // Now modification is allowed again
       sheet.replaceSync('.allowed {}');
       assert.strictEqual((sheet.cssRules[0] as CSSStyleRule).selectorText, '.allowed');
+
+      const resolved = await promise;
+      assert.strictEqual(resolved, sheet);
     });
 
     it('rejects replace on non-constructed stylesheets', async () => {

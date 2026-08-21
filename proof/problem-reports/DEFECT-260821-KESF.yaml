@@ -1,0 +1,57 @@
+schema_version: 1
+id: DEFECT-260821-KESF
+title: CSSStyleValue.parse invalid object-position returned CSSStyleValue instead of TypeError
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: invalid_parse_swallowed
+description: |
+    css-typed-om-1 parse(property, cssText) must throw TypeError when cssText is not valid
+    for the property. POSITION_PROPERTIES short-circuited tryParsePosition failure into a
+    generic CSSStyleValue. Product fix: throw TypeError from _parseAll and createValueFromTokens
+    when tryParsePosition returns null. Sibling color properties already threw via CSSColorValue.parse.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: 7AKJ/HGFK named the throw; the object-position invalid partition was unwitnessed.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-7AKJ
+        - SYS-REQ-260821-HGFK
+    affected_code:
+        - src/typed-om/values/style-value-parser.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - SW-REQ-260821-7AKJ
+    - SYS-REQ-260821-HGFK
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-7AKJ
+        - SYS-REQ-260821-HGFK
+    added_obligations:
+        - requirement: SW-REQ-260821-7AKJ
+          obligation_class: error_handling
+    regression_tests:
+        - "tests/typed-om-position.test.ts:CSSPositionValue invalid position syntax throws TypeError"
+        - "proof/reproducers/KI-3-object-position-parse.ts:KI-3: invalid object-position throws TypeError"
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-7AKJ
+          witness: "invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE"
+        - requirement: SYS-REQ-260821-HGFK
+          witness: "invalid_typed_input=T, parse_throws=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-3.

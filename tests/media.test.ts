@@ -14,12 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Verifies: SYS-REQ-260821-5283, SW-REQ-260821-W8S1, INT-REQ-260821-MZW3
 import { test } from 'node:test';
 import assert from 'node:assert';
 import { Parser } from '../src/parser.ts';
 import { tokenize } from '../src/tokenizer.ts';
 import { CSSMediaRule } from '../src/index.ts';
 
+// SYS-REQ-260821-5283:error_handling:nominal
+// SW-REQ-260821-W8S1:error_handling:nominal
 test('MediaList behavior', () => {
   const css = '@media screen, print { body { color: red; } }';
   const tokens = tokenize(css);
@@ -119,6 +122,8 @@ test('Inconsistent media range operators (100px < width > 200px) preserved in ge
 
 import { MediaParser, serializeMediaQuery } from '../src/MediaParser.ts';
 
+// SYS-REQ-260821-5283:error_handling:negative
+// SW-REQ-260821-W8S1:error_handling:negative
 test('Media query list error handling: invalid queries are replaced with "not all"', () => {
   // Spec example 1 (general enclosed parenthesized):
   const queries1 = MediaParser.parse('(example, all,), speech').map(serializeMediaQuery);
@@ -134,9 +139,12 @@ test('Media query list error handling: invalid queries are replaced with "not al
 });
 
 test('Media query list error handling: unclosed blocks', () => {
+  // mediaqueries-4 § 3.2 #error-handling: a query that does not match the grammar
+  // (unclosed () / {}) is replaced by not all. css-syntax-3 recovers the tokens at EOF,
+  // but that recovered form must not be accepted as <general-enclosed>.
   const queries = MediaParser.parse('(example, speech { body { color: red; } }').map(serializeMediaQuery);
   assert.strictEqual(queries.length, 1);
-  assert.strictEqual(queries[0], '(example, speech {body {color: red;}})');
+  assert.strictEqual(queries[0], 'not all');
   assert.strictEqual(MediaParser.evaluate(queries[0]), false);
 });
 

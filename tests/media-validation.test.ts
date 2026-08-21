@@ -64,3 +64,11 @@ test('MediaParser: Validate media feature values and evaluation', () => {
   assert.strictEqual(MediaParser.evaluate('(unknown-feature)', env), false);
 });
 
+test('MediaParser: unbalanced parentheses serialize as not all', () => {
+  assert.deepEqual(MediaParser.parse('((').map(serializeMediaQuery), ['not all']);
+  assert.deepEqual(MediaParser.parse('(').map(serializeMediaQuery), ['not all']);
+  assert.deepEqual(MediaParser.parse('screen, ((').map(serializeMediaQuery), ['screen', 'not all']);
+  assert.deepEqual(MediaParser.parse('&test').map(serializeMediaQuery), ['not all']);
+  assert.deepEqual(MediaParser.parse('(color)').map(serializeMediaQuery), ['(color)']);
+});
+

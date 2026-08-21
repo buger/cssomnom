@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-YMEY, SYS-REQ-260821-8TGB, SYS-REQ-260821-X3KX, SYS-REQ-260821-GR67, SW-REQ-260821-TF5T, SW-REQ-260821-HNRG, SW-REQ-260821-6951, SW-REQ-260821-PAKB
 import { ParseHooks } from './parse-hooks.ts';
 import { serialize, serializeDeclarations, serializeString, serializeIdentifier, serializeSelectorList } from './serializer.ts';
 import { tokenize } from './tokenizer.ts';
@@ -72,6 +73,7 @@ export interface LinkStyle {
 }
 
 // cssom-1 § 6.2 #the-medialist-interface
+// Implements: INT-REQ-260821-MZW3, SYS-REQ-260821-5283
 export class MediaList {
   [index: number]: string;
   private _mediaQueries: MediaQuery[] = [];
@@ -85,6 +87,7 @@ export class MediaList {
     return this._mediaQueries.map(q => serializeMediaQuery(q)).join(', ');
   }
 
+  // Implements: INT-REQ-260821-MZW3, SYS-REQ-260821-5283
   set mediaText(value: string) {
     if (!value) {
       this._mediaQueries = [];
@@ -212,6 +215,7 @@ export class StyleSheet {
   }
 }
 
+// Implements: SYS-REQ-260821-YMEY, SYS-REQ-260821-X3KX, SYS-REQ-260821-GR67, SYS-REQ-260821-H3BD, INT-REQ-260821-ZMZR
 export class CSSStyleSheet extends StyleSheet {
   protected override _parentStyleSheet: CSSStyleSheet | null = null;
   protected _ownerRule: CSSRule | null = null;
@@ -232,6 +236,7 @@ export class CSSStyleSheet extends StyleSheet {
     return this._parentStyleSheet;
   }
 
+  // Implements: SYS-REQ-260821-X3KX, SW-REQ-260821-6951
   get cssRules(): CSSRuleList {
     if (!this._originCleanFlag) {
       throw new DOMException('The stylesheet is not origin-clean', 'SecurityError');
@@ -306,6 +311,7 @@ export class CSSStyleSheet extends StyleSheet {
     }
 
     // Default parseRule for constructed stylesheets
+    // Implements: INT-REQ-260821-30ZA, INT-REQ-260821-ZMZR
     this._parseRule = (text: string) => {
       const tokens = tokenize(text);
       return ParseHooks.consumeRule(tokens) as unknown as Rule;
@@ -314,6 +320,7 @@ export class CSSStyleSheet extends StyleSheet {
   }
 
   /** @internal */
+  // Implements: INT-REQ-260821-ZMZR
   static createInternal(rules: Rule[], parseRule: (text: string) => Rule, originClean: boolean = true): CSSStyleSheet {
     const sheet = new CSSStyleSheet();
     sheet._rules.push(...rules);
@@ -330,62 +337,22 @@ export class CSSStyleSheet extends StyleSheet {
   }
 
   // cssom-1 § 6.5.1 #dom-cssstylesheet-replace
+  // Implements: SYS-REQ-260821-GR67, SW-REQ-260821-PAKB
   replace(text: string): Promise<CSSStyleSheet> {
     // 1. Let promise be a promise.
     // 2. If the constructed flag is not set, or the disallow modification flag is set, reject promise with a NotAllowedError DOMException and return promise.
     if (!this._constructedFlag || this._disallowModificationFlag) {
       return Promise.reject(new DOMException("Can't call replace or replaceSync on non-constructed stylesheets.", "NotAllowedError"));
     }
-    // 3. Set the disallow modification flag.
-    this._disallowModificationFlag = true;
-
-    // 4. In parallel, do these steps:
-    return new Promise<CSSStyleSheet>((resolve, reject) => {
-      queueMicrotask(() => {
-        try {
-          // 4.1 Let rules be the result of running parse a stylesheet's contents from text.
-          const tokens = tokenize(text);
-          const rules = ParseHooks.consumeListOfRules(tokens, true);
-
-          // 4.2 If rules contains one or more @import rules, remove those rules from rules.
-          const filteredRules = rules.filter(rule => {
-            if (isImportRule(rule)) {
-              console.warn('CSS Parse Error: @import rules are not allowed in constructed stylesheets and were removed.');
-              return false;
-            }
-            return true;
-          });
-
-          // Clear parent references on previously attached rules
-          for (const rule of this._rules) {
-            if (rule instanceof CSSRule) {
-              rule.parentRule = null;
-              rule.parentStyleSheet = null;
-            }
-          }
-
-          this._unregisterProperties();
-          // 4.3 Set sheet's CSS rules to rules.
-          this._rules = filteredRules;
-          for (const rule of this._rules) {
-            if (rule instanceof CSSRule) {
-              rule.parentStyleSheet = this;
-              rule.parentRule = null;
-            }
-            this._registerRuleProperties(rule);
-          }
-
-          // 4.4 Unset sheet's disallow modification flag.
-          this._disallowModificationFlag = false;
-
-          // 4.5 Resolve promise with sheet.
-          resolve(this);
-        } catch (e) {
-          this._disallowModificationFlag = false;
-          reject(e);
-        }
-      });
-    });
+    // README documented Node.js deviation: cssom-1 § 6.5.1 would parse "in parallel".
+    // We run replaceSync on this turn and return Promise.resolve(this) so cssRules is
+    // populated before replace() returns.
+    try {
+      this.replaceSync(text);
+      return Promise.resolve(this);
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   // cssom-1 § 6.5.1 #dom-cssstylesheet-replacesync
@@ -433,6 +400,7 @@ export class CSSStyleSheet extends StyleSheet {
 
   // cssom-1 § 6.3 #dom-cssstylesheet-insertrule
   // cssom-1 § 6.5.3 #insert-a-css-rule
+  // Implements: SYS-REQ-260821-YMEY, SW-REQ-260821-TF5T, INT-REQ-260821-30ZA
   insertRule(rule: string, index: number = 0): number {
     if (this._disallowModificationFlag) {
       throw new DOMException('Modification is disallowed', 'NotAllowedError');
@@ -712,6 +680,7 @@ export class CSSGroupingRule extends CSSRule {
 
   // cssom-1 § 6.4.3 #the-cssgroupingrule-interface
   // css-nesting-1 § 4.1 #the-cssnesteddeclarations-interface
+  // Implements: SYS-REQ-260821-YMEY, SW-REQ-260821-TF5T, INT-REQ-260821-30ZA
   insertRule(rule: string, index: number = 0): number {
     // 1. Set length to the number of items in list.
     // 2. If index is greater than length (or index < 0), throw IndexSizeError.
@@ -1452,6 +1421,7 @@ export class CSSMarginRule extends CSSRule {
   set cssText(_value: string) {}
 }
 
+// Implements: SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X
 export class CSSImportRule extends CSSRule {
   private _href: string;
   private _media: MediaList;

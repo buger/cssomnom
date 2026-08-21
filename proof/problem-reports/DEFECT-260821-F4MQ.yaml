@@ -1,0 +1,59 @@
+schema_version: 1
+id: DEFECT-260821-F4MQ
+title: CSS.registerProperty after @property skipped InvalidModificationError
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: duplicate_register_skips_ime
+description: |
+    css-properties-values-api-1 registerProperty must throw InvalidModificationError when the
+    name is already registered, including names introduced by @property. PropertyRegistry.register
+    only threw when existing.origin === 'js'. Product fix: JS origin always throws IME if the
+    name exists; CSS origin is ignored when the name is already registered (JS wins; earlier CSS wins).
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: V5GA/EGCP named IME on duplicate JS register; the CSS-then-JS partition was unwitnessed.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-V5GA
+        - SYS-REQ-260821-EGCP
+    affected_code:
+        - src/PropertyRegistry.ts
+        - src/CSSOM.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - SW-REQ-260821-V5GA
+    - SYS-REQ-260821-EGCP
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-V5GA
+        - SYS-REQ-260821-EGCP
+    added_obligations:
+        - requirement: SW-REQ-260821-V5GA
+          obligation_class: error_handling
+    regression_tests:
+        - "tests/register-property.test.ts:CSS.registerProperty: throws InvalidModificationError after @property of the same name"
+        - "tests/register-property.test.ts:later @property of an already-registered name is ignored"
+        - "proof/reproducers/KI-4-register-after-at-property.ts:KI-4: JS register after @property throws InvalidModificationError"
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-V5GA
+          witness: "duplicate_js_register=T, invalid_modification_error=T => TRUE"
+        - requirement: SYS-REQ-260821-EGCP
+          witness: "bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-4.

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-HGFK, SYS-REQ-260821-Y6R3, SW-REQ-260821-7AKJ, SW-REQ-260821-E5D5
 
 import type { ComponentValue, IdentToken, CSSFunction } from '../../types.ts';
 import { tokenize } from '../../tokenizer.ts';
@@ -104,6 +105,8 @@ function createValueFromTokens(values: ComponentValue[], property?: string): CSS
   if (property && POSITION_PROPERTIES.has(property.toLowerCase())) {
     const posVal = tryParsePosition(trimmed, property);
     if (posVal) return posVal;
+    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue / § 3.3 #positionvalue-objects
+    throw new TypeError(`Invalid <position> value for property '${property}'`);
   }
 
   if (trimmed.length === 1) {
@@ -187,7 +190,8 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
   if (POSITION_PROPERTIES.has(propLower)) {
     const posVal = tryParsePosition(trimmed, property);
     if (posVal) return [posVal];
-    return [new CSSStyleValue(css.trim(), privateToken)];
+    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue / § 3.3 #positionvalue-objects
+    throw new TypeError(`Invalid value for property '${property}': '${css}'`);
   }
 
   if (propLower === 'transform') {
@@ -371,6 +375,7 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
   return results;
 }
 
+// Implements: SYS-REQ-260821-HGFK, SW-REQ-260821-7AKJ, INT-REQ-260821-9SGA
 export function parseStyleValue(property: string, css: string): CSSStyleValue {
   if (arguments.length < 2) {
     throw new TypeError("Failed to execute 'parse' on 'CSSStyleValue': 2 arguments required, but only " + arguments.length + " present.");

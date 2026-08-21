@@ -1,0 +1,61 @@
+schema_version: 1
+id: DEFECT-260821-H3KB
+title: Unbalanced media query (( serialized as (()) instead of not all
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: invalid_mq_not_not_all
+description: |
+    mediaqueries-4 maps a query that does not match the grammar to not all. MediaParser
+    recovered unbalanced (( via css-syntax-3 EOF auto-close as general-enclosed '(())'.
+    Product fix: mark unclosed simple-blocks and functions in the parser, and treat any
+    query containing an unclosed construct as invalid so serializeMediaQuery emits not all.
+    Balanced general-enclosed (example, all,) is unchanged.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: W8S1/5283 named not-all serialization; the unbalanced-paren partition was unwitnessed.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-W8S1
+        - SYS-REQ-260821-5283
+    affected_code:
+        - src/MediaParser.ts
+        - src/parser.ts
+        - src/types.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - SW-REQ-260821-W8S1
+    - SYS-REQ-260821-5283
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-W8S1
+        - SYS-REQ-260821-5283
+    added_obligations:
+        - requirement: SW-REQ-260821-W8S1
+          obligation_class: error_handling
+    regression_tests:
+        - "tests/media-validation.test.ts:MediaParser: unbalanced parentheses serialize as not all"
+        - "tests/media.test.ts:Media query list error handling: unclosed blocks"
+        - "proof/reproducers/KI-5-media-unbalanced.ts:KI-5: unbalanced (( serializes as not all"
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-W8S1
+          witness: "media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=T => TRUE"
+        - requirement: SYS-REQ-260821-5283
+          witness: "media_query_invalid=T, serialized_as_not_all=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-5.

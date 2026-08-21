@@ -1,0 +1,58 @@
+schema_version: 1
+id: DEFECT-260821-QHWP
+title: CSSStyleSheet.replace parsed in queueMicrotask instead of Promise.resolve after replaceSync
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: documented_sync_parse_deferred
+description: |
+    README documents a Node.js deviation: replace() runs replaceSync then Promise.resolve(this).
+    HEAD scheduled tokenize + consumeListOfRules in queueMicrotask so cssRules was empty on return.
+    Product fix: replace() calls replaceSync on this turn and returns Promise.resolve(this).
+    replaceSync was already synchronous. Non-constructed sheets still reject without parsing.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: PAKB/GR67 named the documented deviation; the sync-parse SAT row was unwitnessed while queueMicrotask remained.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    affected_code:
+        - src/CSSOM.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - SW-REQ-260821-PAKB
+    - SYS-REQ-260821-GR67
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    added_obligations:
+        - requirement: SW-REQ-260821-PAKB
+          obligation_class: nominal
+    regression_tests:
+        - "tests/constructable-stylesheets.test.ts:sheet.replace(text) parses synchronously via replaceSync then Promise.resolve"
+        - "tests/cssom-rules-wave35.test.ts:replace() parses synchronously then returns Promise.resolve(this)"
+        - "proof/reproducers/KI-2-replace-sync.ts:KI-2: replace() parses synchronously"
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-PAKB
+          witness: "deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE"
+        - requirement: SYS-REQ-260821-GR67
+          witness: "deviation_applies=T, documented_deviation_honored=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-2.

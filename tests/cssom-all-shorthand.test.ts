@@ -64,6 +64,28 @@ describe('CSSOM: all Shorthand Property Expansion & Contraction (CSSOM § 6.4.3 
     assert.strictEqual(style.getPropertyValue('--custom'), '10px');
   });
 
+  it('invalid all after stored var(--x) is a no-op', () => {
+    const style = new CSSStyleDeclaration();
+    style.setProperty('all', 'var(--x)');
+    assert.strictEqual(style.getPropertyValue('all'), 'var(--x)');
+    assert.strictEqual(style.cssText.trim(), 'all: var(--x);');
+
+    style.setProperty('all', 'not-a-css-wide-keyword');
+
+    assert.strictEqual(style.getPropertyValue('all'), 'var(--x)');
+    assert.strictEqual(style.cssText.trim(), 'all: var(--x);');
+  });
+
+  it('invalid all after env() stored all is a no-op', () => {
+    const style = new CSSStyleDeclaration();
+    style.setProperty('all', 'env(safe-area-inset-top)');
+    assert.strictEqual(style.getPropertyValue('all'), 'env(safe-area-inset-top)');
+
+    style.setProperty('all', 'nope');
+
+    assert.strictEqual(style.getPropertyValue('all'), 'env(safe-area-inset-top)');
+  });
+
   it('handles all shorthand with CSSStyleSheet and insertRule', () => {
     const sheet = new CSSStyleSheet();
     sheet.insertRule('.foo { all: revert; width: 50px; }');

@@ -1,0 +1,52 @@
+schema_version: 1
+id: DEFECT-260821-NYAR
+title: toParserRule mapped CSSOM type-0 at-rules to CSSParserRawRule
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: adapter_type_zero_fallback
+description: |
+    parser-api toParserRule promoted numeric CSSRule.type values that were not 0, 1, or 17
+    into CSSParserAtRule. Modern at-rules use type 0 (CSSLayerStatementRule, CSSLayerBlockRule,
+    CSSContainerRule, CSSScopeRule, CSSStartingStyleRule, …). parseStylesheetSync('@layer foo;')
+    therefore returned CSSParserRawRule. Product fix: extract @-name from cssText for numeric
+    CSSOM at-rules including type 0, recurse into cssRules. CSSNestedDeclarations (type 0,
+    cssText not starting with @) still falls through.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: WTPD named parseStylesheetSync AST adaptation; the type-0 @layer/@container partition was unwitnessed.
+impact_analysis:
+    affected_requirements:
+        - INT-REQ-260821-WTPD
+    affected_code:
+        - src/parser-api.ts
+        - src/CSSOM.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - INT-REQ-260821-WTPD
+hardening:
+    strengthened_requirements:
+        - INT-REQ-260821-WTPD
+    regression_tests:
+        - "tests/parser-api.test.ts:parseStylesheetSync adapts type-0 @layer and @container to CSSParserAtRule"
+        - "proof/reproducers/KI-6-parser-api-type0.ts:KI-6: type-0 at-rules adapt to CSSParserAtRule"
+    mcdc_witnesses:
+        - requirement: INT-REQ-260821-WTPD
+          witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-6.

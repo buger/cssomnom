@@ -14,12 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Verifies: SYS-REQ-260821-NGJH, SYS-REQ-260821-KA02, SYS-REQ-260821-SMW6, SYS-REQ-260821-RAAM, SW-REQ-260821-MZ8P, SW-REQ-260821-2Z0N, SW-REQ-260821-HW77
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { CSS } from '../src/index.ts';
 import { CSSParserAtRule, CSSParserDeclaration, CSSParserQualifiedRule, CSSParserFunction, CSSParserToken } from '../src/parser-api.ts';
 
 describe('CSS Parser API', () => {
+    // SYS-REQ-260821-NGJH:nominal:nominal
+    // SW-REQ-260821-MZ8P:nominal:nominal
+    // SYS-REQ-260821-RAAM:nominal:nominal
     test('CSS.parseStylesheet', async () => {
         const css = '@media all { div { color: red; } }';
         const rules = await CSS.parseStylesheet(css);
@@ -33,6 +37,32 @@ describe('CSS Parser API', () => {
         assert.ok(atRule.body?.[0] instanceof CSSParserQualifiedRule);
     });
 
+    test('parseStylesheetSync adapts type-0 @layer and @container to CSSParserAtRule', () => {
+        const layer = CSS.parseStylesheetSync('@layer foo;');
+        assert.strictEqual(layer.length, 1);
+        assert.ok(layer[0] instanceof CSSParserAtRule);
+        assert.strictEqual((layer[0] as CSSParserAtRule).name, 'layer');
+
+        const layerBlock = CSS.parseStylesheetSync('@layer foo { .x { color: red; } }');
+        assert.strictEqual(layerBlock.length, 1);
+        assert.ok(layerBlock[0] instanceof CSSParserAtRule);
+        const layerAt = layerBlock[0] as CSSParserAtRule;
+        assert.strictEqual(layerAt.name, 'layer');
+        assert.ok(layerAt.body?.[0] instanceof CSSParserQualifiedRule);
+
+        const container = CSS.parseStylesheetSync('@container (min-width: 1px) { .x { color: red; } }');
+        assert.strictEqual(container.length, 1);
+        assert.ok(container[0] instanceof CSSParserAtRule);
+        const containerAt = container[0] as CSSParserAtRule;
+        assert.strictEqual(containerAt.name, 'container');
+        assert.ok(containerAt.body?.[0] instanceof CSSParserQualifiedRule);
+
+        const scope = CSS.parseStylesheetSync('@scope (.a) { .x { color: red; } }');
+        assert.ok(scope[0] instanceof CSSParserAtRule);
+        assert.strictEqual((scope[0] as CSSParserAtRule).name, 'scope');
+        assert.ok((scope[0] as CSSParserAtRule).body?.[0] instanceof CSSParserQualifiedRule);
+    });
+
     test('CSS.parseStylesheet (Async)', async () => {
         const css = 'div { color: blue; }';
         const rules = await CSS.parseStylesheet(css);
@@ -40,6 +70,8 @@ describe('CSS Parser API', () => {
         assert.ok(rules[0] instanceof CSSParserQualifiedRule);
     });
 
+    // SYS-REQ-260821-KA02:error_handling:nominal
+    // SW-REQ-260821-2Z0N:error_handling:nominal
     test('CSS.parseRule', () => {
         const css = 'div { color: green; }';
         const rule = CSS.parseRule(css);
@@ -59,6 +91,8 @@ describe('CSS Parser API', () => {
         assert.strictEqual((rule as CSSParserAtRule).name, 'media');
     });
 
+    // SYS-REQ-260821-KA02:error_handling:negative
+    // SW-REQ-260821-2Z0N:error_handling:negative
     test('CSS.parseRule with trailing garbage throws SyntaxError', () => {
         const css = 'div { color: green; } trailing garbage';
         assert.throws(() => {

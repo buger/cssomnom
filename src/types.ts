@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-7521, SYS-REQ-260821-KV30
 import type { CSSStyleDeclaration } from './CSSStyleDeclaration.ts';
 import type { StylePropertyMapReadOnly } from './typed-om.ts';
 
@@ -171,12 +172,16 @@ export interface SimpleBlock {
   type: 'simple-block';
   associatedToken: Token;
   value: ComponentValue[];
+  /** Set when css-syntax-3 consume-simple-block hits EOF before the mirror token. */
+  unclosed?: boolean;
 }
 
 export interface CSSFunction {
   type: 'function';
   name: string;
   value: ComponentValue[];
+  /** Set when css-syntax-3 consume-function hits EOF before ')'. */
+  unclosed?: boolean;
 }
 
 export interface Declaration {

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-5283, SW-REQ-260821-W8S1, INT-REQ-260821-MZW3
 import { tokenize } from './tokenizer.ts';
 import { Parser } from './parser.ts';
 import { serialize, getMirrorToken, serializeIdentifier } from './serializer.ts';
@@ -29,10 +30,25 @@ import {
   FEATURE_ALLOWED_IDENTS
 } from './data/gen/media-features.ts';
 
+function hasUnclosedConstruct(values: ComponentValue[]): boolean {
+  for (const v of values) {
+    if (v.type === 'simple-block') {
+      if (v.unclosed) return true;
+      if (hasUnclosedConstruct(v.value)) return true;
+    } else if (v.type === 'function' && Array.isArray(v.value)) {
+      const fn = v as CSSFunction;
+      if (fn.unclosed) return true;
+      if (hasUnclosedConstruct(fn.value)) return true;
+    }
+  }
+  return false;
+}
+
 // mediaqueries-4 § 2 #structure
 // mediaqueries-4 § 3 #media-types
 // mediaqueries-4 § 4 #evaluating-features
 // mediaqueries-5 § 2 #syntax
+// Implements: SYS-REQ-260821-5283, SW-REQ-260821-W8S1, INT-REQ-260821-MZW3
 export class MediaParser {
   /**
    * Parse a media query list string into an array of normalized media queries.
@@ -40,6 +56,7 @@ export class MediaParser {
    * // mediaqueries-4 § 2.1 #mq-syntax
    * // mediaqueries-4 § 3.2 #evaluating-mq-list
    */
+  // Implements: SYS-REQ-260821-5283, SW-REQ-260821-W8S1, INT-REQ-260821-MZW3
   public static parse(mediaText: string): MediaQuery[] {
     if (!mediaText || mediaText.trim() === '') {
       return [];
@@ -91,6 +108,18 @@ export class MediaParser {
   private static normalizeAndValidate(values: ComponentValue[]): MediaQuery {
     const filtered = values.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
     if (filtered.length === 0) {
+      return {
+        type: 'media-query',
+        invalid: true,
+        tokens: values
+      };
+    }
+
+    // mediaqueries-4 § 3.2 #error-handling: a query that does not match the grammar
+    // (including unclosed () / functions recovered by css-syntax-3 at EOF) is `not all`.
+    // Canonical re-serialization would otherwise re-close `((` as `(())` and accept it
+    // as <general-enclosed>.
+    if (hasUnclosedConstruct(filtered)) {
       return {
         type: 'media-query',
         invalid: true,
@@ -789,6 +818,7 @@ export const DEFAULT_MEDIA_ENV: MediaEnvironment = {
 
 export type EvalResult = boolean | 'unknown';
 
+// Implements: SYS-REQ-260821-5283, SW-REQ-260821-W8S1
 export function serializeMediaQuery(query: MediaQuery): string {
   if (query.invalid) return 'not all';
 

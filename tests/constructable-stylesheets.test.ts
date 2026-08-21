@@ -46,6 +46,8 @@ describe('Constructable CSSStyleSheet', () => {
     assert.strictEqual(sheet.disabled, false);
   });
 
+  // SYS-REQ-260821-GR67:nominal:nominal
+  // SW-REQ-260821-PAKB:nominal:nominal
   test('sheet.replaceSync(text)', () => {
     const sheet = new CSSStyleSheet();
     sheet.replaceSync('div { color: red; }');
@@ -60,11 +62,16 @@ describe('Constructable CSSStyleSheet', () => {
     assert.strictEqual(sheet.cssRules[0].cssText, 'span { color: blue; }');
   });
 
-  test('sheet.replace(text) executes asynchronously and updates rules', async () => {
+  test('sheet.replace(text) parses synchronously via replaceSync then Promise.resolve', async () => {
     const sheet = new CSSStyleSheet();
     const promise = sheet.replace('p { color: green; }');
-    assert.strictEqual(sheet.cssRules.length, 0, 'sheet should not have rules updated before promise resolution');
-    await promise;
+    assert.ok(promise instanceof Promise);
+    // README: Node.js deviation from cssom-1 § 6.5.1 "in parallel" — cssRules is populated
+    // on this turn, before the returned promise is awaited.
+    assert.strictEqual(sheet.cssRules.length, 1, 'sheet should have rules updated before promise resolution');
+    assert.strictEqual(sheet.cssRules[0].cssText, 'p { color: green; }');
+    const resolved = await promise;
+    assert.strictEqual(resolved, sheet);
     assert.strictEqual(sheet.cssRules.length, 1);
     assert.strictEqual(sheet.cssRules[0].cssText, 'p { color: green; }');
   });

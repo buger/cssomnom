@@ -1,0 +1,60 @@
+schema_version: 1
+id: DEFECT-260821-XZAS
+title: 'setProperty(''all'') mutate-before-validate dropped stored all: var(--x) on failed expand'
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: shorthand_mutate_before_validate
+description: |
+    CSSStyleDeclaration.setProperty deleted any stored all declaration before expandAll.
+    all: var(--x) stores all itself; a later invalid setProperty then emptied cssText.
+    Product fix: delete stored all only after expandAll succeeds. Failed expand is a no-op.
+    Sibling SHORTHANDS already expand-then-return without pre-deleting the shorthand name.
+    env() stored-all is the same path (hasVar includes env().
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: HNRG/8TGB named the no-op guarantee; the all+var partition was unwitnessed until KI-1.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    affected_code:
+        - src/CSSStyleDeclaration.ts
+        - src/shorthands.ts
+disposition:
+    status: open
+    owner: agent:grok-4.6
+    next_action: Flip to covered_by_requirement after obligation/review stamps; product fix and regressions have landed.
+    review_due: "2026-09-21"
+affects:
+    - SW-REQ-260821-HNRG
+    - SYS-REQ-260821-8TGB
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    added_obligations:
+        - requirement: SW-REQ-260821-HNRG
+          obligation_class: error_handling
+    regression_tests:
+        - "tests/cssom-all-shorthand.test.ts:invalid all after stored var(--x) is a no-op"
+        - "tests/cssom-all-shorthand.test.ts:invalid all after env() stored all is a no-op"
+        - "proof/reproducers/KI-1-setproperty-all.ts:KI-1: invalid all is a no-op"
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-HNRG
+          witness: "declaration_unchanged=T, value_validation_fails=T => TRUE"
+        - requirement: SYS-REQ-260821-8TGB
+          witness: "invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE"
+history:
+    - at: "2026-08-21T20:13:40Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T20:15:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-1.

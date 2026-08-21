@@ -1,0 +1,80 @@
+id: KI-3
+title: CSSStyleValue.parse('object-position', invalid) returns CSSStyleValue instead of throwing
+description: |
+    CSS Typed OM Level 1 parse(property, cssText) must throw TypeError when cssText is not a valid value for the property. style-value-parser.ts short-circuits POSITION_PROPERTIES: tryParsePosition failure returns a generic CSSStyleValue instead of throwing. CSSStyleValue.parse('object-position', 'not-a-position') therefore succeeds. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+affected_requirements:
+    - SW-REQ-260821-7AKJ
+    - SYS-REQ-260821-HGFK
+commands:
+    - node --test tests/typed-om-position.test.ts
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts
+reproduction_steps:
+    - Import parser.ts then CSSStyleValue from typed-om.ts.
+    - Call CSSStyleValue.parse('object-position', 'not-a-position').
+    - Observe a CSSStyleValue is returned (toString 'not-a-position') instead of TypeError.
+    - 'Intended contract: invalid <position> values throw TypeError.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: CSSStyleValue.parse throws TypeError when tryParsePosition fails for POSITION_PROPERTIES.
+remediation: Landed in src/typed-om/values/style-value-parser.ts. Class-closure DEFECT-260821-KESF.
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: fixed
+history:
+    - at: "2026-08-21T21:00:00Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T17:22:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-reproducer-command
+    - at: "2026-08-21T20:15:20Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,set-status=fixed,add-command
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS Typed OM library correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts
+        real_infrastructure: constructs CSSStyleValue.parse on the public API (not a mock).
+        control_test / operational_path_verified: runner asserts invalid object-position must throw TypeError (exit 1 while the hole is present); valid object-position 'left' still parses.
+        current_deployment_relevance: hole is on HEAD CSSStyleValue.parse POSITION_PROPERTIES fallback.
+        honest_severity / no_inflation: medium correctness matches missing TypeError, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended throw so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is a missing TypeError on invalid object-position, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleValue.parse can hit the hole. Rule 4 is Web3-only.
+template_class: invalid_parse_swallowed
+isomorphic_sites:
+    - src/typed-om/values/style-value-parser.ts:188 #fixed
+    - src/typed-om/values/style-value-parser.ts:189 #fixed
+    - src/typed-om/values/style-value-parser.ts:190 #fixed
+    - src/typed-om/values/style-value-parser.ts:191 #fixed
+dedup_armor: |
+    Only POSITION_PROPERTIES (object-position, background-position, …) return a generic CSSStyleValue when tryParsePosition fails. Color properties throw TypeError via matchesSyntax / CSSColorValue.parse. Do not merge this KI into a generic CSSStyleValue.parse defect without a second live hole.

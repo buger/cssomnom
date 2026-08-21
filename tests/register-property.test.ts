@@ -14,11 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Verifies: SYS-REQ-260821-EGCP, SW-REQ-260821-PD6M, SW-REQ-260821-V5GA, INT-REQ-260821-ZP03
 import { test } from 'node:test';
-import assert from 'node:assert';
+import assert from 'node:assert/strict';
+import { parse } from '../src/parser.ts';
 import { CSS } from '../src/typed-om.ts';
 import { PropertyRegistry } from '../src/PropertyRegistry.ts';
 
+// SYS-REQ-260821-EGCP:error_handling:nominal
+// SYS-REQ-260821-EGCP:error_handling:negative
+// SW-REQ-260821-PD6M:error_handling:nominal
+// SW-REQ-260821-PD6M:error_handling:negative
 test('CSS.registerProperty: validation', () => {
   PropertyRegistry.clear();
 
@@ -123,6 +129,8 @@ test('CSS.registerProperty: throws TypeError on missing inherits', () => {
   }, { name: 'TypeError' });
 });
 
+// SW-REQ-260821-V5GA:error_handling:nominal
+// SW-REQ-260821-V5GA:error_handling:negative
 test('CSS.registerProperty: throws InvalidModificationError on duplicate registration', () => {
   PropertyRegistry.clear();
 
@@ -139,6 +147,35 @@ test('CSS.registerProperty: throws InvalidModificationError on duplicate registr
       inherits: false
     });
   }, { name: 'InvalidModificationError' });
+});
+
+test('CSS.registerProperty: throws InvalidModificationError after @property of the same name', () => {
+  PropertyRegistry.clear();
+  const sheet = parse('@property --from-at-property { syntax: "*"; inherits: false; }');
+  assert.equal(sheet.cssRules.length, 1);
+  assert.ok(PropertyRegistry.get('--from-at-property'));
+
+  assert.throws(() => {
+    CSS.registerProperty({
+      name: '--from-at-property',
+      syntax: '*',
+      inherits: false
+    });
+  }, { name: 'InvalidModificationError' });
+
+  PropertyRegistry.clear();
+});
+
+test('later @property of an already-registered name is ignored', () => {
+  PropertyRegistry.clear();
+  parse('@property --css-then-css { syntax: "*"; inherits: false; }');
+  const first = PropertyRegistry.get('--css-then-css');
+  assert.ok(first);
+  parse('@property --css-then-css { syntax: "<color>"; inherits: true; initial-value: red; }');
+  const second = PropertyRegistry.get('--css-then-css');
+  assert.equal(second?.syntax, '*');
+  assert.equal(second?.inherits, false);
+  PropertyRegistry.clear();
 });
 
 test('CSS.registerProperty: throws DOMException on invalid name', () => {

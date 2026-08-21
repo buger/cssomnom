@@ -1,0 +1,81 @@
+id: KI-4
+title: CSS.registerProperty after @property overwrites without InvalidModificationError
+description: |
+    CSS Properties and Values API registerProperty must throw InvalidModificationError when the name is already registered, including names introduced by @property. PropertyRegistry.register only throws when existing.origin === 'js'. A CSS-origin registration is overwritten by a later JS registerProperty with no throw. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+affected_requirements:
+    - SW-REQ-260821-V5GA
+    - SYS-REQ-260821-EGCP
+commands:
+    - node --test tests/register-property.test.ts
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.registerProperty
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts
+reproduction_steps:
+    - 'PropertyRegistry.clear() then parse(''@property --x { syntax: "*"; inherits: false; }'').'
+    - 'Call CSS.registerProperty({ name: ''--x'', syntax: ''*'', inherits: false }).'
+    - Observe no throw; registry origin becomes js.
+    - 'Intended contract: InvalidModificationError because the name is already registered.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: JS registerProperty throws InvalidModificationError if the name is already registered regardless of origin.
+remediation: Landed in src/PropertyRegistry.ts. Class-closure DEFECT-260821-F4MQ.
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: fixed
+history:
+    - at: "2026-08-21T21:00:00Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T17:22:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-reproducer-command
+    - at: "2026-08-21T20:15:20Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,set-status=fixed,add-command
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS Properties and Values API correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-4-register-after-at-property.ts
+        real_infrastructure: parse() registers @property then CSS.registerProperty (not a mock).
+        control_test / operational_path_verified: runner setup asserts @property stored the name (exit 2 if setup fails); intended contract is InvalidModificationError on the JS register.
+        current_deployment_relevance: hole is on HEAD PropertyRegistry.register origin gating.
+        honest_severity / no_inflation: medium correctness matches missing IME, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended throw so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is a missing InvalidModificationError, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest can hit the hole. Rule 4 is Web3-only.
+template_class: duplicate_register_skips_ime
+isomorphic_sites:
+    - src/PropertyRegistry.ts:349 #fixed
+    - src/PropertyRegistry.ts:351 #fixed
+    - src/PropertyRegistry.ts:353 #fixed
+    - src/PropertyRegistry.ts:358 #fixed
+    - src/CSSOM.ts:250 #na
+dedup_armor: |
+    Only existing.origin !== 'js' falls through to registry.set on a later JS registerProperty. The JS-then-JS path still throws InvalidModificationError. Do not merge this KI into a generic duplicate-register defect without a second live hole.

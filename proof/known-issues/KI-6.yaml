@@ -1,0 +1,84 @@
+id: KI-6
+title: toParserRule maps CSSOM type-0 at-rules to CSSParserRawRule instead of CSSParserAtRule
+description: |
+    parser-api toParserRule only promotes numeric CSSRule.type values that are not 0, 1, or 17 into CSSParserAtRule. Modern at-rules use type 0 (CSSLayerStatementRule, CSSLayerBlockRule, CSSContainerRule, CSSScopeRule, CSSStartingStyleRule, and others). parseStylesheetSync('@layer foo;') therefore returns a CSSParserRawRule fallback instead of CSSParserAtRule, and nested rules inside @layer/@container/@scope are not adapted recursively. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence, not a live ticket.
+affected_requirements:
+    - INT-REQ-260821-WTPD
+commands:
+    - node --test tests/parser-api.test.ts
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseStylesheetSync
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts
+reproduction_steps:
+    - 'Call CSS.parseStylesheetSync(''@layer foo;'') (and ''@layer foo { .x { color: red; } }'', ''@container (min-width: 1px) { .x { color: red; } }'').'
+    - Observe the top-level node is not a CSSParserAtRule (constructor name CSSParserRawRule).
+    - 'Control: CSS.parseStylesheetSync(''@media all { .x { color: red; } }'')[0] is CSSParserAtRule.'
+    - 'Intended contract: parseStylesheetSync returns CSSParserAtRule/CSSParserQualifiedRule, with nested rules adapted recursively.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: toParserRule maps CSSOM type-0 at-rules whose cssText starts with @ to CSSParserAtRule and recurses cssRules.
+remediation: Landed in src/parser-api.ts. Class-closure DEFECT-260821-NYAR.
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: fixed
+history:
+    - at: "2026-08-21T21:10:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live adapter hole: toParserRule excludes CSSRule.type === 0, so modern at-rules become CSSParserRawRule. Filed against INT-REQ-260821-WTPD MC/DC FALSE row parse_stylesheet_sync_called=T, parser_ast_adapted=F. Distinct from KI-1 (setProperty all), KI-2 (replace queueMicrotask), KI-3 (typed OM object-position), KI-4 (registerProperty after @property), and KI-5 (invalid media not-all). No product fix. No DEFECT.
+    - at: "2026-08-21T17:22:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-reproducer-command
+    - at: "2026-08-21T20:15:20Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,set-status=fixed,add-command
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS Parser API adapter correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts
+        real_infrastructure: constructs CSS.parseStylesheetSync from src/index.ts (not a mock).
+        control_test / operational_path_verified: runner setup asserts @media still adapts to CSSParserAtRule (exit 2 if setup fails).
+        current_deployment_relevance: hole is on HEAD toParserRule type !== 0 exclusion.
+        honest_severity / no_inflation: medium correctness matches RawRule fallback, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended CSSParserAtRule so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is CSSParserRawRule instead of CSSParserAtRule, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS Parser API adapter hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral adapter defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync can hit the hole. Rule 4 is Web3-only.
+template_class: adapter_type_zero_fallback
+isomorphic_sites:
+    - src/parser-api.ts:211 #fixed
+    - src/parser-api.ts:250 #na
+    - src/CSSOM.ts:1078 #fixed
+    - src/CSSOM.ts:1095 #fixed
+    - src/CSSOM.ts:1112 #fixed
+    - src/CSSOM.ts:1126 #fixed
+    - src/CSSOM.ts:1145 #fixed
+dedup_armor: |
+    Only CSSOM at-rules whose type getter returns 0 miss the toParserRule numeric at-rule branch (parser-api.ts:211 excludes type === 0) and fall through to CSSParserRawRule (parser-api.ts:250). Style rules (type 1) and legacy at-rules with non-zero type constants still adapt. Do not merge this KI into empty-stylesheet or unknown-at-rule cases.

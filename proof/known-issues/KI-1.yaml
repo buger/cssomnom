@@ -1,0 +1,95 @@
+id: KI-1
+title: setProperty('all') deletes existing all before expandAll; failed expand drops prior all
+description: |
+    CSSStyleDeclaration.setProperty deletes any existing all declaration before expandAll. A successful all:unset expands to longhands and is observably a no-op on a later failed expand. The live hole is when all itself is stored (all: var(--x) or env()): a later invalid setProperty drops cssText from "all: var(--x);" to empty. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+affected_requirements:
+    - SW-REQ-260821-HNRG
+    - SYS-REQ-260821-8TGB
+commands:
+    - node --test tests/cssom-all-shorthand.test.ts
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleDeclaration.setProperty
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts
+reproduction_steps:
+    - Construct a CSSStyleDeclaration and setProperty('all', 'var(--x)') so the all declaration is stored (not expanded to longhands).
+    - Call setProperty('all', 'not-a-css-wide-keyword') (expandAll returns null).
+    - Observe cssText and getPropertyValue('all') are empty. The prior all was deleted at CSSStyleDeclaration.ts before expand returned.
+    - 'Intended contract: invalid all is a no-op; all: var(--x) remains.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: Invalid all after stored var/env is a no-op; stored all is deleted only after expandAll succeeds.
+remediation: Landed in src/CSSStyleDeclaration.ts. Class-closure DEFECT-260821-XZAS.
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: fixed
+history:
+    - at: "2026-08-21T14:18:52Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-21T16:40:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Retracted sibling DEFECT-260821-1JGF. That report was filed in error during spec-conformance review (covered_by_known_issue parked on this KI). Live unfixed bugs stay on the KnownIssue; a DEFECT is created only after a product fix lands and the whole bug class is hardened. Reproducer tightened: all:unset is observably a no-op on failed expand; the visible drop is all: var(--x) then an invalid set.
+    - at: "2026-08-21T17:20:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Hygiene only: filled isomorphic_sites with the all-path mutate-before-validate sites (delete at src/CSSStyleDeclaration.ts:512 and :514, var/env stored-all at :520 and :533, expandAll via :522/:537, src/shorthands.ts:1913 expandAll and :2216 SHORTHANDS all). Inspected other SHORTHANDS at setProperty expand-then-return; they do not pre-delete the shorthand name, so no sibling holes were invented. Added 11-rule poc_quality: 7 true, 4 false with not_applicable reasons (quantitative_impact, untrusted_attacker, attacker_profitability, reachability_verified). Status remains open. No product fix. No DEFECT.
+    - at: "2026-08-21T19:40:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        isomorphic_sites now lists only the pre-delete of all (CSSStyleDeclaration.ts:512 and :514) and the expand that fails (shorthands.ts:1913 expandAll, :2216 SHORTHANDS['all']). Removed generic shorthand lines 520/522/533/537; those do not pre-delete the shorthand name. No product fix. No DEFECT.
+    - at: "2026-08-21T17:22:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-reproducer-command
+    - at: "2026-08-21T20:15:11Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,set-status=fixed,add-command
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS OM library correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts
+        real_infrastructure: constructs src/CSSStyleDeclaration.ts and calls public setProperty (not a mock).
+        control_test / operational_path_verified: runner setup asserts valid all: var(--x) stores cssText (exit 2 if setup fails); KI description records all:unset then invalid is observably a no-op (expanded-all path).
+        current_deployment_relevance: hole is on HEAD setProperty; live drop is all: var(--x) then invalid set emptying cssText.
+        honest_severity / no_inflation: medium correctness matches empty cssText, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended no-op so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is dropped cssText on invalid all, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleDeclaration.setProperty can hit the hole. Rule 4 is Web3-only / attacker-trust-model.
+template_class: shorthand_mutate_before_validate
+isomorphic_sites:
+    - src/CSSStyleDeclaration.ts:512 #fixed
+    - src/CSSStyleDeclaration.ts:514 #fixed
+    - src/shorthands.ts:1913 #na
+    - src/shorthands.ts:2216 #na
+dedup_armor: |
+    Only property === 'all' deletes from _declarations/_declMap before expandAll. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.

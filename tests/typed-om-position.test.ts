@@ -105,16 +105,18 @@ test('CSSPositionValue serialization', () => {
   assert.strictEqual(pos.toString(), '10px 100%');
 });
 
-test('CSSPositionValue invalid position syntax fallback', () => {
-  // Invalid 2-component position syntaxes must fall back to generic CSSStyleValue
-  const val1 = CSSStyleValue.parse('background-position', 'top 10px');
-  assert.ok(val1 instanceof CSSStyleValue);
-  assert.ok(!(val1 instanceof CSSPositionValue));
-  assert.strictEqual(val1.toString(), 'top 10px');
+test('CSSPositionValue invalid position syntax throws TypeError', () => {
+  // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: invalid <position> throws TypeError
+  assert.throws(() => {
+    CSSStyleValue.parse('background-position', 'top 10px');
+  }, TypeError);
 
-  const val2 = CSSStyleValue.parse('background-position', '10px left');
-  assert.ok(val2 instanceof CSSStyleValue);
-  assert.ok(!(val2 instanceof CSSPositionValue));
-  assert.strictEqual(val2.toString(), '10px left');
+  assert.throws(() => {
+    CSSStyleValue.parse('background-position', '10px left');
+  }, TypeError);
+
+  assert.throws(() => {
+    CSSStyleValue.parse('object-position', 'not-a-position');
+  }, TypeError);
 });
 

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-EGCP, SYS-REQ-260821-9YM3, SW-REQ-260821-PD6M, SW-REQ-260821-V5GA, SW-REQ-260821-ARC1, INT-REQ-260821-ZP03
 import { unitToBase, unitToPixels } from './data/gen/units.ts';
 import { NAMED_COLORS } from './data/gen/colors.ts';
 import { tokenize } from './tokenizer.ts';
@@ -292,7 +293,9 @@ interface PropertyDefinitionInternal extends PropertyDefinition {
 
 const registry = new Map<string, PropertyDefinitionInternal>();
 
+// Implements: SYS-REQ-260821-EGCP, SYS-REQ-260821-9YM3, INT-REQ-260821-ZP03, SW-REQ-260821-PD6M, SW-REQ-260821-V5GA, SW-REQ-260821-ARC1
 export const PropertyRegistry = {
+  // Implements: SYS-REQ-260821-EGCP, SW-REQ-260821-PD6M
   validate(definition: PropertyDefinition) {
     if (definition.name === undefined) {
       throw new TypeError('The name parameter is required.');
@@ -340,16 +343,20 @@ export const PropertyRegistry = {
     }
   },
 
+  // Implements: SYS-REQ-260821-EGCP, SW-REQ-260821-V5GA, INT-REQ-260821-ZP03
   register(definition: PropertyDefinition, origin: 'js' | 'css' = 'js') {
     this.validate(definition);
     const existing = registry.get(definition.name);
     if (existing) {
-      if (existing.origin === 'js') {
-        if (origin === 'js') {
-          throw new DOMException(`Property "${definition.name}" is already registered`, 'InvalidModificationError');
-        }
-        return; // Ignore CSS override of JS registration
+      // css-properties-values-api-1 § 3.2 #the-registerproperty-function
+      // If the name is already registered, JS registerProperty throws InvalidModificationError
+      // regardless of whether the prior registration came from JS or @property.
+      if (origin === 'js') {
+        throw new DOMException(`Property "${definition.name}" is already registered`, 'InvalidModificationError');
       }
+      // css-properties-values-api-1 § 2 #at-property-rule
+      // A later @property for an already-registered name is ignored (JS wins; earlier CSS wins).
+      return;
     }
     registry.set(definition.name, { ...definition, origin });
   },

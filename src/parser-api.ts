@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Implements: SYS-REQ-260821-NGJH, SYS-REQ-260821-KA02, SYS-REQ-260821-SMW6, SYS-REQ-260821-RAAM, SW-REQ-260821-MZ8P, SW-REQ-260821-2Z0N, SW-REQ-260821-HW77, SW-REQ-260821-3553, INT-REQ-260821-WTPD, INT-REQ-260821-ZP03
 /**
  * @fileoverview Implementation of the CSS Parser API based on the WICG draft.
  * @see https://raw.githubusercontent.com/WICG/css-parser-api/refs/heads/main/index.bs
@@ -185,6 +186,32 @@ function toParserToken(val: ComponentValue): CSSToken {
   return res;
 }
 
+function cssomAtRuleFromCssText(r: Record<string, unknown>): CSSParserAtRule | null {
+  const cssText = typeof r.cssText === 'string' ? r.cssText : '';
+  const atMatch = /^@([A-Za-z_][\w-]*)([\s\S]*)$/.exec(cssText);
+  if (!atMatch) return null;
+  const name = atMatch[1].toLowerCase();
+  const rest = atMatch[2];
+  const brace = rest.indexOf('{');
+  let preludeText: string;
+  let body: CSSParserRule[] | null;
+  if (brace === -1) {
+    preludeText = rest.replace(/;?\s*$/, '').trim();
+    body = null;
+  } else {
+    preludeText = rest.slice(0, brace).trim();
+    body = r.cssRules
+      ? Array.from(r.cssRules as Iterable<unknown>).map(toParserRule)
+      : [];
+  }
+  return new CSSParserAtRule(
+    name,
+    preludeText ? [new CSSParserToken(preludeText)] : [],
+    body
+  );
+}
+
+// Implements: SYS-REQ-260821-NGJH, SW-REQ-260821-MZ8P, INT-REQ-260821-WTPD
 function toParserRule(rule: unknown): CSSParserRule {
   const r = rule as Record<string, unknown>;
   // Handle internal AST at-rule
@@ -205,19 +232,24 @@ function toParserRule(rule: unknown): CSSParserRule {
     );
   }
 
-  // Handle CSSOM at-rules (Media, Keyframes, etc.)
-  if (typeof r.type === 'number' && r.type !== 1 && r.type !== 17 && r.type !== 0) {
-    const name = (r.name as string) || 
-                 (r.type === 4 ? 'media' : 
-                  r.type === 7 ? 'keyframes' : 
-                  r.type === 3 ? 'import' : 'unknown');
-    
-    return new CSSParserAtRule(
-      name,
-      r.media ? [new CSSParserToken((r.media as {mediaText: string}).mediaText)] : 
-               (r.prelude ? [new CSSParserToken(r.prelude as string)] : []),
-      r.cssRules ? Array.from(r.cssRules as Iterable<unknown>).map(toParserRule) : null
-    );
+  // Handle CSSOM at-rules (Media, Keyframes, type-0 layer/container/scope, …)
+  // cssom-1 § 6.4 #the-cssrule-interface: modern at-rules use type 0 (UNKNOWN_RULE).
+  if (typeof r.type === 'number' && r.type !== 1 && r.type !== 17) {
+    const fromCssText = cssomAtRuleFromCssText(r);
+    if (fromCssText) return fromCssText;
+    if (r.type !== 0) {
+      const name = (r.name as string) ||
+                   (r.type === 4 ? 'media' :
+                    r.type === 7 ? 'keyframes' :
+                    r.type === 3 ? 'import' : 'unknown');
+
+      return new CSSParserAtRule(
+        name,
+        r.media ? [new CSSParserToken((r.media as {mediaText: string}).mediaText)] :
+                 (r.prelude ? [new CSSParserToken(r.prelude as string)] : []),
+        r.cssRules ? Array.from(r.cssRules as Iterable<unknown>).map(toParserRule) : null
+      );
+    }
   }
 
   // Handle internal AST declaration
@@ -281,6 +313,7 @@ export interface CSSParserOptions {
  * Parser API Implementation
  */
 
+// Implements: SYS-REQ-260821-NGJH, SW-REQ-260821-MZ8P, INT-REQ-260821-WTPD
 export function parseStylesheetSync(css: string, options: CSSParserOptions = {}): CSSParserRule[] {
   const tokens = tokenize(css);
   const parser = new Parser(tokens, options);
@@ -306,6 +339,7 @@ export async function parseRuleList(css: CSSStringSource, options: CSSParserOpti
   return parseRuleListSync(source, options);
 }
 
+// Implements: SYS-REQ-260821-KA02, SW-REQ-260821-2Z0N
 export function parseRuleSync(css: string, options: CSSParserOptions = {}): CSSParserRule | null {
   const tokens = tokenize(css);
   const parser = new Parser(tokens, options);
@@ -317,6 +351,7 @@ export function parseRuleSync(css: string, options: CSSParserOptions = {}): CSSP
   return toParserRule(rule);
 }
 
+// Implements: SYS-REQ-260821-KA02, SW-REQ-260821-2Z0N
 export function parseRule(css: string, options: CSSParserOptions = {}): CSSParserRule | null {
   return parseRuleSync(css, options);
 }
@@ -535,6 +570,7 @@ function evalSupportsConditionValues(values: ComponentValue[]): boolean {
   }
 }
 
+// Implements: SYS-REQ-260821-SMW6, SW-REQ-260821-HW77
 export function supports(propertyOrCondition: string, value?: string): boolean {
   if (typeof value === 'string') {
     return evaluateSupportsDeclaration(propertyOrCondition, value);
@@ -560,6 +596,7 @@ export function supports(propertyOrCondition: string, value?: string): boolean {
 
 import { escape as cssEscape } from './css-escape.ts';
 
+// Implements: SYS-REQ-260821-RAAM, SW-REQ-260821-3553, SYS-REQ-260821-NGJH, SYS-REQ-260821-KA02, SYS-REQ-260821-SMW6, INT-REQ-260821-ZP03, INT-REQ-260821-WTPD
 export const CSS = {
     // Typed OM Factories
     ...CSSFactories,
