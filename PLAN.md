@@ -3153,3 +3153,26 @@ Close remaining `denial_of_service_resistant:fuzz` cells by annotating an existi
 
 - [x] Add file-level `// Implements: <existing REQ>` after the license on every `src/**/*.ts` except `src/data/gen/**` that lacked one. Reused folder IDs only (parser `HHVE`, CSSOM `6951`, typed-om `7AKJ`, cascade `FWNH`, selectors `6D9T`, serializer `YTV6`, library `1E5K`/`37RC`, geometry `JTY2`). Did not invent reqs. Did not `proof approve`.
 
+---
+
+## Phase: fuzz evidence profile provenance for 4 `:fuzz` triples
+
+`obligation_evidence_complete` remaining cells were `denial_of_service_resistant:fuzz` with triples already on `tests/css-fuzz-cssomnom.test.ts` but no execution provenance. Small `project.evidence_profiles` entry + real refresh. Did **not** `proof approve`. Did **not** waive. Did **not** lower MC/DC floors. Did **not** stamp QV2H.
+
+- [x] `project.commands.fuzz`: `node --test --test-reporter=dot tests/css-fuzz-cssomnom.test.ts` (opt-in; not default `tests_pass`).
+- [x] `project.evidence_profiles.css-fuzz`: `evidence_type: fuzz`, `command: fuzz`, `required_for: [denial_of_service_resistant]`, reqs 7521/HHVE/SBJ7/7M07 only.
+- [x] `proof evidence refresh proof/evidence/css-fuzz.yaml` re-ran that command (Node 24). `deep nesting gate against cssomnom` pass (12 ms). `validate --strict` valid.
+- [x] Full audit: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full-6.log` — Errors 0, Warnings 13. `obligation_evidence_complete` 5→1 (QV2H only). `obligation_profile_evidence_complete` 4 cells covered.
+
+---
+
+## Phase: StreamingTokenizer deep-chunk fuzz witness for QV2H
+
+Close the last `denial_of_service_resistant:fuzz` cell (`SW-REQ-260821-QV2H`) with a real `StreamingTokenizer.appendChunk`+`getTokens` carrier. Did **not** `proof approve`. Did **not** waive. Did **not** lower `code_mcdc` 100/100/100 floors.
+
+- [x] `tests/css-fuzz-cssomnom.test.ts` `StreamingTokenizer deep-chunk appendChunk+getTokens does not throw` — `genDeepNesting(DEEP_NEST_DEPTH)` closed+open, 1-char `appendChunk` pieces, drain `getTokens`, `close()`. Triple: `SW-REQ-260821-QV2H:denial_of_service_resistant:fuzz`. Node 24: pass (6 ms).
+- [x] `project.evidence_profiles.css-fuzz.requirements` now includes `SW-REQ-260821-QV2H` (honest: the new test actually drives `appendChunk`).
+- [x] `proof evidence refresh proof/evidence/css-fuzz.yaml` re-ran `project.commands.fuzz` (Node 24). `validate --strict` valid. `proof evidence explain SW-REQ-260821-QV2H` → pass / carrier QV2H.
+- [x] `obligation_evidence_complete` 1→0 (168/66 covered). `obligation_profile_evidence_complete` 5 cells covered.
+- [x] `proof req verification --propose` for 7521/HHVE/SBJ7/7M07/QV2H → `passing` (css-fuzz evidence_profile). `--auto --changed-by agent:grok-4.6` applied. Lifecycle stayed `review`.
+

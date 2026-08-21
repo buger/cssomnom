@@ -122,6 +122,11 @@ project:
             node:
                 language: ts
                 command: node --test --test-reporter=dot tests/**/*.test.ts
+        # Opt-in DoS fuzz lane (proof audit --fuzz / evidence_type: fuzz).
+        # Not on default tests_pass. Runs the annotated cssomnom css-fuzz
+        # file, including `deep nesting gate against cssomnom` and
+        # `StreamingTokenizer deep-chunk appendChunk+getTokens does not throw`.
+        fuzz: node --test --test-reporter=dot tests/css-fuzz-cssomnom.test.ts
     description: Spec-compliant CSS Object Model (CSSOM) and Typed OM parser in pure TypeScript
     catalog:
         version: 1.9.1
@@ -136,6 +141,23 @@ project:
             # never hand-annotate generated tables (orphan/trace scanners would
             # otherwise demand Implements: on regenerated files).
             - src/data/gen/**
+    # Typed fuzz provenance for denial_of_service_resistant cells annotated
+    # on tests/css-fuzz-cssomnom.test.ts. 7521/HHVE/SBJ7/7M07 ride the
+    # stylesheet parse deep-nest gate; QV2H rides StreamingTokenizer
+    # appendChunk+getTokens on the same nested CSS in pieces.
+    evidence_profiles:
+        css-fuzz:
+            evidence_type: fuzz
+            command: fuzz
+            result: proof/evidence/css-fuzz.yaml
+            required_for:
+                - denial_of_service_resistant
+            requirements:
+                - SYS-REQ-260821-7521
+                - SW-REQ-260821-HHVE
+                - SYS-REQ-260821-SBJ7
+                - SW-REQ-260821-7M07
+                - SW-REQ-260821-QV2H
     documentation:
         sources:
             - path: docs/

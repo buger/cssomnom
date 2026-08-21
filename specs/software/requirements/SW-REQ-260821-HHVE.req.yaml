@@ -56,10 +56,16 @@ obligation_hazards:
     - class: recursion_depth_bounded
       worst_case: Nested grouping-rule consume without a depth cap overflows the call stack on adversarial nesting, aborting the Node process.
       severity: high
+verification_state: passing
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
           from: draft
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6
+        - date: "2026-08-21T22:47:33Z"
+          from: verification=not_started
+          to: verification=passing
+          reason: auto-derived [not_started→passing] signals=2; review_record:REVIEW-20=present | evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing
           changed_by: agent:grok-4.6

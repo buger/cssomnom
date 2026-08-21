@@ -1,0 +1,17 @@
+schema_version: proof.evidence_profile.v1
+profile: css-fuzz
+evidence_type: fuzz
+requirements:
+    - SYS-REQ-260821-7521
+    - SW-REQ-260821-HHVE
+    - SYS-REQ-260821-SBJ7
+    - SW-REQ-260821-7M07
+    - SW-REQ-260821-QV2H
+artifact: tests/css-fuzz-cssomnom.test.ts
+command: node --test --test-reporter=dot tests/css-fuzz-cssomnom.test.ts
+status: pass
+executed_at: "2026-08-21T22:48:34Z"
+input_set:
+    - tests/css-fuzz-cssomnom.test.ts
+freshness_hashes:
+    tests/css-fuzz-cssomnom.test.ts: sha256:540e5998f23af660272741fd4093396e674d25b1b39c9af13ee90b8970b155b9

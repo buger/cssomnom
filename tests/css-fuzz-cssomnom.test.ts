@@ -26,6 +26,8 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import * as cssfuzz from '../fuzz/css-fuzz/src/index.ts';
+import { StreamingTokenizer } from '../src/streaming-tokenizer.ts';
+import type { Token } from '../src/types.ts';
 
 const ITERS = Number.parseInt(process.env.CSS_FUZZ_ITERS ?? '32', 10) || 32;
 const CRASH_DIR = 'fuzz/css-fuzz/crashes';
@@ -40,6 +42,24 @@ function recordFinding(name: string, data: Uint8Array, message: string): void {
   mkdirSync(CRASH_DIR, { recursive: true });
   writeFileSync(join(CRASH_DIR, name), data);
   writeFileSync(join(CRASH_DIR, `${name}.txt`), message);
+}
+
+/**
+ * Feed `genDeepNesting` CSS to StreamingTokenizer in pieces. QV2H's DoS
+ * cell is appendChunk+getTokens on a chunked stream, not batch tokenize().
+ * css-syntax-3 § 4 #tokenization / § 3.3 #input-preprocessing
+ */
+function drainStreamingChunks(bytes: Uint8Array): Token[] {
+  const text = cssfuzz.decodeUtf8Lossy(bytes);
+  const tokenizer = new StreamingTokenizer();
+  const drained: Token[] = [];
+  for (let i = 0; i < text.length; i++) {
+    tokenizer.appendChunk(text.slice(i, i + 1));
+    drained.push(...tokenizer.getTokens());
+  }
+  tokenizer.close();
+  drained.push(...tokenizer.getTokens());
+  return drained;
 }
 
 test('generate+mutate+no-panic against CssomnomTarget stylesheet/tokenizer/media', () => {
@@ -87,6 +107,32 @@ test('deep nesting gate against cssomnom', () => {
   const r2 = cssfuzz.deepNestingSafe('deep_open', open, (b) => target.parse(b));
   if (!r2.ok) recordFinding('deep-open.bin', open, r2.error.message);
   assert.equal(r2.ok, true, r2.ok ? '' : r2.error.message);
+});
+
+// Verifies: SW-REQ-260821-QV2H
+// SW-REQ-260821-QV2H:denial_of_service_resistant:fuzz
+test('StreamingTokenizer deep-chunk appendChunk+getTokens does not throw', () => {
+  const closed = cssfuzz.genDeepNesting(cssfuzz.DEEP_NEST_DEPTH, true);
+  const open = cssfuzz.genDeepNesting(cssfuzz.DEEP_NEST_DEPTH, false);
+
+  for (const [label, data] of [
+    ['stream_deep_closed', closed],
+    ['stream_deep_open', open],
+  ] as const) {
+    const r = cssfuzz.deepNestingSafe(label, data, drainStreamingChunks);
+    if (!r.ok) recordFinding(`${label}.bin`, data, r.error.message);
+    assert.equal(r.ok, true, r.ok ? '' : r.error.message);
+    if (!r.ok) continue;
+    assert.ok(Array.isArray(r.value), `${label}: getTokens must return an array`);
+    assert.ok(
+      r.value.length > 0,
+      `${label}: complete tokens must drain after appendChunk+getTokens`,
+    );
+    assert.ok(
+      r.value.some((t) => t.type === 'ident'),
+      `${label}: nested a{...} must yield ident tokens`,
+    );
+  }
 });
 
 test('determinism on a few seeds', () => {

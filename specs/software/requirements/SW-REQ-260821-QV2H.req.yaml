@@ -54,10 +54,16 @@ obligation_hazards:
     - class: denial_of_service_resistant
       worst_case: StreamingTokenizer.appendChunk without a bound on accumulated chunks lets a stream exhaust heap.
       severity: high
+verification_state: passing
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
           from: draft
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6
+        - date: "2026-08-21T22:47:34Z"
+          from: verification=not_started
+          to: verification=passing
+          reason: auto-derived [not_started→passing] signals=2; review_record:REVIEW-18=present | evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing
           changed_by: agent:grok-4.6
