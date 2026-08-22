@@ -3315,6 +3315,15 @@ Drive remaining `src/typed-om/position/position-parser.ts` `tryParsePosition` un
 
 ---
 
+## Phase: still-hot `tryParsePosition` unique-cause tests (Champ)
+
+Cover leftover unique-cause in `src/typed-om/position/position-parser.ts:tryParsePosition` still hot after `tests/mcdc-hotspot-url-position.test.ts` and `tests/mcdc-hotspot-position-leftover.test.ts`. Drive public `CSSStyleValue.parse`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-position-still-hot-unique-cause.test.ts` — 1-value `isToken` F (`calc`/`min`/`clamp` vs `url`/`attr`/block/angle-calc); 2-value `isToken` F Option B / center / reject / Option A; 2-value `coord1 && coord2` F (`left foo` / `90deg 10px`); 3-value Case 4 `off` F vs calc T; Case 1/2/3 function offsets; 4-value Case B second-keyword F (`top 10px center 20px`); Case B `off1`/`off2` F vs calc T,T; transform-origin calc 3-value does not drop z; remaining POSITION_PROPERTIES (`perspective-origin` / `offset-*` / `mask-position`).
+- [x] Node 24: `node --test tests/mcdc-position-still-hot-unique-cause.test.ts` — 9 pass. Together with leftover/url-position/typed-om-position 50 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-pos3.md`.
+
+---
+
 ## Phase: leftover PropertyRegistry `consumeSyntaxComponent` MC/DC tests (Champ)
 
 Cover leftover `src/PropertyRegistry.ts:consumeSyntaxComponent` (4/18) through public `CSS.registerProperty` and exported `matchesSyntax`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
