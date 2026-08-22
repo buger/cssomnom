@@ -2980,7 +2980,7 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ## Phase 121: Strict Proof 0/0 campaign (in progress)
 
-**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`): **Errors: 0, Warnings: 9**. Spec MC/DC **222/222 uncovered=0**. Code MC/DC **55.1% / 57.4%** vs 100% floors (not lowered). KI-1,2,3,5,6 **fixed**; KI-4 **withdrawn** (Houdini JS-wins); KI-7 **open** (documented no-fetch). Do not `proof approve` 66 reqs.
+**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `cd3a692`): **Errors: 0, Warnings: 10**. Spec MC/DC **222/222 uncovered=0** (1 stale EGCP). Code MC/DC **89.1% / 90.9%** (3280/3683 D, 4698/5170 C) vs 100% floors (not lowered). KI-1,2,3,5,6,8–14 **fixed**; KI-4 **withdrawn**; KI-7 **open** (documented no-fetch). Do not `proof approve` 66 reqs.
 
 ---
 
@@ -4094,3 +4094,24 @@ Cover leftover unique-cause in `src/MediaParser.ts` `canonicalSerialize` (22/29 
 - [x] `tests/mcdc-media-round4-unique-cause.test.ts` — calc catch (`1px+1s` / `1foo`) vs `calc(foo)` return-null; mixed-case `CaLc`/`CALC`; L180 dpi/dpcm/dppx/x via simplify-sum not lone dim; L236 lastType simple-block/at-keyword/hash/string/`*` then operator; square/curly blocks; nextIsOperator missing/ident/`+`; adjacent `>=`; ident `*`; whitespace/comment all-and strip; empty serialize. Boolean `prefix !== null` via `KNOWN_FEATURES` `min-zzz`/`max-zzz`; two-op `actual === null` on viewport-segments / `-webkit-device-pixel-ratio`; L1235 non-length `1`; webkit ident `op !== '='`; color-gamut/video-color-gamut rec2020 F via extra allowed ident; `actualIdent !== null` F via null env fields.
 - [x] Structurally unpairable left mute (no ignore): L228 `lastType==='delim' && lastWasOperator && ident` (lastWasOperator already requires delim; trailing space skipped only when next is also an operator); L229 inside that arm; L234 `lastType==='number' && v.type==='number'` (shadowed by L223); L186 `unit==='x'` after `to('dppx')` (`x` converts); L217 isRatioSlash already-ends-with-space; L238 endsWith-space T at L236; L1260 `actual===null` T (numeric parse and getActualNumeric share names); L1265 `typeof parsedVal==='string'` F (only number|string after null); env field `undefined` throws before `actualIdent !== null` F (`null` unique-causes F).
 - [x] Node 24: `node --test tests/mcdc-media-round4-unique-cause.test.ts` — 10 pass. Together with existing media branch/leftover/still-hot files 74 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-media4.md`.
+
+---
+
+## Phase: Full proof recapture at cd3a692 (Champ)
+
+Proof recapture only. Did **not** edit `src/**`. Did **not** `git reset` / restore / checkout --force / `git add .`. Did **not** `proof approve` / `waive`. Node v24.11.1; proof `/tmp/proof-dx/proof`. HEAD `cd3a692`.
+
+- [x] Full `proof audit --fail-level warn`: **Errors: 0  Warnings: 10**. Exit 2. Cache 22 hits / 174 fresh / 164 stored (107s). Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-now.md`.
+- [x] Remaining warning IDs (not waived): `change_record_lands`, `nonbool_inputs_constrained`, `obligation_enforcement_backed`, `spec_lint_status_vs_review`, `property_based_test_coverage`, `code_mcdc_coverage`, `obligation_evidence_complete`, `process_checklist`, `suspect_clean`, `under_modeled_requirements_clean`.
+- [x] Code MC/DC printed **89.1% / 90.9%** (3280/3683 D, 4698/5170 C, incomplete 403 / missing 472) vs 100% floors. Spec MC/DC: 61 reqs, 222 rows, **0 uncovered**, 1 stale witness `SYS-REQ-260821-EGCP`.
+- [x] Cleared vs prior 12-warning recapture: `authored_delta_expected`, `known_issue_complete`, `known_issue_sibling_disposition`, `problem_reports_reviewed`. New: `obligation_enforcement_backed` + `obligation_evidence_complete` (`INT-REQ-260821-ZMZR` `nominal`).
+
+---
+
+## Phase: leftover `qualifiedFromCssText` unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/parser-api.ts` `qualifiedFromCssText` (0/5 D, 1/9 C, 5 incomplete — new from KI-6/14 class-fix) after `tests/parser-api.test.ts`, `tests/parser-api-keyframe-adapter.test.ts`, `tests/mcdc-parser-api-toparser.test.ts`, and `tests/mcdc-parser-api-still-hot-unique-cause.test.ts`. Drive `CSS.parseStylesheetSync` / `CSS.parseRule` / exported `toParserRule`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-qualified-from-csstext-unique-cause.test.ts` — L265 while skip `i < length` F (`/*c*/` empty after consumeComments / `'   '` after ws) vs T; whitespace T (`  from` / tab+nl) vs F (`from`); L266 `i >= length` T vs `at-keyword` T (`@foo` / `@keyframes` / `@media` / `@FOO`) vs both F (`from` / `50%` / `#id`); L269 for-loop exhaust F (`from` / `from, to` / `0`) vs `{` body T and trailing junk ignored; L271 `{` T,T vs `[]`/`()` T,F (`from [a]` / `from (1)` / nested `( { color } )`) vs ident/string/function/CDO/semicolon F; quoted `{` string not the body (`from "{" { color }` vs quoted-only); L277 bodyBlock T empty `{}` / `;` vs T decls / custom / unclosed vs F no-block; empty-prelude `{ color }`; parseStylesheetSync/parseRule `@keyframes` keyText path vs top-level style-rule empty body vs type-8 cssText duck decls; keyText string wins over cssText; non-string keyText falls through; empty/non-string cssText never enter.
+- [x] Structurally unpairable left mute (no ignore): L265 `type === 'comment'` T (tokenizer `consumeComments()` never emits comment tokens); L265 `i < length` F independently of `(ws || comment)` T (JS `&&` short-circuit); L266 `i >= length` T independently of `at-keyword` T (JS `||` short-circuit); L271 `type === 'simple-block'` F independently of `associatedToken.type === '{'` T (JS `&&` short-circuit; non-blocks have no associatedToken).
+- [x] Node 24: `node --test tests/mcdc-qualified-from-csstext-unique-cause.test.ts` — 7 pass. Together with parser-api/toparser/still-hot/keyframe-adapter 118 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-qcss.md`.
