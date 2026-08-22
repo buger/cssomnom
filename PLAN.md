@@ -3578,3 +3578,21 @@ Cover leftover unique-cause in `src/typed-om/values/CSSUnparsedValue.ts`, `CSSKe
 - [x] `tests/mcdc-values-leftover-unique-cause.test.ts` — CSSStyleValue constructor token/name AND, toString `_cssText || ''`, toStringTag, parse/parseAll arity 0/1 vs 2; CSSKeywordValue empty ctor/setter, serialize leftover, ident escape; CSSURLImageValue `startsWith('url(')` T/F/case, url getter, gradient toString; CSSVariableReferenceValue 0-arg, fallback null/undefined, duck-type truthy/object/constructor/name/iterator, setter `typeof !== 'string'`; CSSUnparsedValue proxy symbol get/set, non-digit Reflect, invalid value; toString empty/space/isIdentChar independence; processNode `var()` empty / non-ident / `--` / no-comma, function+simple-block hasVar, last-is-string close; `seg === ""` EOF and non-mirror block; leftover forEach thisArg / empty, item, serialize, type().
 - [x] Node 24: `node --test tests/mcdc-values-leftover-unique-cause.test.ts` — 13 pass. Together with existing unparsed/typed-om hotspot files 151 pass (8 skipped). `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-values.md`.
 
+---
+
+## Phase: leftover css-escape / utils unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/css-escape.ts` and `src/utils.ts` / `src/utils/format.ts` not already in `tests/css-escape.test.ts` / `tests/format.test.ts` / `tests/dom-matrix.test.ts` / `tests/mcdc-branch-cssom.test.ts` / `tests/mcdc-branch-declaration-leftover.test.ts`. Drive `CSS.escape` / `CSSKeywordValue.toString`, `CSSStyleDeclaration` camelCase, `StyleSheetList` / `MediaList` / `CSSRuleList` indexed getters, `deleteRule`, `DOMMatrix.rotateFromVector`, `serialize` / `CSSUnitValue`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-escape-utils-leftover-unique-cause.test.ts` — CSS.escape arity vs `String()`; NULL vs control vs DEL (`codeUnit >= 1` F unpairable after step 1); first-digit / hyphen-digit index+range; lone `-` vs ident-keep leftover `<= 122` `{|}~` / `<= 90` `[\]^`; camelToDashed `[A-Z]` vs `/^ms-/` through style proxy; createIndexedProxy `typeof` / `isNaN` / `val !== undefined` including `''`/`Infinity`/`NaN`/holes; deleteRule index bounds plus crafted `oldRule && typeof object` / `in parentRule` / `in parentStyleSheet`; angleFromVector `y === 0` with `x === 0`; formatNumber `val === 0` / `isFinite` / Infinity / formatted `'-0'` via serialize and CSSUnitValue.
+- [x] Node 24: `node --test tests/mcdc-escape-utils-leftover-unique-cause.test.ts` — 10 pass. Together with css-escape/format/dom-matrix/cssom-core 67 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-escape.md`.
+
+---
+
+## Phase: leftover math-parser `parseMathFunction` unique-cause MC/DC tests (Champ)
+
+Cover still-uncovered unique-cause in `src/math-parser.ts` besides `simplify` — `parseMathFunction` leftover (16/38 decisions, 22/49 conditions) plus parse-time helpers it calls. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-math-parser-leftover-unique-cause.test.ts` — `calc()` empty/unit-wrap/mixed/mixed-case; `consumeValue` paren vs `[`/`{`, unary `+/-`, ident constants including crafted `-infinity`; consumeSum `+`/`-`/other delim; consumeProduct `*`/`/` and leftover product mix; toCanonical `dppx` vs `x`; min/max firstArg/trailing comma/nested function+paren; clamp lower/upper `none` AND (`token` F, ident not-none, mixed case) and comma OR (`index >= length` T, `type !== comma` T); round strategy ident, omitted precision, leftover commas; MATH_FUNCTIONS arity/mixed-case/unknown/`sign`; mod/rem `isSameType` percentHint skip vs mismatch.
+- [x] Node 24: `node --test tests/mcdc-math-parser-leftover-unique-cause.test.ts` — 9 pass. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-math3.md`.
+
