@@ -1,0 +1,40 @@
+id: SYS-REQ-260822-JD78
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when deep_math_expression_consumed the parser shall always satisfy math_depth_bounded
+description: Math expression consumption and simplification (nested parentheses, nested calc(), deep CSSMathValue trees) shall be depth-bounded so untrusted calc() input cannot overflow the JavaScript call stack with RangeError.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: parser
+rationale: css-values-4 allows arbitrarily nested calc(); a conforming consumer must fail closed with a structured error instead of relying on the engine stack. parseMathFunction/simplify recurse without a depth counter, so calc() nesting of a few thousand levels aborts the host parse path.
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - deep_math_expression_consumed
+    - math_depth_bounded
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-values-4/Overview.bs#calc-syntax
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-22T20:06:06Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-22T20:06:06Z"

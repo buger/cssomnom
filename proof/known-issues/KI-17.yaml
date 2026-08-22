@@ -1,0 +1,71 @@
+id: KI-17
+title: Acyclic var()/env() substitution expands exponentially without a size budget
+description: 'The custom-property resolvers detect cyclic var()/env() graphs but never bound the cost of an ACYCLIC fan-out DAG. A doubling chain --vN: var(--v(N-1)) var(--v(N-1)) re-tokenizes and re-resolves each reference independently, expanding to 2^(N+1)-1 characters: depth 15 already yields a 65535-char value (~160ms via Parser.resolveVariables, ~430ms via getCascadedStyle), and depth 16+ ends in RangeError: Maximum call stack size exceeded. Availability fault (CWE-400) against hosts that resolve variables on untrusted CSS; cycle detection terminating proves no budget, only the cycle set, exists.'
+affected_requirements:
+    - SYS-REQ-260822-EGPW
+evidence_manifests:
+    - proof/evidence/ki-17.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: getCascadedStyle() / Parser.resolveVariables() / cascade variable-resolver
+attacker_input: untrusted stylesheet text with a fan-out (doubling) acyclic custom-property chain plus one consuming property (a dozen declarations suffice)
+reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not resolve var()/env() on untrusted stylesheets without an external timeout/memory guard.
+remediation: Add an expansion-size and substitution-depth budget to src/cascade/variable-resolver.ts substituteVariables() and the Parser.#resolveVarFunction path alongside the existing cyclicProps set; treat overflow as invalid at computed-value time per css-variables-1.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+kill_domain: resource_exhaustion
+do_not_refile_as: var()/env() substitution blow-up (cycle or acyclic)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public getCascadedStyle() (src/cascade.ts) fed by parseStyleSheet()
+        (src/parser.ts) with linkedom fixture element — the same public shape as the KI-108 overlay.
+        quantitative_impact: measured on current HEAD, Node v24.11.1 — doubling chain depth 2
+        resolves to exactly 'x x x x' (reproducer L44); depth 15 expands to 65535 chars in ~445ms;
+        depth 20 throws RangeError after ~1.0s. Scan baseline: outLen 511@8, 2047@10, 8191@12,
+        32767@14, 65535@15 (~160ms Parser.resolveVariables, ~430ms cascade), RangeError @16+.
+        control_test: L44 asserts the exact small-chain substitution result, proving the resolver
+        works and only the budget is missing.
+        untrusted_attacker: a dozen attacker-authored declarations (--kN: var(--k(N-1)) twice)
+        are the entire payload; no host state or privileges needed.
+        current_deployment_relevance: variable resolution runs inside getCascadedStyle, the
+          library's computed-style entry; confirmed live at HEAD d826b0f before filing.
+        honest_severity: medium availability — CPU/memory/stack growth is bounded per call by
+        chain length but grows as 2^N; single-request abort primitive, not persistent damage.
+        attacker_profitability: linear-byte input buys exponential work and a crash at modest
+        depth; ideal cost/benefit for an availability attacker.
+        reproducible: two consecutive reproducer runs exited 1 with the asserted failure
+        ('acyclic substitution threw RangeError ... expected resolved length <= 10000', L50);
+        evidence capture re-ran it again.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk availability;
+        cve_surface none; cycle detection working is stated rather than inflated into partial fix.
+        operational_path_verified: the failing leg calls the exact public cascade path hosts use;
+        no internal-only shortcut.
+        reachability_verified: any host resolving var() on untrusted CSS via getCascadedStyle /
+        Parser.resolveVariables reaches the unbounded expansion directly through public API.
+history:
+    - at: "2026-08-22T20:12:11Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:18Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-17.yaml

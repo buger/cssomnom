@@ -1,0 +1,69 @@
+id: KI-16
+title: :has()/combinator selector matching lacks a complexity budget
+description: 'matchHasPseudo eagerly materializes full descendant/sibling neighborhoods and querySelectorAll re-enters it for every visited node with no step count or deadline; matchComplexRecursive likewise retries ancestors/previous siblings without a cap. A flat miss selector '':has(~ .missing)'' over w siblings costs Theta(w^2) pair checks (~224ms at width 3000 vs ~1.2ms plain class scan, ~192x; ~800ms at width 5000 per security scan). Nested '':has(:has())'' is rejected at parse time — necessary but insufficient. Availability fault (CWE-400): event-loop stalls for hosts evaluating attacker-influenced selectors over large DOM-like trees, including cascade rule filtering.'
+affected_requirements:
+    - SYS-REQ-260822-ZQJT
+evidence_manifests:
+    - proof/evidence/ki-16.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: querySelectorAll() / matches() / cascade rule filtering
+attacker_input: untrusted selector or stylesheet selector text (:has(...) / long ~ chains) evaluated against a large host-side DOM-like tree
+reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not evaluate untrusted selectors containing :has() or long sibling combinators against large trees without an external timeout.
+remediation: Thread a step/deadline budget through matches()/querySelectorAll() -> matchComplexRecursive -> matchHasPseudo/getAllDescendants, memoize :has results per query, and fail closed when the budget is exhausted.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+kill_domain: resource_exhaustion
+do_not_refile_as: selector matching superlinear cost (:has / sibling combinators)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public querySelectorAll()/matches() (src/matcher.ts) over a plain
+        object DOM built to the exported DOMElement interface — the documented matcher contract.
+        quantitative_impact: measured on current HEAD, Node v24.11.1 — ':has(~ .ki16-nope)' miss
+        over 3000 siblings took ~224ms vs ~1.2ms for the equivalent class scan (~192x; reproducer
+        L91 asserts <= 8x). Scan baseline at width 5000: 811ms vs 0.47ms (~1722x); deep-chain route
+        ~627x at depth 2000. Superlinear growth confirmed across widths (255x@1k -> 1722x@5k).
+        control_test: L81 asserts the linear-scan positive contract (all 3000 nodes match) and the
+        parse-time nested-:has rejection, isolating the missing budget as the failure cause.
+        untrusted_attacker: attacker supplies the selector text; host supplies tree size — both
+        realistic in theme/filter/query-builder ingestion.
+        current_deployment_relevance: matches() is also the cascade rule-filter sink, so attacker
+          stylesheet selectors pay this cost during style resolution; confirmed live at HEAD d826b0f.
+        honest_severity: medium availability — CPU-bound event-loop stalls that terminate;
+          polynomial with large constants, honestly not exponential at tested sizes.
+        attacker_profitability: a one-line miss selector turns a linear scan into Theta(w^2) work
+        per evaluation and re-pays it per visited node via querySelectorAll.
+        reproducible: two consecutive reproducer runs exited 1 with the asserted ratio failure
+        (192x > 8x); evidence capture re-ran it again.
+        no_inflation: ratio bound asserted instead of absolute wall-clock to stay hardware-fair;
+        severity_basis reproducer; cve_surface none; scan's own finding says polynomial, filed as such.
+        operational_path_verified: failing leg is the exact public tree-query API hosts call.
+        reachability_verified: public matcher entry points are the product surface for selector
+        evaluation; no privilege or internal path needed between host input and the sink.
+history:
+    - at: "2026-08-22T20:12:11Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:19Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-16.yaml

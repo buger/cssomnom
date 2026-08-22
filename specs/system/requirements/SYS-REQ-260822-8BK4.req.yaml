@@ -1,0 +1,40 @@
+id: SYS-REQ-260822-8BK4
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when mixed_unit_product_converted the typed_om shall always satisfy conversion_terms_bounded
+description: 'CSSNumericValue.to()/toSum() conversion shall bound intermediate term count: distributing a product of sums with distinct unit maps (e.g. px and em) must not allocate prod|sum_i| = 2^n cartesian terms before rejecting or returning.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: typed_om
+rationale: Typed OM numeric conversion normalizes products of sums via full cartesian distribution with no term cap; a compact calc((1px + 1em)*(1px + 1em)*...) string forces exponential memory and CPU before the final TypeError.
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - mixed_unit_product_converted
+    - conversion_terms_bounded
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#numeric-objects
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-22T20:05:46Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-22T20:05:46Z"

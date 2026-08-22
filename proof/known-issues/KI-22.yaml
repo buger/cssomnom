@@ -1,0 +1,72 @@
+id: KI-22
+title: Math expression parse/simplify recurses unbounded on nested calc() input
+description: 'parseMathExpressionTokens / parseMathFunction / simplify in src/math-parser.ts descend nested parentheses, nested calc(), and deep CSSMathValue trees with no expression-depth or node-count budget. The public tokenize -> Parser.parseComponentValues -> createCSSStyleValue path aborts with a raw RangeError: Maximum call stack size exceeded at parenNest(4000) / calcNest(3000). css-values-4 #calc-syntax admits arbitrarily nested calc(); a consumer must fail closed with a structured error instead of relying on the engine stack. Availability fault (CWE-674/CWE-400); sibling manifestation of KI-18''s missing depth invariant inside math value consumption.'
+affected_requirements:
+    - SYS-REQ-260822-JD78
+evidence_manifests:
+    - proof/evidence/ki-22.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: createCSSStyleValue() / CSSNumericValue.parse() / Typed OM calc() value paths
+attacker_input: untrusted calc()/math string with a few thousand nesting levels of parentheses or nested calc() (linear byte cost)
+reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-22-math-parser-unbounded-recursion-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not reify untrusted calc() strings through Typed OM value factories without a process-level stack guard.
+remediation: Thread an expression-depth/node-count counter through parseMathFunction and simplify; reject over-budget expressions with a structured parse error before recursion exhausts the stack.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+kill_domain: resource_exhaustion
+do_not_refile_as: math expression stack overflow via nested calc/parens
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public tokenize() (src/tokenizer.ts) -> Parser.parseComponentValues()
+        (src/parser.ts) -> createCSSStyleValue() (src/typed-om barrel) — the documented Typed OM
+        reification pipeline; no internal hooks.
+        quantitative_impact: measured on current HEAD, Node v24.11.1 — nestParens(4000) and
+        nestCalc(3000) both throw RangeError: Maximum call stack size exceeded in 5-13ms through
+        the public path (reproducer L70/L76); scan baseline: paren nesting survives ~2000-4000,
+        nested calc ~1500-3000; hypot() unbounded arity noted as sibling unbound.
+        control_test: L63 asserts shallow nested calc (depth 200) simplifies to 1px, proving the
+        math path is live and correct at bounded depth.
+        untrusted_attacker: attacker supplies the calc string ('calc(' repeated ~3k times is the
+        whole payload); any API accepting dimension/math text is the boundary.
+        current_deployment_relevance: createCSSStyleValue/CSSNumericValue.parse are exported
+          library entry points used by MediaParser and transform helpers too; confirmed live at
+          HEAD d826b0f before filing.
+        honest_severity: medium availability — single-call abort via engine RangeError; no
+        corruption; distinct sink from KI-18 (math consumption vs rule consumption).
+        attacker_profitability: linear-byte input reliably overflows the stack of any host that
+        reifies math values; retry costs nothing.
+        reproducible: two consecutive reproducer runs exited 1 with the asserted
+        RangeError-catch failure on both legs; evidence capture re-ran it again.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk availability;
+        cve_surface none; CSSNumericValue.parse's SyntaxError wrapping disclosed rather than
+        counted as mitigation for the raw-RangeError path.
+        operational_path_verified: failing legs run the exact public string->value pipeline.
+        reachability_verified: public Typed OM entry points are the product surface; hosts parsing
+        untrusted calc() reach the recursion directly with no privilege step between.
+history:
+    - at: "2026-08-22T20:12:42Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:20Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-22.yaml

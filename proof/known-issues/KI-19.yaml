@@ -1,0 +1,69 @@
+id: KI-19
+title: CSSNumericValue.to/toSum cartesian expansion allocates 2^n terms without a cap
+description: 'createSumValue in numeric-methods.ts distributes products of sums with nested cartesian loops and no intermediate term cap. A compact calc((1px + 1em)*(1px + 1em)*...) with n factors (relative units keep distinct unit maps) allocates prod|sum_i| = 2^n terms: n=16 is 65536 terms / ~30-34MB live heap growth / ~64-77ms, and n=20 reaches ~1M terms and ~585MB RSS per security scan — all paid BEFORE the conversion rejects the mixed-unit result with TypeError. Availability fault (CWE-400) on the published Typed OM .to()/.toSum() surface.'
+affected_requirements:
+    - SYS-REQ-260822-8BK4
+evidence_manifests:
+    - proof/evidence/ki-19.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: CSSNumericValue.parse().to() / .toSum()
+attacker_input: untrusted dimension/calc string parsed via CSSNumericValue.parse whose product-of-sums shape mixes units that do not collapse under canonicalization
+reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not call .to()/.toSum() on untrusted parsed values without an external memory guard.
+remediation: Add a MAX_TERMS-style cap to the createSumValue product branch; fail closed (or lazily represent the product) once the term budget is exceeded instead of materializing the full cartesian product.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+kill_domain: resource_exhaustion
+do_not_refile_as: typed-om numeric conversion cartesian blow-up
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSNumericValue.parse() and .toSum() (src/typed-om barrel,
+        methods wired in src/typed-om/numeric/numeric-methods.ts) — no internal helpers.
+        quantitative_impact: measured on current HEAD, Node v24.11.1 — 16-factor mixed-unit product
+        allocated ~33.4MB live heap in ~77ms before the TypeError (reproducer L41 asserts <= 8MB);
+        scan baseline: 2^16=65536 terms ~76ms ~190MB RSS, n=18 ~215ms ~336MB, n=20 ~740ms
+        ~585MB-610MB RSS; ternary px/em/rem variant 3^10 terms.
+        control_test: L33 asserts the same-unit positive conversion (calc(1px + 2px).toSum()
+        serializes with 3px), proving conversion works when terms collapse.
+        untrusted_attacker: the payload is a ~150-byte calc string; attacker controls both the
+        expression shape and the unit mix that defeats canonicalization.
+        current_deployment_relevance: .to()/.toSum() are the published Typed OM conversion API;
+          confirmed live at HEAD d826b0f against a fresh build before filing.
+        honest_severity: medium availability — memory/CPU spike per call; TypeError is eventually
+        thrown correctly, only the cost profile is broken.
+        attacker_profitability: exponential allocation for linear input bytes; each conversion call
+        is a fresh amplification opportunity on a worker's heap.
+        reproducible: two consecutive reproducer runs exited 1 with the asserted heap-budget failure
+        (~33.4MB > 8MB); evidence capture re-ran it again.
+        no_inflation: heap-delta proxy asserted (deterministic live-set growth) instead of wall-clock;
+        n=16 chosen to demonstrate without risking runner OOM at n=20; cve_surface none.
+        operational_path_verified: failing leg is the exact public conversion path hosts call.
+        reachability_verified: any host converting attacker-influenced parsed numeric values via
+        .to/.toSum reaches the uncapped distribution directly through public API.
+history:
+    - at: "2026-08-22T20:12:42Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:20Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-19.yaml

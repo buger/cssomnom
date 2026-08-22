@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-17
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-EGPW
+command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T20:13:18Z"
+input_set:
+    - proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts: sha256:14d7fe88af979048a2f0319e17df23254fda65448b4a4077ec2671404b2e7c63
+known_issues:
+    - KI-17

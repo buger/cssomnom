@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-22
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-JD78
+command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-22-math-parser-unbounded-recursion-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T20:13:20Z"
+input_set:
+    - proof/reproducers/KI-22-math-parser-unbounded-recursion-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-22-math-parser-unbounded-recursion-overlay-260822.ts: sha256:c4582d62d2fd9303c0b9a221272eb98b4f10c0e41e6b169709d08698cf2f1ffd
+known_issues:
+    - KI-22

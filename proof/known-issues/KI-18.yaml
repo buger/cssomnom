@@ -1,0 +1,71 @@
+id: KI-18
+title: Parser unbounded nesting depth overflows the JS stack on deeply nested CSS
+description: 'consumeBlockContents / consumeNestedQualifiedRuleFromStream / consumeAtRule recurse without a nesting-depth cap, so parse() and CSSStyleSheet.replaceSync() abort with a raw RangeError: Maximum call stack size exceeded on ~4000-deep nested style rules or ~2000-deep nested @media blocks. css-syntax-3 § 5.5.x consume algorithms recover from pathological input by reporting errors and dropping constructs; escaping an engine RangeError instead violates the stylesheet_returned guarantee and the recursion_depth_bounded hazard already modeled on SYS-REQ-260821-7521. Availability fault (CWE-674/CWE-400) against any host that parses untrusted stylesheet text.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-18.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: parse() / CSSStyleSheet.replaceSync()
+attacker_input: untrusted stylesheet text with deeply nested style rules or grouping at-rules (a{a{...}} x ~4k, @media all{...} x ~2k; a few KB of source)
+reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not expose parse()/replaceSync() to untrusted CSS without a process-level stack guard or input depth pre-check.
+remediation: Thread a nesting-depth counter through consumeBlockContents/consumeNestedQualifiedRuleFromStream/consumeAtRule/consumeComponentValue and fail closed with a structured parse error before the engine stack is exhausted.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+kill_domain: resource_exhaustion
+do_not_refile_as: parser stack overflow via nested rules/blocks
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() (src/parser.ts) and CSSStyleSheet.replaceSync()
+        (src/CSSOM.ts) only — no mocks, no private hooks; reproducer imports mirror KI-7 style.
+        quantitative_impact: measured on current HEAD, Node v24.11.1 — nestStyle(200) parses in
+        ~9ms (reproducer L49); nestStyle(4000), nestMedia(2000), replaceSync(nestStyle(4000)) all
+        throw RangeError: Maximum call stack size exceeded in 6-12ms each; scan baseline: last good
+        depth ~2187 for a{a{...}}, @media dies earlier (~1000-2000).
+        control_test: L49 asserts the shallow-nest positive contract (stylesheet returned, 1 rule),
+        so the failing deep legs are not setup failures.
+        untrusted_attacker: stylesheet text is the trust boundary; a few KB of attacker-chosen
+        nesting reaches the sink through any host that ingests user CSS.
+        current_deployment_relevance: parse() is the headline ingest API of this library release;
+          confirmed live at HEAD d826b0f against a fresh build before filing.
+        honest_severity: medium availability — abort of one parse/worker request; no memory
+        corruption, no RCE, library has no network face of its own.
+        attacker_profitability: an attacker who can choose theme/upload CSS gains a reliable
+        single-request CPU/abort primitive against parsing workers; retry amplification is free.
+        reproducible: two consecutive runs of the reproducer command both exited 1 with the
+        asserted RangeError-catch failure (L57/L72/L87 legs); evidence capture re-ran it again.
+        no_inflation: severity_basis is reproducer with the executed manifest attached; risk field
+        names availability honestly; cve_surface none (library, not a network service).
+        operational_path_verified: the three failing tests are the exact product path a host calls
+        (parse / replaceSync); no debug-only or gated path involved.
+        reachability_verified: public entry points ARE the product surface here — any caller
+        passing attacker CSS to parse()/replaceSync() reaches the recursion with zero additional
+        privileges; no ingress ACL layer exists between host and parser.
+history:
+    - at: "2026-08-22T20:11:44Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:12:57Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-18.yaml

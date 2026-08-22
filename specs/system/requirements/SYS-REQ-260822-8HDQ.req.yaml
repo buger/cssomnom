@@ -1,0 +1,40 @@
+id: SYS-REQ-260822-8HDQ
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when decoded_identifier_serialized the serializer shall always satisfy round_trip_structure_preserved
+description: Serializing hash tokens and AST function names shall escape identifier-context code points via serialize-an-identifier so decoded structural characters (; { } :) cannot break out of declaration or rule boundaries on cssText re-parse.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: serializer
+rationale: 'cssom-1 requires identifiers (including hash token values and function names) to be serialized with the serialize-an-identifier algorithm; emitting ''#'' + raw value lets an escaped #\3B reappear as a real '';'' and inject declarations on re-embed.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - decoded_identifier_serialized
+    - round_trip_structure_preserved
+references:
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#serialize-an-identifier
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-22T20:06:05Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-22T20:06:05Z"

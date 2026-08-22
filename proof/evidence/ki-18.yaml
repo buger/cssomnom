@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-18
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260821-7521
+command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T20:12:57Z"
+input_set:
+    - proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts: sha256:591aa4e3dbb54b1e5b74baa9a677649ef02ddc061ba8d03f23d1538b841bf0c2
+known_issues:
+    - KI-18
