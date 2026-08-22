@@ -2980,7 +2980,7 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ## Phase 121: Strict Proof 0/0 campaign (in progress)
 
-**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `aa374f0`, 2026-08-22T09:48:17Z): **Errors: 2, Warnings: 17** (regressed vs `d72e532` 0e/7w because new domain reqs + restored SYS catalog files landed without grounded reviews / witnesses / docs). `nonbool_inputs_constrained` **cleared** (57/57 constrained). Spec MC/DC **343 rows / 98 uncovered / 12 stale**. Code MC/DC **still 92.2% / 93.7%** (3394/3683 D, 4845/5170 C). **47 `//mcdc:ignore:defensive` comments are not honored** (`Ignored decisions: 0`) — JS engine gap DX-042 in flight. Catalog **82** reqs. KI-7 **open** with extra failing e2e (`14c6aff`). Do not `proof approve`. Do not `proof waive`. Floors not lowered. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
+**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof` DX-042 `6d41cc0`, HEAD `7bbb4ae` + later `7ff8011` witnesses, 2026-08-22T10:11:26Z): **Errors: 0, Warnings: 17**. `nonbool_inputs_constrained` **pass**. Spec MC/DC Champ `7ff8011` claims **343/343 uncovered=0** (full audit at 7bbb4ae still showed 4 uncovered during concurrent edits). Code MC/DC **93.3% / 94.6%** (3397/3639 D, 4842/5118 C; **Ignored decisions: 47**; incomplete 242) vs 100% floors (not lowered). Catalog **82** reqs. KI-7 **open**. Do not `proof approve`. Do not `proof waive`. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
 
 - [x] **acknowledge KI-7 on 5W6X approved guarantee** (`PROOF_ACTOR=agent:grok-4.6`): `approved_guarantee_ki_conflict` was 1w — SW-REQ-260821-5W6X approved while open KI-7 had no `release_disposition`. Canonical option 2: `proof known-issue edit KI-7 --set-release-disposition ship_with_known_issue`. KI-7 **stays open** (documented no-fetch; no I/O). Did not `proof waive`, class-fix fetch, or mass un-approve 66 reqs. 5W6X approval remains DEFECT-3T1G href copy (does not claim fetch); SAT TRUE is `constructed=T, fetched=F, import_url_present=T`; KI-7 tripwire remains `constructed=T, fetched=T, import_url_present=T => FALSE`. Isolated `proof audit --check approved_guarantee_ki_conflict --fail-level warn`: **0e / 0w**.
 
@@ -4587,4 +4587,22 @@ Recapture at `aa374f0` **Errors: 2**: `spec_lint_spec_conformance_review_grounde
 - [x] Mutex `invalid_input_vs_position_reify` on SYS+SW `typed_om`: `{invalid_typed_input, position_reifies}` — css-typed-om-1 § 3.3 invalid parse cannot reify as CSSPositionValue. Pair was HGFK/7AKJ `parse_throws` vs SNP4/Z6J1 `!parse_throws`.
 - [x] Grounded `spec_conformance` REVIEW-34..41 for SW-REQ-260822-{73TM,QKE9,Z6J1,ZN94,1REE,7R6Z,MN8Z,YBF2} against .bs anchors and existing unique-cause tests (`Verifies:` comments only; no new product tests).
 - [x] Isolated `proof audit --check spec_lint_spec_conformance_review_grounded` and `verify_passes`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-close-errors-2.md`.
+
+LOOP Reviewer+Grizz **REJECTED** `7bbb4ae` for wrong-algorithm section numbers. Citation retarget (no `src/**`, no `proof waive`, mutex `{invalid_typed_input, position_reifies}` kept, KI-7 constructed vs fetched not mutexed):
+
+- [x] REVIEW-34 / `parser.vars.yaml` `source`: consume-at-rule is css-syntax-3 **§ 5.5.2 `#consume-at-rule`** (not § 5.4.4 `#parse-stylesheet-contents`). Keep css-values-4 § 4.1 `#keywords`. consumeListOfRules cites § 5.5.1 `#consume-stylesheet-contents`.
+- [x] REVIEW-40 / `tokenizer.vars.yaml` / `property_registry.vars.yaml` `source`: consume-unicode-range-token is css-syntax-3 **§ 4.3.14 `#consume-unicode-range-token`** (not § 4.3.13 `#consume-number`). Escaped code point stays § 4.3.7 `#consume-escaped-code-point`. css-properties-values-api-1 heading is **`#at-property-rule`** (not `#the-at-property-rule`).
+- [x] REVIEW-36 / typed_om mutex reason: cite css-typed-om-1 **§ 2 `#parse-a-cssstylevalue`** (throw on grammar fail) plus this implementation's CSSPositionValue reify. Do **not** cite dropped `#positionvalue-objects` / non-existent § 3.3. css-values-4 `#position` is **§ 8.3** (not leftover § 10.1 calc()).
+- [x] REVIEW-41: expandBox margin/padding is **css-box-3 `#propdef-margin`**, plus css-logical-1 § 4.7 `#logical-shorthand-keyword`. Not css-backgrounds-3.
+
+---
+
+## Phase: Overlay warn close — KI-7 evidence + domain docs/obligations (Champ)
+
+Full audit 0e/17w. Close `known_issue_complete`, `documentation_coverage`, `obligation_enforcement_backed`, `obligation_evidence_complete`. Did **not** implement fetch. Did **not** set KI-7 status fixed. Did **not** edit `src/**`. Did **not** invent fuzz.
+
+- [x] **KI-7 evidence refresh** (`172528c` `refresh KI-7 evidence for extra e2e`): both overlay tripwires in `commands` and `proof/evidence/ki-7.yaml` `input_set` / `freshness_hashes` — `KI-7-import-stylesheet-null.ts` and `KI-7-import-url-token.ts` (plus `fixtures/x.css`, `src/parser.ts`, `src/CSSOM.ts`, basename `parser.ts`). Re-stamped after `a381e92` parser.ts ignore comments so `src/parser.ts` freshness matches HEAD. `proof evidence refresh KI-7` re-ran the primary tripwire; observed `fail` / `known_issue_reproduced`. Extra e2e still exit 1. Status **open**.
+- [x] **Documents:** `docs/css-domain-models.md` cites the 16 SYS/SW domain reqs from `5f73ceb`/`b7c76d3` and describes the real tables/ranges (at-rule dispatch, resolution dpi 0..9600, position arity 1..4, :disabled kinds, hex 0..6, hue 0..360, box 1..4, matrix 0..3 on INT-REQ-260821-JTY2).
+- [x] **Obligation triples** on existing unique-cause tests (`tests/mcdc-witness-domain-tables.test.ts`, `tests/mcdc-witness-domain-bounds.test.ts`): `<REQ>:nominal:nominal` on SAT TRUE happy paths; `<REQ>:nominal:negative` on existing invalid-input / non-match cases. Pattern `a6c94db`. No new product tests.
+- [x] Isolated `proof audit --check known_issue_complete --check documentation_coverage --check obligation_enforcement_backed --check obligation_evidence_complete --fail-level warn`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/overlay-warn-close.md`.
 

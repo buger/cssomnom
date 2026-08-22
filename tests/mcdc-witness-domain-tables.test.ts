@@ -87,6 +87,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-AACP: stylesheet_returned=T, typed_cssom_rule=T, unknown_at_rule_fallback=T => TRUE
     // Verifies: SW-REQ-260822-73TM
     // MCDC SW-REQ-260822-73TM: consume_stylesheet_completed=T, stylesheet_returned=T, typed_cssom_rule=T, unknown_at_rule_fallback=T => TRUE
+    // SYS-REQ-260822-AACP:nominal:nominal
+    // SW-REQ-260822-73TM:nominal:nominal
     test('mixed-case @MEDIA and unknown @-rule complete consume and return a stylesheet', () => {
       const sheet = parse(DISPATCH_CSS);
       assert.ok(sheet instanceof CSSStyleSheet);
@@ -132,6 +134,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-4EY2: resolution_dpi_GT_0=F, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction=0]
     // Verifies: SW-REQ-260822-QKE9
     // MCDC SW-REQ-260822-QKE9: resolution_dpi_GT_0=F, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction=0]
+    // SYS-REQ-260822-4EY2:nominal:negative
+    // SW-REQ-260822-QKE9:nominal:negative
     test('boolean (resolution) is not positive when environment dpi is 0', () => {
       let resolutionPositiveAction = 0;
       const matched = MediaParser.evaluate('(resolution)', { resolution: 0 });
@@ -144,6 +148,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-4EY2: resolution_dpi_GT_0=T, resolution_feature_positive=T => TRUE
     // Verifies: SW-REQ-260822-QKE9
     // MCDC SW-REQ-260822-QKE9: resolution_dpi_GT_0=T, resolution_feature_positive=T => TRUE
+    // SYS-REQ-260822-4EY2:nominal:nominal
+    // SW-REQ-260822-QKE9:nominal:nominal
     test('boolean (resolution) matches when converted dpi is greater than 0', () => {
       assert.equal(DEFAULT_MEDIA_ENV.resolution > 0, true);
       assert.equal(MediaParser.evaluate('(resolution)'), true);
@@ -176,6 +182,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
     // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // SYS-REQ-260822-SNP4:nominal:negative
+    // SW-REQ-260822-Z6J1:nominal:negative
     test('empty object-position throws and does not reify a 1-to-4 CSSPositionValue', () => {
       let reifyAction = 0;
       assert.throws(() => {
@@ -189,6 +197,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
     // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
+    // SYS-REQ-260822-SNP4:nominal:negative
+    // SW-REQ-260822-Z6J1:nominal:negative
     test('3-value object-position and 4-value transform-origin throw without CSSPositionValue', () => {
       let noThrowAction = 0;
       assert.throws(() => {
@@ -210,6 +220,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-SNP4: parse_throws=F, position_arity_GE_1=T, position_reifies=T => TRUE
     // Verifies: SW-REQ-260822-Z6J1
     // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=F, position_arity_GE_1=T, position_reifies=T => TRUE
+    // SYS-REQ-260822-SNP4:nominal:nominal
+    // SW-REQ-260822-Z6J1:nominal:nominal
     test('1-to-4 component positions reify as CSSPositionValue without throwing', () => {
       let throwCount = 0;
       try {
@@ -240,6 +252,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-XDRG: empty_match=T, matches_disabled=F, matches_enabled=F => TRUE [no-action: nonEmptyMatchAction=0]
     // Verifies: SW-REQ-260822-ZN94
     // MCDC SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=F => TRUE [no-action: nonEmptyMatchAction=0]
+    // SYS-REQ-260822-XDRG:nominal:negative
+    // SW-REQ-260822-ZN94:nominal:negative
     test('div does not match :disabled or :enabled', () => {
       const { plain } = formDocument();
       let nonEmptyMatchAction = 0;
@@ -255,6 +269,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // MCDC SYS-REQ-260822-XDRG: empty_match=F, matches_disabled=T, matches_enabled=T => TRUE
     // Verifies: SW-REQ-260822-ZN94
     // MCDC SW-REQ-260822-ZN94: empty_match=F, matches_disabled=T, matches_enabled=T => TRUE
+    // SYS-REQ-260822-XDRG:nominal:nominal
+    // SW-REQ-260822-ZN94:nominal:nominal
     test(':disabled and :enabled each match listed form controls', () => {
       const { off, on, fs, inLegend, inFs, plain } = formDocument();
       assert.equal(matches(off, ':disabled'), true);

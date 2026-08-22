@@ -134,6 +134,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // Verifies: SW-REQ-260822-7R6Z
     // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
+    // SYS-REQ-260822-YQQZ:nominal:nominal
+    // SW-REQ-260822-7R6Z:nominal:nominal
     test('tokenize returns tokens for escaped scalar, U+FFFD replacement, and 7-hex stop', () => {
       // css-syntax-3 § 4.3.7: \61 → U+0061; \0 → U+FFFD; \1234567 stops hex at 6.
       const tokens = tokenize('.\\61 \\0 \\1234567 { color: red; }');
@@ -212,6 +214,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
     // Verifies: SW-REQ-260822-YBF2
     // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // SYS-REQ-260822-5V7N:nominal:negative
+    // SW-REQ-260822-YBF2:nominal:negative
     test('in-bound invalid margin and font without family are rejected without assigning longhands', () => {
       const invalidMargin = styleRule('div { margin: red; }');
       assert.equal(invalidMargin.style.getPropertyValue('margin-top'), '');
@@ -253,6 +257,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE
     // Verifies: SW-REQ-260822-YBF2
     // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE
+    // SYS-REQ-260822-5V7N:nominal:nominal
+    // SW-REQ-260822-YBF2:nominal:nominal
     test('1-to-4 value margin via parse and replaceSync assigns four longhands', () => {
       const one = styleRule('div { margin: 1px; }');
       assert.equal(one.style.getPropertyValue('margin-top'), '1px');
@@ -455,6 +461,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SW-REQ-260822-1REE: blue_from_chroma=T, green_from_chroma=T, hsl_component_count_GE_3=F, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: blue_from_chroma=T, cascaded_style_requested=T, green_from_chroma=T, hsl_component_count_GE_3=F, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // SYS-REQ-260822-CFRA:nominal:negative
+    // SW-REQ-260822-1REE:nominal:negative
     test('two-component hsl() does not assign 0-60 red chroma', () => {
       const el = targetElement();
       let redChromaAction = 0;
@@ -507,6 +515,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE
+    // SYS-REQ-260822-CFRA:nominal:nominal
+    // SW-REQ-260822-1REE:nominal:nominal
     test('getCascadedStyle of hsl(0) assigns red chroma and consults matcher/media', () => {
       const el = targetElement();
       const original = MediaParser.evaluate;
@@ -566,6 +576,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SYS-REQ-260822-JY0V: bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
     // Verifies: SW-REQ-260822-MN8Z
     // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // SYS-REQ-260822-JY0V:nominal:nominal
+    // SW-REQ-260822-MN8Z:nominal:nominal
     test('valid @property is not dropped so the drop action stays idle', () => {
       let dropAction = 0;
       const sheet = parse(`
@@ -651,6 +663,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE
     // Verifies: SW-REQ-260822-MN8Z
     // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE
+    // SYS-REQ-260822-JY0V:nominal:negative
+    // SW-REQ-260822-MN8Z:nominal:negative
     test('bad @property is dropped while namespace, keyframe 0%, and 6-hex urange stay', () => {
       const sheet = parse(`
         @namespace svg url("http://www.w3.org/2000/svg");
