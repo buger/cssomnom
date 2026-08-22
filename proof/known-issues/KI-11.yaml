@@ -1,10 +1,14 @@
 id: KI-11
 title: tryParsePosition accepts 3-value perspective-origin / 4-value transform-origin and drops center left
 description: |
-    css-values-4 § 10.1 #position: generic <position> is 1-/2-/4-value, not 3-value (csswg-drafts#2140). css-transforms-2 #perspective-origin-property uses <position>, so left 10px top must throw. css-transforms-1 #transform-origin-property is not 4-value <position>, so left 10px top 20px must throw. The && grammar puts center in both x and y groups, so object-position: center left is a valid CSSPositionValue. HEAD tryParsePosition accepts 3-value for all POSITION_PROPERTIES, accepts 4-value transform-origin, and returns null for center left (swallowed as CSSStyleValue). Distinct from KI-3 (invalid 'not-a-position' not throwing). Overlay audit cannot change product code.
+    css-values-4 § 10.1 #position: generic <position> is 1-/2-/4-value, not 3-value (csswg-drafts#2140). css-transforms-2 #perspective-origin-property uses <position>, so left 10px top must throw. css-transforms-1 #transform-origin-property is not 4-value <position>, so left 10px top 20px must throw. The && grammar puts center in both x and y groups, so object-position: center left is a valid CSSPositionValue. HEAD tryParsePosition accepted 3-value for all POSITION_PROPERTIES, accepted 4-value transform-origin, and returned null for center left (swallowed as CSSStyleValue). Distinct from KI-3 (invalid 'not-a-position' not throwing). Product fix: grammar-first isValidCssPosition / isValidTransformOrigin / isKeywordAndPair. Class-closure DEFECT-260822-PGRM.
 affected_requirements:
     - SW-REQ-260821-7AKJ
     - SYS-REQ-260821-HGFK
+commands:
+    - node --test tests/typed-om-position.test.ts
+evidence_manifests:
+    - proof/evidence/ki-11.yaml
 severity: medium
 severity_basis: risk
 risk: correctness
@@ -13,26 +17,31 @@ affected_api: CSSStyleValue.parse
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-11-position-grammar.ts
 reproduction_steps:
-    - 'Call CSSStyleValue.parse(''perspective-origin'', ''left 10px top'') — observe CSSPositionValue instead of TypeError.'
-    - 'Call CSSStyleValue.parse(''transform-origin'', ''left 10px top 20px'') — observe CSSPositionValue instead of TypeError.'
-    - 'Call CSSStyleValue.parse(''object-position'', ''center left'') — observe CSSStyleValue instead of CSSPositionValue.'
+    - Call CSSStyleValue.parse('perspective-origin', 'left 10px top') — observe CSSPositionValue instead of TypeError.
+    - Call CSSStyleValue.parse('transform-origin', 'left 10px top 20px') — observe CSSPositionValue instead of TypeError.
+    - Call CSSStyleValue.parse('object-position', 'center left') — observe CSSStyleValue instead of CSSPositionValue.
     - 'Intended: 3-value perspective-origin TypeError; 4-value transform-origin TypeError; center left is CSSPositionValue.'
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-11-position-grammar.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: None on HEAD. Callers must not rely on CSSStyleValue.parse to reject 3-value perspective-origin or 4-value transform-origin, or to reify center left as CSSPositionValue.
-remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land isValidCssPosition / transform-origin z-gate / center-left && in src/typed-om/position/position-parser.ts. Close only after the three contracts hold. No DEFECT — live unfixed bugs stay as KnownIssues.
+mitigation: matchesPositionPropertyGrammar / isValidCssPosition rejects 3-value generic <position> (perspective-origin, object-position). isValidTransformOrigin rejects 4-value <position>. isKeywordAndPair accepts center left (css-values-4 &&). tryParsePosition reifies 2D only.
+remediation: Landed in src/typed-om/position/position-parser.ts and src/typed-om/values/style-value-parser.ts. Class-closure DEFECT-260822-PGRM.
 notes:
     - '2026-08-22: filed after fe7defa restore. Distinct from KI-3 (invalid not-a-position swallow). Same reqs (7AKJ/HGFK), different grammar hole.'
+    - '2026-08-22: class-fix. 3-value perspective-origin TypeError; 4-value transform-origin TypeError; object-position center left reifies CSSPositionValue. Overlay reproducer PASSES twice (Node 24). Distinct from KI-3 (invalid not-a-position swallow).'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: open
+status: fixed
 history:
     - at: "2026-08-22T12:00:00Z"
       by: agent:grok-4.6
       action: created
       detail: |
         Live position-grammar holes after fe7defa restore. Overlay reproducer FAILS. Distinct from KI-3. No product fix. No DEFECT.
+    - at: "2026-08-22T05:59:14Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,append-note,set-status=fixed,add-command
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -66,9 +75,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleValue.parse can hit the hole. Rule 4 is Web3-only.
 template_class: position_grammar_three_value
 isomorphic_sites:
-    - src/typed-om/position/position-parser.ts:96
-    - src/typed-om/position/position-parser.ts:100
-    - src/typed-om/position/position-parser.ts:114
-    - src/typed-om/values/style-value-parser.ts:188
+    - "src/typed-om/position/position-parser.ts:113 #fixed"
+    - "src/typed-om/position/position-parser.ts:315 #fixed"
+    - "src/typed-om/position/position-parser.ts:320 #fixed"
+    - "src/typed-om/position/position-parser.ts:359 #fixed"
+    - "src/typed-om/values/style-value-parser.ts:87 #fixed"
 dedup_armor: |
     Grammar holes in tryParsePosition (3-value accepted, center left dropped, transform-origin 4-value accepted). Distinct from KI-3, which is the CSSStyleValue fallback when tryParsePosition returns null for invalid 'not-a-position'. Do not merge this KI into KI-3 without collapsing the grammar vs swallow-invalid distinction.

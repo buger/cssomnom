@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-11
+evidence_type: known_issue_tripwire
+requirements:
+    - SW-REQ-260821-7AKJ
+    - SYS-REQ-260821-HGFK
+command: node --experimental-strip-types proof/reproducers/KI-11-position-grammar.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-22T06:00:55Z"
+input_set:
+    - proof/reproducers/KI-11-position-grammar.ts
+freshness_hashes:
+    proof/reproducers/KI-11-position-grammar.ts: sha256:baca52056cba950ffa0886d6c265f28341b15e5ce9c06c5a2b2a63e6d26d744c
+known_issues:
+    - KI-11

@@ -106,6 +106,7 @@ test('CSSPositionValue serialization', () => {
   assert.strictEqual(pos.toString(), '10px 100%');
 });
 
+// Reproduces: KI-3
 test('CSSPositionValue invalid position syntax throws TypeError', () => {
   // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: invalid <position> throws TypeError
   assert.throws(() => {
@@ -152,6 +153,7 @@ test('CSSStyleValue.parse does not throw when grammar is valid but CSSPositionVa
   assert.ok(!(origin3 instanceof CSSKeywordValue));
 });
 
+// Reproduces: KI-11
 test('transform-origin grammar is checked before CSSPositionValue reification', () => {
   // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: TypeError only when property grammar fails.
   // css-transforms-1 § 5 #transform-origin-property:
@@ -181,6 +183,7 @@ test('transform-origin grammar is checked before CSSPositionValue reification', 
   }, TypeError, '4-value <position> is invalid transform-origin');
 });
 
+// Reproduces: KI-11
 test('transform-origin && overlapping center: center left / center left 5px parse', () => {
   // css-transforms-1 § 5 #transform-origin-property:
   // [ [ center | left | right ] && [ center | top | bottom ] ] <length>?
@@ -229,6 +232,7 @@ test('transform-origin && overlapping center: center left / center left 5px pars
   }, TypeError, '4-value <position> is still invalid transform-origin');
 });
 
+// Reproduces: KI-11
 test('perspective-origin is <position> including 4-value, not transform-origin z', () => {
   // css-transforms-2 #perspective-origin-property: Value is <position>.
   // css-values-4 § 10.1 #position: 1-/2-/4-value only. 3-value is not generic

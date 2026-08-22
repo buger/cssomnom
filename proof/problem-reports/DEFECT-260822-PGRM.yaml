@@ -1,43 +1,46 @@
 schema_version: 1
-id: DEFECT-260821-KESF
-title: CSSStyleValue.parse invalid object-position returned CSSStyleValue instead of TypeError
+id: DEFECT-260822-PGRM
+title: tryParsePosition accepted 3-value perspective-origin / 4-value transform-origin and dropped center left
 introduced_in: inception
 source:
     type: audit_finding
 classification:
     surface: runtime_code
     severity: medium
-    defect_class: invalid_parse_swallowed
+    defect_class: position_grammar_three_value
 description: |
-    css-typed-om-1 parse(property, cssText) must throw TypeError when cssText is not valid
-    for the property. POSITION_PROPERTIES short-circuited tryParsePosition failure into a
-    generic CSSStyleValue. Product fix: grammar-first matchesPositionPropertyGrammar then
-    reify (parseThenReifyPosition). TypeError only when the property grammar fails; valid
-    grammar that cannot reify as CSSPositionValue returns CSSKeywordValue / raw CSSStyleValue.
-    Sibling color properties already threw via CSSColorValue.parse.
+    css-values-4 § 10.1 #position: generic <position> is 1-/2-/4-value, not 3-value
+    (csswg-drafts#2140). css-transforms-2 #perspective-origin-property uses <position>,
+    so left 10px top is invalid. css-transforms-1 #transform-origin-property is not
+    4-value <position>, so left 10px top 20px is invalid. css-values-4 § 2.2 #comb-all
+    puts center in both x and y groups, so center left is a valid CSSPositionValue.
+    Product fix: grammar-first matchesPositionPropertyGrammar (isValidCssPosition,
+    isValidTransformOrigin, isKeywordAndPair) then reify. 3-value remains valid only
+    for css-backgrounds-3 #background-position. Distinct from KI-3 (invalid ident swallow).
 root_cause:
     missing_requirement: false
     missing_test_partition: true
     missing_mcdc_variable: false
-    notes: 7AKJ/HGFK named the throw; the object-position invalid partition was unwitnessed.
+    notes: 7AKJ/HGFK named the throw; 3-value / && / transform-origin 4-value partitions were unwitnessed.
 impact_analysis:
     affected_requirements:
         - SW-REQ-260821-7AKJ
         - SYS-REQ-260821-HGFK
     affected_code:
-        - src/typed-om/values/style-value-parser.ts
         - src/typed-om/position/position-parser.ts
+        - src/typed-om/values/style-value-parser.ts
 disposition:
     status: covered_by_requirement
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
-    reviewed_at: "2026-08-21T23:40:00Z"
+    reviewed_at: "2026-08-22T06:00:00Z"
     requirements:
         - SW-REQ-260821-7AKJ
         - SYS-REQ-260821-HGFK
     evidence:
         verified_by:
             - tests/typed-om-position.test.ts
+            - proof/reproducers/KI-11-position-grammar.ts
         requirement_mcdc_witnesses:
             - requirement: SW-REQ-260821-7AKJ
               witness: "invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE"
@@ -55,28 +58,26 @@ hardening:
           obligation_class: error_handling
     sibling_sweep:
         scope:
-            - src/typed-om/values/style-value-parser.ts
             - src/typed-om/position/position-parser.ts
+            - src/typed-om/values/style-value-parser.ts
         checked_at: "2026-08-22"
         reviewer: agent:grok-4.6
         result: clean
     regression_tests:
         - tests/typed-om-position.test.ts
-        - proof/reproducers/KI-3-object-position-parse.ts
+        - tests/mcdc-hotspot-url-position.test.ts
+        - tests/mcdc-position-still-hot-unique-cause.test.ts
+        - proof/reproducers/KI-11-position-grammar.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-7AKJ
           witness: "invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE"
         - requirement: SYS-REQ-260821-HGFK
           witness: "invalid_typed_input=T, parse_throws=T => TRUE"
 history:
-    - at: "2026-08-21T20:13:40Z"
+    - at: "2026-08-22T05:59:20Z"
       by: agent:grok-4.6
       action: created
-    - at: "2026-08-21T20:15:00Z"
-      by: agent:grok-4.6
-      action: edited
-      detail: Filled class-closure hardening after the product fix for KI-3.
     - at: "2026-08-22T06:00:00Z"
       by: agent:grok-4.6
       action: edited
-      detail: Restored grammar-first class-closure after fe7defa src restore. KI-3 status fixed.
+      detail: Filled class-closure hardening after the product fix for KI-11.

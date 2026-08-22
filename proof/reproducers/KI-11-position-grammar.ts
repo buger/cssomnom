@@ -4,7 +4,7 @@
  * css-transforms-2 #perspective-origin-property uses <position> (3-value invalid).
  * css-transforms-1 #transform-origin-property is not 4-value <position>.
  * css-values-4 && grammar: center is in both x and y groups, so "center left" is valid.
- * Asserts those contracts so this command FAILS while tryParsePosition is unrestored.
+ * Asserts those contracts. PASSES after the KI-11 product fix.
  *
  * Reproduces: KI-11
  */
@@ -79,9 +79,9 @@ function ki11Contract(): { setupOk: boolean; holds: boolean; message: string } {
 
 // Reproduces: KI-11
 // Verifies: SW-REQ-260821-7AKJ
-// MCDC SW-REQ-260821-7AKJ: invalid_typed_input=T, parse_style_value=T, parse_throws=F => FALSE [known-issue] [ki: KI-11]
+// MCDC SW-REQ-260821-7AKJ: invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE
 // Verifies: SYS-REQ-260821-HGFK
-// MCDC SYS-REQ-260821-HGFK: invalid_typed_input=T, parse_throws=F => FALSE [known-issue] [ki: KI-11]
+// MCDC SYS-REQ-260821-HGFK: invalid_typed_input=T, parse_throws=T => TRUE
 test('position grammar: 3-value perspective-origin throws; center left reifies; transform-origin 4-value throws', () => {
   const outcome = ki11Contract();
   assert.equal(outcome.setupOk, true, outcome.message);
