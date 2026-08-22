@@ -3303,3 +3303,30 @@ Follow-up to 657058e: lookup folded the CSS at-keyword (`atRuleName.toLowerCase(
 - [x] RED then GREEN in `tests/mcdc-branch-parser-atrules.test.ts`: `{ FOO: 'rule' }` vs `@foo`; `{ Foo: 'declaration' }` vs `@Foo`; inherited-key hijack.
 - [x] Node 24 (`/opt/node24/bin`): `node --test tests/mcdc-branch-parser-atrules.test.ts` — 18 pass.
 
+---
+
+## Phase: leftover PropertyRegistry `consumeSyntaxComponent` MC/DC tests (Champ)
+
+Cover leftover `src/PropertyRegistry.ts:consumeSyntaxComponent` (4/18) through public `CSS.registerProperty` and exported `matchesSyntax`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-property-registry-syntax.test.ts` — data type names (`<color>`, unknown/`<>`/`<COLOR>`, unterminated `<color`, inner junk), unexpected start tokens, ident literals + CSS-wide keywords + `<custom-ident>`, adjacent and whitespace-separated multipliers (`+` `#` `?` `*` `{A,B}` closed vs EOF), `|` unions / trailing pipe / double pipe / `*`, pre-multiplied `<transform-list>` rejecting a trailing multiplier, `matchesSyntax` color/hash/function/system/`currentcolor`, `<length>+` every-item unique-cause, `#` comma-list miss, invalid syntax returns false.
+- [x] Node 24: `node --test tests/mcdc-hotspot-property-registry-syntax.test.ts` — 12 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-syntax.md`.
+
+---
+
+## Phase: leftover `toParserRule` MC/DC tests (Champ)
+
+Cover leftover `src/parser-api.ts` `toParserRule` unique-cause branches. Drive `CSS.parseStylesheetSync` / `CSS.parseRule` for remaining at-rules and style rules, duck-typed type 0, empty prelude. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-parser-api-toparser.test.ts` — remaining at-rules not in `tests/parser-api.test.ts` (`@supports`, `@starting-style`, empty `@layer`/`@scope`/`@media`/`@container`, `@import`, `@namespace`, `@font-face`, `@page`+`@top-left`, `@property`, `@counter-style`, `@font-feature-values`, `@custom-media`, `@view-transition`, unknown `@foo`, `@keyframes` keyframe children); empty prelude; nested style + `CSSNestedDeclarations` type-0 raw fallback; duck-typed type 0 (empty prelude block/statement, cssRules body, whitespace/comment skip, missing/non-at-rule cssText); AST at-rule mixed block; duck type 4/7/3/5/8 and style `selectorText`/`style`/`prelude`.
+- [x] Node 24: `node --test tests/mcdc-parser-api-toparser.test.ts` — 59 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
+---
+
+## Phase: leftover `contractBackground` MC/DC tests (Champ)
+
+Cover leftover `src/shorthands.ts` `contractBackground` unique-cause branches that `tests/mcdc-hotspot-shorthands.test.ts` hit only via direct `SHORTHANDS['background'].contract()` / `getPropertyValue('background')`. Drive `CSSStyleDeclaration.cssText` after `setProperty` of the eight background longhands. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-contract-background.test.ts` — `cssText` after setting `background-color`/`image`/`repeat`/`attachment`/`position`/`size`/`origin`/`clip`: all-initial `none`; color/image/attachment unique-cause; position/size omit-initial vs slash vs position-only; repeat-x/y (two-token map and stored keyword), collapse identical, mixed, 1-token, 3-token; origin/clip XOR padding-box/border-box, clip-only `text`/`border-area`, same/mixed boxes, substring `includes('text'|'border-area')`; layer-count unique-cause mismatch per longhand (no `background:` shorthand); empty last/first layers via trailing/leading commas; multi-layer color only on last layer; full combination + `!important`.
+- [x] Node 24: `node --test tests/mcdc-hotspot-contract-background.test.ts` — 9 pass.
+
