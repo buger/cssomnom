@@ -3323,10 +3323,10 @@ Cover leftover `src/parser-api.ts` `toParserRule` unique-cause branches. Drive `
 
 ---
 
-## Phase: leftover `contractBackground` MC/DC tests (Champ)
+## Phase: leftover color-spaces `parseColorArgs` MC/DC tests (Champ)
 
-Cover leftover `src/shorthands.ts` `contractBackground` unique-cause branches that `tests/mcdc-hotspot-shorthands.test.ts` hit only via direct `SHORTHANDS['background'].contract()` / `getPropertyValue('background')`. Drive `CSSStyleDeclaration.cssText` after `setProperty` of the eight background longhands. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+Cover leftover `src/typed-om/color/color-spaces.ts` `parseColorArgs` (8/22) through public `CSSColorValue.parse` / `CSSStyleValue.parse('color', ...)`. rgb/hsl/hwb/lab/lch/oklab/oklch/color() missing args, slash alpha, none, percentages. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
 
-- [x] `tests/mcdc-hotspot-contract-background.test.ts` — `cssText` after setting `background-color`/`image`/`repeat`/`attachment`/`position`/`size`/`origin`/`clip`: all-initial `none`; color/image/attachment unique-cause; position/size omit-initial vs slash vs position-only; repeat-x/y (two-token map and stored keyword), collapse identical, mixed, 1-token, 3-token; origin/clip XOR padding-box/border-box, clip-only `text`/`border-area`, same/mixed boxes, substring `includes('text'|'border-area')`; layer-count unique-cause mismatch per longhand (no `background:` shorthand); empty last/first layers via trailing/leading commas; multi-layer color only on last layer; full combination + `!important`.
-- [x] Node 24: `node --test tests/mcdc-hotspot-contract-background.test.ts` — 9 pass.
+- [x] `tests/mcdc-hotspot-parse-color-args.test.ts` — empty/comment/whitespace `fn()`; missing 1–2 args; space 4-arg without slash; first slash vs double slash vs mid-slash vs arity≠4; mixed comma+slash; comma 3-arg/4-arg/trailing/leading/double/mixed separators; `none` channels + slash-alpha `none`; percentages and number→percent/deg conversions (lab a/b %×1.25, lch C/1.5, oklab %×0.004, oklch C/0.004); `color()` space-only, slash, percentages, comma form, non-keyword space; rejected string/hash/calc/var/url/delim; comments; rgba/hsla; `CSSStyleValue.parse('color', ...)`.
+- [x] Node 24: `node --test tests/mcdc-hotspot-parse-color-args.test.ts` — 9 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-colorargs.md`.
 
