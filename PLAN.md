@@ -3258,6 +3258,15 @@ Leftovers from 5f95a3b `getAtRuleHandler` ASCII fold. Spec: css-values-4 § 4.1 
 
 ---
 
+## Phase: leftover `_parseAll` property-family MC/DC tests (Champ)
+
+Cover leftover `src/typed-om/values/style-value-parser.ts:_parseAll` (29/57) through public `CSSStyleValue.parse` / `parseAll`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-hotspot-parse-all-more.test.ts` — properties not in `tests/mcdc-hotspot-parse-all.test.ts`: images (`url()` / gradients / `image-set` / `list-style-image` / `border-image-source` / `mask-image`), shadows (`box-shadow` SHORTHANDS_DATA vs comma list, `text-shadow` syntax vs list split), remaining filters (`drop-shadow` / `url` / multi / `var()` / `NONE` / `will-change: scroll-position`), grid shorthand + tracks/areas/placement, transition/animation shorthand + leftover longhands, `content`, `quotes`, remaining `cursor` keywords + url hotspot + invalid `default`, `clip-path` boxes/url vs basic-shape TypeError, `background-position` comma list, SHORTHANDS_DATA-only (`gap`/`columns`/`place-*`), leftover logical 2-value syntax fail.
+- [x] Node 24: `node --test tests/mcdc-hotspot-parse-all-more.test.ts` — 13 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
+---
+
 ## Phase: assembleUnicodeRanges MC/DC tests (Champ)
 
 Drive `src/parser.ts` `assembleUnicodeRanges` (1/30 remaining code-MC/DC decisions) through `@font-face` unicode-range parsing, `CSSFontFaceDescriptors.setProperty`, and the exported `assembleUnicodeRanges` helper. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).

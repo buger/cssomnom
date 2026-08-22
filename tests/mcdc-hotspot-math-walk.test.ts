@@ -19,8 +19,9 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseHTML } from 'linkedom';
 import '../src/parser.ts';
-import { parse, parseStyleSheet } from '../src/parser.ts';
+import { parse, parseStyleSheet, parseRuleInBlock } from '../src/parser.ts';
 import { tokenize } from '../src/tokenizer.ts';
+import { ParseHooks } from '../src/parse-hooks.ts';
 import { getCascadedStyle } from '../src/cascade.ts';
 import { simplify } from '../src/math-parser.ts';
 import {
@@ -46,7 +47,17 @@ import {
   CSSMediaRule,
   CSSSupportsRule,
   CSSLayerBlockRule,
+  CSSLayerStatementRule,
   CSSNestedDeclarations,
+  CSSPageRule,
+  CSSMarginRule,
+  CSSStartingStyleRule,
+  CSSContainerRule,
+  CSSImportRule,
+  CSSNamespaceRule,
+  CSSFontFaceRule,
+  CSSKeyframesRule,
+  CSSScopeRule,
 } from '../src/CSSOM.ts';
 import type { ASTAtRule, ComponentValue, Rule } from '../src/types.ts';
 
@@ -826,5 +837,256 @@ describe('MC/DC hotspot: cascade walkRules via getCascadedStyle', { concurrency:
     const styleRule = withNestedDecls.cssRules[0] as CSSStyleRule;
     assert.ok([...styleRule.cssRules].some((r) => r instanceof CSSNestedDeclarations));
     assert.ok([...styleRule.cssRules].some((r) => r instanceof CSSMediaRule));
+  });
+
+  test('@page descriptors and margin rules skip the element; nested grouping still walks', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      @page {
+        margin: 1in;
+        z-index: 99;
+        @top-left { content: "header"; }
+        @media all {
+          .t { order: 3; isolation: isolate; }
+        }
+      }
+      @page :first { z-index: 88; }
+      @page { }
+      .t { z-index: 1; }
+    `);
+    const rules = [...sheet.cssRules];
+    assert.ok(rules[0] instanceof CSSPageRule);
+    assert.ok([...rules[0].cssRules].some((r) => r instanceof CSSMarginRule));
+    assert.ok([...rules[0].cssRules].some((r) => r instanceof CSSMediaRule));
+    assert.ok(rules[1] instanceof CSSPageRule);
+    assert.equal((rules[1] as CSSPageRule).selectorText, ':first');
+
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '1');
+    assert.equal(style.getPropertyValue('content'), '');
+    assert.notEqual(style.getPropertyValue('margin-top'), '1in');
+    assert.equal(style.getPropertyValue('order'), '3');
+    assert.equal(style.getPropertyValue('isolation'), 'isolate');
+  });
+
+  test('@starting-style remaining: nested declarations, nested grouping, and top-level style rules', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      .t {
+        z-index: 1;
+        @starting-style {
+          caret-color: rgb(0, 128, 0);
+          isolation: isolate;
+        }
+      }
+      @starting-style {
+        .t { order: 4; }
+        @supports (display: grid) {
+          .t { opacity: 0.3; }
+        }
+        @media not all {
+          .t { z-index: 99; }
+        }
+      }
+    `);
+    const host = sheet.cssRules[0] as CSSStyleRule;
+    assert.ok(host.cssRules[0] instanceof CSSStartingStyleRule);
+    assert.ok((host.cssRules[0] as CSSStartingStyleRule).cssRules[0] instanceof CSSNestedDeclarations);
+    assert.ok(sheet.cssRules[1] instanceof CSSStartingStyleRule);
+
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '1');
+    assert.equal(style.getPropertyValue('caret-color'), 'rgb(0, 128, 0)');
+    assert.equal(style.getPropertyValue('isolation'), 'isolate');
+    assert.equal(style.getPropertyValue('order'), '4');
+    assert.equal(style.getPropertyValue('opacity'), '0.3');
+
+    const before = getCascadedStyle(el, sheet.cssRules, '::before');
+    assert.equal(before.getPropertyValue('caret-color'), '');
+    assert.equal(before.getPropertyValue('order'), '');
+  });
+
+  test('CSSNestedDeclarations leftover: :scope, @scope spec 0, !important, legacy :before parent, strip to :scope', () => {
+    const { el, document } = makeDiv();
+
+    const leftoverSheet = parse(`
+      .t {
+        z-index: 1;
+        @media all { }
+        order: 2 !important;
+      }
+    `);
+    const leftoverStyle = getCascadedStyle(el, leftoverSheet.cssRules);
+    assert.equal(leftoverStyle.getPropertyValue('z-index'), '1');
+    assert.equal(leftoverStyle.getPropertyValue('order'), '2');
+    const leftoverHost = leftoverSheet.cssRules[0] as CSSStyleRule;
+    const leftoverDecl = [...leftoverHost.cssRules].find((r) => r instanceof CSSNestedDeclarations) as CSSNestedDeclarations;
+    assert.ok(leftoverDecl);
+    assert.equal(leftoverDecl.style.getPropertyPriority('order'), 'important');
+
+    const scoped = parse(`
+      @scope (.t) {
+        z-index: 4;
+        order: 6 !important;
+      }
+      .t { z-index: 1; }
+    `);
+    assert.ok(scoped.cssRules[0] instanceof CSSScopeRule);
+    assert.ok((scoped.cssRules[0] as CSSScopeRule).cssRules[0] instanceof CSSNestedDeclarations);
+    const scopedStyle = getCascadedStyle(el, scoped.cssRules);
+    assert.equal(scopedStyle.getPropertyValue('z-index'), '1');
+    assert.equal(scopedStyle.getPropertyValue('order'), '6');
+    assert.equal(getCascadedStyle(document.body, scoped.cssRules).getPropertyValue('order'), '');
+
+    const topDecls = ParseHooks.parseStyleAttribute(tokenize('z-index: 7 !important; opacity: 0.5'));
+    const topNested = new CSSNestedDeclarations(topDecls.declarations);
+    const htmlStyle = getCascadedStyle(document.documentElement, [topNested]);
+    assert.equal(htmlStyle.getPropertyValue('z-index'), '7');
+    assert.equal(htmlStyle.getPropertyValue('opacity'), '0.5');
+    assert.equal(getCascadedStyle(el, [topNested]).getPropertyValue('z-index'), '');
+
+    const hostDecls = ParseHooks.parseStyleAttribute(tokenize('z-index: 1; content: "x"')).declarations;
+    const nestedOpacity = new CSSNestedDeclarations(
+      ParseHooks.parseStyleAttribute(tokenize('opacity: 0.25 !important')).declarations,
+    );
+    const legacyBefore = new CSSStyleRule('.t:before', hostDecls, [nestedOpacity], parseRuleInBlock);
+    const before = getCascadedStyle(el, [legacyBefore], '::before');
+    assert.equal(legacyBefore.selectorText, '.t:before');
+    assert.equal(before.getPropertyValue('z-index'), '1');
+    assert.equal(before.getPropertyValue('opacity'), '0.25');
+    assert.equal(getCascadedStyle(el, [legacyBefore]).getPropertyValue('z-index'), '');
+    assert.equal(getCascadedStyle(el, [legacyBefore], '::after').getPropertyValue('z-index'), '');
+    assert.equal(getCascadedStyle(el, [legacyBefore], '::after').getPropertyValue('content'), '');
+
+    const bareBefore = new CSSStyleRule('::before', hostDecls, [nestedOpacity], parseRuleInBlock);
+    const htmlBefore = getCascadedStyle(document.documentElement, [bareBefore], '::before');
+    assert.equal(htmlBefore.getPropertyValue('z-index'), '1');
+    assert.equal(htmlBefore.getPropertyValue('opacity'), '0.25');
+    assert.equal(getCascadedStyle(el, [bareBefore], '::before').getPropertyValue('z-index'), '');
+  });
+
+  test('@container style() grouping walks without evaluating the style query', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      @container style(--theme: dark) {
+        .t { z-index: 2; }
+      }
+      @container card style(--theme: light) {
+        .t { opacity: 0.4; }
+      }
+      @container style((color: red) and (background-color: blue)) {
+        .t { order: 5; }
+      }
+      @container style(--unused: 1) { }
+    `);
+    const rules = [...sheet.cssRules];
+    assert.equal(rules.length, 4);
+    assert.ok(rules.every((r) => r instanceof CSSContainerRule));
+    assert.match((rules[0] as CSSContainerRule).conditionText, /style\(--theme:\s*dark\)/);
+    assert.equal((rules[1] as CSSContainerRule).containerName, 'card');
+    assert.match((rules[1] as CSSContainerRule).conditionText, /style\(--theme:\s*light\)/);
+    assert.match((rules[2] as CSSContainerRule).conditionText, /style\(\(color:\s*red\)/);
+    assert.equal((rules[3] as CSSContainerRule).cssRules.length, 0);
+
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '2');
+    assert.equal(style.getPropertyValue('opacity'), '0.4');
+    assert.equal(style.getPropertyValue('order'), '5');
+  });
+
+  test(':host selectors are walked and do not match a light-tree element', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      :host { z-index: 1; caret-color: rgb(255, 0, 0); }
+      :host(.t) { z-index: 2; isolation: isolate; }
+      :host-context(body) { order: 8; }
+      .t { z-index: 9; }
+    `);
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '9');
+    assert.equal(style.getPropertyValue('caret-color'), '');
+    assert.equal(style.getPropertyValue('isolation'), 'auto');
+    assert.equal(style.getPropertyValue('order'), '');
+  });
+
+  test('empty sheets and empty rule lists yield no author declarations', () => {
+    const { el } = makeDiv();
+    const emptyParse = parse('');
+    assert.equal(emptyParse.cssRules.length, 0);
+    assert.equal(getCascadedStyle(el, emptyParse.cssRules).getPropertyValue('z-index'), '');
+
+    const comments = parse('/* only a comment */ @charset "utf-8";');
+    assert.equal(comments.cssRules.length, 0);
+    assert.equal(getCascadedStyle(el, comments.cssRules).getPropertyValue('order'), '');
+
+    const constructed = new CSSStyleSheet();
+    assert.equal(constructed.cssRules.length, 0);
+    assert.equal(getCascadedStyle(el, constructed.cssRules).getPropertyValue('z-index'), '');
+
+    assert.equal(getCascadedStyle(el, []).getPropertyValue('z-index'), '');
+  });
+
+  test('duplicate @layer names share one order; later same-layer wins; unlayered still beats both', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      @layer a, a, b;
+      @layer a { .t { z-index: 1; opacity: 0.1; } }
+      @layer a { .t { z-index: 2; } }
+      @layer b { .t { z-index: 3; } }
+      .t { z-index: 9; }
+    `);
+    const rules = [...sheet.cssRules];
+    assert.ok(rules[0] instanceof CSSLayerStatementRule);
+    assert.deepEqual([...(rules[0] as CSSLayerStatementRule).nameList], ['a', 'a', 'b']);
+    assert.ok(rules[1] instanceof CSSLayerBlockRule);
+    assert.ok(rules[2] instanceof CSSLayerBlockRule);
+    assert.equal((rules[1] as CSSLayerBlockRule).name, 'a');
+    assert.equal((rules[2] as CSSLayerBlockRule).name, 'a');
+
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '9');
+    assert.equal(style.getPropertyValue('opacity'), '0.1');
+
+    const sameLayer = parse(`
+      @layer a { .t { z-index: 1; } }
+      @layer a { .t { z-index: 2; } }
+    `);
+    assert.equal(getCascadedStyle(el, sameLayer.cssRules).getPropertyValue('z-index'), '2');
+
+    const importantSame = parse(`
+      @layer a { .t { z-index: 1 !important; } }
+      @layer a { .t { z-index: 2 !important; } }
+    `);
+    assert.equal(getCascadedStyle(el, importantSame.cssRules).getPropertyValue('z-index'), '2');
+  });
+
+  test('@import, @namespace, @font-face, and @keyframes are skipped by walkRules', () => {
+    const { el } = makeDiv();
+    const sheet = parse(`
+      @import url("https://example.com/a.css");
+      @import url("b.css") layer(foo) supports(display: grid);
+      @namespace svg url("http://www.w3.org/2000/svg");
+      @font-face { font-family: skip; src: url(skip.woff); }
+      @keyframes spin {
+        from { z-index: 99; opacity: 0; }
+        to { z-index: 98; }
+      }
+      .t { z-index: 1; }
+    `);
+    const rules = [...sheet.cssRules];
+    assert.ok(rules[0] instanceof CSSImportRule);
+    assert.ok(rules[1] instanceof CSSImportRule);
+    assert.equal((rules[0] as CSSImportRule).href, 'https://example.com/a.css');
+    assert.equal((rules[1] as CSSImportRule).styleSheet, null);
+    assert.ok(rules[2] instanceof CSSNamespaceRule);
+    assert.ok(rules[3] instanceof CSSFontFaceRule);
+    assert.ok(rules[4] instanceof CSSKeyframesRule);
+    assert.ok(rules[5] instanceof CSSStyleRule);
+
+    const style = getCascadedStyle(el, sheet.cssRules);
+    assert.equal(style.getPropertyValue('z-index'), '1');
+    assert.notEqual(style.getPropertyValue('z-index'), '99');
+    assert.notEqual(style.getPropertyValue('font-family'), 'skip');
+    assert.equal(style.getPropertyValue('opacity'), '1');
   });
 });
