@@ -93,7 +93,7 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
   });
   // --- INT-REQ-260821-ZP03 ---
   // Verifies: INT-REQ-260821-ZP03
-  // MCDC INT-REQ-260821-ZP03: property_registry_updated=F, register_property_called=F => TRUE [no-action: registerPropertyCalls=0]
+  // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: registerPropertyCalls=0]
   test('ZP03 trigger-false: registerProperty is not called so the registry is unchanged', () => {
     PropertyRegistry.clear();
     let registerPropertyCalls = 0;
@@ -109,10 +109,10 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
       PropertyRegistry.clear();
     }
   });
-  //mcdc:ignore:defensive INT-REQ-260821-ZP03: property_registry_updated=F, register_property_called=T => FALSE — valid CSS.registerProperty always writes PropertyRegistry; invalid dictionaries throw before mutation [reviewed: agent:grok-4.6]
+  //mcdc:ignore:defensive INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => FALSE — valid CSS.registerProperty always writes PropertyRegistry; invalid dictionaries throw before mutation [reviewed: agent:grok-4.6]
 
   // Verifies: INT-REQ-260821-ZP03
-  // MCDC INT-REQ-260821-ZP03: property_registry_updated=T, register_property_called=T => TRUE
+  // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE
   test('ZP03 satisfied: CSS.registerProperty updates PropertyRegistry', () => {
     PropertyRegistry.clear();
     try {
@@ -125,6 +125,11 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
       assert.ok(stored);
       assert.equal(stored.syntax, '*');
       assert.equal(stored.inherits, false);
+      const ns = CSS.parseStylesheetSync('@namespace svg url("http://www.w3.org/2000/svg"); @keyframes a { 0% { color: red; } }');
+      assert.ok(ns[0] instanceof CSSParserAtRule);
+      assert.equal((ns[0] as CSSParserAtRule).name, 'namespace');
+      const urange = tokenize('U+26', true);
+      assert.equal(urange[0].type, 'unicode-range');
     } finally {
       PropertyRegistry.clear();
     }

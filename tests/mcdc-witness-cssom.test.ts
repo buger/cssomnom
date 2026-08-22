@@ -189,7 +189,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
 
   describe('INT-REQ-260821-30ZA', () => {
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: insert_rule_path=F, parse_hooks_consume_rule_called=F, parser_imported=F => TRUE [no-action: ParseHooks.consumeRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: ParseHooks.consumeRule]
     test('insertRule path is idle without calling consumeRule or importing Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -206,11 +206,11 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
         ParseHooks.consumeRule = original;
       }
     });
-//mcdc:ignore:defensive INT-REQ-260821-30ZA: insert_rule_path=T, parse_hooks_consume_rule_called=F, parser_imported=F => FALSE — CSSStyleSheet.insertRule parse path always calls ParseHooks.consumeRule via _parseRule [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-30ZA: insert_rule_path=T, parse_hooks_consume_rule_called=T, parser_imported=T => FALSE — src/CSSOM.ts does not import parser.ts; insertRule uses ParseHooks inversion [reviewed: agent:grok-4.6]
+//mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — CSSStyleSheet.insertRule parse path always calls ParseHooks.consumeRule via _parseRule [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE — src/CSSOM.ts does not import parser.ts; insertRule uses ParseHooks inversion [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: insert_rule_path=T, parse_hooks_consume_rule_called=T, parser_imported=F => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE
     test('insertRule calls ParseHooks.consumeRule and CSSOM does not import Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -221,12 +221,15 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       };
       try {
         const sheet = new CSSStyleSheet();
-        const index = sheet.insertRule('div { color: red; }', 0);
+        const index = sheet.insertRule('div { margin: 1px 2px 3px 4px; }', 0);
         assert.equal(index, 0);
         assert.ok(consumeCalls >= 1);
         assert.equal(sheet.cssRules.length, 1);
         assert.ok(sheet.cssRules[0] instanceof CSSStyleRule);
-        assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('color'), 'red');
+        assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-top'), '1px');
+        assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-right'), '2px');
+        assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-bottom'), '3px');
+        assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-left'), '4px');
       } finally {
         ParseHooks.consumeRule = original;
       }

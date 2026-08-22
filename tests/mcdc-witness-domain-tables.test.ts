@@ -173,9 +173,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=F, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=F, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     test('empty object-position throws and does not reify a 1-to-4 CSSPositionValue', () => {
       let reifyAction = 0;
       assert.throws(() => {

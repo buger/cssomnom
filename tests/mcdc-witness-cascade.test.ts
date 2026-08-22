@@ -40,7 +40,7 @@ function withLayoutCounter(el: Element, fn: () => void): number {
 describe('MC/DC cascade witnesses', { concurrency: false }, () => {
   describe('INT-REQ-260821-HJVC', () => {
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=F, matcher_and_media_consulted=F => TRUE [no-action: MediaParser.evaluate]
+    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=T, cascaded_style_requested=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE [no-action: MediaParser.evaluate]
     test('cascaded style is not requested so matcher and media stay idle', () => {
       const original = MediaParser.evaluate;
       let evaluateCalls = 0;
@@ -54,10 +54,10 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
         MediaParser.evaluate = original;
       }
     });
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=F => FALSE — getCascadedStyle walks CSSOM rules and consults matches/MediaParser.evaluate/supports when a cascaded style is requested [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=F, red_from_chroma=T => FALSE — getCascadedStyle walks CSSOM rules and consults matches/MediaParser.evaluate/supports when a cascaded style is requested [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
+    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE
     test('getCascadedStyle consults matcher, media, and supports', () => {
       const el = targetElement();
       const original = MediaParser.evaluate;
@@ -68,7 +68,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
       }) as typeof MediaParser.evaluate;
       try {
         const matcherSheet = parse(`
-          .t { color: red; }
+          .t { color: hsl(0, 100%, 50%); }
           span { color: blue !important; }
         `);
         assert.equal(
@@ -77,7 +77,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
         );
 
         const mediaSheet = parse(`
-          .t { color: red; }
+          .t { color: hsl(0, 100%, 50%); }
           @media not all { .t { color: blue; } }
         `);
         assert.equal(

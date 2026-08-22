@@ -155,7 +155,7 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
 
   describe('INT-REQ-260821-JTY2', () => {
     // Verifies: INT-REQ-260821-JTY2
-    // MCDC INT-REQ-260821-JTY2: transform_string_parsed=F, native_matrix_string=F, typed_om_transform_hook_used=F => TRUE [no-action: parseTransformListHook]
+    // MCDC INT-REQ-260821-JTY2: matrix_index_LE_3=T, native_matrix_string=F, transform_string_parsed=F, typed_om_transform_hook_used=F => TRUE [no-action: parseTransformListHook]
     test('non-string DOMMatrix construction does not use the transform hook', () => {
       const prev = parseTransformListHook;
       let hookCalls = 0;
@@ -176,7 +176,7 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
     });
 
     // Verifies: INT-REQ-260821-JTY2
-    // MCDC INT-REQ-260821-JTY2: transform_string_parsed=T, native_matrix_string=T, typed_om_transform_hook_used=F => TRUE [no-action: parseTransformListHook]
+    // MCDC INT-REQ-260821-JTY2: matrix_index_LE_3=T, native_matrix_string=T, transform_string_parsed=T, typed_om_transform_hook_used=F => TRUE [no-action: parseTransformListHook]
     test('native matrix() and matrix3d() skip the typed_om transform hook', () => {
       const prev = parseTransformListHook;
       let hookCalls = 0;
@@ -199,10 +199,10 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
         setParseTransformListHook(prev!);
       }
     });
-    //mcdc:ignore:defensive INT-REQ-260821-JTY2: transform_string_parsed=T, native_matrix_string=F, typed_om_transform_hook_used=F => FALSE — transform-list strings (translate/rotate) always call the typed_om hook; hook=F unique-cause is the native matrix() exemption [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-JTY2: matrix_index_LE_3=T, native_matrix_string=F, transform_string_parsed=T, typed_om_transform_hook_used=F => FALSE — transform-list strings (translate/rotate) always call the typed_om hook; hook=F unique-cause is the native matrix() exemption [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-JTY2
-    // MCDC INT-REQ-260821-JTY2: transform_string_parsed=T, native_matrix_string=F, typed_om_transform_hook_used=T => TRUE
+    // MCDC INT-REQ-260821-JTY2: matrix_index_LE_3=T, native_matrix_string=F, transform_string_parsed=T, typed_om_transform_hook_used=T => TRUE
     test('translate string construction uses the typed_om transform hook', () => {
       const prev = parseTransformListHook;
       let hookCalls = 0;
@@ -216,6 +216,9 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
         assert.equal(translated.is2D, true);
         assert.equal(translated.e, 10);
         assert.equal(translated.f, 20);
+        const product = translated.multiply(new DOMMatrix('translate(1px, 2px)'));
+        assert.equal(product.e, 11);
+        assert.equal(product.f, 22);
         assert.ok(hookCalls >= 1, 'DOMMatrix string ctor must call parseTransformListHook');
         assert.throws(() => {
           new DOMMatrix('nope(1)');

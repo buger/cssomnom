@@ -208,7 +208,7 @@ test('INT-WQX9 StylePropertyMap duck-types CSSStyleDeclaration setProperty/getPr
 // INT-REQ-260821-HJVC:integration:integration
 // INT-REQ-260821-HJVC:malformed_recovers_or_errors_loudly:nominal
 // INT-REQ-260821-HJVC:malformed_recovers_or_errors_loudly:negative
-// MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
+// MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE
 test('INT-HJVC cascade walks CSSOM rules and consults matcher, MediaParser, and supports', () => {
   const { document } = parseHTML('<html><body><div class="target"></div></body></html>');
   const el = document.querySelector('.target');
@@ -216,7 +216,7 @@ test('INT-HJVC cascade walks CSSOM rules and consults matcher, MediaParser, and 
 
   // Unmatched `span` is later and !important: if matcher did not drop it, blue would win.
   const matcherSheet = parse(`
-    .target { color: red; }
+    .target { color: hsl(0, 100%, 50%); }
     span { color: blue !important; }
   `);
   assert.equal(
@@ -226,7 +226,7 @@ test('INT-HJVC cascade walks CSSOM rules and consults matcher, MediaParser, and 
 
   // Inner `.target { color: blue }` is later, same specificity: if MediaParser were skipped, blue would win.
   const mediaSheet = parse(`
-    .target { color: red; }
+    .target { color: hsl(0, 100%, 50%); }
     @media not all { .target { color: blue; } }
   `);
   assert.equal(
@@ -331,12 +331,15 @@ test('INT-ZP03 CSS.registerProperty and @property share PropertyRegistry', () =>
 // INT-REQ-260821-JTY2:malformed_input:nominal
 // INT-REQ-260821-JTY2:error_handling:negative
 // INT-REQ-260821-JTY2:malformed_input:negative
-// MCDC INT-REQ-260821-JTY2: transform_string_parsed=T, native_matrix_string=F, typed_om_transform_hook_used=T => TRUE
+// MCDC INT-REQ-260821-JTY2: matrix_index_LE_3=T, native_matrix_string=F, transform_string_parsed=T, typed_om_transform_hook_used=T => TRUE
 test('INT-JTY2 DOMMatrix string ctor uses the typed_om transform parse hook', () => {
   const translated = new DOMMatrix('translate(10px, 20px)');
   assert.equal(translated.is2D, true);
   assert.equal(translated.e, 10);
   assert.equal(translated.f, 20);
+  const product = translated.multiply(new DOMMatrix('translate(1px, 2px)'));
+  assert.equal(product.e, 11);
+  assert.equal(product.f, 22);
   assert.throws(() => {
     new DOMMatrix('nope(1)');
   }, (err: unknown) => err instanceof DOMException && err.name === 'SyntaxError');
