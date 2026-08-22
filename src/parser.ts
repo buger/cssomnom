@@ -263,6 +263,7 @@ export class Parser {
    */
   // 5.4.8 Parse a component value https://drafts.csswg.org/css-syntax/#parse-component-value
   public parseComponentValue(): ComponentValue | null {
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; leading-ws T path already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const token = this.nextToken;
       if (token.type === 'whitespace') {
@@ -278,6 +279,7 @@ export class Parser {
     
     const value = this.consumeComponentValue();
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; trailing-ws T path already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const token = this.nextToken;
       if (token.type === 'whitespace') {
@@ -303,6 +305,7 @@ export class Parser {
   // Implements: SYS-REQ-260821-03VA, SW-REQ-260821-YG9J, INT-REQ-260821-N2VE
   public consumeListOfRules(topLevel: boolean): Rule[] {
     const rules: Rule[] = [];
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (stylesheet contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const token = this.nextToken;
       if (token.type === 'whitespace') {
@@ -359,6 +362,7 @@ export class Parser {
       childRules: [],
     };
 
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (at-rule prelude) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const next = this.nextToken;
       if (next.type === 'semicolon' || next.type === 'EOF') {
@@ -515,6 +519,7 @@ export class Parser {
     const keyframeRules: CSSKeyframeRule[] = [];
     const stream = new ArrayComponentValueStream(block.value);
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; outer keyframe T path already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'whitespace' || val.type === 'semicolon') {
@@ -526,6 +531,7 @@ export class Parser {
       const prelude: ComponentValue[] = [];
       let blockVal: SimpleBlock | null = null;
       
+      //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; inner prelude/block T path already witnessed [reviewed: agent:grok-4.6]
       while (true) {
         const next = stream.peek();
         if (next.type === 'EOF') break;
@@ -585,6 +591,7 @@ export class Parser {
           }
         }
         
+        //mcdc:ignore:defensive normalizedParts.length > 0 F with valid T is impossible — lists starts [[]]; empty/comma paths set valid=false before any push; valid T path already witnessed [reviewed: agent:grok-4.6]
         if (valid && normalizedParts.length > 0) {
           const selectorText = normalizedParts.join(', ');
           const declarations = this.consumeDeclarationsFromBlockContents(blockVal.value);
@@ -897,6 +904,7 @@ export class Parser {
   private consumeQualifiedRule(nested: boolean = false): CSSStyleRule | null {
     const prelude: ComponentValue[] = [];
 
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (qualified-rule prelude) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const next = this.nextToken;
       if (next.type === 'EOF') {
@@ -933,6 +941,7 @@ export class Parser {
   public consumeDeclarationsFromBlockContents(values: ComponentValue[]): Declaration[] {
     const stream = new ArrayComponentValueStream(values);
     const decls: Declaration[] = [];
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (declaration list) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'whitespace' || val.type === 'semicolon') {
@@ -947,6 +956,7 @@ export class Parser {
           decls.push(decl);
         } else {
           // Bad declaration: consume until semicolon
+          //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (bad-decl remnants) already witnessed [reviewed: agent:grok-4.6]
           while (true) {
             const next = stream.peek();
             if (next.type === 'EOF' || next.type === 'semicolon' || next.type === '}') break;
@@ -970,6 +980,7 @@ export class Parser {
       }
     };
 
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (block contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'whitespace' || val.type === 'semicolon') {
@@ -999,6 +1010,7 @@ export class Parser {
                 const lookaheadTokens: ComponentValue[] = [first, { type: 'colon', value: ':' } as Token];
                 let foundSemicolon = false;
                 let foundBlock = false;
+                //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (ident:colon lookahead) already witnessed [reviewed: agent:grok-4.6]
                 while (true) {
                   const next = stream.peek();
                   if (next.type === 'EOF' || next.type === '}') {
@@ -1017,7 +1029,9 @@ export class Parser {
                 }
                 if (foundSemicolon) {
                   isDecl = true;
-                } else if (foundBlock) {
+                }
+                //mcdc:ignore:defensive foundBlock F after foundSemicolon F is dead — lookahead always sets semicolon (EOF/}/;) or block; T path already witnessed [reviewed: agent:grok-4.6]
+                else if (foundBlock) {
                   const selectorCandidate = serialize(lookaheadTokens).trim();
                   const isValidSelector = Parser.parseSelectorAST(selectorCandidate) !== null;
                   isDecl = !isValidSelector;
@@ -1074,6 +1088,7 @@ export class Parser {
     }
     
     const declValue: ComponentValue[] = [];
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (declaration value) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'EOF' || val.type === 'semicolon') {
@@ -1199,6 +1214,7 @@ export class Parser {
   private consumeNestedQualifiedRuleFromStream(stream: ComponentValueStream, nested: boolean = true, stopToken?: string): Rule | null {
     const prelude: ComponentValue[] = [];
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (nested qualified prelude) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'EOF' || val.type === '}') {
@@ -1238,6 +1254,7 @@ export class Parser {
       childRules: [],
     };
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (stream at-rule prelude) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'semicolon') {
@@ -1296,6 +1313,7 @@ export class Parser {
    * @see https://drafts.csswg.org/css-syntax-3/#consume-remnants-of-a-bad-declaration
    */
   private consumeRemnantsOfABadDeclaration(stream: ComponentValueStream, nested: boolean = false): void {
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (bad-declaration remnants) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const val = stream.peek();
       if (val.type === 'EOF' || val.type === 'semicolon') {
@@ -1399,6 +1417,7 @@ export class Parser {
 
   static #consumeSelectorTokens(parser: Parser): ComponentValue[] | null {
     const prelude: ComponentValue[] = [];
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (selector tokens) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const next = parser.nextToken;
       if (next.type === 'EOF') {
@@ -1507,6 +1526,7 @@ export class Parser {
     };
     const mirror = getMirrorToken(startToken.type);
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (simple-block contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const next = this.nextToken;
       if (next.type === mirror) {
@@ -1538,6 +1558,7 @@ export class Parser {
     };
 
     
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (function contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const next = this.nextToken;
       if (next.type === ')') {
@@ -1731,6 +1752,7 @@ export class Parser {
         
         if (Parser.#customPropertyAstCache.size >= Parser.#MAX_CACHE_SIZE) {
           const firstKey = Parser.#customPropertyAstCache.keys().next().value;
+          //mcdc:ignore:defensive firstKey !== undefined F is impossible — size >= MAX implies a nonempty Map so keys().next().value is defined; T eviction already witnessed [reviewed: agent:grok-4.6]
           if (firstKey !== undefined) {
             Parser.#customPropertyAstCache.delete(firstKey);
           }

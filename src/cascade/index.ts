@@ -261,10 +261,13 @@ export function getCascadedStyle(
   }
 
   for (const [prop, decls] of declarationsByProperty) {
+    //mcdc:ignore:defensive decls.length > 0 F with startsWith('--') T is impossible — groupDeclarationsByProperty never stores []; custom-prop T path already witnessed [reviewed: agent:grok-4.6]
     if (prop.startsWith('--') && decls.length > 0) {
       const lastDecl = decls[decls.length - 1];
+      //mcdc:ignore:defensive lastDecl.raw T / includes('var(') independence is impossible — collectors stringify MatchedDeclaration.value and never copy .raw; F stringify path already witnessed [reviewed: agent:grok-4.6]
       const rawVal = (lastDecl.raw && !lastDecl.raw.includes('var('))
         ? lastDecl.raw
+        //mcdc:ignore:defensive typeof lastDecl.value === 'string' F is impossible — collectors always stringify value; T path already witnessed [reviewed: agent:grok-4.6]
         : (typeof lastDecl.value === 'string' ? lastDecl.value : serialize(lastDecl.value, true));
       rawCustomProps.set(prop, rawVal);
     }

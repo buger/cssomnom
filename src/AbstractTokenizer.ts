@@ -36,6 +36,7 @@ export abstract class AbstractTokenizer {
   // 4.3.1 Consume a token
   // Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
   protected consumeToken(): Token {
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (consume-token) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       this.consumeComments();
       const cp = this.consume();
@@ -178,6 +179,7 @@ export abstract class AbstractTokenizer {
     while (this.cp === 0x002F && this.peek(1) === 0x002A) { // /*
       this.consume();
       this.consume();
+      //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (comment body) already witnessed [reviewed: agent:grok-4.6]
       while (true) {
         const cp = this.consume();
         if (cp === -1) {
@@ -236,6 +238,7 @@ export abstract class AbstractTokenizer {
     let hasEscapes = false;
     let result = '';
 
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (string contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const cp = this.consume();
       if (cp === endingCodePoint || cp === -1) {
@@ -288,6 +291,7 @@ export abstract class AbstractTokenizer {
     while (this.isWhitespace(this.cp)) {
       this.consume();
     }
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (url contents) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const cp = this.consume();
       if (cp === 0x0029 || cp === -1) { // )
@@ -398,6 +402,7 @@ export abstract class AbstractTokenizer {
     let hasEscapes = false;
     let result = '';
 
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (ident sequence) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const cp = this.consume();
       if (this.isIdentCodePoint(cp)) {
@@ -492,6 +497,7 @@ export abstract class AbstractTokenizer {
 
   // 4.3.14 Consume the remnants of a bad url
   protected consumeRemnantsOfBadUrl(): void {
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (bad-url remnants) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const cp = this.consume();
       if (cp === 0x0029 || cp === -1) { // )

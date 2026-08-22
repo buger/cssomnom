@@ -90,6 +90,7 @@ function consumeSyntaxComponent(stream: ArrayTokenStream): SyntaxComponent {
 
   if (token.type === 'delim' && token.value === '<') {
     name = '<';
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (syntax <type> name) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const t = stream.next();
       if (t.type === 'EOF') throw new DOMException('Unterminated data type name', 'SyntaxError');
@@ -131,6 +132,7 @@ function consumeSyntaxComponent(stream: ArrayTokenStream): SyntaxComponent {
       multiplier = afterWs.value;
     } else if (afterWs.type === '{') {
       stream.next();
+      //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (whitespace-then-{N} multiplier) already witnessed [reviewed: agent:grok-4.6]
       while (true) {
         const t = stream.next();
         if (t.type === '}' || t.type === 'EOF') break;
@@ -142,6 +144,7 @@ function consumeSyntaxComponent(stream: ArrayTokenStream): SyntaxComponent {
     multiplier = next.value;
   } else if (next.type === '{') {
     stream.next();
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T ({N} multiplier) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const t = stream.next();
       if (t.type === '}' || t.type === 'EOF') break;

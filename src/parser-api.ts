@@ -480,6 +480,7 @@ async function sourceToString(source: CSSStringSource): Promise<string> {
   const reader = source.getReader();
   const decoder = new TextDecoder();
   let result = '';
+  //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (ReadableStream read) already witnessed [reviewed: agent:grok-4.6]
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;

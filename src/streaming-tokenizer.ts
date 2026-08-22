@@ -141,6 +141,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
   }
 
   private tokenizeLoop(): void {
+    //mcdc:ignore:defensive while(true) F is a language literal — loop-exit false cannot occur; T (streaming tokenize) already witnessed [reviewed: agent:grok-4.6]
     while (true) {
       const startPos = this.pos;
       try {
@@ -188,6 +189,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
   }
 
   protected reconsume(): void {
+    //mcdc:ignore:defensive this.pos > 0 F is unreachable after consume-non-EOF — reconsume only runs with pos>0; T path already witnessed [reviewed: agent:grok-4.6]
     if (this.pos > 0) {
       this.pos--;
     }
