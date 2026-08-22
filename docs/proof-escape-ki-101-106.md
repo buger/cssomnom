@@ -1,7 +1,7 @@
 # Proof escape analysis: KI-101 through KI-106
 
 This is the audit companion for the ordinary CSSOM conformance findings KI-101
-through KI-106. Each finding is intentionally left unfixed in `src/**`; the
+through KI-105 (with KI-106 retired as a duplicate). Each finding is intentionally left unfixed in `src/**`; the
 reproducer asserts the normative behavior and is expected to remain red until
 the product is repaired.
 
@@ -13,7 +13,6 @@ proof/evidence/ki-102.yaml  known_issue_reproduced
 proof/evidence/ki-103.yaml  known_issue_reproduced
 proof/evidence/ki-104.yaml  known_issue_reproduced
 proof/evidence/ki-105.yaml  known_issue_reproduced
-proof/evidence/ki-106.yaml  known_issue_reproduced
 ```
 
 Every reproducer was run twice with `/opt/node24/bin/node` before and during
@@ -80,7 +79,7 @@ Reproducer: `proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-
 `CSSKeyframesRule.appendRule()` extracts text between the first `{` and last
 `}` and appends it even when non-whitespace text follows the closing brace.
 The CSS Animations § 5.3 `#interface-csskeyframesrule-appendrule` contract
-accepts one complete keyframe rule. CSS Syntax § 5.4.1 `#parse-a-rule`
+accepts one complete keyframe rule. CSS Syntax § 5.4.1 `#parse-rule`
 requires the parsed input to be consumed as a complete rule, so the trailing
 tokens must not be accepted.
 
@@ -138,9 +137,11 @@ narrow draft requirement owned by the parser) and a mixed invalid/valid
 declaration witness that proves the invalid declaration is dropped without
 discarding its neighbor.
 
-## KI-106 — invalid `display` retained by CSSStyleDeclaration mutation
+## KI-106 — retired duplicate of KI-105
 
-Reproducer: `proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts`
+KI-106 is withdrawn and consolidated into KI-105. The KI-105 reproducer now
+contains independent parser, `setProperty`, and `cssText` branches, preserving
+the original mutation-path evidence without a second known-issue root.
 
 Both `setProperty('display', invalid)` and the `cssText` setter retain the
 invalid value. CSSOM § 6.6, `#dom-cssstyledeclaration-setproperty`, requires an
@@ -164,6 +165,7 @@ bound; no new requirement was invented for KI-106.
 
 ## Disposition
 
-All six records remain `status: open`, `release_disposition:
-ship_with_known_issue`, and unfixed. The records are ordinary conformance
+KI-101 through KI-105 remain `status: open`, `release_disposition:
+ship_with_known_issue`, and unfixed; KI-106 is `withdrawn` as a duplicate of
+KI-105. The records are ordinary conformance
 findings only. No product source or `PLAN.md` file was changed by this batch.

@@ -3,6 +3,7 @@ profile: ki-101
 evidence_type: known_issue_tripwire
 requirements:
     - SYS-REQ-260822-YEQZ
+    - SYS-REQ-260822-FM19
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced

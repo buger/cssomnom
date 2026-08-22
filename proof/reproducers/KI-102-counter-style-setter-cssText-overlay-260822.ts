@@ -13,6 +13,8 @@ import { CSSCounterStyleRule } from '../../src/CSSOM.ts';
 test('KI-102: a valid CSSCounterStyleRule descriptor setter updates cssText', () => {
   // css-counter-styles-3 § 8.1 #the-csscounterstylerule-interface and
   // #counter-style-prefix: a valid setter replaces the associated descriptor.
+  // cssom-1 § 6.3 #serialize-a-css-rule and #dom-cssrule-csstext: CSSRule.cssText
+  // serializes the current associated rule state.
   const sheet = parse('@counter-style tally { system: cyclic; symbols: "*" "†"; }');
   const rule = sheet.cssRules[0] as CSSCounterStyleRule;
   rule.prefix = '"("';

@@ -164,6 +164,39 @@ project:
                 - SYS-REQ-260821-SBJ7
                 - SW-REQ-260821-7M07
                 - SW-REQ-260821-QV2H
+        ki-101:
+            evidence_type: known_issue_tripwire
+            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+            result: proof/evidence/ki-101.yaml
+            requirements:
+                - SYS-REQ-260822-YEQZ
+                - SYS-REQ-260822-FM19
+        ki-102:
+            evidence_type: known_issue_tripwire
+            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+            result: proof/evidence/ki-102.yaml
+            requirements:
+                - SYS-REQ-260822-XEPS
+        ki-103:
+            evidence_type: known_issue_tripwire
+            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+            result: proof/evidence/ki-103.yaml
+            requirements:
+                - SYS-REQ-260822-50T6
+        ki-104:
+            evidence_type: known_issue_tripwire
+            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+            result: proof/evidence/ki-104.yaml
+            requirements:
+                - SYS-REQ-260822-HARM
+        ki-105:
+            evidence_type: known_issue_tripwire
+            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+            result: proof/evidence/ki-105.yaml
+            requirements:
+                - SYS-REQ-260822-1MB8
+                - SYS-REQ-260821-8TGB
+                - SW-REQ-260821-HNRG
     documentation:
         sources:
             - path: docs/

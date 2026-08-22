@@ -1,8 +1,10 @@
 id: KI-105
-title: Stylesheet parsing stores property-grammar-invalid display declarations
-description: 'Stylesheet parsing retains display: definitely-not-a-display-value instead of dropping the declaration after property-specific grammar validation. The resulting CSSStyleDeclaration exposes a declaration that CSS Display does not define.'
+title: Invalid display values retained across stylesheet and CSSStyleDeclaration paths
+description: 'The parser, CSSStyleDeclaration.setProperty, and CSSStyleDeclaration.cssText paths all retain display: definitely-not-a-display-value instead of dropping it. CSSOM requires invalid values to be ignored without mutation, while stylesheet declaration parsing must drop the invalid declaration and preserve valid neighbors. The consolidated reproducer executes independent parser, setProperty, and cssText subtests plus valid controls.'
 affected_requirements:
     - SYS-REQ-260822-1MB8
+    - SYS-REQ-260821-8TGB
+    - SW-REQ-260821-HNRG
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
 evidence_manifests:
@@ -11,7 +13,7 @@ severity: medium
 severity_basis: reproducer
 risk: correctness
 cve_surface: none
-affected_api: parse() / CSSStyleSheet.cssRules[].style
+affected_api: parse() / CSSStyleDeclaration.setProperty() / CSSStyleDeclaration.cssText
 attacker_input: ordinary stylesheet text containing a property-grammar-invalid display value; no attacker required
 sanitizer: manual:logic
 reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
@@ -22,6 +24,7 @@ mitigation: Treat style values read from parsed stylesheets as unvalidated when 
 remediation: Apply the property grammar during stylesheet declaration parsing and drop a declaration whose entire value is invalid, while preserving neighboring valid declarations.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+    - Root KI after deduplicating retired KI-106; parser, setProperty, and cssText branches are independently exercised.
 owner: agent:codex
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -38,3 +41,7 @@ history:
       by: agent:codex
       action: edit
       detail: append-note,add-requirement
+    - at: "2026-08-22T17:13:10Z"
+      by: agent:codex
+      action: edit
+      detail: set-title,set-description,set-affected-api,append-note,add-requirement

@@ -10,9 +10,20 @@ import { parse } from '../../src/parser.ts';
 import { CSSKeyframesRule } from '../../src/CSSOM.ts';
 
 // Reproduces: KI-103
-test('KI-103: appendRule rejects a valid-looking keyframe followed by garbage', () => {
+test('KI-103 valid control: appendRule appends a complete keyframe rule', () => {
+  // css-animations-1 § 5.3 #interface-csskeyframesrule-appendrule: a valid
+  // complete keyframe rule is always appended.
+  const sheet = parse('@keyframes fade {}');
+  const frames = sheet.cssRules[0] as CSSKeyframesRule;
+  frames.appendRule('from { opacity: 0; }');
+  assert.equal(frames.length, 1,
+    'appendRule must append a complete keyframe rule');
+});
+
+// Reproduces: KI-103
+test('KI-103 malformed input: appendRule rejects trailing garbage', () => {
   // css-animations-1 § 5.3 #interface-csskeyframesrule-appendrule: the
-  // argument is one complete keyframe rule; CSS Syntax § 5.4.1 #parse-a-rule
+  // argument is one complete keyframe rule; CSS Syntax § 5.4.1 #parse-rule
   // requires the parsed rule input to be consumed without trailing tokens.
   const sheet = parse('@keyframes fade {}');
   const frames = sheet.cssRules[0] as CSSKeyframesRule;

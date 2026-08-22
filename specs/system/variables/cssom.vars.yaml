@@ -112,6 +112,14 @@ variables:
       type: bool
       direction: output
       description: An appendRule argument with trailing tokens was not appended.
+    - name: keyframe_child_removed
+      type: bool
+      direction: input
+      description: Keyframe child is removed from its CSSKeyframesRule.
+    - name: parent_links_cleared
+      type: bool
+      direction: output
+      description: Removed keyframe child exposes null parentRule and parentStyleSheet.
 independence:
     declared: true
     reason: SYS cssom pairs (insertRule, setProperty, origin-clean, documented deviation) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.

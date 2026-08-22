@@ -6,8 +6,6 @@ affected_requirements:
     - SW-REQ-260821-HNRG
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
-evidence_manifests:
-    - proof/evidence/ki-106.yaml
 severity: medium
 severity_basis: reproducer
 risk: correctness
@@ -21,10 +19,12 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not treat a setProperty or cssText success as evidence that a display value is valid.
 remediation: Route both mutation paths through property-specific display validation; invalid values must be a no-op and valid neighboring declarations must remain.
+notes:
+    - Withdrawn as a duplicate of KI-105 after KI-105 gained independent parser, setProperty, and cssText subtests; the consolidated root remains open.
 owner: agent:codex
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
-status: open
+status: withdrawn
 history:
     - at: "2026-08-22T16:47:50Z"
       by: agent:codex
@@ -33,3 +33,7 @@ history:
       by: human:cli
       action: capture-evidence
       detail: proof/evidence/ki-106.yaml
+    - at: "2026-08-22T17:12:58Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,set-status=withdrawn,remove-evidence-manifest
