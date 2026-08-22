@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-105
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-1MB8
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T16:51:46Z"
+input_set:
+    - proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts: sha256:d14a4ed2b2d6315f7df931321d6f0738c39a824c0e488831ce12331d3b7c3474
+known_issues:
+    - KI-105

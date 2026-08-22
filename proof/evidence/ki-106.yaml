@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-106
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260821-8TGB
+    - SW-REQ-260821-HNRG
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T16:51:46Z"
+input_set:
+    - proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts: sha256:0d5750149a53173bed420c46e1c40c958c5846f036708a268045dedd141afee5
+known_issues:
+    - KI-106

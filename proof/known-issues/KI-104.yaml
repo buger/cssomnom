@@ -1,0 +1,40 @@
+id: KI-104
+title: Keyframe parsing retains forbidden animation declarations and important values
+description: Keyframe declaration parsing retains animation-name and animation-duration, even though CSS Animations requires animation properties to be ignored except animation-timing-function. It also retains opacity marked !important, which the specification declares invalid and ignored in keyframes.
+affected_requirements:
+    - SYS-REQ-260822-HARM
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-104.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSKeyframeRule.style
+attacker_input: ordinary @keyframes declaration list containing animation properties or !important; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not use keyframe style declarations as an animation source until forbidden declarations are filtered.
+remediation: Filter CSS Animations-defined properties other than animation-timing-function and drop declarations with the important flag while consuming keyframe blocks.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:32Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:00Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-104.yaml
+    - at: "2026-08-22T16:51:40Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement

@@ -1,0 +1,40 @@
+id: KI-102
+title: CSSCounterStyleRule valid descriptor setters leave cssText stale
+description: A valid CSSCounterStyleRule descriptor setter updates the descriptor getter but not the rule serialization. Setting prefix to a valid symbol therefore leaves cssText without the newly associated descriptor.
+affected_requirements:
+    - SYS-REQ-260822-XEPS
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-102.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSCounterStyleRule.prefix / CSSRule.cssText
+attacker_input: ordinary @counter-style CSS and a valid prefix descriptor assignment; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read the descriptor getter rather than cssText after a CSSCounterStyleRule setter.
+remediation: Make each valid descriptor setter update the associated declaration state used by CSSRule.cssText serialization; reject invalid values per the descriptor grammar.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:14Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:47:59Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-102.yaml
+    - at: "2026-08-22T16:51:39Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement

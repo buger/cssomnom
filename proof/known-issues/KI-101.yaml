@@ -1,0 +1,40 @@
+id: KI-101
+title: Keyframe child CSSRule links are not attached and are not cleared on deletion
+description: Parsing an @keyframes rule leaves each CSSKeyframeRule.parentRule null and parentStyleSheet null. Appending a child sets parentRule, but deleting it leaves the old parent links. CSSOM requires enclosed rules to expose their parent CSS rule and attached stylesheet, with links cleared after removal.
+affected_requirements:
+    - SYS-REQ-260822-YEQZ
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-101.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSKeyframesRule.cssRules / appendRule() / deleteRule()
+attacker_input: ordinary CSS @keyframes input; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on keyframe child parentRule or parentStyleSheet links after parsing or deletion.
+remediation: Attach parsed keyframe children to CSSKeyframesRule and stylesheet; clear parentRule and parentStyleSheet when deleteRule removes a child.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:46:58Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:47:59Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-101.yaml
+    - at: "2026-08-22T16:51:39Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement

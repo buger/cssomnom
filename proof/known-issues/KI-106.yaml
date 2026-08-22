@@ -1,0 +1,35 @@
+id: KI-106
+title: CSSStyleDeclaration setProperty and cssText accept invalid display values
+description: Both CSSStyleDeclaration.setProperty("display", ...) and the cssText setter retain a value outside the CSS Display grammar. CSSOM requires an invalid parsed value to be ignored and the declaration to remain unchanged; the implementation stores the invalid display value.
+affected_requirements:
+    - SYS-REQ-260821-8TGB
+    - SW-REQ-260821-HNRG
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-106.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleDeclaration.setProperty() / CSSStyleDeclaration.cssText
+attacker_input: ordinary CSSOM caller-supplied invalid display value; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not treat a setProperty or cssText success as evidence that a display value is valid.
+remediation: Route both mutation paths through property-specific display validation; invalid values must be a no-op and valid neighboring declarations must remain.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:50Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:01Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-106.yaml

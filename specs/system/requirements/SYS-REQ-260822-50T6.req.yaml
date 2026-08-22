@@ -1,0 +1,42 @@
+id: SYS-REQ-260822-50T6
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when append_rule_called & trailing_tokens the cssom shall always satisfy keyframe_not_appended
+description: The CSSOM shall not append a keyframe rule when CSSKeyframesRule.appendRule receives trailing non-whitespace tokens.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: cssom
+rationale: Narrow draft requirement introduced solely to bind KI-103 appendRule whole-input oracle.
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - append_rule_called
+    - trailing_tokens
+    - keyframe_not_appended
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-animations-1/Overview.bs#interface-csskeyframesrule-appendrule
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#parse-a-rule
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:codex
+    created_at: "2026-08-22T16:51:32Z"
+    last_modified_by: agent:codex
+    last_modified_at: "2026-08-22T16:51:32Z"

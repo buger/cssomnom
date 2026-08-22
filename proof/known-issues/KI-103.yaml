@@ -1,0 +1,40 @@
+id: KI-103
+title: CSSKeyframesRule.appendRule accepts trailing garbage
+description: CSSKeyframesRule.appendRule finds the first opening brace and last closing brace and appends the extracted body even when non-whitespace tokens follow the closing brace. A string that is not one complete keyframe rule is therefore accepted.
+affected_requirements:
+    - SYS-REQ-260822-50T6
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-103.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSKeyframesRule.appendRule()
+attacker_input: ordinary CSSOM caller-supplied keyframe rule text with trailing tokens; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pre-validate appendRule strings and reject or ignore any non-whitespace trailing tokens.
+remediation: Parse appendRule input as exactly one complete keyframe rule, including end-of-input validation, before appending.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:23Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:00Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-103.yaml
+    - at: "2026-08-22T16:51:39Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement

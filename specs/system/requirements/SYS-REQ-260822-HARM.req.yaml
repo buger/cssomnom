@@ -1,0 +1,39 @@
+id: SYS-REQ-260822-HARM
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when keyframe_declaration_forbidden the parser shall always satisfy declaration_dropped
+description: The parser shall drop declarations forbidden in keyframe blocks by CSS Animations, including declarations marked !important.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: parser
+rationale: Narrow draft requirement introduced solely to bind KI-104 keyframe-context declaration oracle.
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - keyframe_declaration_forbidden
+    - declaration_dropped
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-animations-1/Overview.bs#keyframes
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:codex
+    created_at: "2026-08-22T16:51:32Z"
+    last_modified_by: agent:codex
+    last_modified_at: "2026-08-22T16:51:32Z"

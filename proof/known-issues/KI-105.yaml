@@ -1,0 +1,40 @@
+id: KI-105
+title: Stylesheet parsing stores property-grammar-invalid display declarations
+description: 'Stylesheet parsing retains display: definitely-not-a-display-value instead of dropping the declaration after property-specific grammar validation. The resulting CSSStyleDeclaration exposes a declaration that CSS Display does not define.'
+affected_requirements:
+    - SYS-REQ-260822-1MB8
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-105.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSStyleSheet.cssRules[].style
+attacker_input: ordinary stylesheet text containing a property-grammar-invalid display value; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat style values read from parsed stylesheets as unvalidated when property-specific validity matters.
+remediation: Apply the property grammar during stylesheet declaration parsing and drop a declaration whose entire value is invalid, while preserving neighboring valid declarations.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:00Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-105.yaml
+    - at: "2026-08-22T16:51:40Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement

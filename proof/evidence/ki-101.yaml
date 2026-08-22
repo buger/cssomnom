@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-101
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-YEQZ
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-22T16:51:44Z"
+input_set:
+    - proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts: sha256:5d6514af19336acaaf33969e7b49eccd9611136ed3a7f9bed4c40d5f159b720b
+known_issues:
+    - KI-101

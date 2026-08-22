@@ -84,6 +84,34 @@ variables:
       type: bool
       direction: output
       description: True when a box, position, or font shorthand returns null because arity or numeric domain is outside the grammar.
+    - name: keyframe_child_attached
+      type: bool
+      direction: input
+      description: Keyframe child is attached to a CSSKeyframesRule.
+    - name: parent_links_set
+      type: bool
+      direction: output
+      description: Keyframe child exposes its enclosing rule and stylesheet while attached.
+    - name: counter_descriptor_set
+      type: bool
+      direction: input
+      description: A valid CSSCounterStyleRule descriptor was set.
+    - name: serialized_descriptor_current
+      type: bool
+      direction: output
+      description: CSSCounterStyleRule.cssText reflects the associated descriptor state.
+    - name: append_rule_called
+      type: bool
+      direction: input
+      description: CSSKeyframesRule.appendRule was called.
+    - name: trailing_tokens
+      type: bool
+      direction: input
+      description: The appendRule argument contains non-whitespace tokens after the keyframe rule.
+    - name: keyframe_not_appended
+      type: bool
+      direction: output
+      description: An appendRule argument with trailing tokens was not appended.
 independence:
     declared: true
     reason: SYS cssom pairs (insertRule, setProperty, origin-clean, documented deviation) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.

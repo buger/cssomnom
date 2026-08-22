@@ -52,6 +52,18 @@ variables:
       type: bool
       direction: output
       description: True when an unknown at-rule falls back to CSSAtRule instead of a typed subclass.
+    - name: keyframe_declaration_forbidden
+      type: bool
+      direction: input
+      description: A keyframe declaration is forbidden by CSS Animations or marked important.
+    - name: declaration_dropped
+      type: bool
+      direction: output
+      description: A property-grammar-invalid declaration was dropped while parsing.
+    - name: property_value_invalid
+      type: bool
+      direction: input
+      description: A declaration value is invalid under its property grammar.
 independence:
     declared: true
     reason: SYS parser pairs (stylesheet return, nesting, no-throw, no-fetch) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.
