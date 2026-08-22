@@ -3897,3 +3897,18 @@ Cover leftover unique-cause in `src/typed-om/values/style-value-parser.ts` `_par
 - [x] Ran each open-KI reproducer twice under Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Logs: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-repro-KI-*-{1,2}.log`. Open bugs exit non-zero. KI-4 not turned into a failing product KI.
 - [x] Overlay-only commit: `proof/known-issues/**`, `proof/reproducers/**`, `PLAN.md`. Message: `reopen KI-1,2,3,5,6 after src logic restore`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-reopen-after-restore.md`.
 
+---
+
+## Phase: MC/DC leftover holes after src restore — new KIs (Champ overlay audit)
+
+Overlay audit only after `fe7defa` restore. **Did not edit `src/`**. Did not class-fix. Did not fight KI-1..12 yaml (reopen champ already opened KI-8..12). KI-4 stays withdrawn. KI-7 stays open no-fetch. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+Confirmed leftover unique-cause holes vs already-open KIs:
+
+- [x] At-rule ASCII case `@MEDIA` → `CSSAtRule` type 0 (lowercase `@media` → `CSSMediaRule` type 4) — already KI-12. Skipped.
+- [x] 3-value `<position>` `CSSStyleValue.parse('object-position'|'perspective-origin', 'left 10px top')` → `CSSPositionValue 10px 0%` — already KI-11. Skipped.
+- [x] `@import url(foo.css)` empty href **and** cssText `url("") url("foo.css")` — already KI-8 (same hole: leftover `<url-token>` skipped then serialized as mediaText). Did not rewrite KI-8 yaml. Strengthened `proof/reproducers/KI-8-import-href.ts` to assert both symptoms; append-note on KI-8.
+- [x] KI-13: `:disabled` matches non-form controls (`div[disabled]`, `p` inside `fieldset[disabled]`). Distinct from KI-10 first-legend. Tripwire `proof/reproducers/KI-13-disabled-non-form.ts`. Two runs exit 1. Logs: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-repro-KI-13-{1,2}.log`.
+- [x] KI-14: Parser API `@keyframes` child maps to `{name:"unknown", prelude:[], body:null}` instead of a keyframe qualified rule. Not KI-6 (type-0 at-rules). Tripwire `proof/reproducers/KI-14-keyframes-parser-api.ts`. Two runs exit 1. Logs: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-repro-KI-14-{1,2}.log`.
+- [x] Overlay-only commit: `proof/known-issues/KI-13.yaml`, `proof/known-issues/KI-14.yaml`, `proof/reproducers/KI-13-disabled-non-form.ts`, `proof/reproducers/KI-14-keyframes-parser-api.ts`, `proof/reproducers/KI-8-import-href.ts`, KI-8 note, `PLAN.md`. Message: `add KIs for MC/DC-found holes after src restore`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-mcdc-found-holes.md`.
+

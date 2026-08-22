@@ -1,0 +1,75 @@
+id: KI-13
+title: ':disabled matches non-form controls (div[disabled], p in fieldset[disabled])'
+description: |
+    html #selector-disabled matches actually-disabled elements only (html #concept-element-disabled / #concept-fe-disabled): listed form controls, fieldsets, and form-associated custom elements. isElementDisabled returns true for any element with a disabled attribute and for any descendant of a disabled fieldset, so matches(div[disabled], ':disabled') and matches(p inside fieldset[disabled], ':disabled') are true. :enabled already gates on the listed tag set. Distinct from KI-10 (first-legend exemption on a listed control / nested fieldset). Overlay audit cannot change product code.
+affected_requirements:
+    - SW-REQ-260821-6D9T
+    - SYS-REQ-260821-PJ76
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts
+reproduction_steps:
+    - 'Parse <div disabled> and <fieldset disabled><p id=p></fieldset> with linkedom.'
+    - 'Call matches(div, ":disabled") and matches(p, ":disabled").'
+    - 'Observe both true. Intended both false (not listed form controls).'
+    - 'Controls: input[disabled], button[disabled], fieldset[disabled], and input inside fieldset[disabled] still match :disabled.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: None on HEAD. Callers must not use :disabled as a proxy for a disabled attribute on non-form elements, or for arbitrary descendants of fieldset[disabled].
+remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land a listed-form-control gate in src/matcher.ts isElementDisabled. Close only after div[disabled] and p-in-fieldset[disabled] do not match :disabled. No DEFECT — live unfixed bugs stay as KnownIssues.
+notes:
+    - '2026-08-22: discovered during code MC/DC unique-cause leftover work after restore fe7defa. Distinct from KI-10 first-legend. Overlay reproducer is a failing tripwire.'
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-22T05:46:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live :disabled overmatch after fe7defa restore: any disabled attribute and any fieldset[disabled] descendant match, including div and p. Overlay reproducer FAILS. Distinct from KI-10. No product fix. No DEFECT.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        HTML :disabled matching correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts
+        real_infrastructure: linkedom document + matches() (not a mock).
+        control_test / operational_path_verified: runner setup asserts listed form controls / fieldset[disabled] still match :disabled.
+        current_deployment_relevance: hole is on HEAD isElementDisabled with no listed-control gate.
+        honest_severity / no_inflation: medium correctness matches wrong :disabled, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts non-form false so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            Selector matching hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
+template_class: disabled_non_form_control
+isomorphic_sites:
+    - src/matcher.ts:623
+    - src/matcher.ts:628
+    - src/matcher.ts:831
+    - src/matcher.ts:832
+    - src/matcher.ts:835
+dedup_armor: |
+    Only :disabled overmatch on non-listed elements (div[disabled], p/span descendants of fieldset[disabled]). Distinct from KI-10, which is the first-legend exemption on listed controls / nested fieldsets. :enabled already checks the listed tag set at matcher.ts:628. Do not merge this KI into KI-10 without collapsing the listed-control gate vs first-legend walk-up distinction.

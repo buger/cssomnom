@@ -13,7 +13,7 @@ affected_api: CSSImportRule.href
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-8-import-href.ts
 reproduction_steps:
-    - 'Call parse(''@import url(foo.css);'') (unquoted url-token, not url("foo.css")).'
+    - Call parse('@import url(foo.css);') (unquoted url-token, not url("foo.css")).
     - Observe cssRules[0] is CSSImportRule but href is "".
     - 'Intended contract: href is foo.css.'
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-8-import-href.ts'
@@ -23,6 +23,7 @@ mitigation: None on HEAD. Callers must quote the URL (url("foo.css") or "foo.css
 remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land first.type === 'url' copy in src/parser.ts handleImportRule. Close only after unquoted url(foo.css) href is foo.css. No DEFECT — live unfixed bugs stay as KnownIssues.
 notes:
     - '2026-08-22: overlay reproducer already existed as a passing contract check after f173f32. src restore emptied href again. Filed KI-8 as a failing tripwire. Distinct from KI-7 (styleSheet null / never-fetch).'
+    - '2026-08-22: same hole also serializes cssText as url("") url("foo.css") because the leftover <url-token> becomes mediaText. Overlay tripwire now asserts both href === foo.css and cssText without url(""). No product fix. Did not rewrite KI-8 yaml fields.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: open
@@ -32,6 +33,10 @@ history:
       action: created
       detail: |
         Live href hole after fe7defa restore: handleImportRule ignores <url-token>. Overlay reproducer proof/reproducers/KI-8-import-href.ts asserts href === 'foo.css' and FAILS. No product fix. No DEFECT.
+    - at: "2026-08-22T05:49:27Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
