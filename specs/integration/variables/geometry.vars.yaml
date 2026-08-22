@@ -8,3 +8,7 @@ variables:
       type: bool
       direction: output
       description: Boolean flag typed om transform hook used for component geometry.
+    - name: native_matrix_string
+      type: bool
+      direction: input
+      description: Caller passed a native matrix() or matrix3d() DOMMatrix string. Documented exemption from the typed_om transform hook.

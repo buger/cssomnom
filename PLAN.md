@@ -4508,6 +4508,31 @@ Capability-gap KI-7 stays **open**. Did **not** implement fetch. Did **not** edi
 - [x] `proof/known-issues/KI-7.yaml` `reproduction_steps` lists the extra e2e file and four shapes; `--add-command` for the extra runner. `proof evidence refresh KI-7` restamped `proof/evidence/ki-7.yaml` (`status: fail` / `known_issue_reproduced`).
 - [x] Retargeted `tests/mcdc-witness-selectors-media.test.ts` SAT FALSE defensive ignores for `serialized_as_not_all=F` (W8S1 / 5283) to the KI-5 **fixed** contract: unique-cause SAT is `serialized_as_not_all=T`; FALSE row is unreachable after class-fix. Did **not** add capability-gap or `[ki: KI-5]`. Witness file 13/13 pass.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki7-e2e.md`.
+- [x] Commit `14c6aff` (`add KI-7 e2e import shapes; retarget fixed KI-5 witnesses`). LOOP Reviewer+Grizz in flight.
+
+---
+
+## Phase: classified defensive ignores on witnessed unpairable residue (Champ)
+
+Close leftover **code** MC/DC to 100% floors without theater unique-cause and without class-fixing product logic. Recapture at `d72e532` was **92.2%/93.7%** (3394/3683 D, 4845/5170 C, incomplete **289**, ignored **0**).
+
+- [ ] Place `//mcdc:ignore:defensive <reason> [reviewed: agent:grok-4.6]` **directly above** structurally unpairable decision lines whose **positive path is already witnessed**. Grammar: `proof help mcdc:ignore` code-level form.
+- [ ] Do **not** ignore pairable public-API decisions. Do **not** getter-flip / Reflect / ParseHooks override / `keep=N` / `constructor.name`. Do **not** edit product logic (comments only). Do **not** implement fetch. Do **not** lower floors. Do **not** `proof waive` / `approve` 66 reqs.
+- [ ] Documented unpairable first: `resolveCustomProp` / `getCascadedStyle` `.raw` collectors; `typeof value === 'string'` F; empty `--` decls array; `while (true)` F literals; dead `else if` after mutually exclusive flags (`consumeBlockContents` L1020 `foundBlock` F); `handleKeyframesRule` L588 length F with valid T.
+- [ ] Path-scoped `git add --` only. No `PLAN.md`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-unpairable-ignores.md`.
+
+---
+
+## Phase: remaining pairable unique-cause via public APIs (Champ)
+
+Drive leftover **pairable** unique-cause through shipped public APIs only. New `tests/mcdc-*-unique-cause.test.ts` files. Did **not** change `src/` except if a Champ is the ignore Champ.
+
+- [ ] `parseRatio` (`MediaParser.ts` L1047) via `MediaParser.parse` / `evaluate` aspect-ratio `16/9` vs number vs delim.
+- [ ] `parseLengthToPx` (`MediaParser.ts` L989) via width/height media features: dimension, `calc()`, `0`, non-length.
+- [ ] `reconsume` (`tokenizer.ts` L93) via `tokenize` / `parse` on surrogate-pair + ident reconsume (css-syntax-3).
+- [ ] `consumeAtRuleFromStream` nested flag via nested `@media` / `@layer` in style rules vs top-level.
+- [ ] `_parseAll` `property === "--"` / `startsWith('--') && length < 3` via `CSSStyleValue.parse` / `parseAll`.
+- [ ] No theater. Node 24 twice. Path-scoped commit. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-pairable-public.md`.
 
 ---
 

@@ -331,7 +331,7 @@ test('INT-ZP03 CSS.registerProperty and @property share PropertyRegistry', () =>
 // INT-REQ-260821-JTY2:malformed_input:nominal
 // INT-REQ-260821-JTY2:error_handling:negative
 // INT-REQ-260821-JTY2:malformed_input:negative
-// MCDC INT-REQ-260821-JTY2: transform_string_parsed=T, typed_om_transform_hook_used=T => TRUE
+// MCDC INT-REQ-260821-JTY2: transform_string_parsed=T, native_matrix_string=F, typed_om_transform_hook_used=T => TRUE
 test('INT-JTY2 DOMMatrix string ctor uses the typed_om transform parse hook', () => {
   const translated = new DOMMatrix('translate(10px, 20px)');
   assert.equal(translated.is2D, true);

@@ -67,7 +67,6 @@ function ki13Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-13
 // Verifies: SW-REQ-260821-6D9T
 // Verifies: SYS-REQ-260821-PJ76
-// MCDC leftover isElementDisabled listed-control gate [known-issue] [ki: KI-13]
 test(':disabled does not match div[disabled] or p inside fieldset[disabled]', () => {
   const outcome = ki13Contract();
   assert.equal(outcome.setupOk, true, outcome.message);
