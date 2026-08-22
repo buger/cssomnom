@@ -1,5 +1,5 @@
 schema_version: 1
-id: DEFECT-260821-NYAR
+id: DEFECT-260822-T0AR
 title: toParserRule mapped CSSOM type-0 at-rules to CSSParserRawRule
 introduced_in: inception
 source:
@@ -12,9 +12,11 @@ description: |
     parser-api toParserRule promoted numeric CSSRule.type values that were not 0, 1, or 17
     into CSSParserAtRule. Modern at-rules use type 0 (CSSLayerStatementRule, CSSLayerBlockRule,
     CSSContainerRule, CSSScopeRule, CSSStartingStyleRule, …). parseStylesheetSync('@layer foo;')
-    therefore returned CSSParserRawRule. Product fix: extract @-name from cssText for numeric
-    CSSOM at-rules including type 0, recurse into cssRules. CSSNestedDeclarations (type 0,
-    cssText not starting with @) still falls through.
+    therefore returned CSSParserRawRule. Product fix: cssomAtRuleFromFields prefers CSSOM
+    fields (name / nameList / conditionText / cssRules) and re-tokenizes cssText (css-syntax-3
+    string tokens) instead of slicing at the first `{`. CSSNestedDeclarations (type 0, cssText
+    not starting with @) still falls through. DEFECT-260821-NYAR is stale class-closure
+    paperwork from a rolled-back class-fix — kept; this report is the landing closure.
 root_cause:
     missing_requirement: false
     missing_test_partition: true
@@ -25,17 +27,17 @@ impact_analysis:
         - INT-REQ-260821-WTPD
     affected_code:
         - src/parser-api.ts
-        - src/CSSOM.ts
 disposition:
     status: covered_by_requirement
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
-    reviewed_at: "2026-08-21T23:40:00Z"
+    reviewed_at: "2026-08-22T06:04:00Z"
     requirements:
         - INT-REQ-260821-WTPD
     evidence:
         verified_by:
             - tests/parser-api.test.ts
+            - tests/parser-api-keyframe-adapter.test.ts
             - proof/reproducers/KI-6-parser-api-type0.ts
         requirement_mcdc_witnesses:
             - requirement: INT-REQ-260821-WTPD
@@ -51,27 +53,23 @@ hardening:
     sibling_sweep:
         scope:
             - src/parser-api.ts
-            - src/CSSOM.ts
-        checked_at: "2026-08-21"
+        checked_at: "2026-08-22"
         reviewer: agent:grok-4.6
         result: clean
+        notes: |
+            Type 8 CSSKeyframeRule is a distinct hole (KI-14 / DEFECT-260822-KF14): it is a
+            qualified rule, not an at-rule. CSSNestedDeclarations type 0 with non-@ cssText
+            remains a raw parser rule by design. Duck-typed type 0 re-tokenizes cssText so a
+            quoted `{` in the prelude is not truncated.
     regression_tests:
         - tests/parser-api.test.ts
+        - tests/parser-api-keyframe-adapter.test.ts
         - proof/reproducers/KI-6-parser-api-type0.ts
     mcdc_witnesses:
         - requirement: INT-REQ-260821-WTPD
           witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"
 history:
-    - at: "2026-08-21T20:13:40Z"
-      by: agent:grok-4.6
-      action: created
-    - at: "2026-08-21T20:15:00Z"
-      by: agent:grok-4.6
-      action: edited
-      detail: Filled class-closure hardening after the product fix for KI-6.
     - at: "2026-08-22T06:04:00Z"
       by: agent:grok-4.6
-      action: edited
-      detail: |
-        Stale class-closure paperwork after fe7defa rollback. Kept. Landing closure for
-        the re-fix is DEFECT-260822-T0AR. Do not delete.
+      action: created
+      detail: Class-closure after the product fix for KI-6 (type-0 at-rule adapter via CSSOM fields).

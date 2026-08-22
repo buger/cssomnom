@@ -1,0 +1,77 @@
+schema_version: 1
+id: DEFECT-260822-KF14
+title: toParserRule mapped CSSKeyframeRule (type 8) to CSSParserAtRule name unknown
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: adapter_keyframe_type_eight
+description: |
+    CSS.parseStylesheetSync('@keyframes x { from { color: red } }') adapted the parent
+    CSSKeyframesRule (type 7) then mapped each CSSKeyframeRule child (type 8) through the
+    numeric at-rule branch. The child has no .name / .media / .cssRules, so the adapter
+    emitted {name:"unknown", prelude:[], body:null}. CSSKeyframeRule is a qualified rule
+    (keyframe selector + declaration block), not an at-rule. Product fix: type 8 maps to
+    CSSParserQualifiedRule via keyText+style (css-animations-1 from ≡ 0%, to ≡ 100%) or
+    cssText re-tokenize (css-syntax-3 consume-a-qualified-rule). Distinct from KI-6 type-0
+    at-rules.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: WTPD named parseStylesheetSync AST adaptation; the type-8 keyframe-child partition was unwitnessed.
+impact_analysis:
+    affected_requirements:
+        - INT-REQ-260821-WTPD
+    affected_code:
+        - src/parser-api.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:04:00Z"
+    requirements:
+        - INT-REQ-260821-WTPD
+    evidence:
+        verified_by:
+            - tests/parser-api.test.ts
+            - tests/parser-api-keyframe-adapter.test.ts
+            - tests/mcdc-parser-api-toparser.test.ts
+            - proof/reproducers/KI-14-keyframes-parser-api.ts
+        requirement_mcdc_witnesses:
+            - requirement: INT-REQ-260821-WTPD
+              witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"
+affects:
+    - INT-REQ-260821-WTPD
+hardening:
+    strengthened_requirements:
+        - INT-REQ-260821-WTPD
+    added_obligations:
+        - requirement: INT-REQ-260821-WTPD
+          obligation_class: malformed_recovers_or_errors_loudly
+    sibling_sweep:
+        scope:
+            - src/parser-api.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            CSSKeyframesRule type 7 stays an at-rule named keyframes with .name as prelude.
+            CSSNestedDeclarations type 0 remains a raw parser rule (not an at-keyword).
+            Duck-typed type 8 with cssText `from { color: red }` re-tokenizes as a qualified
+            rule so the prelude keeps `from`.
+    regression_tests:
+        - tests/parser-api.test.ts
+        - tests/parser-api-keyframe-adapter.test.ts
+        - tests/mcdc-parser-api-toparser.test.ts
+        - proof/reproducers/KI-14-keyframes-parser-api.ts
+    mcdc_witnesses:
+        - requirement: INT-REQ-260821-WTPD
+          witness: "parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE"
+history:
+    - at: "2026-08-22T06:04:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: Class-closure after the product fix for KI-14 (CSSKeyframeRule qualified-rule adapter).

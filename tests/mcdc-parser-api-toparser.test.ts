@@ -69,7 +69,7 @@ function styleBag(props: Record<string, string>): {
   };
 }
 
-type BodyKind = 'null' | 'empty' | 'qualified' | 'unknown-at' | 'margin';
+type BodyKind = 'null' | 'empty' | 'qualified' | 'keyframe' | 'margin';
 
 const remainingAtRules: { css: string; name: string; prelude: string; body: BodyKind }[] = [
   { css: '@supports (display: grid) { .x { color: red } }', name: 'supports', prelude: '(display: grid)', body: 'qualified' },
@@ -93,7 +93,7 @@ const remainingAtRules: { css: string; name: string; prelude: string; body: Body
   { css: '@view-transition { navigation: auto; }', name: 'view-transition', prelude: '', body: 'empty' },
   { css: '@foo;', name: 'foo', prelude: '', body: 'null' },
   { css: '@foo { color: red }', name: 'foo', prelude: '', body: 'empty' },
-  { css: '@keyframes spin { from { color: red } to { color: blue } }', name: 'keyframes', prelude: 'spin', body: 'unknown-at' },
+  { css: '@keyframes spin { from { color: red } to { color: blue } }', name: 'keyframes', prelude: 'spin', body: 'keyframe' },
 ];
 
 function assertBody(at: CSSParserAtRule, body: BodyKind): void {
@@ -119,9 +119,8 @@ function assertBody(at: CSSParserAtRule, body: BodyKind): void {
   }
   assert.ok(at.body.length >= 2);
   for (const child of at.body) {
-    const unknownAt = asAt(child);
-    assert.equal(unknownAt.name, 'unknown');
-    assert.equal(unknownAt.body, null);
+    const kf = asQualified(child);
+    assert.ok(kf.prelude.length >= 1);
   }
 }
 
@@ -336,9 +335,9 @@ describe('MC/DC leftover: toParserRule AST at-rule and CSSOM fallback ducks', ()
     assert.equal(unknown.prelude.length, 0);
     assert.equal(unknown.body, null);
 
-    const keyframe = asAt(toParserRule({ type: 8, cssText: 'from { color: red }' }));
-    assert.equal(keyframe.name, 'unknown');
-    assert.equal(keyframe.body, null);
+    const keyframe = asQualified(toParserRule({ type: 8, cssText: 'from { color: red }' }));
+    assert.ok(preludeText(keyframe).includes('from'));
+    assert.ok(keyframe.body.some((d) => d instanceof CSSParserDeclaration && d.name === 'color'));
 
     const preludeTokens = asAt(toParserRule({
       type: 7,

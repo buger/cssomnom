@@ -3975,6 +3975,30 @@ Unbalanced media query `((` serialized as `(())` instead of `not all` after `fe7
 
 ---
 
+## Phase: KI-6 and KI-14 parser-api class-fix (Champ)
+
+`toParserRule` mapped CSSOM type-0 at-rules (`@layer` / `@container` / `@scope`) to `CSSParserRawRule` (KI-6) and mapped `CSSKeyframeRule` (type 8) to `CSSParserAtRule` name `"unknown"` (KI-14). Node 24 (`/opt/node24/bin`). Product file: `src/parser-api.ts` only. Did **not** `git add .`.
+
+- [x] **RED twice**: overlay `proof/reproducers/KI-6-parser-api-type0.ts` exit 1 (`@layer`/`@container` → `CSSParserRawRule`). Overlay `proof/reproducers/KI-14-keyframes-parser-api.ts` exit 1 (keyframe child `{name:"unknown", prelude:[], body:null}`).
+- [x] **Product**: `cssomAtRuleFromFields` uses CSSOM fields (name/prelude/cssRules), not first-`{` cssText slice; duck type 0 re-tokenizes (css-syntax-3 § 4.3.4 / § 5.5.2 / cssom-1 § 6.4 UNKNOWN_RULE). Type 8 / `CSSKeyframeRule` maps to `CSSParserQualifiedRule` via keyText+style (`css-animations-1` `#CSSKeyframeRule` / `#keyframe-selector` from≡0% to≡100%) or cssText re-tokenize (css-syntax-3 § 5.5.3 `#consume-a-qualified-rule`).
+- [x] **GREEN twice**: KI-6 overlay exit 0; KI-14 overlay exit 0; `tests/parser-api.test.ts` + `tests/parser-api-keyframe-adapter.test.ts` + `tests/mcdc-parser-api-toparser.test.ts` 96 pass. `tsc --noEmit` clean. oxlint 0 on changed files.
+- [x] KI-6 `status: fixed`. Class-closure `DEFECT-260822-T0AR`. `DEFECT-260821-NYAR` kept (stale rolled-back paperwork). Evidence `proof/evidence/ki-6.yaml`.
+- [x] KI-14 `status: fixed`. Class-closure `DEFECT-260822-KF14`. Evidence `proof/evidence/ki-14.yaml`.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-6-14.md`.
+
+---
+
+## Phase: commit KI-6 and KI-14 (Champ)
+
+Verified product fix already in working tree. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin/node` v24.11.1). Did **not** redo the algorithm. Did **not** `git add .`. Did **not** fetch (KI-7 stays open). Did **not** edit `src/CSSOM.ts` `styleSheet`.
+
+- [x] `node --test tests/parser-api.test.ts tests/parser-api-keyframe-adapter.test.ts tests/mcdc-parser-api-toparser.test.ts` 94 pass, exit 0
+- [x] `proof/reproducers/KI-6-parser-api-type0.ts` exit 0 twice
+- [x] `proof/reproducers/KI-14-keyframes-parser-api.ts` exit 0 twice
+- [x] Commit `fix KI-6 type-0 at-rule and KI-14 keyframe parser-api` with explicit path list only
+
+---
+
 ## Phase: class-fix KI-2 replaceSync, KI-8 import href, KI-12 at-rule case (Champ)
 
 Product class-fix after `fe7defa` restore. Shared `src/CSSOM.ts` / `src/parser.ts`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Did **not** fetch `@import` (KI-7 remains open). Did **not** `git add .`. Did **not** `proof approve`.

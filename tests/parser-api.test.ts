@@ -105,6 +105,45 @@ describe('CSS Parser API', () => {
         assert.ok(!preludeStr.includes('from'), `prelude swallowed body: ${JSON.stringify(preludeStr)}`);
     });
 
+    // INT-REQ-260821-WTPD:malformed_recovers_or_errors_loudly:nominal
+    // css-animations-1 #CSSKeyframeRule / css-syntax-3 § 5.5.3 #consume-a-qualified-rule
+    test('parseStylesheetSync maps @keyframes children to CSSParserQualifiedRule', () => {
+        const sheet = CSS.parseStylesheetSync('@keyframes x { from { color: red } to { color: blue } 50% { opacity: 1 } }');
+        assert.strictEqual(sheet.length, 1);
+        assert.ok(sheet[0] instanceof CSSParserAtRule);
+        const at = sheet[0] as CSSParserAtRule;
+        assert.strictEqual(at.name, 'keyframes');
+        assert.ok(at.body && at.body.length >= 3, `expected keyframe children, got ${at.body?.length}`);
+
+        const fromRule = at.body[0] as CSSParserQualifiedRule;
+        assert.ok(fromRule instanceof CSSParserQualifiedRule, `from child was ${fromRule?.constructor?.name}`);
+        const fromPrelude = fromRule.prelude.map((t) => t.toString()).join('');
+        assert.ok(fromPrelude.includes('from'), `from prelude was ${JSON.stringify(fromPrelude)}`);
+        const fromColor = fromRule.body.find((d) => d instanceof CSSParserDeclaration && d.name === 'color');
+        assert.ok(fromColor, 'from keyframe lacked color declaration');
+
+        const toRule = at.body[1] as CSSParserQualifiedRule;
+        assert.ok(toRule instanceof CSSParserQualifiedRule);
+        const toPrelude = toRule.prelude.map((t) => t.toString()).join('');
+        assert.ok(toPrelude.includes('to'), `to prelude was ${JSON.stringify(toPrelude)}`);
+
+        const mid = at.body[2] as CSSParserQualifiedRule;
+        assert.ok(mid instanceof CSSParserQualifiedRule);
+        const midPrelude = mid.prelude.map((t) => t.toString()).join('');
+        assert.ok(midPrelude.includes('50%'), `50% prelude was ${JSON.stringify(midPrelude)}`);
+    });
+
+    test('duck-typed KEYFRAME_RULE type 8 is a qualified rule, not unknown at-rule', () => {
+        const duck = { type: 8, cssText: 'from { color: red }' };
+        const rule = toParserRule(duck);
+        assert.ok(rule instanceof CSSParserQualifiedRule, `type 8 duck was ${rule?.constructor?.name}`);
+        const qr = rule as CSSParserQualifiedRule;
+        const prelude = qr.prelude.map((t) => t.toString()).join('');
+        assert.ok(prelude.includes('from'), `type 8 duck prelude was ${JSON.stringify(prelude)}`);
+        const color = qr.body.find((d) => d instanceof CSSParserDeclaration && d.name === 'color');
+        assert.ok(color, 'type 8 duck lacked color declaration');
+    });
+
     test('CSS.parseStylesheet (Async)', async () => {
         const css = 'div { color: blue; }';
         const rules = await CSS.parseStylesheet(css);

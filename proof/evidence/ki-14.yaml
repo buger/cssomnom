@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-14
+evidence_type: known_issue_tripwire
+requirements:
+    - INT-REQ-260821-WTPD
+command: node --experimental-strip-types proof/reproducers/KI-14-keyframes-parser-api.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-22T06:04:00Z"
+input_set:
+    - proof/reproducers/KI-14-keyframes-parser-api.ts
+freshness_hashes:
+    proof/reproducers/KI-14-keyframes-parser-api.ts: sha256:40279aceee5ed45c35eb7d6352a8ca79e6182a4eabadb9986895f1d42ec94dd2
+known_issues:
+    - KI-14
