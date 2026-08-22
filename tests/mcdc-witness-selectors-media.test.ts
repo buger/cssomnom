@@ -117,7 +117,7 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
       assert.equal(queries[0].invalid, true);
       assert.equal(serializeMediaQuery(queries[0]), 'not all');
     });
-    //mcdc:ignore:defensive SW-REQ-260821-W8S1: media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=F => FALSE — unbalanced (( serializes as not all [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260821-W8S1: media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=F => FALSE — serializeMediaQuery emits not all for invalid queries including unbalanced (( (KI-5 class-fix); unique-cause SAT is serialized_as_not_all=T [reviewed: agent:grok-4.6]
 
     // Verifies: SW-REQ-260821-W8S1
     // MCDC SW-REQ-260821-W8S1: media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=T => TRUE
@@ -143,7 +143,7 @@ describe('MC/DC selectors media geometry witnesses', { concurrency: false }, () 
       const serialized = MediaParser.parse('screen and').map(serializeMediaQuery);
       assert.deepEqual(serialized, ['not all']);
     });
-    //mcdc:ignore:defensive SYS-REQ-260821-5283: media_query_invalid=T, serialized_as_not_all=F => FALSE — unbalanced (( serializes as not all [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260821-5283: media_query_invalid=T, serialized_as_not_all=F => FALSE — serializeMediaQuery emits not all for invalid queries including unbalanced (( (KI-5 class-fix); unique-cause SAT is serialized_as_not_all=T [reviewed: agent:grok-4.6]
 
     // Verifies: SYS-REQ-260821-5283
     // MCDC SYS-REQ-260821-5283: media_query_invalid=T, serialized_as_not_all=T => TRUE

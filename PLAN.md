@@ -4462,3 +4462,15 @@ Cover leftover unique-cause in `src/math-parser.ts` `fromCanonical` after last r
 - [x] Structurally unpairable on a stable `CSSUnit` string (unique-caused via boxed keep, no ignore): L64 FF (only dpi/dpcm/dppx/x are resolution; dpi/dpcm return before the OR). L57 `unitToRadians` F with `base === 'angle'` (every angle unit is in the map). L59 `unitToSeconds` F with `base === 'time'` (only s/ms, both in the map).
 - [x] Node 24: `node --test tests/mcdc-from-canonical-unique-cause.test.ts` — 5 pass. Together with leftover / simplify leftover / simplify unique-cause / still-hot / still-hot2 / still-hot3 / product-parsefn 52 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run check:safe-exec` pass. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-fromcan.md`.
 
+---
+
+## Phase: KI-7 extra e2e import shapes + KI-5 witness retarget (Champ)
+
+Capability-gap KI-7 stays **open**. Did **not** implement fetch. Did **not** edit `src/**`. Overlay extra e2e is **not** under `tests/` (`pnpm test:node` glob). Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] Extra e2e `proof/reproducers/KI-7-import-url-token.ts` (fixture `proof/reproducers/fixtures/x.css`) covers user-shaped public APIs: `@import "x.css"`, `@import url(x.css)`, `@import url("https://example.com/x.css")`, `@import url(x.css) print;`. Each asserts the full CSSOM contract (associated loaded sheet / cssRules from the imported file) and **FAILS** while no-fetch holds. Existing `KI-7-import-stylesheet-null.ts` kept.
+- [x] Node 24 twice: `KI-7-import-stylesheet-null.ts` exit **1/1**; `KI-7-import-url-token.ts` exit **1/1** (4 fail / 0 pass each run).
+- [x] `proof/known-issues/KI-7.yaml` `reproduction_steps` lists the extra e2e file and four shapes; `--add-command` for the extra runner. `proof evidence refresh KI-7` restamped `proof/evidence/ki-7.yaml` (`status: fail` / `known_issue_reproduced`).
+- [x] Retargeted `tests/mcdc-witness-selectors-media.test.ts` SAT FALSE defensive ignores for `serialized_as_not_all=F` (W8S1 / 5283) to the KI-5 **fixed** contract: unique-cause SAT is `serialized_as_not_all=T`; FALSE row is unreachable after class-fix. Did **not** add capability-gap or `[ki: KI-5]`. Witness file 13/13 pass.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki7-e2e.md`.
+
