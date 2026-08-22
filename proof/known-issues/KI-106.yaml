@@ -1,11 +1,6 @@
 id: KI-106
 title: CSSStyleDeclaration setProperty and cssText accept invalid display values
 description: Both CSSStyleDeclaration.setProperty("display", ...) and the cssText setter retain a value outside the CSS Display grammar. CSSOM requires an invalid parsed value to be ignored and the declaration to remain unchanged; the implementation stores the invalid display value.
-affected_requirements:
-    - SYS-REQ-260821-8TGB
-    - SW-REQ-260821-HNRG
-commands:
-    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
 severity: medium
 severity_basis: reproducer
 risk: correctness
