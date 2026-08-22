@@ -3247,3 +3247,12 @@ Leftovers from 5f95a3b `getAtRuleHandler` ASCII fold. Spec: css-values-4 § 4.1 
 - [x] `getAtRuleHandler` comment cites css-values-4 § 4.1 #keywords (not css-syntax-3 § 2).
 - [x] RED then GREEN in `tests/mcdc-branch-parser-atrules.test.ts`. Node 24.
 
+---
+
+## Phase: assembleUnicodeRanges MC/DC tests (Champ)
+
+Drive `src/parser.ts` `assembleUnicodeRanges` (1/30 remaining code-MC/DC decisions) through `@font-face` unicode-range parsing, `CSSFontFaceDescriptors.setProperty`, and the exported `assembleUnicodeRanges` helper. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-assemble-unicode-ranges.test.ts` — valid `U+` hex, `U+start-end`, `?` wildcards, comma lists, whitespace/comments, empty/junk, reconstruction of ident `U`/`U+…` when unicode-range tokens are not used, plus/number/dimension signs, hex-part consume (dimension/number/ident/`?`/`-`/comment/break), `10FFFF` bounds, reversed ranges, trailing comma, delim-comma.
+- [x] Node 24: `node --test tests/mcdc-assemble-unicode-ranges.test.ts` — 23 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
