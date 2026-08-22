@@ -3292,3 +3292,14 @@ Drive remaining `src/math-parser.ts:simplify` unique-cause leftovers (reported 5
 - [x] `tests/mcdc-hotspot-math-simplify-leftover.test.ts` — mixed units that cannot collapse (`hz+khz`, `cqw+px`, 4-term leftover, `px/s` product, function-only product, no-distribute length≠2 / no-numberNode, `round(px, em)`); nested `calc()` fold vs leftover; NaN/Infinity constants; percentage+px across sum/min/clamp/hypot/atan2/mod; type-check parse failures and constructed mismatches; empty `min()`/`max()` parse + `CSSMathFunction` leftover; single-arg `hypot` fold vs leftover and empty `hypot()`.
 - [x] Node 24: `node --test tests/mcdc-hotspot-math-simplify-leftover.test.ts` — 8 pass. `tsc --noEmit` clean. oxlint 0 warnings.
 
+---
+
+## Phase: fold `options.atRules` keys ASCII-case-insensitively (Champ)
+
+Follow-up to 657058e: lookup folded the CSS at-keyword (`atRuleName.toLowerCase()`) but not the option keys, so `{ FOO: 'rule' }` missed `@foo`. Spec: css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive. Did **not** `proof approve` / waive.
+
+- [x] Fold `options.atRules` own keys at `Parser` construction into a `Map` of lowercase keys. `Object.hasOwn` while copying so inherited prototype keys cannot hijack (`Object.create({ foo: 'rule' })` does not match `@foo`).
+- [x] `consumeAtRule` looks up `this.atRuleTypes.get(atRuleName.toLowerCase())`.
+- [x] RED then GREEN in `tests/mcdc-branch-parser-atrules.test.ts`: `{ FOO: 'rule' }` vs `@foo`; `{ Foo: 'declaration' }` vs `@Foo`; inherited-key hijack.
+- [x] Node 24 (`/opt/node24/bin`): `node --test tests/mcdc-branch-parser-atrules.test.ts` — 18 pass.
+

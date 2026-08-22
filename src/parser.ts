@@ -112,9 +112,18 @@ export class Parser {
   }
 
   public options: ParserOptions;
+  // Own-key ASCII-lowercase map of options.atRules (css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive).
+  private readonly atRuleTypes = new Map<string, string>();
 
   constructor(tokens: TokenStream | Token[], options: ParserOptions = {}) {
     this.options = options;
+    const atRules = options.atRules;
+    if (atRules) {
+      for (const key in atRules) {
+        if (!Object.hasOwn(atRules, key)) continue;
+        this.atRuleTypes.set(key.toLowerCase(), atRules[key]);
+      }
+    }
     if (Array.isArray(tokens)) {
       this.tokens = new ArrayTokenStream(tokens);
     } else {
@@ -375,7 +384,7 @@ export class Parser {
         if (nested) return null;
 
         // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive
-        const customAtRuleType = this.options?.atRules?.[atRuleName.toLowerCase()];
+        const customAtRuleType = this.atRuleTypes.get(atRuleName.toLowerCase());
         if (customAtRuleType === 'declaration') {
           const decls = this.consumeDeclarationsFromBlockContents(block.value);
           rule.childRules = decls as unknown as Rule[];

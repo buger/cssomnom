@@ -19,7 +19,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse, Parser } from '../src/parser.ts';
 import { tokenize } from '../src/tokenizer.ts';
-import { parseStylesheetSync, CSSParserAtRule, CSSParserQualifiedRule } from '../src/parser-api.ts';
+import { parseStylesheetSync, CSSParserAtRule, CSSParserDeclaration, CSSParserQualifiedRule } from '../src/parser-api.ts';
 import {
   CSSMediaRule,
   CSSSupportsRule,
@@ -304,6 +304,57 @@ describe('MC/DC branch: at-rule name ASCII case-insensitivity', () => {
     assert.equal(ast.type, 'at-rule');
     assert.ok(Array.isArray(ast.childRules));
     assert.ok(ast.childRules.some((r) => r instanceof CSSStyleRule));
+  });
+
+  test('options.atRules { FOO: rule } matches @foo', () => {
+    const css = '@foo { div { color: red; } }';
+    const folded = parseStylesheetSync(css, { atRules: { FOO: 'rule' } });
+    assert.equal(folded.length, 1);
+    assert.ok(folded[0] instanceof CSSParserAtRule);
+    const at = folded[0] as CSSParserAtRule;
+    assert.ok(at.body && at.body.length >= 1);
+    assert.ok(at.body.some((r) => r instanceof CSSParserQualifiedRule));
+
+    const viaParser = new Parser(tokenize(css), { atRules: { FOO: 'rule' } }).parseStyleSheet();
+    assert.equal(viaParser.cssRules.length, 1);
+    const ast = viaParser.cssRules[0] as unknown as { type?: string; childRules?: unknown[] };
+    assert.equal(ast.type, 'at-rule');
+    assert.ok(Array.isArray(ast.childRules));
+    assert.ok(ast.childRules.some((r) => r instanceof CSSStyleRule));
+  });
+
+  test('options.atRules { Foo: declaration } matches @Foo', () => {
+    const css = '@Foo { color: red; }';
+    const folded = parseStylesheetSync(css, { atRules: { Foo: 'declaration' } });
+    assert.equal(folded.length, 1);
+    assert.ok(folded[0] instanceof CSSParserAtRule);
+    const at = folded[0] as CSSParserAtRule;
+    assert.ok(at.body && at.body.length >= 1);
+    assert.ok(at.body.some((r) => r instanceof CSSParserDeclaration));
+
+    const viaParser = new Parser(tokenize(css), { atRules: { Foo: 'declaration' } }).parseStyleSheet();
+    assert.equal(viaParser.cssRules.length, 1);
+    const ast = viaParser.cssRules[0] as unknown as { type?: string; childRules?: { type?: string; name?: string }[] };
+    assert.equal(ast.type, 'at-rule');
+    assert.ok(Array.isArray(ast.childRules));
+    assert.ok(ast.childRules.some((r) => r?.type === 'declaration' && r.name === 'color'));
+  });
+
+  test('options.atRules inherited keys cannot hijack unknown at-rules', () => {
+    const atRules = Object.create({ foo: 'rule' }) as Record<string, string>;
+    const css = '@foo { div { color: red; } }';
+    const folded = parseStylesheetSync(css, { atRules });
+    assert.equal(folded.length, 1);
+    assert.ok(folded[0] instanceof CSSParserAtRule);
+    const at = folded[0] as CSSParserAtRule;
+    assert.equal(at.body?.some((r) => r instanceof CSSParserQualifiedRule) ?? false, false);
+
+    const viaParser = new Parser(tokenize(css), { atRules }).parseStyleSheet();
+    assert.equal(viaParser.cssRules.length, 1);
+    assert.ok(viaParser.cssRules[0] instanceof CSSAtRule);
+    const ast = viaParser.cssRules[0] as unknown as { type?: string; childRules?: unknown[] };
+    assert.notEqual(ast.type, 'at-rule');
+    assert.equal(Array.isArray(ast.childRules) && ast.childRules.some((r) => r instanceof CSSStyleRule), false);
   });
 
   test('@constructor / @toString / @__proto__ fall through as unknown at-rules', () => {
