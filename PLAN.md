@@ -3398,3 +3398,12 @@ Cover leftover `src/DOMMatrix.ts` unique-cause branches through public construct
 - [x] `tests/mcdc-branch-dommatrix.test.ts` — Float32/Float64 6- vs 16-item ctor vs `fromFloat32Array` column-major transpose (DOMMatrix + ReadOnly); iterable 6/16; invalid number/boolean/null; `fromMatrix(undefined)` identity; DOMMatrixInit `a`/`m11`/`m13` infer 3D / `is2D:true` defaults / `is2D:false` / `toFloat64Array` 16 vs 6; string `NONE` / `MATRIX` / space-separated / NaN / arity / `MATRIX3D` / `setMatrixValue('none')`; `is2D` setter on 16-item identity; 3D-component setters never restore `is2D`; 2D×3D / 3D×2D / 3D×3D `multiply` / `multiplySelf` / `preMultiplySelf`; `multiply(undefined)` / dict; 3D `inverse`/`invertSelf` success / singular / Inf / NaN; translate defaults / already-3D `tz=0` vs `tz≠0`; scale `sy` default / ox-only / oy-only / `sz≠1` / `oz≠0` / already-3D origin; rotate 0-angle / 2-arg X / 3-arg Z-on-2D / Z-on-3D / `rotateAxisAngle(0,0,0)` / `rotateFromVector(0,0)` / `rotate3d`.
 - [x] Node 24: `node --test tests/mcdc-branch-dommatrix.test.ts` — 12 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-dommatrix.md`.
 
+---
+
+## Phase: leftover cascade color/variable resolver MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/cascade/color-resolver.ts` and `src/cascade/variable-resolver.ts` through public `getCascadedStyle`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-cascade-vars.test.ts` — currentcolor / `CurrentColor` / `color-mix()` fallthrough vs named/system/hex/rgb/hsl; leftover rgb slash/percent/alpha/NaN/arity; leftover hsl space form, deg/rad/turn, hue sectors, slash alpha, parsePct n>1; hex 5/7-digit vs 8; `var()` custom props, fallbacks (currentcolor, color-mix, nested, empty), cycles, `env()`, braced `var({ --name })`, other functions / simple-blocks; custom-property `inherit`/`unset`/`initial`/`revert`/`revert-rule`; `revert-layer` same-layer skip vs previous lower vs none.
+- [x] Node 24: `node --test tests/mcdc-cascade-vars.test.ts` — 12 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-cascade-vars.md`.
+
