@@ -3400,6 +3400,15 @@ Cover leftover `src/DOMMatrix.ts` unique-cause branches through public construct
 
 ---
 
+## Phase: leftover `createSumValue` MC/DC tests (Champ)
+
+Cover leftover `src/typed-om/numeric/numeric-methods.ts` `createSumValue` (5/30 decisions, 16.7%). `CSSUnitValue.to` is overridden and does not call `createSumValue`; drive `CSSNumericValue.parse` / `add` (and `sub`/`mul`/`div`/`min`/`max`) then `.to()` / `.toSum()`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-createsumvalue.test.ts` — unit canonicalization unique-cause (`length && unitToPixels` px/in/em/vw, `angle && unitToRadians` deg/rad/grad/turn, `time && unitToSeconds` s/ms, `khz`/`dpi`/`dpcm`/`x` vs hz/dppx, `unit !== 'number'` number/percent/fr); `CSSMathSum` merge vs leftover vs `itemSum` null (leftover min `.add`); negate via `.sub` success vs leftover min; invert via `calc(1 / …)` / `.div` single-term vs mixed-sum `length > 1` vs leftover null; product scale / px*(1/2px) cancellation / leftover `nextSum`; min/max fold vs mixed maps vs `length > 1` vs un-summable `round`/`abs`; clamp fold / `none` lower-or-upper / leftover sums / map mismatch; fallthrough `round`/`abs`/`hypot` (`CSSMathClamp` F).
+- [x] Node 24: `node --test tests/mcdc-createsumvalue.test.ts` — 8 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-sum.md`.
+
+---
+
 ## Phase: leftover cascade color/variable resolver MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/cascade/color-resolver.ts` and `src/cascade/variable-resolver.ts` through public `getCascadedStyle`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
