@@ -4648,3 +4648,13 @@ FRETish retune so impossible worlds are not SAT rows (mutex already declared for
 - [x] Witness comments retargeted to the new unique-cause assignments. Unreachable FALSE rows stay `//mcdc:ignore:defensive`. EGCP extra SAT `F,T,T` is the `max_stale_witness_lines: 1` slot.
 - [x] Node 24 twice: domain-tables/bounds + cssom/cascade + integration-int-req **96/96**. `/tmp/proof-dx/proof audit --check mcdc_coverage --fail-level warn`: **322 rows, 0 uncovered, 1 stale**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-spec-honest-close.md`.
 
+---
+
+## Phase: authored_delta_expected review of 0e36b1f `_parseAll` restore (Champ)
+
+`authored_delta_expected` warned that `src/typed-om/values/style-value-parser.ts` from `0e36b1f` lacked a current no-authored-change review. LOOP had rejected `a381e92` nested-if split of `_parseAll`; `0e36b1f` restored the original compound. Product throw behavior is unchanged vs `main`. Did **not** edit `src/**`. Did **not** rubber-stamp unrelated files. KI-7 stays **open**.
+
+- [x] Reviewed owners: INT-REQ-260821-9SGA (ParseHooks / no Parser import), SW-REQ-260821-7AKJ and SYS-REQ-260821-HGFK (throw on invalid typed input), SW-REQ-260821-E5D5 and SYS-REQ-260821-Y6R3 (10px CSSUnitValue). Compound restore is a refactor; FRETish contracts still hold.
+- [x] Path-scoped `proof review impact --file src/typed-om/values/style-value-parser.ts --base 0e36b1f~1 --decision no-authored-change --change-type refactor`. Five ledger entries in `proof/impact-reviews/cssomnom-audit.yaml`. Artifact fingerprint `sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846`.
+- [x] Isolated `proof audit --check authored_delta_expected --fail-level warn --verbose`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/authored-delta-parseall.md`.
+

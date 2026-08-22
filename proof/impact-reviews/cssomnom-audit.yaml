@@ -1,6 +1,6 @@
 schema_version: 1
 branch: cssomnom-audit
-generated_at: "2026-08-22T06:33:33Z"
+generated_at: "2026-08-22T10:53:06Z"
 reviews:
     - requirement: INT-REQ-260821-30ZA
       artifact: src/CSSOM.ts
@@ -32,6 +32,17 @@ reviews:
       approval_fingerprint: sha256:9dd092dc751657a34a333a69da9016eb98e38ecefe0e7fb9aa85870753447a94
       artifact_fingerprint: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: INT-REQ-260821-9SGA
+      artifact: src/typed-om/values/style-value-parser.ts
+      decision: no-authored-change
+      change_type: refactor
+      reviewer: agent:grok-4.6
+      reason: 0e36b1f restores _parseAll custom-property name guard to the original compound (property === '--' || (startsWith('--') && length < 3)) after LOOP rejected a381e92 nested-if split used only for mcdc:ignore:defensive. Same TypeError message and predicate as main and as parseAllStyleValues L141. Throw surface unchanged vs origin/main. INT-REQ-260821-9SGA ParseHooks/no-Parser-import, SW-REQ-260821-7AKJ/SYS-REQ-260821-HGFK invalid-input throws, and SW-REQ-260821-E5D5/SYS-REQ-260821-Y6R3 10px CSSUnitValue contracts remain valid. KI-7 stays open.
+      base: 0e36b1f~1
+      requirement_fingerprint: sha256:069bc1fe099c64cccd0a03038ca081690160b54c4dbd38af9044bf59373b8cdf
+      approval_fingerprint: sha256:9dd092dc751657a34a333a69da9016eb98e38ecefe0e7fb9aa85870753447a94
+      artifact_fingerprint: sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846
+      reviewed_at: "2026-08-22T10:53:06Z"
     - requirement: INT-REQ-260821-HJVC
       artifact: src/cascade/index.ts
       decision: no-authored-change
@@ -224,6 +235,17 @@ reviews:
       approval_fingerprint: sha256:9583d763305c53319d3d34e64466dffc84d643aeb01d41f1ca9aaa3425fefd86
       artifact_fingerprint: sha256:7ce15cf4a4026fa2e954ab0cd9c4259adeeac093babbe16e4a561c20fb681e2b
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-7AKJ
+      artifact: src/typed-om/values/style-value-parser.ts
+      decision: no-authored-change
+      change_type: refactor
+      reviewer: agent:grok-4.6
+      reason: 0e36b1f restores _parseAll custom-property name guard to the original compound (property === '--' || (startsWith('--') && length < 3)) after LOOP rejected a381e92 nested-if split used only for mcdc:ignore:defensive. Same TypeError message and predicate as main and as parseAllStyleValues L141. Throw surface unchanged vs origin/main. INT-REQ-260821-9SGA ParseHooks/no-Parser-import, SW-REQ-260821-7AKJ/SYS-REQ-260821-HGFK invalid-input throws, and SW-REQ-260821-E5D5/SYS-REQ-260821-Y6R3 10px CSSUnitValue contracts remain valid. KI-7 stays open.
+      base: 0e36b1f~1
+      requirement_fingerprint: sha256:d97450d5789718e7e1544470f029448d0708c8cfa0cd8d93cc53f413c0caf212
+      approval_fingerprint: sha256:9583d763305c53319d3d34e64466dffc84d643aeb01d41f1ca9aaa3425fefd86
+      artifact_fingerprint: sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846
+      reviewed_at: "2026-08-22T10:53:06Z"
     - requirement: SW-REQ-260821-7M07
       artifact: src/AbstractTokenizer.ts
       decision: no-authored-change
@@ -294,6 +316,17 @@ reviews:
       approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
       artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
       reviewed_at: "2026-08-22T00:36:56Z"
+    - requirement: SW-REQ-260821-E5D5
+      artifact: src/typed-om/values/style-value-parser.ts
+      decision: no-authored-change
+      change_type: refactor
+      reviewer: agent:grok-4.6
+      reason: 0e36b1f restores _parseAll custom-property name guard to the original compound (property === '--' || (startsWith('--') && length < 3)) after LOOP rejected a381e92 nested-if split used only for mcdc:ignore:defensive. Same TypeError message and predicate as main and as parseAllStyleValues L141. Throw surface unchanged vs origin/main. INT-REQ-260821-9SGA ParseHooks/no-Parser-import, SW-REQ-260821-7AKJ/SYS-REQ-260821-HGFK invalid-input throws, and SW-REQ-260821-E5D5/SYS-REQ-260821-Y6R3 10px CSSUnitValue contracts remain valid. KI-7 stays open.
+      base: 0e36b1f~1
+      requirement_fingerprint: sha256:33bd150ad5781910b9f2007ee083ea3b6713334853ff3a888af6fb67fa5a722a
+      approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
+      artifact_fingerprint: sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846
+      reviewed_at: "2026-08-22T10:53:06Z"
     - requirement: SW-REQ-260821-FWNH
       artifact: src/cascade/cascade-sorter.ts
       decision: no-authored-change
@@ -564,6 +597,17 @@ reviews:
       approval_fingerprint: sha256:6765df8cb6c3df2e297b44dbe7374ef186aec28d92779b7d20054b1e41fd83bf
       artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
       reviewed_at: "2026-08-22T00:36:56Z"
+    - requirement: SYS-REQ-260821-HGFK
+      artifact: src/typed-om/values/style-value-parser.ts
+      decision: no-authored-change
+      change_type: refactor
+      reviewer: agent:grok-4.6
+      reason: 0e36b1f restores _parseAll custom-property name guard to the original compound (property === '--' || (startsWith('--') && length < 3)) after LOOP rejected a381e92 nested-if split used only for mcdc:ignore:defensive. Same TypeError message and predicate as main and as parseAllStyleValues L141. Throw surface unchanged vs origin/main. INT-REQ-260821-9SGA ParseHooks/no-Parser-import, SW-REQ-260821-7AKJ/SYS-REQ-260821-HGFK invalid-input throws, and SW-REQ-260821-E5D5/SYS-REQ-260821-Y6R3 10px CSSUnitValue contracts remain valid. KI-7 stays open.
+      base: 0e36b1f~1
+      requirement_fingerprint: sha256:aa8cf7051293deb66a9de00cc8b346467f4f72ed39fe7195c57a8b2d981d1da0
+      approval_fingerprint: sha256:6765df8cb6c3df2e297b44dbe7374ef186aec28d92779b7d20054b1e41fd83bf
+      artifact_fingerprint: sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846
+      reviewed_at: "2026-08-22T10:53:06Z"
     - requirement: SYS-REQ-260821-NHZ8
       artifact: src/parser.ts
       decision: no-authored-change
@@ -606,6 +650,17 @@ reviews:
       approval_fingerprint: sha256:a764547c3d5c6afae73720f19088d7e1e3e0ebf35b76acf57f02f99c4517c390
       artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
       reviewed_at: "2026-08-22T00:36:56Z"
+    - requirement: SYS-REQ-260821-Y6R3
+      artifact: src/typed-om/values/style-value-parser.ts
+      decision: no-authored-change
+      change_type: refactor
+      reviewer: agent:grok-4.6
+      reason: 0e36b1f restores _parseAll custom-property name guard to the original compound (property === '--' || (startsWith('--') && length < 3)) after LOOP rejected a381e92 nested-if split used only for mcdc:ignore:defensive. Same TypeError message and predicate as main and as parseAllStyleValues L141. Throw surface unchanged vs origin/main. INT-REQ-260821-9SGA ParseHooks/no-Parser-import, SW-REQ-260821-7AKJ/SYS-REQ-260821-HGFK invalid-input throws, and SW-REQ-260821-E5D5/SYS-REQ-260821-Y6R3 10px CSSUnitValue contracts remain valid. KI-7 stays open.
+      base: 0e36b1f~1
+      requirement_fingerprint: sha256:8502c004fc8e1de6e0c818de1bf0d83553eda88fd78cd677d6515057df66b2b2
+      approval_fingerprint: sha256:a764547c3d5c6afae73720f19088d7e1e3e0ebf35b76acf57f02f99c4517c390
+      artifact_fingerprint: sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846
+      reviewed_at: "2026-08-22T10:53:06Z"
     - requirement: SYS-REQ-260821-YMEY
       artifact: src/CSSOM.ts
       decision: no-authored-change
