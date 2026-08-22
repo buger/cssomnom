@@ -4,7 +4,7 @@ reviewer: agent:grok-4.6
 reviewed_at: "2026-08-22T10:01:14Z"
 subject: SW-REQ-260822-73TM
 decision: approved
-comment: 'FRETish trigger typed_cssom_rule | unknown_at_rule_fallback maps to getAtRuleHandler folding the at-keyword with toLowerCase (css-values-4 § 4.1 #keywords ASCII case-insensitive). Mixed-case @MEDIA hits AT_RULE_HANDLERS.media as CSSMediaRule; unknown @UNKNOWN returns undefined and consume-at-rule (css-syntax-3 § 5.4.4 #consume-at-rule) falls back to CSSAtRule. Mutex at_rule_cssom_class: one dispatch is at most one of typed vs fallback. Either path still finishes consumeListOfRules (css-syntax-3 § 5.5.1) and parseStyleSheet returns CSSStyleSheet (consume_stylesheet_completed & stylesheet_returned). Silent: parse/parseStyleSheet/replaceSync must actually run.'
+comment: 'FRETish trigger typed_cssom_rule | unknown_at_rule_fallback maps to getAtRuleHandler folding the at-keyword with toLowerCase (css-values-4 § 4.1 #keywords ASCII case-insensitive). Mixed-case @MEDIA hits AT_RULE_HANDLERS.media as CSSMediaRule; unknown @UNKNOWN returns undefined and consume-at-rule (css-syntax-3 § 5.5.2 #consume-at-rule) falls back to CSSAtRule. Mutex at_rule_cssom_class: one dispatch is at most one of typed vs fallback. Either path still finishes consumeListOfRules (css-syntax-3 § 5.5.1 #consume-stylesheet-contents) and parseStyleSheet returns CSSStyleSheet (consume_stylesheet_completed & stylesheet_returned). Silent: parse/parseStyleSheet/replaceSync must actually run. css-syntax-3 § 5.4.4 is #parse-stylesheet-contents, not consume-an-at-rule.'
 citations:
     - tests/mcdc-witness-domain-tables.test.ts:88
     - tests/mcdc-witness-domain-tables.test.ts:73

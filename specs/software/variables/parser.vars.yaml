@@ -79,7 +79,7 @@ variables:
 domain:
     tables:
         - name: at_rule_dispatch
-          source: "css-syntax-3 § 5.4.4 #consume-at-rule; css-values-4 § 4.1 #keywords; cssom-1 CSSMediaRule/CSSMarginRule/CSSAtRule"
+          source: "css-syntax-3 § 5.5.2 #consume-at-rule; css-values-4 § 4.1 #keywords; cssom-1 CSSMediaRule/CSSMarginRule/CSSAtRule"
           inputs:
             - name: at_rule_kind
               type: enum

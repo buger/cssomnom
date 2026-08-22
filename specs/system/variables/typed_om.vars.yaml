@@ -41,7 +41,7 @@ independence:
 domain:
     tables:
         - name: position_arity_reification
-          source: 'css-values-4 § 10.1 #position; css-backgrounds-3 #background-position; css-transforms-1 #transform-origin-property; css-transforms-2 #perspective-origin-property; css-typed-om-1 § 3.3 #positionvalue-objects'
+          source: 'css-values-4 § 8.3 #position; css-backgrounds-3 #background-position; css-transforms-1 #transform-origin-property; css-transforms-2 #perspective-origin-property; css-typed-om-1 § 2 #parse-a-cssstylevalue (this implementation CSSPositionValue reify; dropped from current css-typed-om-1)'
           inputs:
             - name: position_arity_class
               type: enum
@@ -101,4 +101,4 @@ domain:
           members:
             - invalid_typed_input
             - position_reifies
-          reason: 'css-typed-om-1 § 3.3: invalid CSSStyleValue.parse input cannot reify as CSSPositionValue'
+          reason: 'css-typed-om-1 § 2 #parse-a-cssstylevalue: grammar-fail CSSStyleValue.parse throws TypeError and cannot reify as this implementation''s CSSPositionValue'

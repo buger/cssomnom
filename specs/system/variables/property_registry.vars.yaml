@@ -23,7 +23,7 @@ variables:
     - name: urange_hex_digits
       type: int
       direction: input
-      description: Hex plus wildcard length of a unicode-range token consumed while parsing at-property prelude remnants (css-syntax-3 § 4.3.13; at most 6).
+      description: Hex plus wildcard length of a unicode-range token consumed while parsing at-property prelude remnants (css-syntax-3 § 4.3.14 #consume-unicode-range-token; at most 6).
       range:
         max: 6
         min: 0
@@ -55,7 +55,7 @@ independence:
 domain:
     tables:
         - name: urange_hex_cap
-          source: "css-syntax-3 § 4.3.13 #consume-unicode-range-token"
+          source: "css-syntax-3 § 4.3.14 #consume-unicode-range-token"
           inputs:
             - name: urange_hex_run_class
               type: enum

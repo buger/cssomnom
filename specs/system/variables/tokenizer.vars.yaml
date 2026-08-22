@@ -11,7 +11,7 @@ variables:
     - name: escaped_hex_digits
       type: int
       direction: input
-      description: Count of hex digits consumed for an escaped code point or unicode-range token (css-syntax-3 § 4.3.7 consume-escaped-code-point and § 4.3.13 consume-unicode-range-token; at most 6).
+      description: Count of hex digits consumed for an escaped code point or unicode-range token (css-syntax-3 § 4.3.7 consume-escaped-code-point and § 4.3.14 consume-unicode-range-token; at most 6).
       range:
         max: 6
         min: 0
@@ -34,7 +34,7 @@ variables:
 domain:
     tables:
         - name: escaped_hex_cap
-          source: "css-syntax-3 § 4.3.7 #consume-escaped-code-point; css-syntax-3 § 4.3.13 #consume-unicode-range-token"
+          source: "css-syntax-3 § 4.3.7 #consume-escaped-code-point; css-syntax-3 § 4.3.14 #consume-unicode-range-token"
           inputs:
             - name: hex_run_class
               type: enum
