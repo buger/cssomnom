@@ -19,12 +19,19 @@
 // Public-API unique-cause for src/parser.ts handleFontFeatureValuesRule
 // `token.type === "whitespace" || token.type === "comment"` at the body
 // skip (L656) and between @-name and `{` (L664). Drive parse /
-// parseStyleSheet / CSSStyleSheet.replaceSync.
+// parseStyleSheet / CSSStyleSheet.replaceSync / tokenize.
 // css-fonts-4 § 8 #cssfontfeaturevaluesrule-interface / #om-fontfeaturevalues,
-// css-syntax-3 § 4.1.8 #comment-diagram / § 5.5.9 #consume-simple-block.
+// css-syntax-3 § 4.3.1 #consume-token / § 4.3.2 #consume-comment /
+// § 5.5.9 #consume-simple-block.
+// Unique-cause is whitespace T vs compact both-F only. Comment T is MUTE
+// leftover: consumeToken always consumeComments() and never emits comment
+// tokens (no preserveComments). After strip, `{/*c*/@swash{foo:1;}}` and
+// `{@swash/*c*/{foo:1;}}` are the compact both-F row. Do not claim comment
+// T from public parse. Do not ignore a TRUE row.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse, parseStyleSheet } from '../src/parser.ts';
+import { tokenize } from '../src/tokenizer.ts';
 import { CSSFontFeatureValuesRule, CSSStyleSheet } from '../src/CSSOM.ts';
 
 function featureRule(css: string): CSSFontFeatureValuesRule {
@@ -35,43 +42,50 @@ function featureRule(css: string): CSSFontFeatureValuesRule {
   return rule;
 }
 
-describe('MC/DC public unique-cause: handleFontFeatureValuesRule comment skip', () => {
-  test('body skip unique-cause of comment T vs whitespace T vs neither', () => {
-    // Unique-cause: token.type === 'comment' T, whitespace F (no ws after `{`).
-    const commentFirst = featureRule('@font-feature-values Fancy {/*c*/@swash { foo: 1; }}');
-    assert.deepEqual(commentFirst.swash.get('foo'), [1]);
+function tokenTypes(css: string): string[] {
+  return tokenize(css).map((t) => t.type);
+}
 
-    // Unique-cause: whitespace T, comment F.
+describe('MC/DC public unique-cause: handleFontFeatureValuesRule whitespace skip', () => {
+  test('body skip unique-cause of whitespace T vs neither', () => {
+    // Unique-cause: whitespace T, comment F (space after `{`).
     const wsFirst = featureRule('@font-feature-values Fancy { @swash { foo: 1; } }');
     assert.deepEqual(wsFirst.swash.get('foo'), [1]);
 
     // Unique-cause: both F (at-keyword immediately after `{`).
     const compact = featureRule('@font-feature-values Fancy {@swash{foo:1;}}');
     assert.deepEqual(compact.swash.get('foo'), [1]);
-
-    const twoComments = featureRule(
-      '@font-feature-values Fancy {/*c1*//*c2*/@swash { foo: 1; }/*c3*/@stylistic { bar: 2; }}',
-    );
-    assert.deepEqual(twoComments.swash.get('foo'), [1]);
-    assert.deepEqual(twoComments.stylistic.get('bar'), [2]);
   });
 
-  test('comment between @-name and block unique-cause of L664 skip', () => {
-    // Unique-cause: after at-keyword, comment T before `{`.
-    const commentThenBlock = featureRule('@font-feature-values Fancy {@swash/*c*/{ foo: 1; }}');
-    assert.deepEqual(commentThenBlock.swash.get('foo'), [1]);
-
+  test('whitespace between @-name and block unique-cause of L664 skip', () => {
+    // Unique-cause: whitespace T, comment F.
     const wsThenBlock = featureRule('@font-feature-values Fancy {@swash { foo: 1; }}');
     assert.deepEqual(wsThenBlock.swash.get('foo'), [1]);
 
-    const commentWs = featureRule('@font-feature-values Fancy { @swash /*c*/ { foo: 1; } }');
-    assert.deepEqual(commentWs.swash.get('foo'), [1]);
-
+    // Unique-cause: both F (no skip).
     const noSkip = featureRule('@font-feature-values Fancy {@swash{foo:1;}}');
     assert.deepEqual(noSkip.swash.get('foo'), [1]);
   });
 
-  test('parseStyleSheet and replaceSync preserve maps through comments and junk', () => {
+  test('comment T is MUTE leftover: tokenize never emits comment tokens', () => {
+    // After strip these strings are the compact both-F row, not comment T.
+    const bodyComment = '@font-feature-values Fancy {/*c*/@swash{foo:1;}}';
+    const nameComment = '@font-feature-values Fancy {@swash/*c*/{foo:1;}}';
+    const compact = '@font-feature-values Fancy {@swash{foo:1;}}';
+
+    assert.equal(tokenize(bodyComment).some((t) => t.type === 'comment'), false);
+    assert.equal(tokenize(nameComment).some((t) => t.type === 'comment'), false);
+    assert.deepEqual(tokenTypes(bodyComment), tokenTypes(compact));
+    assert.deepEqual(tokenTypes(nameComment), tokenTypes(compact));
+
+    assert.deepEqual(featureRule(bodyComment).swash.get('foo'), [1]);
+    assert.deepEqual(featureRule(nameComment).swash.get('foo'), [1]);
+    assert.deepEqual(featureRule(compact).swash.get('foo'), [1]);
+  });
+
+  test('parseStyleSheet and replaceSync preserve maps through stripped comments and junk', () => {
+    // Comments are discarded in consume-a-token; public maps match comment-free
+    // CSS. Not unique-cause of comment T.
     const css = `@font-feature-values Fancy {
       /* prelude comment */
       color: red;
