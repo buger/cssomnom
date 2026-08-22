@@ -58,7 +58,7 @@ hardening:
         - SYS-REQ-260821-SBJ7
     added_obligations:
         - requirement: SW-REQ-260821-QV2H
-          obligation_class: error_handling
+          obligation_class: nominal
     sibling_sweep:
         scope:
             - src/TokenStream.ts
@@ -86,3 +86,14 @@ history:
       by: agent:grok-4.6
       action: created
       detail: Class-closure after the product fix for KI-9.
+    - at: "2026-08-22T06:31:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Withdrew fake hardening.added_obligations error_handling. Catalog
+        error_handling is infrastructure/runtime-dependency failure (nil store,
+        network, crash). KI-9 is incomplete-chunk peek / remnant-order
+        correctness; NeedMoreDataError is flow control, not infra error handling.
+        QV2H already carries nominal (happy-path tokens after a complete chunk;
+        peek must not fabricate EOF). Point added_obligations at nominal instead
+        of attaching a class that does not apply.

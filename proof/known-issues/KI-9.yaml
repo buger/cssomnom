@@ -77,10 +77,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of StreamingTokenizerStream.peek can hit the hole. Rule 4 is Web3-only.
 template_class: streaming_peek_eof_and_remnant
 isomorphic_sites:
-    - src/TokenStream.ts:92 #fixed
-    - src/TokenStream.ts:101 #fixed
-    - src/TokenStream.ts:104 #fixed
-    - src/streaming-tokenizer.ts:78 #fixed
-    - src/streaming-tokenizer.ts:129 #fixed
+    - "src/TokenStream.ts:92 #fixed class-fix: StreamingTokenizerStream.peek"
+    - "src/TokenStream.ts:101 #fixed class-fix: EOF only when tokenizer.closed"
+    - "src/TokenStream.ts:104 #fixed class-fix: incomplete chunk throws NeedMoreDataError"
+    - "src/streaming-tokenizer.ts:78 #fixed class-fix: closed getter is true EOF"
+    - "src/streaming-tokenizer.ts:129 #fixed class-fix: remnant prepends high surrogate onto CR"
 dedup_armor: |
     Only StreamingTokenizerStream.peek fabricates EOF on an incomplete chunk, and only preprocessChunk remnant concat reverses high-surrogate+CR. Distinct from KI-8 import href and from ArrayTokenStream. Do not merge this KI into a generic tokenizer-EOF defect without a second live streaming hole.

@@ -30,6 +30,8 @@ disposition:
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
     reviewed_at: "2026-08-22T06:05:00Z"
+    known_issues:
+        - KI-7
     requirements:
         - SW-REQ-260821-5W6X
         - SYS-REQ-260821-7521
@@ -74,3 +76,11 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: Filled class-closure hardening after the product fix for KI-8.
+    - at: "2026-08-22T06:31:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Linked disposition.known_issues: [KI-7]. This DEFECT closed the KI-8
+        url-token href copy on SW-REQ-260821-5W6X. KI-7 remains open: @import
+        still never fetches and CSSImportRule.styleSheet is not the associated
+        loaded sheet. Do not treat KI-7 as shipped.

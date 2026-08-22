@@ -1,6 +1,6 @@
 schema_version: 1
 branch: cssomnom-audit
-generated_at: "2026-08-22T00:36:56Z"
+generated_at: "2026-08-22T06:33:33Z"
 reviews:
     - requirement: INT-REQ-260821-30ZA
       artifact: src/CSSOM.ts
@@ -182,6 +182,18 @@ reviews:
       approval_fingerprint: sha256:85a1e203e952a21fd5b7976cd4a4ee627c62e81d25c72a5f60bd6e4bd99d2125
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-6951
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:a9b78f68fec40886aa77901ae823de683c83c01944f17c5609ef2ec34e64afb0
+      approval_fingerprint: sha256:85a1e203e952a21fd5b7976cd4a4ee627c62e81d25c72a5f60bd6e4bd99d2125
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SW-REQ-260821-6D9T
       artifact: src/SelectorParser.ts
       decision: no-authored-change
@@ -322,6 +334,18 @@ reviews:
       approval_fingerprint: sha256:15042caab5a6e2faae29568c49680de0381fd9f2cda309e0371fdc29a9eb6187
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-HNRG
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:738ca8b31e984eb91433738e36a26fec60ff6bcdcd217eca3f7f94ff690cb75d
+      approval_fingerprint: sha256:15042caab5a6e2faae29568c49680de0381fd9f2cda309e0371fdc29a9eb6187
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SW-REQ-260821-PAKB
       artifact: src/CSSOM.ts
       decision: no-authored-change
@@ -332,6 +356,18 @@ reviews:
       approval_fingerprint: sha256:9b9d6b5d49511f1ba7d8a9df413266145d9b02d2217ab8d5fa6352d02afa6ce9
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-PAKB
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:bcc12301fc6fd0f098f7e1f32d1e506831c3e776c711298efb4be4ca4b7c8496
+      approval_fingerprint: sha256:9b9d6b5d49511f1ba7d8a9df413266145d9b02d2217ab8d5fa6352d02afa6ce9
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SW-REQ-260821-QV2H
       artifact: src/AbstractTokenizer.ts
       decision: no-authored-change
@@ -392,6 +428,18 @@ reviews:
       approval_fingerprint: sha256:a7a879cb230da519a7bfcf2e868f48bf4b992eb0a2b2bd3bc0e863f409b549d3
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SW-REQ-260821-TF5T
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:0ccb3a33e484dfe03e7135533c17142b3de402cdba23c61ddd158bbdbb1eb8f0
+      approval_fingerprint: sha256:a7a879cb230da519a7bfcf2e868f48bf4b992eb0a2b2bd3bc0e863f409b549d3
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SW-REQ-260821-YG9J
       artifact: src/parser.ts
       decision: no-authored-change
@@ -442,6 +490,18 @@ reviews:
       approval_fingerprint: sha256:8183494a7278d205a03566bf58ded471d40e8b1dadb0c4f0ed300cfdcd295ff3
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-8TGB
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:a93bf627d63179bf1e4ad8f820e24cf2e32f92213480fba6b4f9bfffe68ceca2
+      approval_fingerprint: sha256:8183494a7278d205a03566bf58ded471d40e8b1dadb0c4f0ed300cfdcd295ff3
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SYS-REQ-260821-9YM3
       artifact: src/parser.ts
       decision: no-authored-change
@@ -462,6 +522,18 @@ reviews:
       approval_fingerprint: sha256:1192f69d47e6b4b8bc31545d21138900d8a7503a86e7342fb5e3bb365ffb29d9
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-GR67
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:6b043bde8e5a37571bda7dd7a45320c66f0f576096b37fe46c2b84b593033d70
+      approval_fingerprint: sha256:1192f69d47e6b4b8bc31545d21138900d8a7503a86e7342fb5e3bb365ffb29d9
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SYS-REQ-260821-H3BD
       artifact: src/CSSOM.ts
       decision: no-authored-change
@@ -512,6 +584,18 @@ reviews:
       approval_fingerprint: sha256:ba824c8c73011de77ab0cd3ec4ac54edebc1c327dd4301674933a324e2243677
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-X3KX
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:5314ebc0b8cd8db1a4fb3c9bc59f2087868f12c9f46a9518d0bf1bda9b9ec8dd
+      approval_fingerprint: sha256:ba824c8c73011de77ab0cd3ec4ac54edebc1c327dd4301674933a324e2243677
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"
     - requirement: SYS-REQ-260821-Y6R3
       artifact: src/typed-om/position/position-parser.ts
       decision: no-authored-change
@@ -532,3 +616,15 @@ reviews:
       approval_fingerprint: sha256:3ff86ce53fa412046b9e2a3949fe6b40e88eaf120fb16c6241e87c67064b13a9
       artifact_fingerprint: sha256:5159f38b3c1d5618c4613c06d72775708544ab4b88a6585f8e7e2c18c5f78577
       reviewed_at: "2026-08-21T22:19:22Z"
+    - requirement: SYS-REQ-260821-YMEY
+      artifact: src/CSSStyleDeclaration.ts
+      decision: no-authored-change
+      change_type: fix
+      defect_ref: DEFECT-260822-NQVB
+      reviewer: agent:grok-4.6
+      reason: KI-1 class-fix restores cssom-1 § 6.7.1 invalid-all no-op already specified by HNRG/8TGB; shared CSSStyleDeclaration.ts owners (SW-REQ-260821-6951, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY) unchanged. FRETish and documented design remain correct.
+      base: HEAD~1
+      requirement_fingerprint: sha256:63e20f9bd25faa303862a2bcaf416a82aec6b5d918fe6ed039e50394d4b9341b
+      approval_fingerprint: sha256:3ff86ce53fa412046b9e2a3949fe6b40e88eaf120fb16c6241e87c67064b13a9
+      artifact_fingerprint: sha256:0d7ed9c2a7753a4f9e2f98c9d7c9d3e473266d9c58906239e111e354990981f5
+      reviewed_at: "2026-08-22T06:33:33Z"

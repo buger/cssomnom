@@ -78,10 +78,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of parse() with mixed-case at-keywords can hit the hole. Rule 4 is Web3-only.
 template_class: atrule_ascii_case_dispatch
 isomorphic_sites:
-    - src/parser.ts:82
-    - src/parser.ts:83
-    - src/parser.ts:89
-    - src/parser.ts:374
-    - src/parser.ts:611
+    - "src/parser.ts:82 #fixed class-fix: getAtRuleHandler ASCII-case + Object.hasOwn"
+    - "src/parser.ts:83 #fixed class-fix: at-keywords are ASCII case-insensitive"
+    - "src/parser.ts:89 #fixed class-fix: MARGIN_RULE_NAMES / keyframes folded lookup"
+    - "src/parser.ts:374 #na CSSAtRule fallback after handler miss; not the case-fold lookup"
+    - "src/parser.ts:611 #na handlePageRule first-nested-declarations; not at-keyword dispatch"
 dedup_armor: |
     Only getAtRuleHandler / options.atRules / handleMarginRule ASCII-case and Object.prototype lookup. Distinct from KI-6 (toParserRule type-0 adapter after a typed CSSLayer* rule exists). Do not merge this KI into KI-6 without a second live dispatch hole.

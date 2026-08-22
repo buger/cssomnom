@@ -3923,7 +3923,7 @@ Product fix after `fe7defa` restore. Node 24 (`/opt/node24/bin`). Did not `proof
 - [x] **KI-10** (`src/matcher.ts`): html `#concept-fieldset-disabled` / `#concept-fe-disabled` first-legend skip. `isDisabledByAncestorFieldset` walks each ancestor fieldset independently and does **not** treat the ancestor's own `disabled` as the element's. `#nested-in-legend` / `#in-legend` / nested-legend-input are not `:disabled`. Own-disabled nested fieldset and non-first legend still are.
 - [x] **KI-13** (`src/matcher.ts`): html `#selector-disabled` / `#concept-element-disabled` listed types only (button/input/select/textarea/optgroup/option/fieldset + form-associated custom). `div[disabled]` and `p` in `fieldset[disabled]` do not match. `:enabled` uses `isDisableableElement`.
 - [x] GREEN twice: matcher + mcdc matcher suites 97 pass; KI-10 and KI-13 reproducers pass (exit 0). `tsc --noEmit` clean. oxlint 0. `pnpm run preflight` still fails on unrelated restore holes (KI-3/8/11/12/14 position/import/parser-api); no matcher `:disabled` failures.
-- [x] Class-closure: `DEFECT-260822-FSFL` (KI-10), `DEFECT-260822-DTYP` (KI-13). KI-10 / KI-13 `status: fixed`. Evidence `proof/evidence/ki-10.yaml` / `ki-13.yaml`.
+- [x] Class-closure: `DEFECT-260822-FSFK` (KI-10; renamed from invalid Crockford id `DEFECT-260822-FSFL`), `DEFECT-260822-DTYP` (KI-13). KI-10 / KI-13 `status: fixed`. Evidence `proof/evidence/ki-10.yaml` / `ki-13.yaml`.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-10-13.md`.
 
 ---
@@ -4031,3 +4031,26 @@ Close the 2 Errors from `proof audit --fail-level warn` (HEAD `b055246` + KI-6/1
 - [x] **Stale KI MCDC**: 6 KI-gated `// MCDC [known-issue]` reachability witnesses on fixed bugs. Retargeted overlay SAT TRUE unique-cause of the **fixed** behavior (KI-2/3 pattern): KI-14/KI-6 `INT-REQ-260821-WTPD`; KI-1 `SW-REQ-260821-HNRG` + `SYS-REQ-260821-8TGB`; KI-5 `SW-REQ-260821-W8S1` + `SYS-REQ-260821-5283`. KI-7 untouched.
 - [x] `proof audit --check spec_lint_spec_conformance_review_grounded --check mcdc_known_issue_disposition_stale --fail-level warn`: **Errors: 0  Warnings: 0**.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-close-errors.md`.
+
+---
+
+## Phase: Proof recapture after dc9a684 error close (Champ)
+
+Proof recapture only. Did **not** edit `src/**`. Did **not** `git reset` / restore / checkout --force / `git add .`. Did **not** `proof approve` / `waive`. Node v24.11.1; proof `/tmp/proof-dx/proof`. HEAD `dc9a684`.
+
+- [x] `proof audit --check spec_lint_spec_conformance_review_grounded --check mcdc_known_issue_disposition_stale --fail-level warn`: **Errors: 0  Warnings: 0**. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-two-errors.log`.
+- [x] `proof audit --check tests_pass --check code_mcdc_measure --check code_mcdc_coverage --fail-level warn`: **Errors: 0  Warnings: 1**. Code MC/DC **88.1% / 90.1%** (3244/3683 D, 4656/5170 C) vs 100% floors. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-code-mcdc.log`.
+- [x] `proof audit --check mcdc_coverage --fail-level warn`: **Errors: 0  Warnings: 0**. Spec MC/DC 222/222 uncovered=0; 1 stale witness SYS-REQ-260821-EGCP. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-mcdc-spec.log`.
+- [x] Full `proof audit --fail-level warn`: **Errors: 0  Warnings: 12**. Warning IDs not waived: `change_record_lands`, `nonbool_inputs_constrained`, `spec_lint_status_vs_review`, `authored_delta_expected`, `property_based_test_coverage`, `code_mcdc_coverage`, `known_issue_complete`, `known_issue_sibling_disposition`, `problem_reports_reviewed`, `process_checklist`, `suspect_clean`, `under_modeled_requirements_clean`. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`. Hotspots: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-hotspots-now.txt`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-now.md`.
+
+---
+
+## Phase: overlay Proof hygiene (Champ)
+
+Honest close of remaining WARNINGs on `known_issue_complete`, `known_issue_sibling_disposition`, `problem_reports_reviewed`, `authored_delta_expected`. Did **not** edit `src/**`. Did **not** implement KI-7 fetch. Did **not** `proof approve` / `waive`. Did **not** mass-review 34 `status=review` YAML. Node v24.11.1; proof `/tmp/proof-dx/proof`.
+
+- [x] **KI-7 evidence**: overlay tripwire `proof/reproducers/KI-7-import-stylesheet-null.ts` exit **1/1** (`CSSImportRule.styleSheet` still null). `proof evidence refresh KI-7` re-stamped `proof/evidence/ki-7.yaml` (`status: fail` / `known_issue_reproduced`; `src/parser.ts` hash `sha256:6fe2424b…`). KI-7 remains **open**.
+- [x] **sibling disposition**: quoted `#fixed` / `#na` on fixed-KI `isomorphic_sites` (YAML `#` was a comment unless quoted). Per-site reason: class-fix vs not-a-sibling. Did not invent sites. KI-7 (open) unmarked.
+- [x] **problem reports**: `DEFECT-260822-FSFL` renamed `DEFECT-260822-FSFK` (Crockford alphabet excludes L); history kept. `DEFECT-260822-3T1G` links `disposition.known_issues: [KI-7]` (href copy closed; fetch still open). `DEFECT-260822-SK9P` withdrew fake `error_handling` (catalog is infra failure; KI-9 is incomplete-chunk correctness) and points `added_obligations` at already-attached `nominal`. `DEFECT-260822-ZSWZ` `nominal` honestly added to `INT-REQ-260821-ZMZR` (happy-path mixed-case at-rule construction).
+- [x] **authored_delta_expected**: `src/parser-api.ts` KI-6/14 pairs already current (`proof review impact --file src/parser-api.ts` → 0 pending). Recorded sidecar reviews for the live pending file `src/CSSStyleDeclaration.ts` (KI-1 class-fix) for 8 owners: `SW-REQ-260821-6951`, `HNRG`, `PAKB`, `TF5T`, `SYS-REQ-260821-8TGB`, `GR67`, `X3KX`, `YMEY`. `--change-type fix --defect DEFECT-260822-NQVB`. Sidecar only (`proof/impact-reviews/cssomnom-audit.yaml`).
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/overlay-hygiene.md`.

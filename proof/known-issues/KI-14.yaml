@@ -75,9 +75,9 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync with @keyframes can hit the hole. Rule 4 is Web3-only.
 template_class: adapter_keyframe_type_eight
 isomorphic_sites:
-    - src/parser-api.ts:305 #fixed
-    - src/parser-api.ts:414 #fixed
-    - src/parser-api.ts:415 #fixed
-    - src/CSSOM.ts:1331 #na
+    - "src/parser-api.ts:305 #fixed class-fix: cssomKeyframeToQualified maps type 8 to qualified rule"
+    - "src/parser-api.ts:414 #fixed class-fix: CSSKeyframeRule / type 8 branch before numeric at-rule"
+    - "src/parser-api.ts:415 #fixed class-fix: keyframe child is CSSParserQualifiedRule"
+    - "src/CSSOM.ts:1331 #na CSSFontFaceDescriptors; not the keyframe adapter sibling"
 dedup_armor: |
     Only CSSKeyframeRule (CSSRule.type === 8) is mapped as an at-rule named unknown (no .name, empty prelude, body null). Distinct from KI-6, which is type === 0 (CSSLayerStatementRule / CSSLayerBlockRule / CSSContainerRule) falling through to CSSParserRawRule. CSSKeyframesRule type 7 still enters the numeric at-rule branch. Do not merge this KI into KI-6 without a second live type-8 hole.

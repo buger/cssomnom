@@ -77,12 +77,11 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
 template_class: disabled_non_form_control
 isomorphic_sites:
-    - src/matcher.ts:623
-    - src/matcher.ts:628
-    - src/matcher.ts:859
-    - src/matcher.ts:926
-    - src/matcher.ts:931
-    - src/matcher.ts:942
-    - src/matcher.ts:942
+    - "src/matcher.ts:623 #fixed class-fix: :disabled only via isElementDisabled listed types"
+    - "src/matcher.ts:628 #fixed class-fix: :enabled already gated by isDisableableElement"
+    - "src/matcher.ts:859 #fixed class-fix: isDisableableElement listed-tag + form-associated custom"
+    - "src/matcher.ts:926 #fixed class-fix: isElementDisabled returns false for non-listed elements"
+    - "src/matcher.ts:931 #fixed class-fix: listed form-control tags"
+    - "src/matcher.ts:942 #fixed class-fix: form-associated custom then false for div/span/p"
 dedup_armor: |
     Only :disabled overmatch on non-listed elements (div[disabled], p/span descendants of fieldset[disabled]). Distinct from KI-10, which is the first-legend exemption on listed controls / nested fieldsets. :enabled already checks the listed tag set at matcher.ts:628. Do not merge this KI into KI-10 without collapsing the listed-control gate vs first-legend walk-up distinction.

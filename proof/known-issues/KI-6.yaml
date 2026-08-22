@@ -95,12 +95,12 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync can hit the hole. Rule 4 is Web3-only.
 template_class: adapter_type_zero_fallback
 isomorphic_sites:
-    - src/parser-api.ts:327 #fixed
-    - src/parser-api.ts:392 #fixed
-    - src/parser-api.ts:419 #fixed
-    - src/CSSOM.ts:1077 #na
-    - src/CSSOM.ts:1092 #na
-    - src/CSSOM.ts:1110 #na
-    - src/CSSOM.ts:1123 #na
+    - "src/parser-api.ts:327 #fixed class-fix: cssomAtRuleFromFields maps type-0 CSSOM at-rules"
+    - "src/parser-api.ts:392 #fixed class-fix: toParserRule entry for CSSOM adapter"
+    - "src/parser-api.ts:419 #fixed class-fix: type-0 at-rules take cssomAtRuleFromFields not RawRule"
+    - "src/CSSOM.ts:1077 #na CSSLayerStatementRule.set cssText; not the parser-api adapter fallback"
+    - "src/CSSOM.ts:1092 #na CSSStartingStyleRule.set cssText; not the adapter type-0 hole"
+    - "src/CSSOM.ts:1110 #na CSSScopeRule.cssText; not the adapter type-0 hole"
+    - "src/CSSOM.ts:1123 #na CSSViewTransitionRule constructor; not the adapter type-0 hole"
 dedup_armor: |
     Only CSSOM at-rules whose type getter returns 0 miss the toParserRule numeric at-rule branch (parser-api.ts:211 excludes type === 0) and fall through to CSSParserRawRule (parser-api.ts:250). Style rules (type 1) and legacy at-rules with non-zero type constants still adapt. Do not merge this KI into empty-stylesheet or unknown-at-rule cases.

@@ -26,7 +26,7 @@ commands:
 evidence_manifests:
     - proof/evidence/ki-10.yaml
 mitigation: Product fix landed in src/matcher.ts. isDisabledByAncestorFieldset walks each ancestor fieldset independently and skips descendants of that fieldset's first legend; it does not treat the ancestor's own disabled attribute as the element's.
-remediation: Closed after class-fix. html#concept-fieldset-disabled / #concept-fe-disabled first-legend skip is implemented. #nested-in-legend, #in-legend, and nested-legend-input are not :disabled. Class-closure DEFECT-260822-FSFL.
+remediation: Closed after class-fix. html#concept-fieldset-disabled / #concept-fe-disabled first-legend skip is implemented. #nested-in-legend, #in-legend, and nested-legend-input are not :disabled. Class-closure DEFECT-260822-FSFK (renamed from invalid Crockford id DEFECT-260822-FSFL).
 notes:
     - '2026-08-22: filed after fe7defa restore. Distinct from selector-parse empty-match (6D9T FRETish); attached because matcher is the selectors surface.'
     - '2026-08-22: class-fix landed. Overlay reproducer and tests/matcher.test.ts pass. Distinct from KI-13 listed-control gate.'
@@ -43,7 +43,7 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: |
-        Product class-fix: isDisabledByAncestorFieldset / isDisabledFieldset / isFormControlDisabled skip first-legend descendants instead of walking up and treating the ancestor fieldset's disabled as the element's. Overlay reproducer and matcher.test.ts pass twice. DEFECT-260822-FSFL. Status fixed.
+        Product class-fix: isDisabledByAncestorFieldset / isDisabledFieldset / isFormControlDisabled skip first-legend descendants instead of walking up and treating the ancestor fieldset's disabled as the element's. Overlay reproducer and matcher.test.ts pass twice. DEFECT-260822-FSFK (was FSFL). Status fixed.
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -77,11 +77,11 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
 template_class: fieldset_first_legend_disabled
 isomorphic_sites:
-    - src/matcher.ts:623
-    - src/matcher.ts:844
-    - src/matcher.ts:873
-    - src/matcher.ts:889
-    - src/matcher.ts:897
-    - src/matcher.ts:926
+    - "src/matcher.ts:623 #fixed class-fix: :disabled uses isElementDisabled first-legend walk"
+    - "src/matcher.ts:844 #fixed class-fix: isInsideFirstLegend"
+    - "src/matcher.ts:873 #fixed class-fix: isDisabledByAncestorFieldset per-fieldset first-legend skip"
+    - "src/matcher.ts:889 #fixed class-fix: isFormControlDisabled"
+    - "src/matcher.ts:897 #fixed class-fix: isDisabledFieldset"
+    - "src/matcher.ts:926 #fixed class-fix: isElementDisabled listed-type + first-legend walk"
 dedup_armor: |
     Only :disabled / :enabled via isElementDisabled on fieldset first-legend descendants. Distinct from bad-selector empty-match (6D9T FRETish). Do not merge this KI into a generic matcher miss without a second live :disabled hole.

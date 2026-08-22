@@ -80,8 +80,8 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of parse() with unquoted url() can hit the hole. Rule 4 is Web3-only.
 template_class: import_url_token_href_dropped
 isomorphic_sites:
-    - src/parser.ts:747
-    - src/parser.ts:750
-    - src/parser.ts:800
+    - "src/parser.ts:747 #na CSSPropertyRule return; not the @import url-token href copy"
+    - "src/parser.ts:750 #fixed class-fix: handleImportRule copies first.type === 'url' into href"
+    - "src/parser.ts:800 #na supports() prelude parse; leftover url-token was href, not supports"
 dedup_armor: |
     Only unquoted <url-token> href is dropped (string and url("...") still copy). Distinct from KI-7 (CSSImportRule.styleSheet never-fetch). Do not merge this KI into the offline-import capability gap without a second live href hole.

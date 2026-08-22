@@ -1,5 +1,5 @@
 schema_version: 1
-id: DEFECT-260822-FSFL
+id: DEFECT-260822-FSFK
 title: ':disabled treated first-legend descendants as disabled (html concept-fieldset-disabled)'
 introduced_in: inception
 source:
@@ -80,3 +80,11 @@ history:
       by: agent:grok-4.6
       action: created
       detail: Class-closure after product fix for KI-10.
+    - at: "2026-08-22T06:31:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Renamed id DEFECT-260822-FSFL → DEFECT-260822-FSFK. Crockford base32
+        alphabet excludes L (and I, O, U); FSFL failed
+        DEFECT-<YYMMDD>-<Crockford-tail>. File renamed; history retained.
+        Class-closure for KI-10 is unchanged. No product change.

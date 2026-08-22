@@ -108,10 +108,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleDeclaration.setProperty can hit the hole. Rule 4 is Web3-only / attacker-trust-model.
 template_class: shorthand_mutate_before_validate
 isomorphic_sites:
-    - src/CSSStyleDeclaration.ts:523 #fixed
-    - src/CSSStyleDeclaration.ts:524 #fixed
-    - src/CSSStyleDeclaration.ts:525 #fixed
-    - src/shorthands.ts:1913
-    - src/shorthands.ts:2216
+    - "src/CSSStyleDeclaration.ts:523 #fixed class-fix: drop stored all only after expandAll succeeds"
+    - "src/CSSStyleDeclaration.ts:524 #fixed class-fix: filter _declarations all after expand"
+    - "src/CSSStyleDeclaration.ts:525 #fixed class-fix: _declMap.delete('all') after expand"
+    - "src/shorthands.ts:1913 #na expandAll returning null is the no-op signal, not a pre-delete sibling"
+    - "src/shorthands.ts:2216 #na SHORTHANDS['all'] table entry; expand-then-return, no pre-delete"
 dedup_armor: |
     Only property === 'all' deletes from _declarations/_declMap, and only after expandAll succeeds. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.
