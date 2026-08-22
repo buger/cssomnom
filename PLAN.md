@@ -3734,6 +3734,15 @@ Cover leftover unique-cause in `src/CSSStyleDeclaration.ts` still hot after `tes
 
 ---
 
+## Phase: still-hot SelectorParser unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/SelectorParser.ts` still hot after `tests/mcdc-branch-selectorparser-leftover.test.ts`. Drive `SelectorParser.parse` / `parseAnPlusB` / `CSS.supports` / `parse()`, plus Reflect private-method calls for arms `parse()` cannot reach. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-selectorparser-still-hot-unique-cause.test.ts` — hasAmpersand delim `&` / simple-block / function recurse; parse() leading-trim while T,T via skipWhitespace no-op; tryConsumeCombinator `!token` EOF; consumeTypeOrUniversalSelector EOF / `|` nextPipe T / `*||` isColumnCombinator; consumeAttributeSelector `!isSimpleBlock` and `[*attr]` v2 `|` F; consumeCompoundSelector tight `div~span`, crafted ident-after-PE, hole `!token`; validateSimpleSelectorAfterPseudo type F + stub non-PC after PE; consumePseudoSelector `!token` via consume override; parseAnPlusB `+` hole `!t1`, `+-n-` plusPrefix T, `n-foo` match F, `2.5n+1` numberType F, `+n-` hasDashAfterN T eof.
+- [x] Node 24: `node --test tests/mcdc-selectorparser-still-hot-unique-cause.test.ts` — 17 pass. Together with leftover 51 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-sel2.md`.
+
+---
+
 ## Phase: still-hot MediaParser unique-cause MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/MediaParser.ts` still hot after `tests/mcdc-branch-media.test.ts` and `tests/mcdc-branch-media-leftover.test.ts`. Drive `MediaParser.parse` / `evaluate` / `canonicalSerialize`, `serializeMediaQuery`, `evaluateMediaFeature` / `evaluateMediaCondition` / `evaluateMediaQuery` / `evaluateMediaQueries`, `hasUnknownFeature`, `MediaQueryValidator`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
