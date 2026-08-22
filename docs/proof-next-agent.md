@@ -1,3 +1,4 @@
+// Documents: SYS-REQ-260821-H3BD, SYS-REQ-260821-7521, SW-REQ-260821-7M07, SW-REQ-260821-QV2H, SW-REQ-260821-HHVE
 # Next-agent playbook (credit-aware)
 
 Read this before spawning Champs. Scan source (completed 2026-08-21, target SHA `264c2ea` / origin/main-era):  
