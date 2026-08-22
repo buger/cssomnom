@@ -3416,3 +3416,12 @@ Cover leftover unique-cause in `src/cascade/color-resolver.ts` and `src/cascade/
 - [x] `tests/mcdc-cascade-vars.test.ts` — currentcolor / `CurrentColor` / `color-mix()` fallthrough vs named/system/hex/rgb/hsl; leftover rgb slash/percent/alpha/NaN/arity; leftover hsl space form, deg/rad/turn, hue sectors, slash alpha, parsePct n>1; hex 5/7-digit vs 8; `var()` custom props, fallbacks (currentcolor, color-mix, nested, empty), cycles, `env()`, braced `var({ --name })`, other functions / simple-blocks; custom-property `inherit`/`unset`/`initial`/`revert`/`revert-rule`; `revert-layer` same-layer skip vs previous lower vs none.
 - [x] Node 24: `node --test tests/mcdc-cascade-vars.test.ts` — 12 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-cascade-vars.md`.
 
+---
+
+## Phase: leftover shorthands expand* unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/shorthands.ts` `expandFont` remaining, `expandBorder`, `expandBox` (margin/padding), `expandFlex`, and grid-shorthand leftover that `tests/mcdc-hotspot-shorthands.test.ts` / `tests/mcdc-hotspot-shorthands-more.test.ts` hit via direct `SHORTHANDS[…].expand()`. Drive `CSSStyleDeclaration.setProperty` then `getPropertyValue` of the longhands. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-expand-leftover.test.ts` — `expandFont` size ident/function includes F (`url`/`"16px"`/`rgb()`/`counter()`/`attr()`), number `0` vs `1001`, line-height function includes F, familyVal comment after `/` (`lastIdx !== -1`) vs synthetic line-height; `expandBorder` number/percentage/dimension width, hash vs function vs else url/string color, ident width/style/color, css-wide copy; `expandBox` physical 1–4 and logical 1–4 grid, `LOGICAL` case, `logical` alone / 5-value / comment-only, number `0` vs `1`, min/max/clamp vs `rgb()`, `10deg`/`red`, isLengthBox F (`border-color: red`/`1px`), inset/`scroll-*`; `expandFlex` grow-only vs basis-only, content-keyword ident vs length/function basis, third-token ident/`10px`; grid/gap shorthands have no `expandGrid` so longhands stay empty.
+- [x] Node 24: `node --test tests/mcdc-hotspot-expand-leftover.test.ts` — 17 pass. Together with existing shorthand hotspot files 98 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-expand.md`.
+
