@@ -17,7 +17,9 @@
 // Verifies: SYS-REQ-260821-03VA, SYS-REQ-260821-7521, SYS-REQ-260821-NHZ8, SYS-REQ-260821-H3BD, SW-REQ-260821-YG9J, SW-REQ-260821-9KNX, SW-REQ-260821-39E0, SW-REQ-260821-5W6X, SW-REQ-260821-HHVE, SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parse } from '../src/parser.ts';
+import { parse, Parser } from '../src/parser.ts';
+import { tokenize } from '../src/tokenizer.ts';
+import { parseStylesheetSync, CSSParserAtRule, CSSParserQualifiedRule } from '../src/parser-api.ts';
 import {
   CSSMediaRule,
   CSSSupportsRule,
@@ -37,6 +39,8 @@ import {
   CSSCustomMediaRule,
   CSSFontFaceRule,
   CSSAtRule,
+  CSSRule,
+  CSSStyleRule,
 } from '../src/CSSOM.ts';
 
 describe('MC/DC branch: at-rule handlers require a block when the grammar does', () => {
@@ -264,5 +268,72 @@ describe('MC/DC branch: at-rule name ASCII case-insensitivity', () => {
     assert.ok(sheet.cssRules[4] instanceof CSSLayerStatementRule);
     assert.ok(sheet.cssRules[5] instanceof CSSFontFaceRule);
     assert.equal([...sheet.cssRules].some((r) => r instanceof CSSAtRule), false);
+  });
+
+  test('@TOP-LEFT / @Top-Center store ASCII-lowercase CSSMarginRule.name and cssText', () => {
+    const sheet = parse(`
+      @page {
+        @TOP-LEFT { content: "a"; }
+        @Top-Center { content: "b"; }
+      }
+    `);
+    const page = sheet.cssRules[0] as CSSPageRule;
+    assert.ok(page instanceof CSSPageRule);
+    const margins = [...page.cssRules].filter((r) => r instanceof CSSMarginRule) as CSSMarginRule[];
+    assert.equal(margins.length, 2);
+    assert.equal(margins[0].name, 'top-left');
+    assert.equal(margins[1].name, 'top-center');
+    assert.equal(margins[0].cssText.startsWith('@top-left'), true);
+    assert.equal(margins[1].cssText.startsWith('@top-center'), true);
+    assert.equal(margins[0].cssText.includes('TOP-LEFT'), false);
+    assert.equal(margins[1].cssText.includes('Top-Center'), false);
+  });
+
+  test('options.atRules { foo: rule } matches @FOO', () => {
+    const css = '@FOO { div { color: red; } }';
+    const folded = parseStylesheetSync(css, { atRules: { foo: 'rule' } });
+    assert.equal(folded.length, 1);
+    assert.ok(folded[0] instanceof CSSParserAtRule);
+    const at = folded[0] as CSSParserAtRule;
+    assert.ok(at.body && at.body.length >= 1);
+    assert.ok(at.body.some((r) => r instanceof CSSParserQualifiedRule));
+
+    const viaParser = new Parser(tokenize(css), { atRules: { foo: 'rule' } }).parseStyleSheet();
+    assert.equal(viaParser.cssRules.length, 1);
+    const ast = viaParser.cssRules[0] as unknown as { type?: string; childRules?: unknown[] };
+    assert.equal(ast.type, 'at-rule');
+    assert.ok(Array.isArray(ast.childRules));
+    assert.ok(ast.childRules.some((r) => r instanceof CSSStyleRule));
+  });
+
+  test('@constructor / @toString / @__proto__ fall through as unknown at-rules', () => {
+    let sheet: ReturnType<typeof parse> | undefined;
+    assert.doesNotThrow(() => {
+      sheet = parse(`
+        @constructor { color: red; }
+        @toString { color: blue; }
+        @__proto__ { color: green; }
+        @constructor;
+        @toString;
+        @__proto__;
+      `);
+    });
+    assert.ok(sheet);
+    assert.equal(sheet.cssRules.length, 6);
+    for (const rule of sheet.cssRules) {
+      assert.ok(rule instanceof CSSRule);
+      assert.ok(rule instanceof CSSAtRule);
+      assert.equal(rule instanceof Parser, false);
+      assert.equal(typeof rule, 'object');
+    }
+    const names = [...sheet.cssRules].map((r) => (r as CSSAtRule).name);
+    assert.deepEqual(names, [
+      'constructor',
+      'toString',
+      '__proto__',
+      'constructor',
+      'toString',
+      '__proto__',
+    ]);
   });
 });

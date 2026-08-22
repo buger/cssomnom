@@ -1399,7 +1399,8 @@ export class CSSMarginRule extends CSSRule {
 
   constructor(name: string, declarations: import('./types.ts').Declaration[]) {
     super();
-    this.name = name;
+    // css-values-4 § 4.1 #keywords / cssom-1 #the-cssmarginrule-interface
+    this.name = name.toLowerCase();
     this._style = new CSSMarginDescriptors(declarations);
     this._style.parentRule = this;
   }

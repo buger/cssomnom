@@ -2978,6 +2978,12 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ---
 
+## Phase 121: Strict Proof 0/0 campaign (in progress)
+
+**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`): **Errors: 0, Warnings: 9**. Spec MC/DC **222/222 uncovered=0**. Code MC/DC **55.1% / 57.4%** vs 100% floors (not lowered). KI-1,2,3,5,6 **fixed**; KI-4 **withdrawn** (Houdini JS-wins); KI-7 **open** (documented no-fetch). Do not `proof approve` 66 reqs.
+
+---
+
 ## Phase: KI-1..6 product class-fixes (Champ)
 
 - [x] **KI-1**: `setProperty('all')` no longer deletes stored `all` before `expandAll`. Invalid `all` after `all: var(--x)` / `env()` is a no-op. Regression: `tests/cssom-all-shorthand.test.ts`. DEFECT-260821-XZAS.
@@ -3228,4 +3234,16 @@ Drive remaining high-branch files through public `node:test` APIs. Did **not** l
 - [x] `tests/mcdc-branch-parser-atrules.test.ts` — at-rule handlers not covered by `mcdc-branch-parser.test.ts`: block-required statement drop, `@scope` prelude arms, `@keyframes` string/vendor/comma lists, all 16 `@page` margin names, `@font-feature-values` aliases, `@property` validation fail, `@import`/`@namespace`/`@custom-media` remaining arms, ASCII case-insensitive at-rule names.
 - [x] Product fix: `Parser.getAtRuleHandler` lowercases the at-keyword so `@MEDIA` / `@KEYFRAMES` / `@Import` dispatch to typed handlers (css-syntax-3 / css-conditional-3 ASCII case-insensitive at-rule names). Regression in `tests/mcdc-branch-parser-atrules.test.ts`.
 - [x] Node 24: 45 new tests pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
+---
+
+## Phase: leftover at-rule ASCII-case dispatch (Champ)
+
+Leftovers from 5f95a3b `getAtRuleHandler` ASCII fold. Spec: css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive. Did **not** implement KI-7 fetch. Did **not** `proof approve` / waive.
+
+- [x] `CSSMarginRule.name` stores ASCII-lowercase (`@TOP-LEFT` / `@Top-Center` → `top-left` / `top-center`; `cssText` lowercase).
+- [x] `options.atRules` lookup folds via `atRuleName.toLowerCase()` so `{ foo: 'rule' }` matches `@FOO`.
+- [x] `Object.hasOwn(Parser.AT_RULE_HANDLERS, lower)` so `@constructor` / `@toString` / `@__proto__` fall through as `CSSAtRule` (do not invoke `Object.prototype`).
+- [x] `getAtRuleHandler` comment cites css-values-4 § 4.1 #keywords (not css-syntax-3 § 2).
+- [x] RED then GREEN in `tests/mcdc-branch-parser-atrules.test.ts`. Node 24.
 

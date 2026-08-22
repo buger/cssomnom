@@ -79,8 +79,8 @@ export class Parser {
     'custom-media': (parser, rule) => parser.handleCustomMediaRule(rule),
   };
 
-  // css-syntax-3 § 2 / css-conditional-3 § 3 #at-ruledef-media:
-  // at-rule names are matched ASCII case-insensitively.
+  // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive:
+  // CSS keywords (including at-keywords) are ASCII case-insensitive.
   private getAtRuleHandler(name: string): ((parser: Parser, rule: ASTAtRule, block?: SimpleBlock, nested?: boolean) => Rule | null) | undefined {
     const lower = name.toLowerCase();
     if (Parser.MARGIN_RULE_NAMES.has(lower)) {
@@ -89,6 +89,7 @@ export class Parser {
     if (lower === 'keyframes' || lower.endsWith('-keyframes')) {
       return (parser, rule, block) => block ? parser.handleKeyframesRule(rule, block) : null;
     }
+    if (!Object.hasOwn(Parser.AT_RULE_HANDLERS, lower)) return undefined;
     return Parser.AT_RULE_HANDLERS[lower];
   }
 
@@ -373,17 +374,16 @@ export class Parser {
 
         if (nested) return null;
 
-        if (this.options?.atRules?.[atRuleName]) {
-          const type = this.options.atRules[atRuleName];
-          if (type === 'declaration') {
-            const decls = this.consumeDeclarationsFromBlockContents(block.value);
-            rule.childRules = decls as unknown as Rule[];
-            return rule as unknown as Rule;
-          } else if (type === 'rule') {
-            const rules = this.consumeBlockContents(new ArrayComponentValueStream(block.value), true);
-            rule.childRules = rules;
-            return rule as unknown as Rule;
-          }
+        // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive
+        const customAtRuleType = this.options?.atRules?.[atRuleName.toLowerCase()];
+        if (customAtRuleType === 'declaration') {
+          const decls = this.consumeDeclarationsFromBlockContents(block.value);
+          rule.childRules = decls as unknown as Rule[];
+          return rule as unknown as Rule;
+        } else if (customAtRuleType === 'rule') {
+          const rules = this.consumeBlockContents(new ArrayComponentValueStream(block.value), true);
+          rule.childRules = rules;
+          return rule as unknown as Rule;
         }
         
         return new CSSAtRule(rule.name, rule.prelude, block);
@@ -610,9 +610,11 @@ export class Parser {
     return new CSSPageRule(serialize(rule.prelude).trim(), declarations, nestedRules, parseRule);
   }
 
+  // css-values-4 § 4.1 #keywords / cssom-1 #the-cssmarginrule-interface:
+  // margin at-keywords are ASCII case-insensitive; CSSOM serializes lowercase.
   private handleMarginRule(rule: ASTAtRule, block: SimpleBlock): Rule {
     const declarations = this.consumeDeclarationsFromBlockContents(block.value);
-    return new CSSMarginRule(rule.name, declarations);
+    return new CSSMarginRule(rule.name.toLowerCase(), declarations);
   }
 
   // css-counter-styles-3 § 8.1 #csscounterstylerule
