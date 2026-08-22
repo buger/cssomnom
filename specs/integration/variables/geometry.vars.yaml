@@ -12,3 +12,10 @@ variables:
       type: bool
       direction: input
       description: Caller passed a native matrix() or matrix3d() DOMMatrix string. Documented exemption from the typed_om transform hook.
+    - name: matrix_index
+      type: int
+      direction: input
+      description: Row or column index in a Geometry DOMMatrix 4-by-4 (drafts.fxtf.org/geometry/#dommatrix; multiplyArrays i,j in 0..3).
+      range:
+        max: 3
+        min: 0

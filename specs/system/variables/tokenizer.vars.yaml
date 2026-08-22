@@ -8,3 +8,46 @@ variables:
       type: bool
       direction: output
       description: Boolean flag token list returned for component tokenizer.
+    - name: escaped_hex_digits
+      type: int
+      direction: input
+      description: Count of hex digits consumed for an escaped code point or unicode-range token (css-syntax-3 § 4.3.7 consume-escaped-code-point and § 4.3.13 consume-unicode-range-token; at most 6).
+      range:
+        max: 6
+        min: 0
+    - name: hex_run_class
+      type: enum
+      direction: input
+      description: Whether the source hex run is at most 6 digits or longer than the css-syntax-3 cap.
+    - name: sixth_digit_stops_hex
+      type: bool
+      direction: output
+      description: True when consume-escaped-code-point or consume-unicode-range-token stops hex consumption at 6 digits.
+    - name: uses_replacement_character
+      type: bool
+      direction: output
+      description: True when consume-escaped-code-point returns U+FFFD for NUL, a surrogate, or a value above U+10FFFF.
+    - name: uses_escaped_code_point
+      type: bool
+      direction: output
+      description: True when consume-escaped-code-point returns the decoded hex scalar value.
+domain:
+    tables:
+        - name: escaped_hex_cap
+          source: "css-syntax-3 § 4.3.7 #consume-escaped-code-point; css-syntax-3 § 4.3.13 #consume-unicode-range-token"
+          inputs:
+            - name: hex_run_class
+              type: enum
+              values: [at_most_six, overflow]
+          output:
+            name: sixth_digit_stops_hex
+            type: bool
+          rows:
+            - {hex_run_class: at_most_six, sixth_digit_stops_hex: false}
+            - {hex_run_class: overflow, sixth_digit_stops_hex: true}
+    mutex:
+        - name: escaped_code_point_result
+          members:
+            - uses_replacement_character
+            - uses_escaped_code_point
+          reason: css-syntax-3 § 4.3.7 returns either U+FFFD or the decoded scalar value, never both.

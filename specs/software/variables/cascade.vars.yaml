@@ -24,6 +24,65 @@ variables:
       type: bool
       direction: output
       description: Boolean flag layout performed for component cascade.
+    - name: hue_degrees
+      type: real
+      direction: input
+      description: HSL hue in degrees after css-color-4 modulo-360 normalization (color-resolver hslToRgb).
+      range:
+        max: 360
+        min: 0
+    - name: hue_sector
+      type: enum
+      direction: input
+      description: css-color-4 HSL-to-RGB 60-degree hue sector after normalization.
+    - name: red_from_chroma
+      type: bool
+      direction: output
+      description: True when the HSL-to-RGB red channel is set from chroma C (sectors 0-60 and 300-360).
+    - name: green_from_chroma
+      type: bool
+      direction: output
+      description: True when the HSL-to-RGB green channel is set from chroma C (sectors 60-180).
+    - name: blue_from_chroma
+      type: bool
+      direction: output
+      description: True when the HSL-to-RGB blue channel is set from chroma C (sectors 180-300).
+    - name: hsl_component_count
+      type: int
+      direction: input
+      description: Count of hsl()/hsla() components after slash split (css-color-4 hsl() is 3 or 4 components).
+      range:
+        max: 4
+        min: 3
+    - name: hsl_parsed
+      type: bool
+      direction: output
+      description: True when hslToRgb accepts a 3- or 4-component hsl()/hsla() argument list.
 independence:
     declared: true
     reason: "SW cascade pairs (sorter vs public exports) skip as cross-component; guarantees do not share an intra-component output vocabulary the solver can pair."
+domain:
+    tables:
+        - name: hsl_hue_to_rgb
+          source: "css-color-4 #hsl-to-rgb; css-color-4 § 7 #the-hsl-notation"
+          inputs:
+            - name: hue_sector
+              type: enum
+              values: [h0_60, h60_120, h120_180, h180_240, h240_300, h300_360]
+          output:
+            name: red_from_chroma
+            type: bool
+          rows:
+            - {hue_sector: h0_60, red_from_chroma: true}
+            - {hue_sector: h60_120, red_from_chroma: false}
+            - {hue_sector: h120_180, red_from_chroma: false}
+            - {hue_sector: h180_240, red_from_chroma: false}
+            - {hue_sector: h240_300, red_from_chroma: false}
+            - {hue_sector: h300_360, red_from_chroma: true}
+    mutex:
+        - name: hsl_chroma_channel
+          members:
+            - red_from_chroma
+            - green_from_chroma
+            - blue_from_chroma
+          reason: css-color-4 HSL-to-RGB assigns chroma C to exactly one of R, G, or B in each 60-degree sector.

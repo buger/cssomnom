@@ -16,6 +16,49 @@ variables:
       type: bool
       direction: input
       description: Boolean flag register property called for component parser_api.
+    - name: urange_hex_digits
+      type: int
+      direction: input
+      description: Hex plus wildcard length of a unicode-range token on the CSS.registerProperty / parse path (css-syntax-3 § 4.3.13; at most 6).
+      range:
+        max: 6
+        min: 0
+    - name: namespace_prelude_count
+      type: int
+      direction: input
+      description: 'Non-whitespace @namespace prelude token count (css-namespaces-3: uri, or prefix plus uri).'
+      range:
+        max: 2
+        min: 1
+    - name: keyframe_offset_percent
+      type: real
+      direction: input
+      description: Keyframe selector percentage offset (css-animations-1 0-100) inherited on the parser_api registerProperty path.
+      range:
+        max: 100
+        min: 0
+    - name: urange_hex_run_class
+      type: enum
+      direction: input
+      description: Whether a unicode-range hex-plus-wildcard run is at most 6 digits or longer than the css-syntax-3 cap.
+    - name: urange_sixth_digit_stops
+      type: bool
+      direction: output
+      description: True when unicode-range consumption stops hex and question-mark digits at 6.
 independence:
     declared: true
     reason: "INT parser_api pairs (AST adapter vs registerProperty) skip as cross-component contracts with parser/property_registry; no intra-component shared-output pair remains to check."
+domain:
+    tables:
+        - name: urange_hex_cap
+          source: "css-syntax-3 § 4.3.13 #consume-unicode-range-token"
+          inputs:
+            - name: urange_hex_run_class
+              type: enum
+              values: [at_most_six, overflow]
+          output:
+            name: urange_sixth_digit_stops
+            type: bool
+          rows:
+            - {urange_hex_run_class: at_most_six, urange_sixth_digit_stops: false}
+            - {urange_hex_run_class: overflow, urange_sixth_digit_stops: true}

@@ -4,8 +4,8 @@ status: review
 priority: shall
 category: interface
 req_type: guarantee
-fretish: when insert_rule_path the cssom shall always satisfy parse_hooks_consume_rule_called & !parser_imported
-description: The cssom insertRule path shall call ParseHooks.consumeRule. The cssom module shall not import Parser.
+fretish: when insert_rule_path & box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy parse_hooks_consume_rule_called & !parser_imported & (four_longhands_assigned | shorthand_expanded | shorthand_rejected)
+description: The cssom insertRule path shall call ParseHooks.consumeRule. The cssom module shall not import Parser. Box shorthands stay within 1-4 sides.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -17,8 +17,15 @@ rationale: CSSOM mutation shall use injected parse hooks and shall avoid a parse
 tags: []
 variables:
     - insert_rule_path
+    - box_side_count
+    - position_token_count
+    - keyframe_offset_percent
+    - font_weight_number
     - parse_hooks_consume_rule_called
     - parser_imported
+    - four_longhands_assigned
+    - shorthand_expanded
+    - shorthand_rejected
 references:
     - type: document
       id: README.md
@@ -31,23 +38,23 @@ traces:
 verification:
     assurance_level: C
     formalization_status: valid
-    not_modeled:
-        - predicate: "length <= 6"
-          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
-        - predicate: "tokens.length >= 2"
-          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
-        - predicate: "val > 100"
-          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
     review:
         status: pending
         reviewer: ""
         reviewed_at: ""
         ai_generated: true
+    not_modeled:
+        - predicate: length <= 6
+          reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
+        - predicate: tokens.length >= 2
+          reason: "Function/qualified-rule arity guard on the token list; structural parse, not a requirement domain [structural]"
+        - predicate: val > 100
+          reason: "Incidental percent/number clamp in color or numeric parse; not a modeled requirement domain [structural]"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:47Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:42Z"
+    last_modified_at: "2026-08-22T09:38:32Z"
 obligation_checklist:
     - error_handling
     - malformed_input

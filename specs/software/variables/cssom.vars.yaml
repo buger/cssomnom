@@ -44,6 +44,72 @@ variables:
       type: bool
       direction: internal
       description: Boolean flag value validation fails for component cssom.
+    - name: box_side_count
+      type: int
+      direction: input
+      description: Count of margin/padding/inset/border-radius side values after whitespace filter (css-backgrounds-3 1-to-4 value syntax).
+      range:
+        max: 4
+        min: 1
+    - name: box_arity_class
+      type: enum
+      direction: input
+      description: 'Box shorthand arity class: one, two, three, or four values.'
+    - name: four_longhands_assigned
+      type: bool
+      direction: output
+      description: True when expandBox assigns all four physical or logical longhands from a 1-to-4 value list.
+    - name: position_token_count
+      type: int
+      direction: input
+      description: Count of background-position tokens in a layer (css-backgrounds-3; more than 4 is rejected).
+      range:
+        max: 4
+        min: 0
+    - name: keyframe_offset_percent
+      type: real
+      direction: input
+      description: Keyframe selector percentage offset (css-animations-1; from=0% to=100%; values outside 0-100 throw SyntaxError).
+      range:
+        max: 100
+        min: 0
+    - name: font_weight_number
+      type: int
+      direction: input
+      description: Numeric font-weight in the font shorthand (css-fonts-4; 1 through 1000).
+      range:
+        max: 1000
+        min: 1
+    - name: shorthand_expanded
+      type: bool
+      direction: output
+      description: True when a box, position, or font shorthand expands to longhands.
+    - name: shorthand_rejected
+      type: bool
+      direction: output
+      description: True when a box, position, or font shorthand returns null because arity or numeric domain is outside the grammar.
 independence:
     declared: true
     reason: "SW cssom pairs (setProperty, insertRule, origin-clean, documented deviation) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."
+domain:
+    tables:
+        - name: box_arity_expansion
+          source: "css-backgrounds-3 #propdef-margin; css-backgrounds-3 #propdef-border-radius; css-logical-1 #logical-shorthand-keyword"
+          inputs:
+            - name: box_arity_class
+              type: enum
+              values: [one, two, three, four]
+          output:
+            name: four_longhands_assigned
+            type: bool
+          rows:
+            - {box_arity_class: one, four_longhands_assigned: true}
+            - {box_arity_class: two, four_longhands_assigned: true}
+            - {box_arity_class: three, four_longhands_assigned: true}
+            - {box_arity_class: four, four_longhands_assigned: true}
+    mutex:
+        - name: shorthand_expand_or_reject
+          members:
+            - shorthand_expanded
+            - shorthand_rejected
+          reason: expandBox and related shorthand expanders either assign longhands or return null, never both.
