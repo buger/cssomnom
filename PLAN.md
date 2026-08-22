@@ -3770,6 +3770,18 @@ Cover leftover unique-cause in `src/math-parser.ts` still hot after `tests/mcdc-
 
 ---
 
+## Phase: ReqProof DX — TypeScript signal pack on `defaults: auto` (Champ)
+
+Fix clone `/tmp/probe-labs/reqproof` so cssomnom `code_signal_obligations_reviewed` / `code_signal_unbindable` stop warning “typescript in scope (82 files) but no signal scanner or rule pack”. Did **not** lower MC/DC floors. Did **not** `proof waive`. Did **not** invent extra TS rules. Did **not** change cssomnom `proof.yaml` (`signals.defaults` stays `auto`).
+
+- [x] `detectSignalDefaultPacks`: `.ts`/`.tsx`/`.js`/`.jsx` → `builtin:typescript/default` (shared `pkg/signalpacks` so CLI and workflow stay in sync).
+- [x] Language-coverage guard uses **effective** packs (`defaults: auto` + explicit `rule_packs`), same as `signalDefaultRulePacks`.
+- [x] Table test: ≥5 `.ts` + auto → covered; no `.ts` → pack not selected; explicit `rule_packs: [builtin:typescript/default]` still covered; `defaults: none` still fail-closed.
+- [x] Rebuild `/tmp/proof-dx/proof` (prior DX patches in the clone preserved: package.json cwd walk, Babel, Kind2+Z3 PATH, evidence capture).
+- [x] Smoke: `proof audit --check code_signal_obligations_reviewed --check code_signal_unbindable --fail-level warn` — both pass (0 postMessage hits is honest). Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-code-signal.log`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-ts-pack.md`. DX-039 in `docs/proof-dx-issues.md`.
+
+---
+
 ## Phase: equalsInternal unique-cause MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/typed-om/numeric/numeric-methods.ts` `equalsInternal` / `numericEquals` still hot after `tests/mcdc-numeric-leftover-unique-cause.test.ts`, `tests/mcdc-hotspot-typed-om-more.test.ts`, and `tests/typed-om-math.test.ts`. Drive `CSSNumericValue.parse` / `.equals()` and `CSSMathSum`/`Product`/`Min`/`Max`/`Clamp`/`Negate`/`Invert`/`Round`/`Function` constructors. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
@@ -3861,3 +3873,14 @@ Cover leftover unique-cause in `src/cascade/rule-filter.ts` still hot after `tes
 - [x] `tests/mcdc-rule-filter-still-hot-unique-cause.test.ts` — addSheetRules string sheet vs CSSStyleSheet vs element `textContent`; `typeof === "string"` F (number / object-with-trim / missing) vs T; `trim !== ""` F empty/whitespace vs T real CSS / comment-only; nested `s.sheet.cssRules` T vs sheet T cssRules F vs linkedom `@layer` throw; `cssRules` hole `if (r)` F then T; `length === undefined` vs `length === 0`; `disabled` T/F; `!sheet` via shadowRoot; getRuleBaseURL `_baseURL` vs `href` vs CSSImportRule parent sheet URL vs `ownerDocument.baseURI` vs `defaultView.location.href` vs non-object ownerDocument vs linkedom `<base>`; recurse argument F (`:hover`) vs selector-list (`:is(&)` / `:not(&.no)` / `:has()` / `:is()` empty / `::slotted`) vs object without type (`:lang` / `:nth-child` / `:dir` token arrays).
 - [x] Structurally unpairable left mute (no ignore): getRuleBaseURL L290 `element` F / `typeof === "object"` F independently of the identical `getCascadedStyle` gate (F rows never enter getRuleBaseURL); recurse primitive argument (SelectorParser only produces undefined / SelectorList / ComponentValue[]); recurse `'type' in` T with `type !== 'selector-list'` (parser never puts a non-list typed object in `argument`).
 - [x] Node 24: `node --test tests/mcdc-rule-filter-still-hot-unique-cause.test.ts` — 6 pass. Together with `tests/mcdc-collect-stylesheets-leftover.test.ts` 12 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green (asided parallel-agent WIP `tmp-probe*.ts` / `tmp-rf2-probe*.ts` and leftover untracked tests, then restored). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-rf2.md`.
+
+---
+
+## Phase: still-hot _parseAll round5 unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/typed-om/values/style-value-parser.ts` `_parseAll` (still hottest after `tests/mcdc-parseall-remaining-unique-cause.test.ts`) plus leftover `createValueFromTokens` and L447 `validatePropertyValue`. Drive `CSSStyleValue.parse` / `parseAll` (and `CSSStyleDeclaration.setProperty` for L447, the only caller). Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-parseall-round5-unique-cause.test.ts` — L141 `--` / `-` / `--x` / `color` (`length<3` independent of `=== '--'` unpairable); L324 list no-comma syntax T/F vs non-list comma/no-comma (T,T mute behind L259); L347 color length=1 ident vs hash/function vs length≠1 throwaway; L373 position-keyword on `float`/`justify-content` vs `display` (position T mute behind L204); L379 calc/min F (`var` T mute behind L193/L282); L386–L400 mixed-case LIST key `-Webkit-Box-Align` comma T/F, trailing/leading/doubled comma `current.length` F, createValueFromTokens empty ws/comment segment; L276 includes F; L281 `'value' in` F nameless function stub; L302/L312/L322 `!hasVarFunction` T vs var at L193; createValueFromTokens registered custom list / `*` / string vs dimension / multi-token shadow; L447 negative dimension AND + range-syntax `[0,1]` / `[0.0,1]` / `[0,∞]` via setProperty.
+- [x] Structurally unpairable left mute (no ignore): L159 duplicate of L141 (parseAllStyleValues throws first); L159 `length<3` with startsWith T and `=== '--'` F; L324 T,T / L327 / L335 (L259 already splits); L351 `kw === 'transparent'` (`transparent` is in `NAMED_COLORS`); L373 `isPositionProperty` T; L276 includes T (L180); L379/L381 `var` T (`styleValue` F — L282/L193/createCSSStyleValue always returns); L302/L312/L322 `!hasVarFunction` F (L193); L404 `componentValues.length > 0` F (L172); L447 `value !== undefined` F (tokenizer always sets dimension.value); `[0,∞]` independent of `[0,` (substring).
+- [x] Node 24: `node --test tests/mcdc-parseall-round5-unique-cause.test.ts` — 10 pass. Together with existing parseAll files 65 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green (asided parallel-agent WIP `tmp-rf2-probe*.ts` / `tmp-probe*.ts` / `tests/mcdc-rule-filter-still-hot-unique-cause.test.ts`, then restored). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-parseall5.md`.
+
