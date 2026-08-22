@@ -156,8 +156,15 @@ export function parseAllStyleValues(property: string, css: string): CSSStyleValu
 }
 
 function _parseAll(property: string, css: string): CSSStyleValue[] {
-  if (property === '--' || (property.startsWith('--') && property.length < 3)) {
+  //mcdc:ignore:defensive property === '--' T is unreachable — parseAllStyleValues L141 throws first; F (--x / color) already witnessed [reviewed: agent:grok-4.6]
+  if (property === '--') {
     throw new TypeError(`Invalid property name: '${property}'`);
+  }
+  if (property.startsWith('--')) {
+    //mcdc:ignore:defensive length < 3 T with !== '--' is impossible — only '--' starts with '--' and has length < 3; length>=3 already witnessed [reviewed: agent:grok-4.6]
+    if (property.length < 3) {
+      throw new TypeError(`Invalid property name: '${property}'`);
+    }
   }
   if (typeof css !== 'string' || css.trim() === '') {
     throw new TypeError(`Invalid empty value for property '${property}'`);

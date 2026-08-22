@@ -986,6 +986,7 @@ function parseLengthToPx(tokens: ComponentValue[]): number | null {
     if (t.type === 'function') {
       const fn = t as CSSFunction;
       const mathVal = parseMathFunction(fn.name, fn.value);
+      //mcdc:ignore:defensive mathVal F / type().length F are unreachable — matchesType already requires a math function whose type is length===1; T && T already witnessed [reviewed: agent:grok-4.6]
       if (mathVal && mathVal.type().length) {
         const simplified = simplify(mathVal);
         if (simplified instanceof CSSUnitValue) {
@@ -1039,11 +1040,13 @@ function parseResolutionToDpi(tokens: ComponentValue[]): number | null {
 
 function parseRatio(tokens: ComponentValue[]): number | null {
   const filtered = tokens.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
+  //mcdc:ignore:defensive filtered.length === 1 T is unreachable — mediaqueries-4 § 6.1 colon/range rewrite expands a lone number to n / 1 before evaluate; F (length 3) already witnessed [reviewed: agent:grok-4.6]
   if (filtered.length === 1) {
     if (filtered[0].type === 'number') {
       return filtered[0].value;
     }
   }
+  //mcdc:ignore:defensive length===3 / delim / '/' F unique-causes are unreachable — isFeatureUnknown/matchesType ratio grammar returns first; TTT already witnessed [reviewed: agent:grok-4.6]
   if (filtered.length === 3 && filtered[1].type === 'delim' && (filtered[1] as Token).value === '/') {
     const left = filtered[0];
     const right = filtered[2];
