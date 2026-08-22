@@ -3596,3 +3596,12 @@ Cover still-uncovered unique-cause in `src/math-parser.ts` besides `simplify` �
 - [x] `tests/mcdc-math-parser-leftover-unique-cause.test.ts` — `calc()` empty/unit-wrap/mixed/mixed-case; `consumeValue` paren vs `[`/`{`, unary `+/-`, ident constants including crafted `-infinity`; consumeSum `+`/`-`/other delim; consumeProduct `*`/`/` and leftover product mix; toCanonical `dppx` vs `x`; min/max firstArg/trailing comma/nested function+paren; clamp lower/upper `none` AND (`token` F, ident not-none, mixed case) and comma OR (`index >= length` T, `type !== comma` T); round strategy ident, omitted precision, leftover commas; MATH_FUNCTIONS arity/mixed-case/unknown/`sign`; mod/rem `isSameType` percentHint skip vs mismatch.
 - [x] Node 24: `node --test tests/mcdc-math-parser-leftover-unique-cause.test.ts` — 9 pass. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-math3.md`.
 
+---
+
+## Phase: leftover PropertyRegistry unique-cause MC/DC tests besides consumeSyntaxComponent (Champ)
+
+Cover leftover unique-cause in `src/PropertyRegistry.ts` besides `consumeSyntaxComponent` (already in `tests/mcdc-hotspot-property-registry-syntax.test.ts`): `validate`, `isComputationallyIndependent`, `unregister`, `matchesSyntax`, `checkItem`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-property-registry-leftover-unique-cause.test.ts` — name-token unique-cause (length, `type !== ident` number/whitespace/hash/string, dashed-ident, `--`, missing name/inherits); syntax default omitted/empty/`*`; `*` custom-property `!`/`;`/unmatched/`bad-url`; unclosed function/block parse errors; `var`/`attr` vs nested `calc`/`rgb(currentcolor)`; dimension AND (absolute px-family, viewport s/l/d, angle/time/resolution/frequency, font-relative/container/`1fr`/`1foo`); `currentcolor` ident AND; simple-block recurse; unregister origin mismatch via `CSSStyleSheet.replaceSync`/`deleteRule`; escaped ident `startsWith('<') && endsWith('>')`; checkItem math OR, length/number/percentage/integer/angle/time/resolution/flex, color hash/function/named/system, `url` vs `URL()` vs `<image>`, transform-function/list, `#`/`+`/`?`/`*` else, `return true` fallback.
+- [x] Node 24: `node --test tests/mcdc-property-registry-leftover-unique-cause.test.ts` — 11 pass. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-reg2.md`.
+
