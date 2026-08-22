@@ -3635,10 +3635,28 @@ Cover leftover unique-cause in `src/typed-om/values/style-value-parser.ts:_parse
 
 ---
 
+## Phase: leftover computed-style unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/cascade/computed-style.ts` besides existing `tests/mcdc-computed-style.test.ts`. Drive `CSSComputedStyleDeclaration.getPropertyValue` / `cssText` / `setProperty` / `removeProperty`, `shouldPreserveAutoMinSize`, and `getCascadedStyle`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-computed-style-leftover.test.ts` — read-only `cssText`/mutations even with `readonlyFlag` false; `shouldPreserveAutoMinSize` leftover (`!element`/typeof, `display:none` regex F, parentNode walk, whitespace-only `aspect-ratio` `val !== ""`, style without aspect-ratio, parent style F / block / `flexbox` / `flex` / `GRID` / `grid-template`); custom raw `0` / `---`; `vertical-lr` + empty wm/dir logical remap; `top===right` F border; missing/sticky/fixed offsets; `margin-bottom: auto`; leftover `declarations.some` auto vs winning `10px`; `px`/em/`PX` widths; revert `parentVal` F; leftover system/`currentcolor`/inset/`rgba` box-shadow; `caret-color`/`flood-color` COLOR_PROPERTIES; `border-image-width: medium`; SVG `?? ''` vs default; empty `tagName` vs `nodeName` BODY/SPAN.
+- [x] Node 24: `node --test tests/mcdc-computed-style-leftover.test.ts` — 14 pass. Together with `tests/mcdc-computed-style.test.ts` 27 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-comp2.md`.
+
+---
+
 ## Phase: still-hot CSSOM helper unique-cause MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/CSSOM.ts` helpers still incomplete after `tests/mcdc-branch-cssom.test.ts` leftover describes (`insertRule` / `deleteRule` / `replace` / origin-clean / `CSSMediaRule` / `CSSKeyframesRule`). Drive public CSSOM APIs plus constructed ducks for string-type Rule helpers. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
 
 - [x] `tests/mcdc-cssom-still-hot-unique-cause.test.ts` — `isImportRule`/`isNamespaceRule`/`isRegularRule` AST at-rule name ≠ import/namespace; `replaceSync` AST `@import` strip + duck `instanceof CSSRule` F; grouping remaining AST names + `parseRule` throw; `serializeGroupingRule` empty `@scope` vs starting-style/layer/supports/container, empty nested cssText filter, `CSSAtRule` type switch/prelude/block; `findParentStyleSheet` `!sheet` vs `curr` walk; `_getNamespaceContext` default/same-URI/prefixed-only/orphan; nested selectorText combinator/`&`/ancestor style; `normalizeKeyframeSelector` 0%/100% bounds, whitespace, empty comma part, decimal; `parsePageSelectorList` `:blank`/comments/trailing comma/hash/colon-only/constructor keep-raw, cssText sel/decls/rules; `CSSContainerRule` reserved `and`/`or`/`none`/name-only/explicit; `CSSImportRule` `layerName` `''` vs null, empty `supportsText`; custom-media boolean vs empty MediaList; view-transition missing navigation; title/`addRule` defaults/`ownerRule`; nested `color:` NestedDeclarations; `CSSPropertyRule` null initial; font-face/page descriptors; counter-style string/non-array; remaining font-feature maps.
 - [x] Node 24: `node --test tests/mcdc-cssom-still-hot-unique-cause.test.ts` — 21 pass. Together with `tests/mcdc-branch-cssom.test.ts` 65 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-cssom3.md`.
+
+---
+
+## Phase: leftover `walkRules` unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/cascade/rule-filter.ts` `walkRules` besides existing walk tests in `tests/mcdc-hotspot-math-walk.test.ts`. Drive `getCascadedStyle` and exported `collectMatchedDeclarations`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-walkrules-leftover.test.ts` — `maxSpecificity` / `compareSpecificity > 0` comma-list first-only vs higher-second vs lower-second vs equal; duck `style.length >= 0` 0-vs-`-1` plus non-string `getPropertyValue`, `Array.isArray` F, matching rule without `style`/`block.value`; layer name ternary without `_assignedLayerName` (nested named/anon, top-level named/anon, AST `layer.layer`); `@media` env `innerWidth`/`innerHeight` NaN vs finite, portrait/square/landscape, `frameElement` attr-only / numeric-no-style / empty / `nope`+`0px` / `-10px`+`abc`; `@scope` `isElement` F, missing `closest`, implied-scope spec `(0,0,0)` vs non-element; `CSSNestedDeclarations` `pseudoElement.startsWith('::')` F via `:before`/`before`; `splitSelectorList` escaped quote, trailing `\`, empty comma, extra closer, braces, single quotes, empty selector; nested `qualified-rule`/`at-rule` objects in `block.value` without `cssRules`.
+- [x] Node 24: `node --test tests/mcdc-walkrules-leftover.test.ts` — 8 pass. Together with `tests/mcdc-hotspot-math-walk.test.ts` 37 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-walk3.md`.
 
