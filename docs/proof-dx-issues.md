@@ -72,6 +72,7 @@ Status: `open` | `workaround` | `filed` | `fixed-upstream`
 | DX-039 | Critical | workaround (clone) | `defaults: auto` never selected `builtin:typescript/default`; language-coverage guard ignored auto packs |
 | DX-040 | Critical | workaround (clone) | MC/DC residue hotspot hint pushed a product refactor; agents class-fixed src to green the meter |
 | DX-041 | Critical | workaround (clone) | capability-gap could pass with KI YAML and no failing e2e tripwire; `:defensive` used as unique-cause hatch |
+| DX-042 | Critical | workaround (clone) | JS/TS MC/DC engine ignored `//mcdc:ignore`; report always printed Ignored decisions: 0 |
 
 ---
 
@@ -596,6 +597,27 @@ Status: `open` | `workaround` | `filed` | `fixed-upstream`
 
 ---
 
+## DX-042 — JS/TS MC/DC engine does not honor `//mcdc:ignore`
+
+- **Severity**: Critical
+- **Status**: workaround (clone `/tmp/probe-labs/reqproof` commit `6d41cc0`; binary `/tmp/proof-dx/proof`)
+- **Observed**: cssomnom recapture at `aa374f0` placed 47 `//mcdc:ignore:defensive` comments on `src/**` decisions. `proof mcdc report` still printed **Ignored decisions: 0**. Code MC/DC stuck at **92.2%/93.7%**. Python and Java honor the same annotation; the JS engine dropped it on the floor.
+- **Why it hurts**: Classified ignores were still coverage gaps. Agents either class-fix `src/` (DX-040), park leftover pairs as `:defensive` unique-cause hatches (DX-041), or treat the meter as un-closeable. The comments were already the right disposition; the engine did not consume them.
+- **Expected**: `//mcdc:ignore[:category] [reason]` on the decision line or the line immediately above routes the decision to `IgnoredDecisionList` (not `Decisions` / hotspots). `Layers.IgnoredDecisions` is non-zero; `EligibleDecisions = Instrumented + Ignored`.
+- **Fix (clone)**: Babel plugin sibling collector (Java regex `//\s*mcdc:ignore(?::([A-Za-z0-9_.-]+))?(\s.*)?$`); `Ignore*` on `DecisionMeta`; persist Merge Java-style accounting. Ignored decisions are left uninstrumented. Fixture `ignore_defensive` + persist tests. Did not lower cssomnom floors. Did not `proof waive`. Did not edit cssomnom `src/**`. Did not treat `:defensive` as a unique-cause hatch (DX-041).
+- **Repro (stock / pre-patch persisted artifacts)**:
+  ```bash
+  proof mcdc report --engine js | grep -F 'Ignored decisions: 0'
+  ```
+- **Recapture (patched; remasure required)**:
+  ```bash
+  export PATH="/tmp/node-v24.11.1-linux-x64/bin:/opt/node24/bin:/tmp/proof-dx:$PATH"
+  # orchestrator recaptures; this overlay skipped a full ~2min remasure
+  proof mcdc report --engine js | grep -F 'Ignored decisions'
+  ```
+
+---
+
 ## Critical-fix protocol
 
 If an item is **Critical** and blocks the campaign:
@@ -630,3 +652,4 @@ Non-critical items stay in this log. Optionally file
 | 2026-08-22 | DX-039: `defaults: auto` never selected `builtin:typescript/default`; coverage guard ignored auto packs. Clone patch + `/tmp/proof-dx/proof` rebuild. cssomnom smoke: both checks pass (0 postMessage hits). Writeup `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-ts-pack.md`. Did not change cssomnom `proof.yaml`. |
 | 2026-08-22 | DX-040: hotspot residue hint said “feasibility declaration or a refactor”. Clone `/tmp/probe-labs/reqproof` `9948171` + `/tmp/proof-dx/proof`. Help and hints are KI-first (unique-cause test → KnownIssue tripwire → defensive ignore → declaration, not rewrite). Writeup `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-mcdc-residue-hint.md`. Did not edit cssomnom `src/**`. |
 | 2026-08-22 | DX-041: capability-gap passed with KI YAML and no failing tripwire; `:defensive` used as unique-cause hatch. Clone `/tmp/probe-labs/reqproof` `ce32956` + `/tmp/proof-dx/proof`. `mcdc_ignore_classified` warns `capability-gap-no-tripwire`. Help requires open KI + failing e2e public-API tripwire run twice + additional e2e tests. Residue hints forbid synthetic unique-cause. Writeup `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-cap-gap.md`. Did not edit cssomnom `src/**`. |
+| 2026-08-22 | DX-042: JS/TS MC/DC engine did not honor `//mcdc:ignore`; report Ignored=0 despite 47 cssomnom comments. Clone `/tmp/probe-labs/reqproof` `6d41cc0` + `/tmp/proof-dx/proof`. Babel collector + persist IgnoredDecisionList. Fixture+merge tests pass. Skipped cssomnom remasure (orchestrator recaptures). Writeup `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-js-ignore.md`. Did not edit cssomnom `src/**`. |
