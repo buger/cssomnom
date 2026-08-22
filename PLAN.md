@@ -3339,3 +3339,12 @@ Cover leftover `src/shorthands.ts` `contractBackground` unique-cause branches th
 - [x] `tests/mcdc-hotspot-contract-background.test.ts` — `cssText` after setting `background-color`/`image`/`repeat`/`attachment`/`position`/`size`/`origin`/`clip`: all-initial `none`; color/image/attachment unique-cause; position/size omit-initial vs slash vs position-only; repeat-x/y (two-token map and stored keyword), collapse identical, mixed, 1-token, 3-token; origin/clip XOR padding-box/border-box, clip-only `text`/`border-area`, same/mixed boxes, substring `includes('text'|'border-area')`; layer-count unique-cause mismatch per longhand (no `background:` shorthand); empty last/first layers via trailing/leading commas; multi-layer color only on last layer; full combination + `!important`.
 - [x] Node 24: `node --test tests/mcdc-hotspot-contract-background.test.ts` — 9 pass.
 
+---
+
+## Phase: leftover matcher `getElementDirection` MC/DC tests (Champ)
+
+Cover leftover `src/matcher.ts` `getElementDirection` (3/6 decisions, 6/18 conditions) through public `matches()` and `getCascadedStyle`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-branch-matcher-dir.test.ts` — `dir=ltr`/`dir=rtl`, `html` dir, invalid `dir=inherit` walks parent, `:dir(ltr)`/`:dir(rtl)` via `matches()` and `getCascadedStyle` (`z-index` 1/2; CSS `direction: ltr` does not override HTML dir). Unique-cause `dir=auto` RTL ranges `0x0590..0x08FF` / `0xFB1D..0xFDFF` / `0xFE70..0xFEFF` (inclusive bounds T, just-outside F). Unique-cause `dir=auto` LTR ranges `A-Z` / `a-z` / `0x00C0..0x02AF` with trailing Hebrew so early LTR return vs fall-through is observable. Weak-then-strong, empty/punct auto → ltr. `input type=tel` stays ltr under rtl parent; `type=text` / bare / `button type=tel` inherit (tel=F unique-cause).
+- [x] Node 24: `node --test tests/mcdc-branch-matcher-dir.test.ts` — 6 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
