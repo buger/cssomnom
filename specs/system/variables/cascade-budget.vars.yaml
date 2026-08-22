@@ -1,0 +1,19 @@
+component: cascade
+variables:
+    - name: acyclic_custom_property_chain_supplied
+      type: int
+      direction: input
+      description: 'Depth N of an acyclic fan-out (doubling) custom-property chain (--kN: var(--k(N-1)) var(--k(N-1))) resolved via getCascadedStyle() (reproducer exercises depth 20; obligation covers chains up to depth 30).'
+      range:
+        max: 30
+        min: 1
+    - name: substitution_size_bounded
+      type: int
+      direction: output
+      description: 'Resolved var()/env() substitution output length in characters; quantitative obligation — an acyclic chain must expand to <= 10000 chars (unbudgeted doubling DAG grows as 2^(N+1)-1; reproducer SUBSTITUTION_CHAR_BUDGET).'
+      range:
+        max: 10000
+        min: 0
+no_interface:
+    declared: true
+    reason: "substitution walks a declaration list as an in-process pure transform; SYS/SW guarantees are the resolved-value contract of getCascadedStyle, not a separately versioned caller/callee INT"

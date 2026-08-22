@@ -3,7 +3,7 @@ profile: ki-21
 evidence_type: known_issue_tripwire
 requirements:
     - SYS-REQ-260822-8HDQ
-command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
+command: node --experimental-strip-types --test proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
 executed_at: "2026-08-22T20:13:20Z"

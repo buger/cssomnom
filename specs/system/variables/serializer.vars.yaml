@@ -8,6 +8,14 @@ variables:
       type: bool
       direction: input
       description: Boolean flag tokens from btn rule for component serializer.
+    - name: decoded_identifier_serialized
+      type: bool
+      direction: input
+      description: A hash-token value or AST function name carrying escape-decoded structural code points (e.g. '#\3B', 'a\7d(') reaches serializeToken/serializeNode identifier contexts (cssom-1 #serialize-an-identifier).
+    - name: round_trip_structure_preserved
+      type: bool
+      direction: output
+      description: Structural-equality invariant — re-parsing serialized cssText yields exactly the original rule/declaration structure; a decoded ';' or '}' must never create a declaration/rule boundary.
 no_interface:
     declared: true
     reason: "serialize walks a token list as a pure function; SYS/SW guarantees are the README round-trip example, not a caller/callee INT contract"

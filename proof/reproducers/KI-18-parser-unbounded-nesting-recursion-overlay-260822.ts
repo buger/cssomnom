@@ -1,8 +1,9 @@
 /**
  * Overlay reproducer for KI-18: parser unbounded nesting depth.
  *
- * The css-syntax-3 consume algorithms (§ 5.5 "consume a qualified rule",
- * § 5.4.1 "consume a list of rules", § 5.5.x "consume an at-rule") recover
+ * The css-syntax-3 consume algorithms (§ 5.5.1 #consume-stylesheet-contents
+ * "consume a list of rules", renamed from consume-list-of-rules;
+ * § 5.5.2 #consume-at-rule; § 5.5.3 #consume-qualified-rule) recover
  * from malformed or pathological input by reporting parse errors and
  * dropping constructs; they never require unbounded recursion of the host.
  * A RangeError escaping parse() / replaceSync() violates both the

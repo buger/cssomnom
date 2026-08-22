@@ -20,6 +20,17 @@ variables:
       type: bool
       direction: output
       description: True when matches() reports the element matches :enabled.
+    - name: untrusted_selector_matched_over_large_tree
+      type: bool
+      direction: input
+      description: An attacker-influenced relational selector (e.g. ':has(~ .missing)') is evaluated via querySelectorAll()/matches() over a wide sibling/descendant tree (reproducer width 3000).
+    - name: match_cost_bounded
+      type: real
+      direction: output
+      description: Measured cost ratio of a ':has(~ miss)' query over the same tree's equivalent plain class scan; the obligation is quantitative — the ratio must stay <= 8 measured-vs-plain (reproducer RATIO_BUDGET at width 3000).
+      range:
+        max: 8
+        min: 0
 no_interface:
     declared: true
     reason: selectors SYS/SW guarantees are parseSelector-reject/empty-match in-process matcher behavior; this overlay does not declare a separately versioned caller/callee INT (cascade consult is described on INT-REQ-260821-HJVC). Minting cascade→selectors without an integration witness would be theater.

@@ -11,7 +11,7 @@ risk: data_integrity
 cve_surface: none
 affected_api: CSSStyleRule.cssText / serializer.serialize() / serializeDeclarations()
 attacker_input: 'untrusted stylesheet text containing escaped hash spellings (#\3B, #\7d) or escaped function names (a\7d(...)) that survive naive allowlists precisely because they are escaped'
-reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized

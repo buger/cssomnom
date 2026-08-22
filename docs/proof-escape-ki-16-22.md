@@ -4,7 +4,8 @@ This is the Proof escape companion for the confirmed security/availability
 batch KI-16, KI-17, KI-18, KI-19, KI-21, and KI-22. The six findings remain
 open and unfixed in `src/**`; each overlay reproducer asserts the bounded /
 structure-preserving contract and is expected to stay red until the product
-is repaired.
+is repaired. KI-15, KI-20, and KI-23 through KI-30 are reserved for the
+tooling batch and are intentionally not analyzed here.
 
 Evidence was captured with the workspace's custom Proof fork at
 `/tmp/proof-dx/proof` and Node v24.11.1. Each reproducer was run twice before
@@ -37,7 +38,9 @@ that name hazards qualitatively never fail quantitatively.
 
 Reproducer: `proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts`
 Requirement: `SYS-REQ-260821-7521` (existing)
-Spec anchor: css-syntax-3 § 5.5.x consume algorithms.
+Spec anchor: css-syntax-3 § 5.5.1 `#consume-stylesheet-contents` (renamed
+from consume-list-of-rules), § 5.5.2 `#consume-at-rule`,
+§ 5.5.3 `#consume-qualified-rule`.
 
 Which Proof check should have exposed it: `SYS-REQ-260821-7521` already
 carries `obligation_checklist: [denial_of_service_resistant, nominal,
@@ -149,6 +152,17 @@ Correction locus: overlay/model (`SYS-REQ-260822-8BK4` declares
 heap/time-instrumented test execution that flags any single API call whose
 live-set growth is exponential in a controllable input parameter while tests
 stay green.
+
+Reviewer-hardening note: the suggested second witness — serializing a
+same-unit `.toSum()` result under a string-length cap — is not implementable
+against current semantics: `numericToSum` (src/typed-om/numeric/
+numeric-methods.ts) throws TypeError *before* returning whenever more than
+one term survives, because distributed product unit maps always exceed the
+single-unit/power-1 sum-term limits, so there is no expanded result to
+serialize. The reproducer instead adds a GC-insensitive work-ratio leg: the
+mixed-unit rejection must stay within 128x of an identical-shape px-only
+product whose factors canonicalize per-factor and reject after linear work
+(today hundreds-fold at n=16; any real term cap collapses the ratio).
 
 ## KI-16 — :has()/combinator matching lacks a complexity budget
 

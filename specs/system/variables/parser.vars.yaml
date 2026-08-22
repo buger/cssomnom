@@ -64,6 +64,20 @@ variables:
       type: bool
       direction: input
       description: A declaration value is invalid under its property grammar.
+    - name: deep_math_expression_consumed
+      type: int
+      direction: input
+      description: Nesting depth of parentheses or nested calc() in a math expression consumed through tokenize -> Parser.parseComponentValues -> createCSSStyleValue (reproducer positive control 200; failing legs 4000 paren / 3000 calc).
+      range:
+        max: 4000
+        min: 1
+    - name: math_depth_bounded
+      type: int
+      direction: output
+      description: Maximum supported math-expression nesting depth consumable without an engine RangeError — the domain expresses the floor; consumption up to 3000 nested levels must reify or fail closed with a structured parse error, never a raw RangeError.
+      range:
+        max: 8000
+        min: 3000
 independence:
     declared: true
     reason: SYS parser pairs (stylesheet return, nesting, no-throw, no-fetch) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.

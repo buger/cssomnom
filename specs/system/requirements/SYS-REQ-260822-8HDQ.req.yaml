@@ -24,7 +24,9 @@ variables:
 references:
     - type: document
       id: submodules/csswg-drafts/cssom-1/Overview.bs#serialize-an-identifier
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid

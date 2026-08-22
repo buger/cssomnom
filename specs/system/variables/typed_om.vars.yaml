@@ -35,6 +35,20 @@ variables:
       type: enum
       direction: input
       description: 'Position grammar class: 1- or 2-value generic <position>, 3-value (background-only or transform-origin z), or 4-value.'
+    - name: mixed_unit_product_converted
+      type: int
+      direction: input
+      description: Number of mixed-unit sum factors in a calc() product-of-sums handed to CSSNumericValue.to()/toSum() (reproducer exercises n=16; scan baseline OOM risk beyond n=20).
+      range:
+        max: 16
+        min: 1
+    - name: conversion_terms_bounded
+      type: int
+      direction: output
+      description: Intermediate cartesian terms materialized by createSumValue before rejection/return; quantitative obligation — <= 4096 terms at n=12, with live heap growth during conversion <= 8MB (reproducer proxy at n=16).
+      range:
+        max: 4096
+        min: 0
 independence:
     declared: true
     reason: SYS typed_om pairs (parse throw vs 10px CSSUnitValue) skip as cross-component; they govern disjoint invalid vs nominal parse outputs.

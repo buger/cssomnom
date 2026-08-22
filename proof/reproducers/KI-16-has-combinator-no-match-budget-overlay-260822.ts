@@ -2,7 +2,7 @@
  * Overlay reproducer for KI-16: :has()/combinator matching lacks a
  * complexity budget.
  *
- * selectors-4 § 4.3 #relational defines :has() semantics; it does not
+ * css-selectors-4 § 4.5 #relational defines :has() semantics; it does not
  * license unbounded evaluation cost. The matcher eagerly materializes the
  * whole neighborhood (getAllDescendants / subsequent-sibling walks) with no
  * step or time budget, and querySelectorAll re-enters that path for every
@@ -82,8 +82,20 @@ describe('KI-16 e2e selector matching complexity budget', () => {
     const root = flatTree(WIDTH);
     const hits = querySelectorAll(root, '.ki16-kid');
     assert.equal(hits.length, WIDTH);
-    // Parse-time partial mitigation control (selectors-4 #relational).
-    assert.equal(matches(root.children[0]!, ':has(:has(.x))'), false);
+    // Parse-time partial mitigation control (css-selectors-4 § 4.5 #relational).
+    // Discriminating shape: the probed span gains a descendant chain
+    // (.ki16-mid -> .x), so IF nested ':has' were accepted the inner
+    // ':has(.x)' would match .ki16-mid and this assertion would flip true.
+    // Asserting false therefore proves parse-time rejection of the nested
+    // form, not a vacuous non-match over an empty subtree.
+    const probe = root.children[0] as MockEl;
+    const mid = makeElement('div', 'ki16-mid');
+    const leaf = makeElement('span', 'x');
+    mid.children.push(leaf);
+    leaf.parentElement = mid;
+    mid.parentElement = probe;
+    probe.children.push(mid);
+    assert.equal(matches(probe, ':has(:has(.x))'), false);
   });
 
   // Reproduces: KI-16

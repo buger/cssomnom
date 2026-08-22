@@ -1,6 +1,6 @@
 id: KI-18
 title: Parser unbounded nesting depth overflows the JS stack on deeply nested CSS
-description: 'consumeBlockContents / consumeNestedQualifiedRuleFromStream / consumeAtRule recurse without a nesting-depth cap, so parse() and CSSStyleSheet.replaceSync() abort with a raw RangeError: Maximum call stack size exceeded on ~4000-deep nested style rules or ~2000-deep nested @media blocks. css-syntax-3 § 5.5.x consume algorithms recover from pathological input by reporting errors and dropping constructs; escaping an engine RangeError instead violates the stylesheet_returned guarantee and the recursion_depth_bounded hazard already modeled on SYS-REQ-260821-7521. Availability fault (CWE-674/CWE-400) against any host that parses untrusted stylesheet text.'
+description: 'consumeBlockContents / consumeNestedQualifiedRuleFromStream / consumeAtRule recurse without a nesting-depth cap, so parse() and CSSStyleSheet.replaceSync() abort with a raw RangeError: Maximum call stack size exceeded on ~4000-deep nested style rules or ~2000-deep nested @media blocks. css-syntax-3 § 5.5.1 #consume-stylesheet-contents (renamed from consume-list-of-rules), § 5.5.2 #consume-at-rule, and § 5.5.3 #consume-qualified-rule recover from pathological input by reporting errors and dropping constructs; escaping an engine RangeError instead violates the stylesheet_returned guarantee and the recursion_depth_bounded hazard already modeled on SYS-REQ-260821-7521. Availability fault (CWE-674/CWE-400) against any host that parses untrusted stylesheet text.'
 affected_requirements:
     - SYS-REQ-260821-7521
 evidence_manifests:
@@ -11,7 +11,7 @@ risk: availability
 cve_surface: none
 affected_api: parse() / CSSStyleSheet.replaceSync()
 attacker_input: untrusted stylesheet text with deeply nested style rules or grouping at-rules (a{a{...}} x ~4k, @media all{...} x ~2k; a few KB of source)
-reproducer_command: /tmp/node-v24.11.1-linux-x64/bin/node --experimental-strip-types --test proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
