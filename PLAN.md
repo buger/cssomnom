@@ -3370,3 +3370,13 @@ Cover leftover `src/matcher.ts` `getElementDirection` (3/6 decisions, 6/18 condi
 - [x] `proof review impact --file src/typed-om/position/position-parser.ts` after Case 4 3-value `<position>` product change. Sidecar no-authored-change for 7AKJ/E5D5/HGFK/Y6R3.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/citation-drift.md`.
 
+---
+
+## Phase: more simplify / parseAll unique-cause MC/DC tests (Champ)
+
+Drive remaining `src/math-parser.ts:simplify` (27 incomplete decisions / 32 missing conditions) and `src/typed-om/values/style-value-parser.ts:_parseAll` (25 incomplete / 38 missing) unique-cause leftovers that `tests/mcdc-hotspot-math-*` and `tests/mcdc-hotspot-parse-all*` do not hit. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-simplify-unique-cause.test.ts` — constructed nested leftover sum/product flatten (parse already folds nested `calc()`); invert of leftover min in a product; `otherChildren.length === 1` lone invert product; constructed double negate/invert; clamp unit min/value with leftover/`none` max; hypot of same-base percent/Hz/fr; sin/cos/tan leftover min; asin/acos/atan empty, extra arity, leftover; sqrt/pow/exp/atan2/mod/rem/log/sign wrong arity and non-unit children.
+- [x] `tests/mcdc-parseall-unique-cause.test.ts` — `transform` ident ≠ `none`; translate/scale/rotate comma-only (`args.length < 1`) and comma-filtered args; `-webkit-box-*` with no `STANDARD_PROPERTIES_SYNTAX`; system-color `canvas`/`ButtonFace` all-F color-OR then parse; rgb/hsl/hwb/lab/oklch/`color()`; remaining color longhands; `column-rule-color: 1` syntax-pass then color-parse fail; `float`/`clear`/`caption-side` position-keyword idents on non-position properties; width leftover min/max/clamp/`var()`.
+- [x] Node 24: `node --test tests/mcdc-simplify-unique-cause.test.ts tests/mcdc-parseall-unique-cause.test.ts` — 15 pass. Together with existing hotspot files 84 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-hot-again.md`.
+
