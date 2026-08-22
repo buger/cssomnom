@@ -1,0 +1,74 @@
+id: KI-10
+title: ':disabled treats first-legend descendants as disabled (html concept-fieldset-disabled)'
+description: |
+    html #concept-fieldset-disabled: a fieldset is disabled if its disabled attribute is specified, or it is a descendant of another disabled fieldset and is not a descendant of that fieldset's first legend child. html #concept-fe-disabled uses the same first-legend skip for form controls. isElementDisabled walks to the ancestor fieldset then treats that ancestor's own disabled attribute as the element's, so #nested-in-legend and #in-legend both match :disabled. Overlay audit cannot change product code.
+affected_requirements:
+    - SW-REQ-260821-6D9T
+    - SYS-REQ-260821-PJ76
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts
+reproduction_steps:
+    - 'Parse a fieldset[disabled] whose first legend contains an input and a nested fieldset (no own disabled).'
+    - 'Call matches(nestedFieldset, ":disabled") and matches(inputInLegend, ":disabled").'
+    - 'Observe both true. Intended both false.'
+    - 'Controls: the outer fieldset and an input outside the first legend still match :disabled.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: None on HEAD. Callers must not use :disabled to skip first-legend descendants of fieldset[disabled].
+remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land isDisabledFieldset / first-legend skip in src/matcher.ts. Close only after #nested-in-legend and #in-legend are not :disabled. No DEFECT — live unfixed bugs stay as KnownIssues.
+notes:
+    - '2026-08-22: filed after fe7defa restore. Distinct from selector-parse empty-match (6D9T FRETish); attached because matcher is the selectors surface.'
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-22T12:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live :disabled hole after fe7defa restore: first-legend nested fieldset and input match :disabled. Overlay reproducer FAILS. No product fix. No DEFECT.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        HTML :disabled matching correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts
+        real_infrastructure: linkedom document + matches() (not a mock).
+        control_test / operational_path_verified: runner setup asserts fieldset[disabled] and input outside first legend still match :disabled.
+        current_deployment_relevance: hole is on HEAD isElementDisabled walking to the ancestor's own disabled attribute.
+        honest_severity / no_inflation: medium correctness matches wrong :disabled, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts first-legend false so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            Selector matching hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
+template_class: fieldset_first_legend_disabled
+isomorphic_sites:
+    - src/matcher.ts:623
+    - src/matcher.ts:831
+    - src/matcher.ts:835
+    - src/matcher.ts:843
+dedup_armor: |
+    Only :disabled / :enabled via isElementDisabled on fieldset first-legend descendants. Distinct from bad-selector empty-match (6D9T FRETish). Do not merge this KI into a generic matcher miss without a second live :disabled hole.

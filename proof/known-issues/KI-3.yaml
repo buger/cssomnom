@@ -1,7 +1,7 @@
 id: KI-3
 title: CSSStyleValue.parse('object-position', invalid) returns CSSStyleValue instead of throwing
 description: |
-    CSS Typed OM Level 1 parse(property, cssText) must throw TypeError when cssText is not a valid value for the property. style-value-parser.ts short-circuits POSITION_PROPERTIES: tryParsePosition failure returns a generic CSSStyleValue instead of throwing. CSSStyleValue.parse('object-position', 'not-a-position') therefore succeeds. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+    CSS Typed OM Level 1 parse(property, cssText) must throw TypeError when cssText is not a valid value for the property. style-value-parser.ts short-circuits POSITION_PROPERTIES: tryParsePosition failure returns a generic CSSStyleValue instead of throwing. CSSStyleValue.parse('object-position', 'not-a-position') therefore succeeds. Overlay audit cannot change product code. DEFECT-260821-KESF is stale class-closure paperwork from a rolled-back class-fix — do not delete.
 affected_requirements:
     - SW-REQ-260821-7AKJ
     - SYS-REQ-260821-HGFK
@@ -24,13 +24,13 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: CSSStyleValue.parse throws TypeError when tryParsePosition fails for POSITION_PROPERTIES.
-remediation: Landed in src/typed-om/values/style-value-parser.ts. Class-closure DEFECT-260821-KESF.
+mitigation: None on HEAD. Callers must not rely on CSSStyleValue.parse to throw TypeError for invalid object-position.
+remediation: Product fix was rolled back to origin/main logic in fe7defa (Implements comments kept). Overlay cannot land a throw in src/typed-om/values/style-value-parser.ts when tryParsePosition fails. Close only after invalid <position> throws TypeError. DEFECT-260821-KESF is stale class-closure paperwork — do not delete.
 notes:
-    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
+    - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-KESF is stale class-closure paperwork — do not delete.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: fixed
+status: open
 history:
     - at: "2026-08-21T21:00:00Z"
       by: agent:grok-4.6
@@ -51,6 +51,10 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: append-note
+    - at: "2026-08-22T05:37:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,append-note,set-status=open
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -84,12 +88,9 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleValue.parse can hit the hole. Rule 4 is Web3-only.
 template_class: invalid_parse_swallowed
 isomorphic_sites:
-    - "src/typed-om/values/style-value-parser.ts:188 #na"
-    - "src/typed-om/values/style-value-parser.ts:189 #na"
-    - "src/typed-om/values/style-value-parser.ts:190 #na"
-    - "src/typed-om/values/style-value-parser.ts:191 #na"
-    - "src/typed-om/values/style-value-parser.ts:219 #fixed"
-    - "src/typed-om/values/style-value-parser.ts:223 #fixed"
-    - "src/typed-om/values/style-value-parser.ts:231 #fixed"
+    - src/typed-om/values/style-value-parser.ts:188
+    - src/typed-om/values/style-value-parser.ts:189
+    - src/typed-om/values/style-value-parser.ts:190
+    - src/typed-om/values/style-value-parser.ts:191
 dedup_armor: |
     Only POSITION_PROPERTIES (object-position, background-position, …) return a generic CSSStyleValue when tryParsePosition fails. Color properties throw TypeError via matchesSyntax / CSSColorValue.parse. Do not merge this KI into a generic CSSStyleValue.parse defect without a second live hole.

@@ -1,7 +1,8 @@
 /**
  * Overlay reproducer for KI-3. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended contract
- * (invalid object-position throws TypeError). PASSES after the KI-3 product fix.
+ * (invalid object-position throws TypeError) so this command FAILS while
+ * the hole is present.
  *
  * Reproduces: KI-3
  */
@@ -41,9 +42,9 @@ function ki3Contract(): { setupOk: boolean; holds: boolean; message: string } {
 
 // Reproduces: KI-3
 // Verifies: SW-REQ-260821-7AKJ
-// MCDC SW-REQ-260821-7AKJ: invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE
+// MCDC SW-REQ-260821-7AKJ: invalid_typed_input=T, parse_style_value=T, parse_throws=F => FALSE [known-issue] [ki: KI-3]
 // Verifies: SYS-REQ-260821-HGFK
-// MCDC SYS-REQ-260821-HGFK: invalid_typed_input=T, parse_throws=T => TRUE
+// MCDC SYS-REQ-260821-HGFK: invalid_typed_input=T, parse_throws=F => FALSE [known-issue] [ki: KI-3]
 test('KI-3: invalid object-position throws TypeError', () => {
   const outcome = ki3Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

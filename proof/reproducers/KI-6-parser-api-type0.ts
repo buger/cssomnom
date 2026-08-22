@@ -1,8 +1,8 @@
 /**
  * Overlay reproducer for KI-6. Not a product-suite test.
  * Asserts the intended contract (parseStylesheetSync adapts @layer/@container
- * to CSSParserAtRule with nested CSSParserQualifiedRule children).
- * PASSES after the KI-6 product fix.
+ * to CSSParserAtRule with nested CSSParserQualifiedRule children)
+ * so this command FAILS while the hole is present.
  *
  * Reproduces: KI-6
  */
@@ -48,7 +48,7 @@ function ki6Contract(): { setupOk: boolean; holds: boolean; message: string } {
 
 // Reproduces: KI-6
 // Verifies: INT-REQ-260821-WTPD
-// MCDC INT-REQ-260821-WTPD: parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE
+// MCDC INT-REQ-260821-WTPD: parse_stylesheet_sync_called=T, parser_ast_adapted=F => FALSE [known-issue] [ki: KI-6]
 test('KI-6: type-0 at-rules adapt to CSSParserAtRule', () => {
   const outcome = ki6Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

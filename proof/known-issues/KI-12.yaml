@@ -1,0 +1,77 @@
+id: KI-12
+title: At-rule dispatch is ASCII-case-sensitive; margin name, atRules fold, and hasOwn handlers missing
+description: |
+    css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive: at-keywords are ASCII case-insensitive. getAtRuleHandler looks up MARGIN_RULE_NAMES / AT_RULE_HANDLERS / keyframes without toLowerCase, so @MEDIA is CSSAtRule not CSSMediaRule and @TOP-LEFT inside @page is dropped. options.atRules is case-sensitive so { foo: 'rule' } misses @FOO. AT_RULE_HANDLERS[name] without Object.hasOwn hits Object.prototype (@__proto__ throws TypeError: handler is not a function). Overlay audit cannot change product code.
+affected_requirements:
+    - INT-REQ-260821-ZMZR
+    - SYS-REQ-260821-7521
+    - INT-REQ-260821-WTPD
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.getAtRuleHandler
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-12-atrule-dispatch.ts
+reproduction_steps:
+    - 'parse(''@MEDIA all { .x { color: red; } }'') — observe CSSAtRule, not CSSMediaRule.'
+    - 'parse(''@page { @TOP-LEFT { margin: 1px; } }'') — observe no CSSMarginRule named top-left.'
+    - 'CSS.parseStylesheetSync(''@FOO { div { color: red; } }'', { atRules: { foo: ''rule'' } }) — observe CSSParserRawRule / empty body, not CSSParserAtRule with a qualified child.'
+    - 'parse(''@__proto__ { }'') — observe TypeError: handler is not a function.'
+    - 'Intended: ASCII-case dispatch to typed handlers; margin name lowercased; atRules folded; inherited keys are CSSAtRule and do not throw.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-12-atrule-dispatch.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: None on HEAD. Callers must emit lowercase at-keywords and avoid @constructor / @__proto__ / @toString as unknown at-rule names.
+remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land toLowerCase / hasOwn / atRules fold in src/parser.ts. Close only after the four contracts hold. No DEFECT — live unfixed bugs stay as KnownIssues.
+notes:
+    - '2026-08-22: filed after fe7defa restore. Distinct from KI-6 (type-0 adapter after a typed CSSOM rule exists). @MEDIA never reaches CSSMediaRule so the adapter hole is not this class.'
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-22T12:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live at-rule dispatch holes after fe7defa restore. Overlay reproducer FAILS. Distinct from KI-6. No product fix. No DEFECT.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        Parser at-rule dispatch correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-12-atrule-dispatch.ts
+        real_infrastructure: parse() / CSS.parseStylesheetSync (not a mock).
+        control_test / operational_path_verified: runner setup asserts lowercase @media still becomes CSSMediaRule.
+        current_deployment_relevance: holes are on HEAD getAtRuleHandler / options.atRules / AT_RULE_HANDLERS index.
+        honest_severity / no_inflation: medium correctness matches wrong at-rule class / throw, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended dispatch so it FAILS while the bugs are present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is wrong at-rule class or a throw on @__proto__, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            Parser dispatch hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of parse() with mixed-case at-keywords can hit the hole. Rule 4 is Web3-only.
+template_class: atrule_ascii_case_dispatch
+isomorphic_sites:
+    - src/parser.ts:82
+    - src/parser.ts:83
+    - src/parser.ts:89
+    - src/parser.ts:374
+    - src/parser.ts:611
+dedup_armor: |
+    Only getAtRuleHandler / options.atRules / handleMarginRule ASCII-case and Object.prototype lookup. Distinct from KI-6 (toParserRule type-0 adapter after a typed CSSLayer* rule exists). Do not merge this KI into KI-6 without a second live dispatch hole.

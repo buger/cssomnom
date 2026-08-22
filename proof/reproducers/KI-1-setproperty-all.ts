@@ -1,7 +1,7 @@
 /**
  * Overlay reproducer for KI-1. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended contract
- * (invalid `all` is a no-op). PASSES after the KI-1 product fix.
+ * (invalid `all` is a no-op) so this command FAILS while the hole is present.
  *
  * Reproduces: KI-1
  */
@@ -41,9 +41,9 @@ function ki1Contract(): { setupOk: boolean; holds: boolean; message: string } {
 
 // Reproduces: KI-1
 // Verifies: SW-REQ-260821-HNRG
-// MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, set_property_ignored=T, value_validation_fails=T => TRUE
+// MCDC SW-REQ-260821-HNRG: declaration_unchanged=F, set_property_ignored=F, value_validation_fails=T => FALSE [known-issue] [ki: KI-1]
 // Verifies: SYS-REQ-260821-8TGB
-// MCDC SYS-REQ-260821-8TGB: invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE
+// MCDC SYS-REQ-260821-8TGB: invalid_value=T, set_property_called=T, set_property_ignored=F => FALSE [known-issue] [ki: KI-1]
 test('KI-1: invalid all is a no-op', () => {
   const outcome = ki1Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

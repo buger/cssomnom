@@ -1,7 +1,7 @@
 id: KI-6
 title: toParserRule maps CSSOM type-0 at-rules to CSSParserRawRule instead of CSSParserAtRule
 description: |
-    parser-api toParserRule only promotes numeric CSSRule.type values that are not 0, 1, or 17 into CSSParserAtRule. Modern at-rules use type 0 (CSSLayerStatementRule, CSSLayerBlockRule, CSSContainerRule, CSSScopeRule, CSSStartingStyleRule, and others). parseStylesheetSync('@layer foo;') therefore returns a CSSParserRawRule fallback instead of CSSParserAtRule, and nested rules inside @layer/@container/@scope are not adapted recursively. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence, not a live ticket.
+    parser-api toParserRule only promotes numeric CSSRule.type values that are not 0, 1, or 17 into CSSParserAtRule. Modern at-rules use type 0 (CSSLayerStatementRule, CSSLayerBlockRule, CSSContainerRule, CSSScopeRule, CSSStartingStyleRule, and others). parseStylesheetSync('@layer foo;') therefore returns a CSSParserRawRule fallback instead of CSSParserAtRule, and nested rules inside @layer/@container/@scope are not adapted recursively. Overlay audit cannot change product code. DEFECT-260821-NYAR is stale class-closure paperwork from a rolled-back class-fix — do not delete.
 affected_requirements:
     - INT-REQ-260821-WTPD
 commands:
@@ -23,13 +23,13 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: toParserRule maps CSSOM type-0 at-rules whose cssText starts with @ to CSSParserAtRule and recurses cssRules.
-remediation: Landed in src/parser-api.ts. Class-closure DEFECT-260821-NYAR.
+mitigation: None on HEAD. Callers must not assume parseStylesheetSync('@layer foo;') returns CSSParserAtRule.
+remediation: Product fix was rolled back to origin/main logic in fe7defa (Implements comments kept). Overlay cannot land type-0 at-rule adaptation in src/parser-api.ts. Close only after type-0 at-rules map to CSSParserAtRule with nested rules adapted. DEFECT-260821-NYAR is stale class-closure paperwork — do not delete.
 notes:
-    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
+    - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-NYAR is stale class-closure paperwork — do not delete.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: fixed
+status: open
 history:
     - at: "2026-08-21T21:10:00Z"
       by: agent:grok-4.6
@@ -52,6 +52,10 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: append-note
+    - at: "2026-08-22T05:37:51Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,append-note,set-status=open
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -85,12 +89,11 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync can hit the hole. Rule 4 is Web3-only.
 template_class: adapter_type_zero_fallback
 isomorphic_sites:
-    - "src/parser-api.ts:211 #fixed"
-    - "src/parser-api.ts:250 #fixed"
-    - "src/CSSOM.ts:1078 #fixed"
-    - "src/CSSOM.ts:1095 #fixed"
-    - "src/CSSOM.ts:1112 #fixed"
-    - "src/CSSOM.ts:1126 #fixed"
-    - "src/CSSOM.ts:1145 #na"
+    - src/parser-api.ts:211
+    - src/parser-api.ts:250
+    - src/CSSOM.ts:1077
+    - src/CSSOM.ts:1092
+    - src/CSSOM.ts:1110
+    - src/CSSOM.ts:1123
 dedup_armor: |
     Only CSSOM at-rules whose type getter returns 0 miss the toParserRule numeric at-rule branch (parser-api.ts:211 excludes type === 0) and fall through to CSSParserRawRule (parser-api.ts:250). Style rules (type 1) and legacy at-rules with non-zero type constants still adapt. Do not merge this KI into empty-stylesheet or unknown-at-rule cases.

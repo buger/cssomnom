@@ -1,0 +1,74 @@
+id: KI-9
+title: StreamingTokenizerStream.peek fabricates EOF; remnant high-surrogate+CR reverses order
+description: |
+    css-syntax-3 § 4.3.1 #consume-token emits <EOF-token> only at true end of input. StreamingTokenizerStream.peek returns a synthetic EOF when the buffer is empty after an incomplete chunk instead of NeedMoreDataError. Separately, preprocessChunk buffers a trailing CR then appends a trailing high surrogate onto remnant (CR then high), reversing source order so a split high+CR+low pair becomes a valid scalar instead of two U+FFFD around a newline. Overlay audit cannot change product code.
+affected_requirements:
+    - SW-REQ-260821-QV2H
+    - SYS-REQ-260821-SBJ7
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: StreamingTokenizerStream.peek
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-9-streaming-peek-eof.ts
+reproduction_steps:
+    - 'Construct StreamingTokenizer + StreamingTokenizerStream, appendChunk of an incomplete string, call peek().'
+    - 'Observe a synthetic EOF token instead of NeedMoreDataError.'
+    - 'Split appendChunk of high-surrogate+CR then low-surrogate; compare getTokens() to tokenize(full). Observe divergence.'
+    - 'Intended contract: peek throws NeedMoreDataError until close(); remnant order is high then CR so streaming matches one-shot.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-9-streaming-peek-eof.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: None on HEAD. Buffer the entire stylesheet before StreamingTokenizerStream.peek, or use tokenize() instead of chunked peek.
+remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land NeedMoreDataError in src/TokenStream.ts or remnant = high + CR in src/streaming-tokenizer.ts. Close only after both contracts hold. No DEFECT — live unfixed bugs stay as KnownIssues.
+notes:
+    - '2026-08-22: filed after fe7defa restore. Distinct from KI-7/KI-8 import holes. Peek-EOF and remnant/CR are the same streaming restore class; one tripwire covers both.'
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-22T12:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live streaming holes after fe7defa restore: peek fabricates EOF; remnant high-surrogate+CR reverses. Overlay reproducer FAILS. No product fix. No DEFECT.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        Streaming tokenizer correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-9-streaming-peek-eof.ts
+        real_infrastructure: StreamingTokenizer / StreamingTokenizerStream / tokenize (not a mock).
+        control_test / operational_path_verified: peek-EOF is the first assertion; remnant compared to one-shot tokenize.
+        current_deployment_relevance: holes are on HEAD TokenStream.peek and preprocessChunk remnant concat.
+        honest_severity / no_inflation: medium correctness matches fabricated EOF / reversed remnant, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the intended contracts so it FAILS while the bugs are present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is fabricated EOF / wrong remnant pairing, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            Streaming tokenizer hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of StreamingTokenizerStream.peek can hit the hole. Rule 4 is Web3-only.
+template_class: streaming_peek_eof_and_remnant
+isomorphic_sites:
+    - src/TokenStream.ts:91
+    - src/TokenStream.ts:95
+    - src/streaming-tokenizer.ts:113
+    - src/streaming-tokenizer.ts:121
+dedup_armor: |
+    Only StreamingTokenizerStream.peek fabricates EOF on an incomplete chunk, and only preprocessChunk remnant concat reverses high-surrogate+CR. Distinct from KI-8 import href and from ArrayTokenStream. Do not merge this KI into a generic tokenizer-EOF defect without a second live streaming hole.

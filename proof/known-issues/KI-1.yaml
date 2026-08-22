@@ -1,7 +1,7 @@
 id: KI-1
 title: setProperty('all') deletes existing all before expandAll; failed expand drops prior all
 description: |
-    CSSStyleDeclaration.setProperty deletes any existing all declaration before expandAll. A successful all:unset expands to longhands and is observably a no-op on a later failed expand. The live hole is when all itself is stored (all: var(--x) or env()): a later invalid setProperty drops cssText from "all: var(--x);" to empty. Overlay audit cannot change product code. No DEFECT is filed: a ProblemReport is post-fix class-closure evidence (hardening, regression net, sibling sites), not a live ticket.
+    CSSStyleDeclaration.setProperty deletes any existing all declaration before expandAll. A successful all:unset expands to longhands and is observably a no-op on a later failed expand. The live hole is when all itself is stored (all: var(--x) or env()): a later invalid setProperty drops cssText from "all: var(--x);" to empty. Overlay audit cannot change product code. DEFECT-260821-XZAS is stale class-closure paperwork from a rolled-back class-fix — do not delete.
 affected_requirements:
     - SW-REQ-260821-HNRG
     - SYS-REQ-260821-8TGB
@@ -24,13 +24,13 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: Invalid all after stored var/env is a no-op; stored all is deleted only after expandAll succeeds.
-remediation: Landed in src/CSSStyleDeclaration.ts. Class-closure DEFECT-260821-XZAS.
+mitigation: 'None on HEAD. Callers must not setProperty(''all'', invalid) after storing all: var(--x)/env(); that drop is the live hole.'
+remediation: 'Product fix was rolled back to origin/main logic in fe7defa (Implements comments kept). Overlay cannot land src/CSSStyleDeclaration.ts delete-after-expand. Close only after invalid all is a no-op and stored all: var(--x) remains. DEFECT-260821-XZAS is stale class-closure paperwork — do not delete.'
 notes:
-    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
+    - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-XZAS is stale class-closure paperwork — do not delete.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: fixed
+status: open
 history:
     - at: "2026-08-21T14:18:52Z"
       by: agent:grok-4.6
@@ -66,6 +66,10 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: append-note
+    - at: "2026-08-22T05:37:50Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,append-note,set-status=open
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -99,10 +103,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleDeclaration.setProperty can hit the hole. Rule 4 is Web3-only / attacker-trust-model.
 template_class: shorthand_mutate_before_validate
 isomorphic_sites:
-    - "src/CSSStyleDeclaration.ts:522 #fixed"
-    - "src/CSSStyleDeclaration.ts:523 #fixed"
-    - "src/CSSStyleDeclaration.ts:524 #fixed"
-    - "src/shorthands.ts:1913 #fixed"
-    - "src/shorthands.ts:2216 #fixed"
+    - src/CSSStyleDeclaration.ts:511
+    - src/CSSStyleDeclaration.ts:512
+    - src/CSSStyleDeclaration.ts:513
+    - src/shorthands.ts:1913
+    - src/shorthands.ts:2216
 dedup_armor: |
     Only property === 'all' deletes from _declarations/_declMap before expandAll. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.

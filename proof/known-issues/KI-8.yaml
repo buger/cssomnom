@@ -1,0 +1,72 @@
+id: KI-8
+title: handleImportRule drops css-syntax <url-token> so @import url(foo.css) href is empty
+description: |
+    css-syntax-3 § 4.3.6 #consume-url-token emits a <url-token> for unquoted url(foo.css). cssom-1 § 6.4.4 #dom-cssimportrule-href returns that URL. handleImportRule copies string tokens and url() functions but not first.type === 'url', so parse('@import url(foo.css);').cssRules[0].href is "". Distinct from KI-7 (styleSheet never-fetch). Overlay audit cannot change product code.
+affected_requirements:
+    - SW-REQ-260821-5W6X
+    - SYS-REQ-260821-7521
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSImportRule.href
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-8-import-href.ts
+reproduction_steps:
+    - 'Call parse(''@import url(foo.css);'') (unquoted url-token, not url("foo.css")).'
+    - Observe cssRules[0] is CSSImportRule but href is "".
+    - 'Intended contract: href is foo.css.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-8-import-href.ts'
+introduced_in: inception
+defect_class: latent
+mitigation: None on HEAD. Callers must quote the URL (url("foo.css") or "foo.css") to get a non-empty href.
+remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land first.type === 'url' copy in src/parser.ts handleImportRule. Close only after unquoted url(foo.css) href is foo.css. No DEFECT — live unfixed bugs stay as KnownIssues.
+notes:
+    - '2026-08-22: overlay reproducer already existed as a passing contract check after f173f32. src restore emptied href again. Filed KI-8 as a failing tripwire. Distinct from KI-7 (styleSheet null / never-fetch).'
+owner: agent:grok-4.6
+review_date: "2026-09-21"
+status: open
+history:
+    - at: "2026-08-22T12:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live href hole after fe7defa restore: handleImportRule ignores <url-token>. Overlay reproducer proof/reproducers/KI-8-import-href.ts asserts href === 'foo.css' and FAILS. No product fix. No DEFECT.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: false
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: false
+    notes: |
+        CSS OM @import href correctness (medium), not an exploit-class finding.
+        Overlay runner: node --experimental-strip-types proof/reproducers/KI-8-import-href.ts
+        real_infrastructure: parse() + CSSImportRule.href (not a mock).
+        control_test / operational_path_verified: runner setup asserts CSSImportRule was constructed (exit 2 if setup fails).
+        current_deployment_relevance: hole is on HEAD handleImportRule missing type === 'url'.
+        honest_severity / no_inflation: medium correctness matches empty href, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts href === 'foo.css' so it FAILS while the bug is present.
+        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        reachability_verified N/A: local-behavioral, no trust-boundary crossing.
+    not_applicable:
+        attacker_profitability: |
+            No attacker cost vs revenue. Impact is empty CSSImportRule.href, not extractable value. Rule 7 is Web3-only.
+        quantitative_impact: |
+            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+        reachability_verified: |
+            local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
+        untrusted_attacker: |
+            No signer, privileged role, or trust-boundary attacker. Any caller of parse() with unquoted url() can hit the hole. Rule 4 is Web3-only.
+template_class: import_url_token_href_dropped
+isomorphic_sites:
+    - src/parser.ts:747
+    - src/parser.ts:750
+    - src/parser.ts:800
+dedup_armor: |
+    Only unquoted <url-token> href is dropped (string and url("...") still copy). Distinct from KI-7 (CSSImportRule.styleSheet never-fetch). Do not merge this KI into the offline-import capability gap without a second live href hole.

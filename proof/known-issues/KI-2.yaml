@@ -1,7 +1,6 @@
 id: KI-2
 title: CSSStyleSheet.replace parses in queueMicrotask instead of Promise.resolve after replaceSync
-description: |
-    README documents a Node.js deviation: replace() executes parsing synchronously via replaceSync() and returns Promise.resolve(this). Product now honors that: replace() calls replaceSync then Promise.resolve(this), so cssRules is populated before replace() returns. Overlay SAT TRUE row (deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE) is witnessed on tests/mcdc-witness-cssom.test.ts. The honored=F FALSE row is unreachable after the fix and is //mcdc:ignore:defensive. Overlay reproducer proof/reproducers/KI-2-replace-sync.ts PASSES (no [known-issue] tripwire). Class-closure DEFECT-260821-QHWP.
+description: 'README documents a Node.js deviation: replace() executes parsing synchronously via replaceSync() and returns Promise.resolve(this). HEAD still parses inside queueMicrotask, so cssRules is empty when replace() returns. Overlay audit cannot change product code. No new DEFECT: DEFECT-260821-QHWP is stale class-closure paperwork from a rolled-back class-fix, not a live ticket.'
 affected_requirements:
     - SW-REQ-260821-PAKB
     - SYS-REQ-260821-GR67
@@ -18,19 +17,19 @@ sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts
 reproduction_steps:
     - 'Construct a CSSStyleSheet and call replace(''div { color: red; }'').'
-    - Observe cssRules.length is 1 and cssText is the parsed rule before awaiting the returned Promise.
-    - The returned value is a Promise that resolves to the same sheet (Promise.resolve(this)); after await, cssRules is unchanged.
-    - 'Fixed contract (README): replace() calls replaceSync() then returns Promise.resolve(this); cssRules is populated before replace() returns.'
-    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts (PASSES on HEAD).'
+    - Observe cssRules.length is 0 before awaiting the returned Promise (parse is queued in queueMicrotask).
+    - After await, cssRules is populated.
+    - 'Intended contract (README): replace() calls replaceSync() then returns Promise.resolve(this); cssRules is populated before replace() returns.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: replace() calls replaceSync then Promise.resolve(this) as README documents.
-remediation: Landed in src/CSSOM.ts. Class-closure DEFECT-260821-QHWP.
+mitigation: Await the Promise from replace() before reading cssRules. That is not the documented README contract.
+remediation: Product fix was rolled back to origin/main logic in fe7defa (Implements comments kept). Overlay cannot land replaceSync+Promise.resolve(this) in src/CSSOM.ts. Close only after cssRules is populated before replace() returns. DEFECT-260821-QHWP is stale class-closure paperwork — do not delete.
 notes:
-    - 'Overlay MC/DC reclassified after product fix: SAT TRUE unique-cause rows are witnessed; guarantee-violation FALSE rows are //mcdc:ignore:defensive (unreachable). Overlay reproducer PASSES and has no [known-issue] tripwire. Status remains fixed. KI-7 stays open.'
+    - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-QHWP is stale class-closure paperwork — do not delete.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: fixed
+status: open
 history:
     - at: "2026-08-21T20:30:00Z"
       by: agent:grok-4.6
@@ -68,6 +67,10 @@ history:
       action: edited
       detail: |
         Rewrote reproduction_steps, dedup_armor, and poc_quality for the fixed contract: cssRules is populated before await. Overlay runner PASSES. Unique-cause SAT TRUE is witnessed on tests/mcdc-witness-cssom.test.ts replace(); honored=F is //mcdc:ignore:defensive next to that replace() test.
+    - at: "2026-08-22T05:37:50Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-description,set-mitigation,set-remediation,append-note,set-status=open
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -85,10 +88,9 @@ poc_quality:
         Overlay runner: node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts
         real_infrastructure: constructs src/CSSOM.ts CSSStyleSheet and calls public replace (not a mock).
         control_test / operational_path_verified: runner setup asserts constructed sheet starts empty and replace() returns a Promise (exit 2 if setup fails).
-        current_deployment_relevance: HEAD replace() honors README — replaceSync then Promise.resolve(this); cssRules is populated before await.
-        PAKB/GR67 SAT TRUE (documented_deviation_honored=T) is witnessed on tests/mcdc-witness-cssom.test.ts driving sheet.replace(); honored=F is //mcdc:ignore:defensive next to that replace() test.
-        honest_severity / no_inflation: medium correctness matches the historical empty-cssRules-at-return hole, not theft. No submission.
-        reproducible: single node command, under 5 min. Overlay runner PASSES the fixed contract (cssRules.length === 1 before await).
+        current_deployment_relevance: hole is on HEAD replace(); parse runs in queueMicrotask so cssRules is empty when replace() returns.
+        honest_severity / no_inflation: medium correctness matches empty cssRules at return, not theft. No submission.
+        reproducible: single node command, under 5 min. Asserts the README sync contract so it FAILS while the bug is present.
         Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
@@ -99,12 +101,12 @@ poc_quality:
         reachability_verified: |
             local-behavioral correctness class: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleSheet.replace exercises the (now fixed) path. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleSheet.replace can hit the hole. Rule 4 is Web3-only.
 template_class: documented_sync_parse_deferred
 isomorphic_sites:
-    - "src/CSSOM.ts:341 #fixed"
-    - "src/CSSOM.ts:351 #fixed"
-    - "src/CSSOM.ts:352 #fixed"
-    - "src/CSSOM.ts:401 #na"
+    - src/CSSOM.ts:339
+    - src/CSSOM.ts:350
+    - src/CSSOM.ts:351
+    - src/CSSOM.ts:401
 dedup_armor: |
-    Only CSSStyleSheet.replace was the documented-sync-parse hole (queueMicrotask vs Promise.resolve after replaceSync). HEAD honors README: replace() calls replaceSync then Promise.resolve(this), so cssRules is populated before return. replaceSync at CSSOM.ts:401 still tokenizes and consumeListOfRules immediately. Do not merge this KI into a generic Promise/async stylesheet hole.
+    Only CSSStyleSheet.replace is the documented-sync-parse hole (queueMicrotask vs Promise.resolve after replaceSync). replaceSync at CSSOM.ts:401 still tokenizes and consumeListOfRules immediately. Do not merge this KI into a generic Promise/async stylesheet hole.

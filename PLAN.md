@@ -3884,3 +3884,16 @@ Cover leftover unique-cause in `src/typed-om/values/style-value-parser.ts` `_par
 - [x] Structurally unpairable left mute (no ignore): L159 duplicate of L141 (parseAllStyleValues throws first); L159 `length<3` with startsWith T and `=== '--'` F; L324 T,T / L327 / L335 (L259 already splits); L351 `kw === 'transparent'` (`transparent` is in `NAMED_COLORS`); L373 `isPositionProperty` T; L276 includes T (L180); L379/L381 `var` T (`styleValue` F — L282/L193/createCSSStyleValue always returns); L302/L312/L322 `!hasVarFunction` F (L193); L404 `componentValues.length > 0` F (L172); L447 `value !== undefined` F (tokenizer always sets dimension.value); `[0,∞]` independent of `[0,` (substring).
 - [x] Node 24: `node --test tests/mcdc-parseall-round5-unique-cause.test.ts` — 10 pass. Together with existing parseAll files 65 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run preflight` green (asided parallel-agent WIP `tmp-rf2-probe*.ts` / `tmp-probe*.ts` / `tests/mcdc-rule-filter-still-hot-unique-cause.test.ts`, then restored). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-parseall5.md`.
 
+---
+
+## Phase: reopen KI-1,2,3,5,6 after src logic restore (Champ overlay)
+
+`fe7defa` restored cssomnom logic to `origin/main` (`264c2ea` / 0.1.4) while keeping `// Implements:` comments. Campaign class-fixes are gone. Overlay audit only: **did not edit `src/`**. Did not delete DEFECT files. Did not `git add .`.
+
+- [x] Reopened KI-1, KI-2, KI-3, KI-5, KI-6 (`proof known-issue edit --set-status open`). History 2026-08-22: product fix rolled back to upstream main logic (Implements kept). DEFECT-* objects are stale class-closure paperwork. `remediation` no longer claims the fix is landed in `src/`. Restored failing `[known-issue]` tripwires on overlay reproducers.
+- [x] KI-4 stays **withdrawn** (Houdini JS-wins is specified; not a product hole).
+- [x] KI-7 stays **open** (documented no-fetch).
+- [x] Created KI-8 (url-token href) plus KI-9 (streaming peek-EOF + remnant/CR), KI-10 (fieldset first-legend `:disabled`), KI-11 (3-value perspective-origin / transform-origin 4-value / `center left` &&), KI-12 (at-rule ASCII-case dispatch / margin name / options.atRules / hasOwn). Each has a failing overlay tripwire; demonstrated FAIL on current `src/` before filing.
+- [x] Ran each open-KI reproducer twice under Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Logs: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-repro-KI-*-{1,2}.log`. Open bugs exit non-zero. KI-4 not turned into a failing product KI.
+- [x] Overlay-only commit: `proof/known-issues/**`, `proof/reproducers/**`, `PLAN.md`. Message: `reopen KI-1,2,3,5,6 after src logic restore`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-reopen-after-restore.md`.
+

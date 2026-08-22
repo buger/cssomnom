@@ -15,21 +15,44 @@
  * limitations under the License.
  */
 /**
- * Overlay reproducer for unquoted @import url-token href.
+ * Overlay reproducer for KI-8. Not a product-suite test.
  * css-syntax-3 § 4.3.6 #consume-url-token emits a <url-token> for
  * url(foo.css). cssom-1 § 6.4.4 #dom-cssimportrule-href returns that URL.
+ * Asserts href === 'foo.css' so this command FAILS while handleImportRule
+ * copies only string / url() function tokens.
  *
- * Verifies: SW-REQ-260821-5W6X
+ * Reproduces: KI-8
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from '../../src/parser.ts';
 import { CSSImportRule } from '../../src/CSSOM.ts';
 
-// Verifies: SW-REQ-260821-5W6X
-test('parse(@import url(foo.css);).cssRules[0].href is foo.css', () => {
+function ki8Contract(): { setupOk: boolean; holds: boolean; message: string } {
   const sheet = parse('@import url(foo.css);');
-  const rule = sheet.cssRules[0] as CSSImportRule;
-  assert.ok(rule instanceof CSSImportRule);
-  assert.equal(rule.href, 'foo.css');
+  const rule = sheet.cssRules[0] as CSSImportRule | undefined;
+  if (!rule || !(rule instanceof CSSImportRule)) {
+    return {
+      setupOk: false,
+      holds: false,
+      message: `setup failed: expected CSSImportRule, got ${sheet.cssRules[0]?.constructor?.name}`,
+    };
+  }
+  if (rule.href !== 'foo.css') {
+    return {
+      setupOk: true,
+      holds: false,
+      message: `KI-8: unquoted url(foo.css) href was ${JSON.stringify(rule.href)}; intended foo.css`,
+    };
+  }
+  return { setupOk: true, holds: true, message: 'KI-8 contract holds: url-token href is foo.css' };
+}
+
+// Reproduces: KI-8
+// Verifies: SW-REQ-260821-5W6X
+// Verifies: SYS-REQ-260821-7521
+test('parse(@import url(foo.css);).cssRules[0].href is foo.css', () => {
+  const outcome = ki8Contract();
+  assert.equal(outcome.setupOk, true, outcome.message);
+  assert.equal(outcome.holds, true, outcome.message);
 });
