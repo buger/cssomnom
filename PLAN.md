@@ -3276,6 +3276,15 @@ Drive `src/parser.ts` `assembleUnicodeRanges` (1/30 remaining code-MC/DC decisio
 
 ---
 
+## Phase: computed-style getPropertyValue MC/DC tests (Champ)
+
+Drive remaining `src/cascade/computed-style.ts` `CSSComputedStyleDeclaration.getPropertyValue` code MC/DC (was 18/62 fully covered decisions) through `getCascadedStyle` and the exported `CSSComputedStyleDeclaration` constructor. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-computed-style.test.ts` — custom props (missing / raw / empty-raw space / serialize empty), logical remapping (`margin-inline-start` / `inset-block-start` with `vertical-rl`+`rtl` vs default ltr), border side synthesis + equal-side contraction + unique mixed-side failures (`top===right!==bottom`, `top===right===bottom!==left`), background specified vs initial fallbacks, relative/static/absolute offsets (`0` / `0px` / used length / auto), `margin-top`/`margin-bottom` auto→`0px`, horizontal auto margins (both/one-side remaining, parent/child width px/%/auto/missing/equal/overflow, no element / primitive element / primitive parent / parentNode), min-width/min-height auto preserve (aspect-ratio / flex / grid / inline-flex / inline-grid / `display:none` ancestor / `aspect-ratio:auto` / empty), css-wide `inherit`/`initial`/`unset`/`revert`/`revert-layer`/`revert-rule` parent vs initial/UA, box-shadow system/named/transparent/colorless, `!important`, missing props, SVG/UA display+margin tagName/nodeName/empty, outline/border `thin`/`medium`/`thick`/`0` and missing-width `none`/`hidden`/`solid`.
+- [x] Node 24: `node --test tests/mcdc-computed-style.test.ts` — 13 pass. `pnpm run preflight` clean. oxlint 0 warnings.
+
+---
+
 ## Phase: leftover math-parser `simplify` MC/DC tests (Champ)
 
 Drive remaining `src/math-parser.ts:simplify` unique-cause leftovers (reported 52/89) that `tests/mcdc-hotspot-math-walk.test.ts` does not hit. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
