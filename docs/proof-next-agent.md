@@ -9,6 +9,61 @@ Read this before spawning Champs.
 
 ---
 
+## Persistent session objective (merged 2026-08-22)
+
+This playbook is also the durable goal file for the current orchestration campaign. Use the session as an orchestrator for synchronized cssomnom and Proof work. Continue until **at least 50 distinct, fair, confirmed bugs** are logged as known issues with reproducible evidence.
+
+The campaign must also leave an evidence-backed account of:
+
+- how cssomnom is structured and what it implements;
+- its documented intentional deviations;
+- how to run the custom Proof CLI and interpret its results honestly;
+- specification, WPT, unit-test, requirement, spec-MC/DC, code-MC/DC, coverage, and proof-model gaps used during bug hunting.
+
+### Model and concurrency policy
+
+- Use `gpt-5.6-luna` with x-high reasoning for delegated research, code research, specification validation, bug hunting, and similar work.
+- Follow `AGENTS.md`, `LOOP.md`, and applicable repository skills. The root agent orchestrates; Champ implements; Reviewer and Grizz audit concurrently after each product/overlay commit.
+- Another agent is working in this worktree. Treat all existing changes as concurrently owned. Never reset, restore, clean, overwrite, or broadly stage. Use collision-resistant new test/reproducer names and path-scoped staging only.
+- Preserve the other agent's unfinished work recorded below. Do not mistake dirty files or subagent edits for user-authored changes.
+
+### Honest 50-bug counting bar
+
+A finding counts only when all seven conditions hold:
+
+1. It is a distinct root-cause defect, not another assertion, WPT row, or symptom of an already counted defect.
+2. It violates an authoritative local CSS specification anchor or an explicit in-scope cssomnom API contract.
+3. It is not an intentional deviation documented in `README.md`.
+4. It has a minimal public-API reproducer with explicit expected and actual behavior.
+5. The reproducer runs on supported Node 24 and fails for the asserted reason; live-hole reproducers run twice.
+6. A Bikeshed-only Scrutineer validates the specification claim.
+7. The KI, reproducer, evidence, and root-cause uniqueness survive Reviewer and Grizz.
+
+Historical fixed defects count only when evidence still proves a distinct fair bug. `KI-4` is withdrawn and does not count. Duplicate DEFECT reports, raw WPT/parity assertion counts, stale baselines, harness failures, and unverified audit findings do not count.
+
+### Proof is part of the case study
+
+Use the custom Proof fork identified in this playbook, not `/tools/bin/proof`, unless explicitly comparing versions. For **every confirmed cssomnom bug**, add a Proof escape analysis:
+
+- Which Proof check, requirement, obligation, signal, fixture, MC/DC row, or evidence lane should have exposed it?
+- Why did it escape: missing/weak requirement, incomplete AC, absent regression/fixture, stale evidence/cache, weak spec MC/DC, code-MC/DC limitation, classifier/check defect, or unsupported surface?
+- Does the correction belong in cssomnom's overlay/model or in Proof itself?
+- If Proof is at fault, what engine regression and dogfood check prevents recurrence?
+
+The user authorizes fixing genuine bugs in the custom Proof fork. Reproduce them first, avoid conflating Proof-engine defects with cssomnom model gaps, and pass the applicable developer/reviewer/gatekeeper workflow.
+
+### Current honest count and discovery state
+
+- Confirmed historical baseline: **13 distinct fair bug classes** (12 fixed, one open). At least **37 additional** distinct confirmed bugs are required.
+- Local CSSWG, Houdini, external-suite, and WPT submodules are initialized for authoritative validation.
+- The Luna x-high hunt and Bikeshed audits produced **29 root-deduplicated, spec-valid correctness candidates**. They do **not** count until KI/reproducer creation, twice-run evidence, and LOOP acceptance.
+- `KI-101`–`KI-105` are committed and twice-red, but their LOOP gate remains open while Proof MC/DC/profile integration is repaired. `KI-106` is withdrawn as a duplicate of `KI-105` and does not count.
+- `KI-107`–`KI-111` are present in the worktree with twice-red reproducers and targeted Proof checks, but are uncommitted and not yet LOOP-reviewed; they do not count yet.
+- The accepted campaign count therefore remains the historical **13** until the new batches pass both Reviewer and Grizz.
+- Known Proof-state concerns include stale KI evidence, an audit cache inconsistent with fresh MC/DC queues, and code MC/DC below configured 100/100/100 floors. These are audit findings, not automatically product bugs.
+
+---
+
 ## Environment (copy-paste)
 
 ```bash
@@ -28,15 +83,10 @@ $proof version   # 0.1.0-dev; clone /tmp/probe-labs/reqproof @ 6d41cc0 (DX-042 J
 | Overlay tripwires | `/workspace/proof/reproducers/` |
 | KI evidence | `/workspace/proof/evidence/ki-N.yaml` |
 | DEFECT yaml | `/workspace/proof/problem-reports/` |
-| proof config | `/workspace/proof.yaml` (`security_surface_covered` commented disabled ~L102) |
+| proof config | `/workspace/proof.yaml` |
 | Recapture logs | `/tmp/grok-goal-47e8a9f6b740/implementer/audit-now.md`, `audit-full.log`, `audit-code-mcdc.log`, `mcdc-hotspots-now.txt` |
 | LOOP reviews | `/tmp/grok-goal-47e8a9f6b740/implementer/review-<hash>.md`, `grizz-<hash>.md` |
 | ReqProof clone | `/tmp/probe-labs/reqproof` (DX-042 commit `6d41cc0`) |
-| Codex scan (completed 2026-08-21) | `/home/dev/.codex/state/plugins/codex-security/scans/workspace/codex-security-workspace-TCbtjG/` |
-| Scan findings JSON | `…/findings.json` |
-| Scan PoCs | `…/findings/<slug>/poc/` |
-| Scan hardening (not implemented) | `…/hardening/hardening.md` |
-| Scan target SHA | `264c2ea5544795e366f2132a9683a2ec1b5476d1` (`origin/main`-era). **Re-run PoCs on current HEAD.** |
 
 **Git:** path-scoped `git add -- <files>` only. Never `reset` / `restore` / `checkout --` / `revert` / `clean` / `git add .`.  
 **Roles:** orchestrator does not write `src/` or spec YAML. Champ implements. LOOP Reviewer+Grizz after every product/overlay commit.  
@@ -58,31 +108,35 @@ A goal is **done** only when the check in the right column is true. Do not claim
 | **G0** | Strict overlay gate | `$proof audit --fail-level warn` → **Errors: 0, Warnings: 0**. Floors still 100/100/100. No waive. |
 | **G1** | Spec MC/DC | same audit: `mcdc_coverage` 0 uncovered; stale ≤ `proof.yaml` `max_stale_witness_lines` (1). No lying TRUE comments. |
 | **G2** | Code MC/DC | `code_mcdc_coverage` 100% D and 100% C on `src/**` exclude `src/data/gen/**`. Ignores only `//mcdc:ignore:defensive` on structurally unpairable decisions whose **positive path is witnessed**. Never nested-if splits to hang ignores (`0e36b1f`). |
-| **G3** | Bug hunt is honest | Every live user-facing hole is an **open KI** + failing public e2e **run twice** (exit 1) under `proof/reproducers/`. Capability-gap, not `:defensive`. Tooling holes count if operators run those scripts. |
-| **G4** | Codex scan ingested | All 16 findings below are either (a) open KI + failing overlay PoC on **current HEAD**, or (b) written disposition: PoC no longer holds, with the command+output in the KI history / a `docs/` note. **Zero silent drops.** |
-| **G5** | History class-proof | Every shipped `src/` bugfix that is a real defect has a DEFECT **after** class-fix + a tripwire that fails on the parent commit and passes on HEAD, **and** an answer to “would FRETish/obligation/signal have caught this without the fix commit?” If no → add the missing var/obligation/signal. |
-| **G6** | KI-7 stays red | `node --experimental-strip-types --test proof/reproducers/KI-7-import-stylesheet-null.ts` **and** `…/KI-7-import-url-token.ts` both exit **1**. No fetch I/O. `status: open`, `release_disposition: ship_with_known_issue`. |
+| **G3** | Bug hunt is honest | Every live user-facing cssomnom hole is an **open KI** + failing public e2e **run twice** (exit 1) under `proof/reproducers/`. Capability-gap, not `:defensive`. Do not fix cssomnom during this audit. |
+| **G4** | History class-proof | Every shipped `src/` bugfix that is a real defect has a DEFECT **after** class-fix + a tripwire that fails on the parent commit and passes on HEAD, **and** an answer to “would FRETish/obligation/signal have caught this without the fix commit?” If no → add the missing var/obligation/signal. |
+| **G5** | KI-7 stays red | `node --experimental-strip-types --test proof/reproducers/KI-7-import-stylesheet-null.ts` **and** `…/KI-7-import-url-token.ts` both exit **1**. No fetch I/O. `status: open`, `release_disposition: ship_with_known_issue`. |
+| **G6** | Fifty-bug campaign | At least 50 distinct issues satisfy the seven-part counting bar above; each has a KI, reproducer, evidence, root-cause deduplication, Scrutineer/contract validation, LOOP acceptance, and Proof escape analysis. |
+| **G7** | Proof dogfood closure | Every confirmed bug states why Proof missed it. Genuine custom-Proof defects have failing engine regressions before fixes, passing regressions after fixes, and independent review. Model/overlay gaps are not mislabeled as engine bugs. |
 
-**Priority if credits are tight:** G4 (file security KIs from existing PoCs) then G5, then recapture G0. Do not spend a turn on unique-cause theater.
+**Priority if credits are tight:** validate and log already-scrutinized correctness findings, then G4 and recapture G0. Do not spend a turn on unique-cause theater.
 
 ---
 
 ## Gate snapshot (recapture, not PLAN.md header)
 
-Last **full** `$proof audit --fail-level warn` at `cf47be2` (2026-08-22T11:08Z), log `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`:
+Latest authoritative full baseline used the documented custom binary with cache disabled on 2026-08-22:
 
 | Plane | Result |
 |---|---|
-| Full audit | **Errors: 1, Warnings: 16** |
-| Code MC/DC | **93.5% D / 94.9% C** (3398/3633 D, 4846/5109 C; **Ignored 53**; incomplete **235**) |
-| Spec MC/DC | 322 rows, **8 uncovered / 5 stale** at that recapture |
+| Full audit | **Errors: 0, Warnings: 17** (`$proof audit --no-cache --fail-level warn`) |
+| Ordinary tests | `tests_pass` **error** when run independently; the stale binary's shared MC/DC path can falsely report pass and is being repaired in the fork |
+| Code MC/DC | **93.504% D / 94.813% C** (3397/3633 D, 4844/5109 C; **Ignored 53**; incomplete **236**) |
+| Spec MC/DC | **7 uncovered / 7 stale** rows (`7R6Z`, `30ZA`, `EGCP`) |
 | Catalog | **82** reqs (was 66) |
 
-Later commits **not** in that recapture:
+Important state after that recapture:
 
 - `d1b0c3d` — 7R6Z refines YQQZ (`consume_token_loop_runs`; hex-6 on parent only); 30ZA idle `consume=F`. Isolated mcdc still **red honestly** (7 uncovered / 7 stale).
-- `a815df8` — REVIEW-39 dropped leftover `6`. Isolated `spec_lint_spec_conformance_review_grounded` **0e/0w**. **Next full recapture should drop the 1 error.**
-- `34751fa` / `1153d85` — this playbook.
+- `a815df8` — REVIEW-39 dropped leftover `6`; the later no-cache full audit confirmed the error count is now zero.
+- `c21eb97`..`97ac2a1` — KI-101..105 overlay batch and follow-up evidence/trace repairs; still awaiting final LOOP acceptance.
+- Uncommitted KI-107..111 overlay batch — twice-red and targeted checks reported clean; review still required.
+- `/tmp/probe-labs/reqproof` is a heavily dirty custom Proof fork. The documented `/tmp/proof-dx/proof` binary is stale relative to it. Do not claim the fork fixes are active until rebuilt and LOOP-approved.
 
 Recapture command:
 
@@ -113,82 +167,6 @@ node --experimental-strip-types --test proof/reproducers/KI-7-import-stylesheet-
 node --experimental-strip-types --test proof/reproducers/KI-7-import-url-token.ts         # expect exit 1
 ```
 
----
-
-## Codex security scan vs KI library
-
-**None of the 16 scan findings are in `/workspace/proof/known-issues/`.** KI-1..14 are CSSOM/Typed OM **correctness** holes. KI-7 is documented offline `@import`. They do not overlap CWE-400/22/94/918/78.
-
-That is a **campaign gap**, not a clean bill of health:
-
-1. `/workspace/proof.yaml` **disables** `security_surface_covered` (~L102) because a 2026-08-21 hunt only found WPT runner egress, not CSS `url()` in `src/**`. That hunt did not file library DoS or path-join as KIs.
-2. `denial_of_service_resistant` is on `SYS-REQ-260821-7521`, `SYS-REQ-260821-SBJ7`, `SW-REQ-260821-7M07`, `SW-REQ-260821-HHVE`, `SW-REQ-260821-QV2H`, backed by css-fuzz **crash-freedom**. Crash-freedom ≠ resource budget. Deep nesting / cartesian `toSum` / exponential `var()` / unbounded `:has()` often **do not throw** until stack/heap death.
-3. `verification_scope.completeness.production_include` is `src/**` only. `scripts/wpt/**` never got a KI even though operators/CI run those CLIs.
-4. Could we have found these **without** the scan?
-   - **Library DoS + hash serialize:** **yes**, if FRETish named a bound and a failing tripwire existed. **Spec was not good enough** (DoS obligation present, no numeric domain, no e2e). Missing obligation **shape**, not missing class.
-   - **WPT/wpt.fyi/extractors:** **no**. Tooling trust-boundary. Needed this scan or treating `scripts/` as product / enabling `security_surface_covered`.
-
-**Disposition (user):** open KI + failing public e2e **more than yaml**. Copy/adapt scan PoCs into `/workspace/proof/reproducers/`. Do not class-fix just to green. Tooling hole → KI with `affected_api` = the CLI, not `:defensive`.
-
-### How to file one KI (template)
-
-```bash
-export PATH="/tmp/proof-dx:/tmp/node-v24.11.1-linux-x64/bin:/opt/node24/bin:$PATH"
-# 1) Re-run scan PoC on HEAD (example: parser nesting)
-node /home/dev/.codex/state/plugins/codex-security/scans/workspace/codex-security-workspace-TCbtjG/findings/parser-unbounded-nesting-recursion/poc/nest-dos.mjs
-# 2) Copy/adapt into proof/reproducers/KI-15-parser-nesting-depth.ts
-#    Pattern: proof/reproducers/KI-7-import-stylesheet-null.ts
-#    Must assert the SAFE contract (bounded reject / escaped ident / contained path)
-#    and FAIL while the hole is present. Import src/parser.ts first if ParseHooks needed.
-# 3) Run twice, both exit 1
-node --experimental-strip-types --test proof/reproducers/KI-15-parser-nesting-depth.ts
-# 4) proof known-issue new  (follow `proof help known-issue`)
-#    affected_requirements: the DoS/serialize/tooling req you attach or create
-#    reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-15-….ts
-# 5) proof evidence capture KI-15
-# 6) On the tripwire, immediately above test():
-#    // Reproduces: KI-15
-#    // MCDC <REQ>: <assignment> => FALSE [known-issue] [ki: KI-15]
-#    On the passing witness: //mcdc:ignore:capability-gap … [ki: KI-15] [category: capability-gap]
-```
-
-Suggested IDs **KI-15..KI-30** (do not reuse 1–14).
-
-### The 16 findings — absolute PoC paths
-
-`SCAN=/home/dev/.codex/state/plugins/codex-security/scans/workspace/codex-security-workspace-TCbtjG`
-
-| ID | Sev | Title | Product path | Re-run on HEAD |
-|---|---|---|---|---|
-| KI-15 | **high** | WPT `script src` → `vm.Script` outside WPT root | `/workspace/scripts/wpt/node/run.ts` | `$SCAN/findings/wpt-getscriptcontent-no-containment/poc/exploit.mjs` |
-| KI-16 | med | `:has()`/combinator no match budget | `/workspace/src/matcher.ts` | `$SCAN/findings/has-combinator-no-match-budget/poc/poc.mjs` |
-| KI-17 | med | Acyclic `var()`/`env()` exponential expand | `/workspace/src/cascade/variable-resolver.ts` | `$SCAN/findings/var-env-exponential-expansion/poc/exploit.mjs` |
-| KI-18 | med | Parser nested rules no depth budget | `/workspace/src/parser.ts` | `$SCAN/findings/parser-unbounded-nesting-recursion/poc/nest-dos.mjs` |
-| KI-19 | med | `to`/`toSum` cartesian no term cap | `/workspace/src/typed-om/numeric/numeric-methods.ts` | `$SCAN/findings/numeric-tosum-cartesian-expansion/poc/exploit.mjs` |
-| KI-20 | med | Fixture extractors `eval`/`vm` | `/workspace/scripts/external_suites/extract_{nv_cssom,rrweb,wpt}.ts` | `$SCAN/findings/fixture-extractors-eval-vm-submodule-js/poc/exploit.mjs` |
-| KI-21 | med | Hash serialize skips `serializeIdentifier` | `/workspace/src/serializer.ts` | `$SCAN/findings/serializer-hash-omits-identifier-escape/poc/poc.mjs` |
-| KI-22 | med | Math parse/simplify no depth budget | `/workspace/src/math-parser.ts` | `$SCAN/findings/math-parser-unbounded-recursion/poc/math-recursion-dos.mjs` |
-| KI-23 | med | `--browser` interpolates into paths | `/workspace/scripts/wpt/browser/run.ts` | `$SCAN/findings/wpt-browser-flag-path-escape/poc/probe.mjs` |
-| KI-24 | med | `/interfaces/` fetch no root contain | `/workspace/scripts/wpt/node/run.ts` | `$SCAN/findings/wpt-interfaces-join-no-containment/poc/exploit.mjs` |
-| KI-25 | med | `sandbox.fetch` → host fetch | `/workspace/scripts/wpt/node/run.ts` | `$SCAN/findings/wpt-sandbox-fetch-host-fallthrough/poc/demonstrate_fetch_fallthrough.mjs` |
-| KI-26 | med | `--cache-path` unconstrained write | `/workspace/scripts/wpt/browser/fetch-wptfyi.ts` | `$SCAN/findings/wptfyi-cachepath-resolve-write/poc/exploit.mjs` |
-| KI-27 | med | `results_url` no host allowlist | same | `$SCAN/findings/wptfyi-downloadurl-no-allowlist/poc/poc.mjs` (also `poc_real_module.mjs`) |
-| KI-28 | med | `getGitNotesLog` shell interpolation | `/workspace/scripts/wpt/node/safe-child-process.ts` | `$SCAN/findings/getgitnoteslog-execsync-interpolation/poc/poc.mjs` |
-| KI-29 | med | `gunzipSync` no maxOutputLength | `fetch-wptfyi.ts` | `$SCAN/findings/wptfyi-gunzipsync-no-output-cap/poc/gzip-bomb-demo.js` |
-| KI-30 | **low** | `check-safe-exec` only literal imports | `/workspace/scripts/ci/check-safe-exec.ts` | `$SCAN/findings/check-safe-exec-literal-import-only/poc/end-to-end.mjs` |
-
-Writeups: `$SCAN/findings/<slug>/<slug>.md`. Finding objects: `$SCAN/findings.json`. Hardening proposals (do **not** implement unless asked): `$SCAN/hardening/proposals/`.
-
-Library DoS first (KI-16..19, 21, 22) — user-facing `src/`. Then tooling (KI-15, 20, 23–30).
-
-For each, ask before filing:
-
-- Does a FRETish row already name this? If yes, attach KI to that req.
-- If no: is the spec missing a bound/var (DoS depth, escaped ident, path_contained) → **add DRAFT req/var**, then KI. Do not skip because `production_include` is `src/**`.
-- Is the obligation the wrong cell (crash-freedom vs budget)? → new evidence class / tripwire, not more fuzz.
-
----
-
 ## Historical class-fixed bugs → DEFECT + “would proof have caught it?”
 
 Existing DEFECTs (`/workspace/proof/problem-reports/DEFECT-260821-*.yaml`, `DEFECT-260822-*.yaml`) cover some KI class-fixes only. User asked for **every shipped bugfix**.
@@ -207,21 +185,21 @@ For each real defect:
    - No because bool-only spec / no bound / no serialize-escape output → add var/range/mutex/table **and** the tripwire.
    - No because unexported → KI capability-gap, not `:defensive`.
 3. `proof problem-report new` **after** class-fix evidence. `covered_by_requirement`. `proof approve --role spec-conformance --motivation-kind defect` **only those reqs**.
-4. If the class is a sink (eval, shell, `path.join`, unbounded recursion): add a **code signal** rule, not only a test.
+4. If the defect class is statically detectable, add a **code signal** rule rather than relying only on a test.
 
-KI-1..3,5,6,8–14 already have class-fixes in `src/` + some DEFECTs. Several were found by MC/DC unique-cause, **not** FRETish — parent guarantees were too coarse. Do not fetch for KI-7. Do not class-fix security findings in the same breath as filing them.
+KI-1..3,5,6,8–14 already have class-fixes in `src/` + some DEFECTs. Several were found by MC/DC unique-cause, **not** FRETish — parent guarantees were too coarse. Do not fetch for KI-7.
 
 ---
 
 ## Proof 0/0 leftover
 
-Warning IDs from `cf47be2` full audit. `a815df8` should kill the error.
+Last categorized no-cache warning backlog; recapture after the custom Proof fork passes LOOP and is rebuilt.
 
 Still red (honest):
 
-- `code_mcdc_coverage` 93.5%/94.9%, 235 incomplete, 53 ignores. Public-API unique-cause only. Theater BAN: getter-flip, ParseHooks override, Reflect, `keep=N`, `constructor.name`. Do **not** split `_parseAll` `A || (B && C)` (`a381e92` REJECT / `0e36b1f` restore).
-- `mcdc_coverage` empty auditor SAT on 7R6Z/30ZA — leave red or retune; never restore lying TRUE comments (`7ff8011` / `c4e3dae`).
-- `gaps_clean` / `verify_passes` 13 unconstrained outputs; `variable_orphans_clean` 13 declared-unused.
+- `code_mcdc_coverage` 93.504%/94.813%, 236 incomplete, 53 ignores. Public-API unique-cause only. Theater BAN: getter-flip, ParseHooks override, Reflect, `keep=N`, `constructor.name`. Do **not** split `_parseAll` `A || (B && C)` (`a381e92` REJECT / `0e36b1f` restore).
+- `mcdc_coverage` has 7 uncovered/stale rows across 7R6Z, 30ZA, and EGCP. Leave red until real witnesses exist; never restore lying TRUE comments (`7ff8011` / `c4e3dae`).
+- `gaps_clean` / `verify_passes` 13 unconstrained outputs; `variable_orphans_clean` 14 declared-unused at the last recapture.
 - `spec_lint_status_vs_review` **46** — real reviews, not mass-stamp. Checklist next: `spec-review-1` (`$proof checklist show onboard_v1`).
 - `spec_lint_ac_inverse_coverage` 5, `decomposition_adds_refinement` 5, `formalization_quality` 5.
 - `property_based_test_coverage` 53 — real PBT or `// reqproof:proptest:skip` with ≥16-char reason.
@@ -248,10 +226,13 @@ Reviews on disk: `/tmp/grok-goal-47e8a9f6b740/implementer/review-<hash>.md` and 
 
 ## Immediate next DAG
 
-1. Commit dirty font-feature test if the command in Gate snapshot passes twice.
-2. Full recapture (expect **0 errors** after `a815df8`).
-3. **G4 Security KI batch** using the table above. Library DoS first. Do not class-fix.
-4. **G5 History-swipe DEFECT campaign**.
-5. Then G0 leftover warnings / G2 235 incomplete decisions.
+1. Finish the KI-101..105 Proof integration: remove the retired duplicate requirement, bind honest MC/DC witnesses/obligation evidence, and pass Reviewer+Grizz. Do not fix `src/**`.
+2. Review and commit the uncommitted KI-107..111 batch only after Reviewer+Grizz independently confirm its five distinct roots, twice-red reproducers, exact anchors, and zero newly introduced audit findings.
+3. Finish and gate the custom Proof false-green/evidence changes in `/tmp/probe-labs/reqproof`; rebuild `/tmp/proof-dx/proof` only after both gates accept the coherent fork patch.
+4. Run a fresh no-cache audit with the accepted custom binary. Treat **0 errors / 17 warnings** as the last baseline, not the target.
+5. Continue collision-resistant KI batches from the remaining scrutinized catalog (`KI-112+`). Every issue needs a Proof escape analysis and twice-red public-API reproducer.
+6. Repeat Luna x-high hunting/validation/logging waves until G6 reaches 50 without duplicates, scope inflation, or cssomnom fixes.
+7. Resolve G0/G1/G2 warnings honestly: current spec-MC/DC rows, code-MC/DC public witnesses, requirement modeling/reviews, property evidence, ambiguity/consistency/trace findings, and checklist steps. No waive or lowered floors.
+8. Run preflight, WPT/parity reconciliation, coherence audit, and a requirement-by-requirement completion audit. Update `PLAN.md`; mark the persistent goal complete only when all evidence is current and the full Proof audit is 0/0.
 
-If you can only do one thing: **G4** — the PoCs already exist; the overlay has zero of them as KIs.
+If you can only do one thing: take one already-scrutinized conformance batch all the way through twice-red evidence, Proof escape analysis, and both LOOP gates.
