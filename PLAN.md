@@ -2980,7 +2980,7 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ## Phase 121: Strict Proof 0/0 campaign (in progress)
 
-**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `cd3a692`): **Errors: 0, Warnings: 10**. Spec MC/DC **222/222 uncovered=0** (1 stale EGCP). Code MC/DC **89.1% / 90.9%** (3280/3683 D, 4698/5170 C) vs 100% floors (not lowered). KI-1,2,3,5,6,8–14 **fixed**; KI-4 **withdrawn**; KI-7 **open** (documented no-fetch). Do not `proof approve` 66 reqs.
+**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `d72e532`, 2026-08-22T09:08:54Z): **Errors: 0, Warnings: 7**. Spec MC/DC **222/222 uncovered=0** (1 stale EGCP, within `max_stale_witness_lines: 1`). Code MC/DC **92.2% / 93.7%** (3394/3683 D, 4845/5170 C; incomplete 289 / missing 325; 185 weak functions) vs 100% floors (not lowered). `tests_pass` all passed. Catalog 66 reqs (5 STK / 24 SYS / 37 SW+INT). KI yaml: KI-1,2,3,5,6,8–14 `status: fixed` (class-fixes currently in `src/`; **not a mandate to product-fix more holes** — we do not require fixing issues); KI-4 **withdrawn**; KI-7 **open** (`ship_with_known_issue`, documented no-fetch; extra failing e2e `proof/reproducers/KI-7-import-url-token.ts` uncommitted). Do not `proof approve` 66 reqs. Do not `proof waive`. Working tree dirty (spec domain tables, KI-7 e2e, docs); four overlay Champs still in flight. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
 
 - [x] **acknowledge KI-7 on 5W6X approved guarantee** (`PROOF_ACTOR=agent:grok-4.6`): `approved_guarantee_ki_conflict` was 1w — SW-REQ-260821-5W6X approved while open KI-7 had no `release_disposition`. Canonical option 2: `proof known-issue edit KI-7 --set-release-disposition ship_with_known_issue`. KI-7 **stays open** (documented no-fetch; no I/O). Did not `proof waive`, class-fix fetch, or mass un-approve 66 reqs. 5W6X approval remains DEFECT-3T1G href copy (does not claim fetch); SAT TRUE is `constructed=T, fetched=F, import_url_present=T`; KI-7 tripwire remains `constructed=T, fetched=T, import_url_present=T => FALSE`. Isolated `proof audit --check approved_guarantee_ki_conflict --fail-level warn`: **0e / 0w**.
 
@@ -4464,6 +4464,41 @@ Cover leftover unique-cause in `src/math-parser.ts` `fromCanonical` after last r
 
 ---
 
+## Phase: tag hygiene — stale KI tags + JTY2 public unique-cause (Champ)
+
+Overlay tag hygiene from Grizz/Reviewer. Did **not** edit `src/**` product logic. Did **not** mass-delete unique-cause theater files. Did **not** `git add .`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] **KI-13 SAT TRUE**: `proof/reproducers/KI-13-disabled-non-form.ts` dropped stale `[known-issue] [ki: KI-13]`. KI-13 is **fixed**. Overlay tripwire SAT TRUE of the listed-control gate (KI-10 pattern: passing contract, no KI-gated MCDC leftover).
+- [x] **KI-1 docs**: `docs/proof-mcdc-spec-queue.md` and `docs/proof-remaining-work.md` no longer recommend `//mcdc:ignore:capability-gap … [ki: KI-1]` as a live hole. KI-1 is **fixed**. HNRG SAT TRUE is `declaration_unchanged=T, value_validation_fails=T => TRUE`. Unreachable `declaration_unchanged=F` FALSE rows are `//mcdc:ignore:defensive`.
+- [x] **JTY2 FRETish retarget**: `INT-REQ-260821-JTY2` `when transform_string_parsed & !native_matrix_string the geometry shall always satisfy typed_om_transform_hook_used`. Native `matrix()`/`matrix3d()` is the documented exemption (req YAML `interface.assumptions`). SAT TRUE unique-cause of `typed_om_transform_hook_used=F`: `transform_string_parsed=T, native_matrix_string=T, typed_om_transform_hook_used=F => TRUE [no-action: parseTransformListHook]` in `tests/mcdc-witness-selectors-media.test.ts`. Did **not** leave `:defensive` on that public unique-cause. Unreachable transform-list-without-hook FALSE is `//mcdc:ignore:defensive`.
+- [x] **Synthetic-theater files (Reviewer)** — do **not** mass-delete in this commit. Next work is public-API rewrite or `//mcdc:ignore:defensive` of structurally dead later-gates, **not** more getter-flip / boxed-keep / `constructor.name` tests:
+  - `tests/mcdc-parseall-round6-unique-cause.test.ts` (`Array.some`/`filter` defineProperty)
+  - `tests/mcdc-parseall-round7-unique-cause.test.ts` (ident `value` getter / CSSFunction `name` getter / `POSITION_PROPERTIES.has` skip-once)
+  - `tests/mcdc-simplify-still-hot2-unique-cause.test.ts` (mutate `.unit` after constructor-valid)
+  - `tests/mcdc-simplify-still-hot3-unique-cause.test.ts` (successive-read unit / `name` getters)
+  - `tests/mcdc-math-product-parsefn-unique-cause.test.ts` (keep=3 unit keys / comma `type` getters / empty iterator)
+  - `tests/mcdc-parse-math-function-round2-unique-cause.test.ts` (delayed leftover inject)
+  - `tests/mcdc-parse-color-args-round2-unique-cause.test.ts` (`constructor.name` rename / keep=N `type` getter)
+  - `tests/mcdc-from-canonical-unique-cause.test.ts` (boxed keep targetUnit)
+  - `tests/mcdc-canonical-serialize-round2-unique-cause.test.ts` (keep=N `type` getters / stack-discriminated `to()`)
+  - `tests/mcdc-parse-resolution-to-dpi-unique-cause.test.ts` (stack ident.value / `CSSMathSum.type`)
+  - `tests/mcdc-tryparseposition-round3-unique-cause.test.ts` (`CSSKeywordValue.value` getter split)
+  - `tests/mcdc-style-validation-round2-unique-cause.test.ts` (`_associatedProperty` getter split)
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/tag-hygiene.md`.
+
+---
+
+## Phase: ReqProof DX — capability-gap needs e2e; defensive is not unique-cause hatch (Champ)
+
+Encode the live-hole bar in clone `/tmp/probe-labs/reqproof`. Did **not** edit cssomnom `src/**`. Did **not** `proof waive`. Did **not** lower MC/DC floors.
+
+- [x] Policy: capability-gap = open KnownIssue + failing e2e public-API tripwire run twice + additional e2e tests (tripwire-only is not enough). Feature unreachable from user APIs is a KI, not `:defensive`. Defensive is only JS `&&` skip / `while (true)` F / tokenizer always sets `value` where the positive path is already witnessed. Do not next-action a product refactor (DX-040) or a synthetic unique-cause (getters, ParseHooks override, Reflect private, `keep=N`, `constructor.name` spoof).
+- [x] `mcdc_ignore_classified` finding `capability-gap-no-tripwire` when `[ki:]` resolves but the KI is closed or has no `reproducer_command`/`evidence_manifests`.
+- [x] Help: `mcdc-row-disposition`, `mcdc_ignore_classified`, `code_mcdc_coverage`, `mcdc-report`, `known_issue_complete`, `known_issue_reproducer_present_and_resolves`, `mcdc_known_issue_disposition_stale`. Residue hints in `feasibilityResidueHint`.
+- [x] Tests for help/check strings. Rebuild `/tmp/proof-dx/proof` including prior clone patches. Commit `ce32956` `docs: capability-gap needs e2e; defensive is not unique-cause hatch`. DX-041 in `docs/proof-dx-issues.md`. Writeup `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-cap-gap.md`.
+
+---
+
 ## Phase: KI-7 extra e2e import shapes + KI-5 witness retarget (Champ)
 
 Capability-gap KI-7 stays **open**. Did **not** implement fetch. Did **not** edit `src/**`. Overlay extra e2e is **not** under `tests/` (`pnpm test:node` glob). Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
@@ -4473,4 +4508,16 @@ Capability-gap KI-7 stays **open**. Did **not** implement fetch. Did **not** edi
 - [x] `proof/known-issues/KI-7.yaml` `reproduction_steps` lists the extra e2e file and four shapes; `--add-command` for the extra runner. `proof evidence refresh KI-7` restamped `proof/evidence/ki-7.yaml` (`status: fail` / `known_issue_reproduced`).
 - [x] Retargeted `tests/mcdc-witness-selectors-media.test.ts` SAT FALSE defensive ignores for `serialized_as_not_all=F` (W8S1 / 5283) to the KI-5 **fixed** contract: unique-cause SAT is `serialized_as_not_all=T`; FALSE row is unreachable after class-fix. Did **not** add capability-gap or `[ki: KI-5]`. Witness file 13/13 pass.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki7-e2e.md`.
+
+---
+
+## Phase: CSS domain models — ranges, mutexes, decision tables (Champ)
+
+Honest FRETish domain models for real CSS domains. Did **not** invent `range min 0 max 1` string theater. Did **not** mark vars `proof_auxiliary` to silence `nonbool_inputs_constrained`. Did **not** mutex `{css_import_rule_constructed, external_sheet_fetched}` (KI-7: constructed can be true while fetched is false; full CSSOM both-true is the intended gap). Did **not** mutex `{ordinary_invalid_css, consume_stylesheet_completed}` (invalid CSS still completes consume a stylesheet). Did **not** edit `src/**`. Node v24.11.1; proof `/tmp/proof-dx/proof`.
+
+- [x] **parser** `domain.tables.at_rule_dispatch` (sys+sw): `at_rule_kind` {media, unknown, margin} × `at_rule_case` {lower, mixed} → `typed_cssom_rule`. 6/6 cells SMT-complete. Mixed-case `@MEDIA`/`@TOP-LEFT` typed after KI-12. Mutex `at_rule_cssom_class`: `{typed_cssom_rule, unknown_at_rule_fallback}` (one dispatch, at most one CSSOM class). Reqs SYS-REQ-260822-AACP / SW-REQ-260822-73TM.
+- [x] **media** range `resolution_dpi` real 0..9600 (0 through 100 dppx after dpi/dpcm/dppx/x convert). Table `invalid_media_serializes_as_not_all`: validity {valid, invalid} → `serialized_as_not_all` (2/2). Reqs SYS-REQ-260822-4EY2 / SW-REQ-260822-QKE9 (`resolution_dpi > 0` → `resolution_feature_positive`).
+- [x] **typed_om** range `position_arity` int 1..4. Table `position_arity_reification`: class {one_or_two, three, four} × property {object_position, background_position, perspective_origin, transform_origin} → `position_reifies` (12/12). 3-value background-only; 4-value not transform-origin z; 3-value transform-origin is z-length, not CSSPositionValue. Reqs SYS-REQ-260822-SNP4 / SW-REQ-260822-Z6J1.
+- [x] **selectors** table `disabled_element_kinds`: {form_control, first_legend, div} → `matches_disabled` (3/3; KI-10/KI-13). Mutex `disabled_enabled_exclusive`: `{matches_disabled, matches_enabled}`. Reqs SYS-REQ-260822-XDRG / SW-REQ-260822-ZN94.
+- [x] `proof validate` 74 valid / 0 errors. `variable_orphans_clean` 0. `table_complete`/`table_consistent` 8/8. `nonbool_inputs_constrained`: **49 of 16** (was **92 of 0**). Remaining 49 are code compares on bool-only cssom/cascade/tokenizer/property_registry/geometry/parser_api reqs (hex `length <= 6`, `val > 100`, DOMMatrix `i < 4`, shorthand arity) — not fake-ranged. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/spec-domain-features.md`.
 

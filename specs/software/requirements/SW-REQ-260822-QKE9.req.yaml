@@ -1,0 +1,48 @@
+id: SW-REQ-260822-QKE9
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when resolution_dpi > 0 the media shall always satisfy resolution_feature_positive
+description: The media parser shall report a matching resolution feature when converted dpi is greater than 0.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SYS-REQ-260822-4EY2
+component: media
+rationale: parseResolutionToDpi converts dpi, dpcm, dppx, and x. Boolean (resolution) is true when the environment value is greater than 0.
+tags: []
+variables:
+    - resolution_dpi
+    - resolution_feature_positive
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - SYS-REQ-260822-4EY2
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:cli
+    created_at: "2026-08-22T09:18:23Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-22T09:19:21Z"
+obligation_checklist:
+    - nominal
+lifecycle:
+    change_history:
+        - date: "2026-08-22T09:19:21Z"
+          from: draft
+          to: review
+          reason: Domain-model requirements authored for CSS ranges, mutexes, and decision tables.
+          changed_by: human:cli

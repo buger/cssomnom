@@ -12,3 +12,32 @@ variables:
       type: bool
       direction: output
       description: Boolean flag serialized as not all for component media.
+    - name: resolution_dpi
+      type: real
+      direction: input
+      description: Media query resolution in dpi after unit conversion (0 dppx through 100 dppx).
+      range:
+        max: 9600
+        min: 0
+    - name: resolution_feature_positive
+      type: bool
+      direction: output
+      description: True when the resolution media feature matches in boolean context (env dpi greater than 0).
+    - name: media_query_validity
+      type: enum
+      direction: input
+      description: Whether the media query is a valid query or an invalid query mapped to not all.
+domain:
+    tables:
+        - name: invalid_media_serializes_as_not_all
+          source: "mediaqueries-4 #error-handling"
+          inputs:
+            - name: media_query_validity
+              type: enum
+              values: [valid, invalid]
+          output:
+            name: serialized_as_not_all
+            type: bool
+          rows:
+            - {media_query_validity: valid, serialized_as_not_all: false}
+            - {media_query_validity: invalid, serialized_as_not_all: true}

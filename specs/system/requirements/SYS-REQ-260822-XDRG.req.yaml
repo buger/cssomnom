@@ -1,0 +1,49 @@
+id: SYS-REQ-260822-XDRG
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when matches_disabled | matches_enabled the selectors shall always satisfy !empty_match
+description: The matcher shall not return an empty match when :disabled or :enabled matches an element.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-D7WX
+component: selectors
+rationale: HTML :disabled and :enabled matches are non-empty selector results.
+tags: []
+variables:
+    - matches_disabled
+    - matches_enabled
+    - empty_match
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - STK-REQ-260821-D7WX
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:cli
+    created_at: "2026-08-22T09:18:12Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-22T09:19:21Z"
+obligation_checklist:
+    - nominal
+lifecycle:
+    change_history:
+        - date: "2026-08-22T09:19:21Z"
+          from: draft
+          to: review
+          reason: Domain-model requirements authored for CSS ranges, mutexes, and decision tables.
+          changed_by: human:cli

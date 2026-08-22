@@ -60,6 +60,49 @@ variables:
       type: bool
       direction: output
       description: Boolean flag stylesheet returned for component parser.
+    - name: at_rule_kind
+      type: enum
+      direction: input
+      description: 'At-rule name class after ASCII-case fold: media, unknown, or page-margin.'
+    - name: at_rule_case
+      type: enum
+      direction: input
+      description: 'At-keyword spelling case: lowercase or mixed-case ASCII.'
+    - name: typed_cssom_rule
+      type: bool
+      direction: output
+      description: True when at-rule dispatch constructs a typed CSSOM subclass (CSSMediaRule or CSSMarginRule).
+    - name: unknown_at_rule_fallback
+      type: bool
+      direction: output
+      description: True when an unknown at-rule falls back to CSSAtRule instead of a typed subclass.
+domain:
+    tables:
+        - name: at_rule_dispatch
+          source: "css-syntax-3 § 5.4.4 #consume-at-rule; css-values-4 § 4.1 #keywords; cssom-1 CSSMediaRule/CSSMarginRule/CSSAtRule"
+          inputs:
+            - name: at_rule_kind
+              type: enum
+              values: [media, unknown, margin]
+            - name: at_rule_case
+              type: enum
+              values: [lower, mixed]
+          output:
+            name: typed_cssom_rule
+            type: bool
+          rows:
+            - {at_rule_kind: media, at_rule_case: lower, typed_cssom_rule: true}
+            - {at_rule_kind: media, at_rule_case: mixed, typed_cssom_rule: true}
+            - {at_rule_kind: unknown, at_rule_case: lower, typed_cssom_rule: false}
+            - {at_rule_kind: unknown, at_rule_case: mixed, typed_cssom_rule: false}
+            - {at_rule_kind: margin, at_rule_case: lower, typed_cssom_rule: true}
+            - {at_rule_kind: margin, at_rule_case: mixed, typed_cssom_rule: true}
+    mutex:
+        - name: at_rule_cssom_class
+          members:
+            - typed_cssom_rule
+            - unknown_at_rule_fallback
+          reason: One at-rule dispatch constructs at most one of a typed CSSOM subclass and the CSSAtRule fallback.
 independence:
     declared: true
     reason: "SW parser pairs (stylesheet consume, nesting, invalid-rule drop, import construct) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."

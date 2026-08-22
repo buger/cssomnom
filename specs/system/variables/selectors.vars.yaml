@@ -8,6 +8,45 @@ variables:
       type: bool
       direction: output
       description: Boolean flag empty match for component selectors.
+    - name: disabled_element_kind
+      type: enum
+      direction: input
+      description: 'Element kind under :disabled: listed form control, first-legend descendant, or non-listed div.'
+    - name: matches_disabled
+      type: bool
+      direction: output
+      description: True when matches() reports the element matches :disabled.
+    - name: matches_enabled
+      type: bool
+      direction: output
+      description: True when matches() reports the element matches :enabled.
 no_interface:
     declared: true
-    reason: "selectors SYS/SW guarantees are parseSelector-reject/empty-match in-process matcher behavior; this overlay does not declare a separately versioned caller/callee INT (cascade consult is described on INT-REQ-260821-HJVC). Minting cascade→selectors without an integration witness would be theater."
+    reason: selectors SYS/SW guarantees are parseSelector-reject/empty-match in-process matcher behavior; this overlay does not declare a separately versioned caller/callee INT (cascade consult is described on INT-REQ-260821-HJVC). Minting cascade→selectors without an integration witness would be theater.
+domain:
+    tables:
+        - name: disabled_element_kinds
+          source: 'html #selector-disabled; html #concept-element-disabled; html #concept-fe-disabled; html #concept-fieldset-disabled'
+          inputs:
+            - name: disabled_element_kind
+              type: enum
+              values:
+                - form_control
+                - first_legend
+                - div
+          output:
+            name: matches_disabled
+            type: bool
+          rows:
+            - disabled_element_kind: form_control
+              matches_disabled: true
+            - disabled_element_kind: first_legend
+              matches_disabled: false
+            - disabled_element_kind: div
+              matches_disabled: false
+    mutex:
+        - name: disabled_enabled_exclusive
+          members:
+            - matches_disabled
+            - matches_enabled
+          reason: HTML :disabled and :enabled never match the same element at once.
