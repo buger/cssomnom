@@ -1,0 +1,10 @@
+id: REVIEW-38
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:31Z"
+subject: SW-REQ-260822-1REE
+decision: approved
+comment: 'FRETish hue_degrees < 60 & hsl_component_count >= 3 => red_from_chroma & !green_from_chroma & !blue_from_chroma & hsl_parsed maps to parseHslComponents: too-short or too-long component lists return null; hue is wrapped into a circle then if (h < 60) chroma is assigned to red (css-color-4 #hsl-to-rgb / #the-hsl-notation). hsl_component_count >= 3 is in-grammar arity. Mutex hsl_chroma_channel: chroma assigns to exactly one of R/G/B per sector.'
+citations:
+    - tests/cascade-computed.test.ts:49
+    - tests/mcdc-cascade-vars.test.ts:146

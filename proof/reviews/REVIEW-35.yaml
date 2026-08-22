@@ -1,0 +1,10 @@
+id: REVIEW-35
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:14Z"
+subject: SW-REQ-260822-QKE9
+decision: approved
+comment: 'FRETish resolution_dpi > 0 => resolution_feature_positive maps to MediaParser boolean-context evaluation of resolution: env.resolution > 0 (mediaqueries-4 #mq-boolean-context: a range feature in boolean context is true iff the value is greater than zero). parseResolutionToDpi converts dpi/dpcm/dppx/x per css-values-4 #resolution. dpi at the zero bound is false; DEFAULT_MEDIA_ENV.resolution > 0 is true. Silent: min-/max- prefix in boolean context returns unknown, not this row.'
+citations:
+    - tests/mcdc-witness-domain-tables.test.ts:145
+    - tests/mcdc-witness-domain-tables.test.ts:133

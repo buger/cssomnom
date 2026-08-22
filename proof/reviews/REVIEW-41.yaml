@@ -1,0 +1,9 @@
+id: REVIEW-41
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:32Z"
+subject: SW-REQ-260822-YBF2
+decision: approved
+comment: 'FRETish box_side_count<=4 & position_token_count<=4 & keyframe_offset_percent<=100 & font_weight_number<=1000 => four_longhands_assigned | shorthand_expanded | shorthand_rejected maps to expandBox: empty or over-long side lists return null (css-backgrounds-3 box shorthand / css-logical-1 #logical-shorthand-keyword); otherwise all four physical or logical longhands are assigned (table box_arity_expansion true for one/two/three/four). Mutex shorthand_expand_or_reject: expand vs null, never both. Invalid length tokens still reject so the OR holds. In-range margin/padding unique-cause witnesses four_longhands_assigned.'
+citations:
+    - tests/mcdc-hotspot-expand-leftover.test.ts:266

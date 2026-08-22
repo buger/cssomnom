@@ -46,8 +46,9 @@ test('normalizeComputedColor: hex colors', () => {
   assert.strictEqual(normalizeComputedColor('#00ff00ff'), 'rgb(0, 255, 0)');
 });
 
+// Verifies: SW-REQ-260822-1REE
 test('normalizeComputedColor: functional rgb, rgba, hsl, hsla colors', () => {
-  // css-color-4 § 4.1 & § 4.3
+  // css-color-4 § 4.1 & § 4.3 #the-hsl-notation / #hsl-to-rgb
   assert.strictEqual(normalizeComputedColor('rgb( 0 , 255 , 0 )'), 'rgb(0, 255, 0)');
   assert.strictEqual(normalizeComputedColor('rgb(0 255 0)'), 'rgb(0, 255, 0)');
   assert.strictEqual(normalizeComputedColor('rgba(0, 0, 0, 0)'), 'rgba(0, 0, 0, 0)');

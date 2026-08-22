@@ -1,0 +1,9 @@
+id: REVIEW-40
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:32Z"
+subject: SW-REQ-260822-MN8Z
+decision: approved
+comment: 'FRETish bad_at_property & at_property_validate_fails & urange_hex_digits<=6 & namespace_prelude_count>=1 & keyframe_offset_percent>=0 => property_rule_dropped | urange_sixth_digit_stops maps to handlePropertyRule: PropertyRegistry.validate throw returns null so the @property is ignored (css-properties-values-api-1 #the-at-property-rule). INHERITS: TRUE and non-string syntax drop the rule. urange_hex_digits<=6 is the css-syntax-3 § 4.3.13 cap; at_most_six means urange_sixth_digit_stops is F, so the OR is satisfied by property_rule_dropped. namespace_prelude_count and keyframe_offset_percent are in-range domain bounds from the same parser file, not extra gates on the drop. Silent: missing name/syntax/inherits also return null before validate.'
+citations:
+    - tests/mcdc-parser-still-hot-unique-cause.test.ts:247

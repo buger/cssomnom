@@ -35,33 +35,70 @@ variables:
       type: enum
       direction: input
       description: 'Position grammar class: 1- or 2-value generic <position>, 3-value (background-only or transform-origin z), or 4-value.'
+independence:
+    declared: true
+    reason: SYS typed_om pairs (parse throw vs 10px CSSUnitValue) skip as cross-component; they govern disjoint invalid vs nominal parse outputs.
 domain:
     tables:
         - name: position_arity_reification
-          source: "css-values-4 § 10.1 #position; css-backgrounds-3 #background-position; css-transforms-1 #transform-origin-property; css-transforms-2 #perspective-origin-property; css-typed-om-1 § 3.3 #positionvalue-objects"
+          source: 'css-values-4 § 10.1 #position; css-backgrounds-3 #background-position; css-transforms-1 #transform-origin-property; css-transforms-2 #perspective-origin-property; css-typed-om-1 § 3.3 #positionvalue-objects'
           inputs:
             - name: position_arity_class
               type: enum
-              values: [one_or_two, three, four]
+              values:
+                - one_or_two
+                - three
+                - four
             - name: position_property
               type: enum
-              values: [object_position, background_position, perspective_origin, transform_origin]
+              values:
+                - object_position
+                - background_position
+                - perspective_origin
+                - transform_origin
           output:
             name: position_reifies
             type: bool
           rows:
-            - {position_arity_class: one_or_two, position_property: object_position, position_reifies: true}
-            - {position_arity_class: one_or_two, position_property: background_position, position_reifies: true}
-            - {position_arity_class: one_or_two, position_property: perspective_origin, position_reifies: true}
-            - {position_arity_class: one_or_two, position_property: transform_origin, position_reifies: true}
-            - {position_arity_class: three, position_property: object_position, position_reifies: false}
-            - {position_arity_class: three, position_property: background_position, position_reifies: true}
-            - {position_arity_class: three, position_property: perspective_origin, position_reifies: false}
-            - {position_arity_class: three, position_property: transform_origin, position_reifies: false}
-            - {position_arity_class: four, position_property: object_position, position_reifies: true}
-            - {position_arity_class: four, position_property: background_position, position_reifies: true}
-            - {position_arity_class: four, position_property: perspective_origin, position_reifies: true}
-            - {position_arity_class: four, position_property: transform_origin, position_reifies: false}
-independence:
-    declared: true
-    reason: SYS typed_om pairs (parse throw vs 10px CSSUnitValue) skip as cross-component; they govern disjoint invalid vs nominal parse outputs.
+            - position_arity_class: one_or_two
+              position_property: object_position
+              position_reifies: true
+            - position_arity_class: one_or_two
+              position_property: background_position
+              position_reifies: true
+            - position_arity_class: one_or_two
+              position_property: perspective_origin
+              position_reifies: true
+            - position_arity_class: one_or_two
+              position_property: transform_origin
+              position_reifies: true
+            - position_arity_class: three
+              position_property: object_position
+              position_reifies: false
+            - position_arity_class: three
+              position_property: background_position
+              position_reifies: true
+            - position_arity_class: three
+              position_property: perspective_origin
+              position_reifies: false
+            - position_arity_class: three
+              position_property: transform_origin
+              position_reifies: false
+            - position_arity_class: four
+              position_property: object_position
+              position_reifies: true
+            - position_arity_class: four
+              position_property: background_position
+              position_reifies: true
+            - position_arity_class: four
+              position_property: perspective_origin
+              position_reifies: true
+            - position_arity_class: four
+              position_property: transform_origin
+              position_reifies: false
+    mutex:
+        - name: invalid_input_vs_position_reify
+          members:
+            - invalid_typed_input
+            - position_reifies
+          reason: 'css-typed-om-1 § 3.3: invalid CSSStyleValue.parse input cannot reify as CSSPositionValue'

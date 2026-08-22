@@ -1,0 +1,10 @@
+id: REVIEW-39
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:32Z"
+subject: SW-REQ-260822-7R6Z
+decision: approved
+comment: 'FRETish css_text_supplied & consume_token_loop_runs & escaped_hex_digits<=6 & (uses_replacement_character | uses_escaped_code_point | sixth_digit_stops_hex) => token_list_returned maps to Tokenizer.tokenize looping consumeToken until EOF. consumeEscapedCodePoint consumes at most 6 hex digits (css-syntax-3 #consume-escaped-code-point); a max-length hex escape then a following letter stops hex then emits the letter. NUL/surrogate/out-of-range scalars return the replacement character. consumeUnicodeRangeToken also caps at 6 (css-syntax-3 #consume-unicode-range-token). Mutex escaped_code_point_result: replacement vs scalar, never both. tokenize always returns the token list including EOF.'
+citations:
+    - tests/mcdc-branch-tokenizer-serializer.test.ts:48
+    - tests/mcdc-branch-tokenizer-serializer.test.ts:57

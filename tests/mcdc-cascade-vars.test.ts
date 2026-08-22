@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Verifies: SW-REQ-260821-FWNH, INT-REQ-260821-HJVC
+// Verifies: SW-REQ-260821-FWNH, INT-REQ-260821-HJVC, SW-REQ-260822-1REE
 // Unique-cause leftovers for src/cascade/color-resolver.ts and
 // src/cascade/variable-resolver.ts driven only through getCascadedStyle.
 // No //mcdc:ignore.
@@ -143,6 +143,7 @@ describe('MC/DC unique-cause: cascade color-resolver via getCascadedStyle', { co
   });
 
   // css-color-4 § 4.3 #the-hsl-notation
+  // Verifies: SW-REQ-260822-1REE
   test('hsl() leftover unique-cause space form, hue units, sectors, slash alpha, arity', () => {
     // Unique-cause content.includes(',') F (space-separated) vs T (comma form already in fixtures).
     const space = box('.t { color: hsl(90 100% 50%); }');

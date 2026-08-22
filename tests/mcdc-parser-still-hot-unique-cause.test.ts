@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Verifies: SYS-REQ-260821-03VA, SYS-REQ-260821-7521, SYS-REQ-260821-NHZ8, SYS-REQ-260821-H3BD, SW-REQ-260821-YG9J, SW-REQ-260821-9KNX, SW-REQ-260821-39E0, SW-REQ-260821-5W6X, SW-REQ-260821-HHVE, SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1
+// Verifies: SYS-REQ-260821-03VA, SYS-REQ-260821-7521, SYS-REQ-260821-NHZ8, SYS-REQ-260821-H3BD, SW-REQ-260821-YG9J, SW-REQ-260821-9KNX, SW-REQ-260821-39E0, SW-REQ-260821-5W6X, SW-REQ-260821-HHVE, SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1, SW-REQ-260822-MN8Z
 // Still-hot unique-cause for src/parser.ts leftovers that
 // tests/mcdc-branch-parser.test.ts, tests/mcdc-branch-parser-atrules.test.ts,
 // and tests/mcdc-branch-parser-leftover.test.ts do not isolate:
@@ -244,6 +244,7 @@ describe('MC/DC still-hot unique-cause: handleNamespaceRule (css-namespaces-3 #c
 });
 
 describe('MC/DC still-hot unique-cause: handlePropertyRule (css-properties-values-api-1 #the-at-property-rule)', () => {
+  // Verifies: SW-REQ-260822-MN8Z
   test('descriptor name case vs value case unique-cause of syntax/inherits/initial-value', () => {
     // INHERITS name folds; value `true` is case-sensitive
     const folded = parse('@property --x { syntax: "*"; INHERITS: true; }');

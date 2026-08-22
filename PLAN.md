@@ -2980,7 +2980,7 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ## Phase 121: Strict Proof 0/0 campaign (in progress)
 
-**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `d72e532`, 2026-08-22T09:08:54Z): **Errors: 0, Warnings: 7**. Spec MC/DC **222/222 uncovered=0** (1 stale EGCP, within `max_stale_witness_lines: 1`). Code MC/DC **92.2% / 93.7%** (3394/3683 D, 4845/5170 C; incomplete 289 / missing 325; 185 weak functions) vs 100% floors (not lowered). `tests_pass` all passed. Catalog 66 reqs (5 STK / 24 SYS / 37 SW+INT). KI yaml: KI-1,2,3,5,6,8–14 `status: fixed` (class-fixes currently in `src/`; **not a mandate to product-fix more holes** — we do not require fixing issues); KI-4 **withdrawn**; KI-7 **open** (`ship_with_known_issue`, documented no-fetch; extra failing e2e `proof/reproducers/KI-7-import-url-token.ts` uncommitted). Do not `proof approve` 66 reqs. Do not `proof waive`. Working tree dirty (spec domain tables, KI-7 e2e, docs); four overlay Champs still in flight. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
+**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `aa374f0`, 2026-08-22T09:48:17Z): **Errors: 2, Warnings: 17** (regressed vs `d72e532` 0e/7w because new domain reqs + restored SYS catalog files landed without grounded reviews / witnesses / docs). `nonbool_inputs_constrained` **cleared** (57/57 constrained). Spec MC/DC **343 rows / 98 uncovered / 12 stale**. Code MC/DC **still 92.2% / 93.7%** (3394/3683 D, 4845/5170 C). **47 `//mcdc:ignore:defensive` comments are not honored** (`Ignored decisions: 0`) — JS engine gap DX-042 in flight. Catalog **82** reqs. KI-7 **open** with extra failing e2e (`14c6aff`). Do not `proof approve`. Do not `proof waive`. Floors not lowered. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
 
 - [x] **acknowledge KI-7 on 5W6X approved guarantee** (`PROOF_ACTOR=agent:grok-4.6`): `approved_guarantee_ki_conflict` was 1w — SW-REQ-260821-5W6X approved while open KI-7 had no `release_disposition`. Canonical option 2: `proof known-issue edit KI-7 --set-release-disposition ship_with_known_issue`. KI-7 **stays open** (documented no-fetch; no I/O). Did not `proof waive`, class-fix fetch, or mass un-approve 66 reqs. 5W6X approval remains DEFECT-3T1G href copy (does not claim fetch); SAT TRUE is `constructed=T, fetched=F, import_url_present=T`; KI-7 tripwire remains `constructed=T, fetched=T, import_url_present=T => FALSE`. Isolated `proof audit --check approved_guarantee_ki_conflict --fail-level warn`: **0e / 0w**.
 
@@ -4508,7 +4508,8 @@ Capability-gap KI-7 stays **open**. Did **not** implement fetch. Did **not** edi
 - [x] `proof/known-issues/KI-7.yaml` `reproduction_steps` lists the extra e2e file and four shapes; `--add-command` for the extra runner. `proof evidence refresh KI-7` restamped `proof/evidence/ki-7.yaml` (`status: fail` / `known_issue_reproduced`).
 - [x] Retargeted `tests/mcdc-witness-selectors-media.test.ts` SAT FALSE defensive ignores for `serialized_as_not_all=F` (W8S1 / 5283) to the KI-5 **fixed** contract: unique-cause SAT is `serialized_as_not_all=T`; FALSE row is unreachable after class-fix. Did **not** add capability-gap or `[ki: KI-5]`. Witness file 13/13 pass.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki7-e2e.md`.
-- [x] Commit `14c6aff` (`add KI-7 e2e import shapes; retarget fixed KI-5 witnesses`). LOOP Reviewer+Grizz in flight.
+- [x] Commit `14c6aff` (`add KI-7 e2e import shapes; retarget fixed KI-5 witnesses`). LOOP Reviewer **patch is correct** / Grizz **ACCEPT** (low: HTTPS shape does not compare fixture cssRules after non-null sheet; still fails today on empty placeholder).
+- [x] Overlay log DX-041 committed `f6702bf`. Spec domain tables `5f73ceb`. Tag hygiene `67535f0` (KI-13 stale `[known-issue]` dropped; JTY2 native matrix SAT TRUE not `:defensive`).
 
 ---
 
@@ -4545,4 +4546,45 @@ Honest FRETish domain models for real CSS domains. Did **not** invent `range min
 - [x] **typed_om** range `position_arity` int 1..4. Table `position_arity_reification`: class {one_or_two, three, four} × property {object_position, background_position, perspective_origin, transform_origin} → `position_reifies` (12/12). 3-value background-only; 4-value not transform-origin z; 3-value transform-origin is z-length, not CSSPositionValue. Reqs SYS-REQ-260822-SNP4 / SW-REQ-260822-Z6J1.
 - [x] **selectors** table `disabled_element_kinds`: {form_control, first_legend, div} → `matches_disabled` (3/3; KI-10/KI-13). Mutex `disabled_enabled_exclusive`: `{matches_disabled, matches_enabled}`. Reqs SYS-REQ-260822-XDRG / SW-REQ-260822-ZN94.
 - [x] `proof validate` 74 valid / 0 errors. `variable_orphans_clean` 0. `table_complete`/`table_consistent` 8/8. `nonbool_inputs_constrained`: **49 of 16** (was **92 of 0**). Remaining 49 are code compares on bool-only cssom/cascade/tokenizer/property_registry/geometry/parser_api reqs (hex `length <= 6`, `val > 100`, DOMMatrix `i < 4`, shorthand arity) — not fake-ranged. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/spec-domain-features.md`.
+
+---
+
+## Phase: Restore missing SYS-REQ-260821 catalog files (Champ)
+
+A prior relocate moved 11 legitimate SYS requirement YAML files out of `specs/system/requirements/` into scratch. They are catalog members (STK `derived_reqs` and SW/INT `parent:` point at those IDs). Restored them; did **not** add pwned / tmp-probes / `scripts/wpt/node/core/*.js` / dual-export-nominal / `docs/proof-onboard-research`.
+
+- [x] `mv` 11 files from `/tmp/grok-goal-47e8a9f6b740/implementer/stray-sys-req/` back to `specs/system/requirements/`: SYS-REQ-260821-{03VA,2TXS,KV30,MV44,NGJH,RAAM,V7V0,X3KX,Y6R3,YMEY,ZXZW}.
+- [x] Spot-check SYS-REQ-260821-03VA: real SYS req (`id`, FRETish, `parent: STK-REQ-260821-BQKD`).
+- [x] Path-scoped `git add --` those 11 files only. Commit `aa374f0` `add missing SYS-REQ-260821 catalog files referenced by STK derived_reqs`.
+- [x] `PATH=/tmp/node-v24.11.1-linux-x64/bin:/opt/node24/bin:$PATH /tmp/proof-dx/proof validate`: **82 valid / 0 warnings / 0 errors**. `variable_orphans_clean` **0**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/restore-sys-req.md`.
+
+---
+
+## Phase: SNP4 unique-cause comment honesty (Champ)
+
+LOOP Reviewer rejected `fd10aff` because SNP4/Z6J1 unique-cause TRUE claimed `position_arity_GE_1=F, position_reifies=T` over `CSSStyleValue.parse('object-position', '')` which asserts `reifyAction=0` (`reifies=F`).
+
+- [x] Retargeted empty-string MCDC lines in `tests/mcdc-witness-domain-tables.test.ts` to `position_arity_GE_1=F, position_reifies=F` (trigger_false / throw). Unique-cause of `position_reifies=T` remains the public parse that reifies (`object-position: center` / `10px 20px`). Unique-cause of `position_reifies=F` with arity>=1 remains the invalid 3-value object-position throw. No SW sibling file. Did **not** edit `src/**`.
+
+---
+
+## Phase: DX-042 JS/TS MC/DC honors `//mcdc:ignore` (Champ-for-ReqProof)
+
+cssomnom recapture at `aa374f0` placed 47 `//mcdc:ignore:defensive` comments; `proof mcdc report` still printed **Ignored decisions: 0** (92.2%/93.7%). Python/Java honor the annotation; JS did not.
+
+- [x] Babel plugin sibling collector (`//mcdc:ignore[:category] [reason]`, same line or line above; Java regex). Attach `Ignore*` on DecisionMeta; skip wrapping ignored decisions.
+- [x] persist Merge: `IgnoredDecisionList`, `Layers.IgnoredDecisions`, `EligibleDecisions = Instrumented + Ignored`. Ignored rows are not coverage gaps/hotspots.
+- [x] Fixture `pkg/mcdccodejs/instrument/testdata/fixtures/ignore_defensive/` + persist `TestMergeRoutesIgnoredDecisions`. Clone commit `6d41cc0`. Rebuilt `/tmp/proof-dx/proof`.
+- [x] Overlay log DX-042. Did **not** edit cssomnom `src/**`. Did **not** lower floors. Did **not** `proof waive`. Skipped full remasure (orchestrator recaptures). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/proof-dx-js-ignore.md`.
+
+---
+
+## Phase: Ground spec citations and consistency for new domain reqs (Champ)
+
+Recapture at `aa374f0` **Errors: 2**: `spec_lint_spec_conformance_review_grounded` (citation drift + missing reviews on `5f73ceb`/`b7c76d3` SW FRETish) and `verify_passes` (typed_om consistency). KI-7 stays open. Did **not** mutex `{css_import_rule_constructed, external_sheet_fetched}`. Did **not** edit `src/**`. Did **not** `proof waive` / approve 66.
+
+- [x] Retarget REVIEW-19 `consumeQualifiedRule` to `src/parser.ts:905` and REVIEW-21 `consumeBlockContents` to `src/parser.ts:973` (css-syntax-3 `#consume-qualified-rule` / `#consume-block-contents`).
+- [x] Mutex `invalid_input_vs_position_reify` on SYS+SW `typed_om`: `{invalid_typed_input, position_reifies}` — css-typed-om-1 § 3.3 invalid parse cannot reify as CSSPositionValue. Pair was HGFK/7AKJ `parse_throws` vs SNP4/Z6J1 `!parse_throws`.
+- [x] Grounded `spec_conformance` REVIEW-34..41 for SW-REQ-260822-{73TM,QKE9,Z6J1,ZN94,1REE,7R6Z,MN8Z,YBF2} against .bs anchors and existing unique-cause tests (`Verifies:` comments only; no new product tests).
+- [x] Isolated `proof audit --check spec_lint_spec_conformance_review_grounded` and `verify_passes`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-close-errors-2.md`.
 

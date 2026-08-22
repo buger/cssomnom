@@ -70,6 +70,12 @@ domain:
             - {position_arity_class: four, position_property: background_position, position_reifies: true}
             - {position_arity_class: four, position_property: perspective_origin, position_reifies: true}
             - {position_arity_class: four, position_property: transform_origin, position_reifies: false}
+    mutex:
+        - name: invalid_input_vs_position_reify
+          members:
+            - invalid_typed_input
+            - position_reifies
+          reason: "css-typed-om-1 § 3.3: invalid CSSStyleValue.parse input cannot reify as CSSPositionValue"
 independence:
     declared: true
     reason: "SW typed_om pairs (parse throw vs 10px CSSUnitValue) skip as cross-component; they govern disjoint invalid vs nominal parse outputs."

@@ -1,0 +1,10 @@
+id: REVIEW-37
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T10:01:14Z"
+subject: SW-REQ-260822-ZN94
+decision: approved
+comment: 'FRETish matches_disabled | matches_enabled => !empty_match maps to matcher :disabled/:enabled calling isElementDisabled. html#selector-disabled / html#concept-element-disabled match actually-disabled form controls, fieldset, optgroup, option — a plain div[disabled] does not match, so the trigger is F and empty_match may stay T. Mutex disabled_enabled_exclusive: HTML never matches both on one element. A true matches() for either pseudo is a non-empty match.'
+citations:
+    - tests/mcdc-witness-domain-tables.test.ts:256
+    - tests/mcdc-witness-domain-tables.test.ts:241

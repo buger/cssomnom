@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Verifies: SYS-REQ-260821-8TGB, SW-REQ-260821-HNRG, SYS-REQ-260821-KV30, SW-REQ-260821-YTV6
+// Verifies: SYS-REQ-260821-8TGB, SW-REQ-260821-HNRG, SYS-REQ-260821-KV30, SW-REQ-260821-YTV6, SW-REQ-260822-YBF2
 // Leftover unique-cause for src/shorthands.ts expandFont / expandBorder / expandBox
 // (margin, padding, inset, scroll-*) / expandFlex, driven only through
 // CSSStyleDeclaration.setProperty then getPropertyValue of the longhands.
@@ -263,6 +263,7 @@ const PADDING_LOGICAL = [
 ] as const;
 
 describe('MC/DC leftover: expandBox margin/padding via setProperty (css-box-3 #propdef-margin, css-logical-1 #logical-shorthand-keyword)', () => {
+  // Verifies: SW-REQ-260822-YBF2
   test('physical 1/2/3/4-value grid unique-cause for margin and padding', () => {
     const m1 = setShorthand('margin', '10px');
     for (const name of MARGIN_PHYSICAL) assert.equal(lh(m1, name), '10px', name);

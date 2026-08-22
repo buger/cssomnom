@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Verifies: SYS-REQ-260821-SBJ7, SW-REQ-260821-7M07, SYS-REQ-260821-KV30, SW-REQ-260821-YTV6
+// Verifies: SYS-REQ-260821-SBJ7, SW-REQ-260821-7M07, SYS-REQ-260821-KV30, SW-REQ-260821-YTV6, SW-REQ-260822-7R6Z
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { tokenize } from '../src/tokenizer.ts';
@@ -45,6 +45,7 @@ function nonEof(css: string, unicodeRanges = false): Token[] {
 }
 
 describe('MC/DC leftover: unicode escapes (css-syntax-3 § 4.3.7 #consume-escaped-code-point)', () => {
+  // Verifies: SW-REQ-260822-7R6Z
   test('hex escapes of 1 and 6 digits decode; trailing whitespace is consumed', () => {
     assert.equal(first('\\61').type, 'ident');
     assert.equal(first('\\61').value, 'a');
@@ -53,6 +54,7 @@ describe('MC/DC leftover: unicode escapes (css-syntax-3 § 4.3.7 #consume-escape
     assert.equal(first('\\62\nident').value, 'bident');
   });
 
+  // Verifies: SW-REQ-260822-7R6Z
   test('hex 0, surrogates, and values above U+10FFFF become U+FFFD', () => {
     assert.equal(first('\\0').value, '\uFFFD');
     assert.equal(first('\\000000').value, '\uFFFD');
