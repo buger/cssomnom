@@ -210,7 +210,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
     //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE — src/CSSOM.ts does not import parser.ts; insertRule uses ParseHooks inversion [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     test('insertRule calls ParseHooks.consumeRule and CSSOM does not import Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
