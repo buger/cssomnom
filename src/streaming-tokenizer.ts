@@ -122,10 +122,12 @@ export class StreamingTokenizer extends AbstractTokenizer {
       text = text.slice(0, -1);
     }
 
-    // Buffer high surrogate at chunk boundary if not isLast
-    // High surrogate code units: \uD800-\uDBFF
+    // Buffer high surrogate at chunk boundary if not isLast.
+    // High surrogate code units: \uD800-\uDBFF.
+    // Prepend onto a trailing CR already buffered this call so source
+    // order stays high-then-CR (css-syntax-3 § 3.3 #input-preprocessing).
     if (!isLast && /[\uD800-\uDBFF]$/.test(text)) {
-      this.remnant += text.slice(-1);
+      this.remnant = text.slice(-1) + this.remnant;
       text = text.slice(0, -1);
     }
 
