@@ -1,0 +1,10 @@
+id: REVIEW-16
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-1E5K
+decision: approved
+comment: 'FRETish trigger package_json_exports_map_read maps to package.json exports: ''.'' → dist/index.js (compiled from src/index.ts barrel) and ''./ts'' → src/index.ts. Those annotated entry points are the dual package surfaces cssomnom and cssomnom/ts, so dual_package_exports_exist holds when the exports map is read.'
+citations:
+    - src/index.ts:17
+    - src/browser-entry.ts:3

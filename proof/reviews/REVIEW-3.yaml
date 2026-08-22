@@ -1,0 +1,10 @@
+id: REVIEW-3
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-W8S1
+decision: approved
+comment: FRETish trigger media_query_invalid is set when MediaParser.normalizeAndValidate cannot produce a query node (empty or validator.validate() falsy) and stamps invalid:true. Trigger serialize_media_query_runs maps to serializeMediaQuery; the first branch if (query.invalid) return 'not all' is the response serialized_as_not_all.
+citations:
+    - src/MediaParser.ts:45@MediaParser.parse
+    - src/MediaParser.ts:795@serializeMediaQuery

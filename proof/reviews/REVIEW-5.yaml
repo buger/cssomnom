@@ -1,0 +1,10 @@
+id: REVIEW-5
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-FWNH
+decision: approved
+comment: FRETish trigger element_and_rules_supplied & compare_cascade_declarations_runs maps to getCascadedStyle collecting matched declarations then compareCascadeDeclarations sorting by origin/importance, layer, specificity, and source order. Response cascaded_style_returned is the CSSStyleDeclaration it returns; !layout_performed holds because the path never measures boxes or runs layout, only cascade sort.
+citations:
+    - src/cascade/cascade-sorter.ts:29@compareCascadeDeclarations
+    - src/cascade/index.ts:157@getCascadedStyle

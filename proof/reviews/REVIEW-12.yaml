@@ -1,0 +1,10 @@
+id: REVIEW-12
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-2Z0N
+decision: approved
+comment: FRETish trigger parse_rule_called & trailing_garbage & ensure_eof_runs maps to parseRuleSync consuming one rule then parser.ensureEOF(). ensureEOF discards whitespace and, if nextToken is not EOF, throws DOMException SyntaxError. parseRule delegates to parseRuleSync, so leftover tokens after one rule satisfy parse_rule_throws.
+citations:
+    - src/parser-api.ts:312@parseRuleSync
+    - src/parser-api.ts:324@parseRule

@@ -1,6 +1,6 @@
 schema_version: 1
 branch: cssomnom-audit
-generated_at: "2026-08-21T22:19:22Z"
+generated_at: "2026-08-22T00:36:56Z"
 reviews:
     - requirement: INT-REQ-260821-30ZA
       artifact: src/CSSOM.ts
@@ -195,13 +195,13 @@ reviews:
     - requirement: SW-REQ-260821-7AKJ
       artifact: src/typed-om/position/position-parser.ts
       decision: no-authored-change
-      reviewer: dev
-      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      reviewer: agent:grok-4.6
+      reason: Case 4 3-value <position> (top/bottom/center then left/right + length-percentage) is a product fix within existing CSS Typed OM / css-backgrounds-3 background-position grammar; FRETish intent for 7AKJ/E5D5/HGFK/Y6R3 unchanged.
       base: HEAD~1
       requirement_fingerprint: sha256:d97450d5789718e7e1544470f029448d0708c8cfa0cd8d93cc53f413c0caf212
       approval_fingerprint: sha256:9583d763305c53319d3d34e64466dffc84d643aeb01d41f1ca9aaa3425fefd86
-      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
-      reviewed_at: "2026-08-21T22:19:22Z"
+      artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
+      reviewed_at: "2026-08-22T00:36:56Z"
     - requirement: SW-REQ-260821-7AKJ
       artifact: src/typed-om/values/CSSStyleValue.ts
       decision: no-authored-change
@@ -275,13 +275,13 @@ reviews:
     - requirement: SW-REQ-260821-E5D5
       artifact: src/typed-om/position/position-parser.ts
       decision: no-authored-change
-      reviewer: dev
-      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      reviewer: agent:grok-4.6
+      reason: Case 4 3-value <position> (top/bottom/center then left/right + length-percentage) is a product fix within existing CSS Typed OM / css-backgrounds-3 background-position grammar; FRETish intent for 7AKJ/E5D5/HGFK/Y6R3 unchanged.
       base: HEAD~1
       requirement_fingerprint: sha256:33bd150ad5781910b9f2007ee083ea3b6713334853ff3a888af6fb67fa5a722a
       approval_fingerprint: sha256:577570768e36a48f3bbc791b8936b948e82f6adb2a4ee826f07a9111107b9365
-      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
-      reviewed_at: "2026-08-21T22:19:22Z"
+      artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
+      reviewed_at: "2026-08-22T00:36:56Z"
     - requirement: SW-REQ-260821-FWNH
       artifact: src/cascade/cascade-sorter.ts
       decision: no-authored-change
@@ -485,13 +485,13 @@ reviews:
     - requirement: SYS-REQ-260821-HGFK
       artifact: src/typed-om/position/position-parser.ts
       decision: no-authored-change
-      reviewer: dev
-      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      reviewer: agent:grok-4.6
+      reason: Case 4 3-value <position> (top/bottom/center then left/right + length-percentage) is a product fix within existing CSS Typed OM / css-backgrounds-3 background-position grammar; FRETish intent for 7AKJ/E5D5/HGFK/Y6R3 unchanged.
       base: HEAD~1
       requirement_fingerprint: sha256:aa8cf7051293deb66a9de00cc8b346467f4f72ed39fe7195c57a8b2d981d1da0
       approval_fingerprint: sha256:6765df8cb6c3df2e297b44dbe7374ef186aec28d92779b7d20054b1e41fd83bf
-      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
-      reviewed_at: "2026-08-21T22:19:22Z"
+      artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
+      reviewed_at: "2026-08-22T00:36:56Z"
     - requirement: SYS-REQ-260821-NHZ8
       artifact: src/parser.ts
       decision: no-authored-change
@@ -515,13 +515,13 @@ reviews:
     - requirement: SYS-REQ-260821-Y6R3
       artifact: src/typed-om/position/position-parser.ts
       decision: no-authored-change
-      reviewer: dev
-      reason: Implements-only comments on already-shipped production functions; no product behavior change; requirement FRETish and documented design intent unchanged.
+      reviewer: agent:grok-4.6
+      reason: Case 4 3-value <position> (top/bottom/center then left/right + length-percentage) is a product fix within existing CSS Typed OM / css-backgrounds-3 background-position grammar; FRETish intent for 7AKJ/E5D5/HGFK/Y6R3 unchanged.
       base: HEAD~1
       requirement_fingerprint: sha256:8502c004fc8e1de6e0c818de1bf0d83553eda88fd78cd677d6515057df66b2b2
       approval_fingerprint: sha256:a764547c3d5c6afae73720f19088d7e1e3e0ebf35b76acf57f02f99c4517c390
-      artifact_fingerprint: sha256:4f93894eddf6f39ae70459ad82971226ce1628b31f45db70600b7dcd8fb94c84
-      reviewed_at: "2026-08-21T22:19:22Z"
+      artifact_fingerprint: sha256:19bfb3e0986b54f5303392a6da0c5e31fdf994145a6ec06be20c79bebbd62324
+      reviewed_at: "2026-08-22T00:36:56Z"
     - requirement: SYS-REQ-260821-YMEY
       artifact: src/CSSOM.ts
       decision: no-authored-change

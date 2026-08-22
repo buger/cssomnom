@@ -3358,3 +3358,15 @@ Cover leftover `src/matcher.ts` `getElementDirection` (3/6 decisions, 6/18 condi
 - [x] `tests/mcdc-branch-matcher-dir.test.ts` — `dir=ltr`/`dir=rtl`, `html` dir, invalid `dir=inherit` walks parent, `:dir(ltr)`/`:dir(rtl)` via `matches()` and `getCascadedStyle` (`z-index` 1/2; CSS `direction: ltr` does not override HTML dir). Unique-cause `dir=auto` RTL ranges `0x0590..0x08FF` / `0xFB1D..0xFDFF` / `0xFE70..0xFEFF` (inclusive bounds T, just-outside F). Unique-cause `dir=auto` LTR ranges `A-Z` / `a-z` / `0x00C0..0x02AF` with trailing Hebrew so early LTR return vs fall-through is observable. Weak-then-strong, empty/punct auto → ltr. `input type=tel` stays ltr under rtl parent; `type=text` / bare / `button type=tel` inherit (tel=F unique-cause).
 - [x] Node 24: `node --test tests/mcdc-branch-matcher-dir.test.ts` — 6 pass. `tsc --noEmit` clean. oxlint 0 warnings.
 
+---
+
+## Phase: retarget spec_conformance citations + KI-7 evidence (Champ overlay)
+
+`spec_lint_spec_conformance_review_grounded` reported 3 citation drifts after parser functions moved. `known_issue_complete` warned KI-7 stale `src/parser.ts` hash. Did **not** `proof approve`. Did **not** waive. Did **not** implement KI-7 fetch.
+
+- [x] Nearby `// Implements:` already on `src/parser.ts` file-level (L17), class `Parser` (L47), `handleImportRule` (L748 / SW-REQ-260821-5W6X), `consumeQualifiedRule` (L893 / SW-REQ-260821-9KNX), `consumeBlockContents` (L958 / SW-REQ-260821-39E0). No product change.
+- [x] Retargeted overlay citations: REVIEW-21 `src/parser.ts:958@consumeBlockContents`, REVIEW-22 `src/parser.ts:748@handleImportRule`, REVIEW-19 `src/parser.ts:893@consumeQualifiedRule`. `proof req context` blocked (`probe` missing); citations updated against current Implements lines.
+- [x] `proof evidence refresh KI-7` (Node 24). Tripwire still fails (`CSSImportRule.styleSheet` is null). Manifest `status: fail` / `known_issue_reproduced`. KI-7 remains `open`.
+- [x] `proof review impact --file src/typed-om/position/position-parser.ts` after Case 4 3-value `<position>` product change. Sidecar no-authored-change for 7AKJ/E5D5/HGFK/Y6R3.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/citation-drift.md`.
+

@@ -1,0 +1,10 @@
+id: REVIEW-7
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-7AKJ
+decision: approved
+comment: FRETish trigger parse_style_value & invalid_typed_input maps to CSSStyleValue.parse wired to parseStyleValue/parseAllStyleValues. Response parse_throws is the TypeError branches (missing args, empty/bad tokens, syntax mismatch, empty results) plus parseNumericValue rethrowing DOMException SyntaxError on invalid numeric CSS.
+citations:
+    - src/typed-om/values/CSSStyleValue.ts:47@CSSStyleValue.parse
+    - src/typed-om/values/style-value-parser.ts:375@parseStyleValue

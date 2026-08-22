@@ -1,0 +1,10 @@
+id: REVIEW-4
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-6D9T
+decision: approved
+comment: 'FRETish trigger bad_selector_supplied & parse_selector_rejects maps to SelectorParser.parse throwing SyntaxError when forgiving is false, which parseSelector catches and replaces with an empty selector-list. Response empty_match holds in matches: invalid-selector entries are skipped and a zero-length list returns false; querySelectorAll then yields [].'
+citations:
+    - src/SelectorParser.ts:135@SelectorParser
+    - src/matcher.ts:102@matches

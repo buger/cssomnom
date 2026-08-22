@@ -1,0 +1,10 @@
+id: REVIEW-30
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:55:39Z"
+subject: SW-REQ-260821-YG9J
+decision: approved
+comment: FRETish invalid_rule_consumed maps to consumeListOfRules skipping a null consumeQualifiedRule. reportError records the parse error without throwing, so parse_does_not_throw and the stylesheet object is still returned.
+citations:
+    - src/parser.ts:17
+    - src/parser.ts:288@consumeListOfRules

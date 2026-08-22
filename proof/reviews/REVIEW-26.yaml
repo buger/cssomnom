@@ -1,0 +1,11 @@
+id: REVIEW-26
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-PAKB
+decision: approved
+comment: 'FRETish trigger deviation_applies & replace_sync_parse_runs maps to CSSStyleSheet.replace versus CSSOM-1 ''in parallel'' (README Node sync-parse deviation). Response documented_deviation_honored: replace tokenizes and ParseHooks.consumeListOfRules on the JS thread inside queueMicrotask (no worker/fetch); replaceSync runs the same tokenize/consumeListOfRules path immediately.'
+citations:
+    - src/CSSOM.ts:340@replace
+    - src/CSSOM.ts:401@replaceSync
+    - src/CSSOM.ts:17@CSSStyleSheet

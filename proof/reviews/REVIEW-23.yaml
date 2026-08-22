@@ -1,0 +1,11 @@
+id: REVIEW-23
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-YG9J
+decision: approved
+comment: 'FRETish trigger ordinary_invalid_css maps to consumeListOfRules seeing consumeRule return null (invalid qualified/at-rule) or discarding CDO/CDC at top-level. Response parse_does_not_throw: the loop continues to EOF; reportError only records ParseError and does not throw; parse() still returns a CSSStyleSheet.'
+citations:
+    - src/parser.ts:288@consumeListOfRules
+    - src/parser.ts:47@Parser
+    - src/parser.ts:2012@parse

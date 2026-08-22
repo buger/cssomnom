@@ -1,0 +1,9 @@
+id: REVIEW-11
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-V5GA
+decision: approved
+comment: FRETish trigger duplicate_js_register maps to PropertyRegistry.register looking up existing by name after validate. When existing.origin==='js' and origin==='js', it throws DOMException InvalidModificationError (property already registered). CSS origin against a JS registration returns without override, so only the JS-duplicate path satisfies invalid_modification_error.
+citations:
+    - src/PropertyRegistry.ts:346@register

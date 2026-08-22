@@ -1,0 +1,10 @@
+id: REVIEW-8
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-E5D5
+decision: approved
+comment: FRETish trigger ten_px_parsed & parse_numeric_value_runs maps to parseNumericValue tokenizing a single dimension and createCSSStyleValue constructing CSSUnitValue(v.value, v.unit). For input 10px that yields CSSUnitValue value 10 unit px, satisfying css_unit_value_returned; CSSNumericValue.parse is assigned parseNumericValue.
+citations:
+    - src/typed-om/numeric/numeric-methods.ts:275@parseNumericValue
+    - src/typed-om/numeric/CSSUnitValue.ts:25@CSSUnitValue

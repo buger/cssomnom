@@ -1,0 +1,10 @@
+id: REVIEW-1
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:46:46Z"
+subject: SW-REQ-260821-7M07
+decision: approved
+comment: 'Read consumeToken: it loops consumeComments then consume(); whitespace is collapsed; EOF returns EOF token. FRETish when css_text_supplied & consume_token_loop_runs -> token_list_returned matches this loop emitting Token objects until EOF. tokenize() in tokenizer.ts drives that loop over the full input.'
+citations:
+    - src/AbstractTokenizer.ts:46@consumeToken
+    - src/tokenizer.ts:21@tokenize

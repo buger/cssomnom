@@ -1,0 +1,10 @@
+id: REVIEW-2
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-YTV6
+decision: approved
+comment: FRETish trigger tokens_from_btn_rule & serialize_token_list_runs maps to serialize() walking each ComponentValue and emitting serializeNode text. Response serialized_equals_source holds because adjacent tokens that would coalesce get an inserted /**/ via requiresTokenSeparator (css-syntax-3 § 8), so the token list of a rule like button{color:...} round-trips to source text.
+citations:
+    - src/serializer.ts:17
+    - src/serializer.ts:144@serialize

@@ -1,0 +1,10 @@
+id: REVIEW-6
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:23Z"
+subject: SW-REQ-260821-RPSA
+decision: approved
+comment: 'FRETish trigger cascade_index_exports_read maps to cascade.ts re-exporting cascade/index.ts, whose public surface is getCascadedStyle plus sorter/filter helpers. Response !get_computed_style_exported holds: no getComputedStyle binding is exported; the only getComputedStyle mention is a WPT comment inside getCascadedStyle pseudo handling.'
+citations:
+    - src/cascade.ts:20
+    - src/cascade/index.ts:157@getCascadedStyle

@@ -1,0 +1,10 @@
+id: REVIEW-29
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:55:39Z"
+subject: SW-REQ-260821-YTV6
+decision: approved
+comment: FRETish tokens_from_btn_rule and serialize_token_list_runs map to serialize() walking the token array. serialized_equals_source holds when token values are emitted in order with requiresTokenSeparator inserting comment separators where needed.
+citations:
+    - src/serializer.ts:17
+    - src/serializer.ts:144@serialize

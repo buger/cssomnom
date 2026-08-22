@@ -1,0 +1,11 @@
+id: REVIEW-27
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-TF5T
+decision: approved
+comment: FRETish trigger consume_rule_fails maps to CSSStyleSheet.insertRule _parseRule/ParseHooks.consumeRule returning null and CSSGroupingRule.insertRule _parseRuleInBlock returning null. Response syntax_error_thrown maps to throw new DOMException('Syntax error', 'SyntaxError') per CSSOM insert-a-css-rule step 5 after the IndexSizeError bounds check.
+citations:
+    - src/CSSOM.ts:444@insertRule
+    - src/CSSOM.ts:724@insertRule
+    - src/CSSOM.ts:17@CSSStyleSheet

@@ -1,0 +1,10 @@
+id: REVIEW-15
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-MZ8P
+decision: approved
+comment: 'FRETish trigger parse_stylesheet_sync_called & to_parser_rule_maps_ast maps to parseStylesheetSync: tokenize, Parser.consumeListOfRules(true), then rules.map(toParserRule). toParserRule branches AST at-rule, CSSOM at-rule, declaration, and style-rule into CSSParserAtRule/CSSParserDeclaration/CSSParserQualifiedRule, satisfying css_parser_rule_returned.'
+citations:
+    - src/parser-api.ts:189@toParserRule
+    - src/parser-api.ts:286@parseStylesheetSync

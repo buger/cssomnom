@@ -1,0 +1,10 @@
+id: REVIEW-10
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-PD6M
+decision: approved
+comment: 'FRETish trigger bad_dictionary maps to PropertyRegistry.validate (called first by register): missing name/inherits throw TypeError; non dashed-ident name, invalid syntax, missing/non-independent/mismatched initialValue throw DOMException SyntaxError. Response register_throws is those throws before registry.set.'
+citations:
+    - src/PropertyRegistry.ts:298@validate
+    - src/PropertyRegistry.ts:346@register

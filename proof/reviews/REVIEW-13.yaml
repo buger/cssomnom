@@ -1,0 +1,10 @@
+id: REVIEW-13
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-3553
+decision: approved
+comment: 'FRETish trigger css_namespace_object_bound maps to the exported CSS object literal. Response css_namespace_methods_exported holds: CSS.escape is cssEscape from css-escape.ts, CSS.supports is the supports function, CSS.registerProperty wraps PropertyRegistry.register, and parseStylesheet/parseRule/parseDeclaration/parseValue* are bound as CSS parse methods.'
+citations:
+    - src/parser-api.ts:569@CSS
+    - src/css-escape.ts:11@escape

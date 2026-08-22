@@ -1,0 +1,10 @@
+id: REVIEW-28
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:55:39Z"
+subject: SW-REQ-260821-E5D5
+decision: approved
+comment: FRETish ten_px_parsed and parse_numeric_value_runs map to parseNumericValue, which tokenizes a dimension and constructs CSSUnitValue from value and unit. css_unit_value_returned is that constructor result; CSSNumericValue.parse is assigned parseNumericValue.
+citations:
+    - src/typed-om/numeric/numeric-methods.ts:275@parseNumericValue
+    - src/typed-om/numeric/CSSUnitValue.ts:25@CSSUnitValue

@@ -1,0 +1,10 @@
+id: REVIEW-31
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:55:39Z"
+subject: SW-REQ-260821-HNRG
+decision: needs_changes
+comment: Most invalid values return before declarations change. The all shorthand deletes the existing all entry before expandAll; if expansion fails the prior all declaration is already gone. Formula set_property_ignored is therefore not true for a failed all set. Decision needs_changes.
+citations:
+    - src/CSSStyleDeclaration.ts:468@setProperty
+    - src/CSSStyleDeclaration.ts:109@CSSStyleDeclaration

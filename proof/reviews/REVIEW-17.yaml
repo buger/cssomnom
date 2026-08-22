@@ -1,0 +1,10 @@
+id: REVIEW-17
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-37RC
+decision: approved
+comment: FRETish trigger api_surface_snapshot_compared maps to tests/api-surface.test.ts snapshotting Object.keys of the src/index.ts public barrel (and Parser/CSS methods). Response !export_changed | api_surface_test_updated holds because adding/removing an export from that annotated surface fails the snapshot unless the api-surface test snapshot is updated.
+citations:
+    - src/index.ts:17
+    - src/browser-entry.ts:3

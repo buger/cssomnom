@@ -1,0 +1,11 @@
+id: REVIEW-20
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-HHVE
+decision: approved
+comment: FRETish trigger css_text_supplied maps to parse(css) tokenizing the string and constructing Parser. Response consume_stylesheet_completed maps to parseStyleSheet running consumeListOfRules(true) per CSS Syntax-3 parse-a-stylesheet / consume stylesheet contents, then CSSStyleSheet.createInternal(rules), so consume-a-stylesheet finishes as a CSSStyleSheet.
+citations:
+    - src/parser.ts:174@parseStyleSheet
+    - src/parser.ts:2012@parse
+    - src/parser.ts:47@Parser

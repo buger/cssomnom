@@ -1,0 +1,12 @@
+id: REVIEW-18
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-QV2H
+decision: approved
+comment: 'FRETish trigger chunk_appended maps to StreamingTokenizer.appendChunk: preprocessChunk, push code points, tokenizeLoop calling AbstractTokenizer.consumeToken until NeedMoreDataError rewinds an incomplete token or EOF is queued. Response tokens_available_after_get_tokens maps to getTokens copying and clearing this.tokens so completed tokens are drained after the append/get pair; tokenize() covers the same consumeToken loop over a full string.'
+citations:
+    - src/AbstractTokenizer.ts:46@consumeToken
+    - src/tokenizer.ts:21@tokenize
+    - src/streaming-tokenizer.ts:63@appendChunk
+    - src/streaming-tokenizer.ts:95@getTokens

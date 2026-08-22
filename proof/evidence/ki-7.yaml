@@ -7,13 +7,13 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-21T22:19:35Z"
+executed_at: "2026-08-22T00:37:10Z"
 input_set:
     - proof/reproducers/KI-7-import-stylesheet-null.ts
     - src/parser.ts
     - parser.ts
 freshness_hashes:
     proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:7b9554a00b0a13881c95e4b541cc651357a181acb759011a767c6211bb900cb1
-    src/parser.ts: sha256:a22fd5d66187cd3358fc25790e005d4711c3d3189ade1132dd01b37494103262
+    src/parser.ts: sha256:9e972758e53753f3599e98d755766e22ff7d14a4d47ac86f5aab7d0ce4476d71
 known_issues:
     - KI-7

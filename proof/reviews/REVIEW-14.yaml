@@ -1,0 +1,9 @@
+id: REVIEW-14
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:51:39Z"
+subject: SW-REQ-260821-HW77
+decision: approved
+comment: 'FRETish trigger supports_called & evaluate_supports_condition_runs maps to supports(): two-arg form calls evaluateSupportsDeclaration; one-arg form tokenizes and evalSupportsConditionValues. Both helpers return true/false (unsupported, empty, bad tokens → false) and never throw, so boolean_returned holds and !supports_throws holds.'
+citations:
+    - src/parser-api.ts:543@supports

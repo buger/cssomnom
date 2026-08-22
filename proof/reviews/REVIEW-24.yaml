@@ -1,0 +1,10 @@
+id: REVIEW-24
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-6951
+decision: approved
+comment: FRETish trigger css_rules_getter_runs & !origin_clean maps to CSSStyleSheet.cssRules reading _originCleanFlag (createInternal can set it false). Response security_error_thrown maps to throw new DOMException('The stylesheet is not origin-clean', 'SecurityError') before returning _cssRules, matching CSSOM origin-clean access.
+citations:
+    - src/CSSOM.ts:239@cssRules
+    - src/CSSOM.ts:17@CSSStyleSheet

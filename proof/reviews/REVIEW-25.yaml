@@ -1,0 +1,11 @@
+id: REVIEW-25
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-21T13:53:27Z"
+subject: SW-REQ-260821-HNRG
+decision: needs_changes
+comment: 'FRETish trigger value_validation_fails maps to setProperty early-returns for unsupported names, non-important priority, bad-string/bad-url, invalid dashed ident, failed custom-property/validatePropertyValue, and shorthand expand null; those paths do not write _declarations. Residual hole vs always declaration_unchanged: property===''all'' deletes any existing ''all'' decl before expandAll, so if expandAll returns null the prior ''all'' is already gone.'
+citations:
+    - src/CSSStyleDeclaration.ts:467@setProperty
+    - src/CSSStyleDeclaration.ts:109@CSSStyleDeclaration
+    - src/shorthands.ts:17@SHORTHANDS
