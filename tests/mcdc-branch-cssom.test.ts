@@ -19,6 +19,9 @@ import '../src/parser.ts';
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse, parseRule } from '../src/parser.ts';
+import { ParseHooks } from '../src/parse-hooks.ts';
+import { tokenize } from '../src/tokenizer.ts';
+import type { Rule } from '../src/types.ts';
 import {
   CSSStyleSheet,
   CSSStyleRule,
@@ -41,9 +44,19 @@ import {
   CSSFontFeatureValuesMap,
   CSSCustomMediaRule,
   CSSMarginRule,
+  CSSSupportsRule,
+  CSSNestedDeclarations,
   StyleSheetList,
   MediaList,
 } from '../src/CSSOM.ts';
+
+function astAtRule(name: string): Rule {
+  return { type: 'at-rule', name, prelude: [] } as unknown as Rule;
+}
+
+function astStyleRule(): Rule {
+  return { type: 'style-rule', selectorText: '.a' } as unknown as Rule;
+}
 
 describe('MC/DC branch: StyleSheetList, MediaList, StyleSheet', () => {
   test('StyleSheetList item, length, and iterator', () => {
@@ -351,3 +364,345 @@ describe('MC/DC branch: remaining CSSOM rule types and lists', () => {
     assert.equal(frozen.item(1)?.type, 1);
   });
 });
+
+describe('MC/DC leftover: CSSStyleSheet insertRule unique-cause', () => {
+  test('disallow-modification and SyntaxError from consumeRule null', () => {
+    const blocked = new CSSStyleSheet();
+    (blocked as unknown as { _disallowModificationFlag: boolean })._disallowModificationFlag = true;
+    assert.throws(() => blocked.insertRule('div { color: red; }', 0), { name: 'NotAllowedError' });
+
+    const sheet = new CSSStyleSheet();
+    assert.throws(() => sheet.insertRule('!!!not-a-rule', 0), { name: 'SyntaxError' });
+    assert.throws(() => sheet.insertRule('', 0), { name: 'SyntaxError' });
+    const idx = sheet.insertRule('div { color: red; }');
+    assert.equal(idx, 0);
+    assert.equal((sheet.cssRules[0] as CSSStyleRule).selectorText, 'div');
+  });
+
+  test('@import after a non-import and @namespace before a remaining @import', () => {
+    const withNs = parse('@import "a.css"; @namespace ns url("http://n");');
+    assert.throws(() => withNs.insertRule('@import "b.css";', 2), { name: 'HierarchyRequestError' });
+
+    const importsOnly = parse('@import "a.css"; @import "b.css";');
+    assert.throws(() => importsOnly.insertRule('@namespace x url("http://x");', 0), { name: 'HierarchyRequestError' });
+    const nsIdx = importsOnly.insertRule('@namespace x url("http://x");', 2);
+    assert.equal(nsIdx, 2);
+    assert.ok(importsOnly.cssRules[2] instanceof CSSNamespaceRule);
+  });
+
+  test('regular rule at a @namespace index is HierarchyRequestError', () => {
+    const sheet = parse('@import "a.css"; @namespace ns url("http://n"); .a { color: red; }');
+    assert.throws(() => sheet.insertRule('.b { color: blue; }', 1), { name: 'HierarchyRequestError' });
+    const idx = sheet.insertRule('.c { color: green; }', 3);
+    assert.equal(idx, 3);
+    assert.equal((sheet.cssRules[3] as CSSStyleRule).selectorText, '.c');
+  });
+
+  test('AST duck-typed @import/@namespace use the string-type helpers', () => {
+    const sheet = CSSStyleSheet.createInternal([], (text: string) => {
+      if (text.includes('@import')) return astAtRule('import');
+      if (text.includes('@namespace')) return astAtRule('namespace');
+      return astStyleRule();
+    });
+    assert.equal(sheet.insertRule('@import "x.css";', 0), 0);
+    assert.equal(sheet.insertRule('@namespace x url("http://x");', 1), 1);
+    assert.throws(() => sheet.insertRule('@import "y.css";', 2), { name: 'HierarchyRequestError' });
+    assert.throws(() => sheet.insertRule('.a {}', 0), { name: 'HierarchyRequestError' });
+    assert.equal(sheet.cssRules.length, 2);
+  });
+
+  test('insertRule of @property registers then stays on the sheet', () => {
+    const sheet = parse('.keep { color: red; }');
+    const idx = sheet.insertRule('@property --mcdc-sheet { syntax: "*"; inherits: false; initial-value: 0; }', 0);
+    assert.equal(idx, 0);
+    assert.ok(sheet.cssRules[0] instanceof CSSPropertyRule);
+    assert.equal((sheet.cssRules[0] as CSSPropertyRule).name, '--mcdc-sheet');
+  });
+});
+
+describe('MC/DC leftover: CSSStyleSheet deleteRule unique-cause', () => {
+  test('disallow-modification and IndexSizeError bounds', () => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync('.a { color: red; } .b { color: blue; }');
+    (sheet as unknown as { _disallowModificationFlag: boolean })._disallowModificationFlag = true;
+    assert.throws(() => sheet.deleteRule(0), { name: 'NotAllowedError' });
+    (sheet as unknown as { _disallowModificationFlag: boolean })._disallowModificationFlag = false;
+
+    assert.throws(() => sheet.deleteRule(-1), { name: 'IndexSizeError' });
+    assert.throws(() => sheet.deleteRule(9), { name: 'IndexSizeError' });
+    sheet.deleteRule(0);
+    assert.equal(sheet.cssRules.length, 1);
+    assert.equal((sheet.cssRules[0] as CSSStyleRule).selectorText, '.b');
+  });
+
+  test('deleting @namespace is allowed when only imports/namespaces remain', () => {
+    const sheet = parse('@import "a.css"; @namespace ns url("http://n");');
+    sheet.deleteRule(1);
+    assert.equal(sheet.cssRules.length, 1);
+    assert.ok(sheet.cssRules[0] instanceof CSSImportRule);
+    sheet.deleteRule(0);
+    assert.equal(sheet.cssRules.length, 0);
+  });
+
+  test('deleteRule of a failed @property register still removes the rule', () => {
+    const bad = new CSSPropertyRule('--', 'not-a-syntax', false, null);
+    const warn = console.warn;
+    console.warn = () => {};
+    try {
+      const sheet = CSSStyleSheet.createInternal([bad], () => bad);
+      assert.equal(sheet.cssRules.length, 1);
+      sheet.deleteRule(0);
+      assert.equal(sheet.cssRules.length, 0);
+    } finally {
+      console.warn = warn;
+    }
+  });
+});
+
+describe('MC/DC leftover: replace / replaceSync unique-cause', () => {
+  test('disallow-modification rejects replace and replaceSync with NotAllowedError', async () => {
+    const sheet = new CSSStyleSheet();
+    (sheet as unknown as { _disallowModificationFlag: boolean })._disallowModificationFlag = true;
+    assert.throws(() => sheet.replaceSync('div { color: red; }'), { name: 'NotAllowedError' });
+    await assert.rejects(() => sheet.replace('div { color: red; }'), { name: 'NotAllowedError' });
+  });
+
+  test('replace rejects when replaceSync throws from consumeListOfRules', async () => {
+    const sheet = new CSSStyleSheet();
+    const original = ParseHooks.consumeListOfRules;
+    ParseHooks.consumeListOfRules = () => {
+      throw new Error('replace-sync-parse-boom');
+    };
+    try {
+      await assert.rejects(() => sheet.replace('div { color: red; }'), { message: 'replace-sync-parse-boom' });
+      assert.equal(sheet.cssRules.length, 0);
+    } finally {
+      ParseHooks.consumeListOfRules = original;
+    }
+  });
+
+  test('replaceSync strips @import-only input and clears parentStyleSheet on replaced rules', () => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync('@property --mcdc-gone { syntax: "*"; inherits: false; initial-value: 0; } .a { color: red; }');
+    assert.equal(sheet.cssRules.length, 2);
+    const previous = sheet.cssRules[1];
+    sheet.replaceSync('@import "nope.css";');
+    assert.equal(sheet.cssRules.length, 0);
+    assert.equal(previous.parentStyleSheet, null);
+    assert.equal(previous.parentRule, null);
+
+    sheet.replaceSync('.b { color: blue; }');
+    assert.equal(sheet.cssRules.length, 1);
+    assert.equal((sheet.cssRules[0] as CSSStyleRule).parentStyleSheet, sheet);
+  });
+});
+
+describe('MC/DC leftover: cssRules origin-clean unique-cause', () => {
+  test('createInternal default origin-clean allows cssRules, insertRule, deleteRule', () => {
+    const clean = CSSStyleSheet.createInternal([], parseRule);
+    assert.equal(clean.cssRules.length, 0);
+    assert.equal(clean.rules.length, 0);
+    const idx = clean.insertRule('.a { color: red; }', 0);
+    assert.equal(idx, 0);
+    assert.equal(clean.cssRules[0] instanceof CSSStyleRule, true);
+    clean.deleteRule(0);
+    assert.equal(clean.cssRules.length, 0);
+  });
+
+  test('origin-clean false also throws SecurityError via the rules alias', () => {
+    const tainted = CSSStyleSheet.createInternal([], parseRule, false);
+    assert.throws(() => tainted.rules, { name: 'SecurityError' });
+    assert.throws(() => tainted.insertRule('.a {}', 0), { name: 'SecurityError' });
+    assert.throws(() => tainted.deleteRule(0), { name: 'SecurityError' });
+  });
+});
+
+describe('MC/DC leftover: CSSMediaRule insertRule / deleteRule / cssText', () => {
+  test('empty vs filled cssText, empty condition, and cssText setter no-op', () => {
+    const emptyMedia = parse('@media {}').cssRules[0] as CSSMediaRule;
+    assert.equal(emptyMedia.type, 4);
+    assert.equal(emptyMedia.conditionText, '');
+    assert.equal(emptyMedia.media.mediaText, '');
+    assert.equal(emptyMedia.cssText, '@media {\n}');
+
+    const namedEmpty = parse('@media all {}').cssRules[0] as CSSMediaRule;
+    assert.equal(namedEmpty.cssText, '@media all {\n}');
+
+    const filled = parse('@media screen { .a { color: red; } }').cssRules[0] as CSSMediaRule;
+    const before = filled.cssText;
+    filled.cssText = '@media print { .b { color: blue; } }';
+    assert.equal(filled.cssText, before);
+    filled.media.mediaText = 'print';
+    assert.equal(filled.conditionText, 'print');
+    assert.equal(filled.cssText.startsWith('@media print'), true);
+  });
+
+  test('top-level media rejects @namespace, negative index, and bare declarations', () => {
+    const sheet = parse('@media all { .a { color: red; } }');
+    const media = sheet.cssRules[0] as CSSMediaRule;
+    assert.throws(() => media.insertRule('@namespace x url("http://x");', 0), { name: 'HierarchyRequestError' });
+    assert.throws(() => media.insertRule('.b {}', -1), { name: 'IndexSizeError' });
+    assert.throws(() => media.insertRule('!!!', 0), { name: 'SyntaxError' });
+    assert.throws(() => media.insertRule('', 0), { name: 'SyntaxError' });
+    assert.throws(() => media.insertRule('color: red;', 0), { name: 'SyntaxError' });
+    const idx = media.insertRule('.b { color: blue; }', 1);
+    assert.equal(idx, 1);
+    assert.throws(() => media.deleteRule(-1), { name: 'IndexSizeError' });
+    assert.throws(() => media.deleteRule(9), { name: 'IndexSizeError' });
+    media.deleteRule(1);
+    assert.equal(media.cssRules.length, 1);
+  });
+
+  test('nested media isNested via parentRule; grouping names are insertable', () => {
+    const sheet = parse('.host { @media all {} }');
+    const host = sheet.cssRules[0] as CSSStyleRule;
+    const media = host.cssRules[0] as CSSMediaRule;
+    assert.equal(media.parentRule, host);
+    assert.throws(
+      () => media.insertRule('@font-face { font-family: X; src: url(x); }', 0),
+      { name: 'HierarchyRequestError' },
+    );
+    assert.equal(media.insertRule('@media print { .c { color: teal; } }', 0), 0);
+    assert.ok(media.cssRules[0] instanceof CSSMediaRule);
+    assert.equal(host.insertRule('@supports (display: grid) { .d {} }', 1), 1);
+    assert.ok(host.cssRules[1] instanceof CSSSupportsRule);
+    assert.equal(host.insertRule('@layer nest { .e {} }', 2), 2);
+    assert.ok(host.cssRules[2] instanceof CSSLayerBlockRule);
+    assert.equal(host.insertRule('@container (min-width: 1px) { .f {} }', 3), 3);
+    assert.ok(host.cssRules[3] instanceof CSSContainerRule);
+    assert.equal(host.insertRule('@scope (div) { .g {} }', 4), 4);
+    assert.ok(host.cssRules[4] instanceof CSSScopeRule);
+    assert.equal(host.insertRule('@starting-style { .h { opacity: 0; } }', 5), 5);
+    assert.ok(host.cssRules[5] instanceof CSSStartingStyleRule);
+  });
+
+  test('nested declarations: custom property ok, unsupported name SyntaxError', () => {
+    const sheet = parse('.host { color: red; }');
+    const host = sheet.cssRules[0] as CSSStyleRule;
+    assert.throws(() => host.insertRule('not-a-real-property: 1px;', 0), { name: 'SyntaxError' });
+    const idx = host.insertRule('--mcdc-nested: 1;', 0);
+    assert.equal(idx, 0);
+    assert.ok(host.cssRules[0] instanceof CSSNestedDeclarations);
+    assert.equal((host.cssRules[0] as CSSNestedDeclarations).style.getPropertyValue('--mcdc-nested'), '1');
+  });
+
+  test('constructed CSSMediaRule: null parse result and nested-declarations into top-level', () => {
+    const nullParser = new CSSMediaRule('all', [], () => null as unknown as Rule);
+    assert.throws(() => nullParser.insertRule('.a { color: red; }', 0), { name: 'SyntaxError' });
+
+    const decls = ParseHooks.parseStyleAttribute(tokenize('color: red')).declarations;
+    const nested = new CSSNestedDeclarations(decls);
+    const top = new CSSMediaRule('all', [], () => nested);
+    assert.throws(() => top.insertRule('color: red;', 0), { name: 'SyntaxError' });
+  });
+
+  test('grouping parseRule AST name-list unique-cause without instanceof CSSGroupingRule', () => {
+    const sheet = parse('.host {}');
+    const host = sheet.cssRules[0] as CSSStyleRule;
+    const original = ParseHooks.parseRule;
+    ParseHooks.parseRule = () => astAtRule('media');
+    try {
+      const idx = host.insertRule('@media all { .c { color: navy; } }', 0);
+      assert.equal(idx, 0);
+      assert.ok(host.cssRules[0] instanceof CSSMediaRule);
+    } finally {
+      ParseHooks.parseRule = original;
+    }
+  });
+});
+
+describe('MC/DC leftover: CSSKeyframesRule find/append/delete / cssText', () => {
+  test('length, proxy leftover keys, type, and cssText for remaining disallowed names', () => {
+    const sheet = parse('@keyframes move { from { color: red; } to { color: blue; } }');
+    const kf = sheet.cssRules[0] as CSSKeyframesRule;
+    assert.equal(kf.type, 7);
+    assert.equal(kf.length, 2);
+    assert.ok(kf[0] instanceof CSSKeyframeRule);
+    assert.equal(kf[9], undefined);
+    assert.equal(kf[-1], undefined);
+    assert.equal(kf['1.5'], undefined);
+    assert.equal(kf.name, 'move');
+    assert.equal(kf.cssText.includes('@keyframes move'), true);
+
+    const before = kf.cssText;
+    kf.cssText = '@keyframes other { from { color: green; } }';
+    assert.equal(kf.cssText, before);
+    assert.equal(kf.name, 'move');
+
+    for (const name of ['initial', 'inherit', 'unset', 'revert', 'default', 'NONE']) {
+      const quoted = new CSSKeyframesRule(name, []);
+      assert.equal(quoted.cssText, `@keyframes ${JSON.stringify(name)} { }`);
+    }
+    assert.equal(new CSSKeyframesRule('spin', []).cssText, '@keyframes spin { }');
+  });
+
+  test('findRule last-match, normalized miss, and invalid selector catch', () => {
+    const sheet = parse('@keyframes move { from { color: red; } from { color: blue; } 50% { color: green; } }');
+    const kf = sheet.cssRules[0] as CSSKeyframesRule;
+    assert.equal(kf.findRule('0%')?.style.getPropertyValue('color'), 'blue');
+    assert.equal(kf.findRule('FROM')?.style.getPropertyValue('color'), 'blue');
+    assert.equal(kf.findRule('75%'), null);
+    assert.equal(kf.findRule('nope'), null);
+    assert.equal(kf.findRule('110%'), null);
+    assert.equal(kf.findRule('%'), null);
+  });
+
+  test('appendRule unique-cause missing braces, inverted braces, and comma selectors', () => {
+    const sheet = parse('@keyframes move { from { color: red; } }');
+    const kf = sheet.cssRules[0] as CSSKeyframesRule;
+    kf.appendRule('to { color: blue');
+    kf.appendRule('} to { color: green; }');
+    kf.appendRule('from color: x; }');
+    kf.appendRule('110% { color: black; }');
+    kf.appendRule('% { color: black; }');
+    kf.appendRule('not-a-selector { color: black; }');
+    assert.equal(kf.length, 1);
+    kf.appendRule('50% { color: navy; }');
+    kf.appendRule('from, to { color: pink; }');
+    assert.equal(kf.length, 3);
+    assert.ok(kf.findRule('50%'));
+    assert.equal(kf.findRule('from, to')?.keyText, '0%, 100%');
+  });
+
+  test('deleteRule last duplicate, normalized miss, and invalid catch', () => {
+    const sheet = parse('@keyframes move { from { color: red; } from { color: blue; } }');
+    const kf = sheet.cssRules[0] as CSSKeyframesRule;
+    kf.deleteRule('75%');
+    kf.deleteRule('nope');
+    kf.deleteRule('from');
+    assert.equal(kf.length, 1);
+    assert.equal((kf.cssRules[0] as CSSKeyframeRule).style.getPropertyValue('color'), 'red');
+  });
+
+  test('CSSKeyframeRule keyText range, comma list, empty body, style and cssText setter', () => {
+    const frame = new CSSKeyframeRule('from, to', []);
+    assert.equal(frame.keyText, '0%, 100%');
+    assert.equal(frame.type, 8);
+    assert.equal(frame.cssText, '0%, 100% {}');
+    frame.style = 'opacity: 0';
+    assert.equal(frame.style.getPropertyValue('opacity'), '0');
+    const textBefore = frame.cssText;
+    frame.cssText = 'to { color: blue; }';
+    assert.equal(frame.cssText, textBefore);
+    assert.equal(frame.keyText, '0%, 100%');
+
+    const live = parse('@keyframes move { from { color: red; } }').cssRules[0] as CSSKeyframesRule;
+    const k = live.findRule('from')!;
+    assert.throws(() => {
+      k.keyText = '-10%';
+    }, { name: 'SyntaxError' });
+    assert.throws(() => {
+      k.keyText = '110%';
+    }, { name: 'SyntaxError' });
+    assert.throws(() => {
+      k.keyText = '%';
+    }, { name: 'SyntaxError' });
+    assert.throws(() => {
+      k.keyText = 'NaN%';
+    }, { name: 'SyntaxError' });
+    assert.equal(k.keyText, '0%');
+    k.keyText = '40%';
+    assert.equal(k.keyText, '40%');
+  });
+});
+
