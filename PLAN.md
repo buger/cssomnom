@@ -4010,4 +4010,24 @@ Product class-fix after `fe7defa` restore. Shared `src/CSSOM.ts` / `src/parser.t
 - [x] GREEN twice (exit 0) on all three overlay tripwires. Product `tests/ki-2-8-12-class-fix.test.ts` 8 pass.
 - [x] KI-2/8/12 `status: fixed`. Class-closure `DEFECT-260822-X46W` (KI-2), `DEFECT-260822-3T1G` (KI-8), `DEFECT-260822-ZSWZ` (KI-12). `DEFECT-260821-QHWP` kept (stale rolled-back paperwork).
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-2-8-12.md`.
+---
 
+## Phase: Proof recapture after KI-1..14 class-fixes (Champ)
+
+Proof recapture only. Did **not** edit `src/**`. Did **not** `git reset` / restore / checkout --force / `git add .`. Did **not** `proof approve` / `waive`. Node v24.11.1; proof `/tmp/proof-dx/proof`.
+
+- [x] Overlay KI reproducers twice: KI-1,2,3,5,6,8,9,10,11,12,13,14 exit **0/0**; KI-4 withdrawn exit **0/0**; KI-7 open exit **1/1** (documented no-fetch).
+- [x] `proof audit --check tests_pass --check code_mcdc_measure --check code_mcdc_coverage --fail-level warn`: **Errors: 0  Warnings: 1**. Code MC/DC **88.0% / 90.0%** (3242/3683 D, 4653/5170 C) vs 100% floors. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-code-mcdc.log`.
+- [x] `proof audit --check mcdc_coverage --fail-level warn`: **Errors: 0  Warnings: 0**. Spec MC/DC 222/222 uncovered=0; 1 stale witness SYS-REQ-260821-EGCP. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-mcdc-spec.log`.
+- [x] Full `proof audit --fail-level warn`: **Errors: 2  Warnings: 12**. Errors: `spec_lint_spec_conformance_review_grounded` (ARC1/HNRG citation drift), `mcdc_known_issue_disposition_stale` (6 fixed-KI `[known-issue]` leftovers). Warning IDs not waived: `change_record_lands`, `spec_lint_status_vs_review`, `nonbool_inputs_constrained`, `authored_delta_expected`, `property_based_test_coverage`, `suspect_clean`, `problem_reports_reviewed`, `code_mcdc_coverage`, `under_modeled_requirements_clean`, `known_issue_complete`, `known_issue_sibling_disposition`, `process_checklist`. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-now.md`.
+
+---
+
+## Phase: close proof-audit Errors (Champ)
+
+Close the 2 Errors from `proof audit --fail-level warn` (HEAD `b055246` + KI-6/14). Did **not** `git reset` / restore / checkout --force / `git add .`. Did **not** reopen KIs. KI-7 keeps `[known-issue]`. Did **not** change product logic. Node v24.11.1; proof `/tmp/proof-dx/proof`.
+
+- [x] **Citation drift**: `SW-REQ-260821-ARC1` REVIEW-9 cited `src/parser.ts:676@handlePropertyRule` (outside 10-above/300-below of Implements at 692). Recorded REVIEW-32 `src/parser.ts:693@handlePropertyRule`. `SW-REQ-260821-HNRG` REVIEW-31 cited `src/CSSStyleDeclaration.ts:468@setProperty` with annotations only at 17/109. Added `// Implements:` on `setProperty` (line 466) and recorded REVIEW-33 `src/CSSStyleDeclaration.ts:468@setProperty`. CLI `proof review record`, not stealth YAML.
+- [x] **Stale KI MCDC**: 6 KI-gated `// MCDC [known-issue]` reachability witnesses on fixed bugs. Retargeted overlay SAT TRUE unique-cause of the **fixed** behavior (KI-2/3 pattern): KI-14/KI-6 `INT-REQ-260821-WTPD`; KI-1 `SW-REQ-260821-HNRG` + `SYS-REQ-260821-8TGB`; KI-5 `SW-REQ-260821-W8S1` + `SYS-REQ-260821-5283`. KI-7 untouched.
+- [x] `proof audit --check spec_lint_spec_conformance_review_grounded --check mcdc_known_issue_disposition_stale --fail-level warn`: **Errors: 0  Warnings: 0**.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-close-errors.md`.

@@ -463,6 +463,7 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
     return (winner && winner.important) ? 'important' : '';
   }
 
+  // Implements: SYS-REQ-260821-8TGB, SW-REQ-260821-HNRG
   // cssom-1 § 6.7.1 #the-cssstyledeclaration-interface
   setProperty(property: string, value: string | null, priority: string = '', notify: boolean = true) {
     // 1. If the readonly flag is set, then throw a NoModificationAllowedError exception.

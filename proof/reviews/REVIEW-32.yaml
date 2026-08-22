@@ -1,0 +1,10 @@
+id: REVIEW-32
+kind: spec_conformance
+reviewer: agent:grok-4.6
+reviewed_at: "2026-08-22T06:21:54Z"
+subject: SW-REQ-260821-ARC1
+decision: approved
+comment: FRETish trigger bad_at_property & at_property_validate_fails maps to handlePropertyRule (parser.ts:693) calling PropertyRegistry.validate on @property descriptors. On throw, the catch at the Implements annotation returns null so the at-rule is dropped (property_rule_dropped); missing name/syntax/inherits also return null before validate.
+citations:
+    - src/parser.ts:693@handlePropertyRule
+    - src/PropertyRegistry.ts:298@validate

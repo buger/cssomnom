@@ -83,7 +83,7 @@ function ki14Contract(): { setupOk: boolean; holds: boolean; message: string } {
 
 // Reproduces: KI-14
 // Verifies: INT-REQ-260821-WTPD
-// MCDC INT-REQ-260821-WTPD: parse_stylesheet_sync_called=T, parser_ast_adapted=F => FALSE [known-issue] [ki: KI-14]
+// MCDC INT-REQ-260821-WTPD: parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE
 test('parseStylesheetSync keyframe child is a qualified rule, not unknown at-rule', () => {
   const outcome = ki14Contract();
   assert.equal(outcome.setupOk, true, outcome.message);
