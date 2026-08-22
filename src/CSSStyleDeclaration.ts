@@ -508,11 +508,6 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
       return;
     }
 
-    if (property === 'all') {
-      this._declarations = this._declarations.filter(d => d.name !== 'all');
-      this._declMap.delete('all');
-    }
-
     const shorthand = SHORTHANDS[property];
     if (shorthand) {
       const compVals = ParseHooks.parseComponentValues(tokens);
@@ -520,6 +515,15 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
       if (!hasVar) {
         const expanded = shorthand.expand(compVals);
         if (expanded) {
+          // cssom-1 § 6.7.1 #set-a-css-declaration: a null parse of `value` returns
+          // without mutating declarations. css-cascade-5 § 6.2 #all-shorthand: `all`
+          // only accepts CSS-wide keywords, so expandAll returning null is that no-op.
+          // Drop a stored `all` (var/env) only after expand succeeds; deleting first
+          // made a later invalid setProperty empty cssText.
+          if (property === 'all') {
+            this._declarations = this._declarations.filter(d => d.name !== 'all');
+            this._declMap.delete('all');
+          }
           for (const [lh, val] of Object.entries(expanded)) {
             this.setProperty(lh, serialize(val), normalizedPriority, false);
           }

@@ -1,0 +1,82 @@
+schema_version: 1
+id: DEFECT-260822-NQVB
+title: 'setProperty(''all'') mutate-before-validate dropped stored all: var(--x) on failed expand'
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: shorthand_mutate_before_validate
+description: |
+    CSSStyleDeclaration.setProperty deleted any stored all declaration before expandAll.
+    all: var(--x) stores all itself; a later invalid setProperty then emptied cssText.
+    Product fix: delete stored all only after expandAll succeeds. Failed expand is a no-op
+    (cssom-1 § 6.7.1 #set-a-css-declaration null parse returns; css-cascade-5 § 6.2
+    #all-shorthand accepts only CSS-wide keywords). Sibling SHORTHANDS already
+    expand-then-return without pre-deleting the shorthand name. env() stored-all is the
+    same path (hasVar includes env()). DEFECT-260821-XZAS is stale class-closure
+    paperwork from a rolled-back class-fix — kept; this report is the landing closure.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: HNRG/8TGB named the no-op guarantee; the all+var partition was unwitnessed until KI-1.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    affected_code:
+        - src/CSSStyleDeclaration.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:01:51Z"
+    requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    evidence:
+        verified_by:
+            - tests/cssom-all-shorthand.test.ts
+            - proof/reproducers/KI-1-setproperty-all.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-HNRG
+              witness: "declaration_unchanged=T, value_validation_fails=T => TRUE"
+            - requirement: SYS-REQ-260821-8TGB
+              witness: "invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE"
+affects:
+    - SW-REQ-260821-HNRG
+    - SYS-REQ-260821-8TGB
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-HNRG
+        - SYS-REQ-260821-8TGB
+    added_obligations:
+        - requirement: SW-REQ-260821-HNRG
+          obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/CSSStyleDeclaration.ts
+            - src/shorthands.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            Other SHORTHANDS expand then return on failed expand without pre-deleting
+            the shorthand name. cssText setter clears the declaration list first (full
+            replace), so it is not a mutate-before-validate sibling. expandAll itself
+            only returns longhands for CSS-wide keywords / var; no pre-delete there.
+    regression_tests:
+        - tests/cssom-all-shorthand.test.ts
+        - proof/reproducers/KI-1-setproperty-all.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-HNRG
+          witness: "declaration_unchanged=T, value_validation_fails=T => TRUE"
+        - requirement: SYS-REQ-260821-8TGB
+          witness: "invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE"
+history:
+    - at: "2026-08-22T06:01:51Z"
+      by: agent:grok-4.6
+      action: created
+      detail: Class-closure after the product fix for KI-1 (delete-after-expand).

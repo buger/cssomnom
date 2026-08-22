@@ -1,7 +1,7 @@
 id: KI-1
 title: setProperty('all') deletes existing all before expandAll; failed expand drops prior all
 description: |
-    CSSStyleDeclaration.setProperty deletes any existing all declaration before expandAll. A successful all:unset expands to longhands and is observably a no-op on a later failed expand. The live hole is when all itself is stored (all: var(--x) or env()): a later invalid setProperty drops cssText from "all: var(--x);" to empty. Overlay audit cannot change product code. DEFECT-260821-XZAS is stale class-closure paperwork from a rolled-back class-fix — do not delete.
+    CSSStyleDeclaration.setProperty deleted any existing all declaration before expandAll. A successful all:unset expands to longhands and is observably a no-op on a later failed expand. The live hole was when all itself is stored (all: var(--x) or env()): a later invalid setProperty dropped cssText from "all: var(--x);" to empty. Product fix: drop stored all only after expandAll succeeds. DEFECT-260821-XZAS is stale class-closure paperwork from a rolled-back class-fix — do not delete. Class-closure for this landing is DEFECT-260822-NQVB.
 affected_requirements:
     - SW-REQ-260821-HNRG
     - SYS-REQ-260821-8TGB
@@ -24,13 +24,14 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: 'None on HEAD. Callers must not setProperty(''all'', invalid) after storing all: var(--x)/env(); that drop is the live hole.'
-remediation: 'Product fix was rolled back to origin/main logic in fe7defa (Implements comments kept). Overlay cannot land src/CSSStyleDeclaration.ts delete-after-expand. Close only after invalid all is a no-op and stored all: var(--x) remains. DEFECT-260821-XZAS is stale class-closure paperwork — do not delete.'
+mitigation: 'Invalid all is a no-op. Stored all: var(--x)/env() remains. Delete stored all only after expandAll succeeds.'
+remediation: 'Landed in src/CSSStyleDeclaration.ts. Invalid all is a no-op; stored all: var(--x) remains. Class-closure DEFECT-260822-NQVB. DEFECT-260821-XZAS is stale class-closure paperwork — do not delete.'
 notes:
     - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-XZAS is stale class-closure paperwork — do not delete.'
+    - '2026-08-22: product class-fix. Delete stored all only after expandAll succeeds. Overlay reproducer and tests/cssom-all-shorthand.test.ts pass. DEFECT-260822-NQVB. DEFECT-260821-XZAS kept as stale paperwork.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: open
+status: fixed
 history:
     - at: "2026-08-21T14:18:52Z"
       by: agent:grok-4.6
@@ -70,6 +71,10 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=open
+    - at: "2026-08-22T06:04:09Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,append-note,set-status=fixed
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -87,7 +92,7 @@ poc_quality:
         Overlay runner: node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts
         real_infrastructure: constructs src/CSSStyleDeclaration.ts and calls public setProperty (not a mock).
         control_test / operational_path_verified: runner setup asserts valid all: var(--x) stores cssText (exit 2 if setup fails); KI description records all:unset then invalid is observably a no-op (expanded-all path).
-        current_deployment_relevance: hole is on HEAD setProperty; live drop is all: var(--x) then invalid set emptying cssText.
+        current_deployment_relevance: hole was on HEAD setProperty (all: var(--x) then invalid set emptying cssText); closed by DEFECT-260822-NQVB.
         honest_severity / no_inflation: medium correctness matches empty cssText, not theft. No submission.
         reproducible: single node command, under 5 min. Asserts the intended no-op so it FAILS while the bug is present.
         Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
@@ -103,10 +108,10 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleDeclaration.setProperty can hit the hole. Rule 4 is Web3-only / attacker-trust-model.
 template_class: shorthand_mutate_before_validate
 isomorphic_sites:
-    - src/CSSStyleDeclaration.ts:511
-    - src/CSSStyleDeclaration.ts:512
-    - src/CSSStyleDeclaration.ts:513
+    - src/CSSStyleDeclaration.ts:523 #fixed
+    - src/CSSStyleDeclaration.ts:524 #fixed
+    - src/CSSStyleDeclaration.ts:525 #fixed
     - src/shorthands.ts:1913
     - src/shorthands.ts:2216
 dedup_armor: |
-    Only property === 'all' deletes from _declarations/_declMap before expandAll. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.
+    Only property === 'all' deletes from _declarations/_declMap, and only after expandAll succeeds. Other SHORTHANDS at CSSStyleDeclaration.setProperty expand then return on failed expand without mutating the shorthand's own map entry. Do not merge this KI into a generic shorthand-expand defect without a second live hole.

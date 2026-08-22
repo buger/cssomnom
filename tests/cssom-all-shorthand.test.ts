@@ -64,16 +64,23 @@ describe('CSSOM: all Shorthand Property Expansion & Contraction (CSSOM § 6.4.3 
     assert.strictEqual(style.getPropertyValue('--custom'), '10px');
   });
 
+  // cssom-1 § 6.7.1 #set-a-css-declaration: null parse returns without mutation.
+  // css-cascade-5 § 6.2 #all-shorthand: `all` only accepts CSS-wide keywords.
   it('invalid all after stored var(--x) is a no-op', () => {
     const style = new CSSStyleDeclaration();
+    // direction / custom properties are excluded from `all` (css-cascade-5 #all-shorthand).
+    style.setProperty('direction', 'rtl');
+    style.setProperty('--custom', '10px');
     style.setProperty('all', 'var(--x)');
     assert.strictEqual(style.getPropertyValue('all'), 'var(--x)');
-    assert.strictEqual(style.cssText.trim(), 'all: var(--x);');
+    assert.strictEqual(style.cssText.trim(), 'direction: rtl; --custom: 10px; all: var(--x);');
 
     style.setProperty('all', 'not-a-css-wide-keyword');
 
     assert.strictEqual(style.getPropertyValue('all'), 'var(--x)');
-    assert.strictEqual(style.cssText.trim(), 'all: var(--x);');
+    assert.strictEqual(style.getPropertyValue('direction'), 'rtl');
+    assert.strictEqual(style.getPropertyValue('--custom'), '10px');
+    assert.strictEqual(style.cssText.trim(), 'direction: rtl; --custom: 10px; all: var(--x);');
   });
 
   it('invalid all after env() stored all is a no-op', () => {
@@ -84,6 +91,16 @@ describe('CSSOM: all Shorthand Property Expansion & Contraction (CSSOM § 6.4.3 
     style.setProperty('all', 'nope');
 
     assert.strictEqual(style.getPropertyValue('all'), 'env(safe-area-inset-top)');
+    assert.strictEqual(style.cssText.trim(), 'all: env(safe-area-inset-top);');
+  });
+
+  it('valid all after stored var(--x) expands and drops stored all', () => {
+    const style = new CSSStyleDeclaration();
+    style.setProperty('all', 'var(--x)');
+    style.setProperty('all', 'unset');
+    assert.strictEqual(style.getPropertyValue('all'), 'unset');
+    assert.strictEqual(style.getPropertyValue('color'), 'unset');
+    assert.ok(!style.cssText.includes('all: var(--x)'));
   });
 
   it('handles all shorthand with CSSStyleSheet and insertRule', () => {
