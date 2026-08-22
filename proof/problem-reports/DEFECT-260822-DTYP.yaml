@@ -1,0 +1,83 @@
+schema_version: 1
+id: DEFECT-260822-DTYP
+title: ':disabled matched non-form controls (div[disabled], p in fieldset[disabled])'
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: disabled_non_form_control
+description: |
+    isElementDisabled returned true for any disabled attribute and any descendant of
+    fieldset[disabled], so div[disabled] and p inside fieldset[disabled] matched
+    :disabled. html#selector-disabled matches actually-disabled elements only
+    (html#concept-element-disabled): button/input/select/textarea that are
+    concept-fe-disabled, optgroup/option, disabled fieldsets, and form-associated
+    custom elements. Product fix gates isElementDisabled on those listed types and
+    returns false for div/p/span. :enabled uses the same isDisableableElement set.
+    Distinct from KI-10 first-legend exemption on listed controls / nested fieldsets.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: 6D9T/PJ76 named selector matching; actually-disabled type gate was unwitnessed until KI-13.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    affected_code:
+        - src/matcher.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:00:00Z"
+    requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    evidence:
+        verified_by:
+            - tests/matcher.test.ts
+            - proof/reproducers/KI-13-disabled-non-form.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-6D9T
+              witness: "non_listed_element=T, matches_disabled=F => TRUE"
+            - requirement: SYS-REQ-260821-PJ76
+              witness: "div_disabled=T, p_in_fieldset=T, listed_control_disabled=T => TRUE"
+affects:
+    - SW-REQ-260821-6D9T
+    - SYS-REQ-260821-PJ76
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    added_obligations:
+        - requirement: SW-REQ-260821-6D9T
+          obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/matcher.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            Only isElementDisabled listed-type gate (button/input/select/textarea/fieldset/
+            optgroup/option/form-associated custom) implements :disabled type filtering.
+            :enabled shares isDisableableElement. No other matcher path applies disabled
+            to arbitrary elements. Distinct from KI-10 first-legend walk.
+    regression_tests:
+        - tests/matcher.test.ts
+        - proof/reproducers/KI-13-disabled-non-form.ts
+        - tests/mcdc-branch-matcher-leftover.test.ts
+        - tests/mcdc-branch-matcher-pseudos.test.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-6D9T
+          witness: "non_listed_element=T, matches_disabled=F => TRUE"
+        - requirement: SYS-REQ-260821-PJ76
+          witness: "div_disabled=T, p_in_fieldset=T, listed_control_disabled=T => TRUE"
+history:
+    - at: "2026-08-22T06:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: Class-closure after product fix for KI-13.

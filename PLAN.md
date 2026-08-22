@@ -3925,3 +3925,51 @@ Product fix after `fe7defa` restore. Node 24 (`/opt/node24/bin`). Did not `proof
 - [x] GREEN twice: matcher + mcdc matcher suites 97 pass; KI-10 and KI-13 reproducers pass (exit 0). `tsc --noEmit` clean. oxlint 0. `pnpm run preflight` still fails on unrelated restore holes (KI-3/8/11/12/14 position/import/parser-api); no matcher `:disabled` failures.
 - [x] Class-closure: `DEFECT-260822-FSFL` (KI-10), `DEFECT-260822-DTYP` (KI-13). KI-10 / KI-13 `status: fixed`. Evidence `proof/evidence/ki-10.yaml` / `ki-13.yaml`.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-10-13.md`.
+
+---
+
+## Phase: class-fix KI-1 setProperty all delete-after-expand (Champ)
+
+`CSSStyleDeclaration.setProperty('all')` deleted stored `all` BEFORE `expandAll`. `all: var(--x)` then invalid `setProperty('all', 'not-a-css-wide-keyword')` emptied cssText. Spec: cssom-1 § 6.7.1 `#set-a-css-declaration` / css-cascade-5 § 6.2 `#all-shorthand`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Did **not** `git add .`. Did **not** touch KI-7. Did **not** edit other src files.
+
+- [x] RED: `node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts` exit 1 (`var(--x)` → empty cssText). Product `tests/cssom-all-shorthand.test.ts` failed on invalid-all-after-var and invalid-all-after-env.
+- [x] Product: delete stored `all` only after `expandAll` succeeds. Failed expand is a no-op. Valid `all: unset` after stored var still expands and drops stored `all`. Sibling sweep: other SHORTHANDS expand-then-return without pre-deleting the shorthand name; cssText setter is a full replace.
+- [x] GREEN twice: overlay reproducer exit 0 / exit 0. `tests/cssom-all-shorthand.test.ts` 10 pass. `tsc --noEmit` clean (asided parallel-agent WIP tests). oxlint 0. `pnpm run preflight` green after asiding other-KI restore holes (KI-2/3/7/8/11/12/14), then restored.
+- [x] KI-1 `status: fixed`. Class-closure `DEFECT-260822-NQVB`. `DEFECT-260821-XZAS` kept (stale rolled-back paperwork). Evidence `proof/evidence/ki-1.yaml`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki1.md`.
+
+---
+
+## Phase: KI-9 product class-fix (Champ)
+
+`StreamingTokenizerStream.peek` fabricated EOF on incomplete chunks; `preprocessChunk` remnant concat reversed high-surrogate then CR. Spec: css-syntax-3 § 4.3.1 `#consume-token`, § 3.3 `#input-preprocessing`. Node 24 (`/opt/node24/bin`). Did **not** `git add .`. Did **not** lower `proof.yaml` floors.
+
+- [x] RED: `tests/streaming.test.ts` peek-on-incomplete throws NeedMoreDataError (already failing); added remnant high-then-CR vs one-shot `tokenize()` (also failing). Overlay `proof/reproducers/KI-9-streaming-peek-eof.ts` exit 1.
+- [x] GREEN: `StreamingTokenizer.closed` getter; peek throws `NeedMoreDataError` unless closed; remnant prepends trailing high surrogate onto same-call CR. Sibling sweep: ArrayTokenStream empty-list EOF and one-shot `tokenizer.ts` preprocess unchanged.
+- [x] GREEN ×2: `node --test tests/streaming.test.ts` 13 pass; leftover streaming/tokenstream MC/DC 24 pass; overlay reproducer exit 0. oxlint 0 on changed files.
+- [x] KI-9 status `fixed`. Class-closure `proof/problem-reports/DEFECT-260822-SK9P.yaml`. Evidence `proof/evidence/ki-9.yaml`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki9.md`.
+
+---
+
+## Phase: class-fix KI-3 and KI-11 position grammar parse (Champ)
+
+Product class-fix after `fe7defa` restore. Grammar-first then reify. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Did **not** `proof approve`. Did **not** `git add .`.
+
+- [x] **RED twice**: overlay `proof/reproducers/KI-3-object-position-parse.ts` exit 1 (`not-a-position` → `CSSStyleValue`). Overlay `proof/reproducers/KI-11-position-grammar.ts` exit 1 (`perspective-origin: left 10px top` → `CSSPositionValue 10px 0%`). Product `tests/typed-om-position.test.ts` exit 1 (3-value perspective-origin, 4-value transform-origin, `center left`).
+- [x] **Product**: restore `src/typed-om/position/position-parser.ts` + `src/typed-om/values/style-value-parser.ts` from `fe7defa^` / `src-head-backup`. `matchesPositionPropertyGrammar` then `tryParsePosition` (`parseThenReifyPosition`). css-typed-om-1 § 6.6 `#parse-a-cssstylevalue` / § 3.3 `#positionvalue-objects`. css-values-4 § 10.1 `#position` (1-/2-/4-value; 3-value not generic, csswg-drafts#2140). css-backgrounds-3 `#background-position` still accepts 3-value. css-transforms-1 `#transform-origin-property` (no 4-value; optional z). css-transforms-2 `#perspective-origin-property` (`<position>`). css-values-4 § 2.2 `#comb-all` (`center left` valid &&).
+- [x] **GREEN twice**: KI-3 overlay exit 0; KI-11 overlay exit 0; `tests/typed-om-position.test.ts` + url-position / leftover / still-hot / witness / parse-all 79 pass. `object-position: not-a-position` TypeError. `perspective-origin: left 10px top` TypeError. `transform-origin: left 10px top 20px` TypeError. `object-position: center left` → `CSSPositionValue` 0% 50%.
+- [x] KI-3 `status: fixed`. DEFECT-260821-KESF class-closure refreshed (grammar-first, not throw-on-null-reify). Evidence `proof/evidence/ki-3.yaml` restamped `known_issue_not_reproduced`.
+- [x] KI-11 `status: fixed`. New class-closure `DEFECT-260822-PGRM`. Evidence `proof/evidence/ki-11.yaml`. Overlay SAT TRUE (no `[known-issue]`).
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-3-11.md`.
+
+---
+
+## Phase: KI-5 class-fix after src restore (Champ)
+
+Unbalanced media query `((` serialized as `(())` instead of `not all` after `fe7defa` restored origin/main parser logic. mediaqueries-4 § 3.2 #error-handling: a query that does not match the grammar (including unclosed `()` recovered at EOF by css-syntax-3 § 5.5.9 / § 5.5.10 / § 2.2 #autoclosing) is `not all`. Node 24 (`/opt/node24/bin`). Did **not** `git add .`.
+
+- [x] **RED**: `tests/media-validation.test.ts` and overlay `proof/reproducers/KI-5-media-unbalanced.ts` — `MediaParser.parse('((')` serialized as `(())` with `invalid` unset. Class cases: unclosed `(color` auto-closed as valid `(color)`; unclosed `foo(` as `foo()`.
+- [x] **Product**: `src/parser.ts` marks `simple-block`/`function` `unclosed` at EOF. `src/types.ts` optional flag. `src/MediaParser.ts` `hasUnclosedConstruct` in `normalizeAndValidate` sets `invalid` before canonical re-serialize (which would otherwise re-close as `<general-enclosed>`).
+- [x] **GREEN twice**: `tests/media-validation.test.ts` and overlay reproducer exit 0 twice. Broader media suite (media.test / leftover / still-hot / hotspot / witnesses) pass. Balanced `(foo())` / `(color)` / `(example, all,)` unchanged.
+- [x] KI-5 status=`fixed`. DEFECT-260821-H3KB class-closure refreshed (not deleted). Evidence `proof/evidence/ki-5.yaml` restamped `known_issue_not_reproduced`.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki5.md`.
+

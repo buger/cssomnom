@@ -241,18 +241,26 @@ test('Matcher: :disabled matches only actually-disabled form controls (html#sele
   // optgroup/option that are disabled, disabled fieldsets, and form-associated custom
   // elements — not every descendant of fieldset[disabled].
   const { document } = parseHTML(`
+    <div id="div-disabled" disabled></div>
+    <p id="plain-p-disabled" disabled></p>
     <fieldset id="fs" disabled>
       <legend>
         <input id="in-legend">
         <fieldset id="nested-in-legend">
           <input id="nested-legend-input">
         </fieldset>
-        <fieldset id="nested-in-legend-own-disabled" disabled></fieldset>
+        <fieldset id="nested-in-legend-own-disabled" disabled>
+          <legend>
+            <input id="inner-legend-of-own-disabled">
+          </legend>
+          <input id="inner-outside-legend-of-own-disabled">
+        </fieldset>
       </legend>
       <legend>
         <fieldset id="nested-in-second-legend"></fieldset>
       </legend>
       <div id="div-in-fs">wrap<span id="span-in-fs">x</span></div>
+      <p id="p-in-fs">x</p>
       <input id="in-fs">
       <fieldset id="nested-outside">
         <input id="nested-out-input">
@@ -266,10 +274,16 @@ test('Matcher: :disabled matches only actually-disabled form controls (html#sele
     </select>
   `);
 
+  assert.strictEqual(matches(document.getElementById('div-disabled')!, ':disabled'), false,
+    'div[disabled] is not actually disabled (html#concept-element-disabled)');
+  assert.strictEqual(matches(document.getElementById('plain-p-disabled')!, ':disabled'), false,
+    'p[disabled] is not actually disabled (html#concept-element-disabled)');
   assert.strictEqual(matches(document.getElementById('div-in-fs')!, ':disabled'), false,
     'div inside fieldset[disabled] is not actually disabled');
   assert.strictEqual(matches(document.getElementById('span-in-fs')!, ':disabled'), false,
     'span inside fieldset[disabled] is not actually disabled');
+  assert.strictEqual(matches(document.getElementById('p-in-fs')!, ':disabled'), false,
+    'p inside fieldset[disabled] is not actually disabled');
 
   assert.strictEqual(matches(document.getElementById('opt-in-og')!, ':disabled'), true,
     'option in optgroup[disabled] is concept-option-disabled');
@@ -282,6 +296,10 @@ test('Matcher: :disabled matches only actually-disabled form controls (html#sele
     'input in nested fieldset inside first legend is not concept-fe-disabled');
   assert.strictEqual(matches(document.getElementById('nested-in-legend-own-disabled')!, ':disabled'), true,
     'fieldset inside first legend with own disabled attribute is still concept-fieldset-disabled');
+  assert.strictEqual(matches(document.getElementById('inner-legend-of-own-disabled')!, ':disabled'), false,
+    'input in first legend of nested own-disabled fieldset that sits in outer first legend is not concept-fe-disabled');
+  assert.strictEqual(matches(document.getElementById('inner-outside-legend-of-own-disabled')!, ':disabled'), true,
+    'input outside first legend of nested own-disabled fieldset is concept-fe-disabled even inside outer first legend');
   assert.strictEqual(matches(document.getElementById('nested-in-second-legend')!, ':disabled'), true,
     'nested fieldset inside a non-first legend is concept-fieldset-disabled');
 

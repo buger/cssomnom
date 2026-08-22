@@ -20,19 +20,30 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: None on HEAD. Callers must not use :disabled as a proxy for a disabled attribute on non-form elements, or for arbitrary descendants of fieldset[disabled].
-remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land a listed-form-control gate in src/matcher.ts isElementDisabled. Close only after div[disabled] and p-in-fieldset[disabled] do not match :disabled. No DEFECT — live unfixed bugs stay as KnownIssues.
+commands:
+    - node --test tests/matcher.test.ts
+    - node --experimental-strip-types --test proof/reproducers/KI-13-disabled-non-form.ts
+evidence_manifests:
+    - proof/evidence/ki-13.yaml
+mitigation: Product fix landed in src/matcher.ts. isElementDisabled gates on html#concept-element-disabled listed types (button/input/select/textarea/optgroup/option/fieldset and form-associated custom elements) before applying concept-fe-disabled / concept-fieldset-disabled.
+remediation: Closed after class-fix. div[disabled] and p-in-fieldset[disabled] do not match :disabled. Listed form controls still match. Class-closure DEFECT-260822-DTYP.
 notes:
     - '2026-08-22: discovered during code MC/DC unique-cause leftover work after restore fe7defa. Distinct from KI-10 first-legend. Overlay reproducer is a failing tripwire.'
+    - '2026-08-22: class-fix landed. Overlay reproducer and tests/matcher.test.ts pass. Distinct from KI-10 first-legend walk.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: open
+status: fixed
 history:
     - at: "2026-08-22T05:46:00Z"
       by: agent:grok-4.6
       action: created
       detail: |
         Live :disabled overmatch after fe7defa restore: any disabled attribute and any fieldset[disabled] descendant match, including div and p. Overlay reproducer FAILS. Distinct from KI-10. No product fix. No DEFECT.
+    - at: "2026-08-22T06:00:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Product class-fix: isElementDisabled returns false unless the element is actually disabled (html#concept-element-disabled). Overlay reproducer and matcher.test.ts pass twice. DEFECT-260822-DTYP. Status fixed.
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -50,7 +61,7 @@ poc_quality:
         Overlay runner: node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts
         real_infrastructure: linkedom document + matches() (not a mock).
         control_test / operational_path_verified: runner setup asserts listed form controls / fieldset[disabled] still match :disabled.
-        current_deployment_relevance: hole is on HEAD isElementDisabled with no listed-control gate.
+        current_deployment_relevance: hole was on HEAD isElementDisabled with no listed-control gate; class-fix landed.
         honest_severity / no_inflation: medium correctness matches wrong :disabled, not theft. No submission.
         reproducible: single node command, under 5 min. Asserts non-form false so it FAILS while the bug is present.
         Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
@@ -68,8 +79,10 @@ template_class: disabled_non_form_control
 isomorphic_sites:
     - src/matcher.ts:623
     - src/matcher.ts:628
-    - src/matcher.ts:831
-    - src/matcher.ts:832
-    - src/matcher.ts:835
+    - src/matcher.ts:859
+    - src/matcher.ts:926
+    - src/matcher.ts:931
+    - src/matcher.ts:942
+    - src/matcher.ts:942
 dedup_armor: |
     Only :disabled overmatch on non-listed elements (div[disabled], p/span descendants of fieldset[disabled]). Distinct from KI-10, which is the first-legend exemption on listed controls / nested fieldsets. :enabled already checks the listed tag set at matcher.ts:628. Do not merge this KI into KI-10 without collapsing the listed-control gate vs first-legend walk-up distinction.

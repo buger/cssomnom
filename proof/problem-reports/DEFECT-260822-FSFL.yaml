@@ -1,0 +1,82 @@
+schema_version: 1
+id: DEFECT-260822-FSFL
+title: ':disabled treated first-legend descendants as disabled (html concept-fieldset-disabled)'
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: fieldset_first_legend_disabled
+description: |
+    isElementDisabled walked parentElement and treated an ancestor fieldset's own
+    disabled attribute as the descendant's, so #nested-in-legend and #in-legend
+    matched :disabled. html#concept-fieldset-disabled / html#concept-fe-disabled
+    skip descendants of that fieldset's first legend child. Product fix walks each
+    ancestor fieldset independently via isDisabledByAncestorFieldset / isInsideFirstLegend
+    and does not recurse the ancestor's own disabled onto first-legend descendants.
+    Nested fieldset-in-legend with no own disabled is not :disabled; own disabled
+    still is; non-first legend and outside-legend controls still are.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: 6D9T/PJ76 named selector matching; first-legend fieldset walk was unwitnessed until KI-10.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    affected_code:
+        - src/matcher.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:00:00Z"
+    requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    evidence:
+        verified_by:
+            - tests/matcher.test.ts
+            - proof/reproducers/KI-10-fieldset-disabled.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-6D9T
+              witness: "first_legend_descendant=T, matches_disabled=F => TRUE"
+            - requirement: SYS-REQ-260821-PJ76
+              witness: "fieldset_disabled=T, in_first_legend=T, nested_fieldset_disabled=F => TRUE"
+affects:
+    - SW-REQ-260821-6D9T
+    - SYS-REQ-260821-PJ76
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-6D9T
+        - SYS-REQ-260821-PJ76
+    added_obligations:
+        - requirement: SW-REQ-260821-6D9T
+          obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/matcher.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            Only isElementDisabled / isDisabledByAncestorFieldset / isDisabledFieldset /
+            isFormControlDisabled implement fieldset disabled matching. :enabled reuses
+            isElementDisabled. No second first-legend walk. Distinct from KI-13 listed-type gate.
+    regression_tests:
+        - tests/matcher.test.ts
+        - proof/reproducers/KI-10-fieldset-disabled.ts
+        - tests/mcdc-branch-matcher.test.ts
+        - tests/mcdc-matcher-still-hot-unique-cause.test.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-6D9T
+          witness: "first_legend_descendant=T, matches_disabled=F => TRUE"
+        - requirement: SYS-REQ-260821-PJ76
+          witness: "fieldset_disabled=T, in_first_legend=T, nested_fieldset_disabled=F => TRUE"
+history:
+    - at: "2026-08-22T06:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: Class-closure after product fix for KI-10.
