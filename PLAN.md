@@ -3305,6 +3305,16 @@ Follow-up to 657058e: lookup folded the CSS at-keyword (`atRuleName.toLowerCase(
 
 ---
 
+## Phase: leftover `tryParsePosition` MC/DC tests (Champ)
+
+Drive remaining `src/typed-om/position/position-parser.ts` `tryParsePosition` unique-cause leftovers through public `CSSStyleValue.parse` for `object-position` / `background-position` / `transform-origin`. Did **not** add `//mcdc:ignore`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-hotspot-position-leftover.test.ts` — remaining 1-value keywords/length-percentage; remaining 2-value `&&` orders and keyword+length; leftover invalid 2-value; 4-value unique-cause left/right × top/bottom; invalid 3-value `object-position`; `background-position` remaining 3-value; `transform-origin` remaining 1/2-value reify vs 3-value z; mixed-case; comments.
+- [x] Product fix: 3-/4-value offsets are `<length-percentage>` (keywords are edges). Case 1 no longer steals `left bottom 10px`. Added 3-value Case 4 `[ top | bottom | center ] [ left | right ] <length-percentage>` (css-backgrounds-3 `#background-position`).
+- [x] Node 24: `node --test tests/mcdc-hotspot-position-leftover.test.ts` green. Did not `proof approve`.
+
+---
+
 ## Phase: leftover PropertyRegistry `consumeSyntaxComponent` MC/DC tests (Champ)
 
 Cover leftover `src/PropertyRegistry.ts:consumeSyntaxComponent` (4/18) through public `CSS.registerProperty` and exported `matchesSyntax`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).

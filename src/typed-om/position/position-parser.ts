@@ -16,7 +16,7 @@
  */
 // Implements: SYS-REQ-260821-HGFK, SYS-REQ-260821-Y6R3, SW-REQ-260821-7AKJ, SW-REQ-260821-E5D5
 
-import type { ComponentValue } from '../../types.ts';
+import type { ComponentValue, IdentToken } from '../../types.ts';
 import type { CSSStyleValue } from '../values/CSSStyleValue.ts';
 import { CSSNumericValue } from '../numeric/CSSNumericValue.ts';
 import { CSSKeywordValue } from '../values/CSSKeywordValue.ts';
@@ -43,6 +43,17 @@ export function toPositionCoord(val: CSSStyleValue | CSSNumericValue | CSSKeywor
     return val;
   }
   return null;
+}
+
+// css-backgrounds-3 #background-position / css-values-4 § 10.1 #position:
+// 3-/4-value offsets are <length-percentage>. Keywords are edges, not offsets.
+function parseOffsetCoord(c: ComponentValue, property: string): CSSNumericValue | null {
+  if (isToken(c) && c.type === 'ident') return null;
+  return toPositionCoord(createCSSStyleValue(c, property));
+}
+
+function isIdentKeyword(c: ComponentValue, keywords: string[]): c is IdentToken {
+  return isToken(c) && c.type === 'ident' && keywords.includes(c.value.toLowerCase());
 }
 
 export function tryParsePosition(trimmed: ComponentValue[], property?: string): CSSPositionValue | null {
@@ -129,16 +140,18 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
     }
   }
 
-  // 3-value syntax:
+  // 3-value syntax (css-backgrounds-3 #background-position, not generic <position>):
+  // [ center | [ left | right ] <length-percentage>? ] &&
+  // [ center | [ top | bottom ] <length-percentage>? ]
   if (components.length === 3) {
     const c0 = components[0];
     const c1 = components[1];
     const c2 = components[2];
 
-    // Case 1: [ left | right ] <offset> [ top | bottom | center ]
-    if (isToken(c0) && c0.type === 'ident' && ['left', 'right'].includes(c0.value.toLowerCase())) {
-      const off = toPositionCoord(createCSSStyleValue(c1, 'left'));
-      const vert = toPositionCoord(createCSSStyleValue(c2, 'top'));
+    // Case 1: [ left | right ] <length-percentage> [ top | bottom | center ]
+    if (isIdentKeyword(c0, ['left', 'right']) && isIdentKeyword(c2, ['top', 'bottom', 'center'])) {
+      const off = parseOffsetCoord(c1, property || 'left');
+      const vert = toPositionCoord(new CSSKeywordValue(c2.value));
       if (off && vert) {
         const xCoord = c0.value.toLowerCase() === 'right'
           ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off)))
@@ -147,10 +160,10 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
       }
     }
 
-    // Case 2: [ left | right | center ] [ top | bottom ] <offset>
-    if (isToken(c1) && c1.type === 'ident' && ['top', 'bottom'].includes(c1.value.toLowerCase())) {
-      const horiz = toPositionCoord(createCSSStyleValue(c0, 'left'));
-      const off = toPositionCoord(createCSSStyleValue(c2, 'top'));
+    // Case 2: [ left | right | center ] [ top | bottom ] <length-percentage>
+    if (isIdentKeyword(c0, ['left', 'right', 'center']) && isIdentKeyword(c1, ['top', 'bottom'])) {
+      const horiz = toPositionCoord(new CSSKeywordValue(c0.value));
+      const off = parseOffsetCoord(c2, property || 'top');
       if (horiz && off) {
         const yCoord = c1.value.toLowerCase() === 'bottom'
           ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off)))
@@ -159,15 +172,27 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
       }
     }
 
-    // Case 3: [ top | bottom ] <offset> [ left | right | center ]
-    if (isToken(c0) && c0.type === 'ident' && ['top', 'bottom'].includes(c0.value.toLowerCase())) {
-      const off = toPositionCoord(createCSSStyleValue(c1, 'top'));
-      const horiz = toPositionCoord(createCSSStyleValue(c2, 'left'));
+    // Case 3: [ top | bottom ] <length-percentage> [ left | right | center ]
+    if (isIdentKeyword(c0, ['top', 'bottom']) && isIdentKeyword(c2, ['left', 'right', 'center'])) {
+      const off = parseOffsetCoord(c1, property || 'top');
+      const horiz = toPositionCoord(new CSSKeywordValue(c2.value));
       if (off && horiz) {
         const yCoord = c0.value.toLowerCase() === 'bottom'
           ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off)))
           : off;
         return new CSSPositionValue(horiz, yCoord);
+      }
+    }
+
+    // Case 4: [ top | bottom | center ] [ left | right ] <length-percentage>
+    if (isIdentKeyword(c0, ['top', 'bottom', 'center']) && isIdentKeyword(c1, ['left', 'right'])) {
+      const yCoord = toPositionCoord(new CSSKeywordValue(c0.value));
+      const off = parseOffsetCoord(c2, property || 'left');
+      if (yCoord && off) {
+        const xCoord = c1.value.toLowerCase() === 'right'
+          ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off)))
+          : off;
+        return new CSSPositionValue(xCoord, yCoord);
       }
     }
   }
@@ -180,10 +205,9 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
     const c3 = components[3];
 
     // Case A: [ left | right ] <offset1> [ top | bottom ] <offset2>
-    if (isToken(c0) && c0.type === 'ident' && ['left', 'right'].includes(c0.value.toLowerCase()) &&
-        isToken(c2) && c2.type === 'ident' && ['top', 'bottom'].includes(c2.value.toLowerCase())) {
-      const off1 = toPositionCoord(createCSSStyleValue(c1, 'left'));
-      const off2 = toPositionCoord(createCSSStyleValue(c3, 'top'));
+    if (isIdentKeyword(c0, ['left', 'right']) && isIdentKeyword(c2, ['top', 'bottom'])) {
+      const off1 = parseOffsetCoord(c1, property || 'left');
+      const off2 = parseOffsetCoord(c3, property || 'top');
       if (off1 && off2) {
         const xCoord = c0.value.toLowerCase() === 'right'
           ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off1)))
@@ -196,10 +220,9 @@ export function tryParsePosition(trimmed: ComponentValue[], property?: string): 
     }
 
     // Case B: [ top | bottom ] <offset1> [ left | right ] <offset2>
-    if (isToken(c0) && c0.type === 'ident' && ['top', 'bottom'].includes(c0.value.toLowerCase()) &&
-        isToken(c2) && c2.type === 'ident' && ['left', 'right'].includes(c2.value.toLowerCase())) {
-      const off1 = toPositionCoord(createCSSStyleValue(c1, 'top'));
-      const off2 = toPositionCoord(createCSSStyleValue(c3, 'left'));
+    if (isIdentKeyword(c0, ['top', 'bottom']) && isIdentKeyword(c2, ['left', 'right'])) {
+      const off1 = parseOffsetCoord(c1, property || 'top');
+      const off2 = parseOffsetCoord(c3, property || 'left');
       if (off1 && off2) {
         const yCoord = c0.value.toLowerCase() === 'bottom'
           ? simplify(new CSSMathSum(createUnitValue(100, 'percent'), new CSSMathNegate(off1)))
@@ -251,10 +274,6 @@ function splitCommaList(tokens: ComponentValue[]): ComponentValue[][] {
     }
   }
   return segments;
-}
-
-function isIdentKeyword(c: ComponentValue, keywords: string[]): boolean {
-  return isToken(c) && c.type === 'ident' && keywords.includes(c.value.toLowerCase());
 }
 
 function isSingleValueTransformOrigin(c: ComponentValue): boolean {
