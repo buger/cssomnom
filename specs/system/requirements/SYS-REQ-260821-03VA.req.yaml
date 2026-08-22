@@ -1,0 +1,59 @@
+id: SYS-REQ-260821-03VA
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: the parser shall always satisfy (!invalid_rule_consumed | rule_dropped) & (!ordinary_invalid_css | parse_does_not_throw)
+description: The parser shall drop an invalid rule. The parser shall not throw on ordinary invalid CSS.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: parser
+rationale: Stylesheet ingest shall recover and keep the rest of the sheet.
+tags: []
+variables:
+    - invalid_rule_consumed
+    - ordinary_invalid_css
+    - parse_does_not_throw
+    - rule_dropped
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:grok-4.6
+    created_at: "2026-08-21T12:34:49Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-21T20:04:25Z"
+obligation_checklist:
+    - error_handling
+    - malformed_input
+    - malformed_recovers_or_errors_loudly
+obligation_hazards:
+    - class: malformed_input
+      worst_case: An invalid qualified rule that is kept rather than dropped produces a stylesheet that looks valid while containing unparseable rules.
+      severity: medium
+    - class: malformed_recovers_or_errors_loudly
+      worst_case: Ordinary invalid CSS that throws aborts stylesheet ingest, dropping valid rules after the error instead of recovering per CSS Syntax-3.
+      severity: high
+lifecycle:
+    change_history:
+        - date: "2026-08-21T12:39:07Z"
+          from: draft
+          to: review
+          reason: 'Onboard skeleton believed: four-layer graph linked to research map'
+          changed_by: agent:grok-4.6
