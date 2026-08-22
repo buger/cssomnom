@@ -3216,6 +3216,15 @@ Drive remaining code MC/DC hotspots through public APIs. Did **not** add `//mcdc
 
 ---
 
+## Phase: leftover `walkRules` MC/DC tests (Champ)
+
+Drive remaining `src/cascade/rule-filter.ts:walkRules` (41/66) through `getCascadedStyle`. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-math-walk.test.ts` — leftover grouping: `@page` descriptors/margin skip + nested `@media` walk; `@starting-style` nested `CSSNestedDeclarations` + nested `@supports`/`@media`; `CSSNestedDeclarations` `:scope` / `@scope` spec `(0,0,0)` / `!important` / constructed `.t:before` parent / `::before` strip-to-`:scope`; `@container style()` (unnamed, named, compound, empty); `:host` / `:host()` / `:host-context()` light-tree miss; empty parse / comment / constructable / `[]`; duplicate `@layer a` statement+blocks (later same-layer wins, unlayered still beats); `@import`/`@namespace`/`@font-face`/`@keyframes` skipped.
+- [x] Node 24: `node --test tests/mcdc-hotspot-math-walk.test.ts` — 29 pass. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-walk2.md`.
+
+---
+
 ## Phase: leftover tokenizer/serializer branch tests (Champ)
 
 Drive leftover `AbstractTokenizer` / `serializeToken` / at-rule `cssText` branches through public APIs. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
@@ -3255,4 +3264,13 @@ Drive `src/parser.ts` `assembleUnicodeRanges` (1/30 remaining code-MC/DC decisio
 
 - [x] `tests/mcdc-assemble-unicode-ranges.test.ts` — valid `U+` hex, `U+start-end`, `?` wildcards, comma lists, whitespace/comments, empty/junk, reconstruction of ident `U`/`U+…` when unicode-range tokens are not used, plus/number/dimension signs, hex-part consume (dimension/number/ident/`?`/`-`/comment/break), `10FFFF` bounds, reversed ranges, trailing comma, delim-comma.
 - [x] Node 24: `node --test tests/mcdc-assemble-unicode-ranges.test.ts` — 23 pass. `tsc --noEmit` clean. oxlint 0 warnings.
+
+---
+
+## Phase: leftover math-parser `simplify` MC/DC tests (Champ)
+
+Drive remaining `src/math-parser.ts:simplify` unique-cause leftovers (reported 52/89) that `tests/mcdc-hotspot-math-walk.test.ts` does not hit. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-hotspot-math-simplify-leftover.test.ts` — mixed units that cannot collapse (`hz+khz`, `cqw+px`, 4-term leftover, `px/s` product, function-only product, no-distribute length≠2 / no-numberNode, `round(px, em)`); nested `calc()` fold vs leftover; NaN/Infinity constants; percentage+px across sum/min/clamp/hypot/atan2/mod; type-check parse failures and constructed mismatches; empty `min()`/`max()` parse + `CSSMathFunction` leftover; single-arg `hypot` fold vs leftover and empty `hypot()`.
+- [x] Node 24: `node --test tests/mcdc-hotspot-math-simplify-leftover.test.ts` — 8 pass. `tsc --noEmit` clean. oxlint 0 warnings.
 
