@@ -3973,3 +3973,17 @@ Unbalanced media query `((` serialized as `(())` instead of `not all` after `fe7
 - [x] KI-5 status=`fixed`. DEFECT-260821-H3KB class-closure refreshed (not deleted). Evidence `proof/evidence/ki-5.yaml` restamped `known_issue_not_reproduced`.
 - [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki5.md`.
 
+---
+
+## Phase: class-fix KI-2 replaceSync, KI-8 import href, KI-12 at-rule case (Champ)
+
+Product class-fix after `fe7defa` restore. Shared `src/CSSOM.ts` / `src/parser.ts`. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`). Did **not** fetch `@import` (KI-7 remains open). Did **not** `git add .`. Did **not** `proof approve`.
+
+- [x] **RED twice** (exit 1): `proof/reproducers/KI-2-replace-sync.ts` (`cssRules.length=0` on return); `KI-8-import-href.ts` (`href=""` / cssText `url("") url("foo.css")`); `KI-12-atrule-dispatch.ts` (`@MEDIA` → `CSSAtRule`).
+- [x] **KI-2** (`src/CSSOM.ts`): cssom-1 § 6.5.1 `#dom-cssstylesheet-replace` / `#synchronously-replace-the-rules-of-a-cssstylesheet`. README Node.js deviation: `replace()` calls `replaceSync()` then `Promise.resolve(this)` so cssRules is populated before return. No `queueMicrotask`. Non-constructed sheets still reject without parsing.
+- [x] **KI-8** (`src/parser.ts` `handleImportRule`): css-syntax-3 § 4.3.6 `#consume-url-token`, cssom-1 § 6.4.4 `#dom-cssimportrule-href`. Copy `first.type === 'url'` into href. cssText no longer emits `url("")`. `CSSImportRule.styleSheet` still does not fetch (KI-7 open).
+- [x] **KI-12** (`src/parser.ts`): css-values-4 § 4.1 `#keywords` / infra `#ascii-case-insensitive`. `getAtRuleHandler` `toLowerCase` + `Object.hasOwn`; fold own `options.atRules` keys into a Map; `handleMarginRule` stores lowercase name (`@TOP-LEFT` → `top-left`).
+- [x] GREEN twice (exit 0) on all three overlay tripwires. Product `tests/ki-2-8-12-class-fix.test.ts` 8 pass.
+- [x] KI-2/8/12 `status: fixed`. Class-closure `DEFECT-260822-X46W` (KI-2), `DEFECT-260822-3T1G` (KI-8), `DEFECT-260822-ZSWZ` (KI-12). `DEFECT-260821-QHWP` kept (stale rolled-back paperwork).
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-2-8-12.md`.
+

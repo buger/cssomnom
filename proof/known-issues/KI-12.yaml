@@ -2,6 +2,9 @@ id: KI-12
 title: At-rule dispatch is ASCII-case-sensitive; margin name, atRules fold, and hasOwn handlers missing
 description: |
     css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive: at-keywords are ASCII case-insensitive. getAtRuleHandler looks up MARGIN_RULE_NAMES / AT_RULE_HANDLERS / keyframes without toLowerCase, so @MEDIA is CSSAtRule not CSSMediaRule and @TOP-LEFT inside @page is dropped. options.atRules is case-sensitive so { foo: 'rule' } misses @FOO. AT_RULE_HANDLERS[name] without Object.hasOwn hits Object.prototype (@__proto__ throws TypeError: handler is not a function). Overlay audit cannot change product code.
+commands:
+    - node --test tests/ki-2-8-12-class-fix.test.ts
+    - node --experimental-strip-types proof/reproducers/KI-12-atrule-dispatch.ts
 affected_requirements:
     - INT-REQ-260821-ZMZR
     - SYS-REQ-260821-7521
@@ -22,14 +25,21 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-12-atrule-dispatch.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: None on HEAD. Callers must emit lowercase at-keywords and avoid @constructor / @__proto__ / @toString as unknown at-rule names.
-remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land toLowerCase / hasOwn / atRules fold in src/parser.ts. Close only after the four contracts hold. No DEFECT — live unfixed bugs stay as KnownIssues.
+mitigation: "getAtRuleHandler lowercases the at-keyword, Object.hasOwn on AT_RULE_HANDLERS, options.atRules own keys folded into a Map, handleMarginRule stores lowercase name."
+remediation: "Landed in src/parser.ts. Overlay and tests/ki-2-8-12-class-fix.test.ts pass. DEFECT-260822-ZSWZ."
 notes:
+    - |
+        2026-08-22: class-fix with KI-2/KI-8. ASCII-case dispatch restored. Overlay GREEN twice.
     - '2026-08-22: filed after fe7defa restore. Distinct from KI-6 (type-0 adapter after a typed CSSOM rule exists). @MEDIA never reaches CSSMediaRule so the adapter hole is not this class.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: open
+status: fixed
 history:
+    - at: "2026-08-22T06:10:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Class-fix landed. Overlay GREEN twice. status=fixed.
     - at: "2026-08-22T12:00:00Z"
       by: agent:grok-4.6
       action: created

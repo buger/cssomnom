@@ -343,56 +343,15 @@ export class CSSStyleSheet extends StyleSheet {
     if (!this._constructedFlag || this._disallowModificationFlag) {
       return Promise.reject(new DOMException("Can't call replace or replaceSync on non-constructed stylesheets.", "NotAllowedError"));
     }
-    // 3. Set the disallow modification flag.
-    this._disallowModificationFlag = true;
-
-    // 4. In parallel, do these steps:
-    return new Promise<CSSStyleSheet>((resolve, reject) => {
-      queueMicrotask(() => {
-        try {
-          // 4.1 Let rules be the result of running parse a stylesheet's contents from text.
-          const tokens = tokenize(text);
-          const rules = ParseHooks.consumeListOfRules(tokens, true);
-
-          // 4.2 If rules contains one or more @import rules, remove those rules from rules.
-          const filteredRules = rules.filter(rule => {
-            if (isImportRule(rule)) {
-              console.warn('CSS Parse Error: @import rules are not allowed in constructed stylesheets and were removed.');
-              return false;
-            }
-            return true;
-          });
-
-          // Clear parent references on previously attached rules
-          for (const rule of this._rules) {
-            if (rule instanceof CSSRule) {
-              rule.parentRule = null;
-              rule.parentStyleSheet = null;
-            }
-          }
-
-          this._unregisterProperties();
-          // 4.3 Set sheet's CSS rules to rules.
-          this._rules = filteredRules;
-          for (const rule of this._rules) {
-            if (rule instanceof CSSRule) {
-              rule.parentStyleSheet = this;
-              rule.parentRule = null;
-            }
-            this._registerRuleProperties(rule);
-          }
-
-          // 4.4 Unset sheet's disallow modification flag.
-          this._disallowModificationFlag = false;
-
-          // 4.5 Resolve promise with sheet.
-          resolve(this);
-        } catch (e) {
-          this._disallowModificationFlag = false;
-          reject(e);
-        }
-      });
-    });
+    // README documented Node.js deviation from cssom-1 § 6.5.1 "in parallel":
+    // run replaceSync (#synchronously-replace-the-rules-of-a-cssstylesheet) on this
+    // turn and return Promise.resolve(this) so cssRules is populated before replace() returns.
+    try {
+      this.replaceSync(text);
+      return Promise.resolve(this);
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   // cssom-1 § 6.5.1 #dom-cssstylesheet-replacesync

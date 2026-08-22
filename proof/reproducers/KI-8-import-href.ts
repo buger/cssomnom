@@ -19,8 +19,8 @@
  * css-syntax-3 § 4.3.6 #consume-url-token emits a <url-token> for
  * url(foo.css). cssom-1 § 6.4.4 #dom-cssimportrule-href returns that URL.
  * Asserts href === 'foo.css' and cssText does not emit url("") url("foo.css")
- * so this command FAILS while handleImportRule copies only string / url()
- * function tokens (leftover <url-token> becomes mediaText).
+ * Regression tripwire after the KI-8 class-fix copies the <url-token> value
+ * into href (leftover <url-token> must not become mediaText).
  *
  * Reproduces: KI-8
  */
@@ -55,7 +55,7 @@ function ki8Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-8
 // Verifies: SW-REQ-260821-5W6X
 // Verifies: SYS-REQ-260821-7521
-// MCDC leftover handleImportRule url-token href+cssText [known-issue] [ki: KI-8]
+// MCDC leftover handleImportRule url-token href+cssText
 test('parse(@import url(foo.css);).cssRules[0].href is foo.css', () => {
   const outcome = ki8Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

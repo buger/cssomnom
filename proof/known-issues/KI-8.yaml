@@ -2,6 +2,9 @@ id: KI-8
 title: handleImportRule drops css-syntax <url-token> so @import url(foo.css) href is empty
 description: |
     css-syntax-3 § 4.3.6 #consume-url-token emits a <url-token> for unquoted url(foo.css). cssom-1 § 6.4.4 #dom-cssimportrule-href returns that URL. handleImportRule copies string tokens and url() functions but not first.type === 'url', so parse('@import url(foo.css);').cssRules[0].href is "". Distinct from KI-7 (styleSheet never-fetch). Overlay audit cannot change product code.
+commands:
+    - node --test tests/ki-2-8-12-class-fix.test.ts
+    - node --experimental-strip-types proof/reproducers/KI-8-import-href.ts
 affected_requirements:
     - SW-REQ-260821-5W6X
     - SYS-REQ-260821-7521
@@ -19,15 +22,22 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-8-import-href.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: None on HEAD. Callers must quote the URL (url("foo.css") or "foo.css") to get a non-empty href.
-remediation: Product hole is on origin/main logic restored in fe7defa (Implements comments kept). Overlay cannot land first.type === 'url' copy in src/parser.ts handleImportRule. Close only after unquoted url(foo.css) href is foo.css. No DEFECT — live unfixed bugs stay as KnownIssues.
+mitigation: "handleImportRule copies first.type === url into href. Unquoted url(foo.css) href is foo.css. CSSImportRule.styleSheet still does not fetch (KI-7 open)."
+remediation: "Landed in src/parser.ts handleImportRule. Overlay and tests/ki-2-8-12-class-fix.test.ts pass. DEFECT-260822-3T1G. Did not fetch (KI-7 remains open)."
 notes:
+    - |
+        2026-08-22: class-fix with KI-2/KI-12. <url-token> href is foo.css. Overlay GREEN twice. No fetch I/O.
     - '2026-08-22: overlay reproducer already existed as a passing contract check after f173f32. src restore emptied href again. Filed KI-8 as a failing tripwire. Distinct from KI-7 (styleSheet null / never-fetch).'
     - '2026-08-22: same hole also serializes cssText as url("") url("foo.css") because the leftover <url-token> becomes mediaText. Overlay tripwire now asserts both href === foo.css and cssText without url(""). No product fix. Did not rewrite KI-8 yaml fields.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-status: open
+status: fixed
 history:
+    - at: "2026-08-22T06:10:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Class-fix landed. Overlay GREEN twice. status=fixed.
     - at: "2026-08-22T12:00:00Z"
       by: agent:grok-4.6
       action: created

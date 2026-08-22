@@ -4,7 +4,7 @@
  * are ASCII case-insensitive. handleMarginRule stores lowercase name.
  * options.atRules lookup must fold. AT_RULE_HANDLERS lookup must use hasOwn
  * so @__proto__ / @constructor do not invoke Object.prototype.
- * Asserts those contracts so this command FAILS while getAtRuleHandler is unrestored.
+ * Regression tripwire after the KI-12 class-fix restores getAtRuleHandler.
  *
  * Reproduces: KI-12
  */

@@ -1,0 +1,80 @@
+schema_version: 1
+id: DEFECT-260822-X46W
+title: CSSStyleSheet.replace parsed in queueMicrotask instead of Promise.resolve after replaceSync
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: documented_sync_parse_deferred
+description: |
+    README documents a Node.js deviation: replace() runs replaceSync then Promise.resolve(this).
+    HEAD scheduled tokenize + consumeListOfRules in queueMicrotask so cssRules was empty on return.
+    Product fix: replace() calls replaceSync on this turn and returns Promise.resolve(this).
+    replaceSync was already synchronous. Non-constructed sheets still reject without parsing.
+    Distinct from KI-8 import href and KI-12 at-rule dispatch in the same class-fix commit.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: PAKB/GR67 named the documented deviation; the sync-parse SAT row was unwitnessed while queueMicrotask remained.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    affected_code:
+        - src/CSSOM.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:05:00Z"
+    requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    evidence:
+        verified_by:
+            - tests/ki-2-8-12-class-fix.test.ts
+            - proof/reproducers/KI-2-replace-sync.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-PAKB
+              witness: "deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE"
+            - requirement: SYS-REQ-260821-GR67
+              witness: "deviation_applies=T, documented_deviation_honored=T => TRUE"
+affects:
+    - SW-REQ-260821-PAKB
+    - SYS-REQ-260821-GR67
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-PAKB
+        - SYS-REQ-260821-GR67
+    added_obligations:
+        - requirement: SW-REQ-260821-PAKB
+          obligation_class: nominal
+    sibling_sweep:
+        scope:
+            - src/CSSOM.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            Only CSSStyleSheet.replace deferred parse in queueMicrotask.
+            replaceSync already tokenizes and consumeListOfRules immediately.
+            insertRule / deleteRule are not this class.
+    regression_tests:
+        - tests/ki-2-8-12-class-fix.test.ts
+        - proof/reproducers/KI-2-replace-sync.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-PAKB
+          witness: "deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE"
+        - requirement: SYS-REQ-260821-GR67
+          witness: "deviation_applies=T, documented_deviation_honored=T => TRUE"
+history:
+    - at: "2026-08-22T06:02:12Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-22T06:05:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-2.

@@ -1,0 +1,86 @@
+schema_version: 1
+id: DEFECT-260822-ZSWZ
+title: At-rule dispatch is ASCII-case-sensitive; margin name, atRules fold, and hasOwn handlers missing
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: atrule_ascii_case_dispatch
+description: |
+    css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive: at-keywords are ASCII
+    case-insensitive. getAtRuleHandler looked up MARGIN_RULE_NAMES / AT_RULE_HANDLERS /
+    keyframes without toLowerCase, so @MEDIA was CSSAtRule and @TOP-LEFT was dropped.
+    options.atRules was case-sensitive. AT_RULE_HANDLERS[name] without Object.hasOwn
+    hit Object.prototype (@__proto__ threw TypeError). Product fix lowercases the
+    at-keyword, folds own atRules keys into a Map, uses Object.hasOwn, and stores
+    lowercase CSSMarginRule.name.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: ZMZR/7521/WTPD named parser dispatch; mixed-case at-keywords and inherited-key lookup were unwitnessed until KI-12.
+impact_analysis:
+    affected_requirements:
+        - INT-REQ-260821-ZMZR
+        - SYS-REQ-260821-7521
+        - INT-REQ-260821-WTPD
+    affected_code:
+        - src/parser.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:05:00Z"
+    requirements:
+        - INT-REQ-260821-ZMZR
+        - SYS-REQ-260821-7521
+        - INT-REQ-260821-WTPD
+    evidence:
+        verified_by:
+            - tests/ki-2-8-12-class-fix.test.ts
+            - proof/reproducers/KI-12-atrule-dispatch.ts
+        requirement_mcdc_witnesses:
+            - requirement: INT-REQ-260821-ZMZR
+              witness: "atrule_name_mixed_case=T, typed_handler_dispatched=T => TRUE"
+            - requirement: SYS-REQ-260821-7521
+              witness: "ascii_case_fold=T, hasown_handler_lookup=T => TRUE"
+affects:
+    - INT-REQ-260821-ZMZR
+    - SYS-REQ-260821-7521
+    - INT-REQ-260821-WTPD
+hardening:
+    strengthened_requirements:
+        - INT-REQ-260821-ZMZR
+        - SYS-REQ-260821-7521
+        - INT-REQ-260821-WTPD
+    added_obligations:
+        - requirement: INT-REQ-260821-ZMZR
+          obligation_class: nominal
+    sibling_sweep:
+        scope:
+            - src/parser.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            isSupportedAtRule already folded ASCII case. getAtRuleHandler / options.atRules /
+            handleMarginRule were the remaining case-sensitive sites. Object.hasOwn covers
+            inherited keys. Distinct from KI-6 (type-0 parser-api adapter after a typed rule exists).
+    regression_tests:
+        - tests/ki-2-8-12-class-fix.test.ts
+        - proof/reproducers/KI-12-atrule-dispatch.ts
+    mcdc_witnesses:
+        - requirement: INT-REQ-260821-ZMZR
+          witness: "atrule_name_mixed_case=T, typed_handler_dispatched=T => TRUE"
+        - requirement: SYS-REQ-260821-7521
+          witness: "ascii_case_fold=T, hasown_handler_lookup=T => TRUE"
+history:
+    - at: "2026-08-22T06:02:29Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-22T06:05:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-12.

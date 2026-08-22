@@ -1,0 +1,76 @@
+schema_version: 1
+id: DEFECT-260822-3T1G
+title: handleImportRule drops css-syntax url-token so @import url(foo.css) href is empty
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: import_url_token_href_dropped
+description: |
+    css-syntax-3 § 4.3.6 #consume-url-token emits a <url-token> for unquoted url(foo.css).
+    handleImportRule copied string tokens and url() functions but not first.type === 'url',
+    so href was "" and leftover <url-token> serialized as mediaText (cssText url("") url("foo.css")).
+    Product fix copies url-token .value into href. Does not fetch; CSSImportRule.styleSheet
+    remains the never-fetched placeholder (KI-7 stays open).
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: 5W6X named @import href; the unquoted <url-token> partition was unwitnessed until KI-8.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-5W6X
+        - SYS-REQ-260821-7521
+    affected_code:
+        - src/parser.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:05:00Z"
+    requirements:
+        - SW-REQ-260821-5W6X
+        - SYS-REQ-260821-7521
+    evidence:
+        verified_by:
+            - tests/ki-2-8-12-class-fix.test.ts
+            - proof/reproducers/KI-8-import-href.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-5W6X
+              witness: "import_prelude_url_token=T, href_copied=T => TRUE"
+affects:
+    - SW-REQ-260821-5W6X
+    - SYS-REQ-260821-7521
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-5W6X
+        - SYS-REQ-260821-7521
+    added_obligations:
+        - requirement: SW-REQ-260821-5W6X
+          obligation_class: nominal
+    sibling_sweep:
+        scope:
+            - src/parser.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            handleNamespaceRule already copies token.type === 'url'. Only handleImportRule
+            dropped the url-token. Quoted url("...") and string hrefs already copied.
+            Did not implement @import fetch (KI-7).
+    regression_tests:
+        - tests/ki-2-8-12-class-fix.test.ts
+        - proof/reproducers/KI-8-import-href.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-5W6X
+          witness: "import_prelude_url_token=T, href_copied=T => TRUE"
+history:
+    - at: "2026-08-22T06:02:29Z"
+      by: agent:grok-4.6
+      action: created
+    - at: "2026-08-22T06:05:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Filled class-closure hardening after the product fix for KI-8.

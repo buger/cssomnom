@@ -2,7 +2,7 @@
  * Overlay reproducer for KI-2. Not a product-suite test.
  * Import parser first so ParseHooks inject. Asserts the intended README
  * contract (replace() parses synchronously via replaceSync and returns
- * Promise.resolve(this)) so this command FAILS while the hole is present.
+ * Promise.resolve(this)). Regression tripwire after the KI-2 class-fix.
  *
  * Reproduces: KI-2
  */
@@ -38,9 +38,9 @@ async function ki2Contract(): Promise<{ setupOk: boolean; holds: boolean; messag
 
 // Reproduces: KI-2
 // Verifies: SW-REQ-260821-PAKB
-// MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=F, replace_sync_parse_runs=F => FALSE [known-issue] [ki: KI-2]
+// MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE
 // Verifies: SYS-REQ-260821-GR67
-// MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=F => FALSE [known-issue] [ki: KI-2]
+// MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
 test('KI-2: replace() parses synchronously', async () => {
   const outcome = await ki2Contract();
   assert.equal(outcome.setupOk, true, outcome.message);
