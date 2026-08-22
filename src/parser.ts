@@ -79,18 +79,14 @@ export class Parser {
     'custom-media': (parser, rule) => parser.handleCustomMediaRule(rule),
   };
 
-  // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive:
-  // CSS keywords (including at-keywords) are ASCII case-insensitive.
   private getAtRuleHandler(name: string): ((parser: Parser, rule: ASTAtRule, block?: SimpleBlock, nested?: boolean) => Rule | null) | undefined {
-    const lower = name.toLowerCase();
-    if (Parser.MARGIN_RULE_NAMES.has(lower)) {
+    if (Parser.MARGIN_RULE_NAMES.has(name)) {
       return (parser, rule, block) => block ? parser.handleMarginRule(rule, block) : null;
     }
-    if (lower === 'keyframes' || lower.endsWith('-keyframes')) {
+    if (name === 'keyframes' || name.endsWith('-keyframes')) {
       return (parser, rule, block) => block ? parser.handleKeyframesRule(rule, block) : null;
     }
-    if (!Object.hasOwn(Parser.AT_RULE_HANDLERS, lower)) return undefined;
-    return Parser.AT_RULE_HANDLERS[lower];
+    return Parser.AT_RULE_HANDLERS[name];
   }
 
   private static readonly NESTED_GROUP_AT_RULES = new Set([
@@ -112,18 +108,9 @@ export class Parser {
   }
 
   public options: ParserOptions;
-  // Own-key ASCII-lowercase map of options.atRules (css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive).
-  private readonly atRuleTypes = new Map<string, string>();
 
   constructor(tokens: TokenStream | Token[], options: ParserOptions = {}) {
     this.options = options;
-    const atRules = options.atRules;
-    if (atRules) {
-      for (const key in atRules) {
-        if (!Object.hasOwn(atRules, key)) continue;
-        this.atRuleTypes.set(key.toLowerCase(), atRules[key]);
-      }
-    }
     if (Array.isArray(tokens)) {
       this.tokens = new ArrayTokenStream(tokens);
     } else {
@@ -249,6 +236,7 @@ export class Parser {
       this.discardToken();
     }
     if (this.nextToken.type !== 'ident') {
+      // Implements: SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1
       return null;
     }
     const stream = new LazyComponentValueStream(() => this.consumeComponentValue(), 'EOF');
@@ -383,16 +371,17 @@ export class Parser {
 
         if (nested) return null;
 
-        // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive
-        const customAtRuleType = this.atRuleTypes.get(atRuleName.toLowerCase());
-        if (customAtRuleType === 'declaration') {
-          const decls = this.consumeDeclarationsFromBlockContents(block.value);
-          rule.childRules = decls as unknown as Rule[];
-          return rule as unknown as Rule;
-        } else if (customAtRuleType === 'rule') {
-          const rules = this.consumeBlockContents(new ArrayComponentValueStream(block.value), true);
-          rule.childRules = rules;
-          return rule as unknown as Rule;
+        if (this.options?.atRules?.[atRuleName]) {
+          const type = this.options.atRules[atRuleName];
+          if (type === 'declaration') {
+            const decls = this.consumeDeclarationsFromBlockContents(block.value);
+            rule.childRules = decls as unknown as Rule[];
+            return rule as unknown as Rule;
+          } else if (type === 'rule') {
+            const rules = this.consumeBlockContents(new ArrayComponentValueStream(block.value), true);
+            rule.childRules = rules;
+            return rule as unknown as Rule;
+          }
         }
         
         return new CSSAtRule(rule.name, rule.prelude, block);
@@ -619,11 +608,9 @@ export class Parser {
     return new CSSPageRule(serialize(rule.prelude).trim(), declarations, nestedRules, parseRule);
   }
 
-  // css-values-4 § 4.1 #keywords / cssom-1 #the-cssmarginrule-interface:
-  // margin at-keywords are ASCII case-insensitive; CSSOM serializes lowercase.
   private handleMarginRule(rule: ASTAtRule, block: SimpleBlock): Rule {
     const declarations = this.consumeDeclarationsFromBlockContents(block.value);
-    return new CSSMarginRule(rule.name.toLowerCase(), declarations);
+    return new CSSMarginRule(rule.name, declarations);
   }
 
   // css-counter-styles-3 § 8.1 #csscounterstylerule
@@ -738,7 +725,6 @@ export class Parser {
       });
     } catch (e) {
       // @property rule is invalid if validation fails
-      // Implements: SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1
       return null;
     }
 
@@ -758,17 +744,16 @@ export class Parser {
     
     if (i < prelude.length) {
       const first = prelude[i];
-      // css-syntax-3 § 4.3.6 #consume-url-token: unquoted url(foo.css) is a <url-token>.
-      // css-syntax-3 § 4.3.4 #consume-an-ident-like-token: quoted url("foo") is a function.
-      // cssom-1 § 6.4.4 #dom-cssimportrule-href: href is the URL specified by the @import prelude.
-      if (first.type === 'string' || first.type === 'url') {
+      if (first.type === 'string') {
         href = first.value;
         i++;
       } else if (first.type === 'function' && (first as CSSFunction).name === 'url') {
+         // handle url()
          const urlArg = (first as CSSFunction).value.find(v => v.type === 'string');
          if (urlArg) href = (urlArg as StringToken).value;
 
          else {
+            // raw url
             const raw = (first as CSSFunction).value.map(v => serialize([v])).join('');
             href = raw.trim();
          }
@@ -1511,8 +1496,6 @@ export class Parser {
         return block;
       } else if (next.type === 'EOF') {
         this.reportError('Unexpected EOF in block', next);
-        // css-syntax-3 § 5.5.9 #consume-simple-block: EOF before the mirror token is a parse error.
-        block.unclosed = true;
         return block;
       } else {
         block.value.push(this.consumeComponentValue());
@@ -1540,8 +1523,6 @@ export class Parser {
         return func;
       } else if (next.type === 'EOF') {
         this.reportError('Unexpected EOF in function', next);
-        // css-syntax-3 § 5.5.10 #consume-function: EOF before ')' is a parse error.
-        func.unclosed = true;
         return func;
       } else {
         func.value.push(this.consumeComponentValue());

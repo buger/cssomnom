@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Implements: SYS-REQ-260821-HGFK, SYS-REQ-260821-Y6R3, SW-REQ-260821-7AKJ, SW-REQ-260821-E5D5
 
+// Implements: SYS-REQ-260821-HGFK, SYS-REQ-260821-Y6R3, SW-REQ-260821-7AKJ, SW-REQ-260821-E5D5
 import type { ComponentValue, IdentToken, CSSFunction } from '../../types.ts';
 import { tokenize } from '../../tokenizer.ts';
 import { ParseHooks } from '../../parse-hooks.ts';
@@ -30,7 +30,7 @@ import { CSSStyleValue } from './CSSStyleValue.ts';
 import { CSSKeywordValue } from './CSSKeywordValue.ts';
 import { CSSUnparsedValue, tokensToUnparsedSegments } from './CSSUnparsedValue.ts';
 import { createCSSStyleValue } from './style-value-factory.ts';
-import { tryParsePosition, matchesPositionPropertyGrammar } from '../position/position-parser.ts';
+import { tryParsePosition } from '../position/position-parser.ts';
 import { CSSTransformValue } from '../transform/CSSTransformValue.ts';
 import { parseTranslate, parseRotate, parseScale } from '../transform/transform-parser.ts';
 import { CSSColorValue } from '../color/CSSColorValue.ts';
@@ -79,23 +79,6 @@ function validateMathFunctions(tokens: ComponentValue[]): boolean {
   return true;
 }
 
-/**
- * css-typed-om-1 § 6.6 #parse-a-cssstylevalue: grammar first; TypeError only if it fails.
- * § 3.3 #positionvalue-objects: then reify as CSSPositionValue / CSSKeywordValue / raw CSSStyleValue.
- */
-function parseThenReifyPosition(property: string, trimmed: ComponentValue[], fallbackCss: string): CSSStyleValue {
-  if (!matchesPositionPropertyGrammar(property, trimmed)) {
-    throw new TypeError(`Invalid value for property '${property}': '${fallbackCss}'`);
-  }
-  const posVal = tryParsePosition(trimmed, property);
-  if (posVal) return posVal;
-  const components = trimmed.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
-  if (components.length === 1 && components[0].type === 'ident') {
-    return new CSSKeywordValue((components[0] as IdentToken).value);
-  }
-  return new CSSStyleValue(fallbackCss, privateToken);
-}
-
 function createValueFromTokens(values: ComponentValue[], property?: string): CSSStyleValue {
   let start = 0;
   while (start < values.length && (values[start].type === 'whitespace' || values[start].type === 'comment')) {
@@ -120,7 +103,8 @@ function createValueFromTokens(values: ComponentValue[], property?: string): CSS
   }
 
   if (property && POSITION_PROPERTIES.has(property.toLowerCase())) {
-    return parseThenReifyPosition(property, trimmed, serialize(trimmed).trim());
+    const posVal = tryParsePosition(trimmed, property);
+    if (posVal) return posVal;
   }
 
   if (trimmed.length === 1) {
@@ -202,30 +186,9 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
   }
 
   if (POSITION_PROPERTIES.has(propLower)) {
-    // css-typed-om-1 § 6.6 #parse-a-cssstylevalue: TypeError only if the property grammar fails.
-    // § 3.3 #positionvalue-objects: reify <position> as CSSPositionValue; otherwise keyword/raw CSSStyleValue.
-    if (LIST_PROPERTIES.has(propLower) && componentValues.some(t => t.type === 'comma')) {
-      const segments: ComponentValue[][] = [[]];
-      for (const t of componentValues) {
-        if (t.type === 'comma') {
-          segments.push([]);
-        } else {
-          segments[segments.length - 1].push(t);
-        }
-      }
-      const values: CSSStyleValue[] = [];
-      for (const seg of segments) {
-        const segTrimmed = seg.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
-        if (segTrimmed.length === 0) continue;
-        values.push(parseThenReifyPosition(property, segTrimmed, serialize(seg).trim() || css));
-      }
-      if (values.length === 0) {
-        throw new TypeError(`Invalid value for property '${property}': '${css}'`);
-      }
-      return values;
-    }
-
-    return [parseThenReifyPosition(property, trimmed, css.trim())];
+    const posVal = tryParsePosition(trimmed, property);
+    if (posVal) return [posVal];
+    return [new CSSStyleValue(css.trim(), privateToken)];
   }
 
   if (propLower === 'transform') {

@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Implements: SW-REQ-260821-6D9T
 
+// Implements: SW-REQ-260821-6D9T
 import { tokenize } from './tokenizer.ts';
 import { Parser } from './parser.ts';
 import { SelectorParser, parseAnPlusB } from './SelectorParser.ts';
@@ -99,7 +99,6 @@ function parseSelector(selector: string | ComplexSelector | SelectorList): Selec
  * Evaluates whether a given DOM element matches a CSS selector.
  * selectors-4 § 15 #match-against-element
  */
-// Implements: SW-REQ-260821-6D9T
 export function matches(element: unknown, selector: string | ComplexSelector | SelectorList, scopeElement?: unknown): boolean {
   if (!isElement(element)) return false;
   const list = parseSelector(selector);
@@ -625,9 +624,8 @@ function matchPseudoClassSelector(element: DOMElement, pseudo: PseudoClassSelect
     return isElementDisabled(element);
   }
   if (name === 'enabled') {
-    // html#selector-enabled: button/input/select/textarea/optgroup/option/fieldset
-    // or form-associated custom element that is not actually disabled.
-    if (isDisableableElement(element)) {
+    const tag = toAsciiLowerCase(element.localName || element.tagName || '');
+    if (['button', 'input', 'select', 'textarea', 'optgroup', 'option', 'fieldset'].includes(tag)) {
       return !isElementDisabled(element);
     }
     return false;
@@ -830,112 +828,20 @@ function getElementLanguage(element: DOMElement): string {
   return '';
 }
 
-function elementLocalName(element: DOMElement): string {
-  return toAsciiLowerCase(element.localName || element.tagName || '');
-}
-
-function firstLegendChild(fieldset: DOMElement): DOMElement | undefined {
-  return (fieldset.children ? Array.from(fieldset.children) : []).find(
-    c => elementLocalName(c) === 'legend'
-  );
-}
-
-function isInsideFirstLegend(element: DOMElement, fieldset: DOMElement): boolean {
-  const legend = firstLegendChild(fieldset);
-  return !!legend && !!legend.contains?.(element);
-}
-
-function isFormAssociatedCustomElement(element: DOMElement): boolean {
-  // html#form-associated-custom-element: custom element (name contains '-') with formAssociated.
-  if (!elementLocalName(element).includes('-')) return false;
-  if ('formAssociated' in element && (element as { formAssociated?: unknown }).formAssociated === true) {
-    return true;
-  }
-  const proto = Object.getPrototypeOf(element) as { constructor?: { formAssociated?: unknown } } | null;
-  return proto?.constructor?.formAssociated === true;
-}
-
-function isDisableableElement(element: DOMElement): boolean {
-  const tag = elementLocalName(element);
-  return (
-    tag === 'button' ||
-    tag === 'input' ||
-    tag === 'select' ||
-    tag === 'textarea' ||
-    tag === 'optgroup' ||
-    tag === 'option' ||
-    tag === 'fieldset' ||
-    isFormAssociatedCustomElement(element)
-  );
-}
-
-function isFormControlDisabled(element: DOMElement): boolean {
-  // html#concept-fe-disabled: disabled content attribute, or descendant of a
-  // fieldset whose disabled attribute is set, except descendants of that
-  // fieldset's first legend element child.
-  if (element.hasAttribute?.('disabled')) return true;
-  let ancestor = element.parentElement;
-  while (ancestor) {
-    if (elementLocalName(ancestor) === 'fieldset' && ancestor.hasAttribute?.('disabled')) {
-      if (!isInsideFirstLegend(element, ancestor)) return true;
-    }
-    ancestor = ancestor.parentElement;
-  }
-  return false;
-}
-
-function isDisabledFieldset(element: DOMElement): boolean {
-  // html#concept-fieldset-disabled: a fieldset is disabled if its disabled
-  // attribute is specified, or if it is a descendant of another fieldset
-  // whose disabled attribute is specified and is not a descendant of that
-  // fieldset element's first legend element child, if any.
-  if (element.hasAttribute?.('disabled')) return true;
-  let ancestor = element.parentElement;
-  while (ancestor) {
-    if (elementLocalName(ancestor) === 'fieldset' && ancestor.hasAttribute?.('disabled')) {
-      if (!isInsideFirstLegend(element, ancestor)) return true;
-    }
-    ancestor = ancestor.parentElement;
-  }
-  return false;
-}
-
-function nearestAncestorSelectIsDisabled(element: DOMElement): boolean {
-  let ancestor = element.parentElement;
-  while (ancestor) {
-    if (elementLocalName(ancestor) === 'select') return isFormControlDisabled(ancestor);
-    ancestor = ancestor.parentElement;
-  }
-  return false;
-}
-
-function isOptionDisabled(element: DOMElement): boolean {
-  // html#concept-option-disabled: disabled attribute, or descendant of optgroup[disabled].
-  if (element.hasAttribute?.('disabled')) return true;
-  let ancestor = element.parentElement;
-  while (ancestor) {
-    if (elementLocalName(ancestor) === 'optgroup' && ancestor.hasAttribute?.('disabled')) return true;
-    ancestor = ancestor.parentElement;
-  }
-  return false;
-}
-
 function isElementDisabled(element: DOMElement): boolean {
-  // html#selector-disabled / html#concept-element-disabled:
-  // only actually-disabled form controls, optgroup/option, fieldset, and
-  // form-associated custom elements — not every div/span inside fieldset[disabled].
-  const tag = elementLocalName(element);
-  if (tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea') {
-    return isFormControlDisabled(element);
+  if (element.hasAttribute?.('disabled')) return true;
+  if (element.parentElement) {
+    const tag = toAsciiLowerCase(element.parentElement.localName || element.parentElement.tagName || '');
+    if (tag === 'fieldset' && element.parentElement.hasAttribute?.('disabled')) {
+      const firstLegend = (element.parentElement.children ? Array.from(element.parentElement.children) : []).find(
+        c => toAsciiLowerCase(c.localName || c.tagName || '') === 'legend'
+      );
+      if (!firstLegend || !firstLegend.contains?.(element)) {
+        return true;
+      }
+    }
+    return isElementDisabled(element.parentElement);
   }
-  if (tag === 'fieldset') return isDisabledFieldset(element);
-  if (tag === 'optgroup') {
-    return !!(element.hasAttribute?.('disabled') || nearestAncestorSelectIsDisabled(element));
-  }
-  if (tag === 'option') {
-    return isOptionDisabled(element) || nearestAncestorSelectIsDisabled(element);
-  }
-  if (isFormAssociatedCustomElement(element)) return isFormControlDisabled(element);
   return false;
 }
 

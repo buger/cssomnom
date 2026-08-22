@@ -87,7 +87,6 @@ export class MediaList {
     return this._mediaQueries.map(q => serializeMediaQuery(q)).join(', ');
   }
 
-  // Implements: INT-REQ-260821-MZW3, SYS-REQ-260821-5283
   set mediaText(value: string) {
     if (!value) {
       this._mediaQueries = [];
@@ -344,15 +343,56 @@ export class CSSStyleSheet extends StyleSheet {
     if (!this._constructedFlag || this._disallowModificationFlag) {
       return Promise.reject(new DOMException("Can't call replace or replaceSync on non-constructed stylesheets.", "NotAllowedError"));
     }
-    // README documented Node.js deviation: cssom-1 § 6.5.1 would parse "in parallel".
-    // We run replaceSync on this turn and return Promise.resolve(this) so cssRules is
-    // populated before replace() returns.
-    try {
-      this.replaceSync(text);
-      return Promise.resolve(this);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    // 3. Set the disallow modification flag.
+    this._disallowModificationFlag = true;
+
+    // 4. In parallel, do these steps:
+    return new Promise<CSSStyleSheet>((resolve, reject) => {
+      queueMicrotask(() => {
+        try {
+          // 4.1 Let rules be the result of running parse a stylesheet's contents from text.
+          const tokens = tokenize(text);
+          const rules = ParseHooks.consumeListOfRules(tokens, true);
+
+          // 4.2 If rules contains one or more @import rules, remove those rules from rules.
+          const filteredRules = rules.filter(rule => {
+            if (isImportRule(rule)) {
+              console.warn('CSS Parse Error: @import rules are not allowed in constructed stylesheets and were removed.');
+              return false;
+            }
+            return true;
+          });
+
+          // Clear parent references on previously attached rules
+          for (const rule of this._rules) {
+            if (rule instanceof CSSRule) {
+              rule.parentRule = null;
+              rule.parentStyleSheet = null;
+            }
+          }
+
+          this._unregisterProperties();
+          // 4.3 Set sheet's CSS rules to rules.
+          this._rules = filteredRules;
+          for (const rule of this._rules) {
+            if (rule instanceof CSSRule) {
+              rule.parentStyleSheet = this;
+              rule.parentRule = null;
+            }
+            this._registerRuleProperties(rule);
+          }
+
+          // 4.4 Unset sheet's disallow modification flag.
+          this._disallowModificationFlag = false;
+
+          // 4.5 Resolve promise with sheet.
+          resolve(this);
+        } catch (e) {
+          this._disallowModificationFlag = false;
+          reject(e);
+        }
+      });
+    });
   }
 
   // cssom-1 § 6.5.1 #dom-cssstylesheet-replacesync
@@ -680,7 +720,6 @@ export class CSSGroupingRule extends CSSRule {
 
   // cssom-1 § 6.4.3 #the-cssgroupingrule-interface
   // css-nesting-1 § 4.1 #the-cssnesteddeclarations-interface
-  // Implements: SYS-REQ-260821-YMEY, SW-REQ-260821-TF5T, INT-REQ-260821-30ZA
   insertRule(rule: string, index: number = 0): number {
     // 1. Set length to the number of items in list.
     // 2. If index is greater than length (or index < 0), throw IndexSizeError.
@@ -1399,8 +1438,7 @@ export class CSSMarginRule extends CSSRule {
 
   constructor(name: string, declarations: import('./types.ts').Declaration[]) {
     super();
-    // css-values-4 § 4.1 #keywords / cssom-1 #the-cssmarginrule-interface
-    this.name = name.toLowerCase();
+    this.name = name;
     this._style = new CSSMarginDescriptors(declarations);
     this._style.parentRule = this;
   }
@@ -1427,6 +1465,7 @@ export class CSSMarginRule extends CSSRule {
 export class CSSImportRule extends CSSRule {
   private _href: string;
   private _media: MediaList;
+  private _styleSheet: CSSStyleSheet | null = null;
   private _layerName: string | null = null;
   private _supportsText: string | null = null;
 
@@ -1458,11 +1497,18 @@ export class CSSImportRule extends CSSRule {
     }
   }
 
-  // cssom-1 § 6.4.4 #dom-cssimportrule-stylesheet
-  // The attribute returns the associated sheet if any, or null otherwise.
-  // README documented offline parser: no network/disk I/O, so no associated sheet.
+  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet
   get styleSheet(): CSSStyleSheet | null {
-    return null;
+    if (!this._styleSheet) {
+      this._styleSheet = CSSStyleSheet.createInternal([], (text: string) => {
+        const tokens = tokenize(text);
+        return ParseHooks.consumeRule(tokens) as unknown as Rule;
+      });
+      (this._styleSheet as unknown as { _ownerRule: CSSRule | null })._ownerRule = this;
+      (this._styleSheet as unknown as { _parentStyleSheet: StyleSheet | null })._parentStyleSheet = this.parentStyleSheet;
+      (this._styleSheet as unknown as { _href: string | null })._href = this._href;
+    }
+    return this._styleSheet;
   }
 
   // cssom-1 § 6.4.3 #dom-cssimportrule-layername

@@ -464,7 +464,6 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
   }
 
   // cssom-1 § 6.7.1 #the-cssstyledeclaration-interface
-  // Implements: SYS-REQ-260821-8TGB, SW-REQ-260821-HNRG
   setProperty(property: string, value: string | null, priority: string = '', notify: boolean = true) {
     // 1. If the readonly flag is set, then throw a NoModificationAllowedError exception.
     if (this._readonly) {
@@ -509,6 +508,11 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
       return;
     }
 
+    if (property === 'all') {
+      this._declarations = this._declarations.filter(d => d.name !== 'all');
+      this._declMap.delete('all');
+    }
+
     const shorthand = SHORTHANDS[property];
     if (shorthand) {
       const compVals = ParseHooks.parseComponentValues(tokens);
@@ -516,13 +520,6 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
       if (!hasVar) {
         const expanded = shorthand.expand(compVals);
         if (expanded) {
-          // cssom-1 § 6.7.1 #set-a-css-declaration / css-cascade-5 § 6.2 #all-shorthand
-          // Drop a stored `all` (var/env) only after expandAll succeeds. Deleting first
-          // made an invalid later setProperty a visible mutation instead of a no-op.
-          if (property === 'all') {
-            this._declarations = this._declarations.filter(d => d.name !== 'all');
-            this._declMap.delete('all');
-          }
           for (const [lh, val] of Object.entries(expanded)) {
             this.setProperty(lh, serialize(val), normalizedPriority, false);
           }
