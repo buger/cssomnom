@@ -99,12 +99,14 @@ class Tokenizer extends AbstractTokenizer {
     if (this.pos > 0) {
       this.pos--;
       const codeUnit = this.input.charCodeAt(this.pos);
-      //mcdc:ignore:defensive this.pos > 0 F after a trail surrogate is unreachable — css-syntax-3 § 3.3 replaces a leading lone trail; T pair path already witnessed [reviewed: agent:grok-4.6]
-      if (codeUnit >= 0xDC00 && codeUnit <= 0xDFFF && this.pos > 0) {
-        const prevCodeUnit = this.input.charCodeAt(this.pos - 1);
-        //mcdc:ignore:defensive prevCodeUnit high-surrogate F is unreachable — § 3.3 replaces lone trails so a remaining trail is always paired; T pair path already witnessed [reviewed: agent:grok-4.6]
-        if (prevCodeUnit >= 0xD800 && prevCodeUnit <= 0xDBFF) {
-          this.pos--;
+      if (codeUnit >= 0xDC00 && codeUnit <= 0xDFFF) {
+        //mcdc:ignore:defensive this.pos > 0 F after a trail surrogate is unreachable — css-syntax-3 § 3.3 replaces a leading lone trail; T pair path already witnessed [reviewed: agent:grok-4.6]
+        if (this.pos > 0) {
+          const prevCodeUnit = this.input.charCodeAt(this.pos - 1);
+          //mcdc:ignore:defensive prevCodeUnit high-surrogate F is unreachable — § 3.3 replaces lone trails so a remaining trail is always paired; T pair path already witnessed [reviewed: agent:grok-4.6]
+          if (prevCodeUnit >= 0xD800 && prevCodeUnit <= 0xDBFF) {
+            this.pos--;
+          }
         }
       }
     }

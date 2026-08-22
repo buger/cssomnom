@@ -591,11 +591,13 @@ export class Parser {
           }
         }
         
-        //mcdc:ignore:defensive normalizedParts.length > 0 F with valid T is impossible — lists starts [[]]; empty/comma paths set valid=false before any push; valid T path already witnessed [reviewed: agent:grok-4.6]
-        if (valid && normalizedParts.length > 0) {
-          const selectorText = normalizedParts.join(', ');
-          const declarations = this.consumeDeclarationsFromBlockContents(blockVal.value);
-          keyframeRules.push(new CSSKeyframeRule(selectorText, declarations));
+        if (valid) {
+          //mcdc:ignore:defensive normalizedParts.length > 0 F with valid T is impossible — lists starts [[]]; empty/comma paths set valid=false before any push; valid T path already witnessed [reviewed: agent:grok-4.6]
+          if (normalizedParts.length > 0) {
+            const selectorText = normalizedParts.join(', ');
+            const declarations = this.consumeDeclarationsFromBlockContents(blockVal.value);
+            keyframeRules.push(new CSSKeyframeRule(selectorText, declarations));
+          }
         }
       } else {
         break;

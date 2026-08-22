@@ -19,8 +19,9 @@
 // tests/mcdc-branch-parser.test.ts, tests/mcdc-branch-parser-atrules.test.ts,
 // and tests/mcdc-parser-still-hot-unique-cause.test.ts (18/22 D, 24/28 C,
 // incomplete 4). Hottest seam L532 next.type === "simple-block" &&
-// associatedToken.type === "{". Remaining incomplete: L588
-// valid && normalizedParts.length > 0 (length>0 F), L518/L529 while (true) F.
+// associatedToken.type === "{". Remaining incomplete: length>0 F
+// (ignored as single-condition after LOOP retarget), L518/L529 while (true) F.
+// valid F with nonempty parts is public unique-cause: from, 999% vs from.
 // Drive parseStyleSheet / CSSStyleSheet.replaceSync @keyframes.
 // css-animations-1 #interface-csskeyframesrule / #keyframe-selector,
 // css-syntax-3 § 5.5.2 #consume-an-at-rule / § 5.5.8 #consume-a-simple-block,
@@ -243,13 +244,25 @@ describe('MC/DC leftover unique-cause: handleKeyframesRule grouping / vendor L53
   });
 });
 
+describe('MC/DC leftover unique-cause: handleKeyframesRule valid F after a push (css-animations-1 #keyframe-selector)', () => {
+  test('from, 999% unique-causes valid F with nonempty parts vs from T pair', () => {
+    // valid F ∧ length T: `from` pushes '0%', then 999% is out of [0, 100]
+    // so valid=false with a nonempty normalizedParts. The keyframe is dropped.
+    // T pair: from { } keeps 0%. Drive parseStyleSheet and replaceSync.
+    assertKf(onlyKf('@keyframes n { from, 999% { color: red } }'), 'n', []);
+    assertKf(onlyKf('@keyframes n { from { color: red } }'), 'n', ['0%']);
+    assertKf(replaceKf('@keyframes n { from, 999% { color: red } }'), 'n', []);
+    assertKf(replaceKf('@keyframes n { from { color: red } }'), 'n', ['0%']);
+  });
+});
+
 describe('MC/DC leftover unique-cause: handleKeyframesRule L588 / L518 / L529 mute witness', () => {
-  test('L588 valid T && length>0 F is unreachable: empty/comma prelude is valid F', () => {
+  test('length>0 F with valid T is unreachable: empty/comma prelude is valid F', () => {
     // lists always starts as [[]]. Empty / whitespace-only / leading / trailing
-    // comma preludes hit trimmed.length !== 1 and set valid=false before the
-    // L588 AND, so JS skips normalizedParts.length > 0. Any valid from/to/%
+    // comma preludes hit trimmed.length !== 1 and set valid=false before any
+    // push, so JS never evaluates length>0 under valid T. Any valid from/to/%
     // list pushes a part, so valid T with length 0 cannot occur via
-    // parseStyleSheet / replaceSync (no //mcdc:ignore).
+    // parseStyleSheet / replaceSync (length F is the single-condition ignore).
     assertKf(onlyKf('@keyframes go { { color: red; } }'), 'go', []);
     assertKf(onlyKf('@keyframes go {   { color: red; } }'), 'go', []);
     assertKf(onlyKf('@keyframes go { from, { color: red; } }'), 'go', []);
