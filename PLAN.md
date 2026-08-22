@@ -2980,7 +2980,7 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 ## Phase 121: Strict Proof 0/0 campaign (in progress)
 
-**Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof` DX-042 `6d41cc0`, HEAD `0e36b1f`, 2026-08-22T10:44:15Z): **Errors: 0, Warnings: 17**. Code MC/DC **93.5% / 94.8%** (3396/3633 D, 4842/5109 C; **Ignored decisions: 53**; incomplete 237). Spec MC/DC **322 rows / 12 uncovered / 15 stale** (honest after `0d5ce4f` dropped lying TRUE comments; Champ in flight to close without lies). `nonbool` / `known_issue_complete` / `documentation_coverage` 82/82 / `obligation_enforcement_backed` **pass**. Catalog **82**. KI-7 **open**. Floors not lowered. Do not `proof approve` / `waive`. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
+**Latest recapture** (Node v24.11.1, DX-042 binary, HEAD `cf47be2`, 2026-08-22T11:08:01Z): **Errors: 1, Warnings: 16**. Error: REVIEW-39 numeral vs 7R6Z FRETish (`escaped_hex_digits <= 6` moved to parent). Code MC/DC **93.5% / 94.9%** (3398/3633 D, 4846/5109 C; **Ignored 53**; incomplete 235). Spec MC/DC **322 rows / 8 uncovered / 5 stale** at recapture; later `d1b0c3d` left 7 uncovered honestly (7R6Z/30ZA empty auditor SAT). `c4e3dae` Grizz ACCEPT / Reviewer reject then `d1b0c3d` child-refine. KI-7 **open**. Floors not lowered. Do not `proof approve` / `waive`. Log: `/tmp/grok-goal-47e8a9f6b740/implementer/audit-full.log`.
 
 - [x] **acknowledge KI-7 on 5W6X approved guarantee** (`PROOF_ACTOR=agent:grok-4.6`): `approved_guarantee_ki_conflict` was 1w — SW-REQ-260821-5W6X approved while open KI-7 had no `release_disposition`. Canonical option 2: `proof known-issue edit KI-7 --set-release-disposition ship_with_known_issue`. KI-7 **stays open** (documented no-fetch; no I/O). Did not `proof waive`, class-fix fetch, or mass un-approve 66 reqs. 5W6X approval remains DEFECT-3T1G href copy (does not claim fetch); SAT TRUE is `constructed=T, fetched=F, import_url_present=T`; KI-7 tripwire remains `constructed=T, fetched=T, import_url_present=T => FALSE`. Isolated `proof audit --check approved_guarantee_ki_conflict --fail-level warn`: **0e / 0w**.
 
@@ -4668,4 +4668,14 @@ LOOP Reviewer **REJECTED** `c4e3dae` (Grizz ACCEPTed SNP4/CFRA/5V7N empty-world 
 - [x] **30ZA** idle unique-cause of bound F / `insert_rule_path=F` over `consumeCalls === 0`: `parse_hooks_consume_rule_called=F, parser_imported=F, shorthand_expanded=F, shorthand_rejected=F`. SAT insertRule stays `consume=T, parser_imported=F, expanded|rejected`.
 - [x] REVIEW-36/38/39/41 comments retargeted to the shipped FRETish (Z6J1 no `position_arity>=1`; 1REE then `red_from_chroma` only; 7R6Z consume without hex<=6; YBF2 then `expanded | rejected`).
 - [x] Node 24 twice: `tests/mcdc-witness-domain-bounds.test.ts tests/mcdc-witness-tokenizer.test.ts` **49/49**. Isolated `proof audit --check mcdc_coverage --fail-level warn` left **red honestly**: 322 rows, **7 uncovered, 7 stale** (7R6Z 2/8 partial: auditor SAT `consume=T` with `css_text=F` / all-or-F+`token_list=F` empty on public tokenize; 30ZA 5 uncovered auditor SAT `consume=T, parser_imported=T, mutex both-T` on idle; 30ZA 6 stale honest idle comments + EGCP 1 documented extra SAT). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-c4e3dae-loop-fix.md`.
+
+---
+
+## Phase: drop leftover hex-6 numeral from REVIEW-39 (Champ)
+
+Full audit at `cf47be2` **Errors: 1**: `spec_lint_spec_conformance_review_grounded` — REVIEW-39 cited a numeral not in the 7R6Z FRETish. `d1b0c3d` moved `escaped_hex_digits <= 6` to parent YQQZ but REVIEW-39 still named `6` / `<= 6` / SAT hex examples. Did **not** edit `src/**`. Did **not** retune 7R6Z FRETish. KI-7 stays **open**.
+
+- [x] REVIEW-39 comment restates shipped 7R6Z: `css_text_supplied & consume_token_loop_runs & (uses_replacement_character | uses_escaped_code_point | sixth_digit_stops_hex) => token_list_returned`. Hex cap lives on YQQZ only. Idle `tokenizeCalls=0` is `consume_token_loop_runs=F`; SAT tokenize of escaped ident / over-length hex / unicode-range leftover letter is `consume=T`. No `6` / `<= 6` unless that bound is in the 7R6Z formula (it is not).
+- [x] REVIEW-36 sibling: drop `arity 1..4` from the comment (`position_arity` is not a Z6J1 when conjunct; range stays on typed_om table `position_arity_reification`). Isolated check cannot be 0e while that leftover remains.
+- [x] Isolated `proof audit --check spec_lint_spec_conformance_review_grounded --fail-level warn`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/review-39-numeral.md`.
 
