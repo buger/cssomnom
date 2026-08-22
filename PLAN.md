@@ -2982,6 +2982,8 @@ Objective: Close key spec conformance gaps in `css/css-variables` (61.13% -> 85%
 
 **Latest recapture** (Node v24.11.1, patched `/tmp/proof-dx/proof`, HEAD `cd3a692`): **Errors: 0, Warnings: 10**. Spec MC/DC **222/222 uncovered=0** (1 stale EGCP). Code MC/DC **89.1% / 90.9%** (3280/3683 D, 4698/5170 C) vs 100% floors (not lowered). KI-1,2,3,5,6,8–14 **fixed**; KI-4 **withdrawn**; KI-7 **open** (documented no-fetch). Do not `proof approve` 66 reqs.
 
+- [x] **acknowledge KI-7 on 5W6X approved guarantee** (`PROOF_ACTOR=agent:grok-4.6`): `approved_guarantee_ki_conflict` was 1w — SW-REQ-260821-5W6X approved while open KI-7 had no `release_disposition`. Canonical option 2: `proof known-issue edit KI-7 --set-release-disposition ship_with_known_issue`. KI-7 **stays open** (documented no-fetch; no I/O). Did not `proof waive`, class-fix fetch, or mass un-approve 66 reqs. 5W6X approval remains DEFECT-3T1G href copy (does not claim fetch); SAT TRUE is `constructed=T, fetched=F, import_url_present=T`; KI-7 tripwire remains `constructed=T, fetched=T, import_url_present=T => FALSE`. Isolated `proof audit --check approved_guarantee_ki_conflict --fail-level warn`: **0e / 0w**.
+
 ---
 
 ## Phase: KI-1..6 product class-fixes (Champ)

@@ -25,8 +25,10 @@ remediation: Load the imported href so CSSImportRule.styleSheet is the associate
 notes:
     - Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.
     - 'Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=T, fetched=T, import_url_present=T => FALSE. Do not ignore SAT for fetch=false. Status remains open (documented offline parser, no fetch).'
+    - 'Acknowledge on approved guarantee SW-REQ-260821-5W6X: ship the documented offline no-fetch contract (SAT TRUE css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T). KI-7 tripwire remains the full-CSSOM FALSE row constructed=T, fetched=T, import_url_present=T. Status stays open; no fetch I/O; do not treat the DEFECT-3T1G href SAT as a fetch claim.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: ship_with_known_issue
 status: open
 history:
     - at: "2026-08-21T18:24:24Z"
@@ -51,6 +53,10 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: append-note
+    - at: "2026-08-22T07:13:44Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note,set-release-disposition=ship_with_known_issue
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
