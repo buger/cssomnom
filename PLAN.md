@@ -4404,6 +4404,16 @@ Recapture-only. Did **not** edit `src/**`. Did **not** commit. Did **not** `proo
 
 ---
 
+## Phase: leftover isValidSelector unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/parser.ts` `isValidSelector` after last recapture **11/14 D**, **20/24 C**, **3 incomplete** (top-8 hotspot; next seam L1319 `start <= end && prelude[start].type === "whitespace"`) after `tests/mcdc-parser-still-hot-unique-cause.test.ts`. Drive `parse` / `parseStyleSheet` / `CSSStyleSheet.replaceSync` / shipped `consumeQualifiedRule` (parse() skips leading ws) plus `SelectorParser.parse` / `CSS.supports('selector(...)')` / `querySelector`. Prefer real selectors. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/opt/node24/bin`).
+
+- [x] `tests/mcdc-is-valid-selector-unique-cause.test.ts` — L1319 F empty prelude `{ color: red; }` vs T,F `div`/`div{color:red}` vs T,T leading ws via shipped `consumeQualifiedRule('  div {…}')` / `\t\n` / `.foo` / `:hover` (parse()/consumeRule/consumeBlockContents skip leading ws); whitespace-only ` {…}` T,T then empty; L1320 trailing `div {` vs `div{`; SelectorParser.parse / CSS.supports / querySelector on `div` / `.foo` / `#id` / `div.foo`. L1344 F,F `div.foo` / `.foo` vs F,T `div. span` / `. foo`; last `.`/`#` mute of `next > end` T (L1333). L1353 T `:hover` / `:is(.a)` / `::before` vs `div: [foo]`; last colon mute of `next <= end` F (L1336 `div:` / `::`).
+- [x] Structurally unpairable left mute (no ignore): L1344 `next > end` T (last delim `.`/`#` returns at L1333 before the class-dot walk). L1353 `next <= end` F (last colon returns at L1336 before the colon-next walk). L1319 whitespace T is unpairable through parse()/consumeRule/consumeBlockContents (leading ws discarded); unique-cause T is driven via the shipped `consumeQualifiedRule` with tokenize real selectors (not a copied algorithm).
+- [x] Node 24: `node --test tests/mcdc-is-valid-selector-unique-cause.test.ts` — 4 pass. Together with parser still-hot / leftover / atrules / consumeAtRule / FromStream / selectorparser still-hot / leftover 152 pass. `tsc --noEmit` clean. oxlint 0 warnings. `pnpm run check:safe-exec` pass. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-selvalid.md`.
+
+---
+
 ## Phase: leftover `handleKeyframesRule` unique-cause MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/parser.ts` `handleKeyframesRule` after last recapture **18/22 D**, **24/28 C**, **4 incomplete** (top-8 hotspot; next seam L532 `<expr>.associatedToken.type === "{"`) after `tests/mcdc-branch-parser.test.ts`, `tests/mcdc-branch-parser-atrules.test.ts`, and `tests/mcdc-parser-still-hot-unique-cause.test.ts`. Drive `parseStyleSheet` / `CSSStyleSheet.replaceSync` `@keyframes`. Prefer real CSS. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
