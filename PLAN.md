@@ -4658,3 +4658,14 @@ FRETish retune so impossible worlds are not SAT rows (mutex already declared for
 - [x] Path-scoped `proof review impact --file src/typed-om/values/style-value-parser.ts --base 0e36b1f~1 --decision no-authored-change --change-type refactor`. Five ledger entries in `proof/impact-reviews/cssomnom-audit.yaml`. Artifact fingerprint `sha256:21931dc1545b42b954b7a3cb2b920d408b5ba94c6b8e656f58afd3a64adb9846`.
 - [x] Isolated `proof audit --check authored_delta_expected --fail-level warn --verbose`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/authored-delta-parseall.md`.
 
+---
+
+## Phase: refine 7R6Z over YQQZ; honest 30ZA idle unique-cause (Champ)
+
+LOOP Reviewer **REJECTED** `c4e3dae` (Grizz ACCEPTed SNP4/CFRA/5V7N empty-world drops). 7R6Z dropping `consume_token_loop_runs` copied parent YQQZ. 30ZA idle unique-cause comments still claimed `consume=T` / `parser_imported=T` / mutex both-T over `consumeCalls === 0`. Did **not** edit `src/**`. KI-7 stays open. Did **not** restore lying TRUE comments to green `mcdc_coverage`.
+
+- [x] **7R6Z** SW refinement of YQQZ: `when css_text_supplied & consume_token_loop_runs & (uses_replacement_character | uses_escaped_code_point | sixth_digit_stops_hex) shall satisfy token_list_returned`. `escaped_hex_digits <= 6` stays on YQQZ only (range 0..6; `consume=T ∧ hex>6` empty). Idle `tokenizeCalls=0` is `consume=F`. SAT tokenize of `\61` / `\1234567` / `U+10FFFF7` is `consume=T`.
+- [x] **30ZA** idle unique-cause of bound F / `insert_rule_path=F` over `consumeCalls === 0`: `parse_hooks_consume_rule_called=F, parser_imported=F, shorthand_expanded=F, shorthand_rejected=F`. SAT insertRule stays `consume=T, parser_imported=F, expanded|rejected`.
+- [x] REVIEW-36/38/39/41 comments retargeted to the shipped FRETish (Z6J1 no `position_arity>=1`; 1REE then `red_from_chroma` only; 7R6Z consume without hex<=6; YBF2 then `expanded | rejected`).
+- [x] Node 24 twice: `tests/mcdc-witness-domain-bounds.test.ts tests/mcdc-witness-tokenizer.test.ts` **49/49**. Isolated `proof audit --check mcdc_coverage --fail-level warn` left **red honestly**: 322 rows, **7 uncovered, 7 stale** (7R6Z 2/8 partial: auditor SAT `consume=T` with `css_text=F` / all-or-F+`token_list=F` empty on public tokenize; 30ZA 5 uncovered auditor SAT `consume=T, parser_imported=T, mutex both-T` on idle; 30ZA 6 stale honest idle comments + EGCP 1 documented extra SAT). Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-c4e3dae-loop-fix.md`.
+

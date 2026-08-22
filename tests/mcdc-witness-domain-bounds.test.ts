@@ -87,8 +87,6 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
   describe('SYS-REQ-260822-YQQZ / SW-REQ-260822-7R6Z escaped hex 0..6', () => {
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
-    // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('tokenize is idle when css text is not supplied', () => {
       let tokenizeCalls = 0;
       const tokenizeCss = (css: string, unicodeRangesAllowed?: boolean) => {
@@ -99,6 +97,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal(tokenizeCalls, 0);
     });
 
+    // Verifies: SW-REQ-260822-7R6Z
+    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize/consumeToken]
     test('seven-hex escape source is supplied but consumeToken never runs', () => {
       const overflowHex = '.\\1234567 { color: red; }';
       let tokenizeCalls = 0;
@@ -108,8 +108,6 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
-    // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('source hex longer than 6 is not tokenized so consume does not run', () => {
       const sevenHex = 'U+1234567';
       let tokenizeCalls = 0;
@@ -119,8 +117,6 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
-    // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('plain css without hex escapes is not tokenized', () => {
       const plain = '.btn { color: red; }';
       let tokenizeCalls = 0;
@@ -131,7 +127,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
+    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // SYS-REQ-260822-YQQZ:nominal:nominal
     // SW-REQ-260822-7R6Z:nominal:nominal
     test('tokenize returns tokens for escaped scalar, U+FFFD replacement, and 7-hex stop', () => {
@@ -155,10 +151,10 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — tokenize() always returns a Token[] including EOF after consume-escaped-code-point emits a decoded scalar [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — tokenize() always returns a Token[] after hex consumption stops at 6 digits [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — tokenize() of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=T => FALSE — Tokenizer.tokenize always returns Token[] after U+FFFD replacement [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after a decoded escaped code point [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after hex stops at 6 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — Tokenizer.tokenize of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=T => FALSE — Tokenizer.tokenize always returns Token[] after U+FFFD replacement [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after a decoded escaped code point [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after hex stops at 6 [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — Tokenizer.tokenize of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
   });
 
   describe('SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2 box 1..4, keyframe 0..100, font-weight 1..1000', () => {
@@ -291,7 +287,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
   describe('INT-REQ-260821-30ZA insertRule plus box/keyframe/font bounds', () => {
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-value margin insertRule text is idle so consumeRule is not called', () => {
       assert.equal(cssomImportsParser(), false);
       const fiveSides = 'div { margin: 1px 2px 3px 4px 5px; }';
@@ -310,7 +306,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
     test('font-weight 1001 insertRule text is idle so consumeRule is not called', () => {
       const heavy = 'div { font: 1001 12px sans-serif; }';
       let consumeCalls = 0;
@@ -319,7 +315,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
     test('insertRule path is idle without calling consumeRule', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -338,7 +334,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
     test('101% keyframe insertRule text is idle so consumeRule is not called', () => {
       const over = '@keyframes a { 101% { color: red; } }';
       let consumeCalls = 0;
@@ -347,7 +343,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=F, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-token position insertRule text is idle so consumeRule is not called', () => {
       const fivePos = 'div { background-position: left 10px top 20px center; }';
       let consumeCalls = 0;

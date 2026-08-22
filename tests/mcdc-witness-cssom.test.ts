@@ -189,7 +189,7 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
 
   describe('INT-REQ-260821-30ZA', () => {
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: ParseHooks.consumeRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: ParseHooks.consumeRule]
     test('insertRule path is idle without calling consumeRule or importing Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
