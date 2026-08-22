@@ -13,7 +13,7 @@ description: |
     recovered unbalanced (( via css-syntax-3 EOF auto-close as general-enclosed '(())'.
     Product fix: mark unclosed simple-blocks and functions in the parser, and treat any
     query containing an unclosed construct as invalid so serializeMediaQuery emits not all.
-    Balanced general-enclosed (example, all,) is unchanged.
+    Balanced general-enclosed (example, all,) is unchanged. Re-landed after fe7defa restore.
 root_cause:
     missing_requirement: false
     missing_test_partition: true
@@ -31,7 +31,7 @@ disposition:
     status: covered_by_requirement
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
-    reviewed_at: "2026-08-21T23:40:00Z"
+    reviewed_at: "2026-08-22T06:05:00Z"
     requirements:
         - SW-REQ-260821-W8S1
         - SYS-REQ-260821-5283
@@ -59,12 +59,15 @@ hardening:
         scope:
             - src/MediaParser.ts
             - src/parser.ts
-        checked_at: "2026-08-21"
+            - src/types.ts
+        checked_at: "2026-08-22"
         reviewer: agent:grok-4.6
         result: clean
     regression_tests:
         - tests/media-validation.test.ts
         - tests/media.test.ts
+        - tests/mcdc-hotspot-ki-recovery.test.ts
+        - tests/mcdc-branch-media-leftover.test.ts
         - proof/reproducers/KI-5-media-unbalanced.ts
     mcdc_witnesses:
         - requirement: SW-REQ-260821-W8S1
@@ -79,3 +82,7 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: Filled class-closure hardening after the product fix for KI-5.
+    - at: "2026-08-22T06:05:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: Re-landed class-fix after fe7defa restore. KI-5 status=fixed. Unclosed simple-block/function is invalid → not all.

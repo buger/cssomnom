@@ -30,6 +30,19 @@ import {
   FEATURE_ALLOWED_IDENTS
 } from './data/gen/media-features.ts';
 
+function hasUnclosedConstruct(values: ComponentValue[]): boolean {
+  for (const v of values) {
+    if (v.type === 'simple-block') {
+      if (v.unclosed) return true;
+      if (hasUnclosedConstruct(v.value)) return true;
+    } else if (v.type === 'function' && 'name' in v) {
+      if (v.unclosed) return true;
+      if (hasUnclosedConstruct(v.value)) return true;
+    }
+  }
+  return false;
+}
+
 // mediaqueries-4 § 2 #structure
 // mediaqueries-4 § 3 #media-types
 // mediaqueries-4 § 4 #evaluating-features
@@ -92,6 +105,19 @@ export class MediaParser {
   private static normalizeAndValidate(values: ComponentValue[]): MediaQuery {
     const filtered = values.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
     if (filtered.length === 0) {
+      return {
+        type: 'media-query',
+        invalid: true,
+        tokens: values
+      };
+    }
+
+    // mediaqueries-4 § 3.2 #error-handling: a query that does not match the grammar
+    // (including unclosed () / functions recovered by css-syntax-3 § 2.2 #autoclosing
+    // / § 5.5.9 #consume-simple-block / § 5.5.10 #consume-function at EOF) is `not all`.
+    // Canonical re-serialization would otherwise re-close `((` as `(())` and accept it
+    // as <general-enclosed>, or re-close `(color` as a valid boolean feature.
+    if (hasUnclosedConstruct(filtered)) {
       return {
         type: 'media-query',
         invalid: true,

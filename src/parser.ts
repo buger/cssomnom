@@ -1496,6 +1496,10 @@ export class Parser {
         return block;
       } else if (next.type === 'EOF') {
         this.reportError('Unexpected EOF in block', next);
+        // css-syntax-3 § 5.5.9 #consume-simple-block: EOF before the mirror token is a parse error.
+        // css-syntax-3 § 2.2 #autoclosing recovers the block; callers must still reject it
+        // against their grammar (mediaqueries-4 § 3.2 #error-handling → not all).
+        block.unclosed = true;
         return block;
       } else {
         block.value.push(this.consumeComponentValue());
@@ -1523,6 +1527,10 @@ export class Parser {
         return func;
       } else if (next.type === 'EOF') {
         this.reportError('Unexpected EOF in function', next);
+        // css-syntax-3 § 5.5.10 #consume-function: EOF before ')' is a parse error.
+        // css-syntax-3 § 2.2 #autoclosing recovers the function; mediaqueries-4 still
+        // treats the unclosed construct as not matching the grammar.
+        func.unclosed = true;
         return func;
       } else {
         func.value.push(this.consumeComponentValue());

@@ -172,12 +172,16 @@ export interface SimpleBlock {
   type: 'simple-block';
   associatedToken: Token;
   value: ComponentValue[];
+  /** Set when css-syntax-3 § 5.5.9 #consume-simple-block hits EOF before the mirror token. */
+  unclosed?: boolean;
 }
 
 export interface CSSFunction {
   type: 'function';
   name: string;
   value: ComponentValue[];
+  /** Set when css-syntax-3 § 5.5.10 #consume-function hits EOF before ')'. */
+  unclosed?: boolean;
 }
 
 export interface Declaration {

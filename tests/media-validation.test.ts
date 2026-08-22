@@ -65,10 +65,26 @@ test('MediaParser: Validate media feature values and evaluation', () => {
 });
 
 test('MediaParser: unbalanced parentheses serialize as not all', () => {
-  assert.deepEqual(MediaParser.parse('((').map(serializeMediaQuery), ['not all']);
-  assert.deepEqual(MediaParser.parse('(').map(serializeMediaQuery), ['not all']);
-  assert.deepEqual(MediaParser.parse('screen, ((').map(serializeMediaQuery), ['screen', 'not all']);
-  assert.deepEqual(MediaParser.parse('&test').map(serializeMediaQuery), ['not all']);
-  assert.deepEqual(MediaParser.parse('(color)').map(serializeMediaQuery), ['(color)']);
+  // mediaqueries-4 § 3.2 #error-handling: a query that does not match the grammar
+  // (including unclosed () / functions recovered at EOF by css-syntax-3 § 5.5.9
+  // #consume-simple-block / § 5.5.10 #consume-function) is replaced by not all.
+  // Canonical re-serialize must not auto-close `((` as `(())` or `(color` as `(color)`.
+  function serialized(input: string): string[] {
+    return MediaParser.parse(input).map(serializeMediaQuery);
+  }
+
+  assert.deepEqual(serialized('(('), ['not all']);
+  assert.equal(MediaParser.parse('((')[0].invalid, true);
+  assert.deepEqual(serialized('('), ['not all']);
+  assert.deepEqual(serialized('(color'), ['not all']);
+  assert.deepEqual(serialized('((min-width: 1px)'), ['not all']);
+  assert.deepEqual(serialized('foo('), ['not all']);
+  assert.deepEqual(serialized('unknown-func(val'), ['not all']);
+  assert.deepEqual(serialized('screen, (('), ['screen', 'not all']);
+  assert.deepEqual(serialized('(color), ('), ['(color)', 'not all']);
+  assert.deepEqual(serialized('&test'), ['not all']);
+  assert.deepEqual(serialized('(color)'), ['(color)']);
+  assert.deepEqual(serialized('(foo())'), ['foo()']);
+  assert.equal(MediaParser.parse('(foo())')[0].invalid, undefined);
 });
 
