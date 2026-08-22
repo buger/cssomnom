@@ -4272,6 +4272,16 @@ Recapture-only. Did **not** edit `src/**`. Did **not** commit. Did **not** `proo
 
 ---
 
+## Phase: leftover parseMathFunction round2 unique-cause MC/DC tests (Champ)
+
+Cover leftover unique-cause in `src/math-parser.ts` `parseMathFunction` after last recapture **32/38** D, **43/49** C, **6 incomplete** (after `tests/mcdc-math-product-parsefn-unique-cause.test.ts`). Hottest seam L409 `token.type === "comma"`. Drive `CSSNumericValue.parse` / `CSSStyleValue.parse`. Prefer real CSS strings; leftover after `consumeArg` injects extra tokens through `ParseHooks.parseComponentValues` so they appear only after `consumeArg` returns (tokenizer leftover is only comma or EOF; keep=N type getters did not unique-cause under instrumentation). Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
+
+- [x] `tests/mcdc-parse-math-function-round2-unique-cause.test.ts` — L409 comma F + L419 leftover T via delayed leftover on `min(1px)` / `max(1px)` (extra `+ 2px, 30px` would parse as `min(3px, 30px)` if eaten) vs real comma T `min(1px, 2px)` / 1-arg EOF / eaten `min(1px 2px)` / `min(1px; 2px)`; L451 type !== comma T via delayed leftover on `clamp(10px, 20px)` vs real CSS `clamp(none 10px, 20px)` L445 analog / missing third comma / 3-arg success / eaten `clamp(10px, 20px + 2px, 30px)`; L492 comma F via delayed leftover on `round(15px)` vs real `round(up 15px)` L479 analog / omitted vs present precision; L522 comma F + L532 leftover T via delayed leftover on `hypot(1px)` / `log(8)` vs 1-arg / 2-arg / `hypot(1px 2px)`. Style-value: `width` min/max/clamp plus `calc(round(15px))` / `calc(hypot(1px))` (`validateMathFunctions` only gates calc/min/max/clamp).
+- [x] Structurally unpairable left mute (no ignore): none of the 6 remaining incomplete decisions. Tokenizer leftover after `consumeArg` is only comma or EOF (`nesting` is never incremented; nested commas live inside function/block `.value`). Analog leftover on ident-shortcut paths is already real CSS (L445 `clamp(none 10px, 20px)`, L479 `round(up 15px)`). The six consumeArg leftovers are pairable by delaying extra tokens until after `consumeArg` (stack-discriminated `tokens.length`; not keep=N type getters).
+- [x] Node 24: `node --test tests/mcdc-parse-math-function-round2-unique-cause.test.ts` — 4 pass. Together with leftover/still-hot/product-parsefn/simplify/modern-math/round 88 pass. `tsc --noEmit` clean. oxlint 0 warnings. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/mcdc-math6.md`.
+
+---
+
 ## Phase: leftover `resolveCustomProp` round2 unique-cause MC/DC tests (Champ)
 
 Cover leftover unique-cause in `src/cascade/variable-resolver.ts` `resolveCustomProp` still **18/25 D**, **22/30 C**, **7 incomplete** after `tests/mcdc-resolve-custom-prop-unique-cause.test.ts` (that round did not move Proof). Drive only public `getCascadedStyle` + linkedom. Prefer real CSS over getter mutation. Did **not** add `//mcdc:ignore`. Did **not** change `src/`. Did **not** lower `proof.yaml` floors. Node 24 (`/tmp/node-v24.11.1-linux-x64/bin`).
