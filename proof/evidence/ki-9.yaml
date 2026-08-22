@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-9
+evidence_type: known_issue_tripwire
+requirements:
+    - SW-REQ-260821-QV2H
+    - SYS-REQ-260821-SBJ7
+command: node --experimental-strip-types proof/reproducers/KI-9-streaming-peek-eof.ts
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-22T06:00:33Z"
+input_set:
+    - proof/reproducers/KI-9-streaming-peek-eof.ts
+freshness_hashes:
+    proof/reproducers/KI-9-streaming-peek-eof.ts: sha256:6c04f00b488e86b726397ad68f81bc275223aed23dc7217f4c056ae8fce42f3a
+known_issues:
+    - KI-9

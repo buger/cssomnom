@@ -1,0 +1,88 @@
+schema_version: 1
+id: DEFECT-260822-SK9P
+title: StreamingTokenizerStream.peek fabricated EOF; remnant high-surrogate+CR reversed
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: streaming_peek_eof_and_remnant
+description: |
+    css-syntax-3 § 4.3.1 #consume-token emits <EOF-token> only at true end of input.
+    StreamingTokenizerStream.peek returned a synthetic EOF when getTokens() was empty
+    on an incomplete chunk. css-syntax-3 § 3.3 #input-preprocessing requires CR/FF → LF
+    then surrogate → U+FFFD in source order; preprocessChunk appended a trailing high
+    surrogate onto a same-call CR remnant (CR then high), so a split high+CR+low pair
+    became a valid scalar instead of two U+FFFD around a newline.
+    Product fix: peek throws NeedMoreDataError unless tokenizer.closed; remnant prepends
+    the high surrogate onto CR so order stays high-then-CR. ArrayTokenStream EOF on an
+    empty complete list is unchanged.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: QV2H/SBJ7 named chunked tokens and NeedMoreData; peek-EOF and high-then-CR remnant order were unwitnessed until KI-9.
+impact_analysis:
+    affected_requirements:
+        - SW-REQ-260821-QV2H
+        - SYS-REQ-260821-SBJ7
+    affected_code:
+        - src/TokenStream.ts
+        - src/streaming-tokenizer.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:grok-4.6
+    reviewer: agent:grok-4.6
+    reviewed_at: "2026-08-22T06:00:00Z"
+    requirements:
+        - SW-REQ-260821-QV2H
+        - SYS-REQ-260821-SBJ7
+    evidence:
+        verified_by:
+            - tests/streaming.test.ts
+            - tests/mcdc-branch-streaming-tokenizer-leftover.test.ts
+            - tests/mcdc-branch-tokenstream-leftover.test.ts
+            - proof/reproducers/KI-9-streaming-peek-eof.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-QV2H
+              witness: "chunk_appended=T, complete_token_in_chunk=F, tokens_available_after_get_tokens=F => TRUE"
+            - requirement: SYS-REQ-260821-SBJ7
+              witness: "css_text_supplied=T, token_list_returned=T => TRUE"
+affects:
+    - SW-REQ-260821-QV2H
+    - SYS-REQ-260821-SBJ7
+hardening:
+    strengthened_requirements:
+        - SW-REQ-260821-QV2H
+        - SYS-REQ-260821-SBJ7
+    added_obligations:
+        - requirement: SW-REQ-260821-QV2H
+          obligation_class: error_handling
+    sibling_sweep:
+        scope:
+            - src/TokenStream.ts
+            - src/streaming-tokenizer.ts
+            - src/tokenizer.ts
+        checked_at: "2026-08-22"
+        reviewer: agent:grok-4.6
+        result: clean
+        notes: |
+            ArrayTokenStream.peek synthesizing EOF on an empty complete token list is not a sibling hole.
+            tokenizer.ts one-shot preprocess already applies CR/FF then lone-surrogate replace in source order.
+            LazyComponentValueStream EOF is a finished stream, not an incomplete chunk.
+    regression_tests:
+        - tests/streaming.test.ts
+        - tests/mcdc-branch-streaming-tokenizer-leftover.test.ts
+        - tests/mcdc-branch-tokenstream-leftover.test.ts
+        - proof/reproducers/KI-9-streaming-peek-eof.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-QV2H
+          witness: "chunk_appended=T, complete_token_in_chunk=F, tokens_available_after_get_tokens=F => TRUE"
+        - requirement: SYS-REQ-260821-SBJ7
+          witness: "css_text_supplied=T, token_list_returned=T => TRUE"
+history:
+    - at: "2026-08-22T06:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: Class-closure after the product fix for KI-9.

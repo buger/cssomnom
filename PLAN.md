@@ -3912,3 +3912,16 @@ Confirmed leftover unique-cause holes vs already-open KIs:
 - [x] KI-14: Parser API `@keyframes` child maps to `{name:"unknown", prelude:[], body:null}` instead of a keyframe qualified rule. Not KI-6 (type-0 at-rules). Tripwire `proof/reproducers/KI-14-keyframes-parser-api.ts`. Two runs exit 1. Logs: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-repro-KI-14-{1,2}.log`.
 - [x] Overlay-only commit: `proof/known-issues/KI-13.yaml`, `proof/known-issues/KI-14.yaml`, `proof/reproducers/KI-13-disabled-non-form.ts`, `proof/reproducers/KI-14-keyframes-parser-api.ts`, `proof/reproducers/KI-8-import-href.ts`, KI-8 note, `PLAN.md`. Message: `add KIs for MC/DC-found holes after src restore`. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/ki-mcdc-found-holes.md`.
 
+
+---
+
+## Phase: class-fix KI-10 first-legend and KI-13 disabled types (Champ)
+
+Product fix after `fe7defa` restore. Node 24 (`/opt/node24/bin`). Did not `proof approve`. Did not `git add .`.
+
+- [x] **RED first**: `tests/matcher.test.ts` failed on HEAD `isElementDisabled` (div-in-fieldset `:disabled` true). Overlay tripwires `proof/reproducers/KI-10-fieldset-disabled.ts` and `KI-13-disabled-non-form.ts` failed. Expanded product test with `div[disabled]` / `p[disabled]`, `p` in `fieldset[disabled]`, and nested fieldset-in-legend own-disabled inner walk (`inner-legend-of-own-disabled` false, `inner-outside-legend-of-own-disabled` true).
+- [x] **KI-10** (`src/matcher.ts`): html `#concept-fieldset-disabled` / `#concept-fe-disabled` first-legend skip. `isDisabledByAncestorFieldset` walks each ancestor fieldset independently and does **not** treat the ancestor's own `disabled` as the element's. `#nested-in-legend` / `#in-legend` / nested-legend-input are not `:disabled`. Own-disabled nested fieldset and non-first legend still are.
+- [x] **KI-13** (`src/matcher.ts`): html `#selector-disabled` / `#concept-element-disabled` listed types only (button/input/select/textarea/optgroup/option/fieldset + form-associated custom). `div[disabled]` and `p` in `fieldset[disabled]` do not match. `:enabled` uses `isDisableableElement`.
+- [x] GREEN twice: matcher + mcdc matcher suites 97 pass; KI-10 and KI-13 reproducers pass (exit 0). `tsc --noEmit` clean. oxlint 0. `pnpm run preflight` still fails on unrelated restore holes (KI-3/8/11/12/14 position/import/parser-api); no matcher `:disabled` failures.
+- [x] Class-closure: `DEFECT-260822-FSFL` (KI-10), `DEFECT-260822-DTYP` (KI-13). KI-10 / KI-13 `status: fixed`. Evidence `proof/evidence/ki-10.yaml` / `ki-13.yaml`.
+- [x] Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/fix-ki-10-13.md`.

@@ -189,6 +189,30 @@ test('streaming: peek on incomplete chunk is NeedMoreData, not a fabricated EOF'
   assert.equal(eof.type, 'EOF');
 });
 
+// SW-REQ-260821-QV2H:nominal:nominal
+// SYS-REQ-260821-SBJ7:nominal:nominal
+test('streaming: remnant high-surrogate then CR keeps source order (not CR then high)', () => {
+  // css-syntax-3 § 3.3 #input-preprocessing: CR/FF → LF, then surrogate code
+  // points → U+FFFD. A trailing CR must be buffered before a trailing high
+  // surrogate is buffered, but remnant concat must keep source order
+  // (high then CR). Reversing that pairs a following low surrogate into a
+  // scalar instead of two U+FFFD around a newline.
+  const high = '\uD800';
+  const low = '\uDC00';
+  const full = `x${high}\r${low}y`;
+  const expected = tokenize(full);
+  assert.ok(
+    expected.some((t) => typeof t.value === 'string' && t.value.includes('\uFFFD')),
+    'one-shot preprocess must replace the split surrogates with U+FFFD',
+  );
+
+  const tokenizer = new StreamingTokenizer();
+  tokenizer.appendChunk(`x${high}\r`);
+  tokenizer.appendChunk(`${low}y`);
+  tokenizer.close();
+  assertTokensEqual(tokenizer.getTokens(), expected);
+});
+
 test('streaming: parser integration', () => {
   const input = 'div { color: red; } @media (min-width: 600px) { .bar { color: green; } }';
   

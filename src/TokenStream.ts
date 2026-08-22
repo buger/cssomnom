@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import type { Token, TokenStream, ComponentValue, ComponentValueStream } from './types.ts';
-import type { StreamingTokenizer } from './streaming-tokenizer.ts';
+import { NeedMoreDataError, type StreamingTokenizer } from './streaming-tokenizer.ts';
 
 // Implements: INT-REQ-260821-N2VE
 export class ArrayTokenStream implements TokenStream {
@@ -72,6 +72,7 @@ export class ArrayComponentValueStream implements ComponentValueStream {
   }
 }
 
+// Implements: SW-REQ-260821-QV2H
 export class StreamingTokenizerStream implements TokenStream {
   private tokenizer: StreamingTokenizer;
   private bufferedTokens: Token[] = [];
@@ -92,7 +93,15 @@ export class StreamingTokenizerStream implements TokenStream {
     if (this.bufferedTokens.length === 0) {
       this.bufferedTokens.push(...this.tokenizer.getTokens());
     }
-    return this.bufferedTokens[0] || { type: 'EOF', value: '' };
+    if (this.bufferedTokens.length > 0) {
+      return this.bufferedTokens[0];
+    }
+    // css-syntax-3 § 4.3.1 #consume-token: <EOF-token> only when the input
+    // stream is empty at true end. An incomplete chunk is NeedMoreData, not EOF.
+    if (this.tokenizer.closed) {
+      return { type: 'EOF', value: '' };
+    }
+    throw new NeedMoreDataError();
   }
 }
 
