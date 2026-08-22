@@ -88,6 +88,7 @@ describe('KI-12 at-rule ASCII-case dispatch', () => {
   // Verifies: INT-REQ-260821-ZMZR
   // Verifies: SYS-REQ-260821-7521
   // Verifies: INT-REQ-260821-WTPD
+  // INT-REQ-260821-ZMZR:nominal:nominal
   test('@MEDIA / @KEYFRAMES / @Import dispatch to typed handlers', () => {
     // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive
     const sheet = parse(`

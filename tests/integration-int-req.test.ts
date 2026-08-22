@@ -155,6 +155,7 @@ test('INT-N2VE parser consume path uses TokenStream peek/next and EOF sentinel',
 // Verifies: INT-REQ-260821-ZMZR
 // INT-REQ-260821-ZMZR:integration:integration
 // INT-REQ-260821-ZMZR:error_handling:nominal
+// INT-REQ-260821-ZMZR:nominal:nominal
 test('INT-ZMZR parser constructs CSSOM grouping rules and passes insertRule parse callback', () => {
   const sheet = parse('@media all { }');
   assert.equal(sheet.cssRules.length, 1);
