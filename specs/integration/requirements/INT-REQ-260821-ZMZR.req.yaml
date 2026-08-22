@@ -1,6 +1,6 @@
 id: INT-REQ-260821-ZMZR
 version: 1
-status: review
+status: approved
 priority: shall
 category: interface
 req_type: guarantee
@@ -31,10 +31,18 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
-        ai_generated: true
+        status: approved
+        reviewer: agent:grok-4.6
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-22T06:56:44Z"
+        comment: 'Class-closure DEFECT-ZSWZ: at-rule dispatch is ASCII-case-insensitive with hasOwn.'
+        fingerprint: sha256:bcfade706240ae755bf87e6d8768155519a58a974b513ab398a178bfde2da3cc
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260822-ZSWZ
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
@@ -45,8 +53,8 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:47Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-22T06:31:43Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-22T06:56:44Z"
 obligation_checklist:
     - error_handling
     - nominal

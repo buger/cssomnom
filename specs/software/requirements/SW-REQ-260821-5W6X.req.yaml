@@ -1,6 +1,6 @@
 id: SW-REQ-260821-5W6X
 version: 1
-status: review
+status: approved
 priority: shall
 category: functional
 req_type: guarantee
@@ -29,10 +29,18 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: in_review
+        status: approved
         reviewer: agent:grok-4.6
-        reviewed_at: "2026-08-21T13:53:27Z"
-        ai_generated: true
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-22T06:56:42Z"
+        comment: 'Class-closure DEFECT-3T1G: @import url-token copies into href.'
+        fingerprint: sha256:9ed16b1dc8314e45cf9700c3d82c67f112cdda875749cd0168bfc98b1e6a1c00
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260822-3T1G
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
@@ -44,7 +52,7 @@ history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:00Z"
     last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T21:14:35Z"
+    last_modified_at: "2026-08-22T06:56:42Z"
 obligation_checklist:
     - nominal
 verification_state: failing

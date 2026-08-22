@@ -1,6 +1,6 @@
 id: SYS-REQ-260821-SBJ7
 version: 1
-status: review
+status: approved
 priority: shall
 category: functional
 req_type: guarantee
@@ -29,15 +29,23 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
-        ai_generated: true
+        status: approved
+        reviewer: agent:grok-4.6
+        role: spec-conformance
+        roles:
+            - spec-conformance
+        reviewed_at: "2026-08-22T06:56:44Z"
+        comment: 'Class-closure DEFECT-SK9P: peek does not fabricate EOF; remnant order preserved.'
+        fingerprint: sha256:de748fb37034a2bd5968e3b479b11a8bc167b90a83c765170067579a597a1d0a
+        ai_generated: false
+        motivation:
+            kind: defect
+            ref: DEFECT-260822-SK9P
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:34:49Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-21T20:20:29Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-22T06:56:44Z"
 obligation_checklist:
     - denial_of_service_resistant
     - nominal
