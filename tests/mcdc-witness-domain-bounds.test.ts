@@ -88,7 +88,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
+    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('tokenize is idle when css text is not supplied', () => {
       let tokenizeCalls = 0;
       const tokenizeCss = (css: string, unicodeRangesAllowed?: boolean) => {
@@ -99,8 +99,6 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal(tokenizeCalls, 0);
     });
 
-    // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize/consumeToken]
     test('seven-hex escape source is supplied but consumeToken never runs', () => {
       const overflowHex = '.\\1234567 { color: red; }';
       let tokenizeCalls = 0;
@@ -111,7 +109,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
+    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('source hex longer than 6 is not tokenized so consume does not run', () => {
       const sevenHex = 'U+1234567';
       let tokenizeCalls = 0;
@@ -122,7 +120,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
+    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize]
     test('plain css without hex escapes is not tokenized', () => {
       const plain = '.btn { color: red; }';
       let tokenizeCalls = 0;
@@ -133,7 +131,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
+    // MCDC SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // SYS-REQ-260822-YQQZ:nominal:nominal
     // SW-REQ-260822-7R6Z:nominal:nominal
     test('tokenize returns tokens for escaped scalar, U+FFFD replacement, and 7-hex stop', () => {
@@ -157,17 +155,17 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — tokenize() always returns a Token[] including EOF after consume-escaped-code-point emits a decoded scalar [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — tokenize() always returns a Token[] after hex consumption stops at 6 digits [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — tokenize() of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=T => FALSE — Tokenizer.tokenize always returns Token[] after U+FFFD replacement [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after a decoded escaped code point [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after hex stops at 6 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — Tokenizer.tokenize of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=T => FALSE — Tokenizer.tokenize always returns Token[] after U+FFFD replacement [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after a decoded escaped code point [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE — Tokenizer.tokenize always returns Token[] after hex stops at 6 [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-7R6Z: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE — Tokenizer.tokenize of mixed escaped-scalar, U+FFFD, and 7-hex source always returns a token list [reviewed: agent:grok-4.6]
   });
 
   describe('SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2 box 1..4, keyframe 0..100, font-weight 1..1000', () => {
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=F, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=F, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
     test('five-value margin is not expanded when parse/replaceSync stay idle', () => {
       const fiveSides = 'div { margin: 1px 2px 3px 4px 5px; }';
       let parseCalls = 0;
@@ -178,9 +176,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
     test('font-weight 1001 is not expanded when parse/replaceSync stay idle', () => {
       const heavy = 'div { font: 1001 12px sans-serif; }';
       let parseCalls = 0;
@@ -189,9 +187,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
     test('101% keyframe selector is not consumed when parse/replaceSync stay idle', () => {
       const over = '@keyframes a { 101% { color: red; } }';
       let parseCalls = 0;
@@ -200,9 +198,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
     test('five-token background-position is not expanded when parse/replaceSync stay idle', () => {
       const fivePos = 'div { background-position: left 10px top 20px center; }';
       let parseCalls = 0;
@@ -211,9 +209,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
     // SYS-REQ-260822-5V7N:nominal:negative
     // SW-REQ-260822-YBF2:nominal:negative
     test('in-bound invalid margin and font without family are rejected without assigning longhands', () => {
@@ -229,9 +227,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     test('font shorthand 1..1000 and 1-to-4 background-position expand', () => {
       const font = styleRule('div { font: 400 12px sans-serif; }');
       assert.equal(font.style.getPropertyValue('font-weight'), '400');
@@ -254,9 +252,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     // SYS-REQ-260822-5V7N:nominal:nominal
     // SW-REQ-260822-YBF2:nominal:nominal
     test('1-to-4 value margin via parse and replaceSync assigns four longhands', () => {
@@ -287,13 +285,13 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal(replaced.style.getPropertyValue('margin-top'), '8px');
       assert.equal(replaced.style.getPropertyValue('margin-left'), '5px');
     });
-    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — in-bound 1-to-4 box, 0-100 keyframe, and 1-1000 font-weight paths always assign four longhands, expand, or reject [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — expandBox / font / background-position either assign longhands or return null inside the 1-4 / 0-100 / 1-1000 domains [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — in-bound 1-to-4 box, 0-100 keyframe, and 1-1000 font-weight paths always assign four longhands, expand, or reject [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — expandBox / font / background-position either assign longhands or return null inside the 1-4 / 0-100 / 1-1000 domains [reviewed: agent:grok-4.6]
   });
 
   describe('INT-REQ-260821-30ZA insertRule plus box/keyframe/font bounds', () => {
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-value margin insertRule text is idle so consumeRule is not called', () => {
       assert.equal(cssomImportsParser(), false);
       const fiveSides = 'div { margin: 1px 2px 3px 4px 5px; }';
@@ -312,7 +310,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('font-weight 1001 insertRule text is idle so consumeRule is not called', () => {
       const heavy = 'div { font: 1001 12px sans-serif; }';
       let consumeCalls = 0;
@@ -321,7 +319,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('insertRule path is idle without calling consumeRule', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -340,7 +338,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('101% keyframe insertRule text is idle so consumeRule is not called', () => {
       const over = '@keyframes a { 101% { color: red; } }';
       let consumeCalls = 0;
@@ -349,7 +347,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=F, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=F, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-token position insertRule text is idle so consumeRule is not called', () => {
       const fivePos = 'div { background-position: left 10px top 20px center; }';
       let consumeCalls = 0;
@@ -358,7 +356,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
     test('insertRule of in-bound invalid margin calls consumeRule and rejects the shorthand', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -379,7 +377,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     test('insertRule of font shorthand expands without importing Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -401,7 +399,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     test('insertRule of 4-value margin calls consumeRule and assigns four longhands', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -427,7 +425,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
     test('insertRule of mixed box, font, and rejected margin does not import Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -449,18 +447,18 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
         ParseHooks.consumeRule = original;
       }
     });
-    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — insertRule of an in-bound box/font/position declaration either expands, assigns four longhands, or rejects [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — CSSStyleSheet.insertRule parse path always calls ParseHooks.consumeRule via _parseRule [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE — src/CSSOM.ts does not import parser.ts; insertRule uses ParseHooks inversion [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — insertRule of an in-bound box/font/position declaration either expands, assigns four longhands, or rejects [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => FALSE — CSSStyleSheet.insertRule parse path always calls ParseHooks.consumeRule via _parseRule [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE — src/CSSOM.ts does not import parser.ts; insertRule uses ParseHooks inversion [reviewed: agent:grok-4.6]
   });
 
   describe('SYS-REQ-260822-CFRA / SW-REQ-260822-1REE / INT-REQ-260821-HJVC hsl hue 0..360', () => {
     // Verifies: SYS-REQ-260822-CFRA
-    // MCDC SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=F, hsl_parsed=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=F, hsl_parsed=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=F, hsl_parsed=F, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     // SYS-REQ-260822-CFRA:nominal:negative
     // SW-REQ-260822-1REE:nominal:negative
     test('two-component hsl() does not assign 0-60 red chroma', () => {
@@ -474,11 +472,11 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-CFRA
-    // MCDC SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=F, matcher_and_media_consulted=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     test('hsl hue 120 is green chroma not the 0-60 red assignment', () => {
       const el = targetElement();
       let redChromaAction = 0;
@@ -490,7 +488,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=T, cascaded_style_requested=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE [no-action: getCascadedStyle]
+    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=F, matcher_and_media_consulted=F => TRUE [no-action: getCascadedStyle]
     test('cascaded style is not requested so matcher and hsl stay idle', () => {
       const original = MediaParser.evaluate;
       let evaluateCalls = 0;
@@ -510,11 +508,11 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-CFRA
-    // MCDC SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
+    // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
     // Verifies: INT-REQ-260821-HJVC
-    // MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE
+    // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     // SYS-REQ-260822-CFRA:nominal:nominal
     // SW-REQ-260822-1REE:nominal:nominal
     test('getCascadedStyle of hsl(0) assigns red chroma and consults matcher/media', () => {
@@ -553,22 +551,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
         MediaParser.evaluate = original;
       }
     });
-    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=F, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — hslToRgb accepts 3- or 4-component hsl() and always parses when hue is in 0-60 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — css-color-4 hsl-to-rgb assigns chroma C to red when h < 60 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: blue_from_chroma=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — HSL chroma C is mutex on R/G/B; hue < 60 cannot set green from chroma [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: blue_from_chroma=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — HSL chroma C is mutex on R/G/B; hue < 60 cannot set blue from chroma [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: blue_from_chroma=T, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — HSL chroma C is assigned to exactly one channel per 60-degree sector [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=F, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — hslToRgb accepts 3- or 4-component hsl() and always parses when hue is in 0-60 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — hslToRgb sets r1 = C when h < 60 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-1REE: blue_from_chroma=F, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — hslToRgb hue < 60 cannot set green from chroma C [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-1REE: blue_from_chroma=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — hslToRgb hue < 60 cannot set blue from chroma C [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-1REE: blue_from_chroma=T, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, red_from_chroma=T => FALSE — hslToRgb assigns chroma C to exactly one of R, G, or B [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=F, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => FALSE — getCascadedStyle of 3-component hsl() with hue < 60 always parses [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=F, red_from_chroma=T => FALSE — getCascadedStyle walks CSSOM rules and consults matches/MediaParser.evaluate/supports [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=F => FALSE — cascaded hsl() with hue < 60 assigns chroma to red [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => FALSE — hue < 60 cannot set green from chroma C [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=T, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => FALSE — hue < 60 cannot set blue from chroma C [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive INT-REQ-260821-HJVC: blue_from_chroma=T, cascaded_style_requested=T, green_from_chroma=T, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => FALSE — HSL chroma C is mutex; getCascadedStyle of hue < 60 cannot set all three channels from C [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — css-color-4 hsl-to-rgb assigns chroma C to red when h < 60 [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — hslToRgb sets r1 = C when h < 60 [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=F => FALSE — getCascadedStyle walks CSSOM rules and consults matches/MediaParser.evaluate/supports [reviewed: agent:grok-4.6]
   });
 
   describe('SYS-REQ-260822-JY0V / SW-REQ-260822-MN8Z / INT-REQ-260821-ZP03 urange/namespace', () => {

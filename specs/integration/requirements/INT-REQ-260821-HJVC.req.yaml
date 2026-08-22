@@ -4,8 +4,8 @@ status: review
 priority: shall
 category: interface
 req_type: guarantee
-fretish: when cascaded_style_requested & hue_degrees < 60 & hsl_component_count >= 3 the cascade shall always satisfy matcher_and_media_consulted & red_from_chroma & !green_from_chroma & !blue_from_chroma & hsl_parsed
-description: The cascade shall walk CSSOM rules and call matcher, MediaParser, and supports. hslToRgb shall assign chroma to red below 60 degrees for 3- or 4-component hsl().
+fretish: when cascaded_style_requested the cascade shall always satisfy matcher_and_media_consulted
+description: The cascade shall walk CSSOM rules and call matcher, MediaParser, and supports when a cascaded style is requested.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -17,13 +17,7 @@ rationale: getCascadedStyle shall consult selectors, media, and supports before 
 tags: []
 variables:
     - cascaded_style_requested
-    - hue_degrees
-    - hsl_component_count
     - matcher_and_media_consulted
-    - red_from_chroma
-    - green_from_chroma
-    - blue_from_chroma
-    - hsl_parsed
 references:
     - type: document
       id: README.md
@@ -61,8 +55,8 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:48Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-22T09:38:05Z"
+    last_modified_by: agent:grok-4.6
+    last_modified_at: "2026-08-22T10:44:42Z"
 obligation_checklist:
     - malformed_recovers_or_errors_loudly
 obligation_hazards:

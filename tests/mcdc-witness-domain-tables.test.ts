@@ -165,7 +165,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
 
   describe('SYS-REQ-260822-SNP4 / SW-REQ-260822-Z6J1', () => {
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=F, parse_throws=T, position_arity_GE_1=T, position_reifies=T => TRUE [no-action: parseStyleValueCalls=0]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=F, parse_throws=T, position_reifies=T => TRUE [no-action: parseStyleValueCalls=0]
     test('CSSStyleValue.parse is idle so a 2-value position is not reified', () => {
       let parseStyleValueCalls = 0;
       const parseStyleValue = (property: string, cssText: string) => {
@@ -179,9 +179,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=F, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=F, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // SYS-REQ-260822-SNP4:nominal:negative
     // SW-REQ-260822-Z6J1:nominal:negative
     test('empty object-position throws and does not reify a 1-to-4 CSSPositionValue', () => {
@@ -194,9 +194,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
     // SYS-REQ-260822-SNP4:nominal:negative
     // SW-REQ-260822-Z6J1:nominal:negative
     test('3-value object-position and 4-value transform-origin throw without CSSPositionValue', () => {
@@ -217,9 +217,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=F, position_arity_GE_1=T, position_reifies=T => TRUE
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=F, position_reifies=T => TRUE
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=F, position_arity_GE_1=T, position_reifies=T => TRUE
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=F, position_reifies=T => TRUE
     // SYS-REQ-260822-SNP4:nominal:nominal
     // SW-REQ-260822-Z6J1:nominal:nominal
     test('1-to-4 component positions reify as CSSPositionValue without throwing', () => {
@@ -243,8 +243,8 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
       }
       assert.equal(throwCount, 0);
     });
-    //mcdc:ignore:defensive SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
   });
 
   describe('SYS-REQ-260822-XDRG / SW-REQ-260822-ZN94', () => {

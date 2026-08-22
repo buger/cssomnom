@@ -208,7 +208,7 @@ test('INT-WQX9 StylePropertyMap duck-types CSSStyleDeclaration setProperty/getPr
 // INT-REQ-260821-HJVC:integration:integration
 // INT-REQ-260821-HJVC:malformed_recovers_or_errors_loudly:nominal
 // INT-REQ-260821-HJVC:malformed_recovers_or_errors_loudly:negative
-// MCDC INT-REQ-260821-HJVC: blue_from_chroma=F, cascaded_style_requested=T, green_from_chroma=F, hsl_component_count_GE_3=T, hsl_parsed=T, hue_degrees_LT_60=T, matcher_and_media_consulted=T, red_from_chroma=T => TRUE
+// MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
 test('INT-HJVC cascade walks CSSOM rules and consults matcher, MediaParser, and supports', () => {
   const { document } = parseHTML('<html><body><div class="target"></div></body></html>');
   const el = document.querySelector('.target');
