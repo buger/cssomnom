@@ -7,13 +7,19 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T09:15:49Z"
+executed_at: "2026-08-22T10:20:21Z"
 input_set:
     - proof/reproducers/KI-7-import-stylesheet-null.ts
+    - proof/reproducers/KI-7-import-url-token.ts
+    - proof/reproducers/fixtures/x.css
     - src/parser.ts
+    - src/CSSOM.ts
     - parser.ts
 freshness_hashes:
     proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:7b9554a00b0a13881c95e4b541cc651357a181acb759011a767c6211bb900cb1
-    src/parser.ts: sha256:6fe2424b767bb64695ac39d9ec1587e69a8936c01be8124375834d9f5bf0ed54
+    proof/reproducers/KI-7-import-url-token.ts: sha256:ff5a5c216bedf1362b256fb83480af040f181900fd594cc7de07b702583dab4b
+    proof/reproducers/fixtures/x.css: sha256:7ecd2da96c2b58fdb9f239b8159e64c070c41d23702aa30ba02f988b6a13cb71
+    src/CSSOM.ts: sha256:5c014621049093b45a23e05ebcf7d26e781129fc22d74ab1022ecce5334bdf4a
+    src/parser.ts: sha256:f098410d58e091a1add744cbd6803b182de6ae2176810d417bfcee46e3217250
 known_issues:
     - KI-7
