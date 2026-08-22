@@ -26,7 +26,9 @@ references:
       id: submodules/csswg-drafts/css-counter-styles-3/Overview.bs#the-csscounterstylerule-interface
     - type: document
       id: submodules/csswg-drafts/css-counter-styles-3/Overview.bs#counter-style-prefix
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid
@@ -39,7 +41,7 @@ history:
     created_by: agent:codex
     created_at: "2026-08-22T16:51:31Z"
     last_modified_by: agent:codex
-    last_modified_at: "2026-08-22T17:12:36Z"
+    last_modified_at: "2026-08-22T17:42:59Z"
 lifecycle:
     change_history:
         - date: "2026-08-22T17:12:36Z"

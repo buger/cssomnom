@@ -13,7 +13,6 @@ cve_surface: none
 affected_api: CSSStyleDeclaration.setProperty() / CSSStyleDeclaration.cssText
 attacker_input: ordinary CSSOM caller-supplied invalid display value; no attacker required
 sanitizer: manual:logic
-reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-106-setproperty-csstext-invalid-display-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -21,6 +20,7 @@ mitigation: Do not treat a setProperty or cssText success as evidence that a dis
 remediation: Route both mutation paths through property-specific display validation; invalid values must be a no-op and valid neighboring declarations must remain.
 notes:
     - Withdrawn as a duplicate of KI-105 after KI-105 gained independent parser, setProperty, and cssText subtests; the consolidated root remains open.
+    - 'Superseded-by: KI-105. Withdrawn record intentionally retains no command, reproducer, or evidence references.'
 owner: agent:codex
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -37,3 +37,7 @@ history:
       by: agent:codex
       action: edit
       detail: append-note,set-status=withdrawn,remove-evidence-manifest
+    - at: "2026-08-22T17:42:12Z"
+      by: agent:codex
+      action: edit
+      detail: set-reproducer-command,append-note

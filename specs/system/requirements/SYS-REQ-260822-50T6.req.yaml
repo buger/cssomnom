@@ -27,7 +27,9 @@ references:
       id: submodules/csswg-drafts/css-animations-1/Overview.bs#interface-csskeyframesrule-appendrule
     - type: document
       id: submodules/csswg-drafts/css-syntax-3/Overview.bs#parse-rule
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid
@@ -40,7 +42,7 @@ history:
     created_by: agent:codex
     created_at: "2026-08-22T16:51:32Z"
     last_modified_by: agent:codex
-    last_modified_at: "2026-08-22T17:12:36Z"
+    last_modified_at: "2026-08-22T17:42:58Z"
 lifecycle:
     change_history:
         - date: "2026-08-22T17:12:36Z"
