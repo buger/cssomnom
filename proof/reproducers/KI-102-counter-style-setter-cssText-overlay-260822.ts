@@ -2,6 +2,7 @@
  * Overlay reproducer for KI-102.
  *
  * Reproduces: KI-102
+ * Verifies: SYS-REQ-260822-XEPS
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

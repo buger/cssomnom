@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T17:13:34Z"
+executed_at: "2026-08-22T17:44:01Z"
 input_set:
     - proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts: sha256:a7ea141f9fb9dd226e91b9557058791c0dd1398cc8a208856d1dd5e49b37ca3e
+    proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts: sha256:83b7354d235c816ed360b8cd77c427070b0dc518ab736b04b09a84bd45c69f27
 known_issues:
     - KI-103

@@ -7,10 +7,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T16:51:44Z"
+executed_at: "2026-08-22T17:44:00Z"
 input_set:
     - proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts: sha256:5d6514af19336acaaf33969e7b49eccd9611136ed3a7f9bed4c40d5f159b720b
+    proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts: sha256:50877f8dc792fd794af4e76a8dc32f0711f8af3ff2cd26c52858b1c8d2e74361
 known_issues:
     - KI-101

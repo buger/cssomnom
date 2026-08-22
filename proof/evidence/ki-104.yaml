@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T17:13:35Z"
+executed_at: "2026-08-22T17:44:01Z"
 input_set:
     - proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts: sha256:a1f750dcacf61be14f47b559be441f89235ede123db35c10537c978a9dc2af29
+    proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts: sha256:e50b503588f8c194f9d50eb1355fa75bfa3f85a883e2e2cb0b9afda08c1c37c0
 known_issues:
     - KI-104

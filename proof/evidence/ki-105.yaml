@@ -8,10 +8,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T17:13:35Z"
+executed_at: "2026-08-22T17:44:02Z"
 input_set:
     - proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts: sha256:855926f7a866e59be9868f39fe6c177abeeb5b53ad76a1eac4efac51507ddc65
+    proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts: sha256:9749686ee121f392516400d65625a5244f77479ac37f058202461dac86254d4d
 known_issues:
     - KI-105

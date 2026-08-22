@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T17:17:03Z"
+executed_at: "2026-08-22T17:44:01Z"
 input_set:
     - proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts: sha256:75f15762609bca3a546edbdff65420c70c93a1acb6521b86face6c113e1be638
+    proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts: sha256:cd2be68f85c9848a81b3e2e2dc329e516bb118798ca5805aaa0481880d71c4a4
 known_issues:
     - KI-102

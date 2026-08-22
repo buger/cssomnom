@@ -2,6 +2,7 @@
  * Overlay reproducer for KI-103.
  *
  * Reproduces: KI-103
+ * Verifies: SYS-REQ-260822-50T6
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

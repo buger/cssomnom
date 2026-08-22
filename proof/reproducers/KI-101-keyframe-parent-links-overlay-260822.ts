@@ -4,6 +4,8 @@
  * deleteRule leaves links on a detached child.
  *
  * Reproduces: KI-101
+ * Verifies: SYS-REQ-260822-YEQZ
+ * Verifies: SYS-REQ-260822-FM19
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

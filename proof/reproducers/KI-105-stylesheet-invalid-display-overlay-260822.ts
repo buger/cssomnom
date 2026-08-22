@@ -2,6 +2,7 @@
  * Overlay reproducer for KI-105.
  *
  * Reproduces: KI-105
+ * Verifies: SYS-REQ-260822-1MB8
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

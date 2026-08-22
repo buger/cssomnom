@@ -2,6 +2,7 @@
  * Overlay reproducer for KI-104.
  *
  * Reproduces: KI-104
+ * Verifies: SYS-REQ-260822-HARM
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
