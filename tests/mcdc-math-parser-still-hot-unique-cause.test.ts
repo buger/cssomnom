@@ -25,16 +25,18 @@
 // value is not a CSSUnitValue, combineProductTerms nested CSSMathProduct
 // flatten, simplify double-negate of leftover min, simplify negate-of-sum
 // leftover negate unwrap, simplifyMinMax nested leftover max flatten.
-// Drive CSSNumericValue.parse / CSSStyleValue.parse / parseMathFunction /
-// parseMathExpressionTokens / simplify. css-values-4 § 10.1 #funcdef-calc /
-// § 10.2 #funcdef-min / #funcdef-max / § 10.7 #calc-simplification.
+// Drive CSSNumericValue.parse / CSSStyleValue.parse / simplify. css-values-4
+// § 10.1 #funcdef-calc / § 10.2 #funcdef-min / #funcdef-max /
+// § 10.7 #calc-simplification. parseMathFunction / parseMathExpressionTokens
+// are not used: public parse reaches combineProductTerms flatten. simplify()
+// is kept because CSSStyleValue.parse keeps leftover nested max unflattened
+// and CSSNumericValue.parse keeps leftover double-negate; leftover negate-of-sum
+// unique-cause uses constructed trees that parse-time unit cases would fold.
 // No //mcdc:ignore.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import '../src/parser.ts';
-import { parseMathFunction, parseMathExpressionTokens, simplify } from '../src/math-parser.ts';
-import { tokenize } from '../src/tokenizer.ts';
-import { ParseHooks } from '../src/parse-hooks.ts';
+import { simplify } from '../src/math-parser.ts';
 import {
   CSS,
   CSSNumericValue,
@@ -42,6 +44,7 @@ import {
   CSSMathSum,
   CSSMathProduct,
   CSSMathNegate,
+  CSSMathInvert,
   CSSMathMin,
   CSSMathMax,
   CSSStyleValue,
@@ -141,27 +144,53 @@ describe('MC/DC still-hot unique-cause: combineSumTerms negate-of-non-unit (css-
 
 describe('MC/DC still-hot unique-cause: combineProductTerms nested product flatten (css-values-4 § 10.1 #funcdef-calc)', { concurrency: false }, () => {
   test('t instanceof CSSMathProduct T: paren product of mixed bases is flattened', () => {
-    // px*s cannot collapse, so the inner paren is a CSSMathProduct child of the outer product.
+    // px*s cannot collapse, so the inner paren is a CSSMathProduct that flatten
+    // lifts. Without flatten the outer product would still be a CSSMathProduct
+    // with a nested product child — require no nested product and top-level
+    // mixed-base units. (2px * 3) collapses to 6px before flatten sees a product.
     const nested = parse('calc((2px * 3s) * 4)');
     assert.ok(nested instanceof CSSMathProduct);
-    assert.ok([...nested.values].some((c) => c instanceof CSSUnitValue && c.unit === 'px'));
-    assert.ok([...nested.values].some((c) => c instanceof CSSUnitValue && c.unit === 's'));
+    const nestedKids = [...nested.values];
+    assert.equal(nestedKids.length, 3);
+    assert.equal(nestedKids.some((c) => c instanceof CSSMathProduct), false);
+    assert.ok(hasUnit(nestedKids, 'px', 2));
+    assert.ok(hasUnit(nestedKids, 's', 3));
+    assert.ok(hasUnit(nestedKids, 'number', 4));
 
     const nestedLeftover = parse('calc((2px * 3s) * min(1px, 2em))');
     assert.ok(nestedLeftover instanceof CSSMathProduct);
-    assert.ok([...nestedLeftover.values].some((c) => c instanceof CSSMathMin));
+    const leftoverKids = [...nestedLeftover.values];
+    assert.equal(leftoverKids.some((c) => c instanceof CSSMathProduct), false);
+    assert.ok(leftoverKids.some((c) => c instanceof CSSMathMin));
+    assert.ok(hasUnit(leftoverKids, 'px', 2));
+    assert.ok(hasUnit(leftoverKids, 's', 3));
 
-    // Tokenizer emits raw `(` / `)` delims; component-value parsing groups the paren product.
-    const viaTokens = parseMathExpressionTokens(ParseHooks.parseComponentValues(tokenize('(2px * 3s) * 4')));
-    assert.ok(viaTokens instanceof CSSMathProduct);
-    assert.ok([...viaTokens.values].some((c) => c instanceof CSSUnitValue && c.unit === 'px'));
-    assert.ok([...viaTokens.values].some((c) => c instanceof CSSUnitValue && c.unit === 's'));
+    const inverted = parse('calc((10px / 2s) * 3)');
+    assert.ok(inverted instanceof CSSMathProduct);
+    const invKids = [...inverted.values];
+    assert.equal(invKids.length, 3);
+    assert.equal(invKids.some((c) => c instanceof CSSMathProduct), false);
+    assert.ok(hasUnit(invKids, 'px', 10));
+    assert.ok(hasUnit(invKids, 'number', 3));
+    assert.ok(invKids.some(
+      (c) => c instanceof CSSMathInvert && c.value instanceof CSSUnitValue && c.value.unit === 's' && c.value.value === 2,
+    ));
 
-    const direct = parseMathFunction('calc', ParseHooks.parseComponentValues(tokenize('(10px / 2s) * 3')));
-    assert.ok(direct instanceof CSSMathProduct || direct instanceof CSSMathSum);
+    const width = CSSStyleValue.parse('width', 'calc((2px * 3s) * 4)');
+    assert.ok(width instanceof CSSMathProduct);
+    const widthKids = [...width.values];
+    assert.equal(widthKids.some((c) => c instanceof CSSMathProduct), false);
+    assert.ok(hasUnit(widthKids, 'px', 2));
+    assert.ok(hasUnit(widthKids, 's', 3));
+    assert.ok(hasUnit(widthKids, 'number', 4));
 
-    const width = CSSStyleValue.parse('width', 'calc((2px * 3) * min(1px, 2em))');
-    assert.ok(width instanceof CSSMathProduct || width instanceof CSSMathSum || width instanceof CSSMathMin);
+    const widthLeftover = CSSStyleValue.parse('width', 'calc((2px * 3s) * min(1px, 2em))');
+    assert.ok(widthLeftover instanceof CSSMathProduct);
+    const widthLeftoverKids = [...widthLeftover.values];
+    assert.equal(widthLeftoverKids.some((c) => c instanceof CSSMathProduct), false);
+    assert.ok(widthLeftoverKids.some((c) => c instanceof CSSMathMin));
+    assert.ok(hasUnit(widthLeftoverKids, 'px', 2));
+    assert.ok(hasUnit(widthLeftoverKids, 's', 3));
   });
 });
 

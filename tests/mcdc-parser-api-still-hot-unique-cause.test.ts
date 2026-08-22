@@ -51,7 +51,6 @@ import {
 } from '../src/parser-api.ts';
 import { parseRule } from '../src/parser.ts';
 import { CSSAtRule, CSSStyleRule, CSSSupportsRule } from '../src/CSSOM.ts';
-import type { ComponentValue } from '../src/types.ts';
 
 function asAt(rule: CSSParserRule | null): CSSParserAtRule {
   assert.ok(rule instanceof CSSParserAtRule);
@@ -137,9 +136,10 @@ describe('MC/DC still-hot unique-cause: evaluateSupportsDeclaration (CSS.support
     assert.equal(CSS.supports('margin', '1px'), true);
     assert.equal(CSS.supports('MARGIN', 'nope'), false);
     // L566 syntax T (generated <color>) vs F: -webkit-box-align is SUPPORTED_PROPERTIES
-    // with no STANDARD_PROPERTIES_SYNTAX entry → return true.
-    assert.equal(CSS.supports('-webkit-box-align', 'center'), true);
-    assert.equal(CSS.supports('-webkit-box-flex', '1'), true);
+    // with no STANDARD_PROPERTIES_SYNTAX entry → return true even for garbage values
+    // a real matcher would reject.
+    assert.equal(CSS.supports('-webkit-box-align', 'not-a-real-value'), true);
+    assert.equal(CSS.supports('-webkit-box-flex', 'garbage-xyz'), true);
     assert.equal(CSS.supports('color', 'notacolor'), false);
   });
 });
@@ -383,7 +383,7 @@ describe('MC/DC still-hot unique-cause: toParserRule type 17 / Array.isArray / t
       { type: 'ident', value: 'blue' },
       { type: 'whitespace', value: ' ' },
       { type: 'ident', value: 'red' },
-    ] as unknown as ComponentValue[]);
+    ]);
     assert.equal(fromArray.toString(), 'blue red');
     const fromIdent = toParserRule({ type: 'ident', value: 'blue' });
     assert.equal(fromIdent.toString(), 'blue');
@@ -430,9 +430,13 @@ describe('MC/DC still-hot unique-cause: cssomAtRuleFromFields conditionText / ch
     assert.ok(style instanceof CSSParserQualifiedRule);
     assert.equal(style.toString(), '.x{}');
     assert.equal(asDecl(parseDeclaration('color: red')).toString(), 'color: red;');
-    const viaRule = CSS.parseRule('@media all { .x { color: red } }');
-    assert.equal(asAt(viaRule).name, 'media');
-    assert.ok(asAt(viaRule).toString().startsWith('@media'));
+    const viaRule = asAt(CSS.parseRule('@media all { .x { color: red } }'));
+    assert.equal(viaRule.name, 'media');
+    assert.ok(Array.isArray(viaRule.body));
+    assert.equal(viaRule.body.length, 1);
+    assert.ok(viaRule.body[0] instanceof CSSParserQualifiedRule);
+    assert.equal(viaRule.body[0].toString(), '.x{}');
+    assert.equal(viaRule.toString(), '@mediaall{.x{}}');
   });
 });
 
