@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-35
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-PMB5
+command: node --experimental-strip-types --test proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T13:42:56Z"
+input_set:
+    - proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts: sha256:ccdaa163fbff8e18e1fbe3a6c96da58dff8fbe40dd96b144abff21957f8205a9
+known_issues:
+    - KI-35

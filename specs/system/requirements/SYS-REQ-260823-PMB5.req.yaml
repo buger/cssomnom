@@ -1,0 +1,45 @@
+id: SYS-REQ-260823-PMB5
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when illegal_brace_multipliers >= 1 the property_registry shall always satisfy illegal_multipliers_accepted <= 0 & legal_multipliers_accepted >= 2
+description: 'The @property syntax-string multiplier set is closed to ''+'' (space-separated list) and ''#'' (comma-separated list) per css-properties-values-api #multipliers (:976-991); brace repetition forms {N} and {N,M} do not exist in the syntax grammar (#syntax-strings) and registerProperty must reject them with SyntaxError while continuing to accept +/#.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: property_registry
+rationale: 'Known issue KI-35: registerProperty accepts ''<length>{2}'' and ''<length>{2,4}'' as valid syntax strings; distinct from KI-111 which covers initial-value matcher validation.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - illegal_brace_multipliers
+    - illegal_multipliers_accepted
+    - legal_multipliers_accepted
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#multipliers
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#syntax-strings
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T13:40:01Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T13:40:01Z"

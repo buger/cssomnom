@@ -1,0 +1,19 @@
+component: media
+variables:
+    - name: condition_operands_serialized
+      type: int
+      direction: input
+      description: 'Number of parenthesized <media-in-parens> operands joined by and/or in a serialized conditionText (reproducer KI-31 exercises 3 operands across an or-group plus and-leg; obligation covers conditions up to 6 operands).'
+      range:
+        max: 6
+        min: 1
+    - name: round_trip_semantic_flips
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of media queries whose evaluation degrades (e.g. flips to not all) when the serialized conditionText is re-parsed; must be zero (reproducer constant ROUND_TRIP_SEMANTIC_FLIP_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0
+no_interface:
+    declared: true
+    reason: "serializeMediaCondition is an in-process pure transform of the parsed media AST; the guarantee is the public CSSMediaRule.conditionText contract, not a separately versioned caller/callee INT"

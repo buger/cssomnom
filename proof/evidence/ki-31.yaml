@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-31
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-MRT1
+command: node --experimental-strip-types --test proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T13:42:55Z"
+input_set:
+    - proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts: sha256:3089c321dd159fe9a4a139ae5263b07871c481660394cf8e2fd5c4fb3dc6625d
+known_issues:
+    - KI-31

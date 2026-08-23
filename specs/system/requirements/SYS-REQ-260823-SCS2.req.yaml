@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-SCS2
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when cased_non_html_elements >= 1 the selectors shall always satisfy case_insensitive_false_matches <= 0
+description: 'Type-selector matching against element names outside the HTML namespace must use exact (case-sensitive) string comparison: selectors-4 #case-sensitive (:1306-1317) defaults name matching to the string/identical-to operation and scopes any case-insensitive relaxation to HTML-namespace elements via html#case-sensitivity-of-selectors.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: selectors
+rationale: 'Known issue KI-32: matchSimpleSelector lowercases both sides unconditionally, so ''textpath'' wrongly matches SVG <textPath> and ''foreignobject'' matches <foreignObject>.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - cased_non_html_elements
+    - case_insensitive_false_matches
+references:
+    - type: document
+      id: submodules/csswg-drafts/selectors-4/Overview.bs#case-sensitive
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T13:40:01Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T13:40:01Z"

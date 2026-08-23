@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-MRT1
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when condition_operands_serialized >= 1 the media shall always satisfy round_trip_semantic_flips <= 0
+description: 'Serializing a valid media condition to CSSMediaRule.conditionText and re-parsing it must preserve the condition''s evaluability: mediaqueries-4 #mq-syntax requires every and/or operand to be a <media-in-parens>, and css-conditional-3 #the-cssconditionrule-interface forbids logical simplifications such as removal of unneeded parentheses, so the returned condition will evaluate to the same result as the specified condition.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: media
+rationale: 'Known issue KI-31: serializeMediaCondition joins nested and/or children bare, dropping grouping parentheses; re-parsing the serialized text flips valid queries to not all.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - condition_operands_serialized
+    - round_trip_semantic_flips
+references:
+    - type: document
+      id: submodules/csswg-drafts/mediaqueries-4/Overview.bs#mq-syntax
+    - type: document
+      id: submodules/csswg-drafts/css-conditional-3/Overview.bs#the-cssconditionrule-interface
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T13:39:25Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T13:39:25Z"

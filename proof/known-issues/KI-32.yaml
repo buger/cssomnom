@@ -1,0 +1,58 @@
+id: KI-32
+title: SVG/MathML element names matched ASCII-case-insensitively by type selectors
+description: 'matchSimpleSelector''s type-selector arm (src/matcher.ts ~L300-303) lowercases BOTH the element local name and the selector name unconditionally, so matches({localName:''textPath'', namespaceURI:''http://www.w3.org/2000/svg''}, ''textpath'') returns true and ''foreignobject'' matches <foreignObject>. selectors-4 #case-sensitive (Overview.bs:1306-1317) defaults matching of element names to the string/identical-to operation (case sensitive); its only relaxation is a host-language exception for HTML-namespace elements (html#case-sensitivity-of-selectors), which does not extend to SVG/MathML where camelCase element names are normative (SVG 2 textPath, foreignObject). Correctness fault: SVG documents style wrongly whenever a selector''s case differs from the element name.'
+affected_requirements:
+    - SYS-REQ-260823-SCS2
+evidence_manifests:
+    - proof/evidence/ki-32.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: matches(element, selector) type-selector arm
+attacker_input: selector text whose element name differs in case from a non-HTML-namespace element; no privileged access required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
+tripwire_mutation: Remove unconditional toAsciiLowerCase on both sides in matchSimpleSelector's type-selector arm for non-HTML namespaces; the cased legs flip green while HTML control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat case-differing type selectors as non-matching against SVG/MathML elements when consuming match() results.
+remediation: Compare element local names to type-selector names case-sensitively unless the element is in the HTML namespace (keep the HTML exemption per html#case-sensitivity-of-selectors).
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:42:21Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T13:42:55Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-32.yaml
+kill_domain: selector_case_sensitivity
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public matches() export of src/matcher.ts only; element fixtures are plain DOMElement-shaped literals, no mocks of internals.
+        quantitative_impact: CASED_NON_HTML_ELEMENTS=2 (textPath, foreignObject); both lowercased selectors wrongly match at HEAD (false_matches=2 vs budget 0), measured in <5ms per run.
+        control_test: two positive controls pass - exact-case svg|textPath/textPath matches, and HTML-namespace DIV still matches case-insensitively - isolating the defect to non-HTML namespaces.
+        untrusted_attacker: selector text and document markup are both attacker-influenced in styling pipelines; matching runs on every querySelector-style call.
+        current_deployment_relevance: matches() is the core selector engine entry point of this release; confirmed live at HEAD 69defe8 via two red runs plus evidence capture re-execution.
+        honest_severity: medium correctness - wrong match/nomatch outcomes confined to case-differing SVG/MathML type selectors; no availability or security dimension claimed.
+        attacker_profitability: an author relying on 'textpath { fill: none }' gets silently different styling than conformant engines; parity drift is free to trigger.
+        reproducible: reproducer exited 1 on both pre-filing runs and again under proof evidence capture.
+        no_inflation: severity_basis reproducer; medium grounded in the two executed legs; cve_surface none.
+        operational_path_verified: failing leg exercises the same matchSimpleSelector path used by all matcher callers; no debug gating.
+        reachability_verified: public matches() import reaches the lowercase comparison directly; zero additional privileges required.

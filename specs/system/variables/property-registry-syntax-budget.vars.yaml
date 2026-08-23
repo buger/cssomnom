@@ -1,0 +1,23 @@
+component: property_registry
+variables:
+    - name: illegal_brace_multipliers
+      type: int
+      direction: input
+      description: 'Count of brace-multiplier syntax strings ({N}/{N,M}) submitted to registerProperty expecting rejection (reproducer KI-35 exercises <length>{2} and <length>{2,4}, N=2; the multiplier set is closed to +/# per css-properties-values-api #multipliers).'
+      range:
+        max: 8
+        min: 1
+    - name: illegal_multipliers_accepted
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of brace-multiplier syntax strings accepted by registerProperty without SyntaxError; must be zero.'
+      range:
+        max: 0
+        min: 0
+    - name: legal_multipliers_accepted
+      type: int
+      direction: output
+      description: 'Control floor - count of legal multipliers (+ space-separated, # comma-separated) that must remain accepted by registerProperty (reproducer positive controls accept both; floor 2).'
+      range:
+        max: 2
+        min: 2

@@ -1,0 +1,16 @@
+component: cssom
+variables:
+    - name: supports_conditions_evaluated
+      type: int
+      direction: input
+      description: 'Number of distinct @supports condition texts whose CSSSupportsRule.matches is evaluated against the offline oracle CSS.supports() (reproducer KI-33 evaluates 4; obligation covers any condition expressible to the feature-query evaluator).'
+      range:
+        max: 16
+        min: 1
+    - name: missing_supports_matches_attributes
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of inspected CSSSupportsRule instances lacking a boolean matches IDL attribute (css-conditional-3 #the-csssupportsrule-interface); must be zero (reproducer constant MISSING_MATCHES_ATTRIBUTES_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

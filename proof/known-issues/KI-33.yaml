@@ -1,0 +1,59 @@
+id: KI-33
+title: CSSSupportsRule.matches IDL attribute missing entirely
+description: 'parse(''@supports (display: grid){}'').cssRules[0].matches is undefined: CSSSupportsRule (src/CSSOM.ts ~L975) implements conditionText and cssText but no matches accessor at all. css-conditional-3 #the-csssupportsrule-interface defines ''readonly attribute boolean matches'' (Overview.bs:845-848) returning ''the evaluation of the CSS feature query represented in conditionText'' (:856-859). The attribute is implementable fully offline because the library''s own public CSS.supports() (src/parser-api.ts:757, SYS-REQ-260821-SMW6) already evaluates identical feature queries. Interface-completeness fault: every consumer probing rule support capability gets undefined instead of a boolean. Note (not filed): CSSMediaRule.matches (css-conditional-3 :806, semantics :820-827) is also absent, but its value is window/environment-dependent (''true if the rule is in a stylesheet attached to a document whose Window matches'') and cannot be honestly asserted in a headless harness.'
+affected_requirements:
+    - SYS-REQ-260823-SMA3
+evidence_manifests:
+    - proof/evidence/ki-33.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSSupportsRule.matches
+attacker_input: any '@supports' rule input; correctness hole reachable by ordinary API use
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts
+tripwire_mutation: Adding a boolean matches getter evaluating conditionText flips all four legs red->green while the oracle control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Guard reads of .matches with typeof checks; use CSS.supports(rule.conditionText) directly.
+remediation: Add a readonly boolean matches getter to CSSConditionRule/CSSSupportsRule that evaluates conditionText through the same evaluator backing CSS.supports().
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:42:21Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T13:42:55Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-33.yaml
+kill_domain: idl_surface_completeness
+do_not_refile_as: CSSMediaRule.matches window-dependent media-query evaluation (environment-dependent, not assertable offline)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse(), CSSSupportsRule (src/CSSOM.ts) and the public CSS.supports oracle (src/parser-api.ts:757, SYS-REQ-260821-SMW6); expected values derived offline, no browser needed.
+        quantitative_impact: SUPPORTS_CONDITIONS_EVALUATED=4 - typeof rule.matches === 'undefined' for every @supports variant probed ((display: grid), (foo: bar), not (...), nested and-chain); MISSING_MATCHES_ATTRIBUTES_BUDGET=0 exceeded by 4.
+        control_test: oracle control asserts CSS.supports('(display: grid)')===true and CSS.supports('(foo: bar)')===false before any defect leg, proving the offline oracle discriminates.
+        untrusted_attacker: @supports text is ordinary stylesheet input; the IDL gap is reachable by read-only inspection, no privileges involved.
+        current_deployment_relevance: CSSSupportsRule is shipped in this release's CSSOM layer; confirmed live at HEAD 69defe8 via two red runs plus evidence capture re-execution.
+        honest_severity: medium correctness/IDL-completeness - attribute missing entirely (undefined, not merely wrong); environment-dependent CSSMediaRule.matches deliberately NOT asserted here and parked via do_not_refile_as.
+        attacker_profitability: feature-detection code branching on rule.matches gets undefined (falsy-but-wrong) behavior divergent from every browser; detection evasion is trivial.
+        reproducible: reproducer exited 1 on both pre-filing runs and again under proof evidence capture (4/4 defect legs fail).
+        no_inflation: severity_basis reproducer; medium reflects interface-completeness impact only; cve_surface none.
+        operational_path_verified: legs construct rules through public parse() exactly as consumers do; no internal hooks.
+        reachability_verified: property read on a returned rule object is the product surface itself; nothing stands between caller and hole.

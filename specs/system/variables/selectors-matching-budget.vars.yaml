@@ -1,0 +1,30 @@
+component: selectors
+variables:
+    - name: cased_non_html_elements
+      type: int
+      direction: input
+      description: 'Count of camelCase non-HTML-namespace element names probed with lowercased type selectors (reproducer KI-32 exercises textPath and foreignObject, N=2; obligation covers any mixed-case SVG/MathML element name up to 8).'
+      range:
+        max: 8
+        min: 1
+    - name: case_insensitive_false_matches
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of lowercased type selectors that wrongly match non-HTML-namespace elements whose local names differ in case; must be zero (reproducer constant CASE_INSENSITIVE_FALSE_MATCH_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0
+    - name: wildcard_lang_ranges
+      type: int
+      direction: input
+      description: 'Count of asterisk-prefixed :lang() language ranges exercised (reproducer KI-34 exercises "*-US", "*-CA" and escaped \*-US, N=3; WPT css/selectors/selectors-4/lang-007/008/010/015/018/021 cover the same class; obligation covers extended ranges up to 8 subtags).'
+      range:
+        max: 8
+        min: 1
+    - name: missed_wildcard_matches
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of RFC4647 section 3.3.2 extended-filtering language matches missed by wildcard ranges; must be zero (reproducer constant MISSED_WILDCARD_MATCH_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

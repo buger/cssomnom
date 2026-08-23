@@ -1,0 +1,59 @@
+id: KI-35
+title: registerProperty accepts invalid {N}/{N,M} brace-multiplier syntax strings
+description: 'CSS.registerProperty({name:''--x'', syntax:''<length>{2}'', initialValue:''1px 2px'', inherits:false}) is ACCEPTED (no throw), and ''<length>{2,4}'' likewise registers. css-properties-values-api #multipliers (Overview.bs:976-991) closes the multiplier set to U+002B ''+'' (space-separated list) and U+0023 ''#'' (comma-separated list); no brace repetition form exists anywhere in the syntax-string grammar (#syntax-strings, Overview.bs:1020-1031), so ''<length>{2}'' is not a valid syntax string and register-a-custom-property must throw SyntaxError. Grammar closed-set validation fault: registrations that can never be honored by a conformant consumer enter the registry. Distinct from KI-111, which covers initial-value matcher validation against an ALREADY-valid syntax; here the syntax string itself violates the grammar.'
+affected_requirements:
+    - SYS-REQ-260823-PMB5
+evidence_manifests:
+    - proof/evidence/ki-35.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.registerProperty() / PropertyRegistry.register() syntax-string parsing
+attacker_input: property definition dictionaries with brace-multiplier syntax strings; reachable from any caller of registerProperty
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
+tripwire_mutation: Restricting the multiplier grammar to {+,#} in the property-syntax parser flips both brace legs red->green while +/# controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not ship definitions whose syntax contains brace multipliers; validate syntax strings at the boundary before calling registerProperty.
+remediation: Constrain the syntax-string parser to the closed multiplier set {+,#} and throw SyntaxError for any other multiplier token, including {N}/{N,M} forms.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:42:46Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T13:42:56Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-35.yaml
+kill_domain: grammar_closed_set_validation
+do_not_refile_as: registered initial-value validation against declared syntax (KI-111)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSS namespace of src/parser-api.ts (registerProperty -> PropertyRegistry.register); unique probe names avoid duplicate-name interference between legs.
+        quantitative_impact: ILLEGAL_BRACE_MULTIPLIERS=2 - '<length>{2}' and '<length>{2,4}' both ACCEPTED at HEAD (illegal_multipliers_accepted=2 vs budget 0); controls prove LEGAL_MULTIPLIERS=2 ('+' space-separated, '#' comma-separated with comma initial value) remain accepted.
+        control_test: two doesNotThrow controls isolate the defect to brace multipliers specifically; the # control uses its comma-separated initial value so KI-111's value-matching domain is not conflated.
+        untrusted_attacker: property-definition dictionaries are external input to polyfill/host registries; registration is the trust boundary crossing into typed-value validation.
+        current_deployment_relevance: registerProperty is this release's headline Houdini API; confirmed live at HEAD 69defe8 via two red runs plus evidence capture re-execution.
+        honest_severity: medium correctness - out-of-grammar syntax strings enter the registry and can never be honored by conformant consumers; no injection or corruption claim.
+        attacker_profitability: libraries feature-testing acceptance to decide fallbacks get false confidence; '{2}' registrations poison later lookups at zero cost.
+        reproducible: reproducer exited 1 on both pre-filing runs and again under proof evidence capture.
+        no_inflation: severity_basis reproducer; distinct root cause from KI-111 recorded in description and do_not_refile_as.
+        operational_path_verified: legs call the exported registerProperty exactly as documented in README examples.
+        reachability_verified: one public API call reaches the grammar hole; no privilege or configuration gate exists.

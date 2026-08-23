@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-SMA3
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when supports_conditions_evaluated >= 1 the cssom shall always satisfy missing_supports_matches_attributes <= 0
+description: 'Every CSSSupportsRule instance must expose the readonly boolean matches IDL attribute defined by css-conditional-3 #the-csssupportsrule-interface (:846), returning the evaluation of the CSS feature query represented in conditionText (:856-859); the library''s own public CSS.supports() evaluates identical conditions offline, so the contract is assertable without a browser host.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'Known issue KI-33: CSSSupportsRule exposes no matches attribute at all; typeof rule.matches === ''undefined''.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - supports_conditions_evaluated
+    - missing_supports_matches_attributes
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-conditional-3/Overview.bs#the-csssupportsrule-interface
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T13:40:01Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T13:40:01Z"

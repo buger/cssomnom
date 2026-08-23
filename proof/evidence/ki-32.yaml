@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-32
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-SCS2
+command: node --experimental-strip-types --test proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T13:42:55Z"
+input_set:
+    - proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts: sha256:235d9266605b69b09b8dad9b0805926b376eadf1630db43aa9dcdcf739721da9
+known_issues:
+    - KI-32

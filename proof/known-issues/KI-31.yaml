@@ -1,0 +1,59 @@
+id: KI-31
+title: Media condition serialization drops required parentheses and corrupts round-trip semantics
+description: 'serializeMediaCondition (src/MediaParser.ts ~L839-844) joins condition children with bare '' <op> '' separators, dropping grouping parentheses around nested or/and operands. Parsing ''@media ((width >= 100px) or (grid)) and (hover){div{}}'' yields conditionText "(width >= 100px) or (grid) and (hover)", which RE-PARSES as an invalid mixed and/or chain and serializes as ''not all''; ''@media screen and ((color) or (monochrome))'' likewise degrades to ''not all''. mediaqueries-4 #mq-syntax (Overview.bs:895-904) requires every and/or operand to be a <media-in-parens>, and css-conditional-3 #the-cssconditionrule-interface (Overview.bs:862-867) forbids logical simplifications such as removal of unneeded parentheses precisely so the returned condition evaluates to the same result as the specified one. Correctness fault (serializer equivalence violation): any consumer that persists or re-serializes conditionText silently flips matching semantics from satisfiable to never-match. Distinct from KI-5, which covers unbalanced-paren ''(( input rejection only.'
+affected_requirements:
+    - SYS-REQ-260823-MRT1
+evidence_manifests:
+    - proof/evidence/ki-31.yaml
+severity: high
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() -> CSSMediaRule.conditionText (serializeMediaCondition)
+attacker_input: ordinary stylesheet text with nested media conditions; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
+tripwire_mutation: Parenthesize each non-atomic child in serializeMediaCondition's join; both failing legs flip red->green while controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not persist or compare against serialized conditionText from this engine; keep the original source text for round-trips.
+remediation: In serializeMediaCondition, parenthesize every multi-child media-condition operand before joining with ' and '/' or ' (or serialize from the original token stream), preserving <media-in-parens> structure end-to-end.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:41:59Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T13:42:55Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-31.yaml
+kill_domain: condition_serialization_equivalence
+do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() (src/parser.ts) and the CSSMediaRule.conditionText getter only - no mocks; reproducer imports mirror KI-18 style.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - conditionText for '@media ((width >= 100px) or (grid)) and (hover)' serializes "(width >= 100px) or (grid) and (hover)" and re-parses to invalid/not all in <5ms; second leg 'screen and ((color) or (monochrome))' degrades identically; CONDITION_OPERAND_COUNT=3 exercised against an obligation budget of 6.
+        control_test: positive-control leg asserts a flat and-chain round-trips byte-identically and stays valid, so failures are not setup errors.
+        untrusted_attacker: stylesheet text is the trust boundary; any host ingesting user/theme CSS reaches serializeMediaCondition with zero privileges.
+        current_deployment_relevance: conditionText is the headline media-rule surface of this release; confirmed live at HEAD 69defe8 via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: high correctness - silent semantic flip of persisted/re-serialized conditions from satisfiable to never-match; no memory-safety or RCE dimension.
+        attacker_profitability: an attacker who can get one serialized rule re-ingested (CMS round-trip, build pipeline) deterministically disables the guarded branch of downstream rules.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact public parse()/conditionText path hosts use; no gated or debug path involved.
+        reachability_verified: public parse() IS the product surface; no ingress layer exists between host and serializer.

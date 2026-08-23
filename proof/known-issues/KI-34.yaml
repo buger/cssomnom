@@ -1,0 +1,58 @@
+id: KI-34
+title: :lang() wildcard language ranges never match
+description: 'The :lang() arm in matcher.ts (~L598-606) implements only exact equality or dash-prefix comparison, so an asterisk-prefixed range like ''*-US'' matches nothing: with ancestor/own lang="en-US", matches(p, '':lang("*\-US")'') returns false where it must return true. selectors-4 #lang-pseudo (Overview.bs:2661-2667) requires each language range to be an RFC4647 extended language range matched by extended filtering per RFC4647 section 3.3.2, under which each ''*'' subtag acts as a wildcard (''*-US'' matches en-US; ''*-CA'' matches fr-CA); ranges containing asterisks may be quoted or escaped (:2643-2645). WPT fixtures css/selectors/selectors-4/lang-007.html (:lang("*-CH")), lang-008.html (:lang("*-Latn")), lang-010.html (:lang("*-FR")), lang-015.html (:lang(\*-FR)), lang-018.html (:lang("*-x-foobar")) and lang-021.html (:lang("*-gb")) all assert wildcard matching. Correctness fault: wildcard language selection silently selects nothing.'
+affected_requirements:
+    - SYS-REQ-260823-00C0
+evidence_manifests:
+    - proof/evidence/ki-34.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: matches(element, ':lang(...)')
+attacker_input: selector text with asterisk-prefixed language ranges; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts
+tripwire_mutation: Adding RFC4647 extended-filtering wildcard handling to the lang arm flips the wildcard leg red->green while exact/prefix controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid wildcard :lang() ranges with this engine; enumerate concrete tags.
+remediation: 'Implement RFC4647 extended filtering in the lang arm: split range and tag on ''-'', treat each ''*'' subtag as matching any single subtag, and keep ASCII case-insensitive comparison.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:42:46Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T13:42:56Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-34.yaml
+kill_domain: selector_extended_filtering
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public matches() export of src/matcher.ts; language fixtures are DOMElement-shaped literals exercising getElementLanguage's own ancestor walk.
+        quantitative_impact: WILDCARD_LANG_RANGES=3 - "*-US" (own attr), "*-CA" (inherited from parent lang="fr-CA") and escaped \*-US all return false at HEAD (missed=3 vs budget 0).
+        control_test: three controls pass - exact ':lang("en-US")', prefix ':lang("en")' over en-US, and negative wildcard '*-XX' correctly false - so the harness measures wildcard handling specifically.
+        untrusted_attacker: lang attributes and selectors are document-controlled inputs; :lang evaluation runs during every styled match pass.
+        current_deployment_relevance: matches() core surface; wildcard ranges are the documented BCP47 mechanism (WPT css/selectors/selectors-4/lang-007/008/010/015/018/021 all assert it); confirmed live at HEAD 69defe8.
+        honest_severity: medium correctness - wildcard language selection silently selects nothing; localized to :lang() arm, no security dimension.
+        attacker_profitability: pages relying on '*-CH'/'*-FR' style targeting (per WPT fixtures) render differently here than in conformant engines; divergence costs an attacker nothing.
+        reproducible: reproducer exited 1 on both pre-filing runs and again under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest; cve_surface none; no memory-safety claims.
+        operational_path_verified: legs exercise the same lang-arm code path used by all matcher callers.
+        reachability_verified: single public matches() call reaches the defect; no ingress ACL between host and matcher.

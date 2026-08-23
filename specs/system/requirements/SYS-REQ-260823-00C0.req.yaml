@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-00C0
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when wildcard_lang_ranges >= 1 the selectors shall always satisfy missed_wildcard_matches <= 0
+description: ':lang() language ranges are RFC4647 extended language ranges matched by extended filtering (RFC4647 section 3.3.2), so asterisk subtags act as wildcards: ''*-US'' matches content language ''en-US''. selectors-4 #lang-pseudo (:2661-2667) mandates extended filtering; WPT css/selectors/selectors-4/lang-007/008/010/015/018/021 corroborate wildcard matching.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: selectors
+rationale: 'Known issue KI-34: the matcher implements only exact or dash-prefix comparison for :lang(), so asterisk-prefixed ranges never match anything.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - wildcard_lang_ranges
+    - missed_wildcard_matches
+references:
+    - type: document
+      id: submodules/csswg-drafts/selectors-4/Overview.bs#lang-pseudo
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T13:40:43Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T13:40:43Z"
