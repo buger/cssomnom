@@ -1,0 +1,20 @@
+component: safe_exec_kernel
+variables:
+    - name: shell_metachar_arg_supplied
+      type: int
+      direction: input
+      description: 'getGitNotesLog parameters carrying shell metacharacters (scripts/wpt/node/safe-child-process.ts:305 interpolates both count and ref into an execSync command line); reproducer injects 2 parameters (ref and count).'
+      range:
+        max: 2
+        min: 1
+    - name: injected_shell_executions_zero
+      type: int
+      direction: output
+      description: 'Count of attacker commands /bin/sh executes via the interpolated execSync (reproducer observes echo + touch per injected parameter inside a disposable temp git repo; safe contract requires this to hold at 0).'
+      range:
+        max: 2
+        min: 0
+no_interface:
+    declared: true
+    reason: "safe-child-process.ts is the project-internal centralized execution kernel consumed by repo scripts/tests; its guarantees are the AGENTS.md Safe Subprocess Execution contract, not a versioned external interface"
+

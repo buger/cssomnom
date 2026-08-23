@@ -1,0 +1,68 @@
+id: KI-26
+title: fetch-wptfyi --cache-path writes fetched baselines to unconstrained path.resolve destinations
+description: 'scripts/wpt/browser/fetch-wptfyi.ts:222-227 (verified at HEAD 83ce08f): targetPath = path.resolve(options.cachePath || ''.wpt-cache/report-chrome-upstream.json'') followed by mkdirSync(path.dirname(targetPath), {recursive:true}) and fs.writeFileSync of the fetched baseline — no allowlisted-base containment. An absolute --cache-path or traversal form dist/../../outside/x.json lands attacker/operator-chosen files anywhere the invoking identity can write, clobbering checkout files or dropping payloads outside the tree (CWE-22).'
+affected_requirements:
+    - SYS-REQ-260823-MPS4
+evidence_manifests:
+    - proof/evidence/ki-26.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: fetchWptFyiRun() cache persistence (scripts/wpt/browser/fetch-wptfyi.ts; pnpm run wpt:fetch-upstream)
+attacker_input: operator-supplied --cachePath option (absolute targets or ../ traversal relative forms)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid passing operator-controlled cachePath values on shared/multi-tenant checkouts.
+remediation: Resolve cachePath against a fixed base and require path.relative(base, targetPath) to stay inside the .wpt-cache base before mkdir/write; fail closed on escape exactly like the confined-write contrast shape in the scan PoC.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: path_traversal
+do_not_refile_as: fetch-wptfyi cachePath unconstrained resolve write
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: exercises the REAL exported fetchWptFyiRun (scripts/wpt/browser/
+        fetch-wptfyi.ts, verified at HEAD 83ce08f) with customFetch stubs answering only the
+        wpt.fyi API URL and an in-memory results body; dryRun:false so the actual write branch
+        (:222-227) executes against disposable temp storage; zero network egress.
+        quantitative_impact: absolute --cachePath lands the baseline at <lab>/outside/
+        ki26-evil-cache.json and traversal form 'dist/../../outside/ki26-evil-via-dist.json'
+        (2 climb segments) lands outside the intended base; both files exist post-call with full
+        fetched JSON contents (mkdirSync recursive included, :225).
+        control_test: default cachePath stays inside .wpt-cache and ingests totalTests=1
+        correctly in the same run — ingestion works, confinement is what is missing.
+        untrusted_attacker: operator-supplied option today; hostile values arrive via wrappers,
+        Makefiles, or compromised CI inputs flowing into fetchWptFyiRun options.
+        current_deployment_relevance: wpt:fetch-upstream npm script runs this against the real
+        checkout where ../ can clobber tracked files.
+        honest_severity: medium data_integrity — arbitrary-path write of fetched JSON as the
+        invoking identity; requires control of the option (no remote vector claimed).
+        attacker_profitability: overwrite package.json/tsconfig or plant executable-adjacent
+        files outside the tree with API-fetched content as cover.
+        reproducible: two consecutive reproducer runs exited 1 asserting containedUnder(cachedPath,
+        .wpt-cache); evidence capture re-ran it (proof/evidence/ki-26.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; local write primitive stated
+        plainly.
+        operational_path_verified: failing leg is the production non-dryRun persistence block
+        executed end-to-end through the real function.
+        reachability_verified: single options object reaches path.resolve(:224) with no guard
+        between.

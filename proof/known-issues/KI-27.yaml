@@ -1,0 +1,69 @@
+id: KI-27
+title: fetchWptFyiRun downloads API-provided results URLs with no host allowlist (SSRF/cache poisoning)
+description: 'scripts/wpt/browser/fetch-wptfyi.ts:178-196 (verified at HEAD 83ce08f): downloadUrl = run.raw_results_url || run.results_url is dereferenced verbatim through fetchFn with default redirect following and no scheme/host allowlist between ''bytes returned by the runs API'' and ''URL this process requests''. A compromised or MITM''d wpt.fyi record can coerce maintainer/CI hosts into requesting internal HTTP services (metadata 169.254.169.254, loopback, RFC1918) and cache the returned bytes as the trusted upstream WPT baseline used for parity gating (CWE-918 + baseline poisoning).'
+affected_requirements:
+    - SYS-REQ-260823-Z8HR
+evidence_manifests:
+    - proof/evidence/ki-27.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: fetchWptFyiRun() results download (scripts/wpt/browser/fetch-wptfyi.ts; pnpm run wpt:fetch-upstream)
+attacker_input: wpt.fyi runs-API response fields raw_results_url/results_url (attacker-influenced under API compromise/MITM), including redirect targets
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Fetch upstream baselines only from networks where wpt.fyi TLS is trustworthy; spot-check cached reports for unexpected hosts.
+remediation: Allowlist {https://wpt.fyi, https://storage.googleapis.com} (scheme+host, pre-redirect) for downloadUrl and disable cross-host redirect following; reject violations loudly instead of fetching.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: ssrf_egress
+do_not_refile_as: wpt.fyi results download without host allowlist (SSRF/baseline poisoning)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: REAL exported fetchWptFyiRun driven with customFetch answering the
+        wpt.fyi API query; raw_results_url points at a loopback HTTP listener (127.0.0.1,
+        ephemeral port, server.close() in finally) standing in for an internal service; no
+        external egress (verified at HEAD 83ce08f; sink fetchFn(downloadUrl) at :189).
+        quantitative_impact: poisoned run record causes exactly 1 dereference of
+        http://127.0.0.1:<port>/latest/meta-data/ — the listener records the hit and its JSON
+        response flows back through decompressBuffer->JSON.parse into normalizeWptFyiData, i.e.
+        it would be cached as the trusted upstream baseline but for the test's assertions.
+        control_test: allowlisted raw_results_url (storage.googleapis.com stand-in served by the
+        same stub) ingests totalTests=1 in the same run — download machinery works; the missing
+        piece is solely a host allowlist.
+        untrusted_attacker: the runs-API response is the boundary; compromised/MITM'd wpt.fyi or
+        a hostile mirror authors it.
+        current_deployment_relevance: fetch-upstream output feeds parity gating, so poisoning
+        propagates into release signals, not just a transient request.
+        honest_severity: medium data_integrity — SSRF plus baseline poisoning behind an
+        already-positioned network attacker or API compromise; no unauthenticated remote claim.
+        attacker_profitability: point raw_results_url at cloud metadata/intranet and have CI
+        fetch it on schedule; returned bytes become parity ground truth.
+        reproducible: two consecutive reproducer runs exited 1 asserting hits.length === 0;
+        evidence capture re-ran it (proof/evidence/ki-27.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; redirect amplification noted
+        (undici follows redirects by default) but only single-hop demonstrated.
+        operational_path_verified: failing leg executes the production download path end-to-end
+        (:178 selection, :189 fetch, :194-197 decode).
+        reachability_verified: one stubbed API response away from dereferencing arbitrary URLs;
+        no allowlist check exists anywhere in the path.

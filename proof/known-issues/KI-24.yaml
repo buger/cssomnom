@@ -1,0 +1,68 @@
+id: KI-24
+title: sandbox.fetch /interfaces/ join escapes the WPT root and discloses local files to fixture JS
+description: scripts/wpt/node/run.ts intercepts fixture fetches under '/interfaces/' and serves IDL from disk via path.join(WPT_ROOT, 'interfaces', idlFileName) (L143-145 at HEAD 83ce08f) followed by existsSync/readFileSync (L146-147) with no containment check on idlFileName. '/interfaces/../../../package.json' climbs out of <WPT_ROOT>/interfaces and returns arbitrary readable files to sandboxed page JS as a 200 Response (CWE-22). Live probe confirmed status 200 with repo-root package.json contents through the real exported runWptFile.
+affected_requirements:
+    - SYS-REQ-260823-KYB6
+evidence_manifests:
+    - proof/evidence/ki-24.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: scripts/wpt/node/run.ts sandbox.fetch bridge inside runWptFile()
+attacker_input: fixture-controlled fetch URLs starting with /interfaces/ (../ traversal segments after the prefix)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat WPT fixture trees as untrusted input; avoid running hostile fixtures until the bridge is confined.
+remediation: Normalize the joined path and require it stays inside path.resolve(WPT_ROOT, 'interfaces') via a path.relative containment check served from the same shared helper as the script-content fix; reject escapes before existsSync so probes cannot oracle out-of-tree files.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: path_traversal
+do_not_refile_as: WPT runner /interfaces/ fetch path traversal disclosure
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: live leg imports the REAL exported runWptFile after chdir into a
+        synthetic WPT-shaped temp tree (WPT_ROOT anchors at cwd, run.ts:24); the /interfaces/
+        bridge exercised is run.ts:143-156 verbatim, cited at HEAD 83ce08f; nothing outside the
+        temp tree is read. Mirror leg replicates the same join.
+        quantitative_impact: '/interfaces/../../../package.json' climbs 3 levels out of
+        <WPT_ROOT>/interfaces; live probe returns ok:true status:200 whose text contains the
+        planted package.json marker — contents handed to page JS as a Response.
+        control_test: '/interfaces/KI24InTree.idl' is served locally with expected body in the
+        same run, proving the bridge works and only containment is missing.
+        untrusted_attacker: fixture JS chooses fetch arguments; vendored WPT HTML is
+        attacker-influenceable upstream.
+        current_deployment_relevance: same runner wired into wpt npm scripts; scan independently
+        confirmed the live probe against the real checkout before filing.
+        honest_severity: medium data_integrity — local-file disclosure into the sandbox; chained
+        KI-15/KI-25 escalation noted but not double-counted here.
+        attacker_profitability: one fetch() call turns the runner into an arbitrary-read oracle
+        for files the CI identity can see (lockfiles, .npmrc, env files).
+        reproducible: two consecutive reproducer runs exited 1 (safe-contract assertion inside the
+        registered promise_test throws while disclosure is live); evidence capture re-ran it
+        (proof/evidence/ki-24.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; disclosure-only claim — no
+        write primitive asserted for THIS id.
+        operational_path_verified: failing leg is the sandbox.fetch override installed for every
+        runWptFile() call (run.ts:141).
+        reachability_verified: fixture-reachable with zero extra privileges; existsSync gate is
+        the only thing between probe and contents.

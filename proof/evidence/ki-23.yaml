@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-23
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-ZM55
+command: node --experimental-strip-types --test proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T07:37:03Z"
+input_set:
+    - proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts: sha256:7fd854c01a43c0af46bb64093de163d072d7a0aa78bd62370726f89af02b108f
+known_issues:
+    - KI-23

@@ -1,0 +1,20 @@
+component: fixture_extraction
+variables:
+    - name: vendored_sink_family_extracted
+      type: int
+      direction: input
+      description: 'Extractor sink families exercised with hostile vendored-JS stand-ins (1 = extract_nv_cssom.ts:55 bare eval of the sliced TESTS array, 2 = extract_rrweb.ts:49 vm.runInContext over submodule content, 3 = extract_wpt.ts:126/:257 vm.runInNewContext over regex-matched object literals); reproducer exercises all 3 families.'
+      range:
+        max: 3
+        min: 1
+    - name: host_realm_execution_zero
+      type: int
+      direction: output
+      description: 'Count of host-realm side-effect markers produced while extracting vendored fixture JS (host globalThis mutation or cross-realm vm escape writing into the host filesystem via process.mainModule.require; safe contract requires this to hold at 0).'
+      range:
+        max: 3
+        min: 0
+no_interface:
+    declared: true
+    reason: "fixture extraction sinks are one-shot maintainer scripts under scripts/external_suites/ executed manually via pnpm run fixtures:generate; no separately versioned caller/callee interface exists"
+

@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-30
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-486K
+command: node --experimental-strip-types --test proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T07:37:06Z"
+input_set:
+    - proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts: sha256:cd408c1373829765d4f7ba1b21801e29aecb14b8f93896cd7056386601eeb1f5
+known_issues:
+    - KI-30

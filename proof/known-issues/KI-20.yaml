@@ -1,0 +1,73 @@
+id: KI-20
+title: Fixture extractors execute vendored submodule JavaScript via eval/vm instead of parsing it
+description: 'Three fixture-harvest scripts treat vendored submodule JS as code: scripts/external_suites/extract_nv_cssom.ts:55 bare-evals the sliced ''var TESTS = [...]'' array (element expressions run in the HOST realm); extract_rrweb.ts:49 vm.runInContext''s full submodule content over a plain-object sandbox whose leaked host closures give this.constructor.constructor chains to host process.getBuiltinModule(''fs''); extract_wpt.ts:126/:257 vm.runInNewContext regex-matched object literals so literal-value expressions evaluate cross-realm (all sinks verified at HEAD 83ce08f). A compromised upstream bump or malicious submodule pin move turns the next ''pnpm run fixtures:generate'' into maintainer/CI host code execution (CWE-94 supply-chain family).'
+affected_requirements:
+    - SYS-REQ-260823-AKDT
+evidence_manifests:
+    - proof/evidence/ki-20.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: pnpm run fixtures:generate -> scripts/external_suites/extract_nv_cssom.ts, extract_rrweb.ts, extract_wpt.ts (via extract_all.ts)
+attacker_input: hostile JavaScript embedded in vendored submodule content (submodules/CSSOM parse.spec.js TESTS array elements, rrweb-cssom parse.spec.js body, web-platform-tests HTML var tests/test_map object literals)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Skip fixtures:generate after submodule bumps until extraction is data-only; treat submodule pins as trusted only from audited upstreams.
+remediation: 'Replace execution sinks with data-only parsing: JSON5/JSON.parse for array/object literals (sibling extract_csstree.ts/extract_postcss.ts already show the pattern), or a grammar-limited literal parser that never evaluates call expressions; delete the eval and vm.runInContext/runInNewContext calls outright.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: code_injection
+do_not_refile_as: fixture extractor eval/vm execution of vendored submodule JS
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: mirror legs replicate the three production sinks line-for-line
+        (extract_nv_cssom.ts:44-55 slicing+eval, extract_rrweb.ts:26-50 sandbox shape +
+        vm.createContext/runInContext, extract_wpt.ts regexes + runInNewContext at :126/:257),
+        cited at HEAD 83ce08f; extractor scripts are top-level-executing modules with no exports,
+        so importing them would harvest real submodules — mirroring is the faithful spawn-free
+        route per batch convention.
+        quantitative_impact: hostile TESTS-array element expression executes bare eval in the HOST
+        realm and writes a marker file via process.getBuiltinModule('node:fs'); rrweb leg escapes
+        via this.constructor.constructor('return process')() (scan Route B, confirmed on Node
+        v24.11.1 where ({})..constructor chains fail but context-global this succeeds); both
+        runInNewContext legs evaluate object-literal value expressions that write host markers.
+        3/3 families produce host-realm side effects from ~200 bytes of vendored-content stand-in.
+        control_test: benign arrays/literals extract to expected fixture values with ZERO
+        side-effect markers in the same run (L105), so failures are execution, not parsing noise.
+        untrusted_attacker: submodule content authored upstream is the boundary; pins move via
+        pnpm run submodules:upgrade on every maintenance cycle.
+        current_deployment_relevance: MAINTENANCE.md's documented loop (submodules:upgrade ->
+        fixtures:generate) detonates vendored payloads automatically; extract_all.ts spawnSyncs
+        every extractor.
+        honest_severity: medium data_integrity — maintainer/CI host exec, not
+        remote-unauthenticated; sibling extractors prove data-only extraction was always viable.
+        attacker_profitability: one merged upstream commit or moved pin converts a routine
+        fixture regen into filesystem/env/network access as the developer identity.
+        reproducible: two consecutive reproducer runs exited 1 (hostile legs assert markers must
+        NOT exist; they do); evidence capture re-ran it (proof/evidence/ki-20.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; no RCE-against-third-parties
+        claimed — impact scoped to this repo's tooling identity.
+        operational_path_verified: mirrored sinks are the exact statements executed by
+        'pnpm run fixtures:generate'.
+        reachability_verified: any maintainer following the documented upgrade loop reaches all
+        three sinks with zero additional privileges.

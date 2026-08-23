@@ -1,0 +1,77 @@
+id: KI-15
+title: WPT runner getScriptContent reads and vm-executes <script src> payloads outside the WPT root
+description: scripts/wpt/node/run.ts getScriptContent (L92-115 at HEAD 83ce08f) resolves fixture-controlled <script src> values via path.join(WPT_ROOT, src) or path.resolve(htmlDir, src) with no containment check, then fs.readFileSync's the result (L109-110); runWptFile's script loop (L347-363) hands the bytes to new vm.Script(code).runInContext(context) (L360-362). A hostile or compromised WPT/HTML fixture gains arbitrary local-file read plus execution of out-of-tree attacker JavaScript inside the privileged maintainer/CI runner process (CWE-22/CWE-94). Data-integrity fault against every consumer of the WPT node runner.
+affected_requirements:
+    - SYS-REQ-260823-2P2Q
+evidence_manifests:
+    - proof/evidence/ki-15.yaml
+severity: high
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: scripts/wpt/node/run.ts runWptFile()/getScriptContent() (pnpm run wpt / wpt:node)
+attacker_input: fixture-controlled <script src> attribute in vendored web-platform-tests HTML or any HTML path handed to the runner (../../ and absolute /../ traversal segments)
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not point the WPT node runner at untrusted fixture trees; treat any HTML the runner executes as privileged input until containment lands.
+remediation: After computing fullPath, require path.relative(WPT_ROOT, fullPath) to stay inside the root (reject '..' segments and absolute rel) before existsSync/readFileSync, for both the join and resolve branches; share the helper with the /interfaces/ fetch branch.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T07:40:59Z"
+      by: agent:champ
+      action: edit
+      detail: set-sanitizer
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: live leg dynamically imports the REAL production runner
+        (scripts/wpt/node/run.ts exported runWptFile) after chdir into a synthetic WPT-shaped
+        temp tree so WPT_ROOT (run.ts:24) anchors at disposable storage; no mocks of the runner,
+        no repo reads/writes. Mirror legs replicate run.ts:102-107 verbatim.
+        quantitative_impact: measured at HEAD 83ce08f, Node v24.11.1 — both traversal flavors
+        execute through vm.Script.runInContext during script-tag extraction (run.ts:347-363):
+        relative '../../../../outside-payload-rel.js' resolves from css/cssom up 4 levels to the
+        synthetic repo root; absolute '/../../outside-payload-abs.js' joins/climbs 2 levels;
+        inline harness tests observe self.__KI15_*_ESCAPED === true for both payloads.
+        control_test: in-tree helper 'in-tree-helper.js' loads and its control test passes in the
+        same run, isolating missing containment as the failure cause (not a setup artifact).
+        untrusted_attacker: fixture HTML is the trust boundary; vendored web-platform-tests is
+        exactly how this runner ingests third-party-authored content.
+        current_deployment_relevance: wpt/wpt:node npm scripts invoke this runner on every parity
+        cycle; confirmed live against the exported surface before filing.
+        honest_severity: high data_integrity — arbitrary read as the CI/dev identity plus local
+        code execution of any out-of-tree .js the attacker can plant or name; not claimed as
+        remote-unauthenticated (operator/supply-chain position required).
+        attacker_profitability: one <script src> attribute converts routine submodule-bump CI
+        runs into deterministic file disclosure and payload execution; retry is free.
+        reproducible: two consecutive runs of 'node --experimental-strip-types --test
+        proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts' exited 1
+        with the asserted containment failures (mirror L120/L137 + live L144); evidence capture
+        re-ran it again (proof/evidence/ki-15.yaml status fail).
+        no_inflation: severity_basis reproducer on an executed manifest; cve_surface none
+        (maintainer tooling, no network face); scan's own likelihood call (medium) preserved.
+        operational_path_verified: failing leg is runWptFile() itself — the exact entry the CLI
+        main loop calls per fixture (run.ts:529).
+        reachability_verified: public export -> querySelectorAll('script') -> getScriptContent ->
+        readFileSync -> vm.Script with zero intervening privilege gates; fixtures ARE the input.
+kill_domain: path_traversal
+do_not_refile_as: WPT runner script-src path traversal into vm.Script

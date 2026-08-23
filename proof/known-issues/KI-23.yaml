@@ -1,0 +1,68 @@
+id: KI-23
+title: --browser flag interpolates into dist/report-${browser}.json log paths that escape dist/
+description: scripts/wpt/browser/run.ts:64-66 (verified at HEAD 83ce08f) builds report/screenshot/html destinations by raw template interpolation of the operator-supplied --browser argv value ('dist/report-${browser}.json', 'dist/${browser}-screenshots.txt', 'dist/report-${browser}.html') into path.resolve with no value validation, then materializes them via mkdirSync(dirname) (L74-77) and passes them to 'wpt run' argv (L84-86). Traversal values such as a/../../b write attacker-chosen files outside dist/ and outside the checkout (CWE-22).
+affected_requirements:
+    - SYS-REQ-260823-ZM55
+evidence_manifests:
+    - proof/evidence/ki-23.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: scripts/wpt/browser/run.ts CLI (pnpm run wpt:browser:*)
+attacker_input: --browser argv value carrying ../ traversal segments (operator-typed or forwarded by wrappers/CI matrices)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Run browser-parity jobs only with curated --browser values from package.json scripts.
+remediation: Validate --browser against an allowlist (chrome|firefox|safari) before path construction, or sanitize resolved log paths through a containedUnder(dist/) check that fails closed.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: path_traversal
+do_not_refile_as: --browser interpolation into wptreport/screenshot/html log paths
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: browser/run.ts is a top-level CLI module (importing it would
+        execSync pnpm build and spawn python3 wpt), so the reproducer mirrors run.ts:64-66 path
+        templates and the run.ts:74-77 mkdirSync/writeFileSync materialization verbatim, cited at
+        HEAD 83ce08f, against a disposable two-level jail.
+        quantitative_impact: 5 hostile --browser values yield 11 derived log paths escaping dist/
+        ('../ki23-escape', 'a/../../b', 'foo/../../../deep', '../../outside',
+        'chrome/../../../pwned'); materialization leg proves the reportJson destination lands
+        above dist/ on disk via the same mkdir+write sequence the real pipeline performs.
+        control_test: benign 'chrome' keeps all three logs inside dist/ (passes), isolating
+        interpolation as the cause.
+        untrusted_attacker: operator-typed argv today, but wrappers/CI matrices forwarding
+        parameterized browsers make it attacker-influenced; templates are the only gate.
+        current_deployment_relevance: package.json wires wpt:browser:chrome|firefox through this
+        script on every parity run.
+        honest_severity: medium data_integrity — arbitrary file create/overwrite as the invoking
+        identity; requires control of the --browser value (no remote vector claimed).
+        attacker_profitability: a single matrix variable becomes arbitrary-path JSON/HTML/log
+        writes — e.g. overwriting consumed config beside dist/.
+        reproducible: two consecutive reproducer runs exited 1 (mirror legs assert containment;
+        escapes enumerated); evidence capture re-ran it (proof/evidence/ki-23.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; local-only write primitive
+        stated plainly.
+        operational_path_verified: mirrored construction IS the production statement pair
+        (resolve at :64-66 feeding mkdir at :74-77 and wpt argv at :84-86).
+        reachability_verified: any invocation with a traversal --browser value reaches the sinks;
+        no authz layer exists between argv and path.resolve.

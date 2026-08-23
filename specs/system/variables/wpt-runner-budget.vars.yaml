@@ -1,0 +1,48 @@
+component: wpt_runner
+variables:
+    - name: script_src_escape_depth_supplied
+      type: int
+      direction: input
+      description: 'Parent-directory segments embedded in a fixture <script src> resolved by getScriptContent (scripts/wpt/node/run.ts:92-115); reproducer exercises depth 4 via relative resolve (htmlDir climb) and depth 2 via absolute join (WPT_ROOT climb); obligation covers traversal depths up to 16.'
+      range:
+        max: 16
+        min: 1
+    - name: out_of_tree_script_executions_zero
+      type: int
+      direction: output
+      description: 'Count of out-of-tree payload files read through getScriptContent and handed to vm.Script.runInContext (reproducer plants 2 payloads outside the synthetic WPT root; safe contract requires this to hold at 0).'
+      range:
+        max: 2
+        min: 0
+    - name: idl_fetch_escape_depth_supplied
+      type: int
+      direction: input
+      description: 'Parent-directory segments after the /interfaces/ prefix in a sandbox.fetch URL (scripts/wpt/node/run.ts:143-156); reproducer supplies depth 3 (/interfaces/../../../package.json); obligation covers traversal depths up to 16.'
+      range:
+        max: 16
+        min: 1
+    - name: out_of_tree_idl_disclosures_zero
+      type: int
+      direction: output
+      description: 'Count of out-of-tree files whose contents sandbox.fetch returns to sandboxed page JS through the /interfaces/ branch (reproducer probes 1 disclosure target, a repo-root package.json stand-in; safe contract requires this to hold at 0).'
+      range:
+        max: 2
+        min: 0
+    - name: sandbox_fetch_non_idl_url_supplied
+      type: int
+      direction: input
+      description: 'Count of non-/interfaces/ URLs probed through sandbox.fetch by fixture JS (reproducer probes 4: cloud-metadata 169.254.169.254, attacker.example egress, loopback 127.0.0.1 service, missing-IDL fallthrough).'
+      range:
+        max: 4
+        min: 1
+    - name: host_fetch_fallthrough_zero
+      type: int
+      direction: output
+      description: 'Count of sandbox.fetch calls forwarded to the host network stack (scripts/wpt/node/run.ts:158 unconditional return fetch(...)); reproducer instruments globalThis.fetch with a recording stub (zero real network I/O; safe contract requires this to hold at 0).'
+      range:
+        max: 4
+        min: 0
+no_interface:
+    declared: true
+    reason: "sandbox.fetch and getScriptContent are internal seams of the maintainer-only WPT node runner (scripts/wpt/node/run.ts), not versioned caller/callee interfaces of the published library; SYS-level guarantees on runner containment are the contract"
+

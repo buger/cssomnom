@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-KYB6
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when idl_fetch_escape_depth_supplied the wpt_runner shall always satisfy out_of_tree_idl_disclosures_zero
+description: sandbox.fetch /interfaces/ IDL serving (scripts/wpt/node/run.ts) must reject idlFileName values whose join escapes <WPT_ROOT>/interfaces; traversal URLs must not return out-of-tree file contents to sandboxed page JS.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: wpt_runner
+rationale: path.join(WPT_ROOT, 'interfaces', idlFileName) has no containment check, so '/interfaces/../../../package.json' discloses arbitrary local files to fixture JS as a 200 Response.
+tags:
+    - cssom
+    - tooling
+    - known-issue
+variables:
+    - idl_fetch_escape_depth_supplied
+    - out_of_tree_idl_disclosures_zero
+references:
+    - type: document
+      id: README.md#web-platform-test-wpt-conformance-parity
+    - type: document
+      id: scripts/wpt/node/run.ts#interfaces-fetch-bridge
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T07:32:02Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-23T07:46:57Z"

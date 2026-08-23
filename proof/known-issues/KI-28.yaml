@@ -1,0 +1,72 @@
+id: KI-28
+title: getGitNotesLog interpolates count/ref into an execSync command line (shell command injection)
+description: 'scripts/wpt/node/safe-child-process.ts:303-305 (verified at HEAD 83ce08f): getGitNotesLog builds ''git log -n ${count} --notes=${ref} --format=%h %N'' by string interpolation and executes it with execSync (/bin/sh -c). Caller-controlled count/ref become arbitrary shell commands as the process user; the injected payload executes with full stdout capture parsed back as notes entries. The argv-based siblings execGit (L283-285) and addGitNote (L293) demonstrate the safe pattern and stay inert under identical injection. This violates the kernel''s own AGENTS.md Safe Subprocess Execution mandate that all child execution be constrained (CWE-78).'
+affected_requirements:
+    - SYS-REQ-260823-0A2D
+evidence_manifests:
+    - proof/evidence/ki-28.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: scripts/wpt/node/safe-child-process.ts getGitNotesLog(count, ref) (used by progress-note flows)
+attacker_input: 'count/ref parameters reaching getGitNotesLog (CLI-derived or state-read values carrying shell metacharacters ; | $(...) #)'
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Only pass literal/trusted count/ref values; treat progress-state-derived strings as hostile until converted.
+remediation: Rewrite getGitNotesLog to execFileSync('git', ['log','-n',String(count),'--notes='+ref,'--format=%h %N']) mirroring execGit/addGitNote, and validate count as a positive integer at the boundary.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: command_injection
+do_not_refile_as: getGitNotesLog execSync shell injection via count/ref
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: imports the REAL kernel exports getGitNotesLog/addGitNote/execGit/
+        getGitCommitInfo from scripts/wpt/node/safe-child-process.ts and drives them inside a
+        disposable mkdtemp git repo (local user.email/name configured; git init/add/commit via
+        execFileSync argv only); injected payload merely echoes a marker and touches a marker file
+        INSIDE the temp dir (sink cited at safe-child-process.ts:305, verified at HEAD 83ce08f).
+        quantitative_impact: BOTH parameters inject — ref='wpt; echo KI28_REF_MARKER; touch
+        ki28-ref-marker #' and count='1; echo KI28_COUNT_MARKER; touch ki28-count-marker #' each
+        produce (a) marker files on disk under the repo cwd and (b) echo lines parsed back into
+        entries as commitHash/note, proving sh -c execution with stdout capture.
+        control_test: benign getGitNotesLog(1,'wpt') round-trips the seeded note AND the argv-based
+        sibling execGit stays inert under identical metacharacter input — the failure is the
+        interpolation pattern, not git or the environment.
+        untrusted_attacker: count/ref flow from CLI args and progress-state strings; anything
+        reading persisted state into these parameters crosses the boundary.
+        current_deployment_relevance: lives IN the mandated safety kernel itself, so the project's
+        own constrained-execution guarantee (AGENTS.md Safe Subprocess Execution) is undercut at
+        the source other scripts are told to trust.
+        honest_severity: medium data_integrity — command execution as the process user via a
+        maintainer-tool parameter; not remotely reachable on its own.
+        attacker_profitability: one ';' in a ref-shaped string converts note reads into arbitrary
+        command execution with kernel-sanctioned provenance.
+        reproducible: two consecutive reproducer runs exited 1 (both live legs assert marker file
+        absent && parsed marker absent; both present); evidence capture re-ran it
+        (proof/evidence/ki-28.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; impact confined to the tooling
+        identity and stated as such.
+        operational_path_verified: failing leg calls the exported function exactly as progress
+        flows do.
+        reachability_verified: public export with no sanitization between caller string and
+        execSync template literal.

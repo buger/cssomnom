@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-27
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-Z8HR
+command: node --experimental-strip-types --test proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T07:37:05Z"
+input_set:
+    - proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts: sha256:3430f18888dbc8aa37bcdaf0e7dcbde142dcf57bf1676683e7b57e554dbc477c
+known_issues:
+    - KI-27

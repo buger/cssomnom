@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-7TCQ
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when sandbox_fetch_non_idl_url_supplied the wpt_runner shall always satisfy host_fetch_fallthrough_zero
+description: 'sandbox.fetch must fail closed for non-/interfaces/ URLs: no URL probed by fixture JS may be forwarded from the vm sandbox bridge to the host network stack (no SSRF egress, no missing-IDL fallthrough).'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: wpt_runner
+rationale: The unconditional 'return fetch(input)' fallthrough at scripts/wpt/node/run.ts:158 gives page JS inside the vm a confused-deputy path to cloud metadata, loopback/RFC1918 services, and attacker collectors using the runner identity.
+tags:
+    - cssom
+    - tooling
+    - known-issue
+variables:
+    - sandbox_fetch_non_idl_url_supplied
+    - host_fetch_fallthrough_zero
+references:
+    - type: document
+      id: README.md#web-platform-test-wpt-conformance-parity
+    - type: document
+      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T07:32:03Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-23T07:46:58Z"

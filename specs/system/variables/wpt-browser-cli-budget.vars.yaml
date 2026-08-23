@@ -1,0 +1,20 @@
+component: wpt_browser_cli
+variables:
+    - name: browser_flag_traversal_supplied
+      type: int
+      direction: input
+      description: 'Parent-directory segments embedded in the --browser argv value interpolated into report path templates (scripts/wpt/browser/run.ts:64-66); reproducer cases carry up to 3 climbs (a/../../b, foo/../../../deep) plus a single ../ escape; obligation covers traversal depths up to 8.'
+      range:
+        max: 8
+        min: 1
+    - name: report_paths_outside_dist_zero
+      type: int
+      direction: output
+      description: 'Count of derived log paths (report-<browser>.json, <browser>-screenshots.txt, report-<browser>.html) resolving outside the intended dist/ directory per hostile --browser value (3 templates are interpolated each run and materialized by mkdirSync/writeFileSync at scripts/wpt/browser/run.ts:74-77; safe contract requires this to hold at 0).'
+      range:
+        max: 3
+        min: 0
+no_interface:
+    declared: true
+    reason: "scripts/wpt/browser/run.ts is an operator CLI entry point executed manually via pnpm run wpt:browser:*; no separately versioned caller/callee interface exists"
+

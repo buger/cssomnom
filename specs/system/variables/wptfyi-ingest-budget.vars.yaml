@@ -1,0 +1,48 @@
+component: wptfyi_ingest
+variables:
+    - name: cache_path_escape_supplied
+      type: int
+      direction: input
+      description: 'Parent-directory climb strength of the operator-supplied cachePath before path.resolve (scripts/wpt/browser/fetch-wptfyi.ts:224); reproducer exercises an absolute outside target and a dist/../../ two-climb relative form; obligation covers climbs up to 16 segments.'
+      range:
+        max: 16
+        min: 1
+    - name: cache_writes_outside_base_zero
+      type: int
+      direction: output
+      description: 'Count of fetched-baseline writes landing outside the allowlisted .wpt-cache base (reproducer legs: absolute target + relative traversal; safe contract requires this to hold at 0).'
+      range:
+        max: 2
+        min: 0
+    - name: api_controlled_results_url_supplied
+      type: int
+      direction: input
+      description: 'URL hops followed while downloading API-provided raw_results_url/results_url including redirects (scripts/wpt/browser/fetch-wptfyi.ts:178-196; reproducer exercises 1 hop to a loopback stand-in for an internal service; undici fetch follows redirects by default so blast radius extends past hop 1).'
+      range:
+        max: 2
+        min: 1
+    - name: non_allowlisted_downloads_zero
+      type: int
+      direction: output
+      description: 'Count of downloads requested from hosts outside the wpt.fyi results allowlist {wpt.fyi, storage.googleapis.com} (safe contract requires this to hold at 0).'
+      range:
+        max: 2
+        min: 0
+    - name: gzip_bomb_member_supplied
+      type: int
+      direction: input
+      description: 'Expanded size in MiB of the crafted gzip member fed to decompressBuffer (reproducer crafts 5 MiB of zero bytes compressing to ~5 KiB at level 9; scan ceiling for local demos is 32 MiB).'
+      range:
+        max: 32
+        min: 1
+    - name: decompressed_output_budget_bytes
+      type: int
+      direction: output
+      description: 'Maximum bytes decompressBuffer may materialize before failing closed with ERR_BUFFER_TOO_LARGE; reproducer budget rejects outputs over 655360 bytes (expanded/8) while zlib.gunzipSync(maxOutputLength) enforces the same bound in the remediated shape; obligation ceiling 32 MiB = 33554432 bytes.'
+      range:
+        max: 33554432
+        min: 0
+no_interface:
+    declared: true
+    reason: "fetch-wptfyi.ts exports fetchWptFyiRun/decompressBuffer consumed only by operator CLI flows (pnpm run wpt:fetch-upstream); no separately versioned caller/callee INT exists"
+

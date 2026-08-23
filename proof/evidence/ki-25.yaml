@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-25
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-7TCQ
+command: node --experimental-strip-types --test proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T07:37:04Z"
+input_set:
+    - proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts: sha256:5bff8129bff4a55c986c66e8ae7372d18c4c61bc99be1ecfd2f542b9cfa88e15
+known_issues:
+    - KI-25

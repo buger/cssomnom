@@ -1,0 +1,20 @@
+component: ci_policy_guard
+variables:
+    - name: nonliteral_import_form_present
+      type: int
+      direction: input
+      description: 'child_process acquisition forms the preflight guard must detect (1 = literal static import, 2 = computed-specifier dynamic import, 3 = variable require, 4 = re-export barrel); reproducer exercises form 2 against the literal-only IMPORT_PATTERN of scripts/ci/check-safe-exec.ts:19.'
+      range:
+        max: 4
+        min: 1
+    - name: undetected_child_process_imports_zero
+      type: int
+      direction: output
+      description: 'Count of fixtures carrying a child_process acquisition that checkFiles (scripts/ci/check-safe-exec.ts:37-72) passes without violation while the fixture body performs unmonitored execSync (AGENTS.md Safe Subprocess Execution contract requires this to hold at 0).'
+      range:
+        max: 4
+        min: 0
+no_interface:
+    declared: true
+    reason: "check-safe-exec.ts is the mechanical preflight gate defined by the AGENTS.md Safe Subprocess Execution contract; it is repo tooling without a separately versioned caller/callee interface"
+

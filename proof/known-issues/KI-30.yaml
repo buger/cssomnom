@@ -1,0 +1,75 @@
+id: KI-30
+title: check-safe-exec bans only literal child_process imports; computed-specifier dynamic imports bypass the guard
+description: scripts/ci/check-safe-exec.ts:19 (verified at HEAD 83ce08f) reduces the AGENTS.md 'Safe Subprocess Execution & Mechanical Preflight Enforcement' contract to one literal-string regex /(?:from\s*|import\s*\(?\s*|require\s*\(\s*)['"](?:node:)?child_process['"]/ over source lines. A computed-specifier dynamic import ('node:'+'child_process'; await import(m)) or variable require acquires the module with zero matches, so checkFiles() (L37-72) reports 'All scripts and tests conform to safe subprocess policies' while the fixture body spawns unmonitored children outside safeExecTestFile's constraints (--max-old-space-size=512, RSS/state-D watchdog, cleanup tracking). Policy bypass (CWE-155/CWE-693) against the project's own documented trust boundary; compliance risk, not direct RCE.
+affected_requirements:
+    - SYS-REQ-260823-486K
+evidence_manifests:
+    - proof/evidence/ki-30.yaml
+severity: low
+severity_basis: reproducer
+risk: compliance
+cve_surface: none
+affected_api: pnpm run check:safe-exec (scripts/ci/check-safe-exec.ts IMPORT_PATTERN/checkFiles)
+attacker_input: source lines in scripts/** and tests/** acquiring child_process via computed-specifier dynamic import or variable require (no literal specifier adjacent to import tokens)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep relying on human review for exotic import shapes until the detector covers them; CI currently self-polices via the same guard.
+remediation: 'Detect acquisition forms rather than literals: strip string concatenation/template joins before matching, additionally flag await import(...) whose argument is not a literal, and consider a runtime seam (import map or module loader hook) that hard-denies child_process outside the ALLOWED_FILES allowlist.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: policy_bypass
+do_not_refile_as: check-safe-exec literal-only child_process import detection bypass
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: mirrors the EXACT production detection logic — IMPORT_PATTERN
+        (check-safe-exec.ts:19), ALLOWED_FILES (:6-11), walker (:21-35), and checkFiles scan
+        (:51-72) — cited at HEAD 83ce08f; check-safe-exec.ts is itself a top-level executing CLI
+        (process.exit(1) on violations), so direct import would run the real gate against the
+        whole repo; mini-repo fixtures isolate the logic instead. Spawn-free per overlay
+        convention: fixtures are never executed; the demonstrated gap is detection, and the
+        fixture body's unmonitored execSync is shown statically.
+        quantitative_impact: computed-specifier dynamic import fixture ('node:'+'child_process';
+        await import(m); execSync(...)) yields violations=[] from the exact production matcher
+        while the literal-import control yields exactly 1 violation; variable-specifier require
+        bypasses identically. Two acquisition forms sail through; the guard then prints its
+        success message.
+        control_test: literal 'import { execSync } from node:child_process' IS caught (1
+        violation) in the same run — the regex works for the shape it was written for.
+        untrusted_attacker: threat model is contract evasion — any contributor/PR (or compromised
+        dependency path) introducing dynamic acquisition sails past preflight.
+        current_deployment_relevance: check:safe-exec is a mandated preflight stage (AGENTS.md
+        Safe Subprocess Execution & Mechanical Preflight Enforcement); its assurance claim is
+        false for ordinary ES-module shapes.
+        honest_severity: low compliance — policy_bypass against the project's own documented
+        rule; no direct memory/RCE exposure beyond what unmonitored spawns imply, and no such
+        spawn is claimed demonstrated here.
+        attacker_profitability: two-line import rewrite defeats the mechanical gate and removes
+        RSS/timeout watchdog coverage from spawned children.
+        reproducible: two consecutive reproducer runs exited 1 (live legs require violations>0;
+        none reported); evidence capture re-ran it (proof/evidence/ki-30.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; compliance risk field matches
+        the contract-violation nature; AGENTS.md quoted as the authoritative anchor rather than
+        inventing an external spec citation.
+        operational_path_verified: mirrored matcher is byte-for-byte the shipped logic; guard
+        output message reproduced verbatim in logs.
+        reachability_verified: preflight runs the real gate on every contribution; the gap is
+        reachable on the first dynamic import anyone writes.

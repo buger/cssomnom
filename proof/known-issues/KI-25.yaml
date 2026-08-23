@@ -1,0 +1,68 @@
+id: KI-25
+title: sandbox.fetch falls through to the host network stack for non-/interfaces/ URLs (SSRF egress)
+description: 'scripts/wpt/node/run.ts overrides the fixture sandbox''s fetch to serve /interfaces/*.idl locally but ends with an unconditional ''return fetch(input, init)'' (L158 at HEAD 83ce08f) — no scheme/host allowlist. Page JS running in the vm sandbox can drive the privileged runner process against arbitrary URLs: cloud metadata 169.254.169.254, loopback/RFC1918 internal services, attacker exfil collectors; even a missing in-tree IDL falls through instead of failing closed. SSRF/confused-deputy egress (CWE-918) from maintainer/CI identities.'
+affected_requirements:
+    - SYS-REQ-260823-7TCQ
+evidence_manifests:
+    - proof/evidence/ki-25.yaml
+severity: medium
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: scripts/wpt/node/run.ts sandbox.fetch bridge inside runWptFile()
+attacker_input: fixture-controlled fetch() arguments of any scheme/host (https://attacker.example, http://169.254.169.254, loopback services)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Run WPT fixtures only on network-isolated hosts; assume any URL probed by fixture JS may egress until the bridge is closed.
+remediation: 'Replace the fallthrough with a fail-closed deny: serve only allowlisted in-tree prefixes (/interfaces/, optionally /resources/) and return a rejected Response (or throw) for everything else; never forward to host fetch.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: ssrf_egress
+do_not_refile_as: WPT sandbox.fetch host-network fallthrough (SSRF)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: live leg imports the REAL exported runWptFile (synthetic temp tree,
+        chdir-before-import for run.ts:24) and instruments globalThis.fetch with a recording stub
+        BEFORE running — the exact seam the fallthrough at run.ts:158 (verified at HEAD 83ce08f)
+        resolves through; zero packets leave the process.
+        quantitative_impact: 4/4 probed URLs forwarded to the host stack: cloud-metadata
+        http://169.254.169.254/latest/meta-data/, https://attacker.example/collect?token=ki25,
+        loopback http://127.0.0.1:8080/admin, AND missing IDL '/interfaces/KI25Missing.idl'
+        (existsSync miss falls through instead of failing closed).
+        control_test: in-tree '/interfaces/KI25InTree.idl' served locally without touching host
+        fetch in the same run — routing works; only the deny-list is absent.
+        untrusted_attacker: fixture JS picks the URLs; vendored WPT corpus is the carrier.
+        current_deployment_relevance: every WPT node-runner cycle installs this bridge; CI hosts
+        routinely hold metadata/IAM roles that make IMDS probing profitable.
+        honest_severity: medium data_integrity — SSRF/confused-deputy egress from an operator-
+        initiated process; not claimed as externally reachable service.
+        attacker_profitability: one fetch() in fixture JS reads internal services through the
+        runner's credentials/network position, with results returned INTO the sandbox for exfil
+        via console/test names.
+        reproducible: two consecutive reproducer runs exited 1 asserting hostCalls === [];
+        evidence capture re-ran it (proof/evidence/ki-25.yaml status fail).
+        no_inflation: severity_basis reproducer; cve_surface none; stub-recorded (not contacted)
+        targets disclosed honestly in output and notes.
+        operational_path_verified: the recorded calls flow through the exact unconditional return
+        statement production executes per non-/interfaces/ URL.
+        reachability_verified: fixture-reachable with zero privileges between sandbox JS and
+        host fetch.

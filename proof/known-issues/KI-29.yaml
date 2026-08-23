@@ -1,0 +1,71 @@
+id: KI-29
+title: fetch-wptfyi gunzipSync lacks maxOutputLength so gzip bombs expand synchronously
+description: scripts/wpt/browser/fetch-wptfyi.ts:77-88 decompressBuffer (verified at HEAD 83ce08f) checks gzip magic bytes then calls zlib.gunzipSync(buffer) with NO maxOutputLength, feeding attacker-influenced downloaded baseline bytes (fetchWptFyiRun L194-196) straight into unbounded synchronous inflation; its catch silently returns raw bytes on error, masking failures. A crafted member compressing 5 MiB to ~5 KiB (1022x demonstrated; scan ceiling 32 MiB for demos, no engine cap) allocates the full expansion inside the maintainer/CI process — availability fault via memory exhaustion/OOM on repeat (CWE-409). The remediated shape (gunzipSync maxOutputLength) rejects the same input with ERR_BUFFER_TOO_LARGE, grounded in the reproducer's contrast leg.
+affected_requirements:
+    - SYS-REQ-260823-JS16
+evidence_manifests:
+    - proof/evidence/ki-29.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: decompressBuffer() in scripts/wpt/browser/fetch-wptfyi.ts (download ingestion path)
+attacker_input: gzip members returned by the API-provided results URL (magic-byte gated 0x1F 0x8B; expansion ratio bounded only by engine limits)
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Download baselines only from trusted endpoints; watch RSS when running fetch-upstream (the 512MB heap flag caps Node heap but not buffer growth before OOM-kill).
+remediation: 'Pass {maxOutputLength: BUDGET} sized to expected report sizes (e.g. 32 MiB) and drop the silent catch-to-raw-bytes fallback; propagate ERR_BUFFER_TOO_LARGE as a loud failure.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T07:36:08Z"
+      by: agent:champ
+      action: created
+kill_domain: resource_exhaustion
+do_not_refile_as: uncapped gunzipSync on downloaded baseline bytes
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: imports the REAL decompressBuffer from scripts/wpt/browser/
+        fetch-wptfyi.ts (verified at HEAD 83ce08f, gunzipSync at :81 without maxOutputLength);
+        bomb crafted locally with zlib.gzipSync(level 9); no network involved.
+        quantitative_impact: measured at HEAD 83ce08f, Node v24.11.1 — 5128 compressed bytes
+        expand synchronously to 5242880 UTF-16 code units (10.00 MiB string, 5 MiB buffer;
+        1022.4x ratio) in ~11.7ms inside the calling process; expansion scales linearly with
+        crafted input size (scan demo ceiling 32 MiB chosen for lab safety; engine imposes no cap
+        on the vulnerable path). The silent catch-to-raw-bytes fallback (:83-85) additionally
+        masks decompression failures as plain-text output.
+        control_test: small gzip member decompresses byte-exactly AND the remediated contrast leg
+        zlib.gunzipSync(buffer,{maxOutputLength:BUDGET}) throws ERR_BUFFER_TOO_LARGE in the same
+        run — budget enforcement works when actually passed.
+        untrusted_attacker: gzip member bytes originate from the API-provided results URL
+        (KI-27 chain), i.e. attacker-influenced under API compromise/MITM.
+        current_deployment_relevance: fetch-upstream runs on maintainer laptops and CI where OOM
+        kills disrupt neighboring jobs; repeat invocations amplify.
+        honest_severity: medium availability — bounded-process memory exhaustion/abort, honestly
+        not RCE or persistent damage; 5 MiB demo scaled far below weaponized sizes deliberately.
+        attacker_profitability: a few-KB response forces hundreds-of-MB allocations per attempt;
+        free retries make it an OOM loop against CI runners sharing the machine.
+        reproducible: two consecutive reproducer runs exited 1 (live leg asserts output <= 655360-
+        byte budget or ERR_BUFFER_TOO_LARGE; full expansion observed both times); evidence capture
+        re-ran it (proof/evidence/ki-29.yaml status fail).
+        no_inflation: severity_basis reproducer; risk availability named honestly; crash-freedom
+        framing kept distinct from the data_integrity KIs.
+        operational_path_verified: failing leg is the production decompression step used by
+        fetchWptFyiRun (:196).
+        reachability_verified: any downloaded gzip-magic-byte payload reaches the uncapped
+        gunzipSync with zero intervening limits.
