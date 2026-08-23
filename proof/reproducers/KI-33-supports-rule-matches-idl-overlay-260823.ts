@@ -1,7 +1,7 @@
 /**
  * Overlay reproducer for KI-33: CSSSupportsRule.matches is missing entirely.
  *
- * css-conditional-3 § 7.1 "The CSSSupportsRule interface"
+ * css-conditional-3 § 7.4 "The CSSSupportsRule interface"
  * (#the-csssupportsrule-interface,
  * submodules/csswg-drafts/css-conditional-3/Overview.bs:845-848) defines:
  *
@@ -31,10 +31,9 @@
  */
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import '/workspace/src/parser.ts';
-import { parse } from '/workspace/src/parser.ts';
-import { CSS } from '/workspace/src/parser-api.ts';
-import { CSSSupportsRule } from '/workspace/src/CSSOM.ts';
+import { parse } from '../../src/parser.ts';
+import { CSS } from '../../src/parser-api.ts';
+import { CSSSupportsRule } from '../../src/CSSOM.ts';
 
 // Reproducer constants mirrored in specs/system/variables/cssom-condition-budget.vars.yaml:
 const SUPPORTS_CONDITIONS_EVALUATED = 4;
@@ -62,23 +61,24 @@ describe('KI-33 CSSSupportsRule.matches exists and evaluates conditionText', () 
     test(`matches is boolean and equals CSS.supports() for ${c.name}`, () => {
       const rule = parse(c.source).cssRules[0];
       assert.ok(rule instanceof CSSSupportsRule);
-      const missing = typeof (rule as Partial<CSSSupportsRule>).matches === 'undefined' ? 1 : 0;
+      const rec = rule as unknown as Record<string, unknown>;
+      const missing = typeof rec.matches === 'undefined' ? 1 : 0;
       assert.equal(
         missing,
         MISSING_MATCHES_ATTRIBUTES_BUDGET,
         `KI-33: CSSSupportsRule.matches is undefined for ${c.name}; css-conditional-3 #the-csssupportsrule-interface requires a readonly boolean matches`,
       );
+      assert.equal(typeof rec.matches, 'boolean');
       assert.equal(
-        typeof (rule as { matches?: unknown }).matches,
-        'boolean',
-      );
-      assert.equal(
-        (rule as unknown as { matches: boolean }).matches,
-        CSS.supports((rule as unknown as { conditionText: string }).conditionText),
+        rec.matches,
+        CSS.supports(rule.conditionText),
         `KI-33: matches must return the evaluation of conditionText (${c.name})`,
       );
-      assert.equal((rule as unknown as { matches: boolean }).matches, c.expected);
+      assert.equal(rec.matches, c.expected);
     });
   }
-  assert.equal(CASES.length, SUPPORTS_CONDITIONS_EVALUATED);
+
+  test('fixture count mirrors cssom-condition-budget.vars.yaml', () => {
+    assert.equal(CASES.length, SUPPORTS_CONDITIONS_EVALUATED);
+  });
 });

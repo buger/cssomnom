@@ -2,20 +2,27 @@
  * Overlay reproducer for KI-31: media condition serialization drops required
  * parentheses, corrupting semantics on round-trip.
  *
- * mediaqueries-4 § 2 "Media Queries" syntax section (#mq-syntax,
+ * mediaqueries-4 § 3 "Syntax" (#mq-syntax,
  * submodules/csswg-drafts/mediaqueries-4/Overview.bs:876) defines the
- * condition grammar so that every operand of and/or is a <media-in-parens>:
+ * condition grammar so that every operand of and/or is a <media-in-parens>;
+ * for @media rules this is the load-bearing citation:
  *
  *   <media-condition> = <media-not> | <media-in-parens> [ <media-and>* | <media-or>* ]
+ *   <media-not> = not <media-in-parens>
  *   <media-and> = and <media-in-parens>
- *   <media-or>  = or  <media-in-parens>          (Overview.bs:895-904)
+ *   <media-or>  = or  <media-in-parens>          (Overview.bs:900-904)
  *
- * css-conditional-3 § 6.2 CSSConditionRule.conditionText
+ * css-conditional-3 § 7.2 CSSConditionRule.conditionText
  * (#the-cssconditionrule-interface,
- * submodules/csswg-drafts/css-conditional-3/Overview.bs:862-867) requires the
- * serialized condition to "evaluate to the same result as the specified
- * condition" and explicitly forbids "logical simplifications (such as removal
- * of unneeded parentheses)". Dropping the parentheses around an `or` group
+ * submodules/csswg-drafts/css-conditional-3/Overview.bs:752-795) requires
+ * getting to return "the result of serializing the associated condition"
+ * (:789). The anti-simplification language — "without any logical
+ * simplifications, so that the returned condition will evaluate to the same
+ * result as the specified condition"; "logical simplifications (such as
+ * removal of unneeded parentheses ...) are not allowed" — lives in the
+ * CSSSupportsRule-specific conditionText definition inherited by
+ * conditional-rule subclasses (§ 7.4 #the-csssupportsrule-interface,
+ * Overview.bs:861-876). Dropping the parentheses around an `or` group
  * changes evaluation: "(a) or (b) and (c)" re-parses as a mixed and/or chain,
  * which the grammar above cannot represent, so the query becomes invalid and
  * serializes as 'not all' — a semantic flip from true-capable to never-match.
@@ -31,8 +38,7 @@
  */
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import '/workspace/src/parser.ts';
-import { parse } from '/workspace/src/parser.ts';
+import { parse } from '../../src/parser.ts';
 
 // Reproducer constants mirrored in specs/system/variables/media-roundtrip-budget.vars.yaml:
 const CONDITION_OPERAND_COUNT = 3; // operands exercised: (width >= 100px), (grid), (hover)
@@ -65,7 +71,7 @@ describe('KI-31 media condition round-trip semantic preservation', () => {
     // The hole: serializer joins children bare -> "(width >= 100px) or (grid) and (hover)"
     assert.ok(
       /\(\(.*\)\s+or\s+\(.*\)\)/.test(first.conditionText),
-      `KI-31: conditionText dropped the grouping parens around the or-operand: ${JSON.stringify(first.conditionText)} (css-conditional-3 #the-cssconditionrule-interface forbids removal of unneeded parentheses)`,
+      `KI-31: conditionText dropped the grouping parens around the or-operand: ${JSON.stringify(first.conditionText)} (mediaqueries-4 #mq-syntax requires every and/or operand to be a <media-in-parens>)`,
     );
     let flips = 0;
     const second = firstQueryInvalid(`@media ${first.conditionText}{div{}}`);

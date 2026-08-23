@@ -2,13 +2,13 @@
  * Overlay reproducer for KI-35: registerProperty accepts invalid {N}/{N,M}
  * syntax multipliers.
  *
- * css-properties-values-api § 2.2 "The '+' and '#' Multipliers" (#multipliers,
+ * css-properties-values-api § 5.2 "The '+' and '#' Multipliers" (#multipliers,
  * submodules/css-houdini-drafts/css-properties-values-api/Overview.bs:976-991)
  * closes the multiplier set: "Any syntax component name ... may be immediately
  * followed by a multiplier: U+002B PLUS SIGN (+) indicates a space-separated
  * list. U+0023 NUMBER SIGN (#) indicates a comma-separated list." No brace
  * repetition forms ({N} or {N,M}) exist anywhere in the syntax-string grammar
- * (#syntax-strings, :1020-1031), so '<length>{2}' is not a valid syntax string
+ * (#syntax-strings, :868), so '<length>{2}' is not a valid syntax string
  * and CSS.registerProperty must throw a SyntaxError (register-a-custom-property
  * step: "If name does not start with '--' or parsing syntax fails, throw a
  * SyntaxError", #the-registerproperty-function).
@@ -24,7 +24,7 @@
  */
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { CSS } from '/workspace/src/parser-api.ts';
+import { CSS } from '../../src/parser-api.ts';
 
 // Reproducer constants mirrored in specs/system/variables/property-registry-syntax-budget.vars.yaml:
 const ILLEGAL_BRACE_MULTIPLIERS = 2; // '<length>{2}', '<length>{2,4}'
@@ -81,6 +81,8 @@ describe('KI-35 registerProperty rejects brace multipliers in syntax strings', (
     assert.throws(() => tryRegister('<length>{2}', '1px 2px'), SyntaxError);
   });
 
-  assert.equal(ILLEGAL_BRACE_MULTIPLIERS, 2);
-  assert.equal(LEGAL_MULTIPLIERS, 2);
+  test('budget constants mirror property-registry-syntax-budget.vars.yaml', () => {
+    assert.equal(ILLEGAL_BRACE_MULTIPLIERS, 2);
+    assert.equal(LEGAL_MULTIPLIERS, 2);
+  });
 });

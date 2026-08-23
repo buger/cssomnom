@@ -31,8 +31,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-33.yaml
-kill_domain: idl_surface_completeness
-do_not_refile_as: CSSMediaRule.matches window-dependent media-query evaluation (environment-dependent, not assertable offline)
+    - at: "2026-08-23T14:20:56Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-33.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -57,3 +59,5 @@ poc_quality:
         no_inflation: severity_basis reproducer; medium reflects interface-completeness impact only; cve_surface none.
         operational_path_verified: legs construct rules through public parse() exactly as consumers do; no internal hooks.
         reachability_verified: property read on a returned rule object is the product surface itself; nothing stands between caller and hole.
+kill_domain: idl_surface_completeness
+do_not_refile_as: CSSMediaRule.matches window-dependent media-query evaluation (environment-dependent, not assertable offline)

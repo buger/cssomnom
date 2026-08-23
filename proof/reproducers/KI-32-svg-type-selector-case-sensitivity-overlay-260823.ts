@@ -2,9 +2,9 @@
  * Overlay reproducer for KI-32: SVG (and MathML) element names are matched
  * ASCII-case-insensitively by type selectors.
  *
- * selectors-4 § 3.3 "Case sensitivity" (#case-sensitive,
+ * selectors-4 § 3.7 "Characters and case sensitivity" (#case-sensitive,
  * submodules/csswg-drafts/selectors-4/Overview.bs:1293; normative text at
- * :1306-1317): "When matching Selectors to names and values defined by the
+ * :1309-1318): "When matching Selectors to names and values defined by the
  * document, by default this is done using the string/identical to operation
  * (aka 'case sensitive') ... This includes element names, class names, IDs,
  * attribute names, and attribute values." The only relaxation is a host
@@ -24,7 +24,7 @@
  */
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { matches } from '/workspace/src/matcher.ts';
+import { matches } from '../../src/matcher.ts';
 
 // Reproducer constants mirrored in specs/system/variables/selectors-matching-budget.vars.yaml:
 const CASED_NON_HTML_ELEMENTS = 2; // textPath, foreignObject (camelCase SVG names)

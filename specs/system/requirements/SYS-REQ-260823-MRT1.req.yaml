@@ -5,7 +5,7 @@ priority: shall
 category: functional
 req_type: guarantee
 fretish: when condition_operands_serialized >= 1 the media shall always satisfy round_trip_semantic_flips <= 0
-description: 'Serializing a valid media condition to CSSMediaRule.conditionText and re-parsing it must preserve the condition''s evaluability: mediaqueries-4 #mq-syntax requires every and/or operand to be a <media-in-parens>, and css-conditional-3 #the-cssconditionrule-interface forbids logical simplifications such as removal of unneeded parentheses, so the returned condition will evaluate to the same result as the specified condition.'
+description: 'Serializing a valid media condition to CSSMediaRule.conditionText and re-parsing it must preserve the condition''s evaluability: mediaqueries-4 #mq-syntax requires every and/or operand to be a <media-in-parens>, css-conditional-3 #the-cssconditionrule-interface requires conditionText on getting to return the result of serializing the associated condition, and the CSSSupportsRule-specific conditionText definition inherited by conditional-rule subclasses forbids logical simplifications such as removal of unneeded parentheses, so the returned condition will evaluate to the same result as the specified condition.'
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -26,6 +26,8 @@ references:
       id: submodules/csswg-drafts/mediaqueries-4/Overview.bs#mq-syntax
     - type: document
       id: submodules/csswg-drafts/css-conditional-3/Overview.bs#the-cssconditionrule-interface
+    - type: document
+      id: submodules/csswg-drafts/css-conditional-3/Overview.bs#the-csssupportsrule-interface
 traces:
     satisfies:
         - STK-REQ-260821-BQKD

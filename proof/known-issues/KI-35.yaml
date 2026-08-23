@@ -1,6 +1,6 @@
 id: KI-35
 title: registerProperty accepts invalid {N}/{N,M} brace-multiplier syntax strings
-description: 'CSS.registerProperty({name:''--x'', syntax:''<length>{2}'', initialValue:''1px 2px'', inherits:false}) is ACCEPTED (no throw), and ''<length>{2,4}'' likewise registers. css-properties-values-api #multipliers (Overview.bs:976-991) closes the multiplier set to U+002B ''+'' (space-separated list) and U+0023 ''#'' (comma-separated list); no brace repetition form exists anywhere in the syntax-string grammar (#syntax-strings, Overview.bs:1020-1031), so ''<length>{2}'' is not a valid syntax string and register-a-custom-property must throw SyntaxError. Grammar closed-set validation fault: registrations that can never be honored by a conformant consumer enter the registry. Distinct from KI-111, which covers initial-value matcher validation against an ALREADY-valid syntax; here the syntax string itself violates the grammar.'
+description: 'CSS.registerProperty({name:''--x'', syntax:''<length>{2}'', initialValue:''1px 2px'', inherits:false}) is ACCEPTED (no throw), and ''<length>{2,4}'' likewise registers. css-properties-values-api #multipliers (Overview.bs:976-991) closes the multiplier set to U+002B ''+'' (space-separated list) and U+0023 ''#'' (comma-separated list); no brace repetition form exists anywhere in the syntax-string grammar (#syntax-strings, Overview.bs:868), so ''<length>{2}'' is not a valid syntax string and register-a-custom-property must throw SyntaxError. Grammar closed-set validation fault: registrations that can never be honored by a conformant consumer enter the registry. Distinct from KI-111, which covers initial-value matcher validation against an ALREADY-valid syntax; here the syntax string itself violates the grammar.'
 affected_requirements:
     - SYS-REQ-260823-PMB5
 evidence_manifests:
@@ -31,8 +31,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-35.yaml
-kill_domain: grammar_closed_set_validation
-do_not_refile_as: registered initial-value validation against declared syntax (KI-111)
+    - at: "2026-08-23T14:20:57Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-35.yaml
+    - at: "2026-08-23T14:26:36Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-35.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -57,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer; distinct root cause from KI-111 recorded in description and do_not_refile_as.
         operational_path_verified: legs call the exported registerProperty exactly as documented in README examples.
         reachability_verified: one public API call reaches the grammar hole; no privilege or configuration gate exists.
+kill_domain: grammar_closed_set_validation
+do_not_refile_as: registered initial-value validation against declared syntax (KI-111)

@@ -1,7 +1,7 @@
 /**
  * Overlay reproducer for KI-34: :lang() wildcard language ranges never match.
  *
- * selectors-4 § 11 "The :lang() Pseudo-class" (#lang-pseudo,
+ * selectors-4 § 7.2 "The :lang() Pseudo-class" (#lang-pseudo,
  * submodules/csswg-drafts/selectors-4/Overview.bs:2635-2676): each language
  * range in :lang() is an RFC4647 § 2.2 *extended language range* and "the
  * element's content language matches a language range if its content language
@@ -9,7 +9,7 @@
  * [RFC4647] section 3.3.2" (:2661-2667). Extended filtering treats each
  * asterisk as a wildcard subtag: the range '*-US' matches any primary tag with
  * region US (e.g. 'en-US'), and '*-CA' matches 'fr-CA'. Ranges containing
- * asterisks may be escaped or quoted (:2643-2645), so ':lang("*-US")' and
+ * asterisks may be escaped or quoted (:2647-2649), so ':lang("*-US")' and
  * ':lang(\*-US)' are both legal.
  *
  * WPT fixtures corroborating wildcard matching (submodules/web-platform-tests):
@@ -30,7 +30,7 @@
  */
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { matches } from '/workspace/src/matcher.ts';
+import { matches } from '../../src/matcher.ts';
 
 // Reproducer constants mirrored in specs/system/variables/selectors-matching-budget.vars.yaml:
 const WILDCARD_LANG_RANGES = 3; // "*-US", "*-CA", escaped \*-US
@@ -38,7 +38,18 @@ const MISSED_WILDCARD_MATCH_BUDGET = 0;
 
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 
-function el(langValue: string | null, parent?: ReturnType<typeof el>) {
+interface FixtureElement {
+  nodeType: number;
+  localName: string;
+  tagName: string;
+  namespaceURI: string;
+  getAttribute: (name: string) => string | null;
+  hasAttribute: (name: string) => boolean;
+  attributes: Array<{ name: string; value: string }>;
+  parentElement: FixtureElement | null;
+}
+
+function el(langValue: string | null, parent?: FixtureElement): FixtureElement {
   return {
     nodeType: 1,
     localName: 'p',

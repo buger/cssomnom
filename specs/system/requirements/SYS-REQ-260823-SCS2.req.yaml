@@ -5,7 +5,7 @@ priority: shall
 category: functional
 req_type: guarantee
 fretish: when cased_non_html_elements >= 1 the selectors shall always satisfy case_insensitive_false_matches <= 0
-description: 'Type-selector matching against element names outside the HTML namespace must use exact (case-sensitive) string comparison: selectors-4 #case-sensitive (:1306-1317) defaults name matching to the string/identical-to operation and scopes any case-insensitive relaxation to HTML-namespace elements via html#case-sensitivity-of-selectors.'
+description: 'Type-selector matching against element names outside the HTML namespace must use exact (case-sensitive) string comparison: selectors-4 #case-sensitive (:1309-1318) defaults name matching to the string/identical-to operation and scopes any case-insensitive relaxation to HTML-namespace elements via html#case-sensitivity-of-selectors.'
 formalization_strategy: fretish
 informal_verification:
     method: ""

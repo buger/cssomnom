@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T13:42:55Z"
+executed_at: "2026-08-23T14:20:56Z"
 input_set:
     - proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts: sha256:09e7d4dbdc69de95da95da92c1ed9fc8c0b214d6bd1e477848c105509c4d4629
+    proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts: sha256:9d4af6c9f8a0b37c830fdb2be38be14620e91c3c3a989f756b76bea28f3af214
 known_issues:
     - KI-33

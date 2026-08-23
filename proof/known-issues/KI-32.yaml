@@ -1,6 +1,6 @@
 id: KI-32
 title: SVG/MathML element names matched ASCII-case-insensitively by type selectors
-description: 'matchSimpleSelector''s type-selector arm (src/matcher.ts ~L300-303) lowercases BOTH the element local name and the selector name unconditionally, so matches({localName:''textPath'', namespaceURI:''http://www.w3.org/2000/svg''}, ''textpath'') returns true and ''foreignobject'' matches <foreignObject>. selectors-4 #case-sensitive (Overview.bs:1306-1317) defaults matching of element names to the string/identical-to operation (case sensitive); its only relaxation is a host-language exception for HTML-namespace elements (html#case-sensitivity-of-selectors), which does not extend to SVG/MathML where camelCase element names are normative (SVG 2 textPath, foreignObject). Correctness fault: SVG documents style wrongly whenever a selector''s case differs from the element name.'
+description: 'matchSimpleSelector''s type-selector arm (src/matcher.ts ~L300-303) lowercases BOTH the element local name and the selector name unconditionally, so matches({localName:''textPath'', namespaceURI:''http://www.w3.org/2000/svg''}, ''textpath'') returns true and ''foreignobject'' matches <foreignObject>. selectors-4 #case-sensitive (Overview.bs:1309-1318) defaults matching of element names to the string/identical-to operation (case sensitive); its only relaxation is a host-language exception for HTML-namespace elements (html#case-sensitivity-of-selectors), which does not extend to SVG/MathML where camelCase element names are normative (SVG 2 textPath, foreignObject). Correctness fault: SVG documents style wrongly whenever a selector''s case differs from the element name.'
 affected_requirements:
     - SYS-REQ-260823-SCS2
 evidence_manifests:
@@ -31,7 +31,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-32.yaml
-kill_domain: selector_case_sensitivity
+    - at: "2026-08-23T14:20:56Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-32.yaml
+    - at: "2026-08-23T14:26:35Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-32.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -56,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer; medium grounded in the two executed legs; cve_surface none.
         operational_path_verified: failing leg exercises the same matchSimpleSelector path used by all matcher callers; no debug gating.
         reachability_verified: public matches() import reaches the lowercase comparison directly; zero additional privileges required.
+kill_domain: selector_case_sensitivity
+do_not_refile_as: case-insensitive type selector matching for non-HTML namespaces

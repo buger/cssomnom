@@ -1,6 +1,6 @@
 id: KI-31
 title: Media condition serialization drops required parentheses and corrupts round-trip semantics
-description: 'serializeMediaCondition (src/MediaParser.ts ~L839-844) joins condition children with bare '' <op> '' separators, dropping grouping parentheses around nested or/and operands. Parsing ''@media ((width >= 100px) or (grid)) and (hover){div{}}'' yields conditionText "(width >= 100px) or (grid) and (hover)", which RE-PARSES as an invalid mixed and/or chain and serializes as ''not all''; ''@media screen and ((color) or (monochrome))'' likewise degrades to ''not all''. mediaqueries-4 #mq-syntax (Overview.bs:895-904) requires every and/or operand to be a <media-in-parens>, and css-conditional-3 #the-cssconditionrule-interface (Overview.bs:862-867) forbids logical simplifications such as removal of unneeded parentheses precisely so the returned condition evaluates to the same result as the specified one. Correctness fault (serializer equivalence violation): any consumer that persists or re-serializes conditionText silently flips matching semantics from satisfiable to never-match. Distinct from KI-5, which covers unbalanced-paren ''(( input rejection only.'
+description: 'serializeMediaCondition (src/MediaParser.ts ~L839-844) joins condition children with bare '' <op> '' separators, dropping grouping parentheses around nested or/and operands. Parsing ''@media ((width >= 100px) or (grid)) and (hover){div{}}'' yields conditionText "(width >= 100px) or (grid) and (hover)", which RE-PARSES as an invalid mixed and/or chain and serializes as ''not all''; ''@media screen and ((color) or (monochrome))'' likewise degrades to ''not all''. mediaqueries-4 #mq-syntax (Overview.bs:900-904) requires every and/or operand to be a <media-in-parens>; css-conditional-3 #the-cssconditionrule-interface (Overview.bs:752-795) requires conditionText on getting to return ''the result of serializing the associated condition'' (:789); and the prohibition of logical simplifications such as removal of unneeded parentheses (''so that the returned condition will evaluate to the same result as the specified condition'') is stated in the CSSSupportsRule-specific conditionText definition inherited by conditional-rule subclasses (#the-csssupportsrule-interface, Overview.bs:861-876). Correctness fault (serializer equivalence violation): any consumer that persists or re-serializes conditionText silently flips matching semantics from satisfiable to never-match. Distinct from KI-5, which covers unbalanced-paren ''(( input rejection only.'
 affected_requirements:
     - SYS-REQ-260823-MRT1
 evidence_manifests:
@@ -31,8 +31,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-31.yaml
-kill_domain: condition_serialization_equivalence
-do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)
+    - at: "2026-08-23T14:20:50Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-31.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -57,3 +59,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public parse()/conditionText path hosts use; no gated or debug path involved.
         reachability_verified: public parse() IS the product surface; no ingress layer exists between host and serializer.
+kill_domain: condition_serialization_equivalence
+do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)

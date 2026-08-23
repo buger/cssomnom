@@ -1,6 +1,6 @@
 id: KI-34
 title: :lang() wildcard language ranges never match
-description: 'The :lang() arm in matcher.ts (~L598-606) implements only exact equality or dash-prefix comparison, so an asterisk-prefixed range like ''*-US'' matches nothing: with ancestor/own lang="en-US", matches(p, '':lang("*\-US")'') returns false where it must return true. selectors-4 #lang-pseudo (Overview.bs:2661-2667) requires each language range to be an RFC4647 extended language range matched by extended filtering per RFC4647 section 3.3.2, under which each ''*'' subtag acts as a wildcard (''*-US'' matches en-US; ''*-CA'' matches fr-CA); ranges containing asterisks may be quoted or escaped (:2643-2645). WPT fixtures css/selectors/selectors-4/lang-007.html (:lang("*-CH")), lang-008.html (:lang("*-Latn")), lang-010.html (:lang("*-FR")), lang-015.html (:lang(\*-FR)), lang-018.html (:lang("*-x-foobar")) and lang-021.html (:lang("*-gb")) all assert wildcard matching. Correctness fault: wildcard language selection silently selects nothing.'
+description: 'The :lang() arm in matcher.ts (~L598-606) implements only exact equality or dash-prefix comparison, so an asterisk-prefixed range like ''*-US'' matches nothing: with ancestor/own lang="en-US", matches(p, '':lang("*\-US")'') returns false where it must return true. selectors-4 #lang-pseudo (Overview.bs:2661-2667) requires each language range to be an RFC4647 extended language range matched by extended filtering per RFC4647 section 3.3.2, under which each ''*'' subtag acts as a wildcard (''*-US'' matches en-US; ''*-CA'' matches fr-CA); ranges containing asterisks may be quoted or escaped (:2647-2649). WPT fixtures css/selectors/selectors-4/lang-007.html (:lang("*-CH")), lang-008.html (:lang("*-Latn")), lang-010.html (:lang("*-FR")), lang-015.html (:lang(\*-FR)), lang-018.html (:lang("*-x-foobar")) and lang-021.html (:lang("*-gb")) all assert wildcard matching. Correctness fault: wildcard language selection silently selects nothing.'
 affected_requirements:
     - SYS-REQ-260823-00C0
 evidence_manifests:
@@ -31,7 +31,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-34.yaml
-kill_domain: selector_extended_filtering
+    - at: "2026-08-23T14:20:57Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-34.yaml
+    - at: "2026-08-23T14:26:35Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-34.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -56,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest; cve_surface none; no memory-safety claims.
         operational_path_verified: legs exercise the same lang-arm code path used by all matcher callers.
         reachability_verified: single public matches() call reaches the defect; no ingress ACL between host and matcher.
+kill_domain: selector_extended_filtering
+do_not_refile_as: :lang exact-prefix-only matching

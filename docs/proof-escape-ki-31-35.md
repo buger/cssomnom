@@ -24,10 +24,15 @@ names the specific check that should have caught it.
 **Hole.** `serializeMediaCondition` (src/MediaParser.ts ~L839-844) joins
 and/or children bare, so `((width >= 100px) or (grid)) and (hover)` serializes
 to `(width >= 100px) or (grid) and (hover)`, which re-parses invalid -> `not all`.
-mediaqueries-4 #mq-syntax (:895-904) requires every operand to be a
+mediaqueries-4 #mq-syntax (:900-904) requires every operand to be a
 `<media-in-parens>`; css-conditional-3 #the-cssconditionrule-interface
-(:862-867) forbids removing unneeded parentheses precisely so the returned
-condition "will evaluate to the same result".
+(:752-795) requires conditionText on getting to return "the result of
+serializing the associated condition" (:789), and the anti-simplification
+language ("removal of unneeded parentheses ... not allowed", stated so that the
+returned condition "will evaluate to the same result as the specified
+condition") lives in the CSSSupportsRule-specific conditionText definition
+(#the-csssupportsrule-interface :861-876), which conditional-rule subclasses
+inherit.
 
 **Which Proof check should have caught it.** A re-parse equivalence property:
 `parse(serialize(rule)).evaluation === rule.evaluation`. The fuzz-oracle work
@@ -41,11 +46,22 @@ property ("serialized_equals_source", SYS-REQ-260821-KV30) rather than a
 *semantic* property. String-equality oracles never test conditions whose correct
 serialization legitimately differs from input text (re-parenthesization), so the
 mixed and/or case had no oracle at all.
-Citation note: the candidate brief cited css-conditional-3
-`#serialize-a-conditional-group-rule`, which **does not exist** in the .bs
-source; the normative text actually lives in the CSSConditionRule.conditionText
-definition (`#the-cssconditionrule-interface`). The filing uses the verified
-anchor.
+Citation note (corrected during review): the original filing misattributed the
+anti-simplification normative text to the CSSConditionRule.conditionText
+definition (`#the-cssconditionrule-interface`) - a reviewer caught this.
+Verified against the vendored .bs sources: `#the-cssconditionrule-interface`
+spans Overview.bs:752-795 and its conditionText dd only requires "the result of
+serializing the associated condition" (:789); the "logical simplifications ...
+removal of unneeded parentheses ... not allowed" text lives in the
+CSSSupportsRule-specific conditionText definition
+(`#the-csssupportsrule-interface`, Overview.bs:861-876). For the @media case
+the load-bearing citation is grammatical: mediaqueries-4 `#mq-syntax`
+(:900-904) makes every and/or operand a `<media-in-parens>`, so any
+serialization that drops grouping parentheses cannot round-trip. The filing,
+requirement description, and reproducer header now carry these verified
+anchors. (The candidate brief had also cited
+css-conditional-3 `#serialize-a-conditional-group-rule`, which does not exist
+in the .bs source.)
 
 **Overlay vs engine correction.** Overlay reproducer only (this batch); engine
 correction belongs to src/MediaParser.ts.
@@ -60,7 +76,7 @@ unless the original was already invalid).
 ## KI-32 - SVG/MathML element names matched ASCII-case-insensitively
 
 **Hole.** matcher.ts ~L300-303 lowercases both sides unconditionally;
-`'textpath'` matches SVG `<textPath>`. selectors-4 #case-sensitive (:1306-1317)
+`'textpath'` matches SVG `<textPath>`. selectors-4 #case-sensitive (:1309-1318)
 defaults element-name matching to string/identical-to with only an
 HTML-namespace host exception (html#case-sensitivity-of-selectors).
 
