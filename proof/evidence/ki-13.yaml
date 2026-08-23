@@ -18,3 +18,5 @@ freshness_hashes:
     tests/matcher.test.ts: sha256:5b76c9f0ac861f1633a7eea437d9fd5d857233dda14f85aaa603e3aefbbb2a36
 known_issues:
     - KI-13
+problem_reports:
+    - DEFECT-260822-DTYP
