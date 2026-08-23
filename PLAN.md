@@ -4679,3 +4679,14 @@ Full audit at `cf47be2` **Errors: 1**: `spec_lint_spec_conformance_review_ground
 - [x] REVIEW-36 sibling: drop `arity 1..4` from the comment (`position_arity` is not a Z6J1 when conjunct; range stays on typed_om table `position_arity_reification`). Isolated check cannot be 0e while that leftover remains.
 - [x] Isolated `proof audit --check spec_lint_spec_conformance_review_grounded --fail-level warn`: **0e / 0w**. Writeup: `/tmp/grok-goal-47e8a9f6b740/implementer/review-39-numeral.md`.
 
+
+---
+
+## Phase: orphan-code lint hygiene — batch-b1/b2 reproducer annotations (Champ)
+
+Extended commit `d006422`'s (batch-a2) annotation pattern to the KI-31..39 reproducer batch. **Comments only — zero logic changes; KI-33 untouched (already traced via header's bare `SYS-REQ-260821-SMW6` mention, zero module-level helpers); KI-114/115/116 left for their owning agent.**
+
+- [x] Req-ID mapping verified against each `proof/known-issues/KI-3*.yaml` `affected_requirements` before writing: MRT1→31, SCS2→32, SMA3→33, 00C0→34, PMB5→35, SHX6→36, SCD7→37, CRG8→38, MFS9→39.
+- [x] 16 `// Verifies: <REQ-ID> (...)` annotations across 8 files (helpers + describe suites), house style per d006422. Commit `df8f054` (8 files, +16).
+- [x] `orphan_code_clean`: **warn 36 → 20**; only other agent's untracked KI-114/115/116 remain.
+- [x] Spot-runs preserved red: KI-33 exit 1 (6 tests / 4 fail), KI-38 exit 1.
