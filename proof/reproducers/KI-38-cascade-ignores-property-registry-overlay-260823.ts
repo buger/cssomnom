@@ -70,6 +70,7 @@ const REGISTERED_INITIAL_VALUE = '10px'; // initialValue of the <length> probe r
 const INHERITS_LEAK_BUDGET = 0; // zero inheritance leaks allowed through an inherits:false registration
 const INVALID_AT_CV_TIME_LEAKS = 0; // zero raw invalid values may leak through var()
 
+// Verifies: SYS-REQ-260823-CRG8 (KI-38 reproducer: cascaded width probe through getCascadedStyle)
 function cascadedWidth(css: string, html: string, selector: string): string {
   const sheet = CSSOM.parse(css);
   const { document } = parseHTML(html);
@@ -77,6 +78,7 @@ function cascadedWidth(css: string, html: string, selector: string): string {
   return CSSOM.getCascadedStyle(el, sheet.cssRules).getPropertyValue('width');
 }
 
+// Verifies: SYS-REQ-260823-CRG8 (KI-38 reproducer suite: registry-honoring cascade contract)
 describe('KI-38 cascade path ignores PropertyRegistry', () => {
   test('positive control: plain literal width resolves through getCascadedStyle', () => {
     const w = cascadedWidth('.c { width: 42px; }', '<html><body><div class=c></div></body></html>', 'div');

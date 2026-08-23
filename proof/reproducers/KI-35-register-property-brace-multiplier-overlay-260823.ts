@@ -31,6 +31,7 @@ const ILLEGAL_BRACE_MULTIPLIERS = 2; // '<length>{2}', '<length>{2,4}'
 const LEGAL_MULTIPLIERS = 2; // '+', '#'
 
 let seq = 0;
+// Verifies: SYS-REQ-260823-PMB5 (KI-35 reproducer: unique-name registerProperty probe)
 function tryRegister(syntax: string, initialValue: string): unknown {
   seq++;
   return CSS.registerProperty({
@@ -41,6 +42,7 @@ function tryRegister(syntax: string, initialValue: string): unknown {
   });
 }
 
+// Verifies: SYS-REQ-260823-PMB5 (KI-35 reproducer suite: closed multiplier-set grammar contract)
 describe('KI-35 registerProperty rejects brace multipliers in syntax strings', () => {
   test('positive control: legal space-separated + multiplier accepted', () => {
     assert.doesNotThrow(() => tryRegister('<length>+', '1px 2px'));

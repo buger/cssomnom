@@ -53,16 +53,19 @@ import * as CSSOM from '../../src/index.ts';
 const MATH_FIXPOINT_SHAPES = 2; // shapes probed: parsed-value arithmetic + direct degenerate-Sum construction
 const FIXPOINT_DRIFT_BUDGET = 0; // zero serializations may drift across parse->toString->parse->toString
 
+// Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer: parse->toString fixpoint predicate)
 function isFixpoint(v: { toString(): string }): boolean {
   return v.toString() === CSSOM.CSSStyleValue.parse('width', v.toString()).toString();
 }
 
 // CSSStyleValue.parse returns the base class; arithmetic lives on CSSNumericValue
 // (repo convention: structural cast, cf. KI-37's `as unknown as { selectorText }`).
+// Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer: arithmetic mul() accessor cast)
 function mulBy(v: CSSOM.CSSStyleValue, n: number): CSSOM.CSSStyleValue {
   return (v as unknown as { mul(n: number): CSSOM.CSSStyleValue }).mul(n);
 }
 
+// Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer suite: serialization fixpoint contract)
 describe('KI-39 calc() serialization fixpoint stability', () => {
   test('positive control: fully-folded calc serializes identically across re-parse', () => {
     const v = CSSOM.CSSStyleValue.parse('width', 'calc(9px)');

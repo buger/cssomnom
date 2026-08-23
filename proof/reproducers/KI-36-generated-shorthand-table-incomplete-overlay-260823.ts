@@ -58,6 +58,7 @@ import { SHORTHANDS } from '../../src/shorthands.ts';
 const GENERATED_SHORTHAND_COVERAGE_MIN = 165; // entries in src/data/gen/shorthands.ts that must resolve at runtime
 const CASCADE_WINNER_FLIP_BUDGET = 0; // zero stale-shorthand round-trip corruptions allowed
 
+// Verifies: SYS-REQ-260823-SHX6 (KI-36 reproducer suite: codegen-backed shorthand expansion and cascade-order contract)
 describe('KI-36 shorthand expansion table completeness', () => {
   test('positive control: margin shorthand expands into longhands', () => {
     const style = new CSSStyleDeclaration();

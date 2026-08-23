@@ -49,6 +49,7 @@ interface FixtureElement {
   parentElement: FixtureElement | null;
 }
 
+// Verifies: SYS-REQ-260823-00C0 (KI-34 reproducer: lang-carrying fixture element factory)
 function el(langValue: string | null, parent?: FixtureElement): FixtureElement {
   return {
     nodeType: 1,
@@ -62,6 +63,7 @@ function el(langValue: string | null, parent?: FixtureElement): FixtureElement {
   };
 }
 
+// Verifies: SYS-REQ-260823-00C0 (KI-34 reproducer suite: RFC4647 extended-filtering wildcard contract)
 describe('KI-34 :lang() wildcard ranges match via RFC4647 extended filtering', () => {
   test('positive control: exact language tag matches', () => {
     assert.equal(matches(el('en-US'), ':lang("en-US")'), true);

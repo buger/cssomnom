@@ -44,6 +44,7 @@ import { parse } from '../../src/parser.ts';
 const CONDITION_OPERAND_COUNT = 3; // operands exercised: (width >= 100px), (grid), (hover)
 const ROUND_TRIP_SEMANTIC_FLIP_BUDGET = 0; // zero round-trip degradations allowed
 
+// Verifies: SYS-REQ-260823-MRT1 (KI-31 reproducer: first-rule media-query invalid/conditionText probe)
 function firstQueryInvalid(source: string): { invalid: unknown; conditionText: string } {
   const rule = parse(source).cssRules[0] as unknown as {
     media?: { _mediaQueries?: Array<{ invalid?: boolean }> };
@@ -55,6 +56,7 @@ function firstQueryInvalid(source: string): { invalid: unknown; conditionText: s
   };
 }
 
+// Verifies: SYS-REQ-260823-MRT1 (KI-31 reproducer suite: serialize -> re-parse semantic-preservation contract)
 describe('KI-31 media condition round-trip semantic preservation', () => {
   test('positive control: flat and-chain serializes identically and round-trips', () => {
     const original = '@media (width >= 100px) and (hover){div{}}';
