@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-1-setproperty-all.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:04:09Z"
+executed_at: "2026-08-23T08:27:24Z"
 input_set:
     - proof/reproducers/KI-1-setproperty-all.ts
 freshness_hashes:
-    proof/reproducers/KI-1-setproperty-all.ts: sha256:a78ccc3554085dd8d8de2912433101347812978029849ede12f04599b8177a29
+    proof/reproducers/KI-1-setproperty-all.ts: sha256:61cb6431997e035db613f4cba0cad105236902465e2b20c7b7b9a84a4c2c76bd
 known_issues:
     - KI-1

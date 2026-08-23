@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T20:13:20Z"
+executed_at: "2026-08-23T08:26:56Z"
 input_set:
     - proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts: sha256:f24aad951e18da6351fe78e5de8789d812cddd1c03c6dad812b5beb022bfcbd6
+    proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts: sha256:c98334508d99d88bd98418f008215aa30595aa8f6d5db83f70af13345390a890
 known_issues:
     - KI-19

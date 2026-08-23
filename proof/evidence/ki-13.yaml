@@ -7,16 +7,14 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-13-disabled-non-form.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:00:00Z"
+executed_at: "2026-08-23T08:27:25Z"
 input_set:
     - proof/reproducers/KI-13-disabled-non-form.ts
     - tests/matcher.test.ts
     - src/matcher.ts
 freshness_hashes:
-    proof/reproducers/KI-13-disabled-non-form.ts: sha256:45e30bdbdab45a6c031b99988cbbf79eccce78e4b041a00eca2b0e468ddc47af
-    tests/matcher.test.ts: sha256:5b76c9f0ac861f1633a7eea437d9fd5d857233dda14f85aaa603e3aefbbb2a36
+    proof/reproducers/KI-13-disabled-non-form.ts: sha256:59d4046fa115a5240c69d96830277ed875a143771969806dfc0494694b11a3b7
     src/matcher.ts: sha256:3e4983c743f43b83f6aab1b615a71fcdd0e217eea7c4a9137f63e7786952a41e
+    tests/matcher.test.ts: sha256:5b76c9f0ac861f1633a7eea437d9fd5d857233dda14f85aaa603e3aefbbb2a36
 known_issues:
     - KI-13
-problem_reports:
-    - DEFECT-260822-DTYP

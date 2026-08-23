@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-22T20:13:19Z"
+executed_at: "2026-08-23T08:26:54Z"
 input_set:
     - proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts: sha256:f634fe836804e336f9f9afe835a3ed17410f76bdfdc8a88e9bc4ed18c4600897
+    proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts: sha256:5006575b0386caaca580163d7bb69a9e99c1a07b0a20fd246fb843a9db4e8a22
 known_issues:
     - KI-16

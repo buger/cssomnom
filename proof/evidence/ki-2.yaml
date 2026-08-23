@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-21T20:21:40Z"
+executed_at: "2026-08-23T08:27:24Z"
 input_set:
     - proof/reproducers/KI-2-replace-sync.ts
 freshness_hashes:
-    proof/reproducers/KI-2-replace-sync.ts: sha256:8d9b736ccad7aa21b9340aaa857051d0b4f29654d05f9d8dc18917f3b1580fa6
+    proof/reproducers/KI-2-replace-sync.ts: sha256:13acf5be7cea377ea271250264a5daf4067f40c4b35141f4c925bb0120a0424b
 known_issues:
     - KI-2

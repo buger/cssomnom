@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-14-keyframes-parser-api.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:04:00Z"
+executed_at: "2026-08-23T08:27:25Z"
 input_set:
     - proof/reproducers/KI-14-keyframes-parser-api.ts
 freshness_hashes:
-    proof/reproducers/KI-14-keyframes-parser-api.ts: sha256:40279aceee5ed45c35eb7d6352a8ca79e6182a4eabadb9986895f1d42ec94dd2
+    proof/reproducers/KI-14-keyframes-parser-api.ts: sha256:973144e17271c212eff0441e54d6798e57bc893ce76f0aeeda8304cabc7036a4
 known_issues:
     - KI-14
