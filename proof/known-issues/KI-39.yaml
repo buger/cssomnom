@@ -1,0 +1,59 @@
+id: KI-39
+title: 'calc() serialization not fixpoint-stable: degenerate single-child Sum serializes as parenthesized product operand, structure changes across round-trip'
+description: 'CSSMathValue.toString() output does not re-parse to the same structure. Fully public chain at HEAD: CSSStyleValue.parse(''width'',''calc(1px + 2px)'') folds to a degenerate single-child CSSMathSum (''calc(3px)''); .mul(3) then serializes ''calc((3px) * 3)'', whose re-parse serializes ''calc(9px)'' - String(v) !== String(parse(String(v))). Direct construction shows the identical defect: new CSSMathProduct(CSS.number(3), new CSSMathSum(CSS.px(3))).toString() === ''calc(3 * (3px))'' which re-parses to ''calc(9px)''. Meanwhile a fresh parse of the folded value is stable, proving inconsistent simplification between the arithmetic path and the parse path. Root cause: src/typed-om/values/style-value-factory.ts:44-46 wraps folded unit values in degenerate single-child CSSMathSum nodes and the Product serializer (src/typed-om/numeric/math/CSSMathOperations.ts ~L150) parenthesizes non-first children without collapsing single-child Sums. css-syntax-3 #serialization (Overview.bs:3710-3712) requires serialization to round-trip with parsing; css-values-4 #serialize-a-calculation-tree defines the Sum (:5306-5338) and Product (:5340-5370) node steps whose parenthesization must preserve tree equivalence. All WPT cssMathValue serialization rows pass - isolated to folded nested sums reachable through typed OM arithmetic. Correctness fault (serializer equivalence violation). Distinct from KI-31 (media condition parentheses, different layer).'
+affected_requirements:
+    - SYS-REQ-260823-MFS9
+evidence_manifests:
+    - proof/evidence/ki-39.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse/CSSMathValue.toString/mul (src/typed-om/numeric/math/CSSMathOperations.ts, src/typed-om/values/style-value-factory.ts)
+attacker_input: ordinary calc() values consumed through the Typed OM layer; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts
+tripwire_mutation: Collapse single-child Sums in the Product serializer (or serialize from canonicalized trees) so toString() output re-parses to an equal tree; both failing legs flip red->green while both positive controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Persist serialized math strings as-is; do not assume toString() output re-parses to an equivalent tree.
+remediation: 'Make math serialization fixpoint-stable: collapse single-child Sum/Product nodes during serialization (or avoid creating degenerate wrappers in style-value-factory), so String(v) === String(parse(String(v))) for every CSSMathValue.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T17:38:40Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T17:38:41Z"
+      by: agent:champ
+      action: capture-evidence
+      detail: proof/evidence/ki-39.yaml
+kill_domain: serializer_equivalence
+do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSStyleValue.parse, CSSMathValue.toString/.mul and the public CSSMathSum/CSSMathProduct constructors only - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - 'calc((3px) * 3)' re-parses/serializes as 'calc(9px)' and constructed 'calc(3 * (3px))' likewise; MATH_FIXPOINT_SHAPES=2 with FIXPOINT_DRIFT_BUDGET=0; all WPT cssMathValue serialization rows pass, isolating the defect to folded nested sums via typed OM arithmetic.
+        control_test: two positive controls - folded 'calc(9px)' and unfolded mixed-unit 'calc((1px + 2em) * 3)' are fixpoint-stable, so failures are not setup errors.
+        untrusted_attacker: stylesheet text is the trust boundary; any host consuming calc() through the Typed OM layer reaches the serializer with zero privileges.
+        current_deployment_relevance: CSSMathValue.toString is a headline Typed OM surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: low-medium correctness - structural drift across round-trips can break string-equality caching/dedup downstream but values remain numerically equivalent; no memory-safety dimension.
+        attacker_profitability: marginal - an attacker can desynchronize persisted math text from its re-parsed form, defeating naive cache-key or diff-based integrity checks over serialized styles.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; graded LOW honestly despite medium-high candidates elsewhere in the batch; cve_surface none.
+        operational_path_verified: failing legs call the exact public parse/mul/toString path hosts use; no gated or debug path involved.
+        reachability_verified: public Typed OM IS the product surface; no ingress layer exists between host and CSSMathOperations.

@@ -1,0 +1,59 @@
+id: KI-37
+title: Comment in descendant-combinator position drops the entire qualified rule
+description: 'parse(''div/**/x{a:b}'').cssRules.length === 0 - the whole rule vanishes; the whitespace control ''div x{a:b}'' parses one rule with selector ''div x'', while ''div > /**/ p'' and ''/**/div'' are unaffected, localizing the fault to implicit-descendant handling. Root cause: SelectorParser.skipWhitespace (src/SelectorParser.ts:102-106) skips only ''whitespace'' ComponentValues, so a preserved ''comment'' token where the descendant combinator belongs breaks recognition of two adjacent compound selectors. css-syntax-3 #serialization (Overview.bs:3701-3704) requires that implementations preserving comments ensure ''this preserved information must have no effect on the parsing step''; selectors-4 #descendant-combinators (Overview.bs:4281-4283) defines the descendant combinator as ''whitespace that separates two compound selectors''. Correctness fault (silent structural loss): stylesheets containing innocuous comments between compound selectors silently lose rules at parse time. Distinct from KI-31 (media condition paren dropping, different layer) and from comment-in-value handling.'
+affected_requirements:
+    - SYS-REQ-260823-SCD7
+evidence_manifests:
+    - proof/evidence/ki-37.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() -> CSSStyleSheet.cssRules via SelectorParser (skipWhitespace)
+attacker_input: ordinary stylesheet text with a comment between compound selectors; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts
+tripwire_mutation: Teach skipWhitespace (or its callers) to also skip comment tokens in selector parsing so an implicit descendant combinator is recognized across trivia; both failing legs flip red->green while explicit-combinator and leading-comment controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Strip comments from selector text before invoking this engine, or avoid comments inside complex selectors.
+remediation: Treat preserved comment tokens as ignorable trivia equivalent to whitespace in SelectorParser (skip in skipWhitespace and wherever implicit-descendant adjacency is decided), honoring css-syntax-3's no-effect-on-parsing requirement.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T17:27:07Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-23T17:27:08Z"
+      by: agent:champ
+      action: capture-evidence
+      detail: proof/evidence/ki-37.yaml
+kill_domain: silent_structural_loss
+do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and the production SelectorParser only - no mocks; reproducer imports mirror KI-31 style.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - parse('div/**/x{a:b}') yields cssRules.length === 0; 4/4 probed shapes (div+comment+x, a+comment+b, div.+comment+a, *.+comment+b) drop their entire rule; COMMENT_DESCENDANT_PROBE_COUNT=4 exercised against an obligation budget of 6.
+        control_test: positive controls assert whitespace descendant parses one rule ('div x') AND explicit-combinator/leading-comment placements keep their rules, so failures are not setup errors.
+        untrusted_attacker: stylesheet text is the trust boundary; any host ingesting user/theme CSS reaches the selector parser with zero privileges.
+        current_deployment_relevance: parse() is the headline surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: medium correctness - silent structural loss of entire rules from innocuous comments; no memory-safety or RCE dimension.
+        attacker_profitability: an attacker who can inject a comment between compound selectors (theme upload, minified CSS) deterministically deletes guarded downstream rules from every consumer's parse.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact public parse() path hosts use; no gated or debug path involved.
+        reachability_verified: public parse() IS the product surface; no ingress layer exists between host and SelectorParser.

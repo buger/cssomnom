@@ -1,0 +1,25 @@
+component: cssom
+variables:
+    - name: shorthand_expansion_requested
+      type: bool
+      direction: input
+      description: 'A generated-family shorthand (any key of SHORTHANDS_DATA in src/data/gen/shorthands.ts, e.g. gap/transition/animation/grid/columns/place-*/column-rule/text-decoration/mask/offset) is set on a CSSStyleDeclaration via setProperty (reproducer KI-36 exercises gap plus table-coverage over all 165 generated keys).'
+    - name: shorthand_coverage_min
+      type: int
+      direction: input
+      description: 'Coverage budget - minimum number of generated shorthands that must resolve in the runtime SHORTHANDS expansion table (src/shorthands.ts ~L1943); must be >= the 165 entries of src/data/gen/shorthands.ts per AGENTS.md Automation Over Hardcoding (reproducer constant GENERATED_SHORTHAND_COVERAGE_MIN = 165).'
+      range:
+        min: 165
+    - name: shorthand_coverage
+      type: int
+      direction: output
+      description: 'Observed count of generated shorthands present in the runtime SHORTHANDS table; obligation shorthand_coverage >= shorthand_coverage_min.'
+      range:
+        min: 165
+    - name: cascade_winner_flips
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of round-trips where serialized cssText preserves a stale unexpanded shorthand or loses the greatest-cascading-order winner (e.g. cssText "gap: 10px; row-gap: 20px;" or "row-gap: 30px; gap: 10px;" with row-gap reading 30px); must be zero (reproducer constant CASCADE_WINNER_FLIP_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

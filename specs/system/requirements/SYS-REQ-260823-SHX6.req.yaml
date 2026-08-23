@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-SHX6
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when shorthand_expansion_requested the cssom shall always satisfy shorthand_coverage >= 165 and cascade_winner_flips <= 0
+description: 'Setting a generated-family shorthand property on a CSSStyleDeclaration must expand it into its longhands per cssom-1 #concept-declarations-specified-order (shorthands expanded into longhand properties in canonical order; greatest cascading order winner represented), so longhand reads reflect shorthand sets and cssText round-trips preserve cascade winners. The runtime SHORTHANDS table must cover every entry of the codegen output src/data/gen/shorthands.ts (AGENTS.md Automation Over Hardcoding).'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'Known issue KI-36: src/shorthands.ts SHORTHANDS hand-wires only 44 entries while src/data/gen/shorthands.ts generates 165; 122 shorthands including gap/transition/animation/grid/columns/place-*/column-rule/text-decoration/mask/offset never expand, corrupting longhand reads and cascade order.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - shorthand_coverage_min
+    - cascade_winner_flips
+references:
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#concept-declarations-specified-order
+    - type: document
+      id: submodules/csswg-drafts/css-gaps-1/Overview.bs#gap-shorthand
+    - type: document
+      id: submodules/csswg-drafts/css-transitions-1/Overview.bs#transition-shorthand-property
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T17:21:48Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-23T17:21:48Z"

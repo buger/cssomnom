@@ -1,0 +1,16 @@
+component: selectors
+variables:
+    - name: comment_descendant_shapes
+      type: int
+      direction: input
+      description: 'Count of selector shapes exercising a preserved comment in the descendant-combinator position (reproducer KI-37 probes 4 shapes: div+comment+x, a+comment+b, div.+comment+a, *.+comment+b; obligation covers up to 6 shapes).'
+      range:
+        max: 6
+        min: 1
+    - name: selector_rules_lost
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of qualified rules dropped entirely by parse() when a comment sits between compound selectors; must be zero per css-syntax-3 #serialization (preserved comments must have no effect on parsing) and selectors-4 #descendant-combinators (reproducer constant RULES_LOST_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

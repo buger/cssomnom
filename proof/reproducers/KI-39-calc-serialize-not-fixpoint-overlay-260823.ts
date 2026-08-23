@@ -1,0 +1,99 @@
+/**
+ * Overlay reproducer for KI-39: calc() serialization is not
+ * fixpoint-stable - a degenerate single-child Sum serializes with parens
+ * inside Products, so toString() output re-parses to a DIFFERENT structure.
+ *
+ * css-syntax-3 § 4.3.2 "Serialization" (#serialization,
+ * submodules/csswg-drafts/css-syntax-3/Overview.bs:3710-3712) is load-bearing:
+ *
+ *   The only requirement for serialization is that it must "round-trip" with
+ *   parsing, that is, parsing the stylesheet must produce the same data
+ *   structures as parsing, serializing, and parsing again ...
+ *
+ * css-values-4 § 5.10 "Serialize a calculation tree"
+ * (#serialize-a-calculation-tree,
+ * submodules/csswg-drafts/css-values-4/Overview.bs:5270) defines the Sum node
+ * step (:5306-5338) and Product node step (:5340-5370); both engines and the
+ * spec's own examples keep single-child Sums paren-free when nested in a
+ * product operand position ("calc(1px + 2px)" folds to 3px, never "(3px)").
+ *
+ * Observed at HEAD via fully public APIs:
+ *
+ *   const v = CSSStyleValue.parse('width', 'calc(1px + 2px)'); // folds to a
+ *                                                              // degenerate
+ *                                                              // CSSMathSum
+ *   v.toString();                       // 'calc(3px)'
+ *   v.mul(3).toString();                // 'calc((3px) * 3)'
+ *   CSSStyleValue.parse(...that...).toString(); // 'calc(9px)' - STRUCTURE
+ *                                               // CHANGED across round-trip
+ *
+ * Root cause: src/typed-om/values/style-value-factory.ts:44-46 deliberately
+ * wraps folded unit values in a degenerate single-child CSSMathSum, and the
+ * Product serializer (src/typed-om/numeric/math/CSSMathOperations.ts ~L150)
+ * wraps every non-first child in parens without collapsing single-child
+ * Sums - so the same numeric value serializes as both 'calc((3px) * 3)'
+ * (via arithmetic on a parsed value) and 'calc(9px)' (via fresh parse).
+ * Direct construction shows the same defect:
+ * new CSSMathProduct(new CSS.number(3), new CSSMathSum(new CSS.px(3)))
+ * .toString() === 'calc(3 * (3px))', which re-parses to 'calc(9px)'.
+ *
+ * Distinctness from KI-31 (media condition parens): different layer entirely
+ * (math expression trees vs media conditions).
+ *
+ * Asserts the SAFE contract: toString() must be a fixpoint -
+ * String(v) === String(CSSStyleValue.parse(property, String(v))).
+ *
+ * Reproduces: KI-39
+ */
+import { describe, test } from 'node:test';
+import assert from 'node:assert/strict';
+import * as CSSOM from '../../src/index.ts';
+
+// Reproducer constants mirrored in specs/system/variables/math-serialize-budget.vars.yaml:
+const MATH_FIXPOINT_SHAPES = 2; // shapes probed: parsed-value arithmetic + direct degenerate-Sum construction
+const FIXPOINT_DRIFT_BUDGET = 0; // zero serializations may drift across parse->toString->parse->toString
+
+function isFixpoint(v: { toString(): string }): boolean {
+  return v.toString() === CSSOM.CSSStyleValue.parse('width', v.toString()).toString();
+}
+
+describe('KI-39 calc() serialization fixpoint stability', () => {
+  test('positive control: fully-folded calc serializes identically across re-parse', () => {
+    const v = CSSOM.CSSStyleValue.parse('width', 'calc(9px)');
+    assert.equal(v.toString(), 'calc(9px)');
+    assert.equal(CSSOM.CSSStyleValue.parse('width', v.toString()).toString(), 'calc(9px)');
+  });
+
+  test('positive control: unfolded sum keeps required grouping parens', () => {
+    const v = CSSOM.CSSStyleValue.parse('width', 'calc((1px + 2em) * 3)');
+    assert.ok(v.toString().includes('em'), v.toString());
+    assert.ok(isFixpoint(v));
+  });
+
+  // Reproduces: KI-39
+  test(`parsed-value arithmetic serializations are fixpoints (${MATH_FIXPOINT_SHAPES} shapes, ${FIXPOINT_DRIFT_BUDGET} drift allowed)`, () => {
+    let drifts = 0;
+    const v = CSSOM.CSSStyleValue.parse('width', 'calc(1px + 2px)');
+    if (!isFixpoint(v.mul(3))) drifts++;
+    const degenerate = new CSSOM.CSSMathSum(new CSSOM.CSSUnitValue(3, 'px'));
+    const constructed = new CSSOM.CSSMathProduct(new CSSOM.CSSUnitValue(3, 'number'), degenerate);
+    if (!isFixpoint(constructed)) drifts++;
+    assert.equal(
+      drifts,
+      FIXPOINT_DRIFT_BUDGET,
+      `KI-39: ${drifts}/${MATH_FIXPOINT_SHAPES} calc serializations drifted across re-parse (e.g. ${JSON.stringify(v.mul(3).toString())} -> ${JSON.stringify(CSSOM.CSSStyleValue.parse('width', v.mul(3).toString()).toString())}); css-syntax-3 #serialization requires round-tripping`,
+    );
+  });
+
+  // Reproduces: KI-39
+  test('toString equals re-parse(toString()).toString() structural fixpoint', () => {
+    const z = CSSOM.CSSStyleValue.parse('width', 'calc(1px + 2px)').mul(3);
+    const first = z.toString();
+    const second = CSSOM.CSSStyleValue.parse('width', first).toString();
+    assert.equal(
+      second,
+      first,
+      `KI-39: toString produced ${JSON.stringify(first)} but its own re-parse serializes ${JSON.stringify(second)}; a degenerate single-child Sum must not serialize as a parenthesized product operand`,
+    );
+  });
+});

@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-MFS9
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when math_value_serialized the typed_om shall always satisfy serialization_fixpoint_drift <= 0
+description: 'CSSMathValue.toString() must be a structural fixpoint: serializing a math value and re-parsing its output must yield a value whose serialization is byte-identical (css-syntax-3 #serialization round-trip requirement; css-values-4 #serialize-a-calculation-tree Sum/Product node steps). A degenerate single-child Sum nested in a Product operand position must not serialize as a parenthesized operand that re-parses to a folded constant.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: typed_om
+rationale: 'Known issue KI-39: style-value-factory wraps folded unit values in degenerate single-child CSSMathSum nodes and the Product serializer parenthesizes them (''calc((3px) * 3)'' / ''calc(3 * (3px))''), so re-parsing yields ''calc(9px)'' - structure changes across round-trip.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - math_value_serialized
+    - serialization_fixpoint_drift
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#serialization
+    - type: document
+      id: submodules/csswg-drafts/css-values-4/Overview.bs#serialize-a-calculation-tree
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T17:38:22Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-23T17:38:22Z"

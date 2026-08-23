@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-SCD7
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when comment_descendant_shapes >= 1 the selectors shall always satisfy selector_rules_lost <= 0
+description: 'A preserved CSS comment sitting in the descendant-combinator position between two compound selectors must be equivalent to whitespace: the qualified rule parses to exactly one rule whose selector preserves the descendant relationship. css-syntax-3 #serialization requires that preserved comments have no effect on the parsing step; selectors-4 #descendant-combinators defines the descendant combinator as whitespace separating two compound selectors.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: selectors
+rationale: 'Known issue KI-37: SelectorParser.skipWhitespace skips only whitespace tokens, so a comment in the implicit-descendant position makes parse() drop the entire qualified rule (cssRules.length === 0) for shapes like div + comment + x.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - comment_descendant_shapes
+    - selector_rules_lost
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#serialization
+    - type: document
+      id: submodules/csswg-drafts/selectors-4/Overview.bs#descendant-combinators
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T17:26:11Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-23T17:26:11Z"

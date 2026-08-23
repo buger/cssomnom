@@ -1,0 +1,13 @@
+component: typed_om
+variables:
+    - name: math_value_serialized
+      type: bool
+      direction: input
+      description: 'A CSSMathValue tree containing a degenerate single-child Sum inside a Product is serialized via toString() (reproducer KI-39 exercises parsed-value arithmetic calc(1px+2px).mul(3) and direct CSSMathProduct/CSSMathSum construction; obligation covers up to 3 shapes).'
+    - name: serialization_fixpoint_drift
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of math serializations where String(v) differs from String(parse(String(v))) (structure changed across round-trip); must be zero per css-syntax-3 #serialization and css-values-4 #serialize-a-calculation-tree (reproducer constant FIXPOINT_DRIFT_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

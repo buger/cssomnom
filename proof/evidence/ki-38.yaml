@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-38
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-CRG8
+command: node --experimental-strip-types --test proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T17:31:38Z"
+input_set:
+    - proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts: sha256:d89ebdf12e60941bf5fb75ad9987572ceae8f47182622b63da2163cb24d93665
+known_issues:
+    - KI-38

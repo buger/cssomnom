@@ -1,0 +1,13 @@
+component: cascade
+variables:
+    - name: registered_var_consumed
+      type: bool
+      direction: input
+      description: 'A declaration consumes var() naming a registerProperty()-registered custom property (<length> probe with initialValue 10px, inherits false) while resolving getCascadedStyle (reproducer KI-38 exercises unset substitution, parent-child inheritance and invalid-value legs).'
+    - name: registry_enforcement_violations
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of PropertyRegistry descriptor violations on the cascade computed-value path (missing initial substitution, inherits:false leak, invalid <length> value leaking through var()); must be zero per css-properties-values-api #calculation-of-computed-values/#inherits-descriptor/#initial-value-descriptor (reproducer constants REGISTERED_INITIAL_VALUE=10px, INHERITS_LEAK_BUDGET=0, INVALID_AT_CV_TIME_LEAKS=0).'
+      range:
+        max: 0
+        min: 0

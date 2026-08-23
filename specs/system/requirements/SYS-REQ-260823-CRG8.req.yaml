@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-CRG8
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when registered_var_consumed the cascade shall always satisfy registry_enforcement_violations <= 0
+description: 'getCascadedStyle must enforce registered custom property descriptors on the computed-value path exactly as the parser''s var() resolver does: unset registered custom properties substitute their registered initial value (css-properties-values-api #initial-value-descriptor), inherits:false registrations never propagate parent values to descendants (#inherits-descriptor), and values failing the registered syntax are invalid at computed-value time instead of leaking through var() substitution (#calculation-of-computed-values).'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cascade
+rationale: 'Known issue KI-38: substituteVariables/resolveCustomProperties in src/cascade/variable-resolver.ts consult only cascaded maps while Parser.#resolveVarFunction applies PropertyRegistry - two resolvers disagree; initial substitution, inherits enforcement and syntax validation are all dead in getCascadedStyle.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - registered_var_consumed
+    - registry_enforcement_violations
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#calculation-of-computed-values
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#inherits-descriptor
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#initial-value-descriptor
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:champ
+    created_at: "2026-08-23T17:31:07Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-23T17:31:07Z"
