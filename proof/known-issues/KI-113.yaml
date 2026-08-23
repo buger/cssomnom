@@ -1,0 +1,44 @@
+id: KI-113
+title: parse() retains font declarations mixing a system font keyword with size/family despite failing the grammar
+description: 'Parsing ''.o{font: menu 10px serif;}'' (and any system keyword mixed with size or family, e.g. ''menu icon'') stores the declaration verbatim: getPropertyValue(''font'') returns ''menu 10px serif'' and cssText re-serializes it. The font grammar has only two alternatives - the full size/family production or a lone system font keyword (css-fonts-4 #font-prop); the #font-prop-desc note (~line 1990) treats the keywords as keywords only in initial position, and WPT css/css-fonts/parsing/font-invalid.html asserts test_invalid_value(''font'', ''menu icon''). cssom-1 #parse-a-css-declaration-block step 3.1 requires dropping declarations that fail their grammar. setProperty() and insertRule() already honor this ignore-invalid contract; only the parse-a-css-declaration-block path accepts the invalid mix.'
+affected_requirements:
+    - SYS-REQ-260823-0BRJ
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts
+evidence_manifests:
+    - proof/evidence/ki-113.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() declaration-block parsing / CSSStyleDeclaration storage
+attacker_input: ordinary CSS font declarations; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not treat getPropertyValue('font') text as grammar-validated after parsing stylesheets containing keyword-mixed font declarations.
+remediation: Run the same shorthand grammar validation used by setProperty over declarations produced by parse-a-css-declaration-block so grammar-failing values are dropped instead of stored verbatim.
+notes:
+    - 'Evidence captured via ''proof evidence capture KI-113'' by genuine re-execution at 2026-08-23T11:36:30Z (proof/evidence/ki-113.yaml); reproducer ran red twice before filing (exit 1 both runs: 6 tests, 2 control passes, 4 defect failures). Distinct root from KI-112: accept-invalid on the parse-a-css-declaration-block path only (setProperty/insertRule drop correctly). Adjacent observation recorded honestly: the same path also retains other grammar-failing values verbatim (e.g. ''.o{color:10px;}''), so the root is absence of value-grammar validation in declaration-block parsing. Bound to draft SYS-REQ-260823-0BRJ created through ''proof req new''; informal until cssom variables can be declared.'
+owner: agent:ox-alpha
+review_date: "2026-09-23"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T11:33:23Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-23T11:34:47Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-23T11:54:35Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: set-review-date
+    - at: "2026-08-23T11:54:35Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: note

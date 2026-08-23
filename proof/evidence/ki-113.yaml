@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-113
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-0BRJ
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T11:36:30Z"
+input_set:
+    - proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts: sha256:0ad4fb24e3c5e0d61cd5518f292b768417f7d894d9129e9bc800ed78026f7f3a
+known_issues:
+    - KI-113

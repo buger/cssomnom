@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-112
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-S4DW
+    - SYS-REQ-260823-YQPJ
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T11:36:30Z"
+input_set:
+    - proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts: sha256:7093b287ad98b4b4d7079fde8fb26c40109583166d6538115e6a383bdbb5f9aa
+known_issues:
+    - KI-112

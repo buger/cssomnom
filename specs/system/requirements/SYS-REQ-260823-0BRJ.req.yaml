@@ -1,0 +1,45 @@
+id: SYS-REQ-260823-0BRJ
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: 'Parsing a declaration block shall drop a font declaration whose value mixes a system font keyword with size or family components (for example ''font: menu 10px serif'' or ''font: menu icon''): the failing declaration is ignored and getPropertyValue(''font'') returns the empty string, matching the ignore-invalid contract already honored by setProperty and insertRule.'
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-fonts-4 #font-prop allows <<system-font-family-name>> only as a lone alternative, and the #font-prop-desc note (~line 1990) says the keywords are treated as keywords only in initial position; a keyword followed by size/family matches neither grammar alternative. Local WPT css/css-fonts/parsing/font-invalid.html test_invalid_value(''font'', ''menu icon'') confirms the mix is invalid. cssom-1 #parse-a-css-declaration-block step 3.1 drops declarations that fail their grammar. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+    - font-shorthand
+variables: []
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-prop
+    - type: document
+      id: submodules/csswg-drafts/css-fonts-4/Overview.bs#system-font-family-name-value
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
+    - type: document
+      id: submodules/web-platform-tests/css/css-fonts/parsing/font-invalid.html
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:cli
+    created_at: "2026-08-23T11:27:10Z"
+    last_modified_by: human:cli
+    last_modified_at: "2026-08-23T11:27:10Z"
