@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T08:23:21Z"
+executed_at: "2026-08-23T19:40:23Z"
 input_set:
     - proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts: sha256:e1158c8687b36d3c8e91691dd6c111e2129a6c9870b678502c1864f767b8d8ed
+    proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts: sha256:b29b2388c5c32f0584de97271e5809ae0995063228a0000790a14fd69bde3797
 known_issues:
     - KI-30

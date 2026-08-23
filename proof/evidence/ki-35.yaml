@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T14:26:36Z"
+executed_at: "2026-08-23T19:40:14Z"
 input_set:
     - proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts: sha256:7e9e1ca15048a35c1511d4b2dc86a9b92b7638f34c64ba04370efd963539a69d
+    proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts: sha256:bc08c7d35dbb50768d602d24600bae7f446c6132869d7b7ed705fd835de14b73
 known_issues:
     - KI-35

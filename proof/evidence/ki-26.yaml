@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T07:37:04Z"
+executed_at: "2026-08-23T19:40:31Z"
 input_set:
     - proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts: sha256:75fcd2cb1fd2805494ffc4f46b3211e001d11bd6376628d5574fc1d54f8e1f5c
+    proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts: sha256:eba6adadd1ea15a66b930df8370089c3b90a76a956b7d6f0db11e78ff39b8b0d
 known_issues:
     - KI-26

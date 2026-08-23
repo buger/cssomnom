@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T18:11:40Z"
+executed_at: "2026-08-23T19:40:16Z"
 input_set:
     - proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts: sha256:3f8e8d6cd468f1c4f7e7e62ab19e9fb3400fb6ffd89e72aa1575f96816ba4249
+    proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts: sha256:77843dc9d297508f1458e09e86aff567b8e32b39833354dc4c004c6b992b91dd
 known_issues:
     - KI-38

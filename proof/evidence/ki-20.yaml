@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T08:23:19Z"
+executed_at: "2026-08-23T19:40:30Z"
 input_set:
     - proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts: sha256:7421b2a5f97ef4394520195417564c24062b752dc29542c76439af5bdb523c59
+    proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts: sha256:eb22dbcae65a3e2c13f79c488fc0c06d2adca750d979ce1ee336df7b7fc7678f
 known_issues:
     - KI-20

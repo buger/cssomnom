@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T14:26:35Z"
+executed_at: "2026-08-23T19:40:14Z"
 input_set:
     - proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts: sha256:beac371528b0a0f5fd789e7c57926504015ce140059ef85bfc085c3e17d7c118
+    proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts: sha256:e00ea218aa1ea7d49e23930842fc14c06272e5e8a33935b920df268c0384e126
 known_issues:
     - KI-34

@@ -6,11 +6,11 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T08:23:21Z"
+executed_at: "2026-08-23T19:40:32Z"
 input_set:
     - proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts: sha256:f8a85cd2dd615005d81b05c836d616fc7795f7a30c0b4d0edd7609e1f31f9bb2
+    proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts: sha256:bdfd060e81cdd742c8469ac0a2ce3628712912783219675499a7988cf8a38fc0
 known_issues:
     - KI-27
 history:
@@ -18,15 +18,4 @@ history:
       by: agent:champ
       action: incident-note
       detail: >-
-        INCIDENT + REMEDIATION (honest record): the pre-fix live leg of the KI-27 reproducer
-        omitted dryRun:true, so fetchWptFyiRun's persistence branch
-        (scripts/wpt/browser/fetch-wptfyi.ts:222-227) wrote canary baseline content
-        ('browser': 'Upstream chrome 143.0.0.0', /css/cssom/ki27-canary.html) into the REAL repo
-        cache at .wpt-cache/report-chrome-upstream.json (gitignored). Fixed by adding
-        dryRun:true to the live leg — the SSRF dereference at :189 remains observable via the
-        stub listener and the reproducer still exits 1 for its asserted reason (verified twice,
-        .wpt-cache stays empty post-run). The poisoned artifact was deleted (rm) rather than
-        regenerated: regeneration via scripts/wpt/browser/fetch-wptfyi.ts requires live wpt.fyi
-        network access and no network-free pre-canary copy exists; the file is an untracked,
-        regenerable cache artifact and contained only this reproducer's own canary payload.
-        No tracked file was affected.
+        INCIDENT + REMEDIATION (honest record): the pre-fix live leg of the KI-27 reproducer omitted dryRun:true, so fetchWptFyiRun's persistence branch (scripts/wpt/browser/fetch-wptfyi.ts:222-227) wrote canary baseline content ('browser': 'Upstream chrome 143.0.0.0', /css/cssom/ki27-canary.html) into the REAL repo cache at .wpt-cache/report-chrome-upstream.json (gitignored). Fixed by adding dryRun:true to the live leg — the SSRF dereference at :189 remains observable via the stub listener and the reproducer still exits 1 for its asserted reason (verified twice, .wpt-cache stays empty post-run). The poisoned artifact was deleted (rm) rather than regenerated: regeneration via scripts/wpt/browser/fetch-wptfyi.ts requires live wpt.fyi network access and no network-free pre-canary copy exists; the file is an untracked, regenerable cache artifact and contained only this reproducer's own canary payload. No tracked file was affected.
