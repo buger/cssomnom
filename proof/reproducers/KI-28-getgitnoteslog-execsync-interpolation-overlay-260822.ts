@@ -46,6 +46,7 @@ import {
 const REF_MARKER = 'KI28_REF_MARKER';
 const COUNT_MARKER = 'KI28_COUNT_MARKER';
 
+// Verifies: SYS-REQ-260823-0A2D (KI-28 reproducer: seeded git-notes fixture repo)
 function setupTempRepo(dir: string): void {
   fs.mkdirSync(dir, { recursive: true });
   const run = (args: string[]) =>
@@ -58,6 +59,7 @@ function setupTempRepo(dir: string): void {
   run(['commit', '-qm', 'init']);
 }
 
+// Verifies: SYS-REQ-260823-0A2D (KI-28 reproducer suite: argv-vs-shell contract)
 describe('KI-28 getGitNotesLog command injection', () => {
   test('positive control: benign ref/count return seeded notes via the real helper', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ki28-control-'));

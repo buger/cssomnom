@@ -52,6 +52,7 @@ const SINK_WPT = 'scripts/external_suites/extract_wpt.ts:126/:257';
  * Mirror of extract_nv_cssom.ts:44-55: locate `var TESTS = [` through the
  * last `];` before the describe call, strip the declaration, and eval.
  */
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_nv_cssom eval mirror)
 function mirrorNvCssomExtract(content: string): unknown[] {
   const describeIndex = content.indexOf('describe(');
   const startIndex = content.indexOf('var TESTS = [');
@@ -65,6 +66,7 @@ function mirrorNvCssomExtract(content: string): unknown[] {
 }
 
 /** Mirror of extract_rrweb.ts:26-50 sandbox + vm.runInContext. */
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_rrweb vm.runInContext mirror)
 function mirrorRrwebExtract(content: string): { TESTS: unknown[] } {
   const specificTests: unknown[] = [];
   const sandbox: Record<string, unknown> = {
@@ -87,12 +89,14 @@ function mirrorRrwebExtract(content: string): { TESTS: unknown[] } {
 }
 
 /** Mirror of extract_wpt.ts:120-126 / 255-257 regex + vm.runInNewContext. */
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_wpt object-literal vm mirror)
 function mirrorWptExtractObjectLiteral(content: string): Record<string, unknown> {
   const match = content.match(/var\s+tests\s*=\s*({[\s\S]*?})\n\s*(?:if|for|<)/);
   if (!match) throw new Error('wpt object-literal mirror out of sync with extractor regex');
   return vm.runInNewContext(`(${match[1]})`) as Record<string, unknown>; // extract_wpt.ts:126
 }
 
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_wpt test_map vm mirror)
 function mirrorWptExtractMapLiteral(content: string): Record<string, unknown> {
   const mapMatch = content.match(/var\s+test_map\s*=\s*({[\s\S]*?});/);
   if (!mapMatch) throw new Error('wpt test_map mirror out of sync with extractor regex');
@@ -104,6 +108,7 @@ function mirrorWptExtractMapLiteral(content: string): Record<string, unknown> {
  * is pinned to its exact sink line in the real extractor source. If production
  * drifts, this fails loudly instead of silently testing a ghost.
  */
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: mirror-drift pinning)
 function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
   const actual = source.split('\n')[lineNo - 1] ?? '';
   assert.ok(
@@ -113,6 +118,7 @@ function assertPinnedLine(source: string, relPath: string, lineNo: number, needl
   );
 }
 
+// Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer suite: vendored-JS-as-data contract)
 describe('KI-20 fixture extractors must not execute vendored JS', () => {
   let lab: string;
 

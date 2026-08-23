@@ -35,6 +35,7 @@ import { fetchWptFyiRun } from '../../scripts/wpt/browser/fetch-wptfyi.ts';
 
 const ALLOWLIST_HOSTS = new Set(['wpt.fyi', 'storage.googleapis.com']);
 
+// Verifies: SYS-REQ-260823-Z8HR (KI-27 reproducer: local attacker-origin server)
 function listenOnce(handler: (req: http.IncomingMessage, res: http.ServerResponse) => void): Promise<{
   server: http.Server;
   origin: string;
@@ -48,6 +49,7 @@ function listenOnce(handler: (req: http.IncomingMessage, res: http.ServerRespons
   });
 }
 
+// Verifies: SYS-REQ-260823-Z8HR (KI-27 reproducer suite: download-url host allowlist)
 describe('KI-27 download-url host allowlist', () => {
   // Reproduces: KI-27
   test('live leg: poisoned raw_results_url must not be dereferenced off the allowlist', async () => {

@@ -28,12 +28,14 @@ import { decompressBuffer } from '../../scripts/wpt/browser/fetch-wptfyi.ts';
 const EXPANSION_BYTES = 5 * 1024 * 1024; // 5 MiB zeros — scan demo ceiling is 32 MiB
 const BUDGET_BYTES = 655360; // expanded/8: far below the crafted expansion
 
+// Verifies: SYS-REQ-260823-JS16 (KI-29 reproducer: expansion-size display formatting)
 function formatBytes(n: number): string {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KiB`;
   return `${(n / (1024 * 1024)).toFixed(2)} MiB`;
 }
 
+// Verifies: SYS-REQ-260823-JS16 (KI-29 reproducer suite: decompression output budget)
 describe('KI-29 decompression output budget', () => {
   test('positive control: small gzip member decompresses exactly', () => {
     const payload = JSON.stringify({ results: [{ test: '/css/cssom/ki29-control.html', status: 'OK' }] });

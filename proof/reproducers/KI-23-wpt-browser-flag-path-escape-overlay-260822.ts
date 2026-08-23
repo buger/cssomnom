@@ -37,6 +37,7 @@ import { fileURLToPath } from 'node:url';
  * line still carries the expected substring so a drifted run.ts fails this
  * reproducer loudly instead of being mirrored against a ghost.
  */
+// Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: mirror-drift pinning)
 function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
   const actual = source.split('\n')[lineNo - 1] ?? '';
   assert.ok(
@@ -47,6 +48,7 @@ function assertPinnedLine(source: string, relPath: string, lineNo: number, needl
 }
 
 /** Exact templates from scripts/wpt/browser/run.ts:64-66. */
+// Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: derived log-path mirror)
 function resolveReportPaths(browser: string): { reportJson: string; screenshotFile: string; reportHtml: string } {
   const reportJson = path.resolve(`dist/report-${browser}.json`);
   const screenshotFile = path.resolve(`dist/${browser}-screenshots.txt`);
@@ -54,6 +56,7 @@ function resolveReportPaths(browser: string): { reportJson: string; screenshotFi
   return { reportJson, screenshotFile, reportHtml };
 }
 
+// Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: dist/ containment predicate)
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
@@ -67,6 +70,7 @@ const ESCAPE_CASES = [
   'chrome/../../../pwned',
 ] as const;
 
+// Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer suite: --browser log-path containment)
 describe('KI-23 --browser report-path containment', () => {
   test('positive control: benign browser value keeps all three logs inside dist/', () => {
     const jail = fs.mkdtempSync(path.join(os.tmpdir(), 'ki23-control-'));

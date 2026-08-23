@@ -42,6 +42,7 @@ const RUNNER_TS = path.resolve('scripts/wpt/node/run.ts');
 const TRAVERSAL_URL = '/interfaces/../../../package.json';
 
 /** Faithful mirror of scripts/wpt/node/run.ts:143-156. */
+// Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: /interfaces/ fetch bridge mirror)
 function mirrorInterfacesFetch(wptRoot: string, urlStr: string): { handled: boolean; fullPath?: string; content?: string } {
   if (!urlStr.startsWith('/interfaces/')) return { handled: false };
   const idlFileName = urlStr.slice('/interfaces/'.length);
@@ -50,11 +51,13 @@ function mirrorInterfacesFetch(wptRoot: string, urlStr: string): { handled: bool
   return { handled: true, fullPath, content: fs.readFileSync(fullPath, 'utf-8') };
 }
 
+// Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: interfaces-dir containment predicate)
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
 }
 
+// Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: synthetic WPT tree + traversal fixture)
 function buildTree(root: string): { wptRoot: string; hostileHtml: string } {
   const wptRoot = path.join(root, 'submodules', 'web-platform-tests');
   const interfacesDir = path.join(wptRoot, 'interfaces');
@@ -90,6 +93,7 @@ function buildTree(root: string): { wptRoot: string; hostileHtml: string } {
   return { wptRoot, hostileHtml };
 }
 
+// Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer suite: IDL fetch containment)
 describe('KI-24 sandbox.fetch /interfaces/ containment', () => {
   test('positive control: in-tree IDL path stays contained under mirror resolver', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ki24-control-'));

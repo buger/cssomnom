@@ -31,6 +31,7 @@ const REPORT_BODY = JSON.stringify({
 });
 
 /** customFetch stub: wpt.fyi API returns one run whose raw_results_url is served locally in-memory. */
+// Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: in-memory wpt.fyi API + results stub)
 function makeStubFetch(): typeof fetch {
   const reportBuf = Buffer.from(REPORT_BODY);
   const exactArrayBuffer = (): ArrayBuffer =>
@@ -67,15 +68,18 @@ function makeStubFetch(): typeof fetch {
   }) as typeof fetch;
 }
 
+// Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: .wpt-cache containment predicate)
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
 }
 
+// Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: real fetchWptFyiRun invocation leg)
 async function runReal(options: FetchWptFyiOptions) {
   return fetchWptFyiRun({ quiet: true, customFetch: makeStubFetch(), ...options });
 }
 
+// Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer suite: cache-path confinement)
 describe('KI-26 fetch-wptfyi cache-path confinement', () => {
   test('positive control: default cachePath lands inside .wpt-cache', async () => {
     const lab = fs.mkdtempSync(path.join(os.tmpdir(), 'ki26-control-'));

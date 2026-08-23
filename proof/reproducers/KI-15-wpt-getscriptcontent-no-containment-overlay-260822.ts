@@ -46,16 +46,19 @@ const REL_PAYLOAD = 'self.__KI15_REL_ESCAPED = true;\n';
 const ABS_PAYLOAD = 'self.__KI15_ABS_ESCAPED = true;\n';
 
 /** Faithful mirror of scripts/wpt/node/run.ts:102-107 resolution. */
+// Verifies: SYS-REQ-260823-2P2Q (KI-15 reproducer: getScriptContent path-resolution mirror)
 function mirrorResolve(wptRoot: string, htmlDir: string, resolvedSrc: string): string {
   if (resolvedSrc.startsWith('/')) return path.join(wptRoot, resolvedSrc);
   return path.resolve(htmlDir, resolvedSrc);
 }
 
+// Verifies: SYS-REQ-260823-2P2Q (KI-15 reproducer: WPT_ROOT containment predicate)
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
 }
 
+// Verifies: SYS-REQ-260823-2P2Q (KI-15 reproducer: synthetic WPT tree with in-tree + traversal payloads)
 function buildTree(root: string): string {
   const wptRoot = path.join(root, 'submodules', 'web-platform-tests');
   const cssDir = path.join(wptRoot, 'css', 'cssom');
@@ -89,6 +92,7 @@ function buildTree(root: string): string {
   return wptRoot;
 }
 
+// Verifies: SYS-REQ-260823-2P2Q (KI-15 reproducer suite: safe-contract assertions)
 describe('KI-15 WPT runner external script containment', () => {
   test('positive control: in-tree relative src stays contained under mirror resolver', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ki15-control-'));
