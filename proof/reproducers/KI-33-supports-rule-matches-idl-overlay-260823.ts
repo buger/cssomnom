@@ -9,7 +9,7 @@
  *     readonly attribute boolean matches;
  *   };
  *
- * and § 7.1 (:856-859) gives the semantics: "The matches attribute returns
+ * and § 7.4 (:856-859) gives the semantics: "The matches attribute returns
  * the evaluation of the CSS feature query represented in conditionText."
  *
  * The attribute is implementable fully offline: the library's own public
