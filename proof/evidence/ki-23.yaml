@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T07:37:03Z"
+executed_at: "2026-08-23T08:23:20Z"
 input_set:
     - proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts: sha256:7fd854c01a43c0af46bb64093de163d072d7a0aa78bd62370726f89af02b108f
+    proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts: sha256:a89ad52a87117869db167209e2aec3a63b7843a57c47051be6bedd1151cfd4c1
 known_issues:
     - KI-23

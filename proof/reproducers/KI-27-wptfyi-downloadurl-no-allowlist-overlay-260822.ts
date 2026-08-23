@@ -16,7 +16,11 @@
  * This exercises the REAL exported fetchWptFyiRun: customFetch stub answers
  * only the wpt.fyi API URL; raw_results_url points at a loopback HTTP
  * listener standing in for an internal service (127.0.0.1 ephemeral port,
- * closed in finally — no external egress).
+ * closed in finally — no external egress). Both legs pass dryRun:true so the
+ * fetched bytes are decoded in memory only — the :189 fetchFn(downloadUrl)
+ * dereference stays observable via the stub listener, while the persistence
+ * branch (fetch-wptfyi.ts:222-227 mkdirSync/writeFileSync) is skipped and
+ * canary baselines can never land in the repo's real .wpt-cache.
  *
  * Asserts the SAFE contract: downloads must only be issued to allowlisted
  * hosts {wpt.fyi, storage.googleapis.com}; a poisoned run record must not
@@ -93,7 +97,10 @@ describe('KI-27 download-url host allowlist', () => {
     try {
       let threw: unknown;
       try {
-        await fetchWptFyiRun({ quiet: true, customFetch: stubFetch });
+        // dryRun keeps the poisoned payload in memory: the SSRF dereference at
+        // fetch-wptfyi.ts:189 still fires (and is observed by the listener), but
+        // nothing is persisted to the repo's .wpt-cache (write branch :222-227 skipped).
+        await fetchWptFyiRun({ quiet: true, dryRun: true, customFetch: stubFetch });
       } catch (e) {
         threw = e;
       }

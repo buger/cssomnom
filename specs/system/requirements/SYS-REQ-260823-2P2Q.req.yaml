@@ -13,7 +13,7 @@ informal_verification:
     verified: false
 parent: STK-REQ-260821-BQKD
 component: wpt_runner
-rationale: getScriptContent joins/resolves fixture-controlled src values with no containment check, so hostile or compromised WPT HTML gains arbitrary local file read plus execution of out-of-tree JavaScript inside the privileged runner process.
+rationale: getScriptContent joins/resolves fixture-controlled src values with no containment check, so hostile or compromised WPT HTML gains arbitrary local file read plus execution of out-of-tree JavaScript inside the privileged runner process. Containment expectation derived from the runner's source-documented sandbox scope (run.ts:1 heap-limit invocation mandate for vendored WPT content; run.ts:24 WPT_ROOT anchored at submodules/web-platform-tests) and CWE-22 path-containment practice — README.md § 'Web Platform Test (WPT) Conformance & Parity' documents conformance stats only and states no containment contract.
 tags:
     - cssom
     - tooling
@@ -23,7 +23,7 @@ variables:
     - out_of_tree_script_executions_zero
 references:
     - type: document
-      id: README.md#web-platform-test-wpt-conformance-parity
+      id: README.md#web-platform-test-wpt-conformance--parity
     - type: document
       id: scripts/wpt/node/run.ts#getscriptcontent
 traces:

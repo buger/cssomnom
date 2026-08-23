@@ -25,7 +25,7 @@ references:
     - type: document
       id: MAINTENANCE.md#fixture-generation-details
     - type: document
-      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
 traces:
     satisfies:
         - STK-REQ-260821-BQKD

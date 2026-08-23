@@ -23,7 +23,7 @@ variables:
     - undetected_child_process_imports_zero
 references:
     - type: document
-      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
     - type: document
       id: scripts/ci/check-safe-exec.ts#import-pattern
 traces:

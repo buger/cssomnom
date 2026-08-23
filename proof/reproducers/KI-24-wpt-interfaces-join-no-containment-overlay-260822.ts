@@ -11,9 +11,15 @@
  * or compromised WPT fixture therefore reads arbitrary files readable by the
  * runner identity ('/interfaces/../../../package.json' climbs out of
  * <WPT_ROOT>/interfaces/) and hands their contents to sandboxed page JS as a
- * 200 Response. This violates the containment expectation for the runner's
- * local-disk bridge documented in README.md § "Web Platform Test (WPT)
- * Conformance & Parity".
+ * 200 Response.
+ *
+ * Containment expectation anchoring (honest): README.md § "Web Platform Test
+ * (WPT) Conformance & Parity" contains only conformance stats, NOT a
+ * containment contract. The expectation is derived from (a) the bridge's own
+ * documented purpose in run.ts source comments — "// Intercept relative
+ * /interfaces/*.idl fetch calls" (run.ts:140), i.e. serve VENDORED IDL from
+ * <WPT_ROOT>/interfaces and nothing else — and (b) CWE-22 path-containment
+ * normative practice (normalize + contain before any disk read).
  *
  * Asserts the SAFE contract: a /interfaces/ URL carrying ../ traversal must
  * NOT return an out-of-tree file to page JS; an in-tree IDL must still be

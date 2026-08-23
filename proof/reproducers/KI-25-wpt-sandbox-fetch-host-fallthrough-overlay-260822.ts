@@ -10,9 +10,14 @@
  * process against arbitrary URLs: cloud-metadata endpoints (169.254.169.254),
  * loopback/RFC1918 internal services, or attacker exfiltration collectors —
  * and even a missing in-tree IDL falls through instead of failing closed.
- * SSRF/confused-deputy egress (CWE-918) from a maintainer/CI process;
- * violates the runner bridge expectations documented in README.md § "Web
- * Platform Test (WPT) Conformance & Parity".
+ * SSRF/confused-deputy egress (CWE-918) from a maintainer/CI process.
+ *
+ * Egress expectation anchoring (honest): README.md § "Web Platform Test (WPT)
+ * Conformance & Parity" holds only conformance stats, NOT an egress contract.
+ * The fail-closed expectation is derived from (a) the bridge's documented
+ * purpose in run.ts source comments — "// Intercept relative /interfaces/*.idl
+ * fetch calls" (run.ts:140) scopes the override to LOCAL IDL serving — and
+ * (b) normative least-privilege/fail-closed egress practice (CWE-918).
  *
  * Asserts the SAFE contract: non-/interfaces/ URLs probed by fixture JS must
  * NOT reach the host network stack; an in-tree IDL must still be served

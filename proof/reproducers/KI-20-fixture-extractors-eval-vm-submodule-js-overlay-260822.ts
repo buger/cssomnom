@@ -99,6 +99,20 @@ function mirrorWptExtractMapLiteral(content: string): Record<string, unknown> {
   return vm.runInNewContext(`(${mapMatch[1]})`) as Record<string, unknown>; // extract_wpt.ts:257
 }
 
+/**
+ * Mirror-drift pinning (read-only): each mirrored production expression above
+ * is pinned to its exact sink line in the real extractor source. If production
+ * drifts, this fails loudly instead of silently testing a ghost.
+ */
+function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
+  const actual = source.split('\n')[lineNo - 1] ?? '';
+  assert.ok(
+    actual.includes(needle),
+    `mirror-drift: ${relPath}:${lineNo} no longer contains ${JSON.stringify(needle)} — ` +
+      `production moved; re-sync the mirror legs before trusting their verdicts (line now: ${JSON.stringify(actual.trim())})`,
+  );
+}
+
 describe('KI-20 fixture extractors must not execute vendored JS', () => {
   let lab: string;
 
@@ -198,6 +212,34 @@ describe('KI-20 fixture extractors must not execute vendored JS', () => {
     assert.ok(
       !escapedObj && !escapedMap,
       `SAFE contract violated: vm.runInNewContext at ${SINK_WPT} evaluated attacker expressions that wrote into the host filesystem (obj=${escapedObj} map=${escapedMap})`,
+    );
+  });
+
+  // Mirror-drift pinning (Grizz P4): read-only source reads; no production
+  // file is written. Pins each mirrored expression to its exact sink line.
+  test('mirror-drift pin: extractor sinks unchanged in production sources', () => {
+    const nv = fs.readFileSync(
+      fileURLToPath(new URL('../../scripts/external_suites/extract_nv_cssom.ts', import.meta.url)),
+      'utf-8',
+    );
+    assertPinnedLine(nv, 'scripts/external_suites/extract_nv_cssom.ts', 55, 'const tests = eval(executableCode);');
+
+    const rrweb = fs.readFileSync(
+      fileURLToPath(new URL('../../scripts/external_suites/extract_rrweb.ts', import.meta.url)),
+      'utf-8',
+    );
+    assertPinnedLine(rrweb, 'scripts/external_suites/extract_rrweb.ts', 49, 'vm.runInContext(content, sandbox);');
+
+    const wpt = fs.readFileSync(
+      fileURLToPath(new URL('../../scripts/external_suites/extract_wpt.ts', import.meta.url)),
+      'utf-8',
+    );
+    assertPinnedLine(wpt, 'scripts/external_suites/extract_wpt.ts', 126, 'const tests = vm.runInNewContext(`(${match[1]})`);');
+    assertPinnedLine(
+      wpt,
+      'scripts/external_suites/extract_wpt.ts',
+      257,
+      'const testMap = vm.runInNewContext(`(${mapMatch[1]})`) as Record<string, unknown>;',
     );
   });
 });

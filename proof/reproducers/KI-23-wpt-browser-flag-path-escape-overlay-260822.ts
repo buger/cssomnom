@@ -30,6 +30,21 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/**
+ * Mirror-drift pinning helper (read-only): asserts the exact production sink
+ * line still carries the expected substring so a drifted run.ts fails this
+ * reproducer loudly instead of being mirrored against a ghost.
+ */
+function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
+  const actual = source.split('\n')[lineNo - 1] ?? '';
+  assert.ok(
+    actual.includes(needle),
+    `mirror-drift: ${relPath}:${lineNo} no longer contains ${JSON.stringify(needle)} — ` +
+      `production moved; re-sync the mirror legs before trusting their verdicts (line now: ${JSON.stringify(actual.trim())})`,
+  );
+}
 
 /** Exact templates from scripts/wpt/browser/run.ts:64-66. */
 function resolveReportPaths(browser: string): { reportJson: string; screenshotFile: string; reportHtml: string } {
@@ -126,5 +141,22 @@ describe('KI-23 --browser report-path containment', () => {
       process.chdir(prevCwd);
       fs.rmSync(jail, { recursive: true, force: true });
     }
+  });
+
+  // Mirror-drift pinning (Grizz P4): read-only source read; pins the mirrored
+  // templates + dist-dir creation to their exact run.ts lines.
+  test('mirror-drift pin: run.ts path templates and mkdir sink unchanged', () => {
+    const src = fs.readFileSync(
+      fileURLToPath(new URL('../../scripts/wpt/browser/run.ts', import.meta.url)),
+      'utf-8',
+    );
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 64, 'dist/report-${browser}.json');
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 65, 'dist/${browser}-screenshots.txt');
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 66, 'dist/report-${browser}.html');
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 76, 'fs.mkdirSync(distDir, { recursive: true });');
+    // The report files are materialized by the spawned `wpt run` child via
+    // these argv flags (run.ts:84-86), not by run.ts itself — see L115-116.
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 84, "'--log-wptreport', reportJson,");
+    assertPinnedLine(src, 'scripts/wpt/browser/run.ts', 141, "spawn('python3'");
   });
 });

@@ -23,7 +23,7 @@ variables:
     - injected_shell_executions_zero
 references:
     - type: document
-      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
     - type: document
       id: scripts/wpt/node/safe-child-process.ts#getgitnoteslog
 traces:

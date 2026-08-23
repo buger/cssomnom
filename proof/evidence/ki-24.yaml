@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T07:37:04Z"
+executed_at: "2026-08-23T08:23:20Z"
 input_set:
     - proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts: sha256:8fda482e8df87c45a070a7374118316f2a8a626a0df72d7ed094facbe224e7b7
+    proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts: sha256:bd483ee32c7d1ead3d683af6f7c9d60bfd0975ade87530f7074b82e500839c2e
 known_issues:
     - KI-24

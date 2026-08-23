@@ -11,9 +11,17 @@
  * new vm.Script(code).runInContext(context) (L360-362). A hostile or
  * compromised WPT/HTML fixture therefore gains arbitrary local file read plus
  * execution of attacker-chosen out-of-tree JavaScript inside the privileged
- * runner process. This violates the project's own containment expectation for
- * fixture-loaded scripts documented in README.md § "Web Platform Test (WPT)
- * Conformance & Parity" (runner executes vendored WPT content, not host files).
+ * runner process.
+ *
+ * Containment expectation anchoring (honest): README.md § "Web Platform Test
+ * (WPT) Conformance & Parity" documents only conformance/parity stats — it
+ * states NO containment contract — and is cited solely as context that this
+ * runner exists to execute vendored web-platform-tests content. The
+ * expectation itself is derived from (a) run.ts source comments documenting
+ * the sandbox scope: the heap-limit invocation mandate for vendored WPT
+ * content (run.ts:1) and WPT_ROOT anchored at submodules/web-platform-tests
+ * (run.ts:24), and (b) CWE-22 path-containment normative practice
+ * (resolve-then-check before any read/exec).
  *
  * Asserts the SAFE contract: a fixture <script src> carrying ../ traversal
  * segments must NOT cause an out-of-tree payload to be read/executed; in-tree

@@ -13,7 +13,7 @@ informal_verification:
     verified: false
 parent: STK-REQ-260821-BQKD
 component: wpt_runner
-rationale: The unconditional 'return fetch(input)' fallthrough at scripts/wpt/node/run.ts:158 gives page JS inside the vm a confused-deputy path to cloud metadata, loopback/RFC1918 services, and attacker collectors using the runner identity.
+rationale: The unconditional 'return fetch(input)' fallthrough at scripts/wpt/node/run.ts:158 gives page JS inside the vm a confused-deputy path to cloud metadata, loopback/RFC1918 services, and attacker collectors using the runner identity. Fail-closed egress expectation derived from the bridge's source-documented purpose (run.ts:140 comment scopes the fetch override to local /interfaces/ IDL serving) and normative least-privilege/fail-closed egress practice (CWE-918); README § 'Web Platform Test (WPT) Conformance & Parity' is stats-only context, not an egress contract.
 tags:
     - cssom
     - tooling
@@ -23,9 +23,9 @@ variables:
     - host_fetch_fallthrough_zero
 references:
     - type: document
-      id: README.md#web-platform-test-wpt-conformance-parity
+      id: README.md#web-platform-test-wpt-conformance--parity
     - type: document
-      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
 traces:
     satisfies:
         - STK-REQ-260821-BQKD

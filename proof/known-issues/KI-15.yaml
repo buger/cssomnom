@@ -65,8 +65,10 @@ poc_quality:
         runs into deterministic file disclosure and payload execution; retry is free.
         reproducible: two consecutive runs of 'node --experimental-strip-types --test
         proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts' exited 1
-        with the asserted containment failures (mirror L120/L137 + live L144); evidence capture
-        re-ran it again (proof/evidence/ki-15.yaml status fail).
+        with the asserted containment failures (mirror containment assert.ok at reproducer
+        L113/L118 — relative ../ and absolute /../ legs — plus live-leg failure surfacing via
+        'await t.fn()' at L158); evidence capture re-ran it again (proof/evidence/ki-15.yaml
+        status fail).
         no_inflation: severity_basis reproducer on an executed manifest; cve_surface none
         (maintainer tooling, no network face); scan's own likelihood call (medium) preserved.
         operational_path_verified: failing leg is runWptFile() itself — the exact entry the CLI

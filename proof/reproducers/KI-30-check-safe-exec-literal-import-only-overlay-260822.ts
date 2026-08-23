@@ -40,6 +40,24 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/** Exact IMPORT_PATTERN source text pinned for mirror-drift detection. */
+const PINNED_IMPORT_PATTERN_SRC = String.raw`/(?:from\s*|import\s*\(?\s*|require\s*\(\s*)['"](?:node:)?child_process['"]/;`;
+
+/**
+ * Mirror-drift pinning helper (read-only): asserts the exact production line
+ * still carries the expected substring so a drifted check-safe-exec.ts fails
+ * this reproducer loudly instead of being mirrored against a ghost.
+ */
+function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
+  const actual = source.split('\n')[lineNo - 1] ?? '';
+  assert.ok(
+    actual.includes(needle),
+    `mirror-drift: ${relPath}:${lineNo} no longer contains ${JSON.stringify(needle)} — ` +
+      `production moved; re-sync the mirror legs before trusting their verdicts (line now: ${JSON.stringify(actual.trim())})`,
+  );
+}
 
 /** Exact IMPORT_PATTERN of scripts/ci/check-safe-exec.ts:19. */
 const IMPORT_PATTERN = /(?:from\s*|import\s*\(?\s*|require\s*\(\s*)['"](?:node:)?child_process['"]/;
@@ -171,5 +189,18 @@ describe('KI-30 check-safe-exec dynamic-import bypass', () => {
     } finally {
       fs.rmSync(root, { recursive: true, force: true });
     }
+  });
+
+  // Mirror-drift pinning (Grizz P4): read-only source read; pins the mirrored
+  // IMPORT_PATTERN / ALLOWED_FILES / success-message to their exact lines.
+  test('mirror-drift pin: check-safe-exec detector shape unchanged', () => {
+    const src = fs.readFileSync(
+      fileURLToPath(new URL('../../scripts/ci/check-safe-exec.ts', import.meta.url)),
+      'utf-8',
+    );
+    assertPinnedLine(src, 'scripts/ci/check-safe-exec.ts', 19, PINNED_IMPORT_PATTERN_SRC);
+    assertPinnedLine(src, 'scripts/ci/check-safe-exec.ts', 7, 'scripts/wpt/node/safe-child-process.ts');
+    // The false-assurance success message is printed by main(), not checkFiles.
+    assertPinnedLine(src, 'scripts/ci/check-safe-exec.ts', 94, 'All scripts and tests conform to safe subprocess policies.');
   });
 });

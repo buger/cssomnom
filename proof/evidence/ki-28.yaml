@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T07:37:05Z"
+executed_at: "2026-08-23T08:23:21Z"
 input_set:
     - proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts: sha256:6440d57697d1e50f3aa760991fa7cca98c4452e5d0c85ed087f3c66e0867b2d1
+    proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts: sha256:6aa3b83b1e4d51789dcc232746b1acc7c2535a79c03c3d9cee93e8c06bf57397
 known_issues:
     - KI-28

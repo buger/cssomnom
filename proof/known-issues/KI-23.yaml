@@ -1,6 +1,6 @@
 id: KI-23
 title: --browser flag interpolates into dist/report-${browser}.json log paths that escape dist/
-description: scripts/wpt/browser/run.ts:64-66 (verified at HEAD 83ce08f) builds report/screenshot/html destinations by raw template interpolation of the operator-supplied --browser argv value ('dist/report-${browser}.json', 'dist/${browser}-screenshots.txt', 'dist/report-${browser}.html') into path.resolve with no value validation, then materializes them via mkdirSync(dirname) (L74-77) and passes them to 'wpt run' argv (L84-86). Traversal values such as a/../../b write attacker-chosen files outside dist/ and outside the checkout (CWE-22).
+description: scripts/wpt/browser/run.ts:64-66 (verified at HEAD 83ce08f) builds report/screenshot/html destinations by raw template interpolation of the operator-supplied --browser argv value ('dist/report-${browser}.json', 'dist/${browser}-screenshots.txt', 'dist/report-${browser}.html') into path.resolve with no value validation, creates the dist directory via mkdirSync(dirname(reportJson)) (L74-77), and hands the interpolated destinations to 'wpt run' argv (--log-wptreport/--log-wptscreenshot/--log-html, L84-86) before spawning python3 wpt (L141-144); the spawned WPT child materializes the log files at the attacker-chosen paths. Traversal values such as a/../../b therefore write files outside dist/ and outside the checkout (CWE-22).
 affected_requirements:
     - SYS-REQ-260823-ZM55
 evidence_manifests:
@@ -42,12 +42,14 @@ poc_quality:
     notes: |
         real_infrastructure: browser/run.ts is a top-level CLI module (importing it would
         execSync pnpm build and spawn python3 wpt), so the reproducer mirrors run.ts:64-66 path
-        templates and the run.ts:74-77 mkdirSync/writeFileSync materialization verbatim, cited at
-        HEAD 83ce08f, against a disposable two-level jail.
+        templates and the run.ts:74-77 dist-dir creation verbatim, cited at HEAD 83ce08f, against a
+        disposable two-level jail; the report file write itself is performed in production by the
+        spawned 'wpt run' child (spawn at run.ts:141-144) at the interpolated --log-wptreport path,
+        which the materialization leg stands in for (reproducer L115-116).
         quantitative_impact: 5 hostile --browser values yield 11 derived log paths escaping dist/
         ('../ki23-escape', 'a/../../b', 'foo/../../../deep', '../../outside',
-        'chrome/../../../pwned'); materialization leg proves the reportJson destination lands
-        above dist/ on disk via the same mkdir+write sequence the real pipeline performs.
+        'chrome/../../../pwned'); the materialization leg proves the reportJson destination lands
+        above dist/ on disk via the interpolated path the spawned `wpt run` child would write.
         control_test: benign 'chrome' keeps all three logs inside dist/ (passes), isolating
         interpolation as the cause.
         untrusted_attacker: operator-typed argv today, but wrappers/CI matrices forwarding
@@ -62,7 +64,8 @@ poc_quality:
         escapes enumerated); evidence capture re-ran it (proof/evidence/ki-23.yaml status fail).
         no_inflation: severity_basis reproducer; cve_surface none; local-only write primitive
         stated plainly.
-        operational_path_verified: mirrored construction IS the production statement pair
-        (resolve at :64-66 feeding mkdir at :74-77 and wpt argv at :84-86).
+        operational_path_verified: mirrored construction IS the production statement chain
+        (resolve at :64-66 feeding dist-dir mkdir at :74-77, destinations handed to wpt argv at
+        :84-86, spawn at :141-144 whose child performs the actual report materialization).
         reachability_verified: any invocation with a traversal --browser value reaches the sinks;
         no authz layer exists between argv and path.resolve.

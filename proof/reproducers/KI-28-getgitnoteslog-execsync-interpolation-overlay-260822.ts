@@ -16,8 +16,13 @@
  * This imports the REAL exported getGitNotesLog / addGitNote / execGit from
  * safe-child-process.ts and drives them inside a disposable temp git repo;
  * the injected payload only echoes a marker and touches a marker file inside
- * that temp dir. Spawn-safe: git invocations go through the kernel's own
- * helpers, never raw child_process in this file.
+ * that temp dir. Child-process use in THIS file: argv-form execFileSync for
+ * one-time temp-repo scaffolding in setupTempRepo() — outside any monitored
+ * surface, never fed attacker input. The FINDING under test is the production
+ * kernel's own execSync string-form inside getGitNotesLog
+ * (safe-child-process.ts:305), which the live legs drive with
+ * metacharacter-bearing count/ref; no raw child_process call here executes
+ * attacker-controlled content.
  *
  * Asserts the SAFE contract: shell metacharacters in count/ref must be
  * passed as data (argv), never executed; the argv-based sibling stays safe
@@ -110,6 +115,11 @@ describe('KI-28 getGitNotesLog command injection', () => {
       addGitNote(commitHash, '{"totalPassing":1}', 'wpt');
 
       const evilCount = `1; echo ${COUNT_MARKER}; touch ki28-count-marker #`;
+      // Stub-cast convention (mirrors the documented `as unknown as Response`
+      // stub casts in KI-25/26/27): the production signature's `number` type is
+      // unsound — getGitNotesLog interpolates the parameter into an execSync
+      // command line instead of validating it — so deliberately violating the
+      // declared type here IS the injection primitive under test.
       const entries = getGitNotesLog(evilCount as unknown as number, 'wpt');
 
       const markerFile = path.join(dir, 'ki28-count-marker');
