@@ -13,6 +13,7 @@ affected_api: scripts/wpt/node/run.ts runWptFile()/getScriptContent() (pnpm run 
 attacker_input: fixture-controlled <script src> attribute in vendored web-platform-tests HTML or any HTML path handed to the runner (../../ and absolute /../ traversal segments)
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts
+tripwire_mutation: Contain getScriptContent's path resolution inside WPT_ROOT (reject resolved paths whose relative-to-root prefix escapes, e.g. path.relative(root,p)!=='..' checks or a root-prefixed containment assertion before fs.readFileSync) — the KI-15 reproducer then passes because script src traversal is refused and vm.Script never receives outside-tree content.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -30,6 +31,14 @@ history:
       by: agent:champ
       action: edit
       detail: set-sanitizer
+    - at: "2026-08-23T19:40:29Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-15.yaml
+    - at: "2026-08-23T21:16:00Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-tripwire-mutation
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
