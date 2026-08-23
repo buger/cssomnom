@@ -1,0 +1,59 @@
+id: KI-41
+title: 'Parser API at-rule prelude whitespace filter corrupts serialization: @media screen re-parses as at-rule named mediascreen'
+description: 'parseRuleListSync("@media screen{a{b:c}}")[0] serializes to "@mediascreen{a{}}, which re-parses to an at-rule NAMED mediascreen; @keyframes k -> @keyframesk{...} (named keyframesk), @layer l -> @layerl, @namespace svg url(...) -> @namespacesvgurl. Root cause: CSSParserAtRule.toString joins prelude tokens with empty separator directly after @name (src/parser-api.ts ~122-128) and tokensToPrelude strips whitespace/comment component values (~202-205), so the structural boundary between at-keyword and prelude is lost. Expected: css-syntax-3 round-trip requirement (#serialization ~3706-3713) - parse(serialize(parse(x))) must yield the same data structures; WICG note: whitespace is parsed into DOMStrings, i.e. preserved information, not garbage.'
+affected_requirements:
+    - SYS-REQ-260823-PRT3
+evidence_manifests:
+    - proof/evidence/ki-41.yaml
+severity: high
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSParserAtRule.toString stringifier + tokensToPrelude (src/parser-api.ts ~L122-128, ~L202-205)
+attacker_input: ordinary at-rule stylesheet text parsed then serialized through the public Parser API; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
+tripwire_mutation: Make tokensToPrelude keep whitespace tokens (or serialize a single-space separator) and/or have CSSParserAtRule.toString emit a separator between @name and the prelude; all four round-trip identity legs flip red->green while the qualified-rule control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Treat Parser API at-rule stringifier output as non-round-trippable today: do not persist or re-parse String(CSSParserAtRule) results; reconstruct preludes from the token arrays instead.'
+remediation: 'Preserve a separator between at-keyword and prelude in CSSParserAtRule.toString and stop tokensToPrelude from dropping whitespace tokens (src/parser-api.ts ~122-128, ~202-205) so serialization round-trips per css-syntax-3 #serialization; all four identity legs flip red->green.'
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:31:26Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-23T20:34:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-mitigation,set-remediation
+kill_domain: data_corruption
+do_not_refile_as: 'media-condition text corruption inside MediaParser/CSSOM (KI-31/KI-115): this is the Parser-API adapter layer losing the keyword/prelude separator itself'
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public Parser API exports and the CSSParserAtRule stringifier only - no mocks; serializations observed live at HEAD.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - '@media screen{a{b:c}}' serializes to '@mediascreen{a{}}' and re-parses to an at-rule NAMED 'mediascreen' (PRELUDE_ROUNDTRIP_CORRUPTION_BUDGET=0 violated on 4/4 at-rule families: media, keyframes, layer, namespace).
+        control_test: qualified-rule round-trip control leg ('div{}') serializes and re-parses identically, so the failure is specific to the at-rule keyword/prelude join, not the test harness.
+        untrusted_attacker: stylesheet text is the trust boundary; any Parser API consumer persisting or re-parsing serialized at-rules hits the corruption with zero privileges.
+        current_deployment_relevance: the stringifier is a normative WICG surface (stringifier on CSSParserAtRule); confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: high correctness/data_integrity - rule identity itself changes across a serialize/re-parse cycle (media -> mediascreen), silently misclassifying every affected at-rule for downstream consumers; no security/RCE dimension, cve_surface none.
+        attacker_profitability: crafted input like '@media screen{...}' deterministically renames the rule on round-trip, breaking any pipeline that filters or re-ingests by at-rule name (@media, @keyframes, @layer, @namespace all affected).
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call String(CSSParserAtRule) + parseRuleListSync, the exact documented host path; no gated or debug path involved.
+        reachability_verified: public Parser API IS the product surface; nothing stands between a host and tokensToPrelude.

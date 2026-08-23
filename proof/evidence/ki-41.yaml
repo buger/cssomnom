@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-41
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-PRT3
+command: node --experimental-strip-types --test proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T20:32:20Z"
+input_set:
+    - proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts: sha256:408438aa448f235e092b69317454e05ec1a724ae83604ea110250ab6581cc501
+known_issues:
+    - KI-41

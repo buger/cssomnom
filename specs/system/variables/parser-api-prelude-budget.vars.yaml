@@ -1,0 +1,13 @@
+component: parser_api
+variables:
+    - name: at_rule_with_prelude_serialized
+      type: bool
+      direction: input
+      description: 'A Parser API at-rule with a non-empty prelude is serialized via its stringifier and the serialization re-parsed with parseRuleListSync (reproducer KI-41 exercises media, keyframes, layer and namespace at-rules).'
+    - name: prelude_roundtrip_corruptions
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of serialize/re-parse round-trips whose result differs from the original rule identity, e.g. an at-rule NAMED mediascreen/keyframesk/layerl/namespacesvgurl instead of media/keyframes/layer/namespace; must be zero (reproducer constant PRELUDE_ROUNDTRIP_CORRUPTION_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

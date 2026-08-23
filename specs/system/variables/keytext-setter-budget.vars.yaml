@@ -1,0 +1,19 @@
+component: cssom
+variables:
+    - name: keytext_setter_called_with_grammar_violation
+      type: bool
+      direction: input
+      description: 'CSSKeyframeRule.keyText is assigned a selector violating the css-animations-1 <keyframe-selector> grammar (from | to | <percentage [0,100]>, Overview.bs ~211), e.g. "0x10%", which JS Number() coerces to 16.'
+    - name: invalid_keytext_acceptances
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of grammar-violating keyText assignments accepted without SyntaxError; must be zero (reproducer constant INVALID_KEYTEXT_ACCEPT_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0
+    - name: control_selector_rejections_min
+      type: int
+      direction: input
+      description: 'Control budget - the five already-correct control selectors ("50%%", "fifty%", "Infinity%", "-5%", "0") must each throw SyntaxError and leave keyText unchanged (reproducer constant CONTROL_SELECTORS_THROW_MIN = 5).'
+      range:
+        min: 5

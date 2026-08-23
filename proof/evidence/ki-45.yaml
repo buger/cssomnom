@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-45
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-PVE7
+command: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T20:32:22Z"
+input_set:
+    - proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts: sha256:40517d429b566ebf5bb9bd03a004b9f70abc4fdd660155f04585887709535215
+known_issues:
+    - KI-45

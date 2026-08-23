@@ -1,0 +1,57 @@
+id: KI-44
+title: 'CSSKeyframeRule.keyText setter accepts JS-Number-coercible garbage: ''0x10%'' normalizes to ''16%'''
+description: 'Setting keyText="0x10%" normalizes to "16%" (and "0X10%" likewise) because normalizeKeyframeSelector uses raw Number(valStr). css-animations-1 ~1072-1077 requires SyntaxError + unchanged value for invalid keyframe selectors; the grammar (~210-212) is from | to | <percentage [0,100]>, which "0x10%" violates. Controls that correctly throw and leave keyText unchanged: 50%%, fifty%, Infinity%, -5%, 0. The tokenizer parse path is already correct: parsing "@keyframes k{0x10%{opacity:0}50%{a:b}}" drops the bad block and keeps only 50% (src/parser.ts ~571-591) - setter must agree with parser.'
+affected_requirements:
+    - SYS-REQ-260823-KTS6
+evidence_manifests:
+    - proof/evidence/ki-44.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSKeyframeRule.keyText setter / normalizeKeyframeSelector (src/CSSOM.ts ~L1157)
+attacker_input: CSSOM property writes of keyText with JS-coercible non-grammar strings; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
+tripwire_mutation: Replace raw Number(valStr) in normalizeKeyframeSelector with a tokenizer/grammar check (<percentage [0,100]> or from/to); both hex-coercion legs flip red->green while the five control rejections and the parser-agreement leg stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:32:13Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-23T20:45:59Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-44.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSStyleSheet.replaceSync + CSSKeyframeRule.keyText setter - no mocks; normalization observed live at HEAD.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - keyText='0x10%' silently normalizes to '16%' ('0X10%' likewise) against INVALID_KEYTEXT_ACCEPT_BUDGET=0; 5/5 controls ('50%%','fifty%','Infinity%','-5%','0') correctly throw and leave keyText unchanged.
+        control_test: five already-correct rejections plus the tokenizer-path agreement leg (parser drops '0x10%' blocks) prove the grammar is knowable and the setter alone diverges.
+        untrusted_attacker: CSSOM writes are the trust boundary for headless/style-ingestion hosts; any code path assigning user-influenced keyText reaches Number() coercion with zero privileges.
+        current_deployment_relevance: CSSKeyframeRule.keyText is a headline css-animations-1 surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: low correctness - JS-coercion acceptance diverges from both the spec grammar and this library's own parser, but impact is confined to keyframe selector metadata; no security/RCE dimension, cve_surface none.
+        attacker_profitability: hex-prefixed selectors slip through validation that expects SyntaxError, producing keyframes whose serialized form differs from what authors/consumers validated.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; severity kept low rather than inflated; cve_surface none.
+        operational_path_verified: failing legs exercise the exact public setter path hosts use; no gated or debug path involved.
+        reachability_verified: public CSSOM IS the product surface; nothing stands between a host and normalizeKeyframeSelector.
+kill_domain: input_validation_bypass
+do_not_refile_as: KI-101 child-rule link attachment; KI-103 appendRule trailing garbage; KI-104 forbidden animation declarations - all different contracts; this is the SETTER selector grammar using JS coercion instead of the grammar

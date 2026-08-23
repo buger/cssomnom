@@ -1,0 +1,42 @@
+id: SYS-REQ-260823-KTS6
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when keytext_setter_called_with_grammar_violation the cssom shall always satisfy invalid_keytext_acceptances <= 0
+description: CSSKeyframeRule.keyText setter must throw SyntaxError and leave keyText unchanged for any selector violating the css-animations-1 <keyframe-selector> grammar (from | to | <percentage [0,100]>, Overview.bs ~211; setter error contract ~1072-1077). JS Number coercion (e.g. accepting 0x10% as 16%) is not grammar validation. Tokenizer-based parsing of @keyframes blocks already drops such selectors; the setter must agree.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: cssom
+rationale: 'Known issue KI-44: normalizeKeyframeSelector uses raw Number(valStr) at src/CSSOM.ts ~1157, so keyText = 0x10% normalizes to 16% instead of throwing.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - keytext_setter_called_with_grammar_violation
+    - invalid_keytext_acceptances
+    - control_selector_rejections
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-animations-1/Overview.bs#dom-csskeyframerule-keytext
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T20:24:46Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T20:25:36Z"

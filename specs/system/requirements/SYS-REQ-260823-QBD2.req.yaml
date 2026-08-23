@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-QBD2
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when style_rule_parsed the parser_api shall always satisfy top_level_body_declaration_count >= 2 and nested_body_declaration_count >= 1
+description: 'Parsing a qualified rule that contains declarations through the CSS Parser API must expose those declarations as CSSParserDeclaration entries in CSSParserQualifiedRule.body (WICG css-parser-api #parser-values defines body members as the rules declaration list; css-syntax-3 #consume-a-qualified-rule consumes the block contents into declarations). Applies to top-level parseRuleSync output and to qualified rules nested inside at-rules.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: parser_api
+rationale: 'Known issue KI-40: src/parser-api.ts toParserRule checks qr.cssRules truthiness before qr.style, so an inherited-but-empty CSSRuleList makes the style->CSSParserDeclaration branch dead and every style-rule body serializes empty.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - style_rule_parsed
+    - top_level_body_declaration_count
+    - nested_body_declaration_count
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#consume-a-qualified-rule
+    - type: document
+      id: submodules/css-houdini-drafts/css-parser-api/Overview.bs#parser-values
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T20:24:06Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T20:25:35Z"

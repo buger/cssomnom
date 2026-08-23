@@ -1,0 +1,25 @@
+component: parser_api
+variables:
+    - name: trailing_garbage_value_parsed
+      type: bool
+      direction: input
+      description: 'A single component value followed by trailing garbage ("10% x") is parsed through both CSS.parseValue (parseValueSync) and CSS.parseComponentValue (css-syntax-3 #parse-a-component-value requires a syntax error when input is non-empty after one value, Overview.bs ~2466-2483).'
+    - name: rejecting_apis
+      type: int
+      direction: output
+      description: 'Observed number of the two Parser API value parsers that throw SyntaxError for "10% x"; obligation rejecting_apis >= rejecting_apis_min - i.e. both must reject consistently (reproducer constant TRAILING_GARBAGE_REJECTING_APIS_MIN = 2).'
+      range:
+        min: 2
+    - name: rejecting_apis_min
+      type: int
+      direction: input
+      description: 'Consistency budget - minimum number of value-parsing APIs that must reject trailing garbage; both parseValue and parseComponentValue are in scope, so 2 (reproducer constant TRAILING_GARBAGE_REJECTING_APIS_MIN = 2).'
+      range:
+        min: 2
+    - name: lenient_acceptances
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of value-parsing APIs that silently truncate to the first value and return; must be zero (reproducer constant LENIENT_ACCEPT_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0

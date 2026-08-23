@@ -1,0 +1,19 @@
+component: parser_api
+variables:
+    - name: bad_url_component_value_parsed
+      type: bool
+      direction: input
+      description: 'parseComponentValue is invoked on input whose single component value is a <bad-url-token>, e.g. "url(a b)" (css-syntax-3 Overview.bs ~2013-2016 marks <bad-url-token> an always-parse-error; #parse-a-component-value turns consumption failure into a syntax error).'
+    - name: bad_url_acceptances
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of bad-token inputs that parseComponentValue returns a value for instead of throwing SyntaxError; must be zero (reproducer constant BAD_URL_ACCEPT_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0
+    - name: multi_value_control_rejections_min
+      type: int
+      direction: input
+      description: 'Control budget - the existing >1-remaining-value rejection branch must keep throwing SyntaxError for "a b" (reproducer constant MULTI_VALUE_CONTROL_REJECTIONS_MIN = 1).'
+      range:
+        min: 1

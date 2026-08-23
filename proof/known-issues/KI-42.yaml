@@ -1,0 +1,58 @@
+id: KI-42
+title: parseComponentValueSync('url(a b)') returns truncated token 'a' instead of SyntaxError for <bad-url-token>
+description: 'parseComponentValueSync("url(a b)") returns CSSParserToken("a") - the truncated ident inside a <bad-url-token> - instead of throwing. css-syntax-3 ~2013-2016 marks <bad-url-token>/<bad-string-token> always-parse-errors; #parse-a-component-value (~2457-2484) turns consumption failure into a syntax error. The library own >1-value branch already throws for "a b" (src/parser-api.ts ~600-602), so rejecting the lone bad token is consistent internal behavior, not new policy. Same defect for url(a\\nb).'
+affected_requirements:
+    - SYS-REQ-260823-BTC4
+evidence_manifests:
+    - proof/evidence/ki-42.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseComponentValue/parseComponentValueSync (src/parser-api.ts ~L590-605)
+attacker_input: component-value strings containing bad-url constructs (raw whitespace inside unquoted url()); correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
+tripwire_mutation: In parseComponentValueSync, reject non-whitespace values whose type is bad-url/bad-string (or run ensureEOF-style failure detection after consume) before toParserToken; both bad-url legs flip red->green while the multi-value control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:31:52Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-23T20:35:59Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: kill-domain=grammar_closed_set_validation
+kill_domain: grammar_closed_set_validation
+do_not_refile_as: 'valid url() href extraction loss in @import/border-image (KI-8 fixed; KI-114/KI-116): those cover VALID urls losing content; this is an always-parse-error bad token that must be REJECTED'
+
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parseComponentValueSync/CSS.parseComponentValue exports and the real tokenizer only - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - 'url(a b)' returns CSSParserToken('a') (BAD_URL_ACCEPT_BUDGET=0 violated); the library's own >1-value branch throws SyntaxError for 'a b', proving the rejection machinery exists and is simply not applied to bad tokens.
+        control_test: multi-value control leg ('a b') still throws via the >1-value branch, isolating the failure to missing bad-token detection.
+        untrusted_attacker: component-value strings are host-supplied text (custom properties, attribute values like img/sizes); zero privileges required.
+        current_deployment_relevance: parseComponentValue is a documented WICG surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: medium correctness - callers relying on the throw contract receive a bogus truncated token instead of an error, corrupting downstream value validation; no security/RCE dimension, cve_surface none.
+        attacker_profitability: input that every conformant implementation rejects is accepted as a plausible-looking value ('a'), letting malformed data pass validation gates built on this API.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact documented parseComponentValueSync entry point; no gated or debug path involved.
+        reachability_verified: public Parser API IS the product surface; nothing stands between a host and the length-check filter.

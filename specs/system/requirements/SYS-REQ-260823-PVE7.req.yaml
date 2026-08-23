@@ -1,0 +1,44 @@
+id: SYS-REQ-260823-PVE7
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when trailing_garbage_value_parsed the parser_api shall always satisfy rejecting_apis >= 2 and lenient_acceptances <= 0
+description: 'Both parseValue and parseComponentValue wrap css-syntax-3 #parse-a-component-value, whose steps return a syntax error when input is non-empty after one component value (Overview.bs ~2466-2483). Trailing garbage after a single value must therefore be rejected consistently by both APIs; parseValue must not silently truncate to the first value.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: parser_api
+rationale: 'Known issue KI-45: parseValueSync lacks the EOF check its sibling parseComponentValueSync performs at src/parser-api.ts ~583-587, so CSS.parseValue(10% x) silently returns 10% while CSS.parseComponentValue(10% x) throws SyntaxError.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - trailing_garbage_value_parsed
+    - rejecting_apis
+    - lenient_acceptances
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#parse-a-component-value
+    - type: document
+      id: submodules/css-houdini-drafts/css-parser-api/Overview.bs#parsing-api
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T20:24:46Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T20:25:36Z"

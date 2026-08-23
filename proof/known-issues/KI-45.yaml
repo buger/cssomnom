@@ -1,0 +1,54 @@
+id: KI-45
+title: 'CSS.parseValue(''10% x'') silently returns 10% while CSS.parseComponentValue(''10% x'') throws; both wrap css-syntax-3 #parse-a-component-value'
+description: 'parseValueSync lacks the EOF check its sibling parseComponentValueSync performs, so trailing garbage after one value is silently truncated. css-syntax-3 #parse-a-component-value (~2457-2484) returns a syntax error when input is non-empty after one component value, and both APIs document themselves as exposing those algorithms. Honest caveat: the thin WICG draft does not spell out parseValue failure semantics explicitly; the violation is anchored on the shared css-syntax algorithm plus internal inconsistency (sibling throws), not explicit parseValue prose. README documents both APIs without a leniency deviation.'
+affected_requirements:
+    - SYS-REQ-260823-PVE7
+evidence_manifests:
+    - proof/evidence/ki-45.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseValue -> parseValueSync (src/parser-api.ts ~L563-569) vs CSS.parseComponentValue -> parseComponentValueSync (~L590-605)
+attacker_input: value strings with trailing garbage after one component value; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
+tripwire_mutation: Add the same EOF/leftover check to parseValueSync that its sibling performs (~583-587) so it throws on trailing garbage; both rejection legs flip red->green while clean-value controls stay green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:32:13Z"
+      by: human:Leonid Bugaev
+      action: created
+kill_domain: api_inconsistency
+do_not_refile_as: 'KI-42 lone <bad-url-token> inside a single component value: this issue is VALID single values followed by REMAINDER input rejected at the EOF step'
+
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSS.parseValue/CSS.parseComponentValue namespace members - no mocks; both behaviors observed live at HEAD.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - parseValue('10% x') returns '10%' while parseComponentValue('10% x') throws; TRAILING_GARBAGE_REJECTING_APIS_MIN=2 violated with LENIENT_ACCEPT_BUDGET=0.
+        control_test: clean-value control leg shows both APIs agree on well-formed input, and the sibling-API leg shows parseComponentValue already rejects - isolating parseValue's missing EOF check.
+        untrusted_attacker: value strings are host/user supplied across Typed OM and Parser API surfaces; zero privileges required.
+        current_deployment_relevance: parseValue/parseComponentValue ship together in this release's documented API table (README); confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: low correctness - silent truncation vs sibling throw confuses callers and hides malformed input; anchored on internal inconsistency plus css-syntax-3 #parse-a-component-value since the thin WICG draft omits explicit parseValue failure prose (caveat also recorded in the description).
+        attacker_profitability: trailing garbage smuggled past parseValue-based validators is silently dropped instead of surfaced, letting near-miss payloads pass where the parallel API would reject.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; severity low with the draft-spec caveat stated rather than inflated; cve_surface none.
+        operational_path_verified: failing legs call the exact documented namespace members; no gated or debug path involved.
+        reachability_verified: public CSS namespace IS the product surface; nothing stands between a host and parseValueSync.

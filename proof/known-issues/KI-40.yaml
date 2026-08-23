@@ -1,0 +1,59 @@
+id: KI-40
+title: Parser API silently drops every style-rule declaration from CSSParserQualifiedRule.body
+description: 'parseRuleSync("div { color: red; margin: 0px }").body.length === 0 and a style rule nested under parseRuleListSync("@media screen{a{b:c}}")[0].body[0].body.length === 0. Root cause: src/parser-api.ts ~452-461 evaluates qr.cssRules ? Array.from(qr.cssRules)... : (qr.style ...); every CSSOM CSSStyleRule inherits a (possibly empty) CSSRuleList so the truthy branch always wins and the qr.style -> CSSParserDeclaration mapping is dead code. The keyframe path (cssomKeyframeToQualified -> styleToParserDeclarations) DOES map declarations - inconsistent adapter behavior; tests/parser-api.test.ts ~122 only asserts the keyframe leg. Expected: WICG css-parser-api #parser-values defines body members as the rule declarations including CSSParserDeclaration nodes; css-syntax-3 #consume-a-qualified-rule + round-trip requirement (~3706-3713) require the data structures to survive serialize/re-parse. Correctness fault (silent data loss): every parsed style rule serializes with an empty body.'
+affected_requirements:
+    - SYS-REQ-260823-QBD2
+evidence_manifests:
+    - proof/evidence/ki-40.yaml
+severity: high
+severity_basis: reproducer
+risk: data_integrity
+cve_surface: none
+affected_api: CSS.parseRule/parseRuleList/parseStylesheet -> CSSParserQualifiedRule.body (src/parser-api.ts toParserRule ~L452-461)
+attacker_input: ordinary stylesheet text parsed through the public Parser API; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts
+tripwire_mutation: In src/parser-api.ts toParserRule, test the qr.style branch before qr.cssRules truthiness (or check cssRules length / use styleToParserDeclarations when the rule is a style rule); both declaration legs flip red->green while the keyframe control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not consume declaration content from Parser API qualified-rule bodies; use the CSSOM layer (CSSStyleRule.style) or re-parse rule cssText until the adapter maps declarations.
+remediation: In toParserRule (src/parser-api.ts ~452-461), check qr.style before the qr.cssRules truthiness branch for style rules (or use styleToParserDeclarations when the record is a style rule) so CSSParserQualifiedRule.body carries the authored declarations; both reproducer legs flip red->green.
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:31:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-23T20:34:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-mitigation,set-remediation
+kill_domain: silent_data_loss
+do_not_refile_as: 'toParserRule type mapping misclassification (KI-6/KI-14, fixed): this is content loss inside correctly-typed CSSParserQualifiedRule nodes, not raw-rule/at-rule misclassification'
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public Parser API exports parseRuleSync/parseRuleListSync and the real CSSOM rule classes only - no mocks; body contents observed live at HEAD.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - top-level 'div { color: red; margin: 0px }' yields body.length 0 against TOP_LEVEL_DECLARATIONS_MIN=2; '@media screen{a{b:c}}' nested leg yields 0 against NESTED_DECLARATIONS_MIN=1; every parsed style rule serializes with an empty declaration list.
+        control_test: keyframe-path contrast leg asserts the same adapter DOES map declarations (opacity survives for @keyframes), so the failure is isolated to the style-rule branch, not setup.
+        untrusted_attacker: stylesheet text is the trust boundary; any host ingesting user/theme CSS through the documented Parser API reaches the dead branch with zero privileges.
+        current_deployment_relevance: parseRule/parseRuleList/parseStylesheet are headline WICG Parser API surfaces of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: high data_integrity - silent loss of ALL style-rule declarations on the primary programmatic parsing surface; no memory-safety or RCE dimension, hence cve_surface none.
+        attacker_profitability: one authored style rule deterministically hides every declaration from Parser API consumers (linters, transformers, custom-element CSS ingestion); corruption propagates to any downstream serialize/re-parse pipeline.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names data_integrity honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact public parseRuleSync/parseRuleListSync path hosts use; no gated or debug path involved.
+        reachability_verified: public Parser API IS the product surface; nothing stands between a host and toParserRule.

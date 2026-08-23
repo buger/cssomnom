@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-44
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-KTS6
+command: node --experimental-strip-types --test proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-23T20:45:59Z"
+input_set:
+    - proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts: sha256:02f4867a2a38d104ea8683ef24abdc1a9f969e3ecdc3d2fc68f2b14b9a8d0c0f
+known_issues:
+    - KI-44

@@ -1,0 +1,62 @@
+id: KI-43
+title: parse('@import url(a b)x.css;') fabricates CSSImportRule href:'' mediaText:'not all' instead of dropping the grammar-invalid rule
+description: 'css-cascade-5 #at-import (~150-160) defines @import [ <url> | <string> ] ...; url(a b) is a <bad-url-token>, so the prelude cannot match and the rule is invalid as a whole. handleImportRule matches none of its href branches, leaves href="", collapses leftover tokens into an empty media list that MediaList normalizes to "not all", and pushes a fabricated CSSImportRule into cssRules. Controls: valid unquoted imports round-trip byte-exactly ("@import url(x.css);" -> href "x.css"); layered imports survive. Precision note: constructed sheets drop ALL imports by policy and insertRule throws HierarchyRequestError there - neither covers document-style parse(), where this fabrication happens.'
+affected_requirements:
+    - SYS-REQ-260823-DRP5
+evidence_manifests:
+    - proof/evidence/ki-43.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleImportRule -> CSSStyleSheet.cssRules (src/parser.ts ~L759-827)
+attacker_input: stylesheet text with grammar-invalid @import preludes; correctness hole, no attacker required
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-43-invalid-import-fabricated-not-dropped-overlay-260823.ts
+tripwire_mutation: In handleImportRule, detect a failed/unmatched href prelude (bad-url or no <url>|<string> match) and return null/drop the rule like other grammar-invalid at-rules; the fabrication leg flips red->green while the valid-import control stays green.
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+owner: agent:champ
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T20:31:52Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-23T20:35:59Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: kill-domain=silent_structural_loss
+    - at: "2026-08-23T20:37:20Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: kill-domain=rule_fabrication
+kill_domain: rule_fabrication
+do_not_refile_as: 'KI-7 styleSheet=null offline deviation (documented, excluded); KI-8 missing unquoted <url-token> branch for VALID urls (fixed): this is fabrication of rules from INVALID preludes'
+
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() export and the real handleImportRule dispatch - no mocks; cssRules contents observed live at HEAD.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - '@import url(a b)x.css;' yields exactly one fabricated CSSImportRule with href='' and mediaText='not all' against FABRICATED_IMPORT_RULE_BUDGET=0.
+        control_test: valid-import control leg keeps href byte-exact ('x.css'), isolating the failure to grammar-invalid preludes rather than import handling generally.
+        untrusted_attacker: stylesheet text is the trust boundary; any ingestion path reaching parse() with user CSS hits this with zero privileges.
+        current_deployment_relevance: @import parsing feeds stylesheet ordering and dependency discovery in this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
+        honest_severity: medium correctness - a rule that must not exist silently does, with empty href and a misleading 'not all' media list, polluting cssRules enumeration for consumers; no security/RCE dimension, cve_surface none.
+        attacker_profitability: crafted invalid imports inject phantom CSSImportRule objects into programmatic enumerations, desynchronizing bundlers/analyzers that trust cssRules shape.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-43-invalid-import-fabricated-not-dropped-overlay-260823.ts exited 1 twice pre-filing and once more under proof evidence capture.
+        no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact public parse() -> handleImportRule path hosts use; no gated or debug path involved.
+        reachability_verified: public parser IS the product surface; nothing stands between a host and the fabrication.

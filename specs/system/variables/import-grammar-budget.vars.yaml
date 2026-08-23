@@ -1,0 +1,19 @@
+component: cssom
+variables:
+    - name: invalid_import_parsed
+      type: bool
+      direction: input
+      description: 'A stylesheet whose @import prelude violates the css-cascade-5 @import grammar ([ <url> | <string> ], Overview.bs ~150-160) is parsed via parse(), e.g. "@import url(a b)x.css;" whose url() argument contains a <bad-url-token>.'
+    - name: fabricated_invalid_import_rules
+      type: int
+      direction: output
+      description: 'Quantitative budget - number of CSSImportRule objects fabricated inside CSSStyleSheet.cssRules for grammar-invalid @import input; must be zero (reproducer constant FABRICATED_IMPORT_RULE_BUDGET = 0).'
+      range:
+        max: 0
+        min: 0
+    - name: valid_import_href_roundtrips_min
+      type: int
+      direction: input
+      description: 'Control budget - valid unquoted imports ("@import url(x.css);") must keep parsing to a CSSImportRule whose href equals the authored URL byte-exactly (reproducer constant VALID_IMPORT_HREF_ROUNDTRIPS_MIN = 1).'
+      range:
+        min: 1

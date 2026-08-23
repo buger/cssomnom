@@ -1,0 +1,41 @@
+id: SYS-REQ-260823-DRP5
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when invalid_import_parsed the cssom shall always satisfy fabricated_invalid_import_rules <= 0
+description: 'An @import whose prelude violates the css-cascade-5 @import grammar ([ <url> | <string> ], Overview.bs ~150-160) must not enter CSSStyleSheet.cssRules as a fabricated CSSImportRule: it is dropped like any grammar-invalid rule. Valid layered/unlayered imports must continue to round-trip their href byte-exactly.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+component: cssom
+rationale: 'Known issue KI-43: parse(@import url(a b)x.css;) fabricates a CSSImportRule with empty href and mediaText not all instead of dropping the grammar-invalid rule.'
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - invalid_import_parsed
+    - fabricated_invalid_import_rules
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-cascade-5/Overview.bs#import
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-23T20:25:10Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-23T20:25:36Z"

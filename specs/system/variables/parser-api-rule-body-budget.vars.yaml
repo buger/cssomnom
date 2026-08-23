@@ -1,0 +1,30 @@
+component: parser_api
+variables:
+    - name: style_rule_parsed
+      type: bool
+      direction: input
+      description: 'A qualified rule containing declarations is parsed through the CSS Parser API (reproducer KI-40 exercises parseRuleSync("div { color: red; margin: 0px }") top-level and "a{b:c}" nested under "@media screen{...}").'
+    - name: top_level_body_declaration_count
+      type: int
+      direction: output
+      description: 'Observed number of CSSParserDeclaration entries in CSSParserQualifiedRule.body for a top-level style rule with 2 declarations; obligation top_level_body_declaration_count >= top_level_body_declarations_min (reproducer constant TOP_LEVEL_DECLARATIONS_MIN = 2).'
+      range:
+        min: 2
+    - name: top_level_body_declarations_min
+      type: int
+      direction: input
+      description: 'Coverage budget - minimum declaration entries ("color", "margin") that CSSParserQualifiedRule.body must expose for the top-level leg (reproducer constant TOP_LEVEL_DECLARATIONS_MIN = 2).'
+      range:
+        min: 2
+    - name: nested_body_declaration_count
+      type: int
+      direction: output
+      description: 'Observed number of CSSParserDeclaration entries in the body of the qualified rule nested inside an at-rule; obligation nested_body_declaration_count >= nested_body_declarations_min (reproducer constant NESTED_DECLARATIONS_MIN = 1).'
+      range:
+        min: 1
+    - name: nested_body_declarations_min
+      type: int
+      direction: input
+      description: 'Coverage budget - minimum declaration entries ("b") that the @media-nested qualified rule body must expose (reproducer constant NESTED_DECLARATIONS_MIN = 1).'
+      range:
+        min: 1
