@@ -19,7 +19,9 @@ tags:
     - conformance
     - known-issue
 variables:
+    - shorthand_expansion_requested
     - shorthand_coverage_min
+    - shorthand_coverage
     - cascade_winner_flips
 references:
     - type: document
@@ -28,7 +30,9 @@ references:
       id: submodules/csswg-drafts/css-gaps-1/Overview.bs#gap-shorthand
     - type: document
       id: submodules/csswg-drafts/css-transitions-1/Overview.bs#transition-shorthand-property
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid

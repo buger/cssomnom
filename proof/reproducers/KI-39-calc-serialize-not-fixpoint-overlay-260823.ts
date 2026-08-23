@@ -13,7 +13,7 @@
  * css-values-4 § 5.10 "Serialize a calculation tree"
  * (#serialize-a-calculation-tree,
  * submodules/csswg-drafts/css-values-4/Overview.bs:5270) defines the Sum node
- * step (:5306-5338) and Product node step (:5340-5370); both engines and the
+ * step (:5312-5340) and Product node step (:5342-5365); both engines and the
  * spec's own examples keep single-child Sums paren-free when nested in a
  * product operand position ("calc(1px + 2px)" folds to 3px, never "(3px)").
  *
@@ -27,7 +27,7 @@
  *   CSSStyleValue.parse(...that...).toString(); // 'calc(9px)' - STRUCTURE
  *                                               // CHANGED across round-trip
  *
- * Root cause: src/typed-om/values/style-value-factory.ts:44-46 deliberately
+ * Root cause: src/typed-om/values/style-value-factory.ts:47 deliberately
  * wraps folded unit values in a degenerate single-child CSSMathSum, and the
  * Product serializer (src/typed-om/numeric/math/CSSMathOperations.ts ~L150)
  * wraps every non-first child in parens without collapsing single-child
@@ -57,6 +57,12 @@ function isFixpoint(v: { toString(): string }): boolean {
   return v.toString() === CSSOM.CSSStyleValue.parse('width', v.toString()).toString();
 }
 
+// CSSStyleValue.parse returns the base class; arithmetic lives on CSSNumericValue
+// (repo convention: structural cast, cf. KI-37's `as unknown as { selectorText }`).
+function mulBy(v: CSSOM.CSSStyleValue, n: number): CSSOM.CSSStyleValue {
+  return (v as unknown as { mul(n: number): CSSOM.CSSStyleValue }).mul(n);
+}
+
 describe('KI-39 calc() serialization fixpoint stability', () => {
   test('positive control: fully-folded calc serializes identically across re-parse', () => {
     const v = CSSOM.CSSStyleValue.parse('width', 'calc(9px)');
@@ -74,20 +80,21 @@ describe('KI-39 calc() serialization fixpoint stability', () => {
   test(`parsed-value arithmetic serializations are fixpoints (${MATH_FIXPOINT_SHAPES} shapes, ${FIXPOINT_DRIFT_BUDGET} drift allowed)`, () => {
     let drifts = 0;
     const v = CSSOM.CSSStyleValue.parse('width', 'calc(1px + 2px)');
-    if (!isFixpoint(v.mul(3))) drifts++;
+    const scaled = mulBy(v, 3);
+    if (!isFixpoint(scaled)) drifts++;
     const degenerate = new CSSOM.CSSMathSum(new CSSOM.CSSUnitValue(3, 'px'));
     const constructed = new CSSOM.CSSMathProduct(new CSSOM.CSSUnitValue(3, 'number'), degenerate);
     if (!isFixpoint(constructed)) drifts++;
     assert.equal(
       drifts,
       FIXPOINT_DRIFT_BUDGET,
-      `KI-39: ${drifts}/${MATH_FIXPOINT_SHAPES} calc serializations drifted across re-parse (e.g. ${JSON.stringify(v.mul(3).toString())} -> ${JSON.stringify(CSSOM.CSSStyleValue.parse('width', v.mul(3).toString()).toString())}); css-syntax-3 #serialization requires round-tripping`,
+      `KI-39: ${drifts}/${MATH_FIXPOINT_SHAPES} calc serializations drifted across re-parse (e.g. ${JSON.stringify(scaled.toString())} -> ${JSON.stringify(CSSOM.CSSStyleValue.parse('width', scaled.toString()).toString())}); css-syntax-3 #serialization requires round-tripping`,
     );
   });
 
   // Reproduces: KI-39
   test('toString equals re-parse(toString()).toString() structural fixpoint', () => {
-    const z = CSSOM.CSSStyleValue.parse('width', 'calc(1px + 2px)').mul(3);
+    const z = mulBy(CSSOM.CSSStyleValue.parse('width', 'calc(1px + 2px)'), 3);
     const first = z.toString();
     const second = CSSOM.CSSStyleValue.parse('width', first).toString();
     assert.equal(

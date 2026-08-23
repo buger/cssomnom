@@ -3,7 +3,7 @@ variables:
     - name: comment_descendant_shapes
       type: int
       direction: input
-      description: 'Count of selector shapes exercising a preserved comment in the descendant-combinator position (reproducer KI-37 probes 4 shapes: div+comment+x, a+comment+b, div.+comment+a, *.+comment+b; obligation covers up to 6 shapes).'
+      description: 'Count of selector shapes exercising a preserved comment in the descendant-combinator position (reproducer KI-37 probes COMMENT_DESCENDANT_PROBE_COUNT=2 valid shapes: div+comment+x, a+comment+b; permanently invalid shapes such as div.+comment+a are excluded since no parser repair can legitimately make them parse; obligation covers up to 6 shapes).'
       range:
         max: 6
         min: 1

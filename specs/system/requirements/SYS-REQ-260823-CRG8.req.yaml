@@ -28,7 +28,9 @@ references:
       id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#inherits-descriptor
     - type: document
       id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#initial-value-descriptor
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid

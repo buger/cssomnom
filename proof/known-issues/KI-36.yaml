@@ -31,8 +31,10 @@ history:
       by: agent:champ
       action: capture-evidence
       detail: proof/evidence/ki-36.yaml
-kill_domain: silent_data_loss
-do_not_refile_as: font shorthand grammar root divergence (KI-112/KI-113); border-image quoted-url expansion loss (KI-114/KI-116)
+    - at: "2026-08-23T18:11:39Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-36.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -57,3 +59,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names data_integrity honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public setProperty/getPropertyValue/cssText path hosts use; no gated or debug path involved.
         reachability_verified: public CSSStyleDeclaration IS the product surface; no ingress layer exists between host and the expansion table.
+kill_domain: silent_data_loss
+do_not_refile_as: font shorthand grammar root divergence (KI-112/KI-113); border-image quoted-url expansion loss (KI-114/KI-116)

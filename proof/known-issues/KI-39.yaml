@@ -1,6 +1,6 @@
 id: KI-39
 title: 'calc() serialization not fixpoint-stable: degenerate single-child Sum serializes as parenthesized product operand, structure changes across round-trip'
-description: 'CSSMathValue.toString() output does not re-parse to the same structure. Fully public chain at HEAD: CSSStyleValue.parse(''width'',''calc(1px + 2px)'') folds to a degenerate single-child CSSMathSum (''calc(3px)''); .mul(3) then serializes ''calc((3px) * 3)'', whose re-parse serializes ''calc(9px)'' - String(v) !== String(parse(String(v))). Direct construction shows the identical defect: new CSSMathProduct(CSS.number(3), new CSSMathSum(CSS.px(3))).toString() === ''calc(3 * (3px))'' which re-parses to ''calc(9px)''. Meanwhile a fresh parse of the folded value is stable, proving inconsistent simplification between the arithmetic path and the parse path. Root cause: src/typed-om/values/style-value-factory.ts:44-46 wraps folded unit values in degenerate single-child CSSMathSum nodes and the Product serializer (src/typed-om/numeric/math/CSSMathOperations.ts ~L150) parenthesizes non-first children without collapsing single-child Sums. css-syntax-3 #serialization (Overview.bs:3710-3712) requires serialization to round-trip with parsing; css-values-4 #serialize-a-calculation-tree defines the Sum (:5306-5338) and Product (:5340-5370) node steps whose parenthesization must preserve tree equivalence. All WPT cssMathValue serialization rows pass - isolated to folded nested sums reachable through typed OM arithmetic. Correctness fault (serializer equivalence violation). Distinct from KI-31 (media condition parentheses, different layer).'
+description: 'CSSMathValue.toString() output does not re-parse to the same structure. Fully public chain at HEAD: CSSStyleValue.parse(''width'',''calc(1px + 2px)'') folds to a degenerate single-child CSSMathSum (''calc(3px)''); .mul(3) then serializes ''calc((3px) * 3)'', whose re-parse serializes ''calc(9px)'' - String(v) !== String(parse(String(v))). Direct construction shows the identical defect: new CSSMathProduct(CSS.number(3), new CSSMathSum(CSS.px(3))).toString() === ''calc(3 * (3px))'' which re-parses to ''calc(9px)''. Meanwhile a fresh parse of the folded value is stable, proving inconsistent simplification between the arithmetic path and the parse path. Root cause: src/typed-om/values/style-value-factory.ts:47 wraps folded unit values in degenerate single-child CSSMathSum nodes and the Product serializer (src/typed-om/numeric/math/CSSMathOperations.ts ~L150) parenthesizes non-first children without collapsing single-child Sums. css-syntax-3 #serialization (Overview.bs:3710-3712) requires serialization to round-trip with parsing; css-values-4 #serialize-a-calculation-tree defines the Sum (:5312-5340) and Product (:5342-5365) node steps whose parenthesization must preserve tree equivalence. All WPT cssMathValue serialization rows pass - isolated to folded nested sums reachable through typed OM arithmetic. Correctness fault (serializer equivalence violation). Distinct from KI-31 (media condition parentheses, different layer).'
 affected_requirements:
     - SYS-REQ-260823-MFS9
 evidence_manifests:
@@ -31,8 +31,14 @@ history:
       by: agent:champ
       action: capture-evidence
       detail: proof/evidence/ki-39.yaml
-kill_domain: serializer_equivalence
-do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)
+    - at: "2026-08-23T18:40:00Z"
+      by: agent:champ
+      action: reviewer-repair
+      detail: Corrected citations (css-values-4 Sum node step :5312-5340, Product node step :5342-5365; degenerate-Sum wrap anchor src/typed-om/values/style-value-factory.ts:47) and typed the .mul call sites via the repo structural-cast convention so the file passes strict tsc.
+    - at: "2026-08-23T18:11:40Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-39.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -57,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; graded LOW honestly despite medium-high candidates elsewhere in the batch; cve_surface none.
         operational_path_verified: failing legs call the exact public parse/mul/toString path hosts use; no gated or debug path involved.
         reachability_verified: public Typed OM IS the product surface; no ingress layer exists between host and CSSMathOperations.
+kill_domain: serializer_equivalence
+do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)

@@ -14,10 +14,17 @@ This is the Proof escape companion for the confirmed four-defect batch:
   `SelectorParser.skipWhitespace` (`src/SelectorParser.ts:102-106`) skips only
   whitespace tokens.
 - **KI-38** — the cascade computed-value path never consults PropertyRegistry:
-  unset registered `var()` yields no initial substitution, `inherits:false` leaks
-  parent values into children, and `<length>`-invalid values (`--len:red`) pass
+  unset registered `var()` yields no initial substitution, and a TRUE
+  descendant (child carrying only the consuming class) of an element declaring
+  `--len:40px` still reads it via `width:var(--len)` despite the
+  `inherits:false` registration; `<length>`-invalid values (`--len:red`) pass
   through as `width:'red'`. Parser's own `#resolveVarFunction`
-  (`src/parser.ts:1793-1826`) enforces all three — two resolvers disagree.
+  (`src/parser.ts:1726-1823`) enforces all three — two resolvers disagree.
+  Fixture honesty: an earlier inherits-leg draft carried the triggering class
+  on the child (`<div class="p c">`), where `.p` applies DIRECTLY — correct
+  even under `inherits:false`, since the descriptor only blocks inheritance —
+  so that confounded markup was replaced by a true descendant without the
+  triggering class.
 - **KI-39** — math serialization is not fixpoint-stable: a degenerate
   single-child Sum inside a Product serializes parenthesized
   (`calc((1px + 2px)` parsed → `.mul(3)` → `'calc((3px) * 3)'`; direct
@@ -103,7 +110,7 @@ the spec-honest contract and is expected to stay red until the product is repair
   canonical trees, not because our arithmetic path is checked.
 - **Why it escaped**: the serializer-fixpoint property is asserted only where
   folding does NOT occur; the one layer that rewrites trees (typed OM
-  simplification + degenerate-Sum wrapping in `style-value-factory.ts:44-46`)
+  simplification + degenerate-Sum wrapping in `style-value-factory.ts:47`)
   is exactly the layer no fixpoint property covers. Simplification tests assert
   VALUES (`9px`), never RE-SERIALIZABILITY of intermediate structures.
 - **Overlay vs engine correction**: engine fix collapses single-child Sum/Product
@@ -122,11 +129,13 @@ the spec-honest contract and is expected to stay red until the product is repair
   :3701-3703); selectors-4 descendant-combinator definition is at :4281-4283
   (brief said :4284); css-properties-values-api #calculation-of-computed-values
   section starts at :202 (brief said :205-217); #initial-value-descriptor
-  controlling sentence at :644-645; css-values-4 Sum node step :5306-5338 /
-  Product node step :5340-5370 (brief said :5312/:5342). cssom-1
-  #concept-declarations-specified-order (:2243-2245), css-gaps-1 #gap-shorthand
-  (:236), css-transitions-1 (:510) and css-syntax-3 round-trip (:3710-3712)
-  matched the brief exactly.
+  controlling sentence at :642-644 (the earlier filed :644-645 was off by two
+  lines); css-values-4 Sum node step :5312-5340 / Product node step
+  :5342-5365 (the filed :5306-5338/:5340-5370 included the preceding
+  algorithm's closing lines; the brief's bare starts :5312/:5342 were right).
+  cssom-1 #concept-declarations-specified-order (:2243-2245), css-gaps-1
+  #gap-shorthand (:236), css-transitions-1 (:510) and css-syntax-3 round-trip
+  (:3710-3712) matched the brief exactly.
 - Count correction: KI-36 headline says 121 missing in the brief; measured live
   at HEAD it is **122** (44 runtime vs 165 generated); the KI description uses
   the measured number.
@@ -140,6 +149,6 @@ the spec-honest contract and is expected to stay red until the product is repair
 
 Evidence was captured with the documented custom Proof binary at `/tmp/proof-dx/proof`
 and Node v24.19.0/v24.11.1. Requirements drafted: SYS-REQ-260823-SHX6,
-SYS-REQ-260823-SCD7, SYS-REQ-260823-CRG8, SYS-REQ-260823-MFS9 — each with a new
-registry variables file mirroring reproducer constants and tracing satisfies to
-STK-REQ-260821-BQKD.
+SYS-REQ-260823-SCD7, SYS-REQ-260823-CRG8, SYS-REQ-260823-MFS9 — each with its
+own budget variables file under `specs/system/variables/` mirroring reproducer
+constants and tracing satisfies to STK-REQ-260821-BQKD.

@@ -31,8 +31,14 @@ history:
       by: agent:champ
       action: capture-evidence
       detail: proof/evidence/ki-37.yaml
-kill_domain: silent_structural_loss
-do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)
+    - at: "2026-08-23T18:40:00Z"
+      by: agent:champ
+      action: reviewer-repair
+      detail: Removed the two permanently invalid budget shapes (div.+comment+a, *.+comment+b - invalid even comment-free) so every asserted-lost shape converges green under the prescribed comment-trivia fix; probe count 4 -> 2.
+    - at: "2026-08-23T18:11:39Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-37.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -47,7 +53,7 @@ poc_quality:
     reachability_verified: true
     notes: |
         real_infrastructure: public parse() and the production SelectorParser only - no mocks; reproducer imports mirror KI-31 style.
-        quantitative_impact: measured at HEAD on Node v24.11.1 - parse('div/**/x{a:b}') yields cssRules.length === 0; 4/4 probed shapes (div+comment+x, a+comment+b, div.+comment+a, *.+comment+b) drop their entire rule; COMMENT_DESCENDANT_PROBE_COUNT=4 exercised against an obligation budget of 6.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - parse('div/**/x{a:b}') yields cssRules.length === 0; 2/2 probed valid shapes (div+comment+x, a+comment+b) drop their entire rule; COMMENT_DESCENDANT_PROBE_COUNT=2 exercised against an obligation budget of 6. Two earlier probed shapes (div.+comment+a, *.+comment+b) were removed as permanently invalid selectors (a '.' cannot be followed by whitespace before the class ident even comment-free), so every asserted-lost shape converges green under the prescribed fix.
         control_test: positive controls assert whitespace descendant parses one rule ('div x') AND explicit-combinator/leading-comment placements keep their rules, so failures are not setup errors.
         untrusted_attacker: stylesheet text is the trust boundary; any host ingesting user/theme CSS reaches the selector parser with zero privileges.
         current_deployment_relevance: parse() is the headline surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
@@ -57,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public parse() path hosts use; no gated or debug path involved.
         reachability_verified: public parse() IS the product surface; no ingress layer exists between host and SelectorParser.
+kill_domain: silent_structural_loss
+do_not_refile_as: media condition paren dropping round-trip corruption (KI-31)

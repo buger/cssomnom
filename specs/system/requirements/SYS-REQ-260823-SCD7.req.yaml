@@ -26,7 +26,9 @@ references:
       id: submodules/csswg-drafts/css-syntax-3/Overview.bs#serialization
     - type: document
       id: submodules/csswg-drafts/selectors-4/Overview.bs#descendant-combinators
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
     formalization_status: valid

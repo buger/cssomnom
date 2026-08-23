@@ -18,29 +18,42 @@
  * § 2.4.1 "#inherits-descriptor" (Overview.bs:617, 627-629) specifies that
  * the inherits descriptor controls "whether or not the property inherits by
  * default", and § 2.4.2 "#initial-value-descriptor" (Overview.bs:632,
- * 644-645) that initial-value "controls the property's initial value".
- * css-variables-1 #guaranteed-invalid additionally makes a var() referencing
- * an invalid registered value without fallback invalid-at-computed-value-time.
+ * controlling sentence :642-644) that initial-value "controls the property's
+ * initial value". css-variables-1 #guaranteed-invalid additionally makes a
+ * var() referencing an invalid registered value without fallback
+ * invalid-at-computed-value-time.
  *
  * Root cause: substituteVariables/resolveCustomProperties
  * (src/cascade/variable-resolver.ts:50+, :220+) consult only the cascaded
  * custom-property maps and never PropertyRegistry, while Parser's own
- * #resolveVarFunction (src/parser.ts:1793-1826) DOES apply the registry -
+ * #resolveVarFunction (src/parser.ts:1726-1823) DOES apply the registry -
  * two resolvers in the same engine disagree about the same registration:
  *
  *   Leg 1: width: var(--len) with NO --len anywhere must substitute the
  *          registered initial value '10px'; getCascadedStyle returns ''.
- *   Leg 2: parent .p{--len:40px} leaks into child width despite
- *          inherits:false registration (child reads '40px'); the
- *          inherits:true control behaves identically, proving non-enforcement.
+ *   Leg 2: a TRUE descendant (#c carries ONLY class c - it does not match
+ *          '.p' itself) inside <div class=p> reads parent .p{--len:40px}
+ *          through its width:var(--len) ('40px') despite the inherits:false
+ *          registration; per #inherits-descriptor :627-629 the property must
+ *          not inherit by default. The inherits:true control over the SAME
+ *          descendant shape DOES propagate.
  *   Leg 3: .p{--len:red} fails <length> validation; 'red' leaks through as
  *          width:'red' instead of invalid-at-computed-value-time.
  *
+ * Fixture note: an earlier draft of leg 2 put BOTH classes on the child
+ * (<div class="p c">), so '.p{--len:40px}' applied to the child DIRECTLY -
+ * direct application is correct even under inherits:false (the descriptor
+ * only blocks inheritance), so that markup could not evidence a leak. The
+ * child now carries only the consuming class; any '40px' on it can only
+ * arrive via inheritance.
+ *
  * Distinctness: KI-108/109/110 cover substitution dispatch bugs (var-name
  * lookup, case-insensitivity, env grammar); KI-111/KI-35 cover registration-
- * time validation; KI-4 covers cascade precedence. This issue covers registry
- * enforcement (initial substitution / inheritance / syntax validation) being
- * entirely absent from the cascade resolver path.
+ * time validation. Withdrawn KI-4 covered JS-vs-@property REGISTRATION
+ * precedence (InvalidModificationError angle), not cascade precedence - no
+ * cascade-precedence KI exists. This issue covers registry enforcement
+ * (initial substitution / inheritance / syntax validation) being entirely
+ * absent from the cascade resolver path.
  *
  * Asserts the SAFE contract: getCascadedStyle honors registered custom
  * property descriptors exactly like Parser.#resolveVarFunction does.
@@ -81,24 +94,28 @@ describe('KI-38 cascade path ignores PropertyRegistry', () => {
   });
 
   // Reproduces: KI-38
-  test(`inherits:false registration isolates children (${INHERITS_LEAK_BUDGET} leak budget)`, () => {
+  test(`inherits:false registration isolates true descendants (${INHERITS_LEAK_BUDGET} leak budget)`, () => {
+    // #c carries ONLY class c, so '.p' never matches it directly; a '40px'
+    // width could only reach it through INHERITANCE, which the inherits:false
+    // registration forbids (css-properties-values-api #inherits-descriptor
+    // :627-629).
     const leaked = cascadedWidth(
       '.p { --len: 40px; } .c { width: var(--len); }',
-      '<html><body><div class=p id=p></div><div class="p c" id=c></div></body></html>',
+      '<html><body><div class=p><div class=c id=c></div></div></body></html>',
       '#c',
     );
     assert.notEqual(
       leaked,
       '40px',
-      `KI-38: child width inherited the parent value (${JSON.stringify(leaked)}) despite inherits:false; css-properties-values-api #inherits-descriptor forbids inheritance here`,
+      `KI-38: descendant width inherited the parent value (${JSON.stringify(leaked)}) despite inherits:false; css-properties-values-api #inherits-descriptor (:627-629) forbids inheritance here`,
     );
   });
 
-  test('positive control: inherits:true registration does propagate to children', () => {
+  test('positive control: inherits:true registration does propagate to true descendants', () => {
     CSSOM.CSS.registerProperty({ name: '--inh-probe', syntax: '<length>', inherits: true, initialValue: '7px' });
     const leaked = cascadedWidth(
       '.p2 { --inh-probe: 40px; } .c2 { width: var(--inh-probe); }',
-      '<html><body><div class=p2 id=p></div><div class="p2 c2" id=c></div></body></html>',
+      '<html><body><div class=p2><div class=c2 id=c></div></div></body></html>',
       '#c',
     );
     assert.equal(leaked, '40px');

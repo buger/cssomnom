@@ -3,7 +3,7 @@ variables:
     - name: math_value_serialized
       type: bool
       direction: input
-      description: 'A CSSMathValue tree containing a degenerate single-child Sum inside a Product is serialized via toString() (reproducer KI-39 exercises parsed-value arithmetic calc(1px+2px).mul(3) and direct CSSMathProduct/CSSMathSum construction; obligation covers up to 3 shapes).'
+      description: 'A CSSMathValue tree containing a degenerate single-child Sum inside a Product is serialized via toString() (reproducer KI-39 exercises exactly MATH_FIXPOINT_SHAPES=2 shapes: parsed-value arithmetic calc(1px+2px).mul(3) and direct CSSMathProduct/CSSMathSum construction).'
     - name: serialization_fixpoint_drift
       type: int
       direction: output

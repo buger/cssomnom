@@ -1,6 +1,6 @@
 id: KI-38
 title: 'Cascade computed-value path ignores PropertyRegistry: initial-value substitution, inherits flag and syntax validation all dead in getCascadedStyle'
-description: 'registerProperty({name:''--len'',syntax:''<length>'',inherits:false,initialValue:''10px''}) is honored by Parser.#resolveVarFunction (src/parser.ts:1793-1826) but entirely ignored on the cascade path: substituteVariables/resolveCustomProperties (src/cascade/variable-resolver.ts:50+, :220+) consult only the cascaded custom-property maps - two resolvers in the same engine disagree. Observed legs: (1) width:var(--len) with no --len anywhere returns '''' instead of substituting the registered initial value 10px; (2) parent .p{--len:40px} leaks into child width ''40px'' despite inherits:false (an inherits:true control behaves identically, proving non-enforcement); (3) .p{--len:red} fails <length> validation yet leaks through as width:''red'' instead of invalid-at-computed-value-time. css-properties-values-api #calculation-of-computed-values (Overview.bs:202-216): the computed value of a registered custom property is determined by its registration syntax; a failing value makes the declaration invalid at computed-value time; #inherits-descriptor (:617,627-629) controls whether the property inherits by default; #initial-value-descriptor (:632,644-645) specifies the initial value. Correctness fault (computed-value contract silently broken for every registered property consumer). Distinctness: KI-108/109/110 are substitution dispatch bugs; KI-111/KI-35 are registration-time validation; KI-4 is cascade precedence.'
+description: 'registerProperty({name:''--len'',syntax:''<length>'',inherits:false,initialValue:''10px''}) is honored by Parser.#resolveVarFunction (src/parser.ts:1726-1823) but entirely ignored on the cascade path: substituteVariables/resolveCustomProperties (src/cascade/variable-resolver.ts:50+, :220+) consult only the cascaded custom-property maps - two resolvers in the same engine disagree. Observed legs: (1) width:var(--len) with no --len anywhere returns '''' instead of substituting the registered initial value 10px; (2) a TRUE descendant (child div carrying only the consuming class, inside <div class=p>) reads parent .p{--len:40px} through width:var(--len) as ''40px'' despite the inherits:false registration - an inherits:true control over the same descendant shape also propagates, isolating the missing inheritance gating; (3) .p{--len:red} fails <length> validation yet leaks through as width:''red'' instead of invalid-at-computed-value-time. Fixture honesty: an earlier draft of leg 2 placed both classes on the child (<div class="p c">), where .p applies DIRECTLY - correct even under inherits:false since the descriptor only blocks inheritance - so it could not evidence a leak; that direct-application confound was removed and the child now carries only class c. css-properties-values-api #calculation-of-computed-values (Overview.bs:202-216): the computed value of a registered custom property is determined by its registration syntax; a failing value makes the declaration invalid at computed-value time; #inherits-descriptor (:617,:627-629) controls whether the property inherits by default; #initial-value-descriptor controlling sentence (:642-644) specifies the initial value. Correctness fault (computed-value contract silently broken for every registered property consumer). Distinctness: KI-108/109/110 are substitution dispatch bugs; KI-111/KI-35 are registration-time validation; withdrawn KI-4 covered JS-vs-@property registration precedence, not cascade precedence.'
 affected_requirements:
     - SYS-REQ-260823-CRG8
 evidence_manifests:
@@ -13,7 +13,7 @@ affected_api: getCascadedStyle() -> substituteVariables/resolveCustomProperties 
 attacker_input: stylesheets combining registerProperty metadata with var() consumption; correctness hole, no attacker required
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
-tripwire_mutation: Route cascade-path custom property resolution through the same PropertyRegistry-aware logic as Parser.#resolveVarFunction (initial substitution + inherits gating + syntax validation); all three failing legs flip red->green while both positive controls stay green.
+tripwire_mutation: Route cascade-path custom property resolution through the same PropertyRegistry-aware logic as Parser.#resolveVarFunction (initial substitution + inherits gating + syntax validation); all three failing legs flip red->green while both positive controls stay green - leg 2 probes a true descendant (child carries only the consuming class), so adding inherits gating alone makes it converge.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -31,8 +31,14 @@ history:
       by: agent:champ
       action: capture-evidence
       detail: proof/evidence/ki-38.yaml
-kill_domain: resolver_divergence
-do_not_refile_as: var-name substitution dispatch bugs (KI-108/KI-109/KI-110); registration-time syntax validation (KI-111/KI-35); cascade precedence (KI-4)
+    - at: "2026-08-23T18:40:00Z"
+      by: agent:champ
+      action: reviewer-repair
+      detail: 'Rebuilt the inherits leg as a true descendant (child no longer matches .p directly, removing the direct-application confound), corrected citations (#resolveVarFunction span src/parser.ts:1726-1823, #initial-value-descriptor :642-644) and replaced the withdrawn KI-4 cascade-precedence claim.'
+    - at: "2026-08-23T18:11:40Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-38.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -47,8 +53,8 @@ poc_quality:
     reachability_verified: true
     notes: |
         real_infrastructure: public registerProperty + getCascadedStyle over linkedom DOM only - no mocks; mirrors the acceptance-suite (tests/acceptance-stk.test.ts) infrastructure.
-        quantitative_impact: measured at HEAD on Node v24.11.1 - leg1 width '' vs expected initial '10px'; leg2 child width '40px' through an inherits:false registration; leg3 invalid 'red' leaked as width:'red'; REGISTERED_INITIAL_VALUE=10px with INHERITS_LEAK_BUDGET=0 and INVALID_AT_CV_TIME_LEAKS=0.
-        control_test: two positive controls - literal width resolves through getCascadedStyle AND inherits:true propagation still works, so failures are not setup errors.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - leg1 width '' vs expected initial '10px'; leg2 a TRUE descendant (child carries only the consuming class) reads width '40px' through an inherits:false registration; leg3 invalid 'red' leaked as width:'red'; REGISTERED_INITIAL_VALUE=10px with INHERITS_LEAK_BUDGET=0 and INVALID_AT_CV_TIME_LEAKS=0. An earlier fixture draft carried the triggering class on the child (direct application, correct even under inherits:false); that confound was removed.
+        control_test: two positive controls - literal width resolves through getCascadedStyle AND inherits:true propagation still works over the same true-descendant shape, so failures are not setup errors.
         untrusted_attacker: stylesheet text is the trust boundary; any host ingesting user CSS reaches the cascade resolver with zero privileges.
         current_deployment_relevance: getCascadedStyle is a headline computed-value surface of this release; confirmed live at HEAD via two red reproducer runs plus evidence capture re-execution.
         honest_severity: medium correctness - computed-value contract broken for registered properties (wrong/missing values, cross-element value leaks); no memory-safety or RCE dimension.
@@ -57,3 +63,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public registerProperty/getCascadedStyle path hosts use; no gated or debug path involved.
         reachability_verified: public getCascadedStyle IS the product surface; no ingress layer exists between host and variable-resolver.
+kill_domain: resolver_divergence
+do_not_refile_as: var-name substitution dispatch bugs (KI-108/KI-109/KI-110); registration-time syntax validation (KI-111/KI-35). No cascade-precedence KI exists - withdrawn KI-4 covered JS-vs-@property registration precedence

@@ -6,7 +6,7 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T17:23:13Z"
+executed_at: "2026-08-23T18:11:39Z"
 input_set:
     - proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts
 freshness_hashes:
