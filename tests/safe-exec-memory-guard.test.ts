@@ -23,18 +23,27 @@ import { parseHTML } from 'linkedom';
 import { patchWindowForTypedOM } from './dom-shim/src/index.ts';
 
 test('CSSImportRule: child stylesheet parentStyleSheet linkage and unlinking', () => {
-  // cssom-1 § 6.4.4 #dom-cssimportrule-stylesheet: associated sheet if any, else null.
-  // README: offline parser does not fetch, so styleSheet is null (not an empty placeholder).
+  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: styleSheet returns the associated
+  // stylesheet object (never null once the rule exists). Offline parser never fetches
+  // (README documented deviation), so the associated sheet is empty until a host
+  // supplies content via replaceSync().
   const sheet = CSSStyleSheet.createInternal([], parseRule);
   sheet.insertRule('@import url("imported.css");', 0);
 
   const importRule = sheet.cssRules[0] as CSSImportRule;
   assert.ok(importRule instanceof CSSImportRule);
   assert.equal(importRule.parentStyleSheet, sheet);
-  assert.equal(importRule.styleSheet, null);
+  const child = importRule.styleSheet;
+  assert.ok(child instanceof CSSStyleSheet);
+  assert.equal(child.ownerRule, importRule);
+  // cssom-1 § 6.4.3 associated stylesheet notes: parentStyleSheet resolves live
+  // through ownerRule, so the child tracks the owning sheet without caching.
+  assert.equal(child.parentStyleSheet, sheet);
+  assert.equal(child.cssRules.length, 0);
 
   sheet.deleteRule(0);
   assert.equal(importRule.parentStyleSheet, null, 'Import rule parentStyleSheet should be null after deleteRule');
+  assert.equal(child.parentStyleSheet, null, 'Associated child sheet resolves through ownerRule; unlinking detaches it');
 });
 
 test('Attribute selector case-sensitivity matching performance and memory containment', () => {

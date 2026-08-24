@@ -31,6 +31,7 @@ import { tokenize } from '../src/tokenizer.ts';
 import {
   CSSStyleRule,
   CSSImportRule,
+  CSSStyleSheet,
   CSSNamespaceRule,
   CSSPropertyRule,
   CSSKeyframesRule,
@@ -115,7 +116,11 @@ describe('MC/DC branch: @import / @namespace / @property', () => {
     assert.equal(rule.layerName, 'base');
     assert.equal(rule.supportsText, 'display: grid');
     assert.equal(rule.media.mediaText.includes('screen'), true);
-    assert.equal(rule.styleSheet, null);
+    // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: styleSheet is the associated
+    // stylesheet object, never null; offline parser never fetches (README documented
+    // deviation), so it stays empty until a host populates it via replaceSync().
+    assert.ok(rule.styleSheet instanceof CSSStyleSheet);
+    assert.equal(rule.styleSheet.cssRules.length, 0);
   });
 
   test('@import unquoted url() and bare layer ident', () => {

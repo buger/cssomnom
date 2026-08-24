@@ -155,7 +155,7 @@ test('MCDC SW-5W6X import_url_present=F constructed=F', () => {
   assert.ok(sheet.cssRules[0] instanceof CSSStyleRule);
 });
 //mcdc:ignore:defensive SW-REQ-260821-5W6X: css_import_rule_constructed=F, external_sheet_fetched=F, import_url_present=T => FALSE — parse of @import always constructs CSSImportRule [reviewed: agent:grok-4.6]
-//mcdc:ignore:capability-gap SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=T, import_url_present=T => FALSE -- CSSImportRule.styleSheet stays null; @import never fetches (full CSSOM would load) [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
+//mcdc:ignore:capability-gap SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=T, import_url_present=T => FALSE -- @import never fetches (documented deviation); KI-7 fixed 2026-08-23: associated stylesheet object exposed offline, empty until host replaceSync [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
 // Verifies: SW-REQ-260821-5W6X
 // MCDC SW-REQ-260821-5W6X: css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE
 test('MCDC SW-5W6X import_url_present=T constructed=T', () => {
@@ -164,12 +164,15 @@ test('MCDC SW-5W6X import_url_present=T constructed=T', () => {
   assert.ok(sheet.cssRules.length >= 1);
   assert.ok(sheet.cssRules[0] instanceof CSSImportRule);
   assert.equal((sheet.cssRules[0] as CSSImportRule).href, 'https://example.com/sheet.css');
+  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: the associated stylesheet
+  // object is returned (never null); no fetch happens, so it is empty offline.
   const associated = (sheet.cssRules[0] as CSSImportRule).styleSheet;
   assert.equal(fetchCalls, 0);
-  // README documented offline parser: no fetch, so no associated sheet.
-  assert.equal(associated, null);
+  assert.ok(associated instanceof CSSStyleSheet);
+  assert.equal(associated.ownerRule, sheet.cssRules[0]);
+  assert.equal(associated.cssRules.length, 0);
 });
-//mcdc:ignore:capability-gap SYS-REQ-260821-H3BD: external_sheet_fetched=T => FALSE -- CSSImportRule.styleSheet stays null; @import never fetches [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
+//mcdc:ignore:capability-gap SYS-REQ-260821-H3BD: external_sheet_fetched=T => FALSE -- @import never fetches (documented deviation); KI-7 fixed 2026-08-23: associated stylesheet object exposed offline [reviewed: agent:grok-4.6] [ki: KI-7] [category: capability-gap]
 // Verifies: SYS-REQ-260821-H3BD
 // MCDC SYS-REQ-260821-H3BD: external_sheet_fetched=F => TRUE [no-action: fetchCalls=0]
 test('MCDC SYS-H3BD import_url_present=T fetched=F', () => {

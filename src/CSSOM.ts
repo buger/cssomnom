@@ -1456,15 +1456,23 @@ export class CSSImportRule extends CSSRule {
     }
   }
 
-  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet
-  get styleSheet(): CSSStyleSheet | null {
+  // cssom-1 § 6.4.3 #the-cssimportrule-interface #dom-cssimportrule-stylesheet:
+  // "The styleSheet attribute must return the associated CSS style sheet object
+  // for the import rule." The association is never null once the rule exists.
+  // Offline-parser deviation (README): the href is never fetched, so the
+  // associated sheet is exposed in its browser pre-load state — a real,
+  // constructed, empty CSSStyleSheet that a host can populate offline via
+  // replaceSync(). Public linkage is live, not cached: child.ownerRule is this
+  // rule and child.parentStyleSheet resolves dynamically through _ownerRule
+  // (cssom-1 § 6.4.3 associated stylesheet notes), so deleting/unlinking the
+  // rule detaches the associated sheet automatically.
+  get styleSheet(): CSSStyleSheet {
     if (!this._styleSheet) {
-      this._styleSheet = CSSStyleSheet.createInternal([], (text: string) => {
-        const tokens = tokenize(text);
-        return ParseHooks.consumeRule(tokens) as unknown as Rule;
-      });
+      // Constructed via the public constructor path (cssom-1 #dom-cssstylesheet):
+      // sets the constructed flag so replace()/replaceSync() are available to a
+      // host supplying content offline; _parseRule default matches consume-a-rule.
+      this._styleSheet = new CSSStyleSheet();
       (this._styleSheet as unknown as { _ownerRule: CSSRule | null })._ownerRule = this;
-      (this._styleSheet as unknown as { _parentStyleSheet: StyleSheet | null })._parentStyleSheet = this.parentStyleSheet;
       (this._styleSheet as unknown as { _href: string | null })._href = this._href;
     }
     return this._styleSheet;

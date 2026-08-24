@@ -360,8 +360,14 @@ test('CSSImportRule href copies url-token from unquoted url()', () => {
   const rule = sheet.cssRules[0] as CSSImportRule;
   assert.ok(rule instanceof CSSImportRule);
   assert.equal(rule.href, 'foo.css');
-  // README documented offline parser: no associated fetched sheet.
-  assert.equal(rule.styleSheet, null);
+  // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: styleSheet returns the associated
+  // stylesheet object (never null once the rule exists). Offline parser never fetches
+  // (README documented deviation), so the associated sheet is empty until a host
+  // supplies content via replaceSync(); it is still publicly linked via ownerRule.
+  const child = rule.styleSheet;
+  assert.ok(child instanceof CSSStyleSheet);
+  assert.equal(child.ownerRule, rule);
+  assert.equal(child.cssRules.length, 0);
 });
 
 test('CSSImportRule cssText serialization', () => {

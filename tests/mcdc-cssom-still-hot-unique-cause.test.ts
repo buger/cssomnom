@@ -470,7 +470,12 @@ describe('MC/DC still-hot unique-cause: CSSImportRule / CSSCustomMediaRule / CSS
     assert.equal(bare.cssText, '@import url("a.css");');
     assert.equal(bare.layerName, null);
     assert.equal(bare.supportsText, null);
-    assert.equal(bare.styleSheet, null);
+    // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: the associated stylesheet
+    // object exists once the rule exists (never null); offline parser never
+    // fetches, so it is empty until a host populates it via replaceSync().
+    assert.ok(bare.styleSheet instanceof CSSStyleSheet);
+    assert.equal(bare.styleSheet.ownerRule, bare);
+    assert.equal(bare.styleSheet.cssRules.length, 0);
 
     const anon = new CSSImportRule('a.css', '', '');
     assert.equal(anon.layerName, '');

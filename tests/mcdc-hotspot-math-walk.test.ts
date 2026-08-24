@@ -1077,7 +1077,12 @@ describe('MC/DC hotspot: cascade walkRules via getCascadedStyle', { concurrency:
     assert.ok(rules[0] instanceof CSSImportRule);
     assert.ok(rules[1] instanceof CSSImportRule);
     assert.equal((rules[0] as CSSImportRule).href, 'https://example.com/a.css');
-    assert.equal((rules[1] as CSSImportRule).styleSheet, null);
+    // cssom-1 § 6.4.3 #dom-cssimportrule-stylesheet: the associated stylesheet
+    // object exists (never null); offline parser never fetches, so it is empty
+    // and walkRules still skips it (not a grouping/style rule).
+    const importChild = (rules[1] as CSSImportRule).styleSheet;
+    assert.ok(importChild instanceof CSSStyleSheet);
+    assert.equal(importChild.cssRules.length, 0);
     assert.ok(rules[2] instanceof CSSNamespaceRule);
     assert.ok(rules[3] instanceof CSSFontFaceRule);
     assert.ok(rules[4] instanceof CSSKeyframesRule);

@@ -75,7 +75,8 @@ describe('KI-8 CSSImportRule href from url-token', () => {
     assert.equal(rule.href, 'foo.css');
     assert.equal(rule.cssText.includes('url("")'), false);
     assert.equal(rule.cssText.includes('foo.css'), true);
-    // KI-7 remains open: do not fetch; do not assert styleSheet is a loaded sheet.
+    // KI-7 fixed 2026-08-23: styleSheet is the associated (offline, empty)
+    // stylesheet; no fetch, and no assertion that it is a loaded sheet.
   });
 
   test('quoted string and quoted url() still copy href', () => {
