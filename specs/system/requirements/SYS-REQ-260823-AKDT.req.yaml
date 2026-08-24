@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when vendored_sink_family_extracted the fixture_extraction shall always satisfy host_realm_execution_zero
+fretish: when vendored_sink_family_extracted >= 1 the fixture_extraction shall always satisfy host_realm_execution_zero <= 0
 description: 'Fixture harvesters under scripts/external_suites/ must treat vendored submodule JS as data: no bare eval of extracted arrays (extract_nv_cssom.ts:55), no vm.runInContext over full submodule files without host-realm isolation (extract_rrweb.ts:49), and no vm.runInNewContext evaluation of regex-matched object literals (extract_wpt.ts:126/:257).'
 formalization_strategy: fretish
 informal_verification:
@@ -25,7 +25,7 @@ references:
     - type: document
       id: MAINTENANCE.md#fixture-generation-details
     - type: document
-      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
 traces:
     satisfies:
         - STK-REQ-260821-BQKD
@@ -41,4 +41,4 @@ history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:03Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-23T07:46:58Z"
+    last_modified_at: "2026-08-24T11:42:00Z"

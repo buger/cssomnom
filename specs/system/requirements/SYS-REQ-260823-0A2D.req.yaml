@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when shell_metachar_arg_supplied the safe_exec_kernel shall always satisfy injected_shell_executions_zero
+fretish: when shell_metachar_arg_supplied >= 1 the safe_exec_kernel shall always satisfy injected_shell_executions_zero <= 0
 description: Every command execution in scripts/wpt/node/safe-child-process.ts must pass caller-controlled parameters as argv elements (execFileSync/execFile style); no parameter may be interpolated into a string handed to a shell (execSync). getGitNotesLog(count, ref) at safe-child-process.ts:305 must match the execGit/addGitNote argv pattern.
 formalization_strategy: fretish
 informal_verification:
@@ -23,7 +23,7 @@ variables:
     - injected_shell_executions_zero
 references:
     - type: document
-      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
     - type: document
       id: scripts/wpt/node/safe-child-process.ts#getgitnoteslog
 traces:
@@ -41,4 +41,4 @@ history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:04Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-23T07:46:59Z"
+    last_modified_at: "2026-08-24T11:42:00Z"

@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when browser_flag_traversal_supplied the wpt_browser_cli shall always satisfy report_paths_outside_dist_zero
+fretish: when browser_flag_traversal_supplied >= 1 the wpt_browser_cli shall always satisfy report_paths_outside_dist_zero <= 0
 description: scripts/wpt/browser/run.ts must validate the --browser value so that every derived log path (report-<browser>.json, <browser>-screenshots.txt, report-<browser>.html at run.ts:64-66) stays inside dist/ before the dist directory is created (mkdirSync, run.ts:74-77) and the destinations are handed to the 'wpt run' argv (--log-wptreport/--log-wptscreenshot/--log-html, run.ts:84-86); the spawned wpt child (spawn, run.ts:141-144) materializes the files at those interpolated paths.
 formalization_strategy: fretish
 informal_verification:
@@ -41,4 +41,4 @@ history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:03Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-23T07:46:58Z"
+    last_modified_at: "2026-08-24T11:42:00Z"

@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when gzip_bomb_member_supplied the wptfyi_ingest shall always satisfy decompressed_output_budget_bytes
+fretish: when gzip_bomb_member_supplied >= 1 the wptfyi_ingest shall always satisfy decompressed_output_budget_bytes <= 33554432
 description: decompressBuffer (scripts/wpt/browser/fetch-wptfyi.ts:77-88) must enforce zlib maxOutputLength against the gzip members it inflates from downloaded baseline bytes, failing closed with ERR_BUFFER_TOO_LARGE (or capping output) instead of synchronously materializing unbounded expansions.
 formalization_strategy: fretish
 informal_verification:
@@ -39,4 +39,4 @@ history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:04Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-23T07:46:59Z"
+    last_modified_at: "2026-08-24T11:42:00Z"

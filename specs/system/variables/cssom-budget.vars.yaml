@@ -88,3 +88,61 @@ variables:
       range:
         min: 0
         max: 0
+    - name: system_font_keyword_declared
+      type: bool
+      direction: input
+      description: 'A declaration whose value is exactly one system font keyword (caption|icon|menu|message-box|small-caption|status-bar, css-fonts-4 #system) reaches the font shorthand via setProperty() or parse() (reproducer KI-112 exercises all 6 keywords over parse and setProperty legs; WPT css/css-fonts/parsing/font-valid.html rows are the green controls).'
+    - name: system_font_shorthand_empty_reads
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of lone system-font-keyword declarations whose getPropertyValue(''font'') reads back empty instead of the keyword; must be zero because css-fonts-4 #font-prop admits <<system-font-family-name>> as a valid alternative and cssom-1 #parse-a-css-declaration-block drops only grammar failures (reproducer KI-112 probes 6 keywords x 2 ingress legs = 12 reads; SYSTEM_FONT_EMPTY_READ_BUDGET = 0).'
+      range:
+        min: 0
+        max: 0
+    - name: system_font_roundtrip_mismatches
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of read-back/re-set cycles where a retained system font keyword fails to round-trip (cssText or getPropertyValue(''font'') differs from the set keyword); must be zero per cssom-1 serialize-a-CSS-declaration-block emit-retained-shorthands mandate and WPT font-valid.html serialization assertions (reproducer constant SYSTEM_FONT_ROUNDTRIP_MISMATCH_BUDGET = 0).'
+      range:
+        min: 0
+        max: 0
+    - name: font_longhand_pollution_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of probed font longhands whose specified value contains the raw system font keyword instead of the empty string; must be zero per css-fonts-4 #font-prop-desc (longhand values stay at UA disposal, never the raw keyword) and WPT css/css-fonts/system-fonts-serialization.tentative.html empty-longhand assertions (reproducer KI-112 probes 13 longhands per keyword; currently red with the keyword stamped into all 13).'
+      range:
+        min: 0
+        max: 0
+    - name: font_invalid_keyword_mix_supplied
+      type: bool
+      direction: input
+      description: 'A declaration whose value mixes a system font keyword with size or family components (''font: menu 10px serif'', ''font: menu icon'') matching neither css-fonts-4 #font-prop grammar alternative appears in a block parsed via parse() (reproducer KI-113 exercises 3 invalid mixes plus the !important variant; setProperty and insertRule controls are green).'
+    - name: font_invalid_mix_retained_declarations
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of keyword-mixed grammar-failing font declarations retained by declaration-block parsing instead of dropped with getPropertyValue(''font'') returning the empty string; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 (reproducer KI-113 observes 4 red legs; FONT_INVALID_MIX_RETAINED_BUDGET = 0).'
+      range:
+        min: 0
+        max: 0
+    - name: typed_out_of_range_unit_set
+      type: bool
+      direction: input
+      description: 'A CSSUnitValue part outside the property grammar''s limited numeric range (flex-grow -3.14 against <number [0,∞]>; border-top-left-radius -3.14em against <length-percentage [0,∞]>) is stored via StylePropertyMap.set() (reproducer KI-122 legs include the getAll re-read; in-range controls green).'
+    - name: unwrapped_out_of_range_reads
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of get()/getAll() reads that reify an out-of-range part as a bare CSSUnitValue instead of wrapping it in a fresh CSSMathSum; must be zero per css-typed-om-1 #create-an-internal-representation and WPT testsuite.js assert_is_equal_with_range_handling ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum"; reproducer constant UNWRAPPED_READ_BUDGET = 0 across flex-grow, border-top-left-radius and getAll legs).'
+      range:
+        min: 0
+        max: 0
+    - name: base_only_property_value_read
+      type: bool
+      direction: input
+      description: 'StylePropertyMap.get()/getAll() reads a color or border-top-color value whose css-typed-om-1 #reify-stylevalue property-specific row ends in reify-as-a-CSSStyleValue (reproducer KI-123 probes red|#bbff00|rgb(255, 255, 128)|transparent plus border-top-color; currentcolor identifier control is green).'
+    - name: subclass_boxed_base_reads
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of such reads returning an instance of a CSSStyleValue subclass (CSSKeywordValue/CSSRGB/CSSColorValue boxing of unrepresentable values) instead of a direct CSSStyleValue carrying [[associatedProperty]]; must be zero per css-typed-om-1 #reify-failure and #reify-as-a-cssstylevalue and WPT color.html runUnsupportedPropertyTests pin "must be a CSSStyleValue and not one of its subclasses" (reproducer constant SUBCLASS_BOXED_BASE_READS = 0 across 5 defect legs).'
+      range:
+        min: 0
+        max: 0

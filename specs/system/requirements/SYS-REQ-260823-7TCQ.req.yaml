@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when sandbox_fetch_non_idl_url_supplied the wpt_runner shall always satisfy host_fetch_fallthrough_zero
+fretish: when sandbox_fetch_non_idl_url_supplied >= 1 the wpt_runner shall always satisfy host_fetch_fallthrough_zero <= 0
 description: 'sandbox.fetch must fail closed for non-/interfaces/ URLs: no URL probed by fixture JS may be forwarded from the vm sandbox bridge to the host network stack (no SSRF egress, no missing-IDL fallthrough).'
 formalization_strategy: fretish
 informal_verification:
@@ -23,9 +23,9 @@ variables:
     - host_fetch_fallthrough_zero
 references:
     - type: document
-      id: README.md#web-platform-test-wpt-conformance--parity
+      id: README.md#web-platform-test-wpt-conformance-parity
     - type: document
-      id: AGENTS.md#safe-subprocess-execution--mechanical-preflight-enforcement-safe-child-processts
+      id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
 traces:
     satisfies:
         - STK-REQ-260821-BQKD
@@ -41,4 +41,4 @@ history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:03Z"
     last_modified_by: human:cli
-    last_modified_at: "2026-08-23T07:46:58Z"
+    last_modified_at: "2026-08-24T11:42:00Z"
