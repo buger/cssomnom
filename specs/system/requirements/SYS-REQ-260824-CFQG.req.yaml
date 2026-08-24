@@ -1,0 +1,39 @@
+id: SYS-REQ-260824-CFQG
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: 'Declaration-block parsing of the color property shall enforce the css-color grammar: a declaration whose value fails the grammar (including the WPT-invalid relative color spellings such as rgb(from rebeccapurple r 10deg 10)) shall be dropped per cssom-1 #parse-a-css-declaration-block step 3.1, leaving getPropertyValue(color) empty and neighboring valid declarations intact.'
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-color-5 #relative-colors defines the relative color grammar and local WPT css/css-color/parsing/color-invalid-relative-color.html pins the invalid rows; cssom-1 licenses dropping only grammar-failing declarations. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned (formalization debt).'
+tags: []
+variables: []
+references:
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
+    - type: document
+      id: submodules/csswg-drafts/css-color-5/Overview.bs#relative-colors
+    - type: document
+      id: submodules/web-platform-tests/css/css-color/parsing/color-invalid-relative-color.html
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:ox-alpha
+    created_at: "2026-08-24T07:12:29Z"
+    last_modified_by: agent:ox-alpha
+    last_modified_at: "2026-08-24T07:12:29Z"

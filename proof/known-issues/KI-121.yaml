@@ -1,0 +1,36 @@
+id: KI-121
+title: 'Serializer drops the attr() namespace pipe: attr(|bar) round-trips as attr(bar), losing the attribute reference qualification on reparse'
+description: 'Setting content to attr(|bar) (or the WPT rows attr( |bar ) and attr(|bar, "fallback")) serializes back with the namespace prefix and pipe silently removed — attr(bar) — changing which attribute the function references and corrupting serialize-then-reparse fidelity. Local WPT css/cssom/serialize-values.html pins verbatim serializations for these namespaced <<attr-name>> rows, whose grammar (css-values-5 #attr ~line 1983: <<attr-name>> = [ <<ident-token>>? | ]? <<ident-token>>) makes the optional namespace part of the value. Dedup: distinct from KI-21 (hash/function identifier escaping); this is lossy normalization of a grammar-legal namespaced function argument.'
+affected_requirements:
+    - SYS-REQ-260824-XRYP
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-121.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleDeclaration.setProperty() / getPropertyValue() / parse() content serialization
+attacker_input: ordinary content declarations using namespaced attr() references; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat serialized attr() output as potentially namespace-stripped; keep the original source text where fidelity matters.
+remediation: Preserve the namespaced <<attr-name>> token stream through parse/serialize so attr(|bar)-family values round-trip verbatim per WPT serialize-values.html.
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T07:14:52Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T07:15:00Z"
+      by: agent:ox-alpha
+      action: capture-evidence
+      detail: proof/evidence/ki-121.yaml
+kill_domain: serializer_equivalence
+do_not_refile_as: cssText structural breakout via escaped identifiers (KI-21)

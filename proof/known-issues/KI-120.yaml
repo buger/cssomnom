@@ -1,0 +1,36 @@
+id: KI-120
+title: 'Declaration values retain insignificant trailing whitespace: getPropertyValue returns "red " for color:red ;'
+description: 'A declaration written with whitespace before the semicolon stores its value with the trailing <whitespace-token> attached, so getPropertyValue(color) returns "red " instead of the canonical "red" (same for calc(1px) and url("x") values). css-syntax-3 #consume-declaration normatively removes trailing whitespace tokens from the declaration value before storage ("While the last item in decl value is a <whitespace-token>, remove that token"), and cssom-1 #serialize-a-css-declaration appends the stored value verbatim, so the polluted stored value leaks into serialized surfaces. Dedup: distinct from KI-41 (parser-API at-rule prelude whitespace filtering).'
+affected_requirements:
+    - SYS-REQ-260824-BJTQ
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-120.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSStyleRule.style.getPropertyValue() / cssText
+attacker_input: ordinary stylesheet text with insignificant whitespace between a value and its semicolon; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Trim values read via getPropertyValue before byte-exact comparisons.
+remediation: 'Apply the css-syntax-3 #consume-declaration trailing-whitespace removal when storing parsed declarations so every read/serialize surface returns canonical values.'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T07:14:39Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T07:15:00Z"
+      by: agent:ox-alpha
+      action: capture-evidence
+      detail: proof/evidence/ki-120.yaml
+kill_domain: canonical_serialization
+do_not_refile_as: at-rule prelude whitespace corruption in the parser API (KI-41)

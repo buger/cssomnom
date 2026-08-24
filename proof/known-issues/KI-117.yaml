@@ -1,0 +1,36 @@
+id: KI-117
+title: Grammar-invalid relative color values are retained instead of dropped by declaration-block parsing
+description: 'Declaration-block parsing keeps color declarations whose values fail the css-color grammar, including every WPT css/css-color/parsing/color-invalid-relative-color.html row probed (rgb/hsl/hwb/lab/oklch channel-type mismatches and invalid component names such as rgb(from rebeccapurple r 10deg 10) and rgb(from rebeccapurple red g b)). cssom-1 #parse-a-css-declaration-block step 3.1 requires parsing each declaration per the appropriate specifications and DROPPING the parts said to be ignored; a grammar-invalid value must yield an empty getPropertyValue(color) while valid neighbors survive. The reproducer also carries a green positive control proving valid relative colors round-trip, pinning that this is retention-of-invalid, not blanket rejection.'
+affected_requirements:
+    - SYS-REQ-260824-CFQG
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-117.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSStyleRule.style.getPropertyValue('color')
+attacker_input: ordinary stylesheet text with grammar-invalid color/relative-color declarations; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not trust parsed color values as grammar-validated input downstream; treat retained spellings as unvalidated text.
+remediation: 'Implement the css-color grammar check for the color property in declaration-block parsing and drop failing declarations per cssom-1 #parse-a-css-declaration-block step 3.1, preserving neighboring valid declarations (WPT color-invalid-relative-color.html).'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T07:14:01Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T07:14:59Z"
+      by: agent:ox-alpha
+      action: capture-evidence
+      detail: proof/evidence/ki-117.yaml
+kill_domain: grammar_drop_omission
+do_not_refile_as: 'ledger-cluster framing "valid lch(from ...) drops whole rules / stylesheet serializes empty": investigated and DISPROVEN — valid relative colors round-trip and bare-value stylesheets correctly yield zero rules per css-syntax'

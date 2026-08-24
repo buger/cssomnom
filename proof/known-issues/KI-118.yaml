@@ -1,0 +1,36 @@
+id: KI-118
+title: NaN math results serialize with a lowercase nan identifier instead of the canonical NaN keyword
+description: 'CSSStyleValue.parse(...).toString() serializes evaluated NaN results as calc(nan) / calc(calc(nan * 1px)) — a lowercase identifier. css-values-4 #calc-serialize step 2 ("serialize a math function") makes the spelling normative: serialize the keyword infinity, -infinity, or NaN, as appropriate; for a length-typed result the form is calc(NaN * 1px), matching local WPT css/css-values/calc-infinity-nan-serialize-length.html rows (1px * NaN -> calc(NaN * 1px); 1px * iNFinIty -> calc(infinity * 1px)). The wpt-cssom known-failure baseline carries 160 entries across the five calc-infinity-nan-serialize-* fixtures. Root-dedup: distinct from KI-39 (degenerate-Sum parenthesization/structure drift); this KI pins only canonical keyword casing via structure-independent assertions.'
+affected_requirements:
+    - SYS-REQ-260824-N9AE
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-118.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse() / CSSMathValue.toString()
+attacker_input: ordinary calc() strings evaluating to NaN (e.g. calc(NaN), calc(1px * NaN)); no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not compare serialized NaN-bearing math values across implementations until the keyword casing is fixed.
+remediation: 'Route NaN/infinity results through the #calc-serialize step-2 keyword branch emitting exactly NaN/infinity/-infinity, with the canonical unit multiplier for non-empty types (validation of exact anchor wording pending Scrutineer pass).'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T07:14:14Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T07:14:59Z"
+      by: agent:ox-alpha
+      action: capture-evidence
+      detail: proof/evidence/ki-118.yaml
+kill_domain: serializer_equivalence
+do_not_refile_as: 'calc serialization fixpoint/parenthesization drift (KI-39): wrapper structure is intentionally NOT asserted here so the two reproducers fail independently'

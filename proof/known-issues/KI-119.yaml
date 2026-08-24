@@ -1,0 +1,36 @@
+id: KI-119
+title: Repeated declarations (font shorthand, color) silently replace the earlier declaration instead of both being retained
+description: 'Parsing p{font:22px Helvetica; font:xxx-large system-ui} retains only 13 declaration entries — the second font shorthand wholesale replaces the first; likewise a{color:red;color:green} collapses to length 1. cssom-1 #parse-a-css-declaration-block appends EVERY successfully parsed declaration and contains no same-name replacement step, and the CSSStyleDeclaration.length definition counts retained declarations, so both sets must survive with the second starting at index 13. Cascade arbitration (which duplicate wins) belongs at computed-value time, not to parse-time mutation. Interpretation flagged: expected counts follow the reproducer control demonstrating cssomnom own 13-longhand expansion granularity; the plain color case is granularity-independent. Validation of this interpretation pending Scrutineer pass. Dedup: distinct root from KI-112/KI-113 (system-keyword expansion / invalid-mix acceptance) and KI-36 (missing expansion table) — here both declarations are ordinary valid values.'
+affected_requirements:
+    - SYS-REQ-260824-EVNP
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-119.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSStyleRule.style.length / item() / getPropertyValue()
+attacker_input: ordinary stylesheet text repeating a property or shorthand within one declaration block; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on style.length/item() as a faithful index of authored declarations when a block repeats properties.
+remediation: 'Retain duplicate same-name declarations in the declarations list per cssom-1 #parse-a-css-declaration-block append semantics; arbitrate winners only during cascade resolution.'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T07:14:28Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T07:15:00Z"
+      by: agent:ox-alpha
+      action: capture-evidence
+      detail: proof/evidence/ki-119.yaml
+kill_domain: declaration_retention
+do_not_refile_as: font system-keyword shorthand serialization (KI-112); font invalid-mix retention (KI-113); missing shorthand expansion table (KI-36)
