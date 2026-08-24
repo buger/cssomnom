@@ -1,25 +1,27 @@
 id: SYS-REQ-260823-YQPJ
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when system_font_keyword_declared the cssom shall always satisfy font_longhand_pollution_count <= 0
 description: 'A retained system-font-keyword font declaration shall not stamp the keyword into the specified values of its longhands: every font longhand serializes the empty string while the shorthand itself serializes as-is, and cssText contains no font-variant or other longhand pollution.'
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: 'Local WPT css/css-fonts/system-fonts-serialization.tentative.html asserts for each of caption|icon|menu|message-box|small-caption|status-bar that target.style.font serializes as-is, [...style] lists the longhands, and each longhand serializes the empty string. css-fonts-4 #font-prop-desc keeps system-font longhand values at the disposal of the UA (initial values when unavailable), never the raw keyword as a specified longhand value. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned.'
+rationale: 'Local WPT css/css-fonts/system-fonts-serialization.tentative.html asserts for each of caption|icon|menu|message-box|small-caption|status-bar that target.style.font serializes as-is, [...style] lists the longhands, and each longhand serializes the empty string. css-fonts-4 #font-prop-desc keeps system-font longhand values at the disposal of the UA (initial values when unavailable), never the raw keyword as a specified longhand value. Formalized 2026-08-24 after specs/system/variables/cssom.vars.yaml ownership conflict cleared; the <= 0 budget counts the 13 font longhands probed by reproducer KI-112 per keyword (currently red: keyword stamped into all 13).'
 tags:
     - cssom
     - conformance
     - known-issue
     - font-shorthand
-variables: []
+variables:
+    - system_font_keyword_declared
+    - font_longhand_pollution_count
 references:
     - type: document
       id: submodules/web-platform-tests/css/css-fonts/system-fonts-serialization.tentative.html
@@ -27,10 +29,12 @@ references:
       id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-prop
     - type: document
       id: submodules/csswg-drafts/css-fonts-4/Overview.bs#system-font-family-name-value
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -39,5 +43,18 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-23T11:26:52Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-23T11:26:52Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:00:00Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:00:00Z"
+          from: draft
+          to: review
+          reason: review via campaign LOOP gate on landing commit
+          changed_by: agent:champ
+        - date: "2026-08-24T12:00:00Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: 'auto-derived [not_started→failing] signals=1; known_issue:KI-112=failing (reproducer KI-112 re-run red at HEAD 2026-08-24)'
+          changed_by: agent:champ

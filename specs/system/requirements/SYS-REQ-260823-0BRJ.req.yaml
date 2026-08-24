@@ -1,25 +1,27 @@
 id: SYS-REQ-260823-0BRJ
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when font_invalid_keyword_mix_supplied the cssom shall always satisfy font_invalid_mix_retained_declarations <= 0
 description: 'Parsing a declaration block shall drop a font declaration whose value mixes a system font keyword with size or family components (for example ''font: menu 10px serif'' or ''font: menu icon''): the failing declaration is ignored and getPropertyValue(''font'') returns the empty string, matching the ignore-invalid contract already honored by setProperty and insertRule.'
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: 'css-fonts-4 #font-prop allows <<system-font-family-name>> only as a lone alternative, and the #font-prop-desc note (~line 1990) says the keywords are treated as keywords only in initial position; a keyword followed by size/family matches neither grammar alternative. Local WPT css/css-fonts/parsing/font-invalid.html test_invalid_value(''font'', ''menu icon'') confirms the mix is invalid. cssom-1 #parse-a-css-declaration-block step 3.1 drops declarations that fail their grammar. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned.'
+rationale: 'css-fonts-4 #font-prop allows <<system-font-family-name>> only as a lone alternative, and the #font-prop-desc note (~line 1990) says the keywords are treated as keywords only in initial position; a keyword followed by size/family matches neither grammar alternative. Local WPT css/css-fonts/parsing/font-invalid.html test_invalid_value(''font'', ''menu icon'') confirms the mix is invalid. cssom-1 #parse-a-css-declaration-block step 3.1 drops declarations that fail their grammar. Formalized 2026-08-24 after specs/system/variables/cssom.vars.yaml ownership conflict cleared; the <= 0 budget covers the reproducer KI-113 legs (3 invalid mixes + the !important variant; setProperty/insertRule controls green, parse() legs currently red).'
 tags:
     - cssom
     - conformance
     - known-issue
     - font-shorthand
-variables: []
+variables:
+    - font_invalid_keyword_mix_supplied
+    - font_invalid_mix_retained_declarations
 references:
     - type: document
       id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-prop
@@ -29,10 +31,12 @@ references:
       id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
     - type: document
       id: submodules/web-platform-tests/css/css-fonts/parsing/font-invalid.html
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -41,5 +45,18 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-23T11:27:10Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-23T11:27:10Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:00:00Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:00:00Z"
+          from: draft
+          to: review
+          reason: review via campaign LOOP gate on landing commit
+          changed_by: agent:champ
+        - date: "2026-08-24T12:00:00Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: 'auto-derived [not_started→failing] signals=1; known_issue:KI-113=failing (reproducer KI-113 re-run red at HEAD 2026-08-24)'
+          changed_by: agent:champ

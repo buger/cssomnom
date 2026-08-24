@@ -1,25 +1,28 @@
 id: SYS-REQ-260823-S4DW
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when system_font_keyword_declared the cssom shall always satisfy system_font_shorthand_empty_reads <= 0 and system_font_roundtrip_mismatches <= 0
 description: Setting or parsing a font declaration whose value is exactly one system font keyword (caption, icon, menu, message-box, small-caption, status-bar) shall leave getPropertyValue('font') non-empty and equal to the keyword, so reading it back and re-setting it round-trips.
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: 'css-fonts-4 #font-prop Value grammar ends ''| <<system-font-family-name>>'' and #system enumerates caption|icon|menu|message-box|small-caption|status-bar, so a lone system keyword is grammatically valid; cssom-1 #parse-a-css-declaration-block licenses dropping only declarations that fail their grammar, and cssom-1 serialize-a-CSS-declaration-block must emit retained shorthands. Local WPT css/css-fonts/parsing/font-valid.html asserts font is set and serialization round-trips for each keyword. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned.'
+rationale: 'css-fonts-4 #font-prop Value grammar ends ''| <<system-font-family-name>>'' and #system enumerates caption|icon|menu|message-box|small-caption|status-bar, so a lone system keyword is grammatically valid; cssom-1 #parse-a-css-declaration-block licenses dropping only declarations that fail their grammar, and cssom-1 serialize-a-CSS-declaration-block must emit retained shorthands. Local WPT css/css-fonts/parsing/font-valid.html asserts font is set and serialization round-trips for each keyword. Formalized 2026-08-24 after specs/system/variables/cssom.vars.yaml ownership conflict cleared; quantitative budgets from reproducer KI-112 (6 keywords x parse/setProperty legs; currently red).'
 tags:
     - cssom
     - conformance
     - known-issue
     - font-shorthand
-variables: []
+variables:
+    - system_font_keyword_declared
+    - system_font_shorthand_empty_reads
+    - system_font_roundtrip_mismatches
 references:
     - type: document
       id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-prop
@@ -29,10 +32,12 @@ references:
       id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
     - type: document
       id: submodules/web-platform-tests/css/css-fonts/parsing/font-valid.html
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -41,5 +46,18 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-23T11:26:35Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-23T11:26:35Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:00:00Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:00:00Z"
+          from: draft
+          to: review
+          reason: review via campaign LOOP gate on landing commit
+          changed_by: agent:champ
+        - date: "2026-08-24T12:00:00Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: 'auto-derived [not_started→failing] signals=1; known_issue:KI-112=failing (reproducer KI-112 re-run red at HEAD 2026-08-24)'
+          changed_by: agent:champ

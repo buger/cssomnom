@@ -1,0 +1,90 @@
+component: cssom
+variables:
+    - name: quoted_url_border_image_declared
+      type: bool
+      direction: input
+      description: 'A grammatically valid border-image declaration whose <<url>> source arrives as a function token named url (the quoted form css-syntax-3 #consume-ident-like-token produces), optionally with a numeric slice, is parsed via parse() (reproducer KI-114 exercises 4 defect legs plus 3 green WPT border-shorthand-serialization.html controls).'
+    - name: border_image_retention_loss
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of parse cycles where a declared border-image value is laundered to all-initial longhands, silently loses its slice component, or is omitted from cssText serialization; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 (drop only grammar failures) and #serialize-a-css-declaration-block no-omission loop (reproducer constant BORDER_IMAGE_DEFECT_LEGS = 4, all of which must retain).'
+      range:
+        min: 0
+        max: 0
+    - name: border_image_url_reparsed
+      type: bool
+      direction: input
+      description: 'The serialized text of a parsed border-image:url() declaration is fed back through parse() (one-cycle fixpoint probe; reproducer KI-116 exercises shorthand read-back, border-image-source longhand, and cssText stability legs against a background:url() property-specific control).'
+    - name: border_image_fixpoint_drift
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of serialize/re-parse cycles where the re-parsed border-image differs from pass 1 (e.g. collapsing url("") to none); must be zero per css-syntax-3 #serialization round-trip mandate.'
+      range:
+        min: 0
+        max: 0
+    - name: grouped_negation_media_roundtripped
+      type: bool
+      direction: input
+      description: 'A media condition containing a negated term wrapped in grouping parentheses ((not (x)) and (r)) is parsed, serialized via conditionText, and re-parsed (reproducer KI-115 exercises condition-level and whole-rule round-trip legs with mq-invalid-media-type-005.html grammar-error rows as green controls).'
+    - name: media_condition_collapse_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of round-trips where serialized conditionText fails the mediaqueries-4 #mq-syntax grammar on re-parse and is replaced by ''not all'' (#error-handling ~line 1031); must be zero per css-syntax-3 #serialization.'
+      range:
+        min: 0
+        max: 0
+    - name: trailing_whitespace_declared
+      type: bool
+      direction: input
+      description: 'A declaration carries an insignificant <whitespace-token> between its value and the closing semicolon (reproducer KI-120 probes 3 value shapes: ident red, function calc(1px), url(x)).'
+    - name: value_whitespace_leak_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of stored declaration values whose trailing whitespace survives into getPropertyValue()/cssText; must be zero per css-syntax-3 #consume-declaration trailing-whitespace removal ("While the last item in decl value is a <whitespace-token>, remove that token").'
+      range:
+        min: 0
+        max: 0
+    - name: grammar_invalid_color_declared
+      type: bool
+      direction: input
+      description: 'A color declaration whose value fails the css-color relative-color grammar (WPT css/css-color/parsing/color-invalid-relative-color.html test_invalid_value spellings) appears in a declaration block (reproducer KI-117 probes 10 such rows).'
+    - name: invalid_color_retention_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of grammar-invalid color declarations retained instead of dropped by declaration-block parsing; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 while valid neighbors survive (reproducer constant INVALID_RELATIVE_COLORS = 10 rows, neighbor control expects exactly 2 surviving declarations).'
+      range:
+        min: 0
+        max: 0
+    - name: duplicate_declaration_parsed
+      type: bool
+      direction: input
+      description: 'A declaration block repeats a property or shorthand (color twice; font:22px Helvetica then font:xxx-large system-ui) and is parsed via parse() (reproducer KI-119; single-font control pins the 13-longhand expansion granularity used for expected counts).'
+    - name: dropped_duplicate_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of successfully parsed declarations silently replaced instead of appended; must be zero per cssom-1 #parse-a-css-declaration-block append semantics (expected lengths: repeated color -> 2, repeated font -> 26 at the demonstrated 13-longhand granularity; reproducer constants EXPECTED_COLOR_LENGTH = 2, EXPECTED_FONT_LENGTH = 26).'
+      range:
+        min: 0
+        max: 0
+    - name: nan_math_result_serialized
+      type: bool
+      direction: input
+      description: 'A calc() expression evaluating to NaN (calc(NaN), calc(1px * NaN), calc(1px * infinity / infinity)) is serialized via CSSStyleValue.parse(...).toString() (reproducer KI-118; structure-independent casing predicate avoids KI-39 wrapper overlap).'
+    - name: noncanonical_nan_keyword_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of NaN-result serializations containing a standalone lowercase nan token instead of the canonical NaN keyword; must be zero per css-values-4 #calc-serialize step 2 ("Serialize the keyword infinity, -infinity, or NaN") and local WPT calc-infinity-nan-serialize-length.html rows (reproducer constant NONCANONICAL_NAN_BUDGET = 0 across 3 probed forms; wpt-cssom baseline carries 160 related rows).'
+      range:
+        min: 0
+        max: 0
+    - name: namespaced_attr_value_set
+      type: bool
+      direction: input
+      description: 'A content declaration whose attr() argument uses a namespaced <<attr-name>> ([<ident-token>|]? <ident-token>, css-values-5 #attr) is set via CSSStyleDeclaration.setProperty() or stylesheet parsing (reproducer KI-121 probes 4 namespaced rows verbatim from local WPT css/cssom/serialize-values.html).'
+    - name: attr_namespace_drop_count
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of set/get or parse/serialize cycles where the namespace pipe is silently stripped from the attr() argument (attr(|bar) -> attr(bar)); must be zero for verbatim round-trip fidelity per WPT serialize-values.html pinned serializations (reproducer constant ATTR_NAMESPACE_DROPS = 0 across 4 probed rows plus a reparse witness).'
+      range:
+        min: 0
+        max: 0

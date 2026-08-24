@@ -1,21 +1,23 @@
 id: SYS-REQ-260824-XE59
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when base_only_property_value_read the cssom shall always satisfy subclass_boxed_base_reads <= 0
 description: 'Reification of declaration values shall follow the per-property rules of css-typed-om-1 #reify-property: for properties whose normalization row ends in reify-as-a-CSSStyleValue (e.g. color and border-top-color for every value other than currentcolor), StylePropertyMap.get()/getAll() shall return a direct CSSStyleValue whose [[associatedProperty]] names the property, not an instance of a CSSStyleValue subclass (no CSSKeywordValue/CSSRGB/CSSColorValue boxing of unrepresentable values).'
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: 'css-typed-om-1 #reify-stylevalue "Property-specific Rules" states the list defines reification for every property; the color/border-top-color rows step 2 say "reify as a CSSStyleValue", and #reify-failure/#reify-as-a-cssstylevalue define the direct object with [[associatedProperty]]. Local WPT color.html runUnsupportedPropertyTests pins "Unsupported value must be a CSSStyleValue and not one of its subclasses" (204 failing sandbox rows across typed-om property fixtures). Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned (formalization debt).'
+rationale: 'css-typed-om-1 #reify-stylevalue "Property-specific Rules" states the list defines reification for every property; the color/border-top-color rows step 2 say "reify as a CSSStyleValue", and #reify-failure/#reify-as-a-cssstylevalue define the direct object with [[associatedProperty]]. Local WPT color.html runUnsupportedPropertyTests pins "Unsupported value must be a CSSStyleValue and not one of its subclasses" (204 failing sandbox rows across typed-om property fixtures). Formalized 2026-08-24 after specs/system/variables/cssom.vars.yaml ownership conflict cleared; the <= 0 budget counts subclass-boxed reads over the reproducer KI-123 legs (red|#bbff00|rgb(255, 255, 128)|transparent + border-top-color; currentcolor identifier control green, defect legs currently red, [[associatedProperty]] pin green today and must stay true).'
 tags: []
-variables: []
+variables:
+    - base_only_property_value_read
+    - subclass_boxed_base_reads
 references:
     - type: document
       id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#reify-stylevalue
@@ -23,10 +25,12 @@ references:
       id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#reify-failure
     - type: document
       id: submodules/web-platform-tests/css/css-typed-om/the-stylepropertymap/properties/color.html
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -35,5 +39,18 @@ verification:
 history:
     created_by: agent:ox-alpha
     created_at: "2026-08-24T08:59:20Z"
-    last_modified_by: agent:ox-alpha
-    last_modified_at: "2026-08-24T08:59:20Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:00:00Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:00:00Z"
+          from: draft
+          to: review
+          reason: review via campaign LOOP gate on landing commit
+          changed_by: agent:champ
+        - date: "2026-08-24T12:00:00Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: 'auto-derived [not_started→failing] signals=1; known_issue:KI-123=failing (reproducer KI-123 re-run red at HEAD 2026-08-24)'
+          changed_by: agent:champ

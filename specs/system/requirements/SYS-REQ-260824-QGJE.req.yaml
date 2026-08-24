@@ -1,21 +1,23 @@
 id: SYS-REQ-260824-QGJE
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when typed_out_of_range_unit_set the cssom shall always satisfy unwrapped_out_of_range_reads <= 0
 description: 'Typed-value storage of the StylePropertyMap shall enforce limited numeric ranges per css-typed-om-1 #create-an-internal-representation: when a component of the property grammar has a limited numeric range and a CSSUnitValue part of the value is outside that range (e.g. flex-grow -3.14 against <number [0,∞]>, border-top-left-radius -3.14em against <length-percentage [0,∞]>), the stored internal representation shall replace that part with a fresh CSSMathSum wrapping exactly it, so get()/getAll() reify a CSSMathSum containing the input unit value.'
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: 'css-typed-om-1 #create-an-internal-representation mandates the out-of-range wrap; WPT testsuite.js assert_is_equal_with_range_handling pins it ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum") across 42 typed-om property fixtures (150 failing sandbox rows). Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned (formalization debt).'
+rationale: 'css-typed-om-1 #create-an-internal-representation mandates the out-of-range wrap; WPT testsuite.js assert_is_equal_with_range_handling pins it ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum") across 42 typed-om property fixtures (150 failing sandbox rows). Formalized 2026-08-24 after specs/system/variables/cssom.vars.yaml ownership conflict cleared; the <= 0 budget counts get()/getAll() reads reifying an out-of-range part as a bare CSSUnitValue over the reproducer KI-122 legs (flex-grow -3.14 number, border-top-left-radius -3.14em, getAll leg; in-range controls green, defect legs currently red).'
 tags: []
-variables: []
+variables:
+    - typed_out_of_range_unit_set
+    - unwrapped_out_of_range_reads
 references:
     - type: document
       id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#create-an-internal-representation
@@ -23,10 +25,12 @@ references:
       id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#reify-stylevalue
     - type: document
       id: submodules/web-platform-tests/css/css-typed-om/the-stylepropertymap/properties/resources/testsuite.js
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -35,5 +39,18 @@ verification:
 history:
     created_by: agent:ox-alpha
     created_at: "2026-08-24T08:59:09Z"
-    last_modified_by: agent:ox-alpha
-    last_modified_at: "2026-08-24T08:59:09Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:00:00Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:00:00Z"
+          from: draft
+          to: review
+          reason: review via campaign LOOP gate on landing commit
+          changed_by: agent:champ
+        - date: "2026-08-24T12:00:00Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: 'auto-derived [not_started→failing] signals=1; known_issue:KI-122=failing (reproducer KI-122 re-run red at HEAD 2026-08-24)'
+          changed_by: agent:champ
