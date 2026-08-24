@@ -179,7 +179,7 @@ project:
         fuzz: node --test --test-reporter=dot tests/css-fuzz-cssomnom.test.ts
     description: Spec-compliant CSS Object Model (CSSOM) and Typed OM parser in pure TypeScript
     catalog:
-        version: 1.9.1
+        version: 1.10.0
     # Overlay catalog class used by SYS-REQ-260821-H3BD / KI-7 (offline parse
     # never fetches). Adopted so catalog_completeness does not treat
     # proof/catalog/domain/no_external_io_on_parse.yaml as an orphan.

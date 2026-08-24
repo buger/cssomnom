@@ -30,17 +30,22 @@ verification:
     formalization_status: valid
     review:
         status: approved
-        reviewer: agent:grok-4.6
+        reviewer: human:Leonid Bugaev
         role: spec-conformance
         roles:
             - spec-conformance
-        reviewed_at: "2026-08-22T06:56:42Z"
-        comment: 'Class-closure DEFECT-3T1G: @import url-token copies into href.'
+        reviewed_at: "2026-08-24T22:38:12Z"
+        comment: 'Re-approved against DEFECT-260824-5SWC class-fix: CSSImportRule.styleSheet now returns a real, linked, host-fillable associated stylesheet offline (cssom-1 § 6.4.3); fetch stays excluded as documented deviation.'
         fingerprint: sha256:9ed16b1dc8314e45cf9700c3d82c67f112cdda875749cd0168bfc98b1e6a1c00
         ai_generated: false
         motivation:
             kind: defect
-            ref: DEFECT-260822-3T1G
+            ref: DEFECT-260824-5SWC
+        motivation_history:
+            - kind: defect
+              ref: DEFECT-260822-3T1G
+              superseded_at: "2026-08-24T22:38:12Z"
+              superseded_by: human:Leonid Bugaev
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"
@@ -51,8 +56,8 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:00Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T06:56:42Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T22:38:12Z"
 obligation_checklist:
     - nominal
 verification_state: failing
@@ -68,3 +73,8 @@ lifecycle:
           to: verification=failing
           reason: auto-derived [not_started→failing] signals=2; review_record:REVIEW-22=present | known_issue:KI-7=failing
           changed_by: agent:grok-4.6
+        - date: "2026-08-24T22:38:12Z"
+          from: approved
+          to: approved
+          reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T06:56:42Z comment="Class-closure DEFECT-3T1G: @import url-token copies into href.")'
+          changed_by: human:Leonid Bugaev

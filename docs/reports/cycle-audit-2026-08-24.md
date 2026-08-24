@@ -1386,7 +1386,9 @@ env() stored-all is the same path (hasVar includes env().
 handleImportRule copied string tokens and url() functions but not first.type === 'url',
 so href was "" and leftover <url-token> serialized as mediaText (cssText url("") url("foo.css")).
 Product fix copies url-token .value into href. Does not fetch; CSSImportRule.styleSheet
-remains the never-fetched placeholder (KI-7 stays open).
+exposes the associated stylesheet's empty pre-load state per cssom-1 § 6.4.3, with network
+fetch excluded as a documented deviation. KI-7 recorded that associated-sheet contract and
+closed as fixed on 2026-08-23.
 
 - **Root cause / remediation:** 5W6X named @import href; the unquoted <url-token> partition was unwitnessed until KI-8.
 - **Affected files:**
