@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T20:32:20Z"
+executed_at: "2026-08-24T22:25:02Z"
 input_set:
     - proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts: sha256:a4b08dd3940451973227a6191cebeba21ff33470f171447d41c472a2451fbe3c
+    proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts: sha256:cc3cbc6577bcf05dbcd728652f8c6fea31d7af2adaf9d031946b79ff4b145f1a
 known_issues:
     - KI-40

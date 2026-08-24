@@ -6,11 +6,11 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:32Z"
+executed_at: "2026-08-24T22:24:58Z"
 input_set:
     - proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts: sha256:bdfd060e81cdd742c8469ac0a2ce3628712912783219675499a7988cf8a38fc0
+    proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts: sha256:690269f5084bf8fc827cc25cb139dd1f8d5f3d1ab5232579f5a3b6fc750f7b2a
 known_issues:
     - KI-27
 history:

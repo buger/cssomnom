@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:49Z"
+executed_at: "2026-08-24T22:25:05Z"
 input_set:
     - proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts: sha256:e42d95196b89b7e8784c1fc5b58a230141d4434a50a481f5d5fd7428aee2e376
+    proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts: sha256:a35f70d6de8fbec233af292081744eee672eda226500a33e3231402dca0c632f
 known_issues:
     - KI-111

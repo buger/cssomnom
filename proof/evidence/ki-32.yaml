@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:13Z"
+executed_at: "2026-08-24T22:24:59Z"
 input_set:
     - proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts: sha256:a097cf960df92162108dbdc427ce11f414f942bec1036735fddb1821f50e1493
+    proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts: sha256:8a84711bbdf0ce093b954837c8c9bb913939e788183e50cd1ef1f0acb9dad13f
 known_issues:
     - KI-32

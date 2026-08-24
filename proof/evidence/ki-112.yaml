@@ -7,10 +7,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T11:36:30Z"
+executed_at: "2026-08-24T22:25:05Z"
 input_set:
     - proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts: sha256:7093b287ad98b4b4d7079fde8fb26c40109583166d6538115e6a383bdbb5f9aa
+    proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts: sha256:51ad7a74b4ce2f621f951d28287983be035b2bd7a00fabb65c4800a9d4687ff9
 known_issues:
     - KI-112

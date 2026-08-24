@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:29Z"
+executed_at: "2026-08-24T22:24:55Z"
 input_set:
     - proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts: sha256:986890cda26b785b377efaa06180b900cdf3eeb45530ea416654b7513440cf34
+    proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts: sha256:7b1a2b2bca9834d30bcaccd3f532a17bb6b316567b6f5e82e273e924ad2cb209
 known_issues:
     - KI-15

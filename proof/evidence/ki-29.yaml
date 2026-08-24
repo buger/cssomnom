@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:23Z"
+executed_at: "2026-08-24T22:24:58Z"
 input_set:
     - proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts: sha256:72edd4d6eee95a30de223af1a39d9d00e48f23032a1f5f01106c005bcc215c18
+    proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts: sha256:5d2565f32ff88dbf5d4dc9f458c527852053089f627cda46f23f205ac0ef9e3f
 known_issues:
     - KI-29

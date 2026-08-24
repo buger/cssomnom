@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T08:49:58Z"
+executed_at: "2026-08-24T22:25:03Z"
 input_set:
     - proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts: sha256:7b2c4358d98695d5a2b101e31ac68a258a0d67ecc127f046d57dc25aba5506c3
+    proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts: sha256:ecf7158dfdfb714496bfc9c11b7800a91fc0866fa6bca85a81118ba075ca45c4
 known_issues:
     - KI-44

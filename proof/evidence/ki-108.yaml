@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:47Z"
+executed_at: "2026-08-24T22:25:04Z"
 input_set:
     - proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts: sha256:b360bde77e2a2cb9540a663d1fd23049631844cd9a94e27974876379bb0ca714
+    proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts: sha256:9cf2216d95d94ccc545521e38e3430270586cd73fe31f0917410b8e6370785b7
 known_issues:
     - KI-108

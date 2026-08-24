@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:51Z"
+executed_at: "2026-08-24T22:25:08Z"
 input_set:
     - proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts: sha256:ff602479366cef89d2de756717ddc57c10965a0d9bc2a56eec174257c600ce41
+    proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts: sha256:cc74ed710c2881fef31941afe585bce3354b815cd6574f4331ebd86ff8596dc0
 known_issues:
     - KI-120

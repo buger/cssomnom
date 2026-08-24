@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T20:32:22Z"
+executed_at: "2026-08-24T22:25:03Z"
 input_set:
     - proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts: sha256:40517d429b566ebf5bb9bd03a004b9f70abc4fdd660155f04585887709535215
+    proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts: sha256:2e38123f830527317132670b7ac76053d5c5b797194d23c61cc986b21288750a
 known_issues:
     - KI-45

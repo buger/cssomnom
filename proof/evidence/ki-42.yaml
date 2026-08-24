@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T20:32:20Z"
+executed_at: "2026-08-24T22:25:02Z"
 input_set:
     - proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts: sha256:a0f279fd37f051e73e3522003438344ce211fe4b12bfd2a98f0f97e4ca244caa
+    proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts: sha256:9cdde10d9169547d6e548e3789a63c459390ca07a70248d9826a60e6ed430ebe
 known_issues:
     - KI-42

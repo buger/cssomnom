@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:16Z"
+executed_at: "2026-08-24T22:25:01Z"
 input_set:
     - proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts: sha256:362676231b961fee566142d65f15d6b2c99926bb0d6c8beef072ce2b5ced0bba
+    proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts: sha256:a36c69a4b7731e31409713519936a9700b37efec28b86e64c9ebc29dda40d80e
 known_issues:
     - KI-39

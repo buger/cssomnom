@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:49Z"
+executed_at: "2026-08-24T22:25:06Z"
 input_set:
     - proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts: sha256:e887f338bb1aab2d44d64015e9165d22133edd869dc59f7975f1f1f20b41970e
+    proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts: sha256:331bcb1bb0f784e1d43b5633beb165ed56305239bec456eac980d399682931fb
 known_issues:
     - KI-114

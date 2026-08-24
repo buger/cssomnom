@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:15Z"
+executed_at: "2026-08-24T22:25:00Z"
 input_set:
     - proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts: sha256:22e8584443de9360cf51443519ad6b9fc4cb68605a76cc96130505dbe7e733be
+    proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts: sha256:d115c8463a758f9f49adaa3ba569b214f83da2aa434f9c27d31fecc5752ea04b
 known_issues:
     - KI-36

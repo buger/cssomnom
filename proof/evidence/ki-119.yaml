@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:51Z"
+executed_at: "2026-08-24T22:25:08Z"
 input_set:
     - proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts: sha256:c3f401c6a099584403bcfe8bada317569a02cae7e946666ded195a24a24f7d4b
+    proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts: sha256:dd29e4657091290492fbeaccdc83ddba2409db4ce85e20d62a4159ccf4902709
 known_issues:
     - KI-119

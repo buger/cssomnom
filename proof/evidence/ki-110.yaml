@@ -7,10 +7,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:48Z"
+executed_at: "2026-08-24T22:25:05Z"
 input_set:
     - proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts: sha256:a13db0fd621c6ce4f6159ab3c4b08cf5aafbde058515b2749678b37c4c21ddb7
+    proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts: sha256:4af847a9c6b8b5dc1bd27bfc740de530789f22a46e125b1d70b161013f2bcae1
 known_issues:
     - KI-110

@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:49Z"
+executed_at: "2026-08-24T22:25:06Z"
 input_set:
     - proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts: sha256:1a5a044ef317bc91d9669e751b768d60d6df5b6d2c19dfa2eded2789fbd0cfce
+    proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts: sha256:e0431a4a157b7f365b46bdb7431be51aac295b9100dbb4bd4352cbe633be660a
 known_issues:
     - KI-115

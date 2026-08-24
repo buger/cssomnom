@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:31Z"
+executed_at: "2026-08-24T22:24:57Z"
 input_set:
     - proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts: sha256:3633161e8fcbfe83f257d21d1f3da0f7629640093ddd8adc457403b428fabb8b
+    proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts: sha256:ac762b79dea1607e3da24ad7cae476ff243f9b8b8439fdb40086d3f932604174
 known_issues:
     - KI-25

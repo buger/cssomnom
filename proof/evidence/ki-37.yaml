@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:15Z"
+executed_at: "2026-08-24T22:25:00Z"
 input_set:
     - proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts: sha256:2d45f83a89afe7dd7c029515ba388aba35f82adc738daf2af2f4e22b8529356e
+    proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts: sha256:52d158a044d052bd1840f67deebda1193d7445307537bf7416d76fcbc6837a22
 known_issues:
     - KI-37

@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T20:32:20Z"
+executed_at: "2026-08-24T22:25:02Z"
 input_set:
     - proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts: sha256:408438aa448f235e092b69317454e05ec1a724ae83604ea110250ab6581cc501
+    proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts: sha256:8c4ca319ccadd6dd6571455c2e2fb3f083e59ff31bf8bcf11ea02630e40a9907
 known_issues:
     - KI-41

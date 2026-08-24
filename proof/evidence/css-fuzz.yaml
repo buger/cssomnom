@@ -10,8 +10,8 @@ requirements:
 artifact: tests/css-fuzz-cssomnom.test.ts
 command: node --test --test-reporter=dot tests/css-fuzz-cssomnom.test.ts
 status: pass
-executed_at: "2026-08-21T22:48:34Z"
+executed_at: "2026-08-24T22:26:23Z"
 input_set:
     - tests/css-fuzz-cssomnom.test.ts
 freshness_hashes:
-    tests/css-fuzz-cssomnom.test.ts: sha256:540e5998f23af660272741fd4093396e674d25b1b39c9af13ee90b8970b155b9
+    tests/css-fuzz-cssomnom.test.ts: sha256:bdc3bbfde9d17a30acb2bbfb0fc877d810297ae490b24155c95656f3e583a753

@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-23T19:40:12Z"
+executed_at: "2026-08-24T22:24:59Z"
 input_set:
     - proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts: sha256:d35f14bd67b32edbf9d57bbee99c19441537eec39001e2a57097a33a96fe4e42
+    proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts: sha256:5da6d8ee88e77fc694a40481eaddea2dee19f6c5f3eb90e0c7c33c65b66ef13e
 known_issues:
     - KI-31

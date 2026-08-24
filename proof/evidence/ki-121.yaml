@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:52Z"
+executed_at: "2026-08-24T22:25:09Z"
 input_set:
     - proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts: sha256:7a2b15870e9971cb195b0646e128b713a91d9a6d0698e8c63542ce4fe43d81a1
+    proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts: sha256:5dc56b6f82cf4cc38a0066d0566fb433aae86f968ed5a64e24775edc2860cbc4
 known_issues:
     - KI-121

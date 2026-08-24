@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T11:12:36Z"
+executed_at: "2026-08-24T22:24:47Z"
 input_set:
     - proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts: sha256:58cb32f18d3f24bcc2a42fff68d72a4c0a28875c126969923147da60eee1cb28
+    proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts: sha256:db0019bc6671ebfdfb1db6ea6f2d87ec81e2753f1acb2960dd2b9025922ea3ed
 known_issues:
     - KI-107
