@@ -1,0 +1,126 @@
+id: REVIEW-58
+kind: spec_conformance
+reviewer: loop-gate:self-spec-audit-w2 2026-08-25
+reviewed_at: "2026-08-24T22:15:01Z"
+subject: SYS-REQ-260822-{8HDQ} SYS-REQ-260823-{0A2D,2P2Q,486K,7TCQ,AKDT,JS16,KYB6,MPS4,PMB5,Z8HR,ZM55}
+decision: approved
+comment: >-
+    Second-wave spec audit of all twelve system requirements still at status=draft
+    flagged by changed_requirements_reviewed. Enumeration note: the checker's
+    changed-file set also covered the six 260824 variable-model reqs
+    (SYS/SW-REQ-260824-{4RGN,BRYV,DAS2,JS91,23WT,CAHE}) but those are already at
+    status=review from the REVIEW-documented cleanup batch; they were excluded as
+    duplicates and no req is counted twice. All twelve are open-KI-binding records:
+    each links exactly one KnownIssue (status open, minimization_status minimized)
+    whose reproducer was executed this session returning exit 1 with failing SAFE
+    contract assertions, confirming failing-state direction matches
+    formalization_status=valid (requirement currently violated, honestly tracked).
+    Per-req checks: (1) FRETish compiled via native parser to FT semantics key
+    null,regular,always,satisfaction for all 12; every formula falsifiable by a
+    counterexample trace over declared variables (numeric bounds or bool output).
+    (2) Variables all declared in specs/system/variables/*.vars.yaml with types,
+    directions, and ranges mirroring cited test/reproducer constants, verified
+    against reproducer source: 0A2D 2 injected metachar params (safe-exec-kernel
+    1..2/0..2); 2P2Q traversal depths 4 rel/2 abs + 2 out-of-tree payloads
+    (wpt-runner depth<=16/count 0..2); 486K acquisition forms 2&3 exercised of 4
+    (ci-guard 1..4/0..4); 7TCQ exactly 4 probed URLs incl 169.254.169.254,
+    attacker.example, 127.0.0.1:8080, missing-IDL (max 4); AKDT all 3 sink
+    families nv_cssom:55/rrweb:49/wpt:126,:257 (1..3/0..3); JS16 5 MiB expansion
+    from ~5 KiB member, reproducer budget 655360 bytes = expanded/8, obligation
+    ceiling 33554432 mirrors documented 32 MiB demo scan ceiling; KYB6 depth-3
+    /interfaces/../../../package.json probe (depth<=16); MPS4 absolute +
+    dist/../../ relative legs (climbs<=16/writes 0..2); PMB5 ILLEGAL_BRACE_
+    MULTIPLIERS=2 ({2},{2,4}) LEGAL_MULTIPLIERS=2 (+,#) matching ranges 1..8/0..0/
+    2..2; Z8HR 1 redirect hop to loopback stand-in (hops 1..2/downloads 0..2);
+    ZM55 up to 3 climbs vs obligation <=8, 3 interpolated templates (paths 0..3).
+    (3) Cited source anchors confirmed present: safe-child-process.ts:305 execSync
+    interpolation in getGitNotesLog; run.ts:92-115 getScriptContent, :140
+    interfaces bridge comment, :158 return fetch fallthrough; check-safe-exec.ts:19
+    literal-only IMPORT_PATTERN; fetch-wptfyi.ts:77-88 uncapped gunzipSync,
+    :222-227 unconstrained cachePath resolve+write, :178-196 downloadUrl deref,
+    :139-141 documented wpt.fyi/GCS scope; extract_nv_cssom.ts:55 bare eval,
+    extract_rrweb.ts:49 vm.runInContext, extract_wpt.ts:126/:257 vm.runInNewContext;
+    browser/run.ts:64-66 template interpolation, :74-77 mkdirSync, :84-86 log argv,
+    :141-144 spawn; css-properties-values-api #multipliers at :976-991 defining only
+    + and # (no brace repetition). (4) traces.satisfies targets exist: STK-REQ-
+    260821-556N for ten reqs, STK-REQ-260821-BQKD for 8HDQ/PMB5 matching their
+    parent fields. JS16 observation (non-blocking): the 5 MiB demo expansion sits
+    below the 32 MiB formula ceiling; it witnesses mechanism absence (gunzipSync
+    has no maxOutputLength, so output is unbounded and bound breach is reachable
+    at larger members), which the open KI tracks. No defects; all twelve stamped
+    in_review by this record.
+scope:
+    - specs/system/requirements/SYS-REQ-260822-8HDQ.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-0A2D.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-2P2Q.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-486K.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-7TCQ.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-AKDT.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-JS16.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-KYB6.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-MPS4.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-PMB5.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-Z8HR.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-ZM55.req.yaml
+verdicts:
+    - id: SYS-REQ-260822-8HDQ
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-21
+      decision: sound
+    - id: SYS-REQ-260823-0A2D
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-28
+      decision: sound
+    - id: SYS-REQ-260823-2P2Q
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-15
+      decision: sound
+    - id: SYS-REQ-260823-486K
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-30
+      decision: sound
+    - id: SYS-REQ-260823-7TCQ
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-25
+      decision: sound
+    - id: SYS-REQ-260823-AKDT
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-20
+      decision: sound
+    - id: SYS-REQ-260823-JS16
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-29
+      decision: sound
+    - id: SYS-REQ-260823-KYB6
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-24
+      decision: sound
+    - id: SYS-REQ-260823-MPS4
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-26
+      decision: sound
+    - id: SYS-REQ-260823-PMB5
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction, spec_anchor]
+      ki: KI-35
+      decision: sound
+    - id: SYS-REQ-260823-Z8HR
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-27
+      decision: sound
+    - id: SYS-REQ-260823-ZM55
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-23
+      decision: sound
+citations:
+    - proof/reproducers/KI-15-wpt-getscriptcontent-no-containment-overlay-260822.ts
+    - proof/reproducers/KI-20-fixture-extractors-eval-vm-submodule-js-overlay-260822.ts
+    - proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
+    - proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
+    - proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
+    - proof/reproducers/KI-25-wpt-sandbox-fetch-host-fallthrough-overlay-260822.ts
+    - proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts
+    - proof/reproducers/KI-27-wptfyi-downloadurl-no-allowlist-overlay-260822.ts
+    - proof/reproducers/KI-28-getgitnoteslog-execsync-interpolation-overlay-260822.ts
+    - proof/reproducers/KI-29-wptfyi-gunzipsync-no-output-cap-overlay-260822.ts
+    - proof/reproducers/KI-30-check-safe-exec-literal-import-only-overlay-260822.ts
+    - proof/reproducers/KI-35-register-property-brace-multiplier-overlay-260823.ts
