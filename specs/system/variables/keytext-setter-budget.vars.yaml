@@ -11,9 +11,16 @@ variables:
       range:
         max: 0
         min: 0
+    - name: control_selector_rejections
+      type: int
+      direction: output
+      description: 'Observed count of the five already-correct control selectors ("50%%", "fifty%", "Infinity%", "-5%", "0") whose keyText assignment threw SyntaxError and left keyText unchanged; obligation control_selector_rejections >= control_selector_rejections_min (reproducer constant CONTROL_SELECTORS_THROW_MIN = 5).'
+      range:
+        min: 5
     - name: control_selector_rejections_min
       type: int
       direction: input
       description: 'Control budget - the five already-correct control selectors ("50%%", "fifty%", "Infinity%", "-5%", "0") must each throw SyntaxError and leave keyText unchanged (reproducer constant CONTROL_SELECTORS_THROW_MIN = 5).'
       range:
         min: 5
+        max: 5

@@ -16,6 +16,7 @@ variables:
       description: 'Coverage budget - minimum declaration entries ("color", "margin") that CSSParserQualifiedRule.body must expose for the top-level leg (reproducer constant TOP_LEVEL_DECLARATIONS_MIN = 2).'
       range:
         min: 2
+        max: 2
     - name: nested_body_declaration_count
       type: int
       direction: output
@@ -28,3 +29,4 @@ variables:
       description: 'Coverage budget - minimum declaration entries ("b") that the @media-nested qualified rule body must expose (reproducer constant NESTED_DECLARATIONS_MIN = 1).'
       range:
         min: 1
+        max: 1

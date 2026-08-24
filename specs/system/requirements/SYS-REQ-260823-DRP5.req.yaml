@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when invalid_import_parsed the cssom shall always satisfy fabricated_invalid_import_rules <= 0
+fretish: when invalid_import_parsed the cssom shall always satisfy fabricated_invalid_import_rules <= 0 & valid_import_href_roundtrips >= valid_import_href_roundtrips_min
 description: 'An @import whose prelude violates the css-cascade-5 @import grammar ([ <url> | <string> ], Overview.bs ~150-160) must not enter CSSStyleSheet.cssRules as a fabricated CSSImportRule: it is dropped like any grammar-invalid rule. Valid layered/unlayered imports must continue to round-trip their href byte-exactly.'
 formalization_strategy: fretish
 informal_verification:
@@ -20,6 +20,8 @@ tags:
 variables:
     - invalid_import_parsed
     - fabricated_invalid_import_rules
+    - valid_import_href_roundtrips
+    - valid_import_href_roundtrips_min
 references:
     - type: document
       id: submodules/csswg-drafts/css-cascade-5/Overview.bs#import
@@ -37,5 +39,5 @@ verification:
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-23T20:25:10Z"
-    last_modified_by: human:Leonid Bugaev
-    last_modified_at: "2026-08-23T20:25:36Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T09:20:47Z"

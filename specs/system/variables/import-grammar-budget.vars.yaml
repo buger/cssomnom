@@ -11,9 +11,16 @@ variables:
       range:
         max: 0
         min: 0
+    - name: valid_import_href_roundtrips
+      type: int
+      direction: output
+      description: 'Observed count of valid unquoted imports ("@import url(x.css);") that parse to a CSSImportRule whose href equals the authored URL byte-exactly; obligation valid_import_href_roundtrips >= valid_import_href_roundtrips_min (reproducer constant VALID_IMPORT_HREF_ROUNDTRIPS_MIN = 1).'
+      range:
+        min: 1
     - name: valid_import_href_roundtrips_min
       type: int
       direction: input
       description: 'Control budget - valid unquoted imports ("@import url(x.css);") must keep parsing to a CSSImportRule whose href equals the authored URL byte-exactly (reproducer constant VALID_IMPORT_HREF_ROUNDTRIPS_MIN = 1).'
       range:
         min: 1
+        max: 1

@@ -11,9 +11,16 @@ variables:
       range:
         max: 0
         min: 0
+    - name: multi_value_control_rejections
+      type: int
+      direction: output
+      description: 'Observed count of >1-remaining-value control inputs ("a b") for which parseComponentValue threw SyntaxError via the existing multi-value branch; obligation multi_value_control_rejections >= multi_value_control_rejections_min (reproducer constant MULTI_VALUE_CONTROL_REJECTIONS_MIN = 1).'
+      range:
+        min: 1
     - name: multi_value_control_rejections_min
       type: int
       direction: input
       description: 'Control budget - the existing >1-remaining-value rejection branch must keep throwing SyntaxError for "a b" (reproducer constant MULTI_VALUE_CONTROL_REJECTIONS_MIN = 1).'
       range:
         min: 1
+        max: 1

@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy shorthand_expanded | shorthand_rejected
+fretish: when box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy four_longhands_assigned & (shorthand_expanded | shorthand_rejected)
 description: The cssom shall expand 1-to-4 value box shorthands, accept at most 4 background-position tokens, accept keyframe offsets in 0-100, and accept font-weight 1-1000.
 formalization_strategy: fretish
 informal_verification:
@@ -20,6 +20,7 @@ variables:
     - position_token_count
     - keyframe_offset_percent
     - font_weight_number
+    - four_longhands_assigned
     - shorthand_expanded
     - shorthand_rejected
 references:
@@ -39,8 +40,8 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:33Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T10:48:27Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T09:20:47Z"
 obligation_checklist:
     - nominal
 lifecycle:

@@ -4,7 +4,7 @@ status: draft
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when trailing_garbage_value_parsed the parser_api shall always satisfy rejecting_apis >= 2 and lenient_acceptances <= 0
+fretish: when trailing_garbage_value_parsed the parser_api shall always satisfy rejecting_apis >= rejecting_apis_min and lenient_acceptances <= 0
 description: 'Both parseValue and parseComponentValue wrap css-syntax-3 #parse-a-component-value, whose steps return a syntax error when input is non-empty after one component value (Overview.bs ~2466-2483). Trailing garbage after a single value must therefore be rejected consistently by both APIs; parseValue must not silently truncate to the first value.'
 formalization_strategy: fretish
 informal_verification:
@@ -20,6 +20,7 @@ tags:
 variables:
     - trailing_garbage_value_parsed
     - rejecting_apis
+    - rejecting_apis_min
     - lenient_acceptances
 references:
     - type: document
@@ -40,5 +41,5 @@ verification:
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-23T20:24:46Z"
-    last_modified_by: human:Leonid Bugaev
-    last_modified_at: "2026-08-23T20:25:36Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T09:20:47Z"

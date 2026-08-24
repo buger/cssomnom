@@ -16,6 +16,7 @@ variables:
       description: 'Consistency budget - minimum number of value-parsing APIs that must reject trailing garbage; both parseValue and parseComponentValue are in scope, so 2 (reproducer constant TRAILING_GARBAGE_REJECTING_APIS_MIN = 2).'
       range:
         min: 2
+        max: 2
     - name: lenient_acceptances
       type: int
       direction: output

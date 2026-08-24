@@ -10,6 +10,7 @@ variables:
       description: 'Coverage budget - minimum number of generated shorthands that must resolve in the runtime SHORTHANDS expansion table (src/shorthands.ts ~L1943); must be >= the 165 entries of src/data/gen/shorthands.ts per AGENTS.md Automation Over Hardcoding (reproducer constant GENERATED_SHORTHAND_COVERAGE_MIN = 165).'
       range:
         min: 165
+        max: 165
     - name: shorthand_coverage
       type: int
       direction: output
