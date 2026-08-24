@@ -1,0 +1,11 @@
+id: REVIEW-43
+kind: spec_conformance
+reviewer: agent:codex
+reviewed_at: "2026-08-22T17:54:29Z"
+subject: SYS-REQ-260822-V108
+decision: approved
+comment: 'Reviewed the local replace-a-var algorithm: substitution functions in the first argument must resolve before parsing the custom-property name, matching the nested-name example in the Bikeshed source.'
+citations:
+    - proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts:34
+    - submodules/csswg-drafts/css-variables-1/Overview.bs:715
+    - submodules/csswg-drafts/css-variables-1/Overview.bs:768

@@ -1,0 +1,10 @@
+id: REVIEW-46
+kind: spec_conformance
+reviewer: agent:codex
+reviewed_at: "2026-08-22T17:54:29Z"
+subject: SYS-REQ-260822-V11A
+decision: approved
+comment: 'Reviewed the local env() substitution algorithm and indexed grammar: only non-negative integer indices are valid, otherwise the containing property is invalid at computed-value time when no valid substitution exists.'
+citations:
+    - proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts:39
+    - submodules/csswg-drafts/css-env-1/Overview.bs:321

@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: path_traversal
-do_not_refile_as: fetch-wptfyi cachePath unconstrained resolve write
+    - at: "2026-08-23T19:40:31Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-26.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -66,3 +68,5 @@ poc_quality:
         executed end-to-end through the real function.
         reachability_verified: single options object reaches path.resolve(:224) with no guard
         between.
+kill_domain: path_traversal
+do_not_refile_as: fetch-wptfyi cachePath unconstrained resolve write

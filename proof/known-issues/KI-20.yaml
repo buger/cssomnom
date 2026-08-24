@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: code_injection
-do_not_refile_as: fixture extractor eval/vm execution of vendored submodule JS
+    - at: "2026-08-23T19:40:30Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-20.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -71,3 +73,5 @@ poc_quality:
         'pnpm run fixtures:generate'.
         reachability_verified: any maintainer following the documented upgrade loop reaches all
         three sinks with zero additional privileges.
+kill_domain: code_injection
+do_not_refile_as: fixture extractor eval/vm execution of vendored submodule JS

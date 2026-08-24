@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: policy_bypass
-do_not_refile_as: check-safe-exec literal-only child_process import detection bypass
+    - at: "2026-08-23T19:40:23Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-30.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -73,3 +75,5 @@ poc_quality:
         output message reproduced verbatim in logs.
         reachability_verified: preflight runs the real gate on every contribution; the gap is
         reachable on the first dynamic import anyone writes.
+kill_domain: policy_bypass
+do_not_refile_as: check-safe-exec literal-only child_process import detection bypass

@@ -39,6 +39,10 @@ history:
       by: agent:champ
       action: refresh-evidence
       detail: proof/evidence/ki-37.yaml
+    - at: "2026-08-23T19:40:15Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-37.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

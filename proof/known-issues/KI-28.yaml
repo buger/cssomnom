@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: command_injection
-do_not_refile_as: getGitNotesLog execSync shell injection via count/ref
+    - at: "2026-08-23T19:40:32Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-28.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -70,3 +72,5 @@ poc_quality:
         flows do.
         reachability_verified: public export with no sanitization between caller string and
         execSync template literal.
+kill_domain: command_injection
+do_not_refile_as: getGitNotesLog execSync shell injection via count/ref

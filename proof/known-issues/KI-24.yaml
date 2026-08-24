@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: path_traversal
-do_not_refile_as: WPT runner /interfaces/ fetch path traversal disclosure
+    - at: "2026-08-23T19:40:30Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-24.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -66,3 +68,5 @@ poc_quality:
         runWptFile() call (run.ts:141).
         reachability_verified: fixture-reachable with zero extra privileges; existsSync gate is
         the only thing between probe and contents.
+kill_domain: path_traversal
+do_not_refile_as: WPT runner /interfaces/ fetch path traversal disclosure

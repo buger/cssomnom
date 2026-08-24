@@ -35,6 +35,14 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-33.yaml
+    - at: "2026-08-23T14:39:38Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-33.yaml
+    - at: "2026-08-23T19:40:13Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-33.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
