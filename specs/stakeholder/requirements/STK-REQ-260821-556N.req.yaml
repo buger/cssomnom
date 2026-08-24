@@ -18,7 +18,20 @@ variables: []
 references:
     - type: document
       id: README.md
-traces: {}
+traces:
+    reviewed_at: "2026-08-24T13:20:32.055650812Z"
+    reviewed_by: agent:champ
+    reviewed_fingerprint: sha256:d1812932f57beb23c078ac4be9aede4cd3df55c9c64aeba472b8f3adbfe2c896
+    review_history:
+        - reviewed_at: "2026-08-24T13:20:32.055650812Z"
+          reviewed_by: agent:champ
+          method: inspection
+          rationale: manual trace review via proof trace review
+          source: proof trace review --citation
+          citations:
+            - docs/proof-onboard-research.md:3
+            - docs/proof-skeleton-id-map.md:3
+            - tests/acceptance-stk.test.ts:219
 verification:
     assurance_level: C
     formalization_status: none
@@ -34,6 +47,11 @@ history:
     last_modified_at: "2026-08-21T22:40:00Z"
 obligation_checklist:
     - nominal
+acceptance_review:
+    reviewed_at: "2026-08-21T22:40:00Z"
+    reviewed_by: agent:ac-sweep
+    disposition: reviewed
+    notes: conformance_owner README deviations (CSSImportRule.styleSheet, getComputedStyle) and dedicated acceptance lock of api-surface snapshot plus public keys. Dual-surface N/A.
 stakeholder:
     persona: Spec maintainer
     story: As a maintainer I treat WPT as the primary oracle and keep intentional deviations documented.
@@ -55,9 +73,3 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
-acceptance_review:
-    reviewed_at: "2026-08-21T22:40:00Z"
-    reviewed_by: agent:ac-sweep
-    disposition: reviewed
-    templates_applied: []
-    notes: "conformance_owner README deviations (CSSImportRule.styleSheet, getComputedStyle) and dedicated acceptance lock of api-surface snapshot plus public keys. Dual-surface N/A."

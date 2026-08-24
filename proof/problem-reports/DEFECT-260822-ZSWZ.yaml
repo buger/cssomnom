@@ -33,6 +33,8 @@ disposition:
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
     reviewed_at: "2026-08-22T06:05:00Z"
+    known_issues:
+        - KI-18
     requirements:
         - INT-REQ-260821-ZMZR
         - SYS-REQ-260821-7521
@@ -84,3 +86,14 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: Filled class-closure hardening after the product fix for KI-12.
+    - at: "2026-08-24T00:00:00Z"
+      by: agent:champ
+      action: edited
+      detail: |
+        Linked disposition.known_issues: [KI-18]. This DEFECT closed the
+        ASCII-case-sensitive at-rule dispatch class on INT-REQ-260821-ZMZR /
+        SYS-REQ-260821-7521 / INT-REQ-260821-WTPD. KI-18 (parser unbounded
+        nesting depth overflows the JS stack) remains open on
+        SYS-REQ-260821-7521 with release disposition ship_with_known_issue — an
+        unrelated availability fault whose behaviour is presumed still present
+        at release. Do not treat SYS-REQ-260821-7521 as fully clean.

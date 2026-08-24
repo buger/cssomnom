@@ -18,7 +18,20 @@ variables: []
 references:
     - type: document
       id: README.md
-traces: {}
+traces:
+    reviewed_at: "2026-08-24T13:20:32.426330628Z"
+    reviewed_by: agent:champ
+    reviewed_fingerprint: sha256:2bcf548a9b00403e97dfba2f48bf65718ef094aa24d0276c347e029fc2eca022
+    review_history:
+        - reviewed_at: "2026-08-24T13:20:32.426330628Z"
+          reviewed_by: agent:champ
+          method: inspection
+          rationale: manual trace review via proof trace review
+          source: proof trace review --citation
+          citations:
+            - docs/proof-onboard-research.md:3
+            - docs/proof-skeleton-id-map.md:3
+            - tests/acceptance-stk.test.ts:131
 verification:
     assurance_level: C
     formalization_status: none

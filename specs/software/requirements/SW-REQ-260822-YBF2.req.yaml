@@ -41,9 +41,14 @@ history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:49Z"
     last_modified_by: agent:champ
-    last_modified_at: "2026-08-24T12:06:23Z"
+    last_modified_at: "2026-08-24T13:15:34Z"
 obligation_checklist:
     - nominal
+obligation_deferrals:
+    - obligation_class: nominal
+      reason: 'Leaf nominal lacks an implemented_by owner: the real carriers (src/shorthands.ts expandBox one-to-four length guard and normalizeKeyframeSelector percent cap) are frozen this audit batch (src/** untouched); Verifies:-tagged test already exists (tests/mcdc-hotspot-expand-leftover.test.ts:266). Implements annotation lands with the next code batch.'
+      tracking: variable-model-cleanup
+      owner: agent:champ
 lifecycle:
     change_history:
         - date: "2026-08-22T09:38:36Z"

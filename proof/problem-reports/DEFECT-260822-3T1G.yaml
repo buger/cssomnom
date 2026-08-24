@@ -31,7 +31,7 @@ disposition:
     reviewer: agent:grok-4.6
     reviewed_at: "2026-08-22T06:05:00Z"
     known_issues:
-        - KI-7
+        - KI-18
     requirements:
         - SW-REQ-260821-5W6X
         - SYS-REQ-260821-7521
@@ -84,3 +84,15 @@ history:
         url-token href copy on SW-REQ-260821-5W6X. KI-7 remains open: @import
         still never fetches and CSSImportRule.styleSheet is not the associated
         loaded sheet. Do not treat KI-7 as shipped.
+    - at: "2026-08-24T00:00:00Z"
+      by: agent:champ
+      action: edited
+      detail: |
+        Refreshed disposition.known_issues. Retired KI-7 from this list: it was
+        FIXED 2026-08-23 (styleSheet returns a real constructed sheet; fetching
+        stays a documented out-of-scope deviation), so its "remains open — do
+        not treat as shipped" caveat no longer holds and the link had gone
+        stale. Linked [KI-18] instead: parser unbounded nesting depth remains
+        open on SYS-REQ-260821-7521 with release disposition
+        ship_with_known_issue, an unrelated availability fault presumed still
+        present at release. Do not treat SYS-REQ-260821-7521 as fully clean.

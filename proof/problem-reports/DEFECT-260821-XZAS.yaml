@@ -31,6 +31,8 @@ disposition:
     owner: agent:grok-4.6
     reviewer: agent:grok-4.6
     reviewed_at: "2026-08-21T23:40:00Z"
+    known_issues:
+        - KI-105
     requirements:
         - SW-REQ-260821-HNRG
         - SYS-REQ-260821-8TGB
@@ -76,3 +78,14 @@ history:
       by: agent:grok-4.6
       action: edited
       detail: Filled class-closure hardening after the product fix for KI-1.
+    - at: "2026-08-24T00:00:00Z"
+      by: agent:champ
+      action: edited
+      detail: |
+        Linked disposition.known_issues: [KI-105]. This DEFECT closed the
+        setProperty('all') mutate-before-validate class on SW-REQ-260821-HNRG /
+        SYS-REQ-260821-8TGB. KI-105 (invalid display values retained across
+        stylesheet / setProperty / cssText paths) remains open on
+        SYS-REQ-260821-8TGB with release disposition ship_with_known_issue — an
+        unrelated failure mode whose behaviour is presumed still present at
+        release. Do not treat SYS-REQ-260821-8TGB as fully clean.
