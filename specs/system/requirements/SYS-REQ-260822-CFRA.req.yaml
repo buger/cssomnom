@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when hue_degrees < 60 & hsl_component_count >= 3 the cascade shall always satisfy red_from_chroma
+fretish: the cascade shall always satisfy ((hue_degrees < 60) & (hsl_component_count >= 3)) => red_from_chroma
 description: The cascade HSL converter shall assign chroma to red in the 0-60 degree sector when hsl() has 3 or 4 components.
 formalization_strategy: fretish
 informal_verification:

@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when hue_degrees >= 180 & hue_degrees < 300 & hsl_component_count >= 3 & hsl_component_count <= 4 the cascade shall always satisfy blue_from_chroma
+fretish: the cascade shall always satisfy ((((hue_degrees >= 180) & (hue_degrees < 300)) & (hsl_component_count >= 3)) & (hsl_component_count <= 4)) => blue_from_chroma
 description: hslToRgb shall assign chroma to blue when normalized hue is 180 or more and below 300 degrees and the component list has 3 or 4 parts.
 formalization_strategy: fretish
 informal_verification:
