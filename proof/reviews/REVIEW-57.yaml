@@ -1,0 +1,44 @@
+id: REVIEW-57
+kind: spec_conformance
+reviewer: loop-gate:self-spec-audit 2026-08-24
+reviewed_at: "2026-08-24T15:46:40Z"
+subject: SYS-REQ-260822-{1MB8,4EY2,50T6,5V7N,AACP,CFRA,FM19,HARM,JY0V,SNP4,XDRG,XEPS,YEQZ,YQQZ}
+decision: approved
+comment: >-
+    First-cycle spec audit of all fourteen system requirements flagged by
+    spec_lint_status_vs_review (status=review but review pending). Eight have
+    direct MC/DC witnesses re-run green this session: 5V7N/CFRA/JY0V/YQQZ in
+    tests/mcdc-witness-domain-bounds.test.ts (box 1..4 / keyframe 0..100 /
+    font-weight 1..1000 expansion legs; hsl 0..60 red-chroma plus two-part
+    negative; @property drop with urange<=6/namespace>=1 guard legs; escaped
+    hex <=6 tokenize incl. U+FFFD and 7-hex stop) and 4EY2/AACP/SNP4/XDRG in
+    tests/mcdc-witness-domain-tables.test.ts (resolution dpi>0 boolean
+    context; mixed-case @MEDIA + unknown at-rule stylesheet return; 1-to-4
+    position arity no-throw; :disabled/:enabled non-empty match). Six are
+    KI-binding records with no tests/** citation by design; their backing is
+    the open-KI reproducer chain, verified end to end: YEQZ+FM19->KI-101,
+    XEPS->KI-102, 50T6->KI-103, HARM->KI-104, 1MB8->KI-105; each reproducer
+    file exists under proof/reproducers/, each evidence manifest exists under
+    proof/evidence/, and KI-103 was executed this session returning the
+    documented 1 pass (control) / 1 fail (tripwire), confirming the open-KI
+    state is honest rather than stale. For all fourteen: FRETish formulas
+    falsifiable; variables declared with types/directions and numeric ranges
+    (urange_hex_digits 0-6, namespace_prelude_count 1-2, hue_degrees,
+    position_arity); cited spec anchors confirmed present in submodules -
+    cssom-1 #concept-css-rule-parent-css-rule /
+    #concept-css-rule-parent-css-style-sheet,
+    css-counter-styles-3 #the-csscounterstylerule-interface /
+    #counter-style-prefix, css-animations-1 #interface-csskeyframesrule-appendrule
+    and <h2 id="keyframes">, cssom-1 dfn "parse a CSS declaration block"
+    (generates #parse-a-css-declaration-block), css-syntax-3
+    #parse-block-contents, css-display-3 #the-display-properties. Stamping
+    these six as in_review asserts only that this record review is underway;
+    their conformance remains tracked by the open KIs (status open,
+    ship_with_known_issue). Observation (non-blocking, corpus-wide):
+    verification_state exists on only eight system reqs total. No defects;
+    all fourteen stamped in_review by this record.
+citations:
+    - tests/mcdc-witness-domain-bounds.test.ts:160
+    - tests/mcdc-witness-domain-tables.test.ts:132
+    - proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+    - proof/known-issues/KI-105.yaml

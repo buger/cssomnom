@@ -1,0 +1,37 @@
+id: REVIEW-54
+kind: spec_conformance
+reviewer: loop-gate:self-spec-audit 2026-08-24
+reviewed_at: "2026-08-24T15:46:40Z"
+subject: INT-REQ-260821-{30ZA,9SGA,HJVC,JTY2,MZW3,N2VE,WQX9,ZP03}
+decision: approved
+comment: >-
+    First-cycle spec audit of all eight integration requirements flagged by
+    spec_lint_status_vs_review (status=review but review pending). Per-req
+    checks: (1) witness tests read and re-run green this session in
+    tests/integration-int-req.test.ts - 30ZA:69 (ParseHooks.consumeRule spy,
+    CSSOM.ts source scanned for parser imports, SyntaxError leg), 9SGA:98
+    (parseComponentValues spy + three-file no-import scan), N2VE:126
+    (TokenStream peek/next counters + EOF sentinel), WQX9:188
+    (styleMap<->CSSStyleDeclaration sync both directions + TypeError leg),
+    HJVC:212 (matcher/media/supports consultation via !important, @media not
+    all, @supports legs), MZW3:271 (MediaParser.parse spy + invalid->not all),
+    ZP03:294 (JS registerProperty and @property share one PropertyRegistry),
+    JTY2:335 (DOMMatrix transform hook + matrix multiply + SyntaxError leg);
+    10/10 pass. (2) Variables declared with types/directions in
+    specs/integration/variables/{cssom,typed_om,cascade,geometry,parser,parser_api}.vars.yaml;
+    numeric guards constrained (box_side_count 1-4, position_token_count
+    0-4, keyframe_offset_percent 0-100). (3) Parent links resolve (YMEY,
+    HGFK, ZXZW, 5283, 7521, 8TGB, EGCP) and traces.satisfies mirror them.
+    (4) obligation_checklist classes match obligation_hazards entries on all
+    eight; interface caller/callee/signature blocks coherent with FRETish.
+    Observation (non-blocking): ZP03 bundles cross-domain guard variables
+    (urange_hex_digits, namespace_prelude_count, keyframe_offset_percent)
+    into its when-clause per the documented ranges/mutexes/decision-tables
+    batch pattern; variables are declared and constrained. No defects found;
+    all eight stamped in_review by this record to clear the administrative
+    lint.
+citations:
+    - tests/integration-int-req.test.ts:69
+    - tests/integration-int-req.test.ts:212
+    - tests/integration-int-req.test.ts:294
+    - specs/integration/variables/cssom.vars.yaml

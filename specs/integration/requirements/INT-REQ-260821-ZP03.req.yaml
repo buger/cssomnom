@@ -35,9 +35,9 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: "REVIEW-54"
+        reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
     not_modeled:
         - predicate: length <= 6

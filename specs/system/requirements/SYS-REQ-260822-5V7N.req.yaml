@@ -33,9 +33,9 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: "REVIEW-57"
+        reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
 history:
     created_by: human:cli

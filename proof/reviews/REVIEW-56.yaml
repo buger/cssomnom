@@ -1,0 +1,45 @@
+id: REVIEW-56
+kind: spec_conformance
+reviewer: loop-gate:self-spec-audit 2026-08-24
+reviewed_at: "2026-08-24T15:46:40Z"
+subject: SYS-REQ-260821-{03VA,2TXS,9YM3,EGCP,H3BD,KA02,KV30,MV44,NGJH,NHZ8,RAAM,SMW6,V7V0,X3KX,Y6R3,YMEY,ZXZW}
+decision: approved
+comment: >-
+    First-cycle spec audit of all seventeen system requirements flagged by
+    spec_lint_status_vs_review (status=review but review pending). Per-req
+    witness bodies read and the covering test files re-run green this
+    session: 03VA mcdc-witness-parser.test.ts:253-291 (invalid rule dropped,
+    parse no-throw); 2TXS mcdc-witness-library.test.ts:152-169 plus the
+    api-surface snapshot lock; 9YM3 property-rule.test.ts:20-60 (valid
+    @property parsed, missing-syntax dropped); EGCP register-property.test.ts:139
+    (duplicate JS register throws InvalidModificationError) and
+    mcdc-hotspot-property-registry-syntax.test.ts; H3BD
+    mcdc-witness-parser.test.ts:175-183 (fetchCalls=0 with @import present);
+    KA02 mcdc-witness-parser-api.test.ts:307-333 (parseRule trailing garbage
+    throws SyntaxError); KV30 mcdc-witness-serializer.test.ts:47-62
+    (serialize(btn tokens)==source); MV44 mcdc-witness-cascade.test.ts:146-155
+    (no getComputedStyle on public surface); NGJH
+    mcdc-witness-parser-api.test.ts:368-390 (CSSParserRule nodes);
+    NHZ8 mcdc-witness-parser.test.ts:293-310 (CSSNestedDeclarations emitted);
+    RAAM parser-api.test.ts + dual-export-nominal.test.ts; SMW6
+    mcdc-witness-parser-api.test.ts:334+ (boolean, no throw); V7V0
+    mcdc-witness-library.test.ts:170-199 (dual package export map imports);
+    X3KX mcdc-witness-cssom.test.ts:351-395 (SecurityError on tainted
+    cssRules getter); Y6R3 mcdc-witness-typed-om.test.ts:222-245 (10px ->
+    CSSUnitValue value/unit); YMEY mcdc-witness-cssom.test.ts:418-460 +
+    acceptance-stk AC-004 (bad insertRule -> SyntaxError); ZXZW
+    mcdc-witness-cascade.test.ts:158-181 (cascaded style, layout counter
+    stays 0). Variables declared with types/directions/ranges under
+    specs/system/variables/*.vars.yaml for every component named. Parent
+    links resolve to existing STK/SYS records. Checklist/hazard pairs
+    coherent (X3KX access_denied+error_handling, NHZ8 recursion_depth_bounded).
+    H3BD verification_state=failing confirmed honest: it marks the by-design
+    unreachable MC/DC row external_sheet_fetched=T=>FALSE; KI-7 is
+    status=fixed since 2026-08-23 with fetch permanently excluded as a README
+    deviation, so the marker is not stale. No defects; all seventeen stamped
+    in_review by this record.
+citations:
+    - tests/mcdc-witness-parser.test.ts:253
+    - tests/mcdc-witness-cssom.test.ts:418
+    - tests/mcdc-witness-cascade.test.ts:146
+    - specs/system/variables/parser.vars.yaml
