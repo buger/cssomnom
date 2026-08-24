@@ -57,3 +57,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names data_integrity honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public parseRuleSync/parseRuleListSync path hosts use; no gated or debug path involved.
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and toParserRule.
+dedup_armor: |
+    Parser-API CSSParserQualifiedRule.body loses declaration nodes (style branch dead behind truthy empty cssRules). Distinct from KI-6/KI-14 (rule-type mapping, fixed). Do not merge into adapter mapping bugs without a body-fidelity parse round-trip.

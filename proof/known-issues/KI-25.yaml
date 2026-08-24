@@ -25,8 +25,10 @@ history:
     - at: "2026-08-23T07:36:08Z"
       by: agent:champ
       action: created
-kill_domain: ssrf_egress
-do_not_refile_as: WPT sandbox.fetch host-network fallthrough (SSRF)
+    - at: "2026-08-23T19:40:31Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-25.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -66,3 +68,13 @@ poc_quality:
         statement production executes per non-/interfaces/ URL.
         reachability_verified: fixture-reachable with zero privileges between sandbox JS and
         host fetch.
+kill_domain: ssrf_egress
+do_not_refile_as: WPT sandbox.fetch host-network fallthrough (SSRF)
+security_relevance_justification:
+    reviewer: "loop-gate:reviewer+grizz (batch A2, commits fdba96d/9ef9c86)"
+    rationale: |
+        SSRF-class egress finding in an operator CLI (scripts/wpt/**), not a network service.
+        Exploitability requires an operator to run this tooling against attacker-influenced
+        wpt.fyi records; the library product surface performs no network I/O. Filed
+        cve_surface: none / risk data_integrity after LOOP review accepted severity medium;
+        CVSS vector intentionally omitted as not security-relevant per campaign disposition.

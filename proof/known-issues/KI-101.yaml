@@ -21,6 +21,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not rely on keyframe child parentRule or parentStyleSheet links after parsing or deletion.
 remediation: Attach parsed keyframe children to CSSKeyframesRule and stylesheet; clear parentRule and parentStyleSheet when deleteRule removes a child.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSKeyframesRule.appendRule/deleteRule only - no mocks; overlay reproducer imports parser+CSSOM directly.
+        quantitative_impact: measured at HEAD - parsed @keyframes children have parentRule null and parentStyleSheet null (leg 1), and after appendRule+deleteRule the child retains stale owner links (leg 2); both fail on Node v24.11.1 across repeated runs.
+        control_test: appendRule attach behavior itself is exercised inside the failing legs; detached-state assertions double as negative checks against fake-green wiring.
+        untrusted_attacker: ordinary CSS @keyframes text is the trust boundary; any host parsing user stylesheets reaches the broken linkage with zero privileges.
+        current_deployment_relevance: keyframe parent linkage is core CSSOM navigation surface; confirmed live via evidence-captured failing runs on current HEAD.
+        honest_severity: medium correctness - broken object graph misleads tree walkers and serializers without memory-safety impact.
+        attacker_profitability: not profit-driven; any consumer walking rule trees (graders, serializers, tooling) silently mis-traverses keyframe children.
+        reproducible: deterministic node:test overlay run, exit 1 both runs pre-filing and at evidence capture.
+        no_inflation: severity medium matches blast radius (correctness-only, recoverable by re-parsing).
+        operational_path_verified: reproducer drives the real parse->append->delete lifecycle through public CSSOM methods.
+        reachability_verified: N/A-eligible local-behavioral finding (no trust-boundary crossing beyond stylesheet text ingestion); still reproduced through the real parse() entry point.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
     - Attach and detach lifecycle are independently modeled by YEQZ and FM19.

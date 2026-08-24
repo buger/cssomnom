@@ -3,6 +3,12 @@
  * JS-Number-coercible garbage — '0x10%' normalizes to '16%'.
  *
  * Reproduces: KI-44
+ * CHARACTERIZATION + MUTATION TRIPWIRE for KI-44: the parser-leg below pins
+ * the (correct) tokenizer behavior as a mutation tripwire; the setter legs
+ * assert the secure grammar-fidelity contract and FAIL while the JS-coercion
+ * defect is open. Tripwire mutation: remove raw Number() coercion from
+ * src/CSSOM.ts normalizeKeyframeSelector so the setter throws SyntaxError.
+ *
  * Verifies: SYS-REQ-260823-KTS6 (keyText setter grammar fidelity)
  *
  * Spec anchors:
@@ -98,7 +104,7 @@ describe('KI-44 keyText setter enforces the keyframe-selector grammar', () => {
 
   // Parser/setter agreement: the tokenizer path already drops such blocks.
   // Verifies: SYS-REQ-260823-KTS6
-  test('tokenizer parse path drops the same selector the setter accepts (agreement contract)', () => {
+  test('tokenizer parse path rejects 0x10% today (characterization: setter diverges from parser)', () => {
     const sheet = new CSSStyleSheet();
     sheet.replaceSync('@keyframes k{0x10%{opacity:0}50%{a:b}}');
     const inner = Array.from((sheet.cssRules[0] as CSSKeyframesRule).cssRules).map(

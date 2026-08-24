@@ -35,6 +35,10 @@ history:
       by: agent:champ
       action: refresh-evidence
       detail: proof/evidence/ki-36.yaml
+    - at: "2026-08-23T19:40:15Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-36.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -61,3 +65,5 @@ poc_quality:
         reachability_verified: public CSSStyleDeclaration IS the product surface; no ingress layer exists between host and the expansion table.
 kill_domain: silent_data_loss
 do_not_refile_as: font shorthand grammar root divergence (KI-112/KI-113); border-image quoted-url expansion loss (KI-114/KI-116)
+dedup_armor: |
+    Runtime SHORTHANDS map lacks 122 generated entries - silent non-expansion / cascade-order corruption class. Distinct from KI-112/113 (font shorthand grammar and serialization roots) and KI-114/116 (border-image quoted-url expansion). Do not merge single-shorthand grammar fixes into table completeness; each missing family needs its own tripwire.

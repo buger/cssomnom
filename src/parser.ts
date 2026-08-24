@@ -1268,7 +1268,6 @@ export class Parser {
           if (!handledRule) return null;
           return handledRule;
         }
-        //mcdc:ignore:defensive nested T after handler F is unreachable — nested-supported names always have handlers; F (top-level CSSAtRule fallback) already witnessed [reviewed: agent:grok-4.6]
         if (nested) return null;
         return new CSSAtRule(rule.name, rule.prelude);
       } else if (val.type === 'EOF' || val.type === '}') {
@@ -1279,7 +1278,6 @@ export class Parser {
           if (!handledRule) return null;
           return handledRule;
         }
-        //mcdc:ignore:defensive nested T after handler F is unreachable — nested-supported names always have handlers; F (top-level CSSAtRule fallback) already witnessed [reviewed: agent:grok-4.6]
         if (nested) return null;
         return new CSSAtRule(rule.name, rule.prelude);
       } else if (val.type === 'simple-block' && (val as SimpleBlock).associatedToken.type === '{') {
@@ -1293,7 +1291,6 @@ export class Parser {
           if (!handledRule) return null;
           return handledRule;
         }
-        //mcdc:ignore:defensive nested T after handler F is unreachable — nested-supported names always have handlers; F (top-level CSSAtRule fallback) already witnessed [reviewed: agent:grok-4.6]
         if (nested) return null;
         rule.childRules = this.consumeBlockContents(new ArrayComponentValueStream(block.value), nested);
         const cssRules = rule.childRules.map(r => r as CSSRule);

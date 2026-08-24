@@ -20,6 +20,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not use keyframe style declarations as an animation source until forbidden declarations are filtered.
 remediation: Filter CSS Animations-defined properties other than animation-timing-function and drop declarations with the important flag while consuming keyframe blocks.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() into CSSKeyframeRule.style - no mocks.
+        quantitative_impact: measured at HEAD - keyframe blocks retain forbidden animation-name/animation-duration declarations and !important values (3 red legs) while the allowed timing-function exception control stays green.
+        control_test: timing-function allowed-exception control passes, proving the filter concept exists and only its boundary is wrong.
+        untrusted_attacker: hostile keyframes text can smuggle animation properties past the declared filter.
+        current_deployment_relevance: keyframe declaration filtering is specified behavior (css-animations-1); live at HEAD.
+        honest_severity: medium correctness - forbidden-property retention violates the spec's keyframe restrictions.
+        attacker_profitability: not profit-driven; retained !important/animation properties skew cascade outcomes in downstream consumers.
+        reproducible: deterministic 3-leg failure across runs and evidence capture.
+        no_inflation: bounded to keyframe declaration filtering, medium ceiling.
+        operational_path_verified: real parse->style inspection path.
+        reachability_verified: N/A-eligible local-behavioral finding through the real parse() ingress.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
 owner: agent:codex

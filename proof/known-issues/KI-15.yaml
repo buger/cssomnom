@@ -86,3 +86,5 @@ poc_quality:
         readFileSync -> vm.Script with zero intervening privilege gates; fixtures ARE the input.
 kill_domain: path_traversal
 do_not_refile_as: WPT runner script-src path traversal into vm.Script
+dedup_armor: |
+    Only <script src> resolution/read/vm.Script execution escape inside scripts/wpt/node/run.ts getScriptContent. Distinct from KI-24 (sandbox.fetch /interfaces/ join - different sink, no vm exec) and KI-23 (--browser report-path interpolation - write path only). Do not merge into a generic WPT-runner containment fix without a second content-read+exec sink.

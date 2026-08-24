@@ -57,3 +57,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call String(CSSParserAtRule) + parseRuleListSync, the exact documented host path; no gated or debug path involved.
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and tokensToPrelude.
+dedup_armor: |
+    CSSParserAtRule.toString/tokensToPrelude join prelude tokens with '' dropping whitespace ('@mediascreen'). Parser-API adapter layer; distinct from KI-31 (condition semantics inside MediaParser) and KI-21 (identifier escaping in serializer). Do not merge into serializer escaping work.

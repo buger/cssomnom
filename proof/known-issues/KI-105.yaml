@@ -22,6 +22,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Treat style values read from parsed stylesheets as unvalidated when property-specific validity matters.
 remediation: Apply the property grammar during stylesheet declaration parsing and drop a declaration whose entire value is invalid, while preserving neighboring valid declarations.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse(), setProperty, and cssText - no mocks.
+        quantitative_impact: measured at HEAD - invalid display values survive stylesheet parsing, setProperty, and cssText paths (3 red legs) while valid-display controls stay green on both mutation paths.
+        control_test: two dedicated positive controls (setProperty and cssText retain valid display) isolate the invalid-value acceptance.
+        untrusted_attacker: any stylesheet/inline-style input carrying display: garbage reaches the unfiltered validators.
+        current_deployment_relevance: display validation spans the three most common ingestion surfaces; live at HEAD.
+        honest_severity: medium correctness - invalid values persist into cascaded models instead of being dropped.
+        attacker_profitability: not profit-driven; persisted garbage skews computed-style comparisons in graders/tooling.
+        reproducible: deterministic exit 1 x3 legs across runs and evidence capture.
+        no_inflation: one property family, three surfaces, medium ceiling.
+        operational_path_verified: all three real ingestion paths exercised end-to-end.
+        reachability_verified: N/A-eligible local-behavioral finding through real parse/setProperty/cssText entries.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
     - Root KI after deduplicating retired KI-106; parser, setProperty, and cssText branches are independently exercised.

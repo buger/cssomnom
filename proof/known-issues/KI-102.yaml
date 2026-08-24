@@ -20,6 +20,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Read the descriptor getter rather than cssText after a CSSCounterStyleRule setter.
 remediation: Make each valid descriptor setter update the associated declaration state used by CSSRule.cssText serialization; reject invalid values per the descriptor grammar.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSCounterStyleRule descriptor setters and cssText getter - no mocks.
+        quantitative_impact: measured at HEAD - a valid descriptor setter updates the model but cssText serialization stays stale (single red leg), so round-trips lose the mutation.
+        control_test: setter acceptance itself is the positive half; stale-read assertion is the discriminating negative.
+        untrusted_attacker: @counter-style text is ordinary stylesheet input reachable from any parsed sheet.
+        current_deployment_relevance: counter-style rules are live CSSOM surface; failure captured by evidence manifest on current HEAD.
+        honest_severity: medium correctness - stale cssText corrupts persisted output; no security dimension.
+        attacker_profitability: not profit-driven; downstream cssText consumers (editors, serializers) observe outdated declarations.
+        reproducible: deterministic exit 1 across repeated runs and evidence refresh.
+        no_inflation: single-descriptor scope keeps severity at medium.
+        operational_path_verified: real setter->getter path through the public rule object.
+        reachability_verified: N/A-eligible local-behavioral finding; reached through genuine CSSOM accessors.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
 owner: agent:codex

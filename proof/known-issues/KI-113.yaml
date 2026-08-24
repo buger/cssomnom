@@ -20,6 +20,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not treat getPropertyValue('font') text as grammar-validated after parsing stylesheets containing keyword-mixed font declarations.
 remediation: Run the same shorthand grammar validation used by setProperty over declarations produced by parse-a-css-declaration-block so grammar-failing values are dropped instead of stored verbatim.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse(), setProperty, insertRule - no mocks.
+        quantitative_impact: measured at HEAD - grammar-failing mixes like 'font: menu icon' and 'font: menu 10px serif' are dropped by setProperty/insertRule controls but RETAINED by parse() (4 red legs); !important does not rescue them.
+        control_test: setProperty and insertRule controls pass, showing the correct reject decision exists elsewhere and pinpointing the parser path.
+        untrusted_attacker: arbitrary font shorthand text is ordinary stylesheet input.
+        current_deployment_relevance: parser-level font grammar validation is core ingestion; live at HEAD.
+        honest_severity: medium correctness - inconsistent accept/reject across ingestion paths yields non-deterministic stylesheets.
+        attacker_profitability: not profit-driven; divergence between paths confuses sanitizers relying on parse-drop semantics.
+        reproducible: deterministic 4-leg failure across runs and evidence capture.
+        no_inflation: single property grammar, medium ceiling.
+        operational_path_verified: all three ingestion paths compared through public APIs.
+        reachability_verified: N/A-eligible local-behavioral finding through real parse() ingress.
 notes:
     - 'Evidence captured via ''proof evidence capture KI-113'' by genuine re-execution at 2026-08-23T11:36:30Z (proof/evidence/ki-113.yaml); reproducer ran red twice before filing (exit 1 both runs: 6 tests, 2 control passes, 4 defect failures). Distinct root from KI-112: accept-invalid on the parse-a-css-declaration-block path only (setProperty/insertRule drop correctly). Adjacent observation recorded honestly: the same path also retains other grammar-failing values verbatim (e.g. ''.o{color:10px;}''), so the root is absence of value-grammar validation in declaration-block parsing. Bound to draft SYS-REQ-260823-0BRJ created through ''proof req new''; informal until cssom variables can be declared.'
 owner: agent:ox-alpha

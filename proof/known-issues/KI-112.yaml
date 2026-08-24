@@ -21,6 +21,30 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not rely on getPropertyValue('font') after setting a system font keyword, and do not read back the keyword-stamped font-* longhand specified values.
 remediation: Treat a lone system font keyword as a retained system-font shorthand declaration that serializes as-is with empty specified longhands (WPT css/css-fonts/system-fonts-serialization.tentative.html), instead of expanding the keyword into every font longhand.
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse()/serialization of font shorthand - no mocks.
+        quantitative_impact: measured at HEAD - every probed system font keyword (caption, icon, menu, message-box, small-caption) leaves the font shorthand empty/non-serializing after parse, while an ordinary font shorthand control parses and serializes cleanly.
+        control_test: ordinary-keyword control leg passes, isolating system-keyword handling.
+        untrusted_attacker: system font keywords are ordinary stylesheet tokens reachable from any CSS input.
+        current_deployment_relevance: font system keywords are spec-standard (css-fonts-4 system theme fonts); live at HEAD.
+        honest_severity: medium correctness - valid declarations degrade to empty shorthands, silently losing author intent.
+        attacker_profitability: not profit-driven; lossy round-trips break visual-fidelity diffing and editors.
+        reproducible: deterministic multi-keyword failure across runs and evidence capture.
+        no_inflation: bounded to system-keyword family, medium ceiling.
+        operational_path_verified: real parse->cssText path through the public API.
+        reachability_verified: N/A-eligible local-behavioral finding through real parse() ingress.
 notes:
     - 'Evidence captured via ''proof evidence capture KI-112'' by genuine re-execution at 2026-08-23T11:36:30Z (proof/evidence/ki-112.yaml); reproducer ran red twice before filing (exit 1 both runs: 14 tests, 1 positive-control pass, 13 defect failures). Bound to narrowly-modeled draft requirements SYS-REQ-260823-S4DW and SYS-REQ-260823-YQPJ created through ''proof req new'' because no existing requirement covers font-shorthand serialization semantics; they are intentionally informal until cssom variables can be declared in specs/system/variables/cssom.vars.yaml, which this batch may not edit.'
 owner: agent:ox-alpha

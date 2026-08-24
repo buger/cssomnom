@@ -129,6 +129,6 @@ template_class: offline_import_never_fetches
 isomorphic_sites:
     - 'src/CSSOM.ts #fixed class-fix: CSSImportRule.styleSheet getter builds the constructed associated sheet'
     - 'src/CSSOM.ts #fixed class-fix: _ownerRule set; child href synced; live parentStyleSheet via ownerRule'
-    - 'src/parser.ts:827 #unchanged handleImportRule already extracts href/media/layer/supports from prelude'
+    - 'src/parser.ts:827 #na site needed no change for the object-graph fix; href/media/layer/supports extraction was already correct'
 dedup_armor: |
     Only CSSImportRule.styleSheet / handleImportRule skip fetch of the imported href. Distinct from KI-2 (replace queueMicrotask) and from generic parse-recovery holes. Do not merge this KI into a generic @import prelude parse issue.
