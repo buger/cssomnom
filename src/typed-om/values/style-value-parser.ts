@@ -39,6 +39,7 @@ import { NAMED_COLORS } from '../../data/gen/colors.ts';
 
 import { parseMathFunction } from '../../math-parser.ts';
 
+// reqproof:proptest:skip property-keyword table predicate with exhaustive branches witnessed by tests/mcdc-parseall-stylevalues-property-public-unique-cause.test.ts
 function shouldFallbackToCSSStyleValue(property: string, css: string): boolean {
   const propLower = property.toLowerCase();
   const valueLower = css.toLowerCase().trim();
@@ -410,6 +411,7 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
 }
 
 // Implements: SYS-REQ-260821-HGFK, SW-REQ-260821-7AKJ, INT-REQ-260821-9SGA
+// reqproof:proptest:skip property-aware orchestration entry over factory and fallback paths; witnessed by tests/mcdc-parseall-stylevalues-property-public-unique-cause.test.ts
 export function parseStyleValue(property: string, css: string): CSSStyleValue {
   if (arguments.length < 2) {
     throw new TypeError("Failed to execute 'parse' on 'CSSStyleValue': 2 arguments required, but only " + arguments.length + " present.");

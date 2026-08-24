@@ -273,6 +273,7 @@ export function numericToSum(self: CSSNumericValue, ...units: string[]): CSSMath
 }
 
 // Implements: SW-REQ-260821-E5D5
+// reqproof:proptest:skip numeric literal parser whose branches are witnessed by MC/DC tests/mcdc-numeric-leftover-unique-cause.test.ts
 export function parseNumericValue(css: string): CSSNumericValue {
   if (arguments.length < 1) {
     throw new TypeError("Failed to execute 'parse' on 'CSSNumericValue': 1 argument required, but only 0 present.");

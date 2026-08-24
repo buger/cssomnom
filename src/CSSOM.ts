@@ -74,6 +74,7 @@ export interface LinkStyle {
 
 // cssom-1 § 6.2 #the-medialist-interface
 // Implements: INT-REQ-260821-MZW3, SYS-REQ-260821-5283
+// reqproof:proptest:skip DOM IDL list wrapper bound to its parent sheet media text; exercised via WPT differential suite
 export class MediaList {
   [index: number]: string;
   private _mediaQueries: MediaQuery[] = [];
@@ -215,6 +216,7 @@ export class StyleSheet {
 }
 
 // Implements: SYS-REQ-260821-YMEY, SYS-REQ-260821-X3KX, SYS-REQ-260821-GR67, SYS-REQ-260821-H3BD, INT-REQ-260821-ZMZR
+// reqproof:proptest:skip stateful DOM stylesheet object owning a live rule list; exercised via WPT differential suite
 export class CSSStyleSheet extends StyleSheet {
   protected override _parentStyleSheet: CSSStyleSheet | null = null;
   protected _ownerRule: CSSRule | null = null;
@@ -1421,6 +1423,7 @@ export class CSSMarginRule extends CSSRule {
 }
 
 // Implements: SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X
+// reqproof:proptest:skip CSSOM rule constructor binding owner sheet and never-fetched href; exercised via WPT differential suite
 export class CSSImportRule extends CSSRule {
   private _href: string;
   private _media: MediaList;

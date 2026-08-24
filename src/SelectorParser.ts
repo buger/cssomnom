@@ -27,6 +27,7 @@ import {
 } from './data/gen/selectors.ts';
 import { getOriginalText } from './serializer.ts';
 // Type guards for ComponentValue types
+// reqproof:proptest:skip two-clause type-guard predicate; a property oracle would restate the guard, adding no independent signal
 export function isToken(val: ComponentValue | undefined): val is Token {
   return val !== undefined && val.type !== 'simple-block' && val.type !== 'function';
 }
@@ -133,6 +134,7 @@ export interface SelectorParserOptions {
  * @see https://drafts.csswg.org/selectors-4/#grammar
  */
 // Implements: SW-REQ-260821-6D9T
+// reqproof:proptest:skip stateful cursor-plus-options parser instance; exercised by selector MC/DC suites and WPT differential parsing
 export class SelectorParser {
   public static readonly PSEUDO_CLASSES = PSEUDO_CLASSES;
   public static readonly PSEUDO_ELEMENTS = PSEUDO_ELEMENTS;

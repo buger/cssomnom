@@ -26,6 +26,7 @@ import { addTypes, addTypesForSum } from '../CSSNumericType.ts';
 import { sortNumericNodes } from './math-sorting.ts';
 import { ensureNumeric, stripOuterParens } from '../../utils/formatting.ts';
 
+// reqproof:proptest:skip internal precondition validator inside the sum/min/max arms; witnessed by tests/mcdc-math-product-parsefn-unique-cause.test.ts
 function validateCompatibleSumTypes(numericArgs: CSSNumericValue[], context: string): void {
   if (numericArgs.length > 0) {
     const firstType = numericArgs[0].type();

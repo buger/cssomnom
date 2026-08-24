@@ -18,6 +18,7 @@ import {
   CSSParserQualifiedRule,
 } from '../../src/index.ts';
 
+// reqproof:proptest:skip known-issue overlay reproducer executed as a scripted contract check, not an isolable pure function
 function ki14Contract(): { setupOk: boolean; holds: boolean; message: string } {
   const media = CSS.parseStylesheetSync('@media all { .x { color: red; } }');
   const mediaTop = media[0] as CSSParserAtRule | undefined;

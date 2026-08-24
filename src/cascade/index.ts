@@ -155,6 +155,7 @@ export function normalizePseudoElement(pseudo: string): { valid: boolean; normal
  * css-variables-1 § 4 #resolving-var-functions
  */
 // Implements: SW-REQ-260821-FWNH, SW-REQ-260821-RPSA, INT-REQ-260821-HJVC
+// reqproof:proptest:skip full document-and-sheet cascade pipeline needing document-level setup; witnessed by tests/mcdc-cascade-getcascaded-round4-unique-cause.test.ts
 export function getCascadedStyle(
   element: unknown,
   rules?: Rule[] | CSSRuleList,

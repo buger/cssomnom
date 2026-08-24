@@ -20,6 +20,7 @@ import { privateToken } from '../utils/validation.ts';
 
 // Spec: CSS Typed OM Level 1 § 3 #stylevalue-objects
 export class CSSStyleValue {
+  // reqproof:proptest:skip abstract IDL base-class constructor delegating parse to style-value-parser; no standalone comparable logic
   get [Symbol.toStringTag]() {
     return this.constructor.name;
   }

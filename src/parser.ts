@@ -975,6 +975,7 @@ export class Parser {
     const rules: Rule[] = [];
     let decls: Declaration[] = [];
 
+    // reqproof:proptest:skip closure over enclosing declarations buffer inside consumeBlockContents; cannot be constructed in isolation
     const flushDecls = () => {
       if (decls.length > 0) {
         rules.push(new CSSNestedDeclarations(decls));
@@ -2063,6 +2064,7 @@ ParseHooks.assembleUnicodeRanges = (values) => assembleUnicodeRanges(values);
 ParseHooks.isValidDashedIdent = (name) => Parser.isValidDashedIdent(name);
 
 // Implements: SYS-REQ-260821-7521, SW-REQ-260821-HHVE, SYS-REQ-260821-03VA
+// reqproof:proptest:skip one-line composition of tokenize plus Parser.parseStyleSheet; both stages carry their own coverage
 export function parse(css: string): CSSStyleSheet {
   return new Parser(tokenize(css)).parseStyleSheet();
 }

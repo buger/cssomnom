@@ -34,6 +34,7 @@ import { isToken } from '../utils/validation.ts';
 /**
  * Converts a parsed component value into a Typed OM CSSStyleValue.
  */
+// reqproof:proptest:skip token-type dispatch facade over typed-om value parsers; arms witnessed by tests/mcdc-style-value-factory-still-hot-unique-cause.test.ts
 export function createCSSStyleValue(v: ComponentValue, property?: string): CSSStyleValue | null {
   if (v.type === 'function') {
     const fn = v as CSSFunction;

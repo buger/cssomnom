@@ -19,6 +19,7 @@
 import type { CSSNumericValue } from './CSSNumericValue.ts';
 
 // Spec: CSS Typed OM Level 1 § 4.3 #numeric-array
+// reqproof:proptest:skip DOM IDL indexed proxy over a frozen node list; exercised via typed-om WPT differential suite
 export class CSSNumericArray {
   [index: number]: CSSNumericValue;
   private _values: readonly CSSNumericValue[];

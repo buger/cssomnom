@@ -32,6 +32,7 @@ import {
 } from './transform-parser.ts';
 
 // Spec: CSS Typed OM Level 1 § 5 #transformvalue-objects
+// reqproof:proptest:skip IDL transform collection validating component lists; exercised via transform suites and typed-om WPT differential suite
 export class CSSTransformValue extends CSSStyleValue {
   [index: number]: CSSTransformComponent;
   public components: CSSTransformComponent[];

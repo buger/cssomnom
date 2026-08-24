@@ -24,6 +24,7 @@ import { isCSSFunction, hasVarFunction } from '../utils/validation.ts';
 import type { CSSNumericType } from '../numeric/CSSNumericType.ts';
 
 // Spec: CSS Typed OM Level 1 § 3.4 #unparsedvalue-objects
+// reqproof:proptest:skip DOM IDL indexed wrapper over component-value arrays; exercised via typed-om WPT differential suite
 export class CSSUnparsedValue extends CSSStyleValue {
   [index: number]: string | CSSVariableReferenceValue;
   private _values: (string | CSSVariableReferenceValue)[];

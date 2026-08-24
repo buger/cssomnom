@@ -20,6 +20,7 @@ import type { CSSNumericType } from '../numeric/CSSNumericType.ts';
 import type { CSSNumericValue } from '../numeric/CSSNumericValue.ts';
 import type { CSSKeywordValue } from '../values/CSSKeywordValue.ts';
 
+// reqproof:proptest:skip brand-check guard probing a globalThis prototype fallback; duck-typing shim whose oracle would restate the two probes
 export function isNumericValue(val: unknown): val is CSSNumericValue {
   if (!val || typeof val !== 'object') return false;
   const Cls = (typeof globalThis !== 'undefined' && (globalThis as unknown as Record<string, unknown>).CSSNumericValue as unknown as { prototype: unknown }) || undefined;

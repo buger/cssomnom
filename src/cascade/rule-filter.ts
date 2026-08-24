@@ -54,6 +54,7 @@ import type { MatchedDeclaration, Specificity } from './types.ts';
  * Harvests all applicable stylesheets and rule lists for an element across document and shadow contexts.
  * css-cascade-5 § 2 #filtering
  */
+// reqproof:proptest:skip traverses document styleSheets and adoptedStyleSheets graph; DOM-dependent, covered by tests/mcdc-collect-stylesheets-leftover.test.ts
 export function collectStyleSheetsAndRules(
   element: unknown,
   rules?: Rule[] | CSSRuleList

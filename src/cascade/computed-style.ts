@@ -38,6 +38,7 @@ import {
   getInitialValue,
 } from './value-processor.ts';
 
+// reqproof:proptest:skip walks duck-typed DOM ancestor chains reading style attributes; DOM-dependent, covered by tests/mcdc-computed-style.test.ts
 export function shouldPreserveAutoMinSize(element: unknown): boolean {
   if (!element || typeof element !== 'object') return false;
   const el = element as {

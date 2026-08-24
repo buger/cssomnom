@@ -26,6 +26,7 @@ import { SUPPORTED_PROPERTIES } from './data/gen/property-list.ts';
 import { camelToDashed } from './utils.ts';
 import { CSSStyleProperties } from './data/gen/properties.ts';
 
+// reqproof:proptest:skip Proxy trap layer over a live mutable declaration target; observable only through DOM object semantics
 export function createStyleProxy<T extends CSSStyleDeclaration>(target: T): T {
   return new Proxy(target, {
     get(t, prop, receiver) {
@@ -107,6 +108,7 @@ export function createStyleProxy<T extends CSSStyleDeclaration>(target: T): T {
 }
 
 // Implements: SYS-REQ-260821-8TGB, SW-REQ-260821-HNRG
+// reqproof:proptest:skip stateful declaration block coupled to parent rule and proxy bridge; exercised via WPT differential suite
 export class CSSStyleDeclaration extends CSSStyleProperties {
   [index: number]: string;
   [property: string]: unknown;

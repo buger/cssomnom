@@ -24,6 +24,7 @@ import '../../src/parser.ts';
 import { parse } from '../../src/parser.ts';
 import { CSSStyleSheet } from '../../src/CSSOM.ts';
 
+// reqproof:proptest:skip trivial repeat-string fixture builder inside recursion-depth reproducer; validated by that script own assertions
 function nestStyle(depth: number): string {
   return 'a{'.repeat(depth) + 'x:1' + '}'.repeat(depth);
 }

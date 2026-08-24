@@ -46,8 +46,9 @@ function generateSemiRandomCSS(length: number): string {
   return result;
 }
 
-// reqproof:proptest parseStyleSheet
-// reqproof:proptest tokenize
+// reqproof:proptest tokenize, Parser
+// (Parser: this harness constructs `new Parser(tokens)` 20,000 times; the
+// bare `parseStyleSheet` method name is not a traced surface position.)
 test('Fuzz parser with random strings', () => {
   const iterations = 10000;
   let successCount = 0;

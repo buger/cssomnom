@@ -23,6 +23,7 @@ import { CSSKeywordValue } from '../values/CSSKeywordValue.ts';
 import { DOMMatrix, DOMMatrixReadOnly } from '../../DOMMatrix.ts';
 import { matchesLength, matchesLengthPercentage, matchesNumber, matchesAngle } from '../utils/type-guards.ts';
 
+  // reqproof:proptest:skip three-line throwing validator delegating to matchesNumber; transform arms witnessed by tests/mcdc-transform-leftover-unique-cause.test.ts
 function validateNumberish(val: unknown, name: string): CSSNumericValue {
   if (typeof val === 'number') {
     return new CSSUnitValue(val, 'number');

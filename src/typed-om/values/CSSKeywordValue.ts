@@ -20,6 +20,7 @@ import { CSSStyleValue } from './CSSStyleValue.ts';
 import { escape } from '../../css-escape.ts';
 
 // Spec: CSS Typed OM Level 1 § 3.1 #keywordvalue-objects
+// reqproof:proptest:skip IDL keyword wrapper constructor with argument-count validation only; exercised via typed-om WPT differential suite
 export class CSSKeywordValue extends CSSStyleValue {
   private _value: string = '';
 

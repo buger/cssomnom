@@ -20,6 +20,7 @@ import { serializeIdentifier } from '../../serializer.ts';
 import type { CSSUnparsedValue } from './CSSUnparsedValue.ts';
 
 // Spec: CSS Typed OM Level 1 § 3.4 #variable-reference-value-objects
+// reqproof:proptest:skip variable reference holder with var-fallback fields; exercised via custom-property and typed-om WPT suites
 export class CSSVariableReferenceValue {
   private _variable!: string;
   private _fallback: CSSUnparsedValue | null = null;

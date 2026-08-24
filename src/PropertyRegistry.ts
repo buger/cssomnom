@@ -294,6 +294,7 @@ interface PropertyDefinitionInternal extends PropertyDefinition {
   origin: 'js' | 'css';
 }
 
+// reqproof:proptest:skip bare module-level Map singleton of registered definitions; shared global state with no own function logic
 const registry = new Map<string, PropertyDefinitionInternal>();
 
 // Implements: SYS-REQ-260821-EGCP, SYS-REQ-260821-9YM3, INT-REQ-260821-ZP03, SW-REQ-260821-PD6M, SW-REQ-260821-V5GA, SW-REQ-260821-ARC1

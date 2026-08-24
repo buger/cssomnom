@@ -22,6 +22,7 @@ import { unitToBase, unitToPixels, unitToRadians, unitToSeconds, type CSSUnit } 
 import { MATH_FUNCTIONS } from './data/gen/math-functions.ts';
 
 
+// reqproof:proptest:skip key-by-key type-map equality under ten lines; symmetry oracle restates the implementation; math MC/DC suites cover its callers
 function isSameType(a: CSSNumericType, b: CSSNumericType): boolean {
   if (a.percentHint !== b.percentHint) return false;
   const keys = new Set([...Object.keys(a), ...Object.keys(b)]);

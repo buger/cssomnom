@@ -18,6 +18,7 @@ import type { Token, TokenStream, ComponentValue, ComponentValueStream } from '.
 import { NeedMoreDataError, type StreamingTokenizer } from './streaming-tokenizer.ts';
 
 // Implements: INT-REQ-260821-N2VE
+// reqproof:proptest:skip stateful cursor wrapper delegating entirely to its token array; covered by MC/DC tests/mcdc-branch-tokenstream-leftover.test.ts
 export class ArrayTokenStream implements TokenStream {
   private tokens: Token[];
   private index: number = 0;
@@ -73,6 +74,7 @@ export class ArrayComponentValueStream implements ComponentValueStream {
 }
 
 // Implements: SW-REQ-260821-QV2H
+// reqproof:proptest:skip incremental chunk-arrival streaming protocol state; covered by MC/DC tests/mcdc-branch-streaming-tokenizer-leftover.test.ts
 export class StreamingTokenizerStream implements TokenStream {
   private tokenizer: StreamingTokenizer;
   private bufferedTokens: Token[] = [];

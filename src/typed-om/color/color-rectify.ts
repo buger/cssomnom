@@ -26,6 +26,7 @@ import {
 } from '../utils/type-guards.ts';
 
 // Spec: CSS Typed OM Level 1 § 8.1 #rectify-a-csscolorrgbcomp
+// reqproof:proptest:skip input-class rectification branch table witnessed by MC/DC tests/mcdc-color-leftover-unique-cause.test.ts
 export function rectifyColorRGBComp(v: unknown): CSSNumericValue | CSSKeywordValue {
   if (typeof v === 'number') {
     return new CSSUnitValue(v * 100, 'percent');

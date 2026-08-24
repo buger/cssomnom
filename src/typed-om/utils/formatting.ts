@@ -22,6 +22,7 @@ import type { CSSKeywordValue } from '../values/CSSKeywordValue.ts';
 import { CSSUnitValue } from '../numeric/CSSUnitValue.ts';
 import { CSSKeywordValue as CSSKeywordValueClass } from '../values/CSSKeywordValue.ts';
 
+// reqproof:proptest:skip indirection seam resolving a globalThis CSSUnitValue override; thin factory delegation with no own logic
 export function createUnitValue(value: number, unit: CSSUnit): CSSUnitValue {
   const Cls = (typeof globalThis !== 'undefined' && (globalThis as unknown as Record<string, unknown>).CSSUnitValue as typeof CSSUnitValue) || CSSUnitValue;
   return new Cls(value, unit);

@@ -30,6 +30,7 @@ import { createCSSStyleValue } from '../values/style-value-factory.ts';
 
 // Spec: CSS Typed OM Level 1 § 3.3 #positionvalue-objects
 // Spec: CSS Values and Units Level 4 § 10.1 #position-type
+// reqproof:proptest:skip keyword-to-percent mapping table witnessed by MC/DC tests/mcdc-tryparseposition-round3-unique-cause.test.ts
 export function toPositionCoord(val: CSSStyleValue | CSSNumericValue | CSSKeywordValue | null): CSSNumericValue | null {
   if (!val) return null;
   if (val instanceof CSSKeywordValue) {

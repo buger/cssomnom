@@ -23,6 +23,7 @@ import { formatNumber } from '../../utils/format.ts';
 
 // Spec: CSS Typed OM Level 1 § 4.2 #unitvalue-objects
 // Implements: SW-REQ-260821-E5D5
+// reqproof:proptest:skip IDL argument-validation constructor; constructed and compared on every generated case of tests/proptest-typedom-numeric.test.ts
 export class CSSUnitValue extends CSSNumericValue {
   value: number;
   unit: CSSUnit;

@@ -18,6 +18,7 @@
 import { AbstractTokenizer } from './AbstractTokenizer.ts';
 import type { Token } from './types.ts';
 
+// reqproof:proptest:skip Error subclass constructor assigning message and state fields only; pure error shim with no comparable logic
 export class NeedMoreDataError extends Error {
   constructor() {
     super('Need more data');

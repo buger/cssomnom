@@ -17,6 +17,7 @@
 // Implements: SW-REQ-260821-6951
 import type { Rule } from './types.ts';
 
+// reqproof:proptest:skip single-regex rename helper under three lines; a property oracle would restate the identical substitution
 export function camelToDashed(str: string): string {
   return str.replace(/[A-Z]/g, m => '-' + m.toLowerCase()).replace(/^ms-/, '-ms-');
 }

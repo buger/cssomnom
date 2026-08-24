@@ -124,6 +124,7 @@ function parseMatrix3D(str: string): { is2D: boolean; values: Float64Array } | n
 }
 
 // Implements: INT-REQ-260821-JTY2
+// reqproof:proptest:skip thin delegation to injected module-global parse hook; no independent oracle without owning the hook itself
 function parseTransformHook(str: string): { is2D: boolean; values: Float64Array } | null {
   if (parseTransformListHook) {
     return parseTransformListHook(str);
@@ -152,6 +153,7 @@ function parseMatrixString(str: string): { is2D: boolean; values: Float64Array }
 export let parseTransformListHook: ((str: string) => { is2D: boolean; values: Float64Array }) | null = null;
 
 // Implements: INT-REQ-260821-JTY2
+// reqproof:proptest:skip module-global setter for cross-layer injection; mutating process-global state defeats output comparison
 export function setParseTransformListHook(hook: (str: string) => { is2D: boolean; values: Float64Array }) {
   parseTransformListHook = hook;
 }

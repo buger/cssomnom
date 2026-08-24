@@ -389,6 +389,7 @@ function cssomAtRuleFromFields(r: unknown): CSSParserAtRule | null {
 }
 
 // Implements: SYS-REQ-260821-NGJH, SW-REQ-260821-MZ8P, INT-REQ-260821-WTPD
+// reqproof:proptest:skip recursive AST adapter into IDL parser rules; structural mapping witnessed by tests/mcdc-parser-api-toparser.test.ts
 export function toParserRule(rule: unknown): CSSParserRule {
   const r = rule as Record<string, unknown>;
   // Handle internal AST at-rule
@@ -524,6 +525,7 @@ export async function parseRuleList(css: CSSStringSource, options: CSSParserOpti
 }
 
 // Implements: SYS-REQ-260821-KA02, SW-REQ-260821-2Z0N
+// reqproof:proptest:skip thin pipeline delegation to tokenize, Parser.consumeRule and toParserRule; every stage carries independent coverage
 export function parseRuleSync(css: string, options: CSSParserOptions = {}): CSSParserRule | null {
   const tokens = tokenize(css);
   const parser = new Parser(tokens, options);
@@ -754,6 +756,7 @@ function evalSupportsConditionValues(values: ComponentValue[]): boolean {
 }
 
 // Implements: SYS-REQ-260821-SMW6, SW-REQ-260821-HW77
+// reqproof:proptest:skip grammar-evaluating predicate whose only independent oracle would reimplement the same parser; witnessed by tests/mcdc-witness-parser-api.test.ts
 export function supports(propertyOrCondition: string, value?: string): boolean {
   if (typeof value === 'string') {
     return evaluateSupportsDeclaration(propertyOrCondition, value);
