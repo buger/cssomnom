@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when css_text_supplied & consume_token_loop_runs & (uses_replacement_character | uses_escaped_code_point | sixth_digit_stops_hex) the tokenizer shall always satisfy token_list_returned
+fretish: when css_text_supplied & escaped_hex_digits <= 6 & consume_token_loop_runs & (uses_replacement_character | uses_escaped_code_point | sixth_digit_stops_hex) the tokenizer shall always satisfy token_list_returned
 description: Tokenizer.tokenize shall emit tokens while consume-escaped-code-point and consume-unicode-range-token stop hex at 6 digits.
 formalization_strategy: fretish
 informal_verification:
@@ -13,10 +13,11 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260822-YQQZ
 component: tokenizer
-rationale: AbstractTokenizer.consumeEscapedCodePoint loops while count is less than 6. consumeUnicodeRangeToken loops while hex.length is less than 6 and while hex plus question marks is less than 6.
+rationale: AbstractTokenizer.consumeEscapedCodePoint loops while count is less than 6. consumeUnicodeRangeToken loops while hex.length is less than 6 and while hex plus question marks is less than 6. tests/mcdc-witness-domain-bounds.test.ts:87-148 exercises the shared escaped-hex domain for this requirement and its parent SYS-REQ-260822-YQQZ (\61 decodes, \0 replaces, \1234567 stops at 6 digits).
 tags: []
 variables:
     - css_text_supplied
+    - escaped_hex_digits
     - consume_token_loop_runs
     - uses_replacement_character
     - uses_escaped_code_point
@@ -39,8 +40,8 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:49Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T11:09:14Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:06:23Z"
 obligation_checklist:
     - nominal
 lifecycle:

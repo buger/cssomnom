@@ -1,0 +1,11 @@
+id: REVIEW-51
+kind: spec_conformance
+reviewer: agent:champ
+reviewed_at: "2026-08-24T12:36:51Z"
+subject: SW-REQ-260824-CAHE
+decision: approved
+comment: 'Formula maps to the parseHslComponents arity gate which returns null outside the three-to-four part window, leaving the authored text unparsed by normalizeComputedColor. The added normalized-hue conjunct mirrors the modulo normalization step and is parse-independent as the witnesses show: radian and turn hue spellings parse while empty and five-part lists fall through verbatim.'
+citations:
+    - src/cascade/color-resolver.ts:140@parseHslComponents
+    - src/cascade/color-resolver.ts:157@parseHslComponents
+    - tests/mcdc-cascade-vars.test.ts:195

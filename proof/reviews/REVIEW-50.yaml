@@ -1,0 +1,11 @@
+id: REVIEW-50
+kind: spec_conformance
+reviewer: agent:champ
+reviewed_at: "2026-08-24T12:36:51Z"
+subject: SW-REQ-260824-23WT
+decision: approved
+comment: 'Formula maps to the hslToRgb branches where b1 takes chroma C across the two blue sub-sectors, gated on the parseHslComponents arity window of three to four parts enforced before sector selection. Trigger bounds mirror the css-color-4 hsl-to-rgb sector table for the blue sectors. Witnesses assert the cyan, sky, and navy sector spellings resolve to their blue-chroma values.'
+citations:
+    - src/cascade/color-resolver.ts:169@hslToRgb
+    - src/cascade/color-resolver.ts:170@hslToRgb
+    - tests/mcdc-cascade-vars.test.ts:163

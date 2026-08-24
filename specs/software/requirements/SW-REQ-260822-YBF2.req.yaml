@@ -4,8 +4,8 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy shorthand_expanded | shorthand_rejected
-description: expandBox, background-position, keyframe selectors, and font-weight shall obey 1-4 sides, at most 4 position tokens, 0-100 percent, and weight 1-1000.
+fretish: when box_side_count >= 1 & box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy four_longhands_assigned & (shorthand_expanded | shorthand_rejected)
+description: expandBox, background-position, keyframe selectors, and font-weight shall obey at least 1 and at most 4 sides, at most 4 position tokens, 0-100 percent, and weight 1-1000, assigning all four longhands.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -13,13 +13,14 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260822-5V7N
 component: cssom
-rationale: src/shorthands.ts expandBox rejects data.length outside 1-4 and positionTokens.length greater than 4. normalizeKeyframeSelector throws when val is greater than 100. font shorthand accepts token.value from 1 through 1000.
+rationale: src/shorthands.ts expandBox rejects data.length outside 1-4 and positionTokens.length greater than 4. normalizeKeyframeSelector throws when val is greater than 100. font shorthand accepts token.value from 1 through 1000. The child pins the box lower bound (declared domain min 1, tests/mcdc-witness-domain-bounds.test.ts:256 exercises the 1-value margin) and adds the four-longhand assignment guarantee.
 tags: []
 variables:
     - box_side_count
     - position_token_count
     - keyframe_offset_percent
     - font_weight_number
+    - four_longhands_assigned
     - shorthand_expanded
     - shorthand_rejected
 references:
@@ -39,8 +40,8 @@ verification:
 history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:49Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T10:48:28Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:06:23Z"
 obligation_checklist:
     - nominal
 lifecycle:

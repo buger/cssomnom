@@ -50,27 +50,71 @@ variables:
       type: bool
       direction: output
       description: True when hslToRgb accepts a 3- or 4-component hsl()/hsla() argument list.
+    - name: nested_var_name
+      type: bool
+      direction: input
+      description: var() first argument contains a nested substitution that yields a custom property name.
+    - name: nested_name_substituted
+      type: bool
+      direction: output
+      description: The nested var() name resolves to the referenced custom property value.
+    - name: mixed_case_var_or_env
+      type: bool
+      direction: input
+      description: A custom property value contains mixed-case VAR() or ENV() syntax.
+    - name: function_dispatch_case_insensitive
+      type: bool
+      direction: output
+      description: Mixed-case VAR() and ENV() dispatch to their defined substitution algorithms.
+    - name: syntactically_valid_env
+      type: bool
+      direction: input
+      description: A value contains env() syntax that matches the environment-variable grammar.
+    - name: supports_env_true
+      type: bool
+      direction: output
+      description: CSS.supports accepts a syntactically valid env() value.
+    - name: invalid_env_index
+      type: bool
+      direction: input
+      description: An env() value contains an index outside the non-negative integer grammar.
+    - name: env_invalid_at_computed_value_time
+      type: bool
+      direction: output
+      description: A syntactically invalid env() function produces an invalid computed value.
 independence:
     declared: true
     reason: SYS cascade pairs (cascaded style vs getComputedStyle export) skip as cross-component; no intra-component shared-output pair remains to check.
 domain:
     tables:
         - name: hsl_hue_to_rgb
-          source: "css-color-4 #hsl-to-rgb; css-color-4 § 7 #the-hsl-notation"
+          source: 'css-color-4 #hsl-to-rgb; css-color-4 § 7 #the-hsl-notation'
           inputs:
             - name: hue_sector
               type: enum
-              values: [h0_60, h60_120, h120_180, h180_240, h240_300, h300_360]
+              values:
+                - h0_60
+                - h60_120
+                - h120_180
+                - h180_240
+                - h240_300
+                - h300_360
           output:
             name: red_from_chroma
             type: bool
           rows:
-            - {hue_sector: h0_60, red_from_chroma: true}
-            - {hue_sector: h60_120, red_from_chroma: false}
-            - {hue_sector: h120_180, red_from_chroma: false}
-            - {hue_sector: h180_240, red_from_chroma: false}
-            - {hue_sector: h240_300, red_from_chroma: false}
-            - {hue_sector: h300_360, red_from_chroma: true}
+            - hue_sector: h0_60
+              red_from_chroma: true
+            - hue_sector: h60_120
+              red_from_chroma: false
+            - hue_sector: h120_180
+              red_from_chroma: false
+            - hue_sector: h180_240
+              red_from_chroma: false
+            - hue_sector: h240_300
+              red_from_chroma: false
+            - hue_sector: h300_360
+              red_from_chroma: true
     mutex:
         - name: hsl_chroma_channel
           members:

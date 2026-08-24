@@ -7,7 +7,7 @@ variables:
     - name: css_namespace_imported
       type: bool
       direction: input
-      description: "True when the caller imports the CSS namespace from the package."
+      description: True when the caller imports the CSS namespace from the package.
     - name: css_namespace_methods_exported
       type: bool
       direction: output
@@ -40,6 +40,14 @@ variables:
       type: bool
       direction: input
       description: Boolean flag trailing garbage for component parser_api.
+    - name: malformed_var_function
+      type: bool
+      direction: input
+      description: CSS.supports value contains malformed var() syntax.
+    - name: supports_false
+      type: bool
+      direction: output
+      description: CSS.supports rejects malformed var() syntax.
 independence:
     declared: true
-    reason: "SYS parser_api pairs (parseRule, CSS namespace, supports, parseStylesheet) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check."
+    reason: SYS parser_api pairs (parseRule, CSS namespace, supports, parseStylesheet) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.

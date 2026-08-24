@@ -4,8 +4,8 @@ status: review
 priority: shall
 category: interface
 req_type: guarantee
-fretish: when insert_rule_path & box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy parse_hooks_consume_rule_called & !parser_imported & (shorthand_expanded | shorthand_rejected)
-description: The cssom insertRule path shall call ParseHooks.consumeRule. The cssom module shall not import Parser. Box shorthands stay within 1-4 sides.
+fretish: when insert_rule_path & box_side_count <= 4 & position_token_count <= 4 & keyframe_offset_percent <= 100 & font_weight_number <= 1000 the cssom shall always satisfy parse_hooks_consume_rule_called & !parser_imported & four_longhands_assigned & (shorthand_expanded | shorthand_rejected)
+description: The cssom insertRule path shall call ParseHooks.consumeRule. The cssom module shall not import Parser. Box shorthands stay within 1-4 sides and assign all four longhands.
 formalization_strategy: fretish
 informal_verification:
     method: ""
@@ -23,6 +23,7 @@ variables:
     - font_weight_number
     - parse_hooks_consume_rule_called
     - parser_imported
+    - four_longhands_assigned
     - shorthand_expanded
     - shorthand_rejected
 references:
@@ -52,8 +53,8 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:36:47Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T10:48:28Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T12:06:23Z"
 obligation_checklist:
     - error_handling
     - malformed_input

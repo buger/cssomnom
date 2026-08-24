@@ -1,0 +1,12 @@
+id: REVIEW-49
+kind: spec_conformance
+reviewer: agent:champ
+reviewed_at: "2026-08-24T12:36:41Z"
+subject: SW-REQ-260824-JS91
+decision: approved
+comment: 'Formula maps to the hslToRgb else-if branch where g1 takes chroma C after the lower green-edge branch, gated on the parseHslComponents arity window of three to four parts enforced before sector selection. Trigger bounds mirror the css-color-4 hsl-to-rgb sector table for the green sectors within the declared hue domain. Witnesses assert the mid-green-sector spelling resolves to pure green and the four-part slash form resolves to translucent green.'
+citations:
+    - src/cascade/color-resolver.ts:168@hslToRgb
+    - src/cascade/color-resolver.ts:140@parseHslComponents
+    - tests/mcdc-witness-domain-bounds.test.ts:476
+    - tests/mcdc-cascade-vars.test.ts:177

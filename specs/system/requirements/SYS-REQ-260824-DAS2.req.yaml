@@ -1,0 +1,53 @@
+id: SYS-REQ-260824-DAS2
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when hsl_component_count >= 3 & hsl_component_count <= 4 the cascade shall always satisfy hsl_parsed
+description: The cascade HSL converter shall parse hsl() when the component list has 3 or 4 parts and reject other arities.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-D7WX
+component: cascade
+rationale: css-color-4 section 7 hsl() accepts 3 or 4 components. src/cascade/color-resolver.ts parseHslComponents returns null outside that arity, so normalizeComputedColor keeps the authored text. Arity witnesses - tests/mcdc-cascade-vars.test.ts:177-198 parses the 4-part slash forms and shows hsl() and the 5-part hsl(1, 2, 3, 4, 5) stay unparsed, while tests/mcdc-witness-domain-bounds.test.ts:460-469 shows the 2-part hsl(0, 100%) does not reach hslToRgb.
+tags: []
+variables:
+    - hsl_component_count
+    - hsl_parsed
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - STK-REQ-260821-D7WX
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-24T12:10:10Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T12:29:06Z"
+obligation_checklist:
+    - nominal
+obligation_deferrals:
+    - obligation_class: nominal
+      reason: 'Positive witness exists untagged: tests/mcdc-cascade-vars.test.ts:177-198 parses 4-part slash forms while hsl() and 5-part lists fall through unparsed; triple-form requirement tag lands with the next tests batch (tests/** frozen this batch).'
+      tracking: variable-model-cleanup
+      owner: human:Leonid Bugaev
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:28:44Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] variable model cleanup batch: sector and arity guarantees mirror reviewed siblings SYS-REQ-260822-CFRA and SW-REQ-260822-1REE with test witnesses cited in rationale'
+          changed_by: human:Leonid Bugaev

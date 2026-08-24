@@ -1,0 +1,54 @@
+id: SYS-REQ-260824-BRYV
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when hue_degrees >= 180 & hue_degrees < 300 & hsl_component_count >= 3 the cascade shall always satisfy blue_from_chroma
+description: The cascade HSL converter shall assign chroma to blue in the 180-300 degree sector when hsl() has 3 or 4 components.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-D7WX
+component: cascade
+rationale: css-color-4 hsl-to-rgb uses 60-degree sectors. hslToRgb sets b1 to C when h is 180 or more and less than 300. Sector witnesses - tests/mcdc-cascade-vars.test.ts:163-168 asserts hsl(180) resolves to rgb(0, 255, 255), hsl(210) to rgb(0, 128, 255), and hsl(240) to rgb(0, 0, 255).
+tags: []
+variables:
+    - hue_degrees
+    - hsl_component_count
+    - blue_from_chroma
+references:
+    - type: document
+      id: README.md
+traces:
+    satisfies:
+        - STK-REQ-260821-D7WX
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-24T12:10:09Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T12:29:05Z"
+obligation_checklist:
+    - nominal
+obligation_deferrals:
+    - obligation_class: nominal
+      reason: 'Positive witness exists untagged: tests/mcdc-cascade-vars.test.ts:163-168 asserts hsl(180), hsl(210), and hsl(240) resolve to blue-chroma rgb values; triple-form requirement tag lands with the next tests batch (tests/** frozen this batch).'
+      tracking: variable-model-cleanup
+      owner: human:Leonid Bugaev
+lifecycle:
+    change_history:
+        - date: "2026-08-24T12:28:44Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] variable model cleanup batch: sector and arity guarantees mirror reviewed siblings SYS-REQ-260822-CFRA and SW-REQ-260822-1REE with test witnesses cited in rationale'
+          changed_by: human:Leonid Bugaev

@@ -40,6 +40,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-121.yaml
+    - at: "2026-08-24T12:06:23Z"
+      by: agent:champ
+      action: edit
+      detail: poc-quality note corrected to 4 runtime-measured assertion failures; reparse-witness assert documented as structurally present but unreachable (node:test aborts per-test at first throw)
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -54,7 +58,7 @@ poc_quality:
     reachability_verified: true
     notes: |
         real_infrastructure: public CSSStyleDeclaration.setProperty/getPropertyValue and parse() - no mocks; rows verbatim from local WPT css/cssom/serialize-values.html attr() section.
-        quantitative_impact: measured at HEAD on Node v24.11.1 - attr(|bar) serializes as attr(bar) losing the namespace pipe across 5 defect legs (setter path x3 incl fallback row, stylesheet path, reparse witness); plain attr(foo, "") control round-trips verbatim.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - attr(|bar) serializes as attr(bar) losing the namespace pipe; 4 assertion failures measured at runtime across the defect tests (setter path x3 incl fallback row, stylesheet path). node:test aborts each test at its first throw, so the stylesheet test's second, reparse-witness assert is structurally present but unreachable after the stylesheet-path serialization failure fires; plain attr(foo, "") control round-trips verbatim.
         control_test: non-namespaced attr() rows already round-trip exactly as WPT pins them, isolating the escape to namespaced <<attr-name>> normalization.
         untrusted_attacker: ordinary content declarations using namespaced attr() references are the trust boundary; qualification loss changes which attribute is referenced after round-trip.
         current_deployment_relevance: serialize-values.html is the cssom-1 <wpt>-listed conformance fixture for this surface; confirmed live via two red runs at landing validation plus evidence re-execution.
