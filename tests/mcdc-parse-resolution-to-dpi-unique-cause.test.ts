@@ -75,6 +75,52 @@ function query(condition: MediaFeature): MediaQuery {
   return { type: 'media-query', tokens: [], condition };
 }
 
+/**
+ * Interception seam (incident 2026-08-24, branch CSSOmNom/Audit): a381e92
+ * added three comment-only //mcdc:ignore lines to src/MediaParser.ts (one in
+ * the parseLengthToPx region above this hotspot), shifting every decision
+ * inside parseResolutionToDpi by +1 (1021→1022, 1022→1023, 1033→1034). The
+ * previous exact-line stack regexes (/MediaParser\.ts:1021|1022|1033\b/) then
+ * matched nothing: the ident leg saw literal 'infinite' everywhere (leg
+ * expected 'unknown', got false) and the mathVal leg never triggered the
+ * type() patch (expected false, got true). Forensics ruled out folding changes
+ * and dual-class identity (the object at the decision satisfies
+ * constructor.name === 'CSSMathSum' && CSSMathSum.prototype.isPrototypeOf(it),
+ * and the class imported here is the one MediaParser mutates); the real hazard
+ * is site ambiguity — .name/.value/.type are also read from
+ * isValidRatioOperand, matchesType and parseLengthToPx (formerly H3). We
+ * therefore anchor each interception by the ENCLOSING MediaParser.ts function
+ * name (stable under comment-only churn) plus a generous ±40-line window as a
+ * secondary guard, instead of bare line numbers; the function anchor also
+ * disambiguates the multiple type()/name/value call sites more precisely than
+ * lines ever did. A lost interception cannot green-wash: every intercepted
+ * assertion below expects a branch-specific outcome ('unknown'/false), so a
+ * miss fails loudly. Product code is intentionally untouched.
+ */
+const MCDC_FN = 'parseResolutionToDpi';
+const MCDC_WINDOW = 40;
+
+const MP_FRAME =
+    /\bat\s+([\w$.]+)\s+\(?.*[/\\]MediaParser\.ts:(\d+):\d+/;
+
+/** MediaParser.ts stack frames as {fn, line}; see interception seam note. */
+function mediaParserFrames(): Array<{ fn: string; line: number }> {
+  const frames: Array<{ fn: string; line: number }> = [];
+  for (const raw of (new Error().stack ?? '').split('\n')) {
+    const m = MP_FRAME.exec(raw);
+    if (m) frames.push({ fn: m[1], line: Number(m[2]) });
+  }
+  return frames;
+}
+
+/** True iff a MediaParser.ts frame inside `fnName` sits within MCDC_WINDOW
+ * lines of `center`. Centers are today's decision lines; the window makes the
+ * witnesses immune to harmless comment-only drift (see seam note above). */
+function calledFromFn(fnName: string, center: number): boolean {
+  return mediaParserFrames()
+      .some((f) => f.fn === fnName && Math.abs(f.line - center) <= MCDC_WINDOW);
+}
+
 const origResolutionTypes = FEATURE_VALUE_TYPES['resolution'];
 const origMinResolutionTypes = FEATURE_VALUE_TYPES['min-resolution'];
 const origMaxResolutionTypes = FEATURE_VALUE_TYPES['max-resolution'];
@@ -104,8 +150,10 @@ function identInfiniteAtMatch(atL1033: string): Token {
       return 'ident';
     },
     get value() {
-      const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:1033\b/.test(stack) ? atL1033 : 'infinite';
+      // matchesType (L742) / isFeatureUnknown must see literal 'infinite';
+      // only parseResolutionToDpi's ident arm sees the impostor. Anchored by
+      // enclosing function + window (see interception seam note).
+      return calledFromFn(MCDC_FN, 1033) ? atL1033 : 'infinite';
     },
   } as Token;
 }
@@ -118,12 +166,13 @@ function calcThenNonMath(): CSSFunction {
   return {
     type: 'function',
     get name() {
-      const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:1021\b/.test(stack) ? 'foo' : 'calc';
+      // matchesType (L718) must parse calc(96dpi) so the gate passes;
+      // parseResolutionToDpi L1021 then parses a non-math function (mathVal
+      // F). Anchored by enclosing function + window (seam note).
+      return calledFromFn(MCDC_FN, 1021) ? 'foo' : 'calc';
     },
     get value() {
-      const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:1021\b/.test(stack) ? [ident('foo')] : [dim(96, 'dpi')];
+      return calledFromFn(MCDC_FN, 1021) ? [ident('foo')] : [dim(96, 'dpi')];
     },
   };
 }
@@ -273,8 +322,10 @@ describe('MC/DC unique-cause: parseResolutionToDpi (mediaqueries-4 § 4.1 #mq-mi
     assert.equal(hasUnknownFeature(MediaParser.parse('(resolution: calc(1s))')[0]), true);
     assert.equal(MediaParser.evaluate('(resolution: calc(1s))'), false);
     CSSMathSum.prototype.type = function (this: CSSMathSum) {
-      const stack = new Error().stack ?? '';
-      if (/MediaParser\.ts:1022\b/.test(stack)) {
+      // Patch ONLY the parseResolutionToDpi type() read; matchesType's own
+      // type.resolution === 1 gate must stay truthful so calc(96dpi) still
+      // reaches the hotspot (site discrimination formerly by exact line).
+      if (calledFromFn(MCDC_FN, 1022)) {
         return {};
       }
       return origSumType.call(this);
