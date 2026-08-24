@@ -51,6 +51,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260823-1V3K (KI-114 reproducer helper: declaration-block style probe)
+// reqproof:proptest:skip trivial accessor returning the first style entry of a live rule graph for the enclosing overlay scenario; nothing comparable in isolation
 function firstStyleOf(cssText: string) {
   const sheet = parse(cssText);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -65,6 +66,7 @@ function firstStyleOf(cssText: string) {
 // ---------------------------------------------------------------------------
 
 // Verifies: SYS-REQ-260823-1V3K (WPT border-shorthand-serialization.html row .a control)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-114 control: WPT row .a — border longhands alone do not serialize a border shorthand', () => {
   // .a { border-width: 1px; border-style: solid; border-color: black; }
   const style = firstStyleOf('.a{border-width:1px;border-style:solid;border-color:black;}');

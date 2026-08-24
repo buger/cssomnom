@@ -35,6 +35,7 @@ function ki5Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // MCDC SW-REQ-260821-W8S1: media_query_invalid=T, serialize_media_query_runs=T, serialized_as_not_all=T => TRUE
 // Verifies: SYS-REQ-260821-5283
 // MCDC SYS-REQ-260821-5283: media_query_invalid=T, serialized_as_not_all=T => TRUE
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-5: unbalanced (( serializes as not all', () => {
   const outcome = ki5Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

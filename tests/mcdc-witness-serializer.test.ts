@@ -25,6 +25,7 @@ const OTHER = 'div { color: red; }';
 // --- SW-REQ-260821-YTV6 ---
 // Verifies: SW-REQ-260821-YTV6
 // MCDC SW-REQ-260821-YTV6: serialize_token_list_runs=F, serialized_equals_source=F, tokens_from_btn_rule=T => TRUE [no-action: serialize not invoked]
+// reqproof:proptest:skip curated MC/DC witness row asserting serialize invocation combinations; assertion-only structural-coverage harness with no independent oracle
 test('MCDC SW-YTV6 serialize_token_list_runs=F tokens_from_btn_rule=T', () => {
   const tokens = tokenize(BTN);
   let serializeInvoked = 0;

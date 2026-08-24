@@ -71,6 +71,7 @@ function ki10Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-10
 // Verifies: SW-REQ-260821-6D9T
 // Verifies: SYS-REQ-260821-PJ76
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('fieldset inside first legend of disabled ancestor is not :disabled', () => {
   const outcome = ki10Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

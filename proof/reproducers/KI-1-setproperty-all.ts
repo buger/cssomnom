@@ -44,6 +44,7 @@ function ki1Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // MCDC SW-REQ-260821-HNRG: declaration_unchanged=T, set_property_ignored=T, value_validation_fails=T => TRUE
 // Verifies: SYS-REQ-260821-8TGB
 // MCDC SYS-REQ-260821-8TGB: invalid_value=T, set_property_called=T, set_property_ignored=T => TRUE
+// reqproof:proptest:skip expected-red known-issue tripwire asserting a live bug reproduces; no correct-behavior oracle exists by design (proof.yaml ki tripwire lanes)
 test('KI-1: invalid all is a no-op', () => {
   const outcome = ki1Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

@@ -52,6 +52,7 @@ const INVALID_KEYTEXT_ACCEPT_BUDGET = 0; // zero grammar violations may be accep
 const CONTROL_SELECTORS_THROW_MIN = 5; // '50%%','fifty%','Infinity%','-5%','0'
 
 // Verifies: SYS-REQ-260823-KTS6 (KI-44 reproducer: first-keyframe rule helper)
+// reqproof:proptest:skip trivial accessor returning the first keyframe of a live keyframes rule graph; nothing comparable in isolation
 function firstKeyframe(): CSSKeyframeRule {
   const sheet = new CSSStyleSheet();
   sheet.replaceSync('@keyframes k{0%{opacity:0}}');
@@ -59,6 +60,7 @@ function firstKeyframe(): CSSKeyframeRule {
 }
 
 // Verifies: SYS-REQ-260823-KTS6 (KI-44 reproducer suite: keyText setter rejects non-grammar selectors)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-44 keyText setter enforces the keyframe-selector grammar', () => {
   test(`control: ${CONTROL_SELECTORS_THROW_MIN} garbage selectors throw and leave keyText unchanged`, () => {
     for (const selector of ['50%%', 'fifty%', 'Infinity%', '-5%', '0'] as const) {

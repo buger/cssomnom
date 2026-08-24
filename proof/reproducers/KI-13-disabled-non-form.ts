@@ -67,6 +67,7 @@ function ki13Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-13
 // Verifies: SW-REQ-260821-6D9T
 // Verifies: SYS-REQ-260821-PJ76
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test(':disabled does not match div[disabled] or p inside fieldset[disabled]', () => {
   const outcome = ki13Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

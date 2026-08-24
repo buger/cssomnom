@@ -47,6 +47,7 @@ const TRAILING_GARBAGE_REJECTING_APIS_MIN = 2; // parseValue AND parseComponentV
 const LENIENT_ACCEPT_BUDGET = 0; // zero silent truncations allowed
 
 // Verifies: SYS-REQ-260823-PVE7 (KI-45 reproducer suite: consistent trailing-garbage rejection)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-45 parseValue and parseComponentValue agree on trailing garbage', () => {
   // Clean-input control (green): both APIs accept a well-formed single value.
   // Verifies: SYS-REQ-260823-PVE7

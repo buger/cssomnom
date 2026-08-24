@@ -353,6 +353,7 @@ test('CSSImportRule interface', () => {
 // SYS-REQ-260821-H3BD:nominal:nominal
 // SW-REQ-260821-5W6X:nominal:nominal
 // Verifies: SW-REQ-260821-5W6X
+// reqproof:proptest:skip cssom conformance scenario over a live CSSImportRule object graph; verdict exists only as inline assertions with no comparable return value
 test('CSSImportRule href copies url-token from unquoted url()', () => {
   // css-syntax-3 § 4.3.6 #consume-url-token: unquoted url(foo.css) is a <url-token>.
   // cssom-1 § 6.4.4 #dom-cssimportrule-href: href is the URL specified by the @import prelude.

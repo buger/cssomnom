@@ -41,6 +41,7 @@ async function ki2Contract(): Promise<{ setupOk: boolean; holds: boolean; messag
 // MCDC SW-REQ-260821-PAKB: deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE
 // Verifies: SYS-REQ-260821-GR67
 // MCDC SYS-REQ-260821-GR67: deviation_applies=T, documented_deviation_honored=T => TRUE
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-2: replace() parses synchronously', async () => {
   const outcome = await ki2Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

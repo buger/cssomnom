@@ -29,6 +29,7 @@ function cascade(css: string): CSSStyleDeclaration {
 // MCDC SYS-REQ-260822-V109: function_dispatch_case_insensitive=F, mixed_case_var_or_env=F => TRUE [no-action: lowercase controls do not enter the mixed-case dispatch path]
 // MCDC SYS-REQ-260822-V109: function_dispatch_case_insensitive=F, mixed_case_var_or_env=T => FALSE [known-issue] [ki: KI-109]
 // MCDC SYS-REQ-260822-V109: function_dispatch_case_insensitive=T, mixed_case_var_or_env=T => TRUE [known-issue] [ki: KI-109]
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-109 positive controls: lowercase var() and env() resolve', () => {
   const varStyle = cascade('.ki109 { --ki109-x: lime; --ki109-y: var(--ki109-x); color: var(--ki109-y, red); }');
   assert.equal(varStyle.getPropertyValue('color'), 'rgb(0, 255, 0)');

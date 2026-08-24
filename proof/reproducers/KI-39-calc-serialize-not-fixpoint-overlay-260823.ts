@@ -54,6 +54,7 @@ const MATH_FIXPOINT_SHAPES = 2; // shapes probed: parsed-value arithmetic + dire
 const FIXPOINT_DRIFT_BUDGET = 0; // zero serializations may drift across parse->toString->parse->toString
 
 // Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer: parse->toString fixpoint predicate)
+// reqproof:proptest:skip fixpoint predicate over the live parse-serialize pipeline inside a known-issue reproducer; any oracle would restate the very serialization under test
 function isFixpoint(v: { toString(): string }): boolean {
   return v.toString() === CSSOM.CSSStyleValue.parse('width', v.toString()).toString();
 }
@@ -61,11 +62,13 @@ function isFixpoint(v: { toString(): string }): boolean {
 // CSSStyleValue.parse returns the base class; arithmetic lives on CSSNumericValue
 // (repo convention: structural cast, cf. KI-37's `as unknown as { selectorText }`).
 // Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer: arithmetic mul() accessor cast)
+// reqproof:proptest:skip structural-cast accessor exposing typed-om numeric internals for the enclosing scenario; carries no comparable logic of its own
 function mulBy(v: CSSOM.CSSStyleValue, n: number): CSSOM.CSSStyleValue {
   return (v as unknown as { mul(n: number): CSSOM.CSSStyleValue }).mul(n);
 }
 
 // Verifies: SYS-REQ-260823-MFS9 (KI-39 reproducer suite: serialization fixpoint contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-39 calc() serialization fixpoint stability', () => {
   test('positive control: fully-folded calc serializes identically across re-parse', () => {
     const v = CSSOM.CSSStyleValue.parse('width', 'calc(9px)');

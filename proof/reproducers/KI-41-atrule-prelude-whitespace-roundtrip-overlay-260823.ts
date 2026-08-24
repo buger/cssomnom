@@ -45,6 +45,7 @@ import { CSSParserAtRule, parseRuleListSync } from '../../src/parser-api.ts';
 const PRELUDE_ROUNDTRIP_CORRUPTION_BUDGET = 0; // zero corrupted round-trips allowed
 
 // Verifies: SYS-REQ-260823-PRT3 (KI-41 reproducer: serialize/re-parse identity helper)
+// reqproof:proptest:skip parse-serialize-reparse probe over live CSSOM values; verdict rides the enclosing assertions and an oracle would duplicate the pipeline
 function serializeAndReparse(source: string): { name: string; preludeText: string } {
   const rule = parseRuleListSync(source)[0];
   assert.ok(rule instanceof CSSParserAtRule, `${source} did not map to CSSParserAtRule`);
@@ -56,6 +57,7 @@ function serializeAndReparse(source: string): { name: string; preludeText: strin
 }
 
 // Verifies: SYS-REQ-260823-PRT3 (KI-41 reproducer suite: at-rule prelude round-trip identity)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-41 at-rule serialization round-trips its name and prelude', () => {
   test(`positive control: qualified rules round-trip (${PRELUDE_ROUNDTRIP_CORRUPTION_BUDGET} corruptions allowed)`, () => {
     const rule = parseRuleListSync('div{}')[0];

@@ -42,6 +42,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260824-EVNP (KI-119 reproducer helper: declaration-block style probe)
+// reqproof:proptest:skip trivial accessor handing back a live declaration object for the enclosing overlay scenario; comparable only through that scenario's own assertions
 function styleOf(declarations: string) {
   const sheet = parse(declarations);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -50,6 +51,7 @@ function styleOf(declarations: string) {
 // Positive control (green today): documents cssomnom's own expansion
 // granularity — one font shorthand occupies 13 longhand declaration slots.
 // Verifies: SYS-REQ-260824-EVNP (expansion-granularity control: font -> 13 slots)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-119 control: single font shorthand yields 13 declarations', () => {
   const style = styleOf('.c{font:12px serif;}');
   assert.equal(style.length, 13);

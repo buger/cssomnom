@@ -44,6 +44,7 @@ function ki3Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // MCDC SW-REQ-260821-7AKJ: invalid_typed_input=T, parse_style_value=T, parse_throws=T => TRUE
 // Verifies: SYS-REQ-260821-HGFK
 // MCDC SYS-REQ-260821-HGFK: invalid_typed_input=T, parse_throws=T => TRUE
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-3: invalid object-position throws TypeError', () => {
   const outcome = ki3Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

@@ -54,6 +54,7 @@ function mapFor(cssText: string): StylePropertyMap {
 // Positive control (green today): the currentcolor keyword reifies as an
 // identifier per the 'color' row step 1 (CSSKeywordValue is correct here).
 // Verifies: SYS-REQ-260824-XE59 (currentcolor identifier-reification control)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-123 control', () => {
   test('currentcolor reifies as an identifier (CSSKeywordValue)', () => {
     const v = mapFor('color: currentcolor').get('color');

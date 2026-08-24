@@ -56,6 +56,7 @@ function ki8Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Verifies: SW-REQ-260821-5W6X
 // Verifies: SYS-REQ-260821-7521
 // MCDC leftover handleImportRule url-token href+cssText
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('parse(@import url(foo.css);).cssRules[0].href is foo.css', () => {
   const outcome = ki8Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

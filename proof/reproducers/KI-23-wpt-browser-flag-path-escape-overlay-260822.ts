@@ -38,6 +38,7 @@ import { fileURLToPath } from 'node:url';
  * reproducer loudly instead of being mirrored against a ghost.
  */
 // Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: mirror-drift pinning)
+// reqproof:proptest:skip reads source text from disk and asserts via assert.ok; output-only mirror-drift pin with fs read and no return value to compare
 function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
   const actual = source.split('\n')[lineNo - 1] ?? '';
   assert.ok(
@@ -49,6 +50,7 @@ function assertPinnedLine(source: string, relPath: string, lineNo: number, needl
 
 /** Exact templates from scripts/wpt/browser/run.ts:64-66. */
 // Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: derived log-path mirror)
+// reqproof:proptest:skip three path.resolve template calls mirroring scripts/wpt/browser/run.ts report-path templates; an oracle would restate the same stdlib composition
 function resolveReportPaths(browser: string): { reportJson: string; screenshotFile: string; reportHtml: string } {
   const reportJson = path.resolve(`dist/report-${browser}.json`);
   const screenshotFile = path.resolve(`dist/${browser}-screenshots.txt`);
@@ -57,6 +59,7 @@ function resolveReportPaths(browser: string): { reportJson: string; screenshotFi
 }
 
 // Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer: dist/ containment predicate)
+// reqproof:proptest:skip three-line stdlib composition of path.relative plus path.resolve; an independent oracle would restate the same stdlib prefix semantics
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
@@ -71,6 +74,7 @@ const ESCAPE_CASES = [
 ] as const;
 
 // Verifies: SYS-REQ-260823-ZM55 (KI-23 reproducer suite: --browser log-path containment)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-23 --browser report-path containment', () => {
   test('positive control: benign browser value keeps all three logs inside dist/', () => {
     const jail = fs.mkdtempSync(path.join(os.tmpdir(), 'ki23-control-'));

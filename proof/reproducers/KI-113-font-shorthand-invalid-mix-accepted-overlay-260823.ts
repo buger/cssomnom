@@ -81,6 +81,7 @@ for (const invalidValue of ['menu icon', 'menu 10px serif', 'icon small-caption 
 
 // The !important variant of the same grammar failure is equally droppable.
 // Verifies: SYS-REQ-260823-0BRJ
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-113: important flag does not rescue an invalid font value', () => {
   const style = firstStyleOf('.o{font: menu 10px serif !important;}');
   assert.equal(style.getPropertyValue('font'), '');

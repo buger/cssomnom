@@ -29,6 +29,7 @@ function cascade(css: string): CSSStyleDeclaration {
 // MCDC SYS-REQ-260822-V108: nested_name_substituted=F, nested_var_name=F => TRUE [no-action: direct var() control does not enter nested-name substitution]
 // MCDC SYS-REQ-260822-V108: nested_name_substituted=F, nested_var_name=T => FALSE [known-issue] [ki: KI-108]
 // MCDC SYS-REQ-260822-V108: nested_name_substituted=T, nested_var_name=T => TRUE [known-issue] [ki: KI-108]
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-108 positive control: direct custom-property reference resolves', () => {
   const style = cascade('.ki108 { --ki108-other: 10px; width: var(--ki108-other); }');
   assert.equal(style.getPropertyValue('width'), '10px');

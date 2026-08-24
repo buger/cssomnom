@@ -28,6 +28,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260824-BJTQ (KI-120 reproducer helper: declaration-block style probe)
+// reqproof:proptest:skip trivial accessor handing back a live declaration object for the enclosing overlay scenario; comparable only through that scenario's own assertions
 function styleOf(declarations: string) {
   const sheet = parse(declarations);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -36,6 +37,7 @@ function styleOf(declarations: string) {
 // Positive control (green today): without trailing whitespace before the
 // semicolon the value round-trips canonically.
 // Verifies: SYS-REQ-260824-BJTQ (clean-declaration control)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-120 control: clean declaration serializes without stray whitespace', () => {
   const style = styleOf('.c{color:red;}');
   assert.equal(style.getPropertyValue('color'), 'red');

@@ -59,6 +59,7 @@ function ki9Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-9
 // Verifies: SW-REQ-260821-QV2H
 // Verifies: SYS-REQ-260821-SBJ7
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('streaming peek does not fabricate EOF; remnant keeps high-surrogate then CR', () => {
   const outcome = ki9Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

@@ -27,6 +27,7 @@ function definition(syntax: string, initialValue: string): { name: string; synta
 // MCDC SYS-REQ-260822-V111: registered_value_invalid=F, registration_rejected=F => TRUE [no-action: valid initial values do not enter rejection handling]
 // MCDC SYS-REQ-260822-V111: registered_value_invalid=T, registration_rejected=F => FALSE [known-issue] [ki: KI-111]
 // MCDC SYS-REQ-260822-V111: registered_value_invalid=T, registration_rejected=T => TRUE [known-issue] [ki: KI-111]
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-111 positive controls: valid length and image values register', () => {
   assert.doesNotThrow(() => CSS.registerProperty(definition('<length>', '10px')));
   assert.doesNotThrow(() => CSS.registerProperty(definition('<image>', 'url(ki111.png)')));

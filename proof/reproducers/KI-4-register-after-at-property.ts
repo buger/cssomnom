@@ -79,6 +79,7 @@ function ki4SpecContract(): { setupOk: boolean; holds: boolean; message: string 
 // MCDC SW-REQ-260821-V5GA: duplicate_js_register=F, invalid_modification_error=F => TRUE
 // Verifies: SYS-REQ-260821-EGCP
 // MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=F, register_throws=F => TRUE
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-4 residual: CSS.registerProperty after @property succeeds and JS wins', () => {
   const outcome = ki4SpecContract();
   assert.equal(outcome.setupOk, true, outcome.message);

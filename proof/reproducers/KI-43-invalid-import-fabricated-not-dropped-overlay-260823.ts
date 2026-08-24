@@ -51,6 +51,7 @@ const FABRICATED_IMPORT_RULE_BUDGET = 0; // zero fabricated rules allowed for in
 const VALID_IMPORT_HREF_ROUNDTRIPS_MIN = 1; // control leg count
 
 // Verifies: SYS-REQ-260823-DRP5 (KI-43 reproducer suite: invalid @import dropped, valid kept)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-43 grammar-invalid @import does not fabricate a CSSImportRule', () => {
   // Control leg (green today): css-cascade-5 #at-import valid forms keep parsing.
   // Verifies: SYS-REQ-260823-DRP5

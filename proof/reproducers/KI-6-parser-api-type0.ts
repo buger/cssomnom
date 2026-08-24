@@ -49,6 +49,7 @@ function ki6Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Reproduces: KI-6
 // Verifies: INT-REQ-260821-WTPD
 // MCDC INT-REQ-260821-WTPD: parse_stylesheet_sync_called=T, parser_ast_adapted=T => TRUE
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-6: type-0 at-rules adapt to CSSParserAtRule', () => {
   const outcome = ki6Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

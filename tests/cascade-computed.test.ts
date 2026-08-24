@@ -47,6 +47,7 @@ test('normalizeComputedColor: hex colors', () => {
 });
 
 // Verifies: SW-REQ-260822-1REE
+// reqproof:proptest:skip obligation-evidence scenario over the live cascade color pipeline; verdict exists only as inline assertions with no comparable return value
 test('normalizeComputedColor: functional rgb, rgba, hsl, hsla colors', () => {
   // css-color-4 § 4.1 & § 4.3 #the-hsl-notation / #hsl-to-rgb
   assert.strictEqual(normalizeComputedColor('rgb( 0 , 255 , 0 )'), 'rgb(0, 255, 0)');

@@ -156,6 +156,7 @@ function ki7AssociatedSheetContract(): { setupOk: boolean; holds: boolean; messa
 // Reproduces: KI-7
 // Verifies: SYS-REQ-260821-H3BD (external_sheet_fetched=F; fetch permanently excluded as documented deviation)
 // Verifies: SW-REQ-260821-5W6X (css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-7: CSSImportRule.styleSheet is the associated, linked, host-fillable offline stylesheet', () => {
   const outcome = ki7AssociatedSheetContract();
   assert.equal(outcome.setupOk, true, outcome.message);

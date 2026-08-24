@@ -66,6 +66,7 @@ function importsParserModule(source: string): boolean {
 // INT-REQ-260821-30ZA:malformed_input:nominal
 // INT-REQ-260821-30ZA:error_handling:negative
 // INT-REQ-260821-30ZA:malformed_input:negative
+// reqproof:proptest:skip architecture-boundary integration check spying module import state; process-level coupling makes it uncallable as an isolated pure function
 test('INT-30ZA insertRule calls ParseHooks.consumeRule without CSSOM importing Parser', () => {
   assert.equal(importsParserModule(readSrc('CSSOM.ts')), false);
 

@@ -17,6 +17,7 @@ import { CSS } from '../../src/parser-api.ts';
 // MCDC SYS-REQ-260822-V107: malformed_var_function=F, supports_false=F => TRUE [no-action: valid var() controls do not enter malformed-input handling]
 // MCDC SYS-REQ-260822-V107: malformed_var_function=T, supports_false=F => FALSE [known-issue] [ki: KI-107]
 // MCDC SYS-REQ-260822-V107: malformed_var_function=T, supports_false=T => TRUE [known-issue] [ki: KI-107]
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-107 positive controls: valid var() forms are supported', () => {
   assert.equal(CSS.supports('color', 'var(--ki107-name)'), true);
   assert.equal(CSS.supports('color', 'var(--ki107-name,)'), true);

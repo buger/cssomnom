@@ -52,6 +52,7 @@ function mapFor(cssText: string): StylePropertyMap {
 // back as the same kind of value, per css-typed-om-1 #create-an-internal-
 // representation (no limited-range violation => no wrapping).
 // Verifies: SYS-REQ-260824-QGJE (in-range no-wrap controls)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-122 control', () => {
   test('in-range flex-grow stays a bare CSSUnitValue', () => {
     const map = mapFor('');

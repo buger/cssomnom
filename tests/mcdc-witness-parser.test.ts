@@ -68,6 +68,7 @@ function spyStream(css: string): TokenStream & { peeks: number; nexts: number } 
 // --- INT-REQ-260821-N2VE ---
 // Verifies: INT-REQ-260821-N2VE
 // MCDC INT-REQ-260821-N2VE: consume_step=F, token_stream_peek_next_used=F => TRUE [no-action: TokenStream.peek/next call counts stayed 0]
+// reqproof:proptest:skip curated MC/DC witness row asserting parse/consumeRule invocation combinations; assertion-only structural-coverage harness with no independent oracle
 test('MCDC INT-N2VE consume_step=F peek_next_used=F', () => {
   const stream = spyStream('.x { color: blue; }');
   assert.equal(stream.peeks, 0, 'peek not invoked');

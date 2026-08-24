@@ -43,6 +43,7 @@ const TRAVERSAL_URL = '/interfaces/../../../package.json';
 
 /** Faithful mirror of scripts/wpt/node/run.ts:143-156. */
 // Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: /interfaces/ fetch bridge mirror)
+// reqproof:proptest:skip fs.existsSync/readFileSync fetch bridge mirroring scripts/wpt/node/run.ts interfaces lookup; performs filesystem I/O so not isolable
 function mirrorInterfacesFetch(wptRoot: string, urlStr: string): { handled: boolean; fullPath?: string; content?: string } {
   if (!urlStr.startsWith('/interfaces/')) return { handled: false };
   const idlFileName = urlStr.slice('/interfaces/'.length);
@@ -52,12 +53,14 @@ function mirrorInterfacesFetch(wptRoot: string, urlStr: string): { handled: bool
 }
 
 // Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: interfaces-dir containment predicate)
+// reqproof:proptest:skip three-line stdlib composition of path.relative plus path.resolve; an independent oracle would restate the same stdlib prefix semantics
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
 }
 
 // Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer: synthetic WPT tree + traversal fixture)
+// reqproof:proptest:skip writes a synthetic WPT fixture tree via mkdirSync/writeFileSync; filesystem I/O makes it uncallable as an isolated pure function
 function buildTree(root: string): { wptRoot: string; hostileHtml: string } {
   const wptRoot = path.join(root, 'submodules', 'web-platform-tests');
   const interfacesDir = path.join(wptRoot, 'interfaces');
@@ -94,6 +97,7 @@ function buildTree(root: string): { wptRoot: string; hostileHtml: string } {
 }
 
 // Verifies: SYS-REQ-260823-KYB6 (KI-24 reproducer suite: IDL fetch containment)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-24 sandbox.fetch /interfaces/ containment', () => {
   test('positive control: in-tree IDL path stays contained under mirror resolver', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ki24-control-'));

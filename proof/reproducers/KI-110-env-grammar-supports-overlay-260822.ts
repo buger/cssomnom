@@ -18,6 +18,7 @@ import { CSSStyleDeclaration } from '../../src/CSSStyleDeclaration.ts';
 // MCDC SYS-REQ-260822-V110: supports_env_true=F, syntactically_valid_env=F => TRUE [no-action: ordinary-value control does not enter env() support handling]
 // MCDC SYS-REQ-260822-V110: supports_env_true=F, syntactically_valid_env=T => FALSE [known-issue] [ki: KI-110]
 // MCDC SYS-REQ-260822-V110: supports_env_true=T, syntactically_valid_env=T => TRUE [known-issue] [ki: KI-110]
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-110 positive controls: ordinary values and valid indexed env() parse', () => {
   assert.equal(CSS.supports('width', '10px'), true);
   assert.equal(CSS.supports('width', 'env()'), false);

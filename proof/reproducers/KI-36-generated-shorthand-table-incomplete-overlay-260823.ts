@@ -59,6 +59,7 @@ const GENERATED_SHORTHAND_COVERAGE_MIN = 165; // entries in src/data/gen/shortha
 const CASCADE_WINNER_FLIP_BUDGET = 0; // zero stale-shorthand round-trip corruptions allowed
 
 // Verifies: SYS-REQ-260823-SHX6 (KI-36 reproducer suite: codegen-backed shorthand expansion and cascade-order contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-36 shorthand expansion table completeness', () => {
   test('positive control: margin shorthand expands into longhands', () => {
     const style = new CSSStyleDeclaration();

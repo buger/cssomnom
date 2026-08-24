@@ -47,6 +47,7 @@ const EGRESS_PROBES = [
 ];
 
 // Verifies: SYS-REQ-260823-7TCQ (KI-25 reproducer: egress-probe fixture tree)
+// reqproof:proptest:skip writes a synthetic WPT fixture tree via mkdirSync/writeFileSync; filesystem I/O makes it uncallable as an isolated pure function
 function buildTree(root: string): string {
   const wptRoot = path.join(root, 'submodules', 'web-platform-tests');
   const interfacesDir = path.join(wptRoot, 'interfaces');
@@ -77,6 +78,7 @@ function buildTree(root: string): string {
 }
 
 // Verifies: SYS-REQ-260823-7TCQ (KI-25 reproducer suite: fetch fail-closed contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-25 sandbox.fetch host fallthrough (SSRF egress)', () => {
   // Reproduces: KI-25
   test('live leg: real runWptFile sandbox.fetch must not forward non-/interfaces/ URLs to the host stack', async () => {

@@ -96,6 +96,7 @@ test('all corpus seeds: no unexpected throw', () => {
 // SW-REQ-260821-HHVE:denial_of_service_resistant:fuzz
 // SYS-REQ-260821-SBJ7:denial_of_service_resistant:fuzz
 // SW-REQ-260821-7M07:denial_of_service_resistant:fuzz
+// reqproof:proptest:skip DoS deep-nesting fuzz gate generating adversarial CSS; crash-resistance evidence rather than an oracle-comparable pure function
 test('deep nesting gate against cssomnom', () => {
   const target = new cssfuzz.CssomnomTarget('stylesheet');
   const closed = cssfuzz.genDeepNesting(cssfuzz.DEEP_NEST_DEPTH, true);

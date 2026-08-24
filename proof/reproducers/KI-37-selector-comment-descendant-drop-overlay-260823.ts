@@ -49,11 +49,13 @@ const COMMENT_DESCENDANT_PROBE_COUNT = 2; // valid selector shapes probed: div/*
 const RULES_LOST_BUDGET = 0; // zero qualified rules may be dropped by comments
 
 // Verifies: SYS-REQ-260823-SCD7 (KI-37 reproducer: parsed rule-count probe)
+// reqproof:proptest:skip parsed-rule-count probe over live parser output; comparable only through the enclosing scenario's assertions
 function ruleCount(source: string): number {
   return parse(source).cssRules.length;
 }
 
 // Verifies: SYS-REQ-260823-SCD7 (KI-37 reproducer suite: comments-as-trivia descendant combinator contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-37 comment in descendant-combinator position', () => {
   test('positive control: whitespace descendant combinator parses one rule', () => {
     const sheet = parse('div x{a:b}');

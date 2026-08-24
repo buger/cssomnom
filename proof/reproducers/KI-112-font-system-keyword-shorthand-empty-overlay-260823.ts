@@ -108,6 +108,7 @@ for (const keyword of SYSTEM_FONT_KEYWORDS) {
 // WPT font-valid.html round-trip leg: re-setting the serialized value must
 // read back unchanged ("serialization should round-trip").
 // Verifies: SYS-REQ-260823-S4DW
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-112: system font shorthand serialization round-trips via setProperty', () => {
   const style = firstStyleOf('.o{}');
   style.setProperty('font', 'message-box');

@@ -43,6 +43,7 @@ const BAD_URL_ACCEPT_BUDGET = 0; // zero bad-token acceptances allowed
 const MULTI_VALUE_CONTROL_REJECTIONS_MIN = 1; // existing >1-value branch must keep throwing
 
 // Verifies: SYS-REQ-260823-BTC4 (KI-42 reproducer suite: bad-token rejection contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-42 parseComponentValue rejects <bad-url-token>', () => {
   // Control leg (green today): multi-value inputs throw via the >1 branch.
   // Verifies: SYS-REQ-260823-BTC4

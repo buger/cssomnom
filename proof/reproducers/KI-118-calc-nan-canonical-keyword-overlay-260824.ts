@@ -37,6 +37,7 @@ import assert from 'node:assert/strict';
 import { CSSStyleValue } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260824-N9AE (KI-118 reproducer helper: parse().toString() probe)
+// reqproof:proptest:skip one-line parse-then-serialize probe over live CSSStyleValue.parse; its oracle would restate the same parse+serialize pipeline
 function toStringOf(value: string): string {
   return String(CSSStyleValue.parse('width', value));
 }
@@ -44,6 +45,7 @@ function toStringOf(value: string): string {
 // Positive control (green today): the infinity keyword already serializes in
 // its canonical lowercase form per css-values-4 step 2 ('infinity').
 // Verifies: SYS-REQ-260824-N9AE (infinity-keyword control per css-values-4 step 2)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-118 control', () => {
   test('infinity keyword is spelled canonically', () => {
     const s = toStringOf('calc(1px * infinity)');

@@ -24,6 +24,7 @@ const CSS_TEXT = '.btn { color: #fff; }';
 // --- SW-REQ-260821-7M07 ---
 // Verifies: SW-REQ-260821-7M07
 // MCDC SW-REQ-260821-7M07: consume_token_loop_runs=F, css_text_supplied=T, token_list_returned=F => TRUE [no-action: tokenize/consumeToken not invoked]
+// reqproof:proptest:skip curated MC/DC witness row asserting tokenize call-count combinations; assertion-only structural-coverage harness with no independent oracle
 test('MCDC SW-7M07 consume_token_loop_runs=F css_text_supplied=T token_list_returned=F', () => {
   const cssTextSupplied = CSS_TEXT;
   let tokenizeInvoked = 0;

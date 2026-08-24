@@ -37,6 +37,7 @@ import type { CSSStyleRule } from '../../src/index.ts';
 // Mirrors the WPT harness contract: set through the declaration API, read the
 // serialization back.
 // Verifies: SYS-REQ-260824-XRYP (KI-121 reproducer helper: set/get serialization probe)
+// reqproof:proptest:skip live CSSStyleDeclaration set/get probe requiring a full declaration object; comparable only through the enclosing scenario's assertions
 function roundtripViaSetProperty(input: string): string {
   const style = new CSSStyleDeclaration();
   style.setProperty('content', input);
@@ -47,6 +48,7 @@ function roundtripViaSetProperty(input: string): string {
 // empty-string fallback already round-trip verbatim (WPT row
 // {actual: 'attr(foo, "")', serialized: 'attr(foo, "")'}).
 // Verifies: SYS-REQ-260824-XRYP (plain attr() control per WPT serialize-values.html)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-121 control: attr(foo, "") round-trips verbatim', () => {
   assert.equal(roundtripViaSetProperty('attr(foo, "")'), 'attr(foo, "")');
 });

@@ -80,6 +80,7 @@ function ki12Contract(): { setupOk: boolean; holds: boolean; message: string } {
 // Verifies: INT-REQ-260821-ZMZR
 // Verifies: SYS-REQ-260821-7521
 // Verifies: INT-REQ-260821-WTPD
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('at-rule dispatch is ASCII-case-insensitive and hasOwn-safe', () => {
   const outcome = ki12Contract();
   assert.equal(outcome.setupOk, true, outcome.message);

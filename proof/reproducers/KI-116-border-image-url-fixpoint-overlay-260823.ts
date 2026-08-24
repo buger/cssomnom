@@ -39,6 +39,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260823-BNDX (KI-116 reproducer helper: declaration-block style probe)
+// reqproof:proptest:skip trivial accessor returning the first style entry of a live rule graph for the enclosing overlay scenario; nothing comparable in isolation
 function firstStyleOf(cssText: string) {
   const sheet = parse(cssText);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -57,6 +58,7 @@ const BORDER_IMAGE_LONGHANDS = [
 // ---------------------------------------------------------------------------
 
 // Verifies: SYS-REQ-260823-BNDX (property-specific stability control)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-116 control: background:url() is fixpoint-stable', () => {
   const pass1 = firstStyleOf('.o{background:url()}');
   const serialized = firstStyleOf(`.o{${pass1.cssText}}`);

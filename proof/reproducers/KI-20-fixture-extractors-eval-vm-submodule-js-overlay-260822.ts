@@ -53,6 +53,7 @@ const SINK_WPT = 'scripts/external_suites/extract_wpt.ts:126/:257';
  * last `];` before the describe call, strip the declaration, and eval.
  */
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_nv_cssom eval mirror)
+// reqproof:proptest:skip eval-based mirror of extract_nv_cssom.ts string slicing; executes extracted code and mirrors drift pins rather than pure logic
 function mirrorNvCssomExtract(content: string): unknown[] {
   const describeIndex = content.indexOf('describe(');
   const startIndex = content.indexOf('var TESTS = [');
@@ -67,6 +68,7 @@ function mirrorNvCssomExtract(content: string): unknown[] {
 
 /** Mirror of extract_rrweb.ts:26-50 sandbox + vm.runInContext. */
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_rrweb vm.runInContext mirror)
+// reqproof:proptest:skip vm.runInContext sandbox mirror of extract_rrweb.ts; depends on vm process state and mirrored extractor semantics
 function mirrorRrwebExtract(content: string): { TESTS: unknown[] } {
   const specificTests: unknown[] = [];
   const sandbox: Record<string, unknown> = {
@@ -90,6 +92,7 @@ function mirrorRrwebExtract(content: string): { TESTS: unknown[] } {
 
 /** Mirror of extract_wpt.ts:120-126 / 255-257 regex + vm.runInNewContext. */
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_wpt object-literal vm mirror)
+// reqproof:proptest:skip eval-based mirror of WPT fixture extractor object-literal parsing; executes extracted snippets, not isolable pure logic
 function mirrorWptExtractObjectLiteral(content: string): Record<string, unknown> {
   const match = content.match(/var\s+tests\s*=\s*({[\s\S]*?})\n\s*(?:if|for|<)/);
   if (!match) throw new Error('wpt object-literal mirror out of sync with extractor regex');
@@ -97,6 +100,7 @@ function mirrorWptExtractObjectLiteral(content: string): Record<string, unknown>
 }
 
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: extract_wpt test_map vm mirror)
+// reqproof:proptest:skip eval-based mirror of WPT fixture extractor map-literal parsing; executes extracted snippets, not isolable pure logic
 function mirrorWptExtractMapLiteral(content: string): Record<string, unknown> {
   const mapMatch = content.match(/var\s+test_map\s*=\s*({[\s\S]*?});/);
   if (!mapMatch) throw new Error('wpt test_map mirror out of sync with extractor regex');
@@ -109,6 +113,7 @@ function mirrorWptExtractMapLiteral(content: string): Record<string, unknown> {
  * drifts, this fails loudly instead of silently testing a ghost.
  */
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer: mirror-drift pinning)
+// reqproof:proptest:skip reads source text from disk and asserts via assert.ok; output-only mirror-drift pin with fs read and no return value to compare
 function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
   const actual = source.split('\n')[lineNo - 1] ?? '';
   assert.ok(
@@ -119,6 +124,7 @@ function assertPinnedLine(source: string, relPath: string, lineNo: number, needl
 }
 
 // Verifies: SYS-REQ-260823-AKDT (KI-20 reproducer suite: vendored-JS-as-data contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-20 fixture extractors must not execute vendored JS', () => {
   let lab: string;
 

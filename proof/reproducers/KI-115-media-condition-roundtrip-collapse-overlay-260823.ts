@@ -42,6 +42,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSMediaRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260823-EEQN (KI-115 reproducer helper: conditionText probe)
+// reqproof:proptest:skip trivial media-condition string wrapper for the enclosing roundtrip scenario; comparable only through that scenario's assertions
 function condOf(cssText: string) {
   return ((parse(cssText).cssRules[0]) as CSSMediaRule).conditionText;
 }
@@ -72,6 +73,7 @@ for (const [query, label] of [
 // (test_media_queries.html expression_should_be_unknown requires unknown
 // features to stay parseable, i.e. NOT become 'not all').
 // Verifies: SYS-REQ-260823-EEQN (pass-1 retention control)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-115 control: valid grouped negation is preserved on first parse', () => {
   assert.equal(condOf(SOURCE), PASS1);
 });

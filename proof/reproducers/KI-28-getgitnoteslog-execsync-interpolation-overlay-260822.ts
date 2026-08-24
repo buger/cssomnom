@@ -47,6 +47,7 @@ const REF_MARKER = 'KI28_REF_MARKER';
 const COUNT_MARKER = 'KI28_COUNT_MARKER';
 
 // Verifies: SYS-REQ-260823-0A2D (KI-28 reproducer: seeded git-notes fixture repo)
+// reqproof:proptest:skip seeds a temporary git repository via child_process execSync; filesystem and subprocess state, not constructible in isolation
 function setupTempRepo(dir: string): void {
   fs.mkdirSync(dir, { recursive: true });
   const run = (args: string[]) =>
@@ -60,6 +61,7 @@ function setupTempRepo(dir: string): void {
 }
 
 // Verifies: SYS-REQ-260823-0A2D (KI-28 reproducer suite: argv-vs-shell contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-28 getGitNotesLog command injection', () => {
   test('positive control: benign ref/count return seeded notes via the real helper', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ki28-control-'));

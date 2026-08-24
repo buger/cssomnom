@@ -50,6 +50,7 @@ const TOP_LEVEL_DECLARATIONS_MIN = 2; // 'color', 'margin'
 const NESTED_DECLARATIONS_MIN = 1; // 'b'
 
 // Verifies: SYS-REQ-260823-QBD2 (KI-40 reproducer: keyframe-path contrast helper)
+// reqproof:proptest:skip keyframe-path contrast probe over live parser output; comparable only through the enclosing scenario's assertions
 function keyframeBodyDeclarationNames(): string[] {
   // css-animations-1 #CSSKeyframeRule maps through styleToParserDeclarations,
   // so this leg documents the working branch of the same adapter.
@@ -59,6 +60,7 @@ function keyframeBodyDeclarationNames(): string[] {
 }
 
 // Verifies: SYS-REQ-260823-QBD2 (KI-40 reproducer suite: qualified rule body declaration contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-40 Parser API qualified rule body preserves declarations', () => {
   // Positive contrast control (green today): the keyframe path maps declarations.
   // Verifies: SYS-REQ-260823-QBD2

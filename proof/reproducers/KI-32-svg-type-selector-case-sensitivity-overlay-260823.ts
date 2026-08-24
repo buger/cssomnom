@@ -34,6 +34,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 // Verifies: SYS-REQ-260823-SCS2 (KI-32 reproducer: namespaced fixture element factory)
+// reqproof:proptest:skip namespaced fixture-element factory returning live DOM-like nodes for the enclosing scenario; nothing comparable in isolation
 function el(localName: string, namespaceURI: string) {
   return {
     nodeType: 1,
@@ -46,6 +47,7 @@ function el(localName: string, namespaceURI: string) {
 }
 
 // Verifies: SYS-REQ-260823-SCS2 (KI-32 reproducer suite: case-sensitive type matching outside the HTML namespace)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-32 type-selector case sensitivity outside the HTML namespace', () => {
   test('positive control: exact-case svg type selector matches', () => {
     assert.equal(matches(el('textPath', SVG_NS), 'svg|textPath') || matches(el('textPath', SVG_NS), 'textPath'), true);

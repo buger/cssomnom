@@ -42,6 +42,7 @@ import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
 // Verifies: SYS-REQ-260824-CFQG (KI-117 reproducer helper: declaration-block style probe)
+// reqproof:proptest:skip trivial accessor handing back a live declaration object for the enclosing overlay scenario; comparable only through that scenario's own assertions
 function styleOf(declarations: string) {
   const sheet = parse(`.k{${declarations}}`);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -99,6 +100,7 @@ for (const value of INVALID_RELATIVE_COLORS) {
 // (cssom-1 #parse-a-css-declaration-block processes each item independently).
 // Reproduces: KI-117
 // Verifies: SYS-REQ-260824-CFQG (neighbor-preservation leg)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 test('KI-117: dropping an invalid relative color preserves valid neighbors', () => {
   const style = styleOf('margin:1px;color:hsl(from rebeccapurple hue s l);padding:2px;');
   assert.equal(style.length, 2, 'only the two valid declarations survive');

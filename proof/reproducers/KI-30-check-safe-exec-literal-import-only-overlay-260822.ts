@@ -51,6 +51,7 @@ const PINNED_IMPORT_PATTERN_SRC = String.raw`/(?:from\s*|import\s*\(?\s*|require
  * this reproducer loudly instead of being mirrored against a ghost.
  */
 // Verifies: SYS-REQ-260823-486K (KI-30 reproducer: mirror-drift pinning)
+// reqproof:proptest:skip reads source text from disk and asserts via assert.ok; output-only mirror-drift pin with fs read and no return value to compare
 function assertPinnedLine(source: string, relPath: string, lineNo: number, needle: string): void {
   const actual = source.split('\n')[lineNo - 1] ?? '';
   assert.ok(
@@ -73,6 +74,7 @@ const ALLOWED_FILES = new Set([
 
 /** Exact walker of scripts/ci/check-safe-exec.ts:21-35. */
 // Verifies: SYS-REQ-260823-486K (KI-30 reproducer: scripts/tests source walker mirror)
+// reqproof:proptest:skip exact walker mirror of scripts/ci/check-safe-exec.ts source discovery; filesystem traversal whose only oracle is the mirrored implementation
 function findSourceFiles(dir: string): string[] {
   const results: string[] = [];
   if (!fs.existsSync(dir)) return results;
@@ -96,6 +98,7 @@ interface Violation {
 
 /** Exact checkFiles() of scripts/ci/check-safe-exec.ts:37-72. */
 // Verifies: SYS-REQ-260823-486K (KI-30 reproducer: literal-import-only detector mirror)
+// reqproof:proptest:skip mirror of scripts/ci/check-safe-exec.ts literal-import detector; reads repository files from disk so not callable as an isolated pure function
 function checkFiles(repoRoot: string): Violation[] {
   const searchDirs = [path.join(repoRoot, 'scripts'), path.join(repoRoot, 'tests')];
   const allFiles: string[] = [];
@@ -117,6 +120,7 @@ function checkFiles(repoRoot: string): Violation[] {
 }
 
 // Verifies: SYS-REQ-260823-486K (KI-30 reproducer: candidate-file fixture writer)
+// reqproof:proptest:skip writes candidate files via fs.writeFileSync; filesystem I/O makes it uncallable as an isolated pure function
 function writeFixture(root: string, relPath: string, source: string): void {
   const abs = path.join(root, relPath);
   fs.mkdirSync(path.dirname(abs), { recursive: true });
@@ -124,6 +128,7 @@ function writeFixture(root: string, relPath: string, source: string): void {
 }
 
 // Verifies: SYS-REQ-260823-486K (KI-30 reproducer suite: acquisition-form detection coverage)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-30 check-safe-exec dynamic-import bypass', () => {
   test('positive control: literal static import is caught by the mirrored guard', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ki30-control-'));

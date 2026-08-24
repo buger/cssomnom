@@ -32,6 +32,7 @@ const REPORT_BODY = JSON.stringify({
 
 /** customFetch stub: wpt.fyi API returns one run whose raw_results_url is served locally in-memory. */
 // Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: in-memory wpt.fyi API + results stub)
+// reqproof:proptest:skip in-memory fetch stub standing in for wpt.fyi network I/O; exists only to serve the enclosing scenario's transport needs
 function makeStubFetch(): typeof fetch {
   const reportBuf = Buffer.from(REPORT_BODY);
   const exactArrayBuffer = (): ArrayBuffer =>
@@ -69,17 +70,20 @@ function makeStubFetch(): typeof fetch {
 }
 
 // Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: .wpt-cache containment predicate)
+// reqproof:proptest:skip three-line stdlib composition of path.relative plus path.resolve; an independent oracle would restate the same stdlib prefix semantics
 function containedUnder(candidate: string, rootDir: string): boolean {
   const rel = path.relative(path.resolve(rootDir), path.resolve(candidate));
   return rel === '' || (!rel.startsWith(`..${path.sep}`) && rel !== '..' && !path.isAbsolute(rel));
 }
 
 // Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer: real fetchWptFyiRun invocation leg)
+// reqproof:proptest:skip real fetchWptFyiRun invocation leg exercising network fetch plus cache-file writes; network and filesystem I/O make it uncallable as an isolated pure function
 async function runReal(options: FetchWptFyiOptions) {
   return fetchWptFyiRun({ quiet: true, customFetch: makeStubFetch(), ...options });
 }
 
 // Verifies: SYS-REQ-260823-MPS4 (KI-26 reproducer suite: cache-path confinement)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-26 fetch-wptfyi cache-path confinement', () => {
   test('positive control: default cachePath lands inside .wpt-cache', async () => {
     const lab = fs.mkdtempSync(path.join(os.tmpdir(), 'ki26-control-'));

@@ -50,6 +50,7 @@ interface FixtureElement {
 }
 
 // Verifies: SYS-REQ-260823-00C0 (KI-34 reproducer: lang-carrying fixture element factory)
+// reqproof:proptest:skip namespaced fixture-element factory returning live DOM-like nodes for the enclosing scenario; nothing comparable in isolation
 function el(langValue: string | null, parent?: FixtureElement): FixtureElement {
   return {
     nodeType: 1,
@@ -64,6 +65,7 @@ function el(langValue: string | null, parent?: FixtureElement): FixtureElement {
 }
 
 // Verifies: SYS-REQ-260823-00C0 (KI-34 reproducer suite: RFC4647 extended-filtering wildcard contract)
+// reqproof:proptest:skip assertion-only known-issue overlay harness driving live parser/CSSOM object graphs; verdict exists only as pass/fail assertions with no comparable return value
 describe('KI-34 :lang() wildcard ranges match via RFC4647 extended filtering', () => {
   test('positive control: exact language tag matches', () => {
     assert.equal(matches(el('en-US'), ':lang("en-US")'), true);
