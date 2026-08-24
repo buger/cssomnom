@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-122
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260824-QGJE
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-24T09:00:15Z"
+input_set:
+    - proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
+freshness_hashes:
+    proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts: sha256:5a6dfb6bd61e8980d1b8f8ead399bd7751b6b381804baa3819b7ef773e86fdae
+known_issues:
+    - KI-122

@@ -1,0 +1,39 @@
+id: SYS-REQ-260824-QGJE
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: 'Typed-value storage of the StylePropertyMap shall enforce limited numeric ranges per css-typed-om-1 #create-an-internal-representation: when a component of the property grammar has a limited numeric range and a CSSUnitValue part of the value is outside that range (e.g. flex-grow -3.14 against <number [0,∞]>, border-top-left-radius -3.14em against <length-percentage [0,∞]>), the stored internal representation shall replace that part with a fresh CSSMathSum wrapping exactly it, so get()/getAll() reify a CSSMathSum containing the input unit value.'
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-typed-om-1 #create-an-internal-representation mandates the out-of-range wrap; WPT testsuite.js assert_is_equal_with_range_handling pins it ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum") across 42 typed-om property fixtures (150 failing sandbox rows). Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned (formalization debt).'
+tags: []
+variables: []
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#create-an-internal-representation
+    - type: document
+      id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#reify-stylevalue
+    - type: document
+      id: submodules/web-platform-tests/css/css-typed-om/the-stylepropertymap/properties/resources/testsuite.js
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:ox-alpha
+    created_at: "2026-08-24T08:59:09Z"
+    last_modified_by: agent:ox-alpha
+    last_modified_at: "2026-08-24T08:59:09Z"

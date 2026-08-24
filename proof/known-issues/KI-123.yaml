@@ -1,0 +1,38 @@
+id: KI-123
+title: Unrepresentable declaration values over-reify into subclasses instead of direct CSSStyleValue with [[associatedProperty]]
+description: 'StylePropertyMap.get() reifies values of properties whose css-typed-om-1 normalization row ends in reify-as-a-CSSStyleValue as subclass instances: get(color) after color: red returns CSSKeywordValue, after #bbff00 or rgb() returns a CSSRGB color value. #reify-stylevalue "Property-specific Rules" defines reification for every property and the color/border-top-color rows step 2 say "Otherwise, reify as a CSSStyleValue and return the result"; #reify-failure + #reify-as-a-cssstylevalue require a new direct CSSStyleValue whose [[associatedProperty]] internal slot is set to the property. Local WPT color.html runUnsupportedPropertyTests pins "Unsupported value must be a CSSStyleValue and not one of its subclasses"; the wpt-sandbox baseline carries 204 such failing rows across the typed-om property fixtures (color.html x5, border-color.html x20+). The currentcolor keyword control (identifier reification) is correct today.'
+affected_requirements:
+    - SYS-REQ-260824-XE59
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-123-unrepresentable-value-overreification-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-123.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.get() / StylePropertyMap.getAll() reification of string-declared declarations
+attacker_input: ordinary stylesheet declarations with <color> (or other base-only) values read back through Typed OM get(); no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-123-unrepresentable-value-overreification-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on instanceof subclass checks on StylePropertyMap.get() results for base-only properties; treat any CSSStyleValue-shaped result as untyped.
+remediation: 'Route get()/getAll() reification through the #reify-property per-property table: for base-only rows return a direct CSSStyleValue carrying [[associatedProperty]] = property instead of boxing into CSSKeywordValue/CSSColorValue subclasses.'
+notes:
+    - 'Reproducer ran red twice before filing (exit 1 both runs: 7 tests, 1 positive-control pass, 1 green-today invariant pin ([[associatedProperty]]), 5 defect failures). Evidence captured via genuine re-execution at 2026-08-24T09:00:16Z (proof/evidence/ki-123.yaml); freshness hash sha256:3095e47b28d3efead62375ff810b43c2bf4ff8d3dc6b712a607b646d9b904aff matches final reproducer bytes. Requirement SYS-REQ-260824-XE59 drafted through proof req new under STK-REQ-260821-BQKD; informal until cssom variables can be declared in specs/system/variables/cssom.vars.yaml (concurrently owned).'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T09:00:09Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T09:02:18Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+kill_domain: reified_type_identity
+do_not_refile_as: 'grammar-invalid relative color retention at block-parse time (KI-117): every value probed here is grammar-VALID; the defect is the reified TYPE on get(); limited-range CSSMathSum wrap on typed set (KI-122): different algorithm (#create-an-internal-representation range clause) and different observable'

@@ -1,0 +1,38 @@
+id: KI-122
+title: StylePropertyMap.set stores out-of-range negative unit values unwrapped instead of wrapping them in a fresh CSSMathSum
+description: 'Setting a CSSUnitValue outside the property grammar''s limited numeric range (flex-grow -3.14 against <number [0,∞]>, border-top-left-radius -3.14em/-3.14% against <length-percentage [0,∞]>) stores a bare CSSUnitValue, so get()/getAll() reify the bare unit value. css-typed-om-1 #create-an-internal-representation requires replacing the out-of-range part "with the result of wrapping it in a fresh CSSMathSum whose values internal slot contains only that part of |value|", and #reify-property reflects that representation on get. WPT testsuite.js assert_is_equal_with_range_handling pins the wrap ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum"); the wpt-sandbox baseline carries 150 such failing rows across 42 typed-om property fixtures (border-radius, scroll-padding, flex-*, column-count, font-weight, orphans/widows, animation-duration, ...). In-range controls stay bare per spec and pass.'
+affected_requirements:
+    - SYS-REQ-260824-QGJE
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
+evidence_manifests:
+    - proof/evidence/ki-122.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.set() / StylePropertyMap.get() / StylePropertyMap.getAll()
+attacker_input: ordinary Typed OM set() calls with negative CSSUnitValues on limited-range properties; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on the constructor identity of values read back from StylePropertyMap for limited-range properties until range wrapping is implemented.
+remediation: 'In create-an-internal-representation, detect grammar components with limited numeric ranges ([0,∞], [1,∞), [0,1], [1,1000]) and wrap out-of-range CSSUnitValue parts in a fresh CSSMathSum before storing, so get()/getAll() reify the wrapped shape (css-typed-om-1 #create-an-internal-representation).'
+notes:
+    - 'Reproducer ran red twice before filing (exit 1 both runs: 5 tests, 2 positive-control passes, 3 defect failures). Evidence captured via genuine re-execution at 2026-08-24T09:00:15Z (proof/evidence/ki-122.yaml); freshness hash sha256:5a6dfb6bd61e8980d1b8f8ead399bd7751b6b381804baa3819b7ef773e86fdae matches final reproducer bytes. Requirement SYS-REQ-260824-QGJE drafted through proof req new under STK-REQ-260821-BQKD; informal until cssom variables can be declared in specs/system/variables/cssom.vars.yaml (concurrently owned).'
+owner: agent:ox-alpha
+review_date: "2026-09-24"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-24T08:59:51Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-24T09:02:09Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+kill_domain: numeric_range_wrapping
+do_not_refile_as: 'calc serialization fixpoint/parenthesization drift (KI-39): this KI never asserts serialization text, only the get()/getAll() wrap shape after a typed set(); registered-syntax initial-value validation (KI-111): different surface (CSS.registerProperty validation vs StylePropertyMap.set storage)'
