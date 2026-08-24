@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: fixture_extraction
 rationale: A compromised upstream bump or malicious submodule pin move turns 'pnpm run fixtures:generate' into maintainer/CI host code execution because three extractor families execute vendored content instead of parsing it; sibling extractors already use data-only JSON.parse.
 tags:
@@ -28,7 +28,7 @@ references:
       id: AGENTS.md#safe-subprocess-execution-mechanical-preflight-enforcement-safe-child-processts
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -40,5 +40,5 @@ verification:
 history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:03Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T20:31:13Z"

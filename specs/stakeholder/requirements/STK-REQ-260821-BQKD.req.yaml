@@ -78,6 +78,123 @@ stakeholder:
             - SYS-REQ-260821-YMEY
             - SYS-REQ-260821-8TGB
             - SYS-REQ-260821-X3KX
+        - id: AC-005
+          text: The parser shall build the stylesheet object graph from CSS text. At-rule dispatch shall yield a typed CSSOM rule or a CSSAtRule fallback. Component-value parsing shall report a syntax error for trailing garbage and for bad-url and bad-string tokens. The parser shall keep every declaration whose value parses and drop a declaration whose value fails the applicable property grammar. A stored declaration value shall carry no insignificant trailing whitespace. The Parser API shall expose the declarations of a qualified rule.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-AACP
+            - SYS-REQ-260823-PVE7
+            - SYS-REQ-260823-BTC4
+            - SYS-REQ-260824-EVNP
+            - SYS-REQ-260824-CFQG
+            - SYS-REQ-260822-1MB8
+            - SYS-REQ-260824-BJTQ
+            - SYS-REQ-260823-QBD2
+        - id: AC-006
+          text: A font declaration that mixes a system font keyword with size or family components shall not be stored. A font declaration whose value is exactly one system font keyword shall keep the keyword and shall not stamp keyword names into the specified values of its longhands. Setting a generated-family shorthand property shall expand into its longhands.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260823-0BRJ
+            - SYS-REQ-260823-S4DW
+            - SYS-REQ-260823-YQPJ
+            - SYS-REQ-260823-SHX6
+        - id: AC-007
+          text: The CSSOM shall maintain parentRule and parentStyleSheet links for keyframe children while attached and clear both after removal. CSSKeyframesRule.appendRule shall not append a rule when the argument carries trailing non-whitespace tokens. The CSSKeyframeRule.keyText setter shall throw SyntaxError for an invalid keyframe selector and leave keyText unchanged. The parser shall drop declarations forbidden in keyframe blocks, including important declarations.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-YEQZ
+            - SYS-REQ-260822-FM19
+            - SYS-REQ-260822-50T6
+            - SYS-REQ-260823-KTS6
+            - SYS-REQ-260822-HARM
+        - id: AC-008
+          text: The CSSOM shall serialize the current valid descriptor state of a CSSCounterStyleRule after a descriptor setter. Every CSSSupportsRule instance shall expose the readonly boolean matches attribute. An at-rule whose prelude violates the import grammar shall not enter cssRules. Serializing a Parser API at-rule and re-parsing it shall yield an at-rule with the same name and prelude content.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-XEPS
+            - SYS-REQ-260823-SMA3
+            - SYS-REQ-260823-DRP5
+            - SYS-REQ-260823-PRT3
+        - id: AC-009
+          text: Serializing a valid media condition to conditionText and re-parsing it shall preserve evaluability, including a negated term inside grouping parentheses. The media parser shall treat a strictly positive resolution as a matching resolution feature.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260823-MRT1
+            - SYS-REQ-260823-EEQN
+            - SYS-REQ-260822-4EY2
+        - id: AC-010
+          text: A preserved comment between compound selectors shall act as a descendant combinator. Type-selector matching outside the HTML namespace shall compare names case-sensitively. Language ranges shall match asterisk subtags as wildcards through extended filtering. Selector matching over a large tree shall bound evaluation cost per query.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260823-SCD7
+            - SYS-REQ-260823-SCS2
+            - SYS-REQ-260823-00C0
+            - SYS-REQ-260822-ZQJT
+        - id: AC-011
+          text: The cascade shall substitute a custom property name produced by a nested var function. The cascade shall dispatch mixed-case var and env function names as their lowercase forms. An env function with an invalid index shall be invalid at computed-value time. getCascadedStyle shall enforce registered custom property descriptors on the computed-value path. Acyclic var substitution shall bound expansion size.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-V108
+            - SYS-REQ-260822-V109
+            - SYS-REQ-260822-V11A
+            - SYS-REQ-260823-CRG8
+            - SYS-REQ-260822-EGPW
+        - id: AC-012
+          text: Math expression consumption and simplification shall be depth-bounded, and product distribution shall bound intermediate term count. CSSMathValue serialization shall re-parse to a value with an equal serialization. A math value evaluating to NaN shall serialize the canonical NaN keyword. StylePropertyMap typed storage shall enforce limited numeric ranges. Reification of declaration values shall follow the per-property normalization rules.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-JD78
+            - SYS-REQ-260822-8BK4
+            - SYS-REQ-260823-MFS9
+            - SYS-REQ-260824-N9AE
+            - SYS-REQ-260824-QGJE
+            - SYS-REQ-260824-XE59
+        - id: AC-013
+          text: Serializing hash tokens and function names shall escape identifier-context code points so structure survives re-parse. Serialization of attr shall preserve the namespaced attribute name exactly as the grammar allows it. Parsing or setting a grammatically valid border-image declaration shall preserve its components, and serializing then re-parsing such a declaration shall reach a fixpoint after one cycle.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-8HDQ
+            - SYS-REQ-260824-XRYP
+            - SYS-REQ-260823-1V3K
+            - SYS-REQ-260823-BNDX
+        - id: AC-014
+          text: CSS.supports shall return false for malformed var syntax and accept a syntactically valid env value in a supported property. registerProperty shall reject an initial-value that fails its registered syntax. The at-property syntax multiplier set shall be closed to plus and comma-list markers, and brace repetition forms shall throw SyntaxError.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-V107
+            - SYS-REQ-260822-V110
+            - SYS-REQ-260822-V111
+            - SYS-REQ-260823-PMB5
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

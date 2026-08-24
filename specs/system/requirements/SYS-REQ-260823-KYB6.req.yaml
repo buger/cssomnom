@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: wpt_runner
 rationale: path.join(WPT_ROOT, 'interfaces', idlFileName) has no containment check, so '/interfaces/../../../package.json' discloses arbitrary local files to fixture JS as a 200 Response. Expectation derived from the bridge's source-documented purpose ('// Intercept relative /interfaces/*.idl fetch calls', run.ts:140 — local vendored IDL serving only) and CWE-22 path-containment practice; README.md § 'Web Platform Test (WPT) Conformance & Parity' is stats-only context, not a containment contract.
 tags:
@@ -28,7 +28,7 @@ references:
       id: scripts/wpt/node/run.ts#interfaces-fetch-bridge
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -40,5 +40,5 @@ verification:
 history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:02Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T20:31:14Z"

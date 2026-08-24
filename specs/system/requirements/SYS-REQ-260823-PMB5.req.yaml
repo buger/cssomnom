@@ -38,6 +38,25 @@ verification:
         reviewer: ""
         reviewed_at: ""
         ai_generated: false
+hazard_review:
+    reviewed_at: "2026-08-24T10:00:00Z"
+    reviewed_by: agent:champ
+    reviewed_against_catalog_version: "1.9.1"
+    notes: Delimiter-pin review for lint-pinned-delimiter-undispositioned. The pinned '+' and '#' multipliers are the accepted inputs of the totality claim, not an undispositioned hazard.
+    categories:
+        - category: domain
+          disposition: not_applicable
+          rationale: registerProperty syntax-string validation is in-process grammar checking; no HTTP, crypto, IPC, or workload-tagged surface is reachable.
+        - category: property
+          disposition: reviewed
+          applied:
+            - totality
+        - category: scenario
+          disposition: not_applicable
+          rationale: No catalog scenario class covers syntax-string multiplier validation; the accept-plus/reject-brace closure is carried by the property totality claim.
+        - category: structural
+          disposition: not_applicable
+          rationale: Grammar rejection only; the requirement performs no encoding round-trip, arithmetic bound, pointer access, or memory ownership transfer.
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-23T13:40:01Z"

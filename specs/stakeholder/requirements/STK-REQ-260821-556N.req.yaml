@@ -66,6 +66,23 @@ stakeholder:
           verification_method: test
           derived_reqs:
             - SYS-REQ-260821-2TXS
+        - id: AC-003
+          text: The conformance toolchain shall execute untrusted test inputs safely. Child processes shall receive caller-controlled parameters as argv elements and never through a shell string. Sandboxed fixture fetches shall fail closed outside the interfaces root. Harvested fixture code shall be treated as data and never evaluated. Downloaded result urls shall follow a scheme and host allowlist. Decompression shall enforce a maximum output length. Derived cache, script, and log paths shall stay inside their configured roots, and the execution-safety policy shall be enforced mechanically.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260823-0A2D
+            - SYS-REQ-260823-2P2Q
+            - SYS-REQ-260823-486K
+            - SYS-REQ-260823-7TCQ
+            - SYS-REQ-260823-AKDT
+            - SYS-REQ-260823-JS16
+            - SYS-REQ-260823-KYB6
+            - SYS-REQ-260823-MPS4
+            - SYS-REQ-260823-Z8HR
+            - SYS-REQ-260823-ZM55
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

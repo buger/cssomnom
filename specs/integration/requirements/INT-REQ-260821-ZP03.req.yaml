@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: interface
 req_type: guarantee
-fretish: when register_property_called & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the parser_api shall always satisfy property_registry_updated | urange_sixth_digit_stops
+fretish: when register_property_called & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the parser_api shall always satisfy property_registry_updated & !urange_sixth_digit_stops
 description: The parser_api CSS.registerProperty path shall update PropertyRegistry. Unicode-range hex stays within 6 digits.
 formalization_strategy: fretish
 informal_verification:

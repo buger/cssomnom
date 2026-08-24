@@ -35,6 +35,25 @@ verification:
         reviewer: ""
         reviewed_at: ""
         ai_generated: true
+hazard_review:
+    reviewed_at: "2026-08-24T10:00:00Z"
+    reviewed_by: agent:champ
+    reviewed_against_catalog_version: "1.9.1"
+    notes: Delimiter-pin review for lint-pinned-delimiter-undispositioned. The pinned ';' and identifier-context code points are the subject of the structural encoding obligation, not an undispositioned hazard.
+    categories:
+        - category: domain
+          disposition: not_applicable
+          rationale: In-process string serialization only; no HTTP, crypto, IPC, filesystem, or persistence surface is reachable from cssText identifier escaping.
+        - category: property
+          disposition: not_applicable
+          rationale: The requirement claims one deterministic structural mapping (serialize-an-identifier), not a cross-scenario invariant such as idempotency or totality over input combinations.
+        - category: scenario
+          disposition: not_applicable
+          rationale: No catalog scenario class covers identifier re-embedding attacks; the boundary behavior is carried by the structural encoding_safety class below.
+        - category: structural
+          disposition: reviewed
+          applied:
+            - encoding_safety
 history:
     created_by: agent:champ
     created_at: "2026-08-22T20:06:05Z"

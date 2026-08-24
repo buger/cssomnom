@@ -76,6 +76,25 @@ stakeholder:
           verification_method: test
           derived_reqs:
             - SYS-REQ-260821-PJ76
+        - id: AC-004
+          text: The cascade HSL converter shall assign chroma to red below 60 degrees, to green from 60 through 180 degrees, and to blue from 180 through 300 degrees when hsl has 3 or 4 components. It shall reject component lists of other lengths.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-CFRA
+            - SYS-REQ-260824-4RGN
+            - SYS-REQ-260824-BRYV
+            - SYS-REQ-260824-DAS2
+        - id: AC-005
+          text: The selector matcher shall return a non-empty match for an element matched by the disabled or enabled pseudo-class.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-XDRG
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

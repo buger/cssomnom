@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when bad_at_property & at_property_validate_fails & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the property_registry shall always satisfy property_rule_dropped | urange_sixth_digit_stops
+fretish: when bad_at_property & at_property_validate_fails & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the property_registry shall always satisfy property_rule_dropped & !urange_sixth_digit_stops
 description: handlePropertyRule shall drop a bad at-property while unicode-range hex stays within 6 digits.
 formalization_strategy: fretish
 informal_verification:
@@ -13,7 +13,7 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260822-JY0V
 component: property_registry
-rationale: parser.ts handlePropertyRule shares the file with unicode-range length <= 6, namespace tokens.length >= 2, and keyframe val > 100. Those bounds are css-syntax-3 and css-animations-1 domains.
+rationale: parser.ts handlePropertyRule shares the file with unicode-range length <= 6, namespace tokens.length >= 2, and keyframe val > 100. Those bounds are css-syntax-3 and css-animations-1 domains. With hex within the cap (system/variables/property_registry.vars.yaml domain table urange_hex_cap, row at_most_six), consumption never stops at a sixth digit, so !urange_sixth_digit_stops holds.
 tags: []
 variables:
     - bad_at_property

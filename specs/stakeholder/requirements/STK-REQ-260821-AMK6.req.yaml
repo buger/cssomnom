@@ -80,6 +80,14 @@ stakeholder:
             - SYS-REQ-260821-SMW6
             - SYS-REQ-260821-NGJH
             - SYS-REQ-260821-KA02
+        - id: AC-004
+          text: Typed OM reification of a 1-to-4 component position shall produce a CSSPositionValue without throwing.
+          verification_method: test
+          witness_deferred:
+              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+              tracking: spec-model-quality-lints
+          derived_reqs:
+            - SYS-REQ-260822-SNP4
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

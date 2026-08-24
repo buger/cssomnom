@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: wptfyi_ingest
 rationale: downloadUrl flows verbatim into fetchFn with default redirect following, letting a compromised/MITM'd wpt.fyi record coerce maintainer/CI hosts into SSRF requests against metadata/loopback/internal services and cache-poison the parity baseline. Allowlist expectation derived from the ingest function's own documented scope ('Fetches latest master or revision-specific Chrome WPT baseline from wpt.fyi / GCS', fetch-wptfyi.ts:139-141) and SSRF normative practice (CWE-918); README § 'Web Platform Test (WPT) Conformance & Parity' is stats-only context, not a download contract.
 tags:
@@ -28,7 +28,7 @@ references:
       id: scripts/wpt/browser/fetch-wptfyi.ts#results-download
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -40,5 +40,5 @@ verification:
 history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:03Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T20:31:16Z"

@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: wptfyi_ingest
 rationale: Uncapped gunzipSync on attacker-influenced download bytes turns a few KB of compressed input into arbitrarily large synchronous heap allocation (5 MiB expansion demonstrated from 5128 bytes; 1022x) — an availability fault in fetch-wptfyi runs.
 tags:
@@ -26,7 +26,7 @@ references:
       id: README.md#development
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -38,5 +38,5 @@ verification:
 history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:04Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T20:31:14Z"

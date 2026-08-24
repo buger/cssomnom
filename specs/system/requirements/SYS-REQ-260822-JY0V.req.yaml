@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when bad_at_property & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the property_registry shall always satisfy property_rule_dropped | urange_sixth_digit_stops
+fretish: when bad_at_property & urange_hex_digits <= 6 & namespace_prelude_count >= 1 & keyframe_offset_percent >= 0 the property_registry shall always satisfy property_rule_dropped & !urange_sixth_digit_stops
 description: The property_registry shall drop a bad at-property rule while unicode-range hex stays within 6 digits and namespace prelude has 1 or 2 tokens.
 formalization_strategy: fretish
 informal_verification:

@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: STK-REQ-260821-BQKD
+parent: STK-REQ-260821-556N
 component: ci_policy_guard
 rationale: The single regex only matches verbatim specifiers next to import tokens, so the ordinary computed-specifier dynamic import shape acquires node:child_process and spawns unmonitored processes with none of the AGENTS.md-mandated kernel constraints (--max-old-space-size=512, RSS/state-D watchdog, cleanup tracking) — a bypass of the project's own mechanical preflight contract.
 tags:
@@ -28,7 +28,7 @@ references:
       id: scripts/ci/check-safe-exec.ts#import-pattern
 traces:
     satisfies:
-        - STK-REQ-260821-BQKD
+        - STK-REQ-260821-556N
 verification:
     assurance_level: C
     formalization_status: valid
@@ -40,5 +40,5 @@ verification:
 history:
     created_by: agent:champ
     created_at: "2026-08-23T07:32:04Z"
-    last_modified_by: human:cli
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: agent:champ
+    last_modified_at: "2026-08-24T20:31:11Z"

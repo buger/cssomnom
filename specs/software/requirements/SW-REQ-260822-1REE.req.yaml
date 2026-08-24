@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when hue_degrees < 60 & hsl_component_count >= 3 the cascade shall always satisfy red_from_chroma
+fretish: when hue_degrees < 60 & hsl_component_count >= 3 & hsl_component_count <= 4 the cascade shall always satisfy red_from_chroma
 description: hslToRgb shall assign chroma to red when normalized hue is below 60 degrees and the component list has 3 or 4 parts.
 formalization_strategy: fretish
 informal_verification:
@@ -13,7 +13,7 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260822-CFRA
 component: cascade
-rationale: src/cascade/color-resolver.ts hslToRgb uses h less than 60, 120, 180, 240, and 300. It returns null when parts.length is less than 3 or greater than 4.
+rationale: src/cascade/color-resolver.ts hslToRgb uses h less than 60, 120, 180, 240, and 300. It returns null when parts.length is less than 3 or greater than 4 (color-resolver.ts:140), so the guarantee is scoped to the implemented arity domain.
 tags: []
 variables:
     - hue_degrees

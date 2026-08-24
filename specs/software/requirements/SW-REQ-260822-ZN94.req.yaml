@@ -4,7 +4,7 @@ status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: when matches_disabled | matches_enabled the selectors shall always satisfy !empty_match
+fretish: when (matches_disabled | matches_enabled) & !parse_selector_rejects the selectors shall always satisfy !empty_match
 description: The matcher shall not return an empty match when :disabled or :enabled matches an element.
 formalization_strategy: fretish
 informal_verification:
@@ -13,11 +13,12 @@ informal_verification:
     verified: false
 parent: SYS-REQ-260822-XDRG
 component: selectors
-rationale: isElementDisabled gates listed form controls and the first-legend exemption. Div does not match :disabled.
+rationale: "isElementDisabled gates listed form controls and the first-legend exemption. Div does not match :disabled. Matching only runs on a parsed selector list - matches() resolves parseSelector(selector) before any pseudo-class evaluation (src/matcher.ts:104), so a rejected selector never reaches the match path this requirement covers."
 tags: []
 variables:
     - matches_disabled
     - matches_enabled
+    - parse_selector_rejects
     - empty_match
 references:
     - type: document
