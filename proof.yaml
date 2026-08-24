@@ -106,6 +106,29 @@ project:
         # repo has none of those artifacts.
         # security_surface_covered:
         #     enabled: false
+    known_issue_text_hygiene:
+        ste100:
+            enabled: true
+            restricted_terms:
+                - fretish
+                - mcdc
+                - scrutineer
+                - reqproof
+    requirements_text_hygiene:
+        ste100:
+            enabled: true
+            hedge_words:
+                - may be
+                - might
+                - possibly
+                - it is believed
+                - appears to
+            restricted_terms:
+                - fretish
+                - mcdc
+                - scrutineer
+                - reqproof
+
     approval:
         agent_autonomous_for:
             all: true
