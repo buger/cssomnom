@@ -1,5 +1,5 @@
 checklist: onboard_v1
-updated_at: "2026-08-21T21:02:26Z"
+updated_at: "2026-08-24T13:56:18Z"
 steps:
     ac-sweep:
         status: confirmed
@@ -10,10 +10,10 @@ steps:
         check_results:
             - id: acceptance_criteria_witnessed
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
             - id: acceptance_witness_quality
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
     annotations-heavy:
         status: confirmed
         confirmed_at: "2026-08-21T14:18:18Z"
@@ -23,10 +23,10 @@ steps:
         check_results:
             - id: annotation_validity
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
             - id: obligation_witness_grounded
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
     coverage:
         status: pending
     debt-standing:
@@ -37,10 +37,10 @@ steps:
         check_results:
             - id: known_issues_reviewed
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
             - id: waivers_reviewed
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
     hazard:
         status: confirmed
         confirmed_at: "2026-08-21T14:08:39Z"
@@ -50,7 +50,7 @@ steps:
         check_results:
             - id: spec_lint_hazard_consequence
               status: info
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
     history-mine:
         status: pending
     init:
@@ -83,7 +83,7 @@ steps:
         check_results:
             - id: residual_kill_hygiene
               status: pass
-              at: "2026-08-21T21:02:11Z"
+              at: "2026-08-24T13:56:10Z"
     skeleton:
         status: not_applicable
         confirmed_at: "2026-08-21T12:42:21Z"
@@ -105,17 +105,7 @@ steps:
     spec-review-1:
         status: pending
     spec-review-2:
-        status: confirmed
-        confirmed_at: "2026-08-21T13:56:35Z"
-        confirmed_by: agent:grok-4.6
-        note: '27 SW spec_conformance reviews recorded (REVIEW-1..31). Independent audit: spec_conformance_review_grounded pass, software_formalization_complete pass. HNRG decision needs_changes (all shorthand drops existing all); live tracker is KI-1 (DEFECT-260821-1JGF retracted — DEFECT is post-fix class-closure only). Four reviews re-recorded after citation/numeral gate failures (DX-028, DX-031).'
-        check_results:
-            - id: spec_lint_spec_conformance_review_grounded
-              status: pass
-              at: "2026-08-21T21:02:11Z"
-            - id: software_formalization_complete
-              status: pass
-              at: "2026-08-21T21:02:11Z"
+        status: pending
     surface-matrix:
         status: confirmed
         confirmed_at: "2026-08-21T13:56:35Z"
@@ -123,30 +113,6 @@ steps:
         note: 'Cold extract --unbiased --package cssomnom: 0 surfaces (ledger/matrix/scorecard in proof/surfaces/runs/cssomnom-cold). surface_coverage passes empty. Extractors are security-surface shaped; no CSS parser sinks detected. Honest empty matrix, not a fake GAP close. DX-027/DX-030.'
         scope_key: cssomnom
     traces-light:
-        status: confirmed
-        confirmed_at: "2026-08-21T20:47:43Z"
-        confirmed_by: agent:grok-4.6
-        note: 'Re-confirmed after overlay var split. Independent audit: annotation_validity pass; orphan_code_clean 1175/1175. File-level Implements remain on non-generated src/**/*.ts. src/data/gen excluded (DX-022). Not theater: rewound by spec fingerprint change, traces still hold.'
-        scope_key: cssomnom
-        check_results:
-            - id: annotation_validity
-              status: pass
-              at: "2026-08-21T21:02:11Z"
-            - id: orphan_code_clean
-              status: pass
-              at: "2026-08-21T21:02:11Z"
+        status: pending
     variables:
-        status: confirmed
-        confirmed_at: "2026-08-21T13:37:27Z"
-        confirmed_by: agent:grok-4.6
-        note: 'Requirement-first vars from skeleton. Independent audit: variable_orphans_clean 0 issues, variable_drift 61 reqs consistent, variables_declared 28 components passed preflight.'
-        check_results:
-            - id: variable_orphans_clean
-              status: pass
-              at: "2026-08-21T21:02:11Z"
-            - id: variables_declared
-              status: pass
-              at: "2026-08-21T21:02:11Z"
-            - id: variable_drift
-              status: pass
-              at: "2026-08-21T21:02:11Z"
+        status: pending

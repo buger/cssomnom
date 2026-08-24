@@ -31,6 +31,7 @@
 
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
 import {
   checkFixpoint,
   checkTokenConservation,
@@ -41,7 +42,12 @@ import {
   rebuiltTextMatches,
 } from '../fuzz/oracles/lib/invariants.ts';
 import { deltaDebug } from '../fuzz/oracles/minimize.ts';
-import { extractExternalInputs } from '../fuzz/oracles/roundtrip-sweep.ts';
+import {
+  buildCorpus,
+  extractExternalInputs,
+  parseArgs,
+  zeroInputCorpusDirWarnings,
+} from '../fuzz/oracles/roundtrip-sweep.ts';
 import type { Token } from '../src/types.ts';
 
 // ---------------------------------------------------------------------------
@@ -315,4 +321,69 @@ test('extractExternalInputs pulls CSS strings from nested structures exactly onc
 test('extractExternalInputs dedups repeated fixtures via the seen-set', () => {
   const { out } = collect([{ input: 'a{b:c}' }, ['a{b:c}', { x: { input: 'a{b:c}' } }]]);
   assert.deepEqual(out, ['a{b:c}']);
+});
+
+// ---------------------------------------------------------------------------
+// parseArgs — repeated flags must ACCUMULATE (wave-1 regression: `map.set` on
+// every flag occurrence dropped all but the last --corpus-dir, silently
+// losing 3 of 4 WPT corpus dirs from the sweep).
+// ---------------------------------------------------------------------------
+
+test('parseArgs accumulates values across repeated occurrences of the same flag', () => {
+  const args = parseArgs(['--corpus-dir', 'a', '--corpus-dir', 'b', '--external']);
+  assert.deepEqual(args.get('corpus-dir'), ['a', 'b']);
+  assert.ok(args.has('external'), 'boolean flag seen after repeated value flags must survive');
+});
+
+test('parseArgs keeps single-flag behavior unchanged', () => {
+  const args = parseArgs(['--corpus-dir', 'only', '--out', 'r.json']);
+  assert.deepEqual(args.get('corpus-dir'), ['only']);
+  assert.deepEqual(args.get('out'), ['r.json']);
+});
+
+test('parseArgs returns empty arrays for valueless flags', () => {
+  const args = parseArgs(['--ci']);
+  assert.deepEqual(args.get('ci'), []);
+});
+
+// ---------------------------------------------------------------------------
+// zeroInputCorpusDirWarnings — anti-greenwashing self-check: an explicitly
+// requested --corpus-dir that contributes 0 inputs (typo'd path, wrong
+// extension, all files oversized) must produce a loud warning line instead of
+// looking identical to a successful load.
+// ---------------------------------------------------------------------------
+
+test('zeroInputCorpusDirWarnings warns exactly for zero-yield dirs with the required wording', () => {
+  assert.deepEqual(
+    zeroInputCorpusDirWarnings(['loaded/dir', 'empty/dir', 'another/empty'], [17, 0, 0]),
+    ["warning: corpus-dir 'empty/dir' yielded 0 inputs", "warning: corpus-dir 'another/empty' yielded 0 inputs"],
+  );
+});
+
+test('zeroInputCorpusDirWarnings treats a missing count as zero and no dirs as no warnings', () => {
+  assert.deepEqual(zeroInputCorpusDirWarnings(['ghost/dir'], []), [
+    "warning: corpus-dir 'ghost/dir' yielded 0 inputs",
+  ]);
+  assert.deepEqual(zeroInputCorpusDirWarnings([], []), []);
+});
+
+test('buildCorpus reports a warning for an explicit corpus-dir that yields no inputs', () => {
+  // Pure in-memory: a nonexistent dir makes walkCssFiles yield nothing; the
+  // embedded edge-case corpus still loads.
+  const build = buildCorpus(new Map([['corpus-dir', ['/nonexistent/definitely-missing']]]));
+  assert.deepEqual(build.warnings, ["warning: corpus-dir '/nonexistent/definitely-missing' yielded 0 inputs"]);
+  assert.ok(build.inputs.length > 0, 'embedded edge cases still load');
+});
+
+test('buildCorpus stays silent when every requested corpus-dir yields inputs', () => {
+  // Positive control anchored to a repo fixture via import.meta.url (NOT cwd —
+  // `node --test` may be invoked from the repo root while paths here resolve
+  // relative to this file's location).
+  const dir = fileURLToPath(new URL('./fixtures/', import.meta.url));
+  const build = buildCorpus(new Map([['corpus-dir', [dir]]]));
+  assert.deepEqual(
+    build.warnings.filter((w) => w.includes(dir)),
+    [],
+    `fixture dir yields inputs, so no warning expected: ${build.warnings.join('; ')}`,
+  );
 });

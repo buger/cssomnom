@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "model_sha256": "759c3cd2b7fe7e93933ad23c4c9181b7396442a2ed746ec7c1d46192c469c46e",
+  "created_at": "2026-08-23T19:33:24Z",
+  "params": {
+    "top_k": 10,
+    "threshold": 0.5000
+  },
+  "results": []
+}

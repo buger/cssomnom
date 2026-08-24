@@ -4682,6 +4682,85 @@ Full audit at `cf47be2` **Errors: 1**: `spec_lint_spec_conformance_review_ground
 
 ---
 
+## Phase: file confirmed security/DoS batch KI-16..22 with overlay reproducers (Champ)
+
+Filed SIX confirmed availability/data-integrity known issues from the codex-security scan against current HEAD `d826b0f` (all re-verified live before filing). **No product fixes** — holes stay open; reproducers assert the safe contract and stay red. Did **not** edit `src/**`, `tests/**`, or any pre-existing dirty file.
+
+- [x] Reproducers (public API only, run twice each, both exits = 1, plus a third run inside `proof evidence capture` and a fourth post-yaml confirmation): `proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts` (:has miss ~192x over 8x ratio budget, W=3000), `KI-17-var-env-exponential-expansion-overlay-260822.ts` (depth-20 doubling chain → RangeError / 2^21-1 chars vs 10k budget), `KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts` (RangeError at nestStyle(4000)/nestMedia(2000)/replaceSync), `KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts` (~33MB heap for 2^16 terms before TypeError, 8MB budget), `KI-21-serializer-hash-identifier-escape-overlay-260822.ts` (`#\3B` → `#;` injects background-image:url(evil) declaration on cssText re-parse; `a\7d(` breakout leg), `KI-22-math-parser-unbounded-recursion-overlay-260822.ts` (RangeError at parenNest(4000)/calcNest(3000) via createCSSStyleValue).
+- [x] Requirements: KI-18 attaches to existing SYS-REQ-260821-7521 (obligation_hazards.recursion_depth_bounded). Five new drafts via `proof req new`: ZQJT (selectors match_cost_bounded), EGPW (cascade substitution_size_bounded), 8BK4 (typed_om conversion_terms_bounded), 8HDQ (serializer round_trip_structure_preserved), JD78 (parser math_depth_bounded).
+- [x] KIs filed open/medium/severity-basis=reproducer/ship_with_known_issue/latent/inception/owner=agent:champ/review 2026-09-22, kill_domain resource_exhaustion ×5 + injection_breakout (KI-21), each with an 11-rule poc_quality block mapping evidence.
+- [x] Evidence manifests captured red (`known_issue_reproduced`) for all six. `proof known-issue check`: zero findings on this batch (only pre-existing stale rows on older KIs).
+- [x] Escape analysis: `docs/proof-escape-ki-15-30.md` (hazards-without-domains, outcome-only contracts blind to cost, snapshot evidence laundering serializer bugs, per-construct hazard enumeration lag).
+- [x] Committed path-scoped as `97b49b6` "log confirmed library dos and serialization kis ki-16..22 with overlay reproducers" (24 files).
+
+---
+
+## Phase: additive output-correctness oracle harness `fuzz/oracles/` (Orchestrator + Champ)
+
+Built the reference-free wrong-output oracle lanes for the recovery parser (crash-signals find nothing there; these assert relations instead). **Additive only — zero edits to `src/**`, `package.json`, `proof.yaml`, or pre-existing tests.** Uncommitted; parallel-agent workstreams untouched.
+
+- [x] Oracles (`fuzz/oracles/lib/invariants.ts`): serialization fixpoint `serialize∘parse` idempotence via per-rule cssText (full-string compare), token conservation (css-syntax-3 §3.3 preprocessing parity + offset contiguity + exact `originalText` concatenation), token refixation, chunked StreamingTokenizer equivalence.
+- [x] Grammar-valid-subset lane (`fuzz/oracles/lib/grammar-gen.ts` + `valid-subset.ts`): seeded sampler for css-values-4 value-definition syntax over `STANDARD_PROPERTIES_SYNTAX`; survival asserted only for `SUPPORTED_PROPERTIES` members (anti-false-positive rule).
+- [x] Tooling: `roundtrip-sweep.ts` CLI (embedded edge cases + css-fuzz corpus + external-suite JSON extraction + `--corpus-dir`, clustered dry-run report, deterministic), `minimize.ts` delta-debugger, `README.md` with pipeline policy (raw finding counts never count as bugs).
+- [x] Tests: `tests/fuzz-oracles.test.ts` (16) + `tests/fuzz-oracles-grammar.test.ts` (18) = 34/34 pass; tsc scoped-clean; oxlint 0/0.
+- [x] LOOP gates: Reviewer **patch is correct**; Grizz **ACCEPT** ("greenwashes nothing"). Post-review fixes applied and re-gated: depth-limited exception-safe external JSON extraction (major), dead `CheckOptions.seed` removed, clusterKey empty-actual fallback, doc/nit cleanups. Determinism re-verified byte-identical across runs.
+- [ ] Triage candidates (REPORT ONLY, not filed): ~~sweep 4× `text-loss`; valid-subset `.o{font:icon;}`~~ → **resolved, see next phase**.
+- [ ] Follow-ups: wire lanes into `proof.yaml` evidence profiles after overlay contention clears; WPT inline-CSS seed harvesting; metamorphic relation wrappers (case-flip, escape encoding, whitespace injection).
+
+---
+
+## Phase: oracle v2 (text-loss false-positive fix) + file KI-112/KI-113 font-shorthand batch (Orchestrator + Champ)
+
+Both v1-harness triage candidates taken through the full pipeline: minimize → root-dedup → Scrutineer Bikeshed validation → disposition. **No edits to `src/**`, `package.json`, `proof.yaml`, or pre-existing files.** Uncommitted pending overlay-batch commit decision.
+
+- [x] **text-loss = oracle artifact, no KI.** Diagnostic: comments never produce tokens — consumed-comment bytes fold into the *next* token's span or a non-zero-width EOF (`src/tokenizer.ts:58-63` captures `start` before `consumeToken()`; `AbstractTokenizer.ts:41,178-195,44-46`). Scrutineer: css-syntax-3 §4.3.1 #consume-token step 1 / §4.3.2 #consume-comment "returns nothing"; no comment token in §4 taxonomy; §5.3 #parser-definitions EOF is conceptual/unconstrained; §8 #serialization permits preserved comment info with no parsing effect. Full stream (incl. EOF) always conserves text.
+- [x] Oracle v2 (red/green): RED captured verbatim (5 fails), then conservation/refixation rebuilt to include EOF `originalText` (+exported pure helpers `concatOriginalText`/`rebuiltTextMatches`); loss detection proven NOT weakened via synthetic negative controls (mid-stream/tail drops still fire). Tests 34→44 pass. Sweep: 4 findings → 0, deterministic ×2. `ORACLE_VERSION` bumped v1→v2 (README documents comparability break). Grizz adversarial probes: old-bug sim fires, prepend-junk silent, fixpoint/streaming untouched.
+- [x] **KI-112 (VIOLATION)** `.o{font:icon;}` → `getPropertyValue('font')===''`: css-fonts-4 Overview.bs #font-prop Value ends `| <<system-font-family-name>>` (#system enumerates the six keywords), cssom-1 #parse-a-css-declaration-block drops only grammar failures; local WPT font-valid.html asserts non-empty. Root chain `shorthands.ts:1311-1319` keyword-stamps all 13 longhands → `contractFont:1451-1454` bail → `CSSStyleDeclaration.ts:334`. Reproducer twice-red (14 tests/13 fail + control).
+- [x] **KI-113 (distinct root)** `.o{font: menu 10px serif;}` accepted verbatim though mixing system keyword with size/family fails the grammar (css-fonts-4 initial-position note; WPT font-invalid.html `test_invalid_value('font','menu icon')`). Reproducer twice-red (6 tests/4 fail + drop-controls isolating parse path).
+- [x] Filed per Proof rules: `proof known-issue new` yamls matching KI-107 schema; `proof evidence capture`+`refresh` manifests, freshness sha256 byte-matched; three CLI-generated draft reqs under parent STK-REQ-260821-BQKD (`SYS-REQ-260823-S4DW/YQPJ`→112, `-0BRJ`→113) honestly informal (vars file concurrently owned); escape analysis `docs/proof-escape-ki-112-113.md` (arity-only MC/DC rows, 8TGB gated on set_property_called so parse path uncovered, valid-subset lane unwired). `proof known-issue check` clean (43 KIs); `proof audit --check known_issue_complete` Errors: 0.
+- [x] LOOP gates: Reviewer **patch is correct**; Grizz **ACCEPT** ("nothing greenwashed"; sha256s byte-verified, reproducers re-run independently exit 1×2). Reviewer minors closed via proof CLI only: review_date → ledger convention 2026-09-23 both KIs; stale note timestamps refreshed to manifest executed_at. Sweep EDGE_CASES hardened with the exact FP-family inputs (146 inputs clean ×2, sha256-identical reports). Reproducers untouched (hashes unchanged).
+- [ ] Deferred: formalize the three draft reqs when `specs/system/variables/*` frees up; wire valid-subset/invalid-superset lanes into proof.yaml; invalid-superset oracle for accept-invalid class (valid-subset cannot see KI-113-class bugs).
+
+---
+
+## Phase: hunt wave 1 → scrutiny → KI-114..116; harness hardening; perf forensics; incremental-test design (Orchestrator + Champs)
+
+- [x] Committed + pushed to fork `buger/cssomnom` branch `CSSOmNom/Audit`: `30ccc27` (oracle harness) + `69defe8` (KI-112/113 overlay); upstream `origin` untouched.
+- [x] Wave-1 sweep (1,699 inputs, deterministic ×2): 18 `fixpoint-unstable` → 9 clusters → 5 hypotheses; valid-subset wide pass re-confirmed KI-112 class only.
+- [x] Scrutineer verdicts: **C** border-shorthand swallows set declarations (VIOLATION, worst — direct WPT `border-shorthand-serialization.html` contradiction), **A** MQ unknown-condition not canonicalized at parse (VIOLATION, MQ4 #error-handling; wrong pass identified = parse), **B1** tokenizer launders `url( x)`→valid url (VIOLATION vs #consume-url-token whitespace branch), **B2** `border-image:url()` fixpoint flip (VIOLATION, shares C's subsystem); **D** cosmetic UNREGULATED (deferred, internal-oracle only); **E** refuted (single-space !important join is cssom-1 mandate — never re-file).
+- [x] Filed via proof CLI: **KI-114** (C+B2, high) / **KI-115** (A) / **KI-116** (B1); drafts SYS-REQ-260823-{1V3K,EEQN,BNDX} under STK-REQ-260821-BQKD; escape doc `docs/proof-escape-ki-114-116.md` with **Proof autonomy plans** (MC/DC rows named, witness tests named as follow-ups, lane-wiring proposals). `known_issue check`: 46 clean; `known_issue_complete`: Errors 0.
+- [x] Harness fixes (red/green ×2): repeated `--corpus-dir` accumulates (was silently overwriting — masked 3 WPT dirs in wave 1); zero-yield dir warnings; `parseArgs`/`buildCorpus` exported+tested. Tests 44→51. Rerun proves all four WPT dirs ingested (`file:244`). Engine-side follow-up logged: `AbstractTokenizer.ts:33` unconditional `console.warn` (no quiet opt-out).
+- [x] Perf forensics of full audit @69defe8 (~730s wall): verify_passes solver re-realization on dirty tree = ~30% (219s vs 6s warm — specs vars dirt invalidates 12 components); MC/DC-instrumented tests_pass ≈117s vs 17s plain (~6.9×, no instrumented-bundle cache); sequential long tail ~170s+. Quick wins ranked incl. engine levers (input-hash solver keys, bundle cache, shared trace-index pass, affected-mode wiring slot found).
+- [x] Incremental test-selection design (`/tmp/opencode/incr-tests/design.md`): ReqProof mechanism = git-diff planner at `pkg/affectedtests/plan.go` (not hash-cache); TS adapter slot-in anchors captured (plan.go:421/828/1850/2044/2268…); recommendation: standalone `scripts/fasttest.ts` (Option A) first; hub-graph density means src-core edits gain little honestly — loud fallback required.
+- [x] Published audit baseline `run-9ed39641c399` (@69defe8) → `refs/notes/proof/runs` on fork (`--remote fork`, dirty snapshot dropped by design).
+- [ ] Queued: LOOP gate + commit KI-114..116 batch + harness fixes; Scrutineer-grade **anchor→requirement coverage check** prototype (why did no requirement exist pre-bug?) ; correctness-hazard domain-class drafts (serialization_round_trip_stable, shorthand_reconstruction_lossless, media_condition_canonicalized_at_parse, token_stream_grammar_fidelity) pending proof.yaml contention; HYP-D optional cosmetic KI.
+
+---
+
+## Phase: ReqProof embeddings revival + semantic bindings enforcement (Orchestrator + Champ ×3 + gates)
+
+Owner challenge applied: embeddings-based hazard/obligation matching must work by default everywhere, and become more than suggestions — top-N matches above threshold REQUIRE a recorded explanation why not. Full pipeline executed on fork `/tmp/probe-labs/reqproof` (committed `4fc5207`; binary rebuilt at `/tmp/proof-dx/proof`, backup `proof.bak-260823`).
+
+- [x] Deep reverse-engineering: NO build-tag gating (vestigial prose only); auto-provisioning works networked (lib 8MB + model 46MB SHA-pinned); real defects = raw ORT-init exit-1 instead of degrade, REQPROOF_NO_DOWNLOAD asymmetry (model path ignored it), no download resume/cleanup (stranded `.tmp` since Aug-21 — root cause of "not working here"), doctor blind to embeddings.
+- [x] Provisioning fixes (red/green): typed `ErrEmbedUnavailable` + remediation text w/ exact URLs+sha256 pins; NO_DOWNLOAD symmetry; `--offline` on suggest/similar/scan; Range-resume verified against hostile servers (wrong-offset 206, partial-close, oversized-tmp 416, truncation → loud fail); SIGINT/SIGTERM tmp cleanup race-clean (`-race -count=3`, goroutine-leak loop); doctor `embeddings:` section (pure-read `pkg/embed/probe.go`). Grizz adversarial probes: offline = ZERO network syscalls (request-counting tripwire); corrupt-model surfaces honestly.
+- [x] Enforcement without doctrine amendment: new `proof catalog semantic-scan` emits byte-deterministic committed artifact `proof/catalog/semantic-scan.json` (top_k=10/threshold=0.5 reuse; SOURCE_DATE_EPOCH; atomic tmp+rename write); audit check `catalog_semantic_bindings_reviewed` (warning tier) reads ONLY artifact+req-yamls — flagged pair requires live `obligation_checklist` binding ∨ `semantic_rejections:{class_id,decision:rejected,reason≥16 runes}` (model field, codec+validation wired); stale-snapshot amnesty removed post-review; provenance staleness/pin-mismatch emitted as infos; malformed artifact fails loudly; missing artifact = silent opt-in. Doctrine guard extended in-intent: `TestWorkflowNeverImportsEmbed` lexical test (fault-injection proven).
+- [x] Gates: Reviewer **patch is correct** (major doctor-predicate inversion found+fixed red/green; header honesty; atomic writes; nits) · Grizz **ACCEPT** (adversarial download probes P1–P5 all PASS; determinism byte-pinned ×10; failure-set vs pristine HEAD identical).
+- [x] Live on cssomnom: first scan auto-provisioned assets, **124 reqs scanned, 0 flagged** (catalog already binds above-threshold matches); warm rerun byte-identical modulo created_at; enforcement drill: injected unbound pair → exact actionable warning; malformed JSON → loud fail. Artifact left untracked pending next cssomnom gate round.
+- [ ] Known scope choices (documented, deferred): sub-top unbound classes of top-match-bound reqs not surfaced (header states it); `catalog eval`/validator lack --offline flag (env switch covers); hand-editable artifact trusted until next rescan (git diff is the detective control).
+
+---
+
+## Phase: ledger audit → prune+ratchet (496cbe6) + KI-117..121 batch (1fc4e93); both gates passed; pushed to fork
+
+- [x] **Ledger audit verdict**: 98.8% of 1,869 live-failing baseline entries unowned; ~8.6k stale entries in sandbox crawl lane (92.5%, prune deferred — needs WPT crawl); PLAN.md's historical "prune ran" claim contradicted by git (zero baseline commits since birth). PostCSS "hole" refuted — consumed by external-roundtrip.test.ts (32/32 pass); all sibling suites genuinely assert expectations.
+- [x] `496cbe6`: prune tooling actually executed (lightning 1114→1100 pure-deletion verified by live re-runs; wpt-cssom tool-pruned 0 — audit estimate corrected by ground truth 225 fail/712 pass); NEW ratchet `tests/baseline-ownership-ratchet.test.ts` freezes 1,232-row unowned-debt inventory (`unclaimed-inventory.json`, added-dates) — subset semantics proven via fault-injection, growth tripwire self-tested.
+- [x] **KI-117..121** filed from ledger clusters (all twice-red, evidence sha256-fresh, reqs SYS-REQ-260824-{CFQG,N9AE,EVNP,BJTQ,XRYP} under BQKD): relative-color grammar-invalid RETAINED (direction inverted vs ledger briefing — valid colors round-trip losslessly; Scrutineer/Grizz independently reproduced), NaN→`calc(nan)` casing vs canonical `NaN`, repeated-shorthand wholesale replacement, trailing-whitespace in stored values, attr() namespace dropped on reserialize. **C5 StylePropertyMap order REFUTED** (css-typed-om-1 mandates sorted iteration) — do-not-refile recorded.
+- [x] Gates: Grizz ACCEPT-after-fix (fraud kill-shots failed: subset semantics, pure deletion, live re-verification; blocking inventory-reconciliation found & fixed = exactly 160 KI-118-owned rows removed, ratchet 5/5 ×2) · Reviewer **patch is correct** (minor: staged foreign src edits flagged — preserved via path-limited commit).
+- [x] Pushed fork `69defe8..1fc4e93`. Parallel agent's staged src/MediaParser.ts+parser.ts deletions remain untouched in index.
+- [ ] Queued: sandbox crawl-lane prune (~9.2k entries); structured ownership field to replace prose-substring matching (Grizz measured magic-comment ceiling ~13%); typed-OM reification mass + constructable-sheet invalidation subsystems as next KI wave; LOOP-gate + commit the still-pending fuzz-harness/KI-114..116-era leftovers if any remain uncommitted.
+
+---
+
 ## Phase: orphan-code lint hygiene — batch-b1/b2 reproducer annotations (Champ)
 
 Extended commit `d006422`'s (batch-a2) annotation pattern to the KI-31..39 reproducer batch. **Comments only — zero logic changes; KI-33 untouched (already traced via header's bare `SYS-REQ-260821-SMW6` mention, zero module-level helpers); KI-114/115/116 left for their owning agent.**
@@ -4690,6 +4769,7 @@ Extended commit `d006422`'s (batch-a2) annotation pattern to the KI-31..39 repro
 - [x] 16 `// Verifies: <REQ-ID> (...)` annotations across 8 files (helpers + describe suites), house style per d006422. Commit `df8f054` (8 files, +16).
 - [x] `orphan_code_clean`: **warn 36 → 20**; only other agent's untracked KI-114/115/116 remain.
 - [x] Spot-runs preserved red: KI-33 exit 1 (6 tests / 4 fail), KI-38 exit 1.
+
 ---
 
 ## Phase: parser-api conformance wave — KI-40..45 filed (Champ)
@@ -4712,3 +4792,26 @@ User-authorized (2026-08-23) product fix of the offline @import object-graph hol
 - [x] Tests updated to approved contract with spec citations: cssom-interfaces, mcdc-branch-parser, mcdc-cssom-still-hot-unique-cause, mcdc-hotspot-math-walk, mcdc-witness-parser (+KI-7 ignore-comment prose), safe-exec-memory-guard; ki-2-8-12 stale comment refreshed. README deviation bullet rewritten (associated empty offline sheet, never null).
 - [x] Reproducers rewritten to amended contract (fail-on-parent verified exit 1 ×2 against HEAD code in isolated copy; exit 0 ×2 on fixed HEAD each). KI-7 yaml status/release_disposition → fixed with history; evidence ki-7 re-stamped via proof evidence refresh (pass / known_issue_not_reproduced); DEFECT-260824-5SWC filed (Proof-caught verification note).
 - [x] Discovered but deliberately NOT changed (out of scope): pre-existing parseResolutionToDpi L1033/L1022 subtest failures in tests/mcdc-parse-resolution-to-dpi-unique-cause.test.ts + tests/mcdc-hotspot-math-walk.test.ts (MediaParser domain, fail in isolation on untouched files); r.mediaText direct property intentionally absent (cssom-1 defines none on CSSImportRule — probe artifact); verify_passes realize/lint debt unrelated to imports.
+
+---
+
+## Phase: resolution witness repair + KI-7 gate mediums (Champ)
+
+Audit-branch follow-ups: the deferred parseResolutionToDpi witness failures and KI-7 documentation-gate Mediums.
+
+- [x] T1 root cause (tests/mcdc-parse-resolution-to-dpi-unique-cause.test.ts): NOT a product regression. a381e92 added three comment-only //mcdc:ignore lines to src/MediaParser.ts (one in the parseLengthToPx region above the hotspot), shifting every decision inside parseResolutionToDpi by +1; the test's exact-line stack regexes /MediaParser\.ts:{1021,1022,1033}\b/ then matched nothing (ident leg evaluated literal 'infinite' → expected 'unknown', got false; type() patch never fired → expected false, got true). H1 folding and H2 dual-class disproven by probe (ctor=CSSMathSum, prototype.isPrototypeOf=true at the decision; type() invoked from matchesType 720 AND parseResolutionToDpi 1023-at-HEAD/1022-in-worktree). Red reproduced against HEAD content in an isolated scratch copy.
+- [x] T1 repair (tests-only, product untouched): interception re-anchored by enclosing MediaParser function name (parseResolutionToDpi) + ±40-line window via mediaParserFrames()/calledFromFn(); all assertions byte-identical; miss fails loudly (no green-wash). Green ×2 on worktree AND green ×1 against +1-shifted HEAD content (drift immunity proven); neighbors mcdc-hotspot-math-walk (29/29) and logical-resolution (1/1) green.
+- [x] T2a spec-quote overreach corrected: src/CSSOM.ts CSSImportRule.styleSheet comment now quotes cssom-1 § 6.4.3 accurately ("...if any, or null otherwise") and states honestly that non-null is our documented offline posture authorized 2026-08-23; README.md deviation bullet likewise no longer implies the spec mandates non-null.
+- [x] T2b proof/known-issues/KI-7.yaml: dead-contract reproduction_steps and undated still-fails/status-open notes plus poc_quality empty-placeholder/reproducible-fails claims date-stamped "[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation]"; history preserved verbatim otherwise; yaml re-validated via `proof known-issue show KI-7`.
+- [x] T2c proof/reproducers/KI-7-import-stylesheet-null.ts header documents that tripwire discrimination rests primarily on leg (e) replaceSync enablement; legs (a)/(b) are regression guards. Both KI-7 reproducers exit 0 once each after edits.
+
+---
+
+## Phase: Audit of stopped-agent landing commits 053c897 + f00a668 (Reviewer/Grizz)
+
+- [x] Reproducer honesty: KI-107/KI-114/KI-119/KI-123 run red ×2 each (exit 1, genuine ERR_ASSERTION shapes: supports true-vs-false, '100%' vs '60' slice loss, 13 vs 26 declarations, CSSKeywordValue vs CSSStyleValue). Controls green as claimed.
+- [x] poc_quality spot-checks KI-107 + KI-121 grounded: WPT serialize-values.html rows verbatim (lines 101–110), css-values-5 <attr-name> grammar ~line 1982, sha256 freshness hashes match for ki-107/ki-119/ki-121/ki-123.
+- [x] Req quality V109 + S4DW/YQPJ/0BRJ/QGJE/XE59: FRETish falsifiable; budgets mirror reproducer constants (-3.14 wraps, #bbff00 family, 13 longhands, EXPECTED_FONT_LENGTH=26); traces.satisfies = parent = STK-REQ-260821-BQKD; draft→review transitions carry honest reasons, review stays pending/unreviewed.
+- [x] verification_state honesty: all five `failing` states backed by open KIs 112/113/122/123 (all status: open); no passing claims anywhere; green mentions limited to control legs.
+- [x] Scope clean both commits (docs/, proof/, specs/ only). `proof audit` four checks → Errors: 0 Warnings: 0.
+- [ ] MEDIUM (open): f00a668's five reqs declare 10 variables (subclass_boxed_base_reads, system_font_*, font_*, unwrapped_out_of_range_reads, …) with no type/direction/range definitions in any specs/system/variables/*.yaml — rationales say cssom.vars.yaml ownership conflict "cleared" but definitions never landed. LOW (open): KI-121 poc_quality says "measured across 5 defect legs"; only 4 fire at runtime (reparse-witness assert unreachable after stylesheet-path throw).

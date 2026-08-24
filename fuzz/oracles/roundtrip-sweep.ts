@@ -216,7 +216,28 @@ function walkCssFiles(dir: string, acc: string[], maxFiles: number): void {
   }
 }
 
-function buildCorpus(args: Map<string, string[]>): SourceInput[] {
+/**
+ * Anti-greenwashing self-check: for every explicitly-requested --corpus-dir
+ * that contributed 0 inputs, emit a warning line. A silent zero (typo'd path,
+ * wrong extension, all files oversized/unreadable) previously looked identical
+ * to a successful load — wave-1 lost 3 of 4 WPT dirs without any signal.
+ */
+export function zeroInputCorpusDirWarnings(
+  requestedDirs: readonly string[],
+  inputsPerDir: readonly number[],
+): string[] {
+  return requestedDirs.flatMap((dir, i) =>
+    (inputsPerDir[i] ?? 0) === 0 ? [`warning: corpus-dir '${dir}' yielded 0 inputs`] : [],
+  );
+}
+
+export interface CorpusBuild {
+  inputs: SourceInput[];
+  /** One warning line per explicitly-requested --corpus-dir that yielded 0 inputs. */
+  warnings: string[];
+}
+
+export function buildCorpus(args: Map<string, string[]>): CorpusBuild {
   const corpus: SourceInput[] = [];
   EDGE_CASES.forEach((text, i) => corpus.push({ sourceId: `edge#${i}`, text }));
 
@@ -234,20 +255,27 @@ function buildCorpus(args: Map<string, string[]>): SourceInput[] {
     corpus.push(...loadExternalInputsCollect());
   }
 
-  for (const dir of args.get('corpus-dir') ?? []) {
+  const requestedDirs = args.get('corpus-dir') ?? [];
+  const inputsPerDir: number[] = [];
+  for (const dir of requestedDirs) {
     const files: string[] = [];
     walkCssFiles(dir, files, args.has('external') ? 1500 : 4000);
+    let loaded = 0;
     files.forEach((path) => {
       try {
         const text = readFileSync(path, 'utf8');
-        if (text.length <= 262_144) corpus.push({ sourceId: `file:${path}`, text });
+        if (text.length <= 262_144) {
+          corpus.push({ sourceId: `file:${path}`, text });
+          loaded++;
+        }
       } catch {
         // unreadable file: skip silently, corpus is best-effort
       }
     });
+    inputsPerDir.push(loaded);
   }
 
-  return corpus;
+  return { inputs: corpus, warnings: zeroInputCorpusDirWarnings(requestedDirs, inputsPerDir) };
 }
 
 // ---------------------------------------------------------------------------
@@ -327,13 +355,16 @@ function runSweep(corpus: SourceInput[], budgetMs: number): Report {
 // CLI
 // ---------------------------------------------------------------------------
 
-function parseArgs(argv: readonly string[]): Map<string, string[]> {
+export function parseArgs(argv: readonly string[]): Map<string, string[]> {
   const map = new Map<string, string[]>();
   let current: string | null = null;
   for (const arg of argv) {
     if (arg.startsWith('--')) {
       current = arg.slice(2);
-      map.set(current, []);
+      // Repeated occurrences of the same flag ACCUMULATE (e.g. multiple
+      // --corpus-dir dirs); only create the bucket on first sight so a
+      // later occurrence never clobbers earlier values.
+      if (!map.has(current)) map.set(current, []);
     } else if (current !== null) {
       map.get(current)?.push(arg);
     }
@@ -346,8 +377,9 @@ async function main(): Promise<void> {
   const budgetMs = Number.parseInt(args.get('budget-ms')?.[0] ?? '90000', 10) || 90_000;
 
   process.stdout.write(`building corpus…\n`);
-  const corpus = buildCorpus(args);
+  const { inputs: corpus, warnings } = buildCorpus(args);
   process.stdout.write(`corpus: ${corpus.length} inputs\n`);
+  for (const line of warnings) process.stdout.write(`${line}\n`);
 
   const report = runSweep(corpus, budgetMs);
 
