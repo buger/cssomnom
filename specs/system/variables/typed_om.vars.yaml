@@ -16,6 +16,13 @@ variables:
       type: bool
       direction: input
       description: Boolean flag ten px parsed for component typed_om.
+    - name: position_arity
+      type: int
+      direction: input
+      description: Count of non-whitespace <position> components (1-4).
+      range:
+        max: 4
+        min: 1
     - name: position_property
       type: enum
       direction: input

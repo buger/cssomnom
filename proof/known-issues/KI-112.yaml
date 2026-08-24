@@ -35,7 +35,7 @@ poc_quality:
     reachability_verified: true
     notes: |
         real_infrastructure: public parse()/serialization of font shorthand - no mocks.
-        quantitative_impact: measured at HEAD - every probed system font keyword (caption, icon, menu, message-box, small-caption) leaves the font shorthand empty/non-serializing after parse, while an ordinary font shorthand control parses and serializes cleanly.
+        quantitative_impact: measured at HEAD - every probed system font keyword (caption, icon, menu, message-box, small-caption, status-bar) leaves the font shorthand empty/non-serializing after parse, while an ordinary font shorthand control parses and serializes cleanly.
         control_test: ordinary-keyword control leg passes, isolating system-keyword handling.
         untrusted_attacker: system font keywords are ordinary stylesheet tokens reachable from any CSS input.
         current_deployment_relevance: font system keywords are spec-standard (css-fonts-4 system theme fonts); live at HEAD.
