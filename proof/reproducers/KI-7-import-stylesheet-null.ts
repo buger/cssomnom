@@ -24,6 +24,12 @@
  *   (e) the host can supply content offline: child.replaceSync(...) populates
  *       the associated sheet and its rules are readable afterwards.
  *
+ * TRIPWIRE DISCRIMINATION (2026-08-24): discrimination of the fixed object
+ * graph rests primarily on leg (e) — replaceSync() enablement on the
+ * associated sheet (NotAllowedError was the pre-fix symptom). Legs (a) and
+ * (b) are regression guards against literal-null styleSheet and broken public
+ * linkage wiring; they alone do not discriminate the fix.
+ *
  * Reproduces: KI-7
  */
 import { test } from 'node:test';

@@ -1457,9 +1457,10 @@ export class CSSImportRule extends CSSRule {
   }
 
   // cssom-1 § 6.4.3 #the-cssimportrule-interface #dom-cssimportrule-stylesheet:
-  // "The styleSheet attribute must return the associated CSS style sheet object
-  // for the import rule." The association is never null once the rule exists.
-  // Offline-parser deviation (README): the href is never fetched, so the
+  // "The styleSheet attribute must return the associated CSS style sheet, if
+  // any, or null otherwise." The spec permits null here; returning a non-null
+  // associated sheet is our documented offline posture (README "Deviations &
+  // Extensions"), authorized 2026-08-23: the href is never fetched, so the
   // associated sheet is exposed in its browser pre-load state — a real,
   // constructed, empty CSSStyleSheet that a host can populate offline via
   // replaceSync(). Public linkage is live, not cached: child.ownerRule is this

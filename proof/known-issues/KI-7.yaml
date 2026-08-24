@@ -22,25 +22,25 @@ reproducer_command: node --experimental-strip-types proof/reproducers/KI-7-impor
 reproduction_steps:
     - 'Import parser.ts then parse(''@import url("sheet.css"); body { color: red; }'').'
     - Find the CSSImportRule in cssRules.
-    - Observe styleSheet is null (README) or an empty never-fetched placeholder (HEAD cssRules.length 0). Fetch/network I/O is not used.
-    - 'Intended contract (full CSSOM): CSSImportRule.styleSheet is the associated loaded stylesheet (not null).'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Observe styleSheet is null (README) or an empty never-fetched placeholder (HEAD cssRules.length 0). Fetch/network I/O is not used.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Intended contract (full CSSOM): CSSImportRule.styleSheet is the associated loaded stylesheet (not null).'
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts'
     - 'Extra e2e user-shaped public APIs (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-7-import-url-token.ts'
-    - '@import "x.css" — associated loaded sheet / cssRules from fixtures/x.css'
-    - '@import url(x.css) — associated loaded sheet / cssRules from fixtures/x.css (url-token)'
-    - '@import url("https://example.com/x.css") — associated loaded sheet / cssRules from the imported resource'
-    - '@import url(x.css) print; — associated loaded sheet / cssRules from fixtures/x.css plus media print'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] @import "x.css" — associated loaded sheet / cssRules from fixtures/x.css'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] @import url(x.css) — associated loaded sheet / cssRules from fixtures/x.css (url-token)'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] @import url("https://example.com/x.css") — associated loaded sheet / cssRules from the imported resource'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] @import url(x.css) print; — associated loaded sheet / cssRules from fixtures/x.css plus media print'
 introduced_in: inception
 defect_class: latent
 remediation: FIXED 2026-08-23 (user-authorized, no-fetch object-graph fix). src/CSSOM.ts CSSImportRule.styleSheet now builds the associated sheet via the public constructed constructor path and sets _ownerRule + child href; parentStyleSheet/ownerRule resolve publicly and live. replaceSync() works so a host can populate the sheet offline. Fetching remains permanently out of scope (README documented deviation). Class-closure DEFECT report records the fix.
 notes:
     - '2026-08-23: USER AUTHORIZED closing the object-graph defect offline: styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 (empty pre-load state), while fetch stays excluded forever as a documented deviation. The original loaded-sheet contract encoded the banned-fetch stalemate; both overlay reproducers were rewritten to the amended contract.'
     - '2026-08-23: class-fix landed in src/CSSOM.ts. Both reproducers fail on parent commit (exit 1 x2 measured against HEAD code in an isolated copy) and pass on fixed HEAD (exit 0 x2 each). Full unit suite: all import-related failures green. DEFECT report records the class-fix.'
-    - Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.
-    - 'Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=T, fetched=T, import_url_present=T => FALSE. Do not ignore SAT for fetch=false. Status remains open (documented offline parser, no fetch).'
-    - 'Acknowledge on approved guarantee SW-REQ-260821-5W6X: ship the documented offline no-fetch contract (SAT TRUE css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T). KI-7 tripwire remains the full-CSSOM FALSE row constructed=T, fetched=T, import_url_present=T. Status stays open; no fetch I/O; do not treat the DEFECT-3T1G href SAT as a fetch claim.'
-    - Extra overlay e2e proof/reproducers/KI-7-import-url-token.ts covers user-shaped @import "x.css", url(x.css), url("https://example.com/x.css"), url(x.css) print;. Each asserts associated loaded sheet / cssRules from the imported file and FAILS while no-fetch holds. Did not implement fetch. KI-7 stays open.
-    - 'Refreshed proof/evidence/ki-7.yaml so both overlay tripwires are in commands and input_set/freshness_hashes: KI-7-import-stylesheet-null.ts (reproducer_command) and KI-7-import-url-token.ts (extra e2e). Also hashed fixtures/x.css, src/parser.ts, src/CSSOM.ts. Tripwires still FAIL (exit 1); no fetch; status remains open.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=T, fetched=T, import_url_present=T => FALSE. Do not ignore SAT for fetch=false. Status remains open (documented offline parser, no fetch).'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Acknowledge on approved guarantee SW-REQ-260821-5W6X: ship the documented offline no-fetch contract (SAT TRUE css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T). KI-7 tripwire remains the full-CSSOM FALSE row constructed=T, fetched=T, import_url_present=T. Status stays open; no fetch I/O; do not treat the DEFECT-3T1G href SAT as a fetch claim.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Extra overlay e2e proof/reproducers/KI-7-import-url-token.ts covers user-shaped @import "x.css", url(x.css), url("https://example.com/x.css"), url(x.css) print;. Each asserts associated loaded sheet / cssRules from the imported file and FAILS while no-fetch holds. Did not implement fetch. KI-7 stays open.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Refreshed proof/evidence/ki-7.yaml so both overlay tripwires are in commands and input_set/freshness_hashes: KI-7-import-stylesheet-null.ts (reproducer_command) and KI-7-import-url-token.ts (extra e2e). Also hashed fixtures/x.css, src/parser.ts, src/CSSOM.ts. Tripwires still FAIL (exit 1); no fetch; status remains open.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 release_disposition: fixed
@@ -111,9 +111,9 @@ poc_quality:
         Overlay runner: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
         real_infrastructure: constructs parse() from src/parser.ts and reads public CSSImportRule.styleSheet (not a mock).
         control_test / operational_path_verified: runner setup asserts @import produced a CSSImportRule (exit 2 if setup fails).
-        current_deployment_relevance: hole is on HEAD CSSImportRule.styleSheet / handleImportRule; never fetches; README documents null; getter currently returns empty placeholder.
+        current_deployment_relevance: [superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] hole is on HEAD CSSImportRule.styleSheet / handleImportRule; never fetches; README documents null; getter currently returns empty placeholder.
         honest_severity / no_inflation: medium correctness matches missing imported sheet, not theft. No submission.
-        reproducible: single node command, under 5 min. Asserts the full CSSOM associated-loaded-sheet contract so it FAILS while the hole is present.
+        reproducible: [superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] single node command, under 5 min. Asserts the full CSSOM associated-loaded-sheet contract so it FAILS while the hole is present.
         Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
