@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "claims": [
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`initial` as a value for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`initial` as a value for an inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`unset` as a value for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`revert` as a value for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`initial` as a `var()` fallback for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`initial` as a `var()` fallback for an inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`unset` as a `var()` fallback for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/css-variables/variable-css-wide-keywords.html::`revert` as a `var()` fallback for a non-inheriting registered custom property",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/cssom/cssstyledeclaration-registered-custom-properties.html::Registered custom properties are included in CSSComputedStyleDeclaration",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    },
+    {
+      "baseline": "wpt-sandbox-known-failures",
+      "entryId": "submodules/web-platform-tests/css/cssom/cssstyledeclaration-registered-custom-properties.html::Only relevant custom properties are included",
+      "owner": "KI-38",
+      "kind": "open-KI",
+      "ref": "KI-38.yaml",
+      "claimedAt": "2026-08-24"
+    }
+  ]
+}
