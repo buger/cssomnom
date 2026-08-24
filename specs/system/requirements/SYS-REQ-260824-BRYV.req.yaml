@@ -29,9 +29,9 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: "agent:champ (REVIEW-53 pending-loop-gate)"
+        reviewed_at: "2026-08-24T17:20:00Z"
         ai_generated: false
 history:
     created_by: human:Leonid Bugaev

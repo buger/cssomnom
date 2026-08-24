@@ -1,0 +1,27 @@
+id: REVIEW-52
+kind: spec_conformance
+reviewer: loop-gate:reviewer+grizz f00a668
+reviewed_at: "2026-08-24T13:16:26Z"
+subject: SYS-REQ-260823-{0BRJ,S4DW,YQPJ}, SYS-REQ-260824-{QGJE,XE59}
+decision: approved_with_loop_gate_pending
+comment: >-
+    Landing-gate review of the stopped-agent formalization batch f00a668
+    ("formalize and link remaining stopped-agent requirements"), audited in the
+    PLAN.md "Audit of stopped-agent landing commits 053c897 + f00a668
+    (Reviewer/Grizz)" phase. Checks performed against these five requirements:
+    FRETish falsifiability confirmed; budgets mirror reproducer constants (-3.14
+    wrap for QGJE, #bbff00 family for XE59, EXPECTED_FONT_LENGTH=26 longhand
+    count for S4DW); traces.satisfies and parent both resolve to
+    STK-REQ-260821-BQKD; draft->review transitions carry honest reasons;
+    verification_state honesty confirmed - every failing state is backed by an
+    open KI (KI-112/113 font shorthand, KI-122/123 Typed OM reification, all
+    status open) with no passing claims; commit scope clean (docs/, proof/,
+    specs/ only). Open items carried, not waived: the batch's ten variables
+    still lack type/direction/range definitions in specs/system/variables/
+    (tracked MEDIUM), so administrative approval stays pending a dedicated
+    loop gate after the variable definitions land.
+citations:
+    - specs/system/requirements/SYS-REQ-260824-QGJE.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-S4DW.req.yaml
+    - proof/reproducers/KI-112-font-system-keyword-shorthand-empty-overlay-260823.ts
+    - proof/known-issues/KI-123.yaml

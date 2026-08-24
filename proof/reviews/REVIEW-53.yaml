@@ -1,0 +1,33 @@
+id: REVIEW-53
+kind: spec_conformance
+reviewer: agent:champ
+reviewed_at: "2026-08-24T17:20:00Z"
+subject: SYS-REQ-260824-{4RGN,BRYV,DAS2}
+decision: needs_changes
+comment: >-
+    Champ self-review (pending-loop-gate) of the three ungated 260824 HSL
+    requirements created by the variable-model cleanup batch 607fe1a; no
+    dedicated loop gate has reviewed them yet, so administrative status stays
+    review and formal approval is withheld. Checks performed: FRETish formulas
+    read against src/cascade/color-resolver.ts hslToRgb sector branches -
+    green_from_chroma [60,180) matches the two g1=C branches, blue_from_chroma
+    [180,300) matches the two b1=C branches, and DAS2's 3-or-4-component arity
+    window matches the parseHslComponents parts.length gate that returns null
+    otherwise; hue_degrees domain [0,360] matches the modulo-360 wrap;
+    variables hue_degrees/hsl_component_count/hsl_parsed/green_from_chroma/
+    blue_from_chroma are defined with types/directions/ranges in
+    specs/system/variables/cascade.vars.yaml under mutex hsl_chroma_channel;
+    cited witnesses exist - tests/mcdc-witness-domain-bounds.test.ts:476-487
+    (hsl(120)->rgb(0,255,0)), tests/mcdc-cascade-vars.test.ts:163-168
+    (hsl(180/210/240)), :177-198 (slash alpha + arity fall-through),
+    :460-469 two-part negative; both test files re-run green this session
+    (54/54). needs_changes scope only: obligation_deferrals name
+    "triple-form requirement tag lands with the next tests batch" while
+    tests/** is frozen for this batch, so nominal-obligation witness tags are
+    still missing; loop gate should confirm the tag landing before approval.
+citations:
+    - src/cascade/color-resolver.ts:140@parseHslComponents
+    - src/cascade/color-resolver.ts:169@hslToRgb
+    - specs/system/variables/cascade.vars.yaml:34@green_from_chroma
+    - tests/mcdc-cascade-vars.test.ts:163
+    - tests/mcdc-witness-domain-bounds.test.ts:476

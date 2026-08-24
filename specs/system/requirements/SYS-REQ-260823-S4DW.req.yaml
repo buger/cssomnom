@@ -39,9 +39,9 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: "loop-gate:reviewer+grizz f00a668"
+        reviewed_at: "2026-08-24T13:16:26Z"
         ai_generated: false
 history:
     created_by: human:cli

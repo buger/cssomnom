@@ -30,9 +30,9 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: "agent:champ"
+        reviewed_at: "2026-08-24T11:06:42Z"
         ai_generated: true
 history:
     created_by: agent:ox-alpha
