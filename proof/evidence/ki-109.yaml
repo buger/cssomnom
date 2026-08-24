@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-109
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-V109
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-24T11:12:48Z"
+input_set:
+    - proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts: sha256:e9e768b2b902cd366149626b7e176a82ebe04c60a96f95ab2c2e99a727a63053
+known_issues:
+    - KI-109

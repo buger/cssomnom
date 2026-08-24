@@ -4,7 +4,7 @@
  * tokens when stored, so getPropertyValue() returns the canonical value.
  *
  * Reproduces: KI-120
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-BJTQ
  *
  * Spec anchors:
  * - css-syntax-3 § "Consume a declaration" (#consume-declaration,
@@ -27,6 +27,7 @@ import assert from 'node:assert/strict';
 import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
+// Verifies: SYS-REQ-260824-BJTQ (KI-120 reproducer helper: declaration-block style probe)
 function styleOf(declarations: string) {
   const sheet = parse(declarations);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -34,6 +35,7 @@ function styleOf(declarations: string) {
 
 // Positive control (green today): without trailing whitespace before the
 // semicolon the value round-trips canonically.
+// Verifies: SYS-REQ-260824-BJTQ (clean-declaration control)
 test('KI-120 control: clean declaration serializes without stray whitespace', () => {
   const style = styleOf('.c{color:red;}');
   assert.equal(style.getPropertyValue('color'), 'red');
@@ -41,8 +43,8 @@ test('KI-120 control: clean declaration serializes without stray whitespace', ()
 
 // css-syntax-3 #consume-declaration requires trailing <whitespace-token>s to
 // be removed from the declaration value before it is stored.
-// Verifies: draft requirement "canonical declaration-value trimming"
-// (see KI-120).
+// Reproduces: KI-120
+// Verifies: SYS-REQ-260824-BJTQ (ident-value trimming leg)
 test('KI-120: single-token value drops trailing whitespace (color:red ;)', () => {
   const style = styleOf('.a{color:red ;}');
   assert.equal(
@@ -52,6 +54,8 @@ test('KI-120: single-token value drops trailing whitespace (color:red ;)', () =>
   );
 });
 
+// Reproduces: KI-120
+// Verifies: SYS-REQ-260824-BJTQ (function-value trimming leg)
 test('KI-120: function value drops trailing whitespace', () => {
   const style = styleOf('.b{color: calc(1px) ;}');
   assert.equal(
@@ -61,6 +65,8 @@ test('KI-120: function value drops trailing whitespace', () => {
   );
 });
 
+// Reproduces: KI-120
+// Verifies: SYS-REQ-260824-BJTQ (url-value trimming leg)
 test('KI-120: url() value drops trailing whitespace', () => {
   const style = styleOf('.d{background-image:url(x) ;}');
   const value = style.getPropertyValue('background-image');

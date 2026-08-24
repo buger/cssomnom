@@ -1,0 +1,68 @@
+id: KI-108
+title: Nested var() custom-property names are not substituted
+description: The cascade does not substitute a nested var() in the first argument of an outer var() before parsing that argument as a custom-property name. The CSS Variables replace-a-var algorithm and its --other/--myvar/--result example require the inner function to resolve first, yielding the referenced custom property value.
+affected_requirements:
+    - SYS-REQ-260822-V108
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-108.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: cascade custom-property substitution and computed style
+attacker_input: ordinary stylesheet custom-property values; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid nested var() custom-property names when computed values must resolve in this implementation.
+remediation: Substitute arbitrary functions in var() first arguments, parse the resulting custom-property name, then perform the outer replacement and fallback steps.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T17:55:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T17:55:50Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-108.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:47Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-108.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: real parseStyleSheet + getCascadedStyle + CSSStyleDeclaration over linkedom DOM - no mocks; mirrors the KI-108 cascade path hosts use.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - width resolves empty instead of '10px' for var(var(--myvar)) directly and through an intermediate --result custom property (2 defect legs); direct var(--other) control returns exactly '10px'.
+        control_test: the direct-reference control asserts the full substitution pipeline works, so failures are not setup errors.
+        untrusted_attacker: ordinary stylesheet custom-property values are the trust boundary; any host computing styles from user CSS reaches the broken nested-name step with zero privileges.
+        current_deployment_relevance: custom-property indirection is core cascade behavior; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - declared widths silently resolve empty; no memory-safety impact.
+        attacker_profitability: not profit-driven; theme/component authors relying on nested indirection get silent zero-length results.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius (two-leg substitution gap); risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs drive parse -> cascade -> getPropertyValue exactly as consumers do.
+        reachability_verified: public cascade surface IS the product path; no gating between stylesheet ingestion and substitution.
+kill_domain: custom_property_substitution_order
+do_not_refile_as: ordinary custom-property lookup/fallback replacement coverage (already green) and substitution blow-up resource exhaustion (KI-17); this KI pins first-argument nested-name resolution order only

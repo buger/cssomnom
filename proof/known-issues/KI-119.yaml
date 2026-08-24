@@ -32,5 +32,37 @@ history:
       by: agent:ox-alpha
       action: capture-evidence
       detail: proof/evidence/ki-119.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:51Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-119.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSStyleDeclaration.length/item/getPropertyValue - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - a{color:red;color:green} collapses to length 1 instead of 2 and p{font:22px Helvetica; font:xxx-large system-ui} to 13 instead of 26 (2 defect legs); single-font control pins cssomnom's own 13-longhand expansion granularity used for expected counts.
+        control_test: the 13-slot granularity control demonstrates expansion works and calibrates expectations independently of interpretation.
+        untrusted_attacker: ordinary stylesheet text repeating declarations is the trust boundary; cascade arbitration inputs are destroyed before computed-value time.
+        current_deployment_relevance: duplicate-declaration handling underpins author override workflows (resets, fallbacks); confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - earlier declarations vanish from the object model; plain-property case is granularity-independent.
+        attacker_profitability: not profit-driven; tools reading style.length misreport authored blocks deterministically.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts exited 1 twice at landing validation (2026-08-24), matching the pre-capture red pair.
+        no_inflation: severity medium matches blast radius; interpretation flag recorded for Scrutineer; cve_surface none.
+        operational_path_verified: failing legs exercise real declaration-block parsing append path.
+        reachability_verified: public parse() IS the product surface; no gating between host and storage.
 kill_domain: declaration_retention
 do_not_refile_as: font system-keyword shorthand serialization (KI-112); font invalid-mix retention (KI-113); missing shorthand expansion table (KI-36)

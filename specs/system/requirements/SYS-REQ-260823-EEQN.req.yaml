@@ -1,0 +1,52 @@
+id: SYS-REQ-260823-EEQN
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when grouped_negation_media_roundtripped the cssom shall always satisfy media_condition_collapse_count <= 0
+description: 'A media condition containing a negated term wrapped in grouping parentheses ((not (x)) and (r)) shall round-trip through conditionText serialization without semantic change: re-parsing the serialized text must yield the same condition, never collapse to ''not all'' per mediaqueries-4 #mq-syntax (<media-not> is a complete production) and #error-handling.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-syntax-3 #serialization mandates round-tripping; mediaqueries-4 #mq-syntax (~line 900) defines <media-not> = not S* <media-in-parens> so the grouping parentheses around a negation are load-bearing, and #error-handling (~line 1031) replaces grammar-failing queries with ''not all''. Green controls mirror mq-invalid-media-type-005.html grammar-error rows and test_media_queries.html expression_should_be_unknown scope honesty. Formalized against cssom-budget.vars.yaml (collapse budget); review happens via this campaign''s LOOP gate.'
+tags: []
+variables:
+    - grouped_negation_media_roundtripped
+    - media_condition_collapse_count
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#serialization
+    - type: document
+      id: submodules/csswg-drafts/mediaqueries-4/Overview.bs#error-handling
+    - type: document
+      id: submodules/csswg-drafts/mediaqueries-4/Overview.bs#mq-syntax
+    - type: document
+      id: submodules/web-platform-tests/css/mediaqueries/mq-invalid-media-type-005.html
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:ox-alpha
+    created_at: "2026-08-23T13:29:05Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T11:20:10Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-24T11:20:10Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] FRETish formalized from KI defect contracts with variables registered in new cssom-budget.vars.yaml and satisfies trace added; review happens via this campaign''s LOOP gate on the landing commit'
+          changed_by: human:Leonid Bugaev

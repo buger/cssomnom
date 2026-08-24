@@ -1,0 +1,68 @@
+id: KI-109
+title: Mixed-case VAR() and ENV() are not dispatched in custom properties
+description: The custom-property cascade gate detects only lowercase var( and env( text, so mixed-case VAR() and ENV() stored in intermediate custom properties are not dispatched even though CSS function names are ASCII case-insensitive. Lowercase direct controls pass, while use-site replacement exposes the unresolved intermediate function.
+affected_requirements:
+    - SYS-REQ-260822-V109
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-109.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: cascade custom-property var()/env() substitution
+attacker_input: ordinary stylesheet custom-property values with mixed-case function names; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on mixed-case var()/env() in intermediate custom-property values until dispatch is corrected.
+remediation: Use case-insensitive function detection at every custom-property substitution gate while preserving author casing for custom-property serialization.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T17:55:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T17:55:50Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-109.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:48Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-109.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: real parseStyleSheet + getCascadedStyle + CSSStyleDeclaration over linkedom - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - --y: VAR(--x) leaves color unresolved (fallback red wins) and --safe: ENV(safe-area-inset-top) leaves padding-top at its 9px fallback instead of '0px' (2 defect legs); identical lowercase spellings resolve to rgb(0, 255, 0)/0px in the same run.
+        control_test: lowercase var()/env() positive controls prove the dispatch and environment lookup work, so failures are case-handling specific.
+        untrusted_attacker: ordinary stylesheet text with mixed-case function names is the trust boundary; ASCII case-insensitivity of function names is normative, so any user CSS can carry these forms.
+        current_deployment_relevance: custom-property intermediates feeding use-site substitution is a core cascade lane; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - values silently fall back instead of resolving; no memory-safety impact.
+        attacker_profitability: not profit-driven; authors of case-normalizing or generated CSS hit unresolved intermediates deterministically.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs exercise the real intermediate-custom-property substitution gate at the use site.
+        reachability_verified: public cascade surface IS the product path; no gating between ingestion and dispatch.
+kill_domain: ascii_case_insensitive_dispatch
+do_not_refile_as: author-cased serialization of custom-property names (casing preservation is spec-correct) and nested-name substitution order (KI-108)

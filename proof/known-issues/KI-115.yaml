@@ -1,0 +1,70 @@
+id: KI-115
+title: conditionText serialization drops the grouping parens around a negated media condition, so re-parsing collapses it to 'not all'
+description: 'Parsing ''@media(not (x))and (r){.q{c:d}}'' correctly retains the valid grouped condition on pass 1 (conditionText ''not (x) and (r)''), but the serializer emits that text WITHOUT the outer parentheses around ''not (x)''. mediaqueries-4 #mq-syntax defines <media-not> = not S* <media-in-parens> as a complete production that cannot take an and-chain, so the serialized text matches neither <media-condition> alternative; re-parsing it replaces the query with ''not all'' per mediaqueries-4 #error-handling (~line 1031), violating css-syntax-3 #serialization (parse(serialize(parse(x))) must yield the same data structures). Root subsystem: MediaParser/serializer flattens the condition tree when reconstructing conditionText. Scope honesty: bare ''@media (x){}'' keeping ''(x)'' is SPEC-CORRECT (test_media_queries.html expression_should_be_unknown requires unknown features to stay parseable, not become ''not all'') and is asserted as a green control here, as are mq-invalid-media-type-005.html''s eight grammar-error rows which already pass.'
+affected_requirements:
+    - SYS-REQ-260823-EEQN
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
+evidence_manifests:
+    - proof/evidence/ki-115.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() @media rule parsing / CSSMediaRule.conditionText / media.mediaText
+attacker_input: ordinary CSS @media rules with grouped negated conditions; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not feed CSSMediaRule.conditionText back into parse() and expect the same rule set for conditions containing negations under grouping.
+remediation: Preserve (or re-derive) the grouping parentheses of nested condition terms when reconstructing conditionText so serialized text re-parses to the same media query.
+notes:
+    - 'Evidence captured via ''proof evidence capture KI-115'' by genuine re-execution at 2026-08-23T13:30:53Z (proof/evidence/ki-115.yaml); reproducer ran red twice before filing (exit 1 both runs: 7 tests, 5 green controls incl. all asserted mq-invalid-media-type-005 rows, 2 defect failures). Scope correction vs hunt briefing recorded: bare ''@media (x){}'' staying ''(x)'' is spec-correct per test_media_queries.html expression_should_be_unknown; only the grouped-negation round-trip collapse is the defect. Bound to draft SYS-REQ-260823-EEQN created through ''proof req new''; informal until cssom variables can be declared.'
+owner: agent:ox-alpha
+review_date: "2026-09-23"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:30:44Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-23T13:31:33Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-115.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSMediaRule.conditionText/mediaText only - no mocks; WPT mq-invalid-media-type-005.html grammar-error rows asserted verbatim as controls.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - '@media(not (x))and (r)' retains conditionText 'not (x) and (r)' on pass 1 but its serialized text re-parses to 'not all' (2 defect legs: condition round-trip and whole-rule structure); 7 tests total, 5 green controls incl. all asserted mq-invalid-media-type-005 rows and the scope-honest bare '(x)' control.
+        control_test: grammar-error queries already collapse to 'not all' correctly and bare unknown features stay parseable, isolating the escape to grouping-paren loss around negations during serialization.
+        untrusted_attacker: ordinary stylesheet text with grouped negated conditions is the trust boundary; any host persisting conditionText re-ingests corrupted media semantics.
+        current_deployment_relevance: negated media conditions are standard responsive-query fare; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - satisfiable queries flip to never-match ('not all') on round-trip; no memory-safety dimension.
+        attacker_profitability: an attacker who gets serialized conditionText re-ingested (CMS round-trip, build pipeline) deterministically disables guarded rule branches.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair in the filing note.
+        no_inflation: severity medium matches blast radius (silent semantic flip, recoverable by keeping source text); cve_surface none.
+        operational_path_verified: failing legs call the exact parse -> conditionText serialize -> re-parse path serializers use.
+        reachability_verified: public parse()/conditionText ARE the product surface; no gating layer in between.
+kill_domain: media_negation_roundtrip_collapse
+do_not_refile_as: 'KI-31 (serializer drops grouping parens around nested or/and operands - mixed-chain corruption) and KI-5 (unbalanced-paren input recovery): this KI pins media-not-under-grouping round-trip collapse specifically'

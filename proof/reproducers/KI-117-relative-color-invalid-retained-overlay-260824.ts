@@ -4,7 +4,7 @@
  * css-color grammar, including the WPT-invalid relative color spellings.
  *
  * Reproduces: KI-117
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-CFQG
  *
  * Spec anchors:
  * - cssom-1 § "parse a CSS declaration block"
@@ -41,6 +41,7 @@ import assert from 'node:assert/strict';
 import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
+// Verifies: SYS-REQ-260824-CFQG (KI-117 reproducer helper: declaration-block style probe)
 function styleOf(declarations: string) {
   const sheet = parse(`.k{${declarations}}`);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -58,7 +59,7 @@ test('KI-117 control: valid relative color lch(from orchid l 30 h) is retained',
 // these fails the css-color grammar, so cssom-1 #parse-a-css-declaration-block
 // step 3.1 requires the declaration to be dropped -> getPropertyValue returns
 // the empty string.
-// Verifies: draft requirement "color grammar drop" (see KI-117).
+// Verifies: SYS-REQ-260824-CFQG (10 WPT color-invalid-relative-color.html rows)
 const INVALID_RELATIVE_COLORS = [
   // Testing invalid values (angle where number/percentage required)
   'rgb(from rebeccapurple r 10deg 10)',
@@ -77,6 +78,7 @@ const INVALID_RELATIVE_COLORS = [
   'oklch(from rebeccapurple l 10deg h)',
 ] as const;
 
+// Reproduces: KI-117
 for (const value of INVALID_RELATIVE_COLORS) {
   test(`KI-117: color-declaring ${value} is dropped (WPT invalid row)`, () => {
     const style = styleOf(`color:${value};`);
@@ -95,6 +97,8 @@ for (const value of INVALID_RELATIVE_COLORS) {
 
 // Dropping must not disturb neighboring VALID declarations
 // (cssom-1 #parse-a-css-declaration-block processes each item independently).
+// Reproduces: KI-117
+// Verifies: SYS-REQ-260824-CFQG (neighbor-preservation leg)
 test('KI-117: dropping an invalid relative color preserves valid neighbors', () => {
   const style = styleOf('margin:1px;color:hsl(from rebeccapurple hue s l);padding:2px;');
   assert.equal(style.length, 2, 'only the two valid declarations survive');

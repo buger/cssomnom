@@ -1,0 +1,70 @@
+id: KI-116
+title: 'border-image:url() serialization is not fixpoint-stable: pass 2 collapses url("") to none while background:url() round-trips'
+description: 'Parsing ''.o{border-image:url()}'' retains the declaration on pass 1 (cssText ''border-image: url("");'', five border-image-* longhands set with source=url("")), but re-parsing its own serialization collapses to ''border-image: none;'' with border-image-source silently reset. css-syntax-3 #serialization requires parsing, serializing, and parsing again to produce the same data structures, and css-backgrounds-3 #borderimage admits an empty <<url>> source. Property-specific inconsistency proves an implementation bug rather than inherent syntax ambiguity: ''.o{background:url()}'' is fixpoint-stable across passes. Root subsystem: the same expandBorderImage quoted-url blindness as KI-114 — the serializer emits the quoted function form url(""), which css-syntax-3 #consume-ident-like-token delivers as a function token named url that expandBorderImage (src/shorthands.ts ~955-1001) fails to recognize as a source, leaving none in place; contractBorderImage then reconstructs ''none''. Adjacent trigger surface shared with KI-114 but distinct violated contract (round-trip stability vs first-parse retention), hence filed separately.'
+affected_requirements:
+    - SYS-REQ-260823-BNDX
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
+evidence_manifests:
+    - proof/evidence/ki-116.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() declaration-block parsing / CSSStyleDeclaration.getPropertyValue('border-image'|'border-image-source') / cssText
+attacker_input: ordinary CSS border-image declarations with url() values; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat any serialized border-image text containing a quoted url as potentially unstable across parse cycles until fixed.
+remediation: Make expandBorderImage accept the function-token form of url (the form our own serializer emits) so the shorthand reaches a one-cycle fixpoint, matching background:url() behavior.
+notes:
+    - 'Evidence captured via ''proof evidence capture KI-116'' by genuine re-execution at 2026-08-23T13:30:53Z (proof/evidence/ki-116.yaml); reproducer ran red twice before filing (exit 1 both runs: 5 tests, 2 green controls incl. background:url() stability, 3 defect failures). Kept separate from KI-114 despite shared expandBorderImage trigger surface: distinct violated contract (css-syntax-3 #serialization fixpoint stability vs first-parse retention), documented in docs/proof-escape-ki-114-116.md. Bound to draft SYS-REQ-260823-BNDX created through ''proof req new''; informal until cssom variables can be declared.'
+owner: agent:ox-alpha
+review_date: "2026-09-23"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:30:44Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-23T13:31:33Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:50Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-116.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSStyleDeclaration getters/cssText only - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - '.o{border-image:url()}' retains on pass 1 (source=url("")) but re-parsing its own serialization collapses to 'border-image: none;' across 3 defect legs (shorthand read-back, source longhand, cssText fixpoint); background:url() stays byte-stable in the same run (property-specific inconsistency proves implementation bug, not syntax ambiguity); 5 tests, 2 green controls, 3 defect failures.
+        control_test: background:url() fixpoint stability plus pass-1 border-image retention isolate the escape to expandBorderImage rejecting the function-token form of url that OUR OWN serializer emits.
+        untrusted_attacker: ordinary stylesheet text with url() border-image sources is the trust boundary; any host running parse/serialize cycles reaches the collapse with zero privileges.
+        current_deployment_relevance: serializer fixpoint stability underpins every persistence lane; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - declared image sources silently reset to none after one cycle; no memory-safety dimension.
+        attacker_profitability: not profit-driven; build tools and editors diffing serializations see phantom author-intent flips.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair in the filing note.
+        no_inflation: severity medium matches blast radius; cve_surface none; kept separate from KI-114 because the violated contracts differ (documented in docs/proof-escape-ki-114-116.md).
+        operational_path_verified: failing legs drive real parse -> cssText -> parse cycles end-to-end.
+        reachability_verified: public parse() IS the product surface; no gating layer between host and expander.
+kill_domain: serialization_fixpoint_stability
+do_not_refile_as: calc() degenerate-Sum parenthesization drift (KI-39, different value class) and first-parse border-image laundering (KI-114, distinct violated contract)

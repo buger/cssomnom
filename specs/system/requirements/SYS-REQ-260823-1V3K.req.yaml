@@ -1,0 +1,52 @@
+id: SYS-REQ-260823-1V3K
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when quoted_url_border_image_declared the cssom shall always satisfy border_image_retention_loss <= 0
+description: 'Parsing or setting a grammatically valid border-image declaration (including quoted url() sources and numeric slice components, per css-backgrounds-3 #borderimage) shall retain it fully: getPropertyValue(''border-image-source'') returns the declared source, the slice component applies instead of being silently dropped, and the declaration is never omitted from cssText serialization.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-backgrounds-3 #borderimage admits <border-image-source> || <border-image-slice> ... so url("x") 60 and url(x) 60 are valid values; cssom-1 #parse-a-css-declaration-block step 3.1 licenses dropping ONLY grammar-failing declarations, and cssom-1 #serialize-a-css-declaration-block (~line 2523) has no omission step in its declaration loop and explicitly lists WPT css/cssom/border-shorthand-serialization.html, whose .b row asserts the border shorthand stays suppressed while border-image longhands are non-initial. Formalized against cssom-budget.vars.yaml (border-image retention budget); review happens via this campaign''s LOOP gate.'
+tags: []
+variables:
+    - quoted_url_border_image_declared
+    - border_image_retention_loss
+references:
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#serialize-a-css-declaration-block
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
+    - type: document
+      id: submodules/csswg-drafts/css-backgrounds-3/Overview.bs#borderimage
+    - type: document
+      id: submodules/web-platform-tests/css/cssom/border-shorthand-serialization.html
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:ox-alpha
+    created_at: "2026-08-23T13:28:49Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T11:20:10Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-24T11:20:10Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] FRETish formalized from KI defect contracts with variables registered in new cssom-budget.vars.yaml and satisfies trace added; review happens via this campaign''s LOOP gate on the landing commit'
+          changed_by: human:Leonid Bugaev

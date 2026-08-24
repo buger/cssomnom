@@ -1,0 +1,51 @@
+id: SYS-REQ-260822-V111
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when registered_value_invalid the css shall always satisfy registration_rejected
+description: CSS.registerProperty shall reject an initial value that does not match its registered syntax.
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: property_registry
+rationale: The Properties and Values API parses an initial value according to the consumed syntax definition and throws on failure.
+tags:
+    - cssom
+    - conformance
+    - known-issue
+variables:
+    - registered_value_invalid
+    - registration_rejected
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#the-registerproperty-function
+    - type: document
+      id: submodules/css-houdini-drafts/css-properties-values-api/Overview.bs#supported-names
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:codex
+    created_at: "2026-08-22T17:48:23Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T11:19:41Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-24T11:19:41Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] KIs ki-107..111 filings landed with completed poc_quality/dedup artifacts; review happens via this campaign''s LOOP gate on the landing commit'
+          changed_by: human:Leonid Bugaev

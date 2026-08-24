@@ -1,30 +1,34 @@
 id: SYS-REQ-260824-EVNP
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
-fretish: ""
+fretish: when duplicate_declaration_parsed the cssom shall always satisfy dropped_duplicate_count <= 0
 description: 'Declaration-block parsing shall retain every successfully parsed declaration, including repeated property names and repeated shorthands (e.g. color twice, or font:22px Helvetica followed by font:xxx-large system-ui): cssom-1 #parse-a-css-declaration-block appends each non-dropped declaration and CSSStyleDeclaration.length counts them; which duplicate wins is decided only by cascade arbitration at computed-value time.'
-formalization_strategy: informal
+formalization_strategy: fretish
 informal_verification:
     method: ""
     evidence: ""
     verified: false
 parent: STK-REQ-260821-BQKD
 component: cssom
-rationale: cssom-1 Overview.bs ~2490 has no replacement/removal step for same-name declarations and the length definition (~line 2700) counts retained declarations. Left informal because modeling needs new cssom variables that cannot be declared while specs/system/variables/cssom.vars.yaml is concurrently owned (formalization debt).
+rationale: cssom-1 Overview.bs ~2490 has no replacement/removal step for same-name declarations and the length definition (~line 2700) counts retained declarations Formalized against cssom-budget.vars.yaml; review happens via this campaign's LOOP gate.
 tags: []
-variables: []
+variables:
+    - duplicate_declaration_parsed
+    - dropped_duplicate_count
 references:
     - type: document
       id: submodules/csswg-drafts/cssom-1/Overview.bs#parse-a-css-declaration-block
     - type: document
       id: submodules/csswg-drafts/css-syntax-3/Overview.bs#consume-declaration
-traces: {}
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
 verification:
     assurance_level: C
-    formalization_status: none
+    formalization_status: valid
     review:
         status: pending
         reviewer: ""
@@ -33,5 +37,12 @@ verification:
 history:
     created_by: agent:ox-alpha
     created_at: "2026-08-24T07:12:58Z"
-    last_modified_by: agent:ox-alpha
-    last_modified_at: "2026-08-24T07:12:58Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T11:20:10Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-24T11:20:10Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] FRETish formalized from KI defect contracts with variables registered in new cssom-budget.vars.yaml and satisfies trace added; review happens via this campaign''s LOOP gate on the landing commit'
+          changed_by: human:Leonid Bugaev

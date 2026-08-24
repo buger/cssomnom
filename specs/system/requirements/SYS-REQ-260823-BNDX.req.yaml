@@ -1,0 +1,50 @@
+id: SYS-REQ-260823-BNDX
+version: 1
+status: review
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when border_image_url_reparsed the cssom shall always satisfy border_image_fixpoint_drift <= 0
+description: 'Serializing a declaration block containing border-image:url() and re-parsing that serialization shall reach a fixpoint after one cycle: border-image-source keeps the url("") form, getPropertyValue(''border-image'') is unchanged across passes, and cssText matches its input, matching background:url() stability per css-syntax-3 #serialization.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'css-syntax-3 #serialization requires parsing, serializing, and parsing again to produce the same data structures, and css-backgrounds-3 #borderimage admits an empty <<url>> source. The serializer itself emits the quoted function form url(""), which css-syntax-3 #consume-ident-like-token delivers as a function token named url; property-specific inconsistency with background:url() (stable) proves an implementation bug rather than syntax ambiguity. Formalized against cssom-budget.vars.yaml (fixpoint drift budget); review happens via this campaign''s LOOP gate.'
+tags: []
+variables:
+    - border_image_url_reparsed
+    - border_image_fixpoint_drift
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-syntax-3/Overview.bs#serialization
+    - type: document
+      id: submodules/csswg-drafts/css-backgrounds-3/Overview.bs#borderimage
+    - type: document
+      id: submodules/csswg-drafts/cssom-1/Overview.bs#serialize-a-css-declaration-block
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: true
+history:
+    created_by: agent:ox-alpha
+    created_at: "2026-08-23T13:29:05Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-24T11:20:10Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-24T11:20:10Z"
+          from: draft
+          to: review
+          reason: '[agent:champ] FRETish formalized from KI defect contracts with variables registered in new cssom-budget.vars.yaml and satisfies trace added; review happens via this campaign''s LOOP gate on the landing commit'
+          changed_by: human:Leonid Bugaev

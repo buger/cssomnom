@@ -5,7 +5,7 @@
  * earlier declaration with the later one.
  *
  * Reproduces: KI-119
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-EVNP
  *
  * Spec anchors:
  * - cssom-1 § "parse a CSS declaration block"
@@ -41,6 +41,7 @@ import assert from 'node:assert/strict';
 import { parse } from '../../src/index.ts';
 import type { CSSStyleRule } from '../../src/index.ts';
 
+// Verifies: SYS-REQ-260824-EVNP (KI-119 reproducer helper: declaration-block style probe)
 function styleOf(declarations: string) {
   const sheet = parse(declarations);
   return (sheet.cssRules[0] as CSSStyleRule).style;
@@ -48,6 +49,7 @@ function styleOf(declarations: string) {
 
 // Positive control (green today): documents cssomnom's own expansion
 // granularity — one font shorthand occupies 13 longhand declaration slots.
+// Verifies: SYS-REQ-260824-EVNP (expansion-granularity control: font -> 13 slots)
 test('KI-119 control: single font shorthand yields 13 declarations', () => {
   const style = styleOf('.c{font:12px serif;}');
   assert.equal(style.length, 13);
@@ -55,7 +57,8 @@ test('KI-119 control: single font shorthand yields 13 declarations', () => {
 
 // cssom-1 #parse-a-css-declaration-block appends every parsed declaration;
 // duplicates are retained and only arbitrated later by the cascade.
-// Verifies: draft requirement "declaration-block retention" (see KI-119).
+// Reproduces: KI-119
+// Verifies: SYS-REQ-260824-EVNP (repeated plain-property retention leg)
 test('KI-119: repeated color declarations are both retained', () => {
   const style = styleOf('.d{color:red;color:green;}');
   assert.equal(
@@ -69,6 +72,8 @@ test('KI-119: repeated color declarations are both retained', () => {
   assert.equal(style.getPropertyValue('color'), 'green');
 });
 
+// Reproduces: KI-119
+// Verifies: SYS-REQ-260824-EVNP (repeated shorthand retention leg)
 test('KI-119: repeated font shorthands keep both declaration sets', () => {
   const style = styleOf('p{font:22px Helvetica; font:xxx-large system-ui}');
   assert.equal(

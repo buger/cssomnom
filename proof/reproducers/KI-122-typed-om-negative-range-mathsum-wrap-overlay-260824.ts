@@ -4,7 +4,7 @@
  * CSSMathSum instead of storing them as bare unit values.
  *
  * Reproduces: KI-122
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-QGJE
  *
  * Spec anchors:
  * - css-typed-om-1 #create-an-internal-representation (~line 680),
@@ -47,9 +47,11 @@ function mapFor(cssText: string): StylePropertyMap {
   return new StylePropertyMap(sheet.cssRules[0].style);
 }
 
+// Verifies: SYS-REQ-260824-QGJE (KI-122 reproducer helper: StylePropertyMap probe)
 // Positive control (green today): in-range values are stored as-is and come
 // back as the same kind of value, per css-typed-om-1 #create-an-internal-
 // representation (no limited-range violation => no wrapping).
+// Verifies: SYS-REQ-260824-QGJE (in-range no-wrap controls)
 describe('KI-122 control', () => {
   test('in-range flex-grow stays a bare CSSUnitValue', () => {
     const map = mapFor('');
@@ -67,9 +69,11 @@ describe('KI-122 control', () => {
   });
 });
 
+// Reproduces: KI-122
+// Verifies: SYS-REQ-260824-QGJE (out-of-range CSSMathSum wrap legs)
 describe('KI-122: out-of-range negative unit values must be wrapped in a fresh CSSMathSum', () => {
   // css-flexbox-1 flex-grow: <number [0,∞]> — -3.14 is outside the range.
-  // Verifies: draft requirement "negative range wrap" (see KI-122).
+  // Verifies: SYS-REQ-260824-QGJE (flex-grow <number [0,∞]> leg).
   test('set(flex-grow, -3.14 number) reifies as CSSMathSum wrapping the input', () => {
     const map = mapFor('');
     const input = new CSSUnitValue(-3.14, 'number');

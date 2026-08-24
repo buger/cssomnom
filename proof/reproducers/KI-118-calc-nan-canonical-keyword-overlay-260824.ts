@@ -4,7 +4,7 @@
  * `NaN` keyword (and never leak a lowercase `nan` identifier).
  *
  * Reproduces: KI-118
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-N9AE
  *
  * Spec anchors:
  * - css-values-4 § "Serialization" (#calc-serialize, ~line 5214), algorithm
@@ -36,12 +36,14 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { CSSStyleValue } from '../../src/index.ts';
 
+// Verifies: SYS-REQ-260824-N9AE (KI-118 reproducer helper: parse().toString() probe)
 function toStringOf(value: string): string {
   return String(CSSStyleValue.parse('width', value));
 }
 
 // Positive control (green today): the infinity keyword already serializes in
 // its canonical lowercase form per css-values-4 step 2 ('infinity').
+// Verifies: SYS-REQ-260824-N9AE (infinity-keyword control per css-values-4 step 2)
 describe('KI-118 control', () => {
   test('infinity keyword is spelled canonically', () => {
     const s = toStringOf('calc(1px * infinity)');
@@ -50,6 +52,8 @@ describe('KI-118 control', () => {
   });
 });
 
+// Reproduces: KI-118
+// Verifies: SYS-REQ-260824-N9AE (canonical-NaN-keyword defect legs)
 describe('KI-118: NaN results must serialize with the canonical NaN keyword', () => {
   // css-values-4 #calc-serialize step 2: bare NaN has empty type, so the
   // serialization is exactly "calc(NaN)".
@@ -60,7 +64,7 @@ describe('KI-118: NaN results must serialize with the canonical NaN keyword', ()
   // Structure-independent casing predicate (avoids KI-39's wrapper overlap):
   // no serialization of an NaN result may contain a standalone lowercase
   // 'nan' token; the canonical keyword is 'NaN'.
-  // Verifies: draft requirement "NaN canonical keyword" (see KI-118).
+  // Verifies: SYS-REQ-260824-N9AE (structure-independent casing predicate).
   test('no lowercase nan token leaks from calc(1px * NaN)', () => {
     const s = toStringOf('calc(1px * NaN)');
     assert.doesNotMatch(

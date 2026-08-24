@@ -1,0 +1,69 @@
+id: KI-110
+title: env() grammar is shallowly accepted and supports() rejects valid env()
+description: 'One env() grammar root has two independently failing paths: CSS.supports rejects syntactically valid env() values instead of applying the parse-time validity rule, and computed substitution accepts an invalid negative index path rather than making the property invalid at computed-value time. The local CSS Environment Variables grammar permits non-negative integer indices and a bare comma fallback only.'
+affected_requirements:
+    - SYS-REQ-260822-V110
+    - SYS-REQ-260822-V11A
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-110.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.supports env() grammar and Parser.resolveVariables env() substitution
+attacker_input: ordinary CSS env() values, including indexed names; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat env() values as untrusted until grammar and index validity are checked; do not use current CSS.supports results as an env() grammar oracle.
+remediation: Recognize syntactically valid env() in CSS.supports and reject malformed indices before substitution, producing invalid-at-computed-value-time when no valid fallback applies.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T17:55:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T17:55:51Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-110.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:48Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-110.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSS.supports from src/parser-api.ts and Parser.resolveVariables over a real CSSStyleDeclaration - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - one env() grammar root, two independently failing paths: CSS.supports('width', 'env(name)') and its empty-fallback form return false (V110 legs), and env(name -1, 5px) substitutes the unindexed '9px' instead of invalidating at computed-value time (V11A leg); controls 10px/env() and a non-negative index resolving '8px' stay green.
+        control_test: ordinary-value and non-negative-index controls pin correct behavior around both defect paths, so failures are not setup errors.
+        untrusted_attacker: ordinary CSS env() values including indexed names are the trust boundary; any host parsing or substituting user CSS reaches both paths with zero privileges.
+        current_deployment_relevance: env() is the standard device/environment adaptation mechanism; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - a false negative blocks valid fallbacks and a wrong index path yields stale values; no memory-safety impact.
+        attacker_profitability: not profit-driven; mis-ranked fallback selection can silently apply wrong geometry in responsive layouts.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; one root filed once with two requirement traces rather than duplicated KIs.
+        operational_path_verified: failing legs call the exact public supports()/resolveVariables paths hosts use.
+        reachability_verified: public CSS/Parser surfaces ARE the product path; no gating layer between host and grammar check.
+kill_domain: environment_function_grammar
+do_not_refile_as: 'mixed-case VAR()/ENV() dispatch casing (KI-109) and CSS.supports malformed var() grammar (KI-107): different function grammars and different observables'

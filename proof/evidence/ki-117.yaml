@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T07:14:59Z"
+executed_at: "2026-08-24T11:12:50Z"
 input_set:
     - proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts: sha256:b225ad1993545c145ad1b23e971f3c0cc42838b4e36a651bfafcc14730236dc6
+    proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts: sha256:050f72d7afb6f02bfd1c4100d0cb2063af5919e5b6d1d3cb05fc0754c17c2516
 known_issues:
     - KI-117

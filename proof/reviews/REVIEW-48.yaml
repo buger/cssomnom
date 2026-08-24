@@ -1,0 +1,29 @@
+id: REVIEW-48
+kind: spec_conformance
+reviewer: agent:champ
+reviewed_at: "2026-08-24T11:06:42Z"
+subject: SYS-REQ-260822-V107..V11A, SYS-REQ-260823-{1V3K,BNDX,EEQN}, SYS-REQ-260824-{BJTQ,CFQG,EVNP,N9AE,XRYP}
+decision: approved_with_loop_gate_pending
+comment: >-
+    Landing review of the stopped-agent campaign batch (KI-107..111, KI-114..123).
+    Inventory: all 15 KI yamls, reproducers, and evidence manifests present; every
+    reproducer exited 1 twice (all open, no quarantine). Filings completed this
+    session: grounded 11-rule poc_quality blocks on all 15 KIs; kill_domain +
+    do_not_refile_as added to KI-107..111/114..116; dedup_armor added to KI-114
+    (the sole known_issue_template_transfer finding). Reproducer annotations
+    (// Reproduces / // Verifies) cleared orphan_code_clean for KI-114..123 with a
+    comments-only change (re-run still exits 1 with identical assertion shapes).
+    Evidence refreshed by genuine re-execution after annotation; all 15 manifests
+    fresh (sha256 match) recording status fail per open KIs. Requirements: 8 cssom
+    reqs formalized from their KI defect contracts (FRETish + variables in new
+    specs/system/variables/cssom-budget.vars.yaml + traces.satisfies
+    STK-REQ-260821-BQKD); all 14 in-scope reqs promoted draft -> review. Final
+    state: proof validate clean for in-scope files; system_formalization_complete,
+    l1_system_complete, system_requirements_linked report zero findings.
+citations:
+    - proof/known-issues/KI-107.yaml
+    - proof/known-issues/KI-114.yaml
+    - proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts:6
+    - proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts:72
+    - specs/system/variables/cssom-budget.vars.yaml
+    - docs/proof-escape-ki-107-111.md

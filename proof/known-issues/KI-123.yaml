@@ -34,5 +34,37 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:53Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-123.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public StylePropertyMap.get() over parsed declarations - no mocks; rows from local WPT color.html runUnsupportedPropertyTests.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - get('color') returns CSSKeywordValue/CSSRGB subclasses for red/#bbff00/rgb()/transparent and border-top-color behaves identically (5 defect legs fail); currentcolor control correctly identifier-reifies and the [[associatedProperty]] invariant pin passes, proving the slot machinery exists.
+        control_test: currentcolor reification (row step 1) and the associatedProperty pin isolate the escape to the step-2 direct-CSSStyleValue branch.
+        untrusted_attacker: ordinary stylesheet declarations read back through Typed OM are the trust boundary; subclass identity is public API surface.
+        current_deployment_relevance: wpt-sandbox baseline carries 204 such rows across typed-om property fixtures (color.html x5, border-color.html x20+); confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - wrong reified type violates the per-property reification table; no memory-safety dimension.
+        attacker_profitability: not profit-driven; instanceof-based consumer logic silently misroutes base-only values.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-123-unrepresentable-value-overreification-overlay-260824.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair in notes.
+        no_inflation: severity medium matches blast radius; every probed value is grammar-valid (KI-117 disjoint); cve_surface none.
+        operational_path_verified: failing legs drive the real get()/getAll() reification path.
+        reachability_verified: public StylePropertyMap IS the product surface; no gating between host and reification.
 kill_domain: reified_type_identity
 do_not_refile_as: 'grammar-invalid relative color retention at block-parse time (KI-117): every value probed here is grammar-VALID; the defect is the reified TYPE on get(); limited-range CSSMathSum wrap on typed set (KI-122): different algorithm (#create-an-internal-representation range clause) and different observable'

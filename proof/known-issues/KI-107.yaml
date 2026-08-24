@@ -1,0 +1,68 @@
+id: KI-107
+title: CSS.supports accepts malformed var() syntax
+description: CSS.supports returns true for malformed var() functions, including empty arguments, extra name tokens, and unclosed functions. CSS Conditional requires supports(property, value) to return true only when the value successfully parses; the CSS Variables var() grammar requires a dashed custom-property name and an optional fallback.
+affected_requirements:
+    - SYS-REQ-260822-V107
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-107.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.supports(property, value)
+attacker_input: ordinary CSS value passed to CSS.supports; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not use CSS.supports as a validity oracle for values containing malformed var() syntax.
+remediation: Validate var() function arity, custom-property-name grammar, fallback comma structure, and closure before CSS.supports reports support.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T17:55:14Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T17:55:49Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-107.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:36Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-107.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSS.supports(property, value) from src/parser-api.ts only - no mocks; overlay reproducer imports the real parser API.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - CSS.supports('color', 'var()'), var(--ki107-name red), and both unclosed forms return true instead of false (4 defect legs); the three valid-var controls pass, isolating the defect to malformed-syntax handling.
+        control_test: direct name, empty-fallback, and non-empty-fallback forms are asserted supported in the same run, so failures are not setup errors.
+        untrusted_attacker: ordinary CSS value text passed to CSS.supports is the trust boundary; any caller probing feature support reaches the broken grammar check with zero privileges.
+        current_deployment_relevance: feature querying gates author fallback paths; confirmed live via two red runs at HEAD plus evidence-capture re-execution.
+        honest_severity: medium correctness - a wrong boolean steers feature detection; no memory-safety impact.
+        attacker_profitability: not profit-driven; any consumer using supports() as an oracle ships broken fallbacks for malformed input.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius (incorrect boolean, recoverable); risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact two-argument CSS.supports entry hosts use; no debug or gated path involved.
+        reachability_verified: public CSS namespace IS the product surface; no ingress layer exists between host and the supports() algorithm.
+kill_domain: feature_query_grammar_validity
+do_not_refile_as: generic supports() boolean plumbing or trailing-garbage value parsing (parser_api supports_throws surface); mixed-case VAR()/ENV() dispatch is KI-109 - this KI pins malformed substitution-function grammar only

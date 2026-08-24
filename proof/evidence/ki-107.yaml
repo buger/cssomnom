@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-107
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260822-V107
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-24T11:12:36Z"
+input_set:
+    - proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts
+freshness_hashes:
+    proof/reproducers/KI-107-css-supports-malformed-var-overlay-260822.ts: sha256:58cb32f18d3f24bcc2a42fff68d72a4c0a28875c126969923147da60eee1cb28
+known_issues:
+    - KI-107

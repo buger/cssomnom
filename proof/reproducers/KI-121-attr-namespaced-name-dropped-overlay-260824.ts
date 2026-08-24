@@ -4,7 +4,7 @@
  * instead of silently dropping the namespace prefix (data loss on reparse).
  *
  * Reproduces: KI-121
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-XRYP
  *
  * Spec anchors:
  * - Local WPT fixture css/cssom/serialize-values.html (cssom-1
@@ -36,6 +36,7 @@ import type { CSSStyleRule } from '../../src/index.ts';
 
 // Mirrors the WPT harness contract: set through the declaration API, read the
 // serialization back.
+// Verifies: SYS-REQ-260824-XRYP (KI-121 reproducer helper: set/get serialization probe)
 function roundtripViaSetProperty(input: string): string {
   const style = new CSSStyleDeclaration();
   style.setProperty('content', input);
@@ -45,12 +46,14 @@ function roundtripViaSetProperty(input: string): string {
 // Positive control (green today): plain attribute references and an explicit
 // empty-string fallback already round-trip verbatim (WPT row
 // {actual: 'attr(foo, "")', serialized: 'attr(foo, "")'}).
+// Verifies: SYS-REQ-260824-XRYP (plain attr() control per WPT serialize-values.html)
 test('KI-121 control: attr(foo, "") round-trips verbatim', () => {
   assert.equal(roundtripViaSetProperty('attr(foo, "")'), 'attr(foo, "")');
 });
 
 // WPT serialize-values.html rows with a namespaced <<attr-name>>.
-// Verifies: draft requirement "namespaced attr() serialization" (see KI-121).
+// Reproduces: KI-121
+// Verifies: SYS-REQ-260824-XRYP (namespaced <<attr-name>> rows)
 test('KI-121: attr(|bar) keeps its namespace pipe', () => {
   assert.equal(
     roundtripViaSetProperty('attr(|bar)'),
@@ -59,6 +62,8 @@ test('KI-121: attr(|bar) keeps its namespace pipe', () => {
   );
 });
 
+// Reproduces: KI-121
+// Verifies: SYS-REQ-260824-XRYP (internal-spacing row)
 test('KI-121: attr( |bar ) keeps its internal spacing', () => {
   assert.equal(
     roundtripViaSetProperty('attr( |bar )'),
@@ -67,6 +72,8 @@ test('KI-121: attr( |bar ) keeps its internal spacing', () => {
   );
 });
 
+// Reproduces: KI-121
+// Verifies: SYS-REQ-260824-XRYP (fallback row)
 test('KI-121: namespaced attr() with fallback keeps namespace and fallback', () => {
   assert.equal(
     roundtripViaSetProperty('attr(|bar, "fallback")'),
@@ -76,6 +83,8 @@ test('KI-121: namespaced attr() with fallback keeps namespace and fallback', () 
 });
 
 // Stylesheet parse path must agree with the setter path.
+// Reproduces: KI-121
+// Verifies: SYS-REQ-260824-XRYP (stylesheet-path agreement + reparse witness)
 test('KI-121: stylesheet-parsed content:attr(|bar) serializes losslessly', () => {
   const sheet = parse('.z{content:attr(|bar);}');
   const style = (sheet.cssRules[0] as CSSStyleRule).style;

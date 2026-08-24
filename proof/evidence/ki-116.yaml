@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-116
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-BNDX
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-24T11:12:50Z"
+input_set:
+    - proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts: sha256:23b55d9d07b5b27cbc9a375cf73cf5dc32e6e46e8862048098b95f438c2c29c2
+known_issues:
+    - KI-116

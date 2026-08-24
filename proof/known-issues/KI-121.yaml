@@ -32,5 +32,37 @@ history:
       by: agent:ox-alpha
       action: capture-evidence
       detail: proof/evidence/ki-121.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:52Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-121.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSStyleDeclaration.setProperty/getPropertyValue and parse() - no mocks; rows verbatim from local WPT css/cssom/serialize-values.html attr() section.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - attr(|bar) serializes as attr(bar) losing the namespace pipe across 5 defect legs (setter path x3 incl fallback row, stylesheet path, reparse witness); plain attr(foo, "") control round-trips verbatim.
+        control_test: non-namespaced attr() rows already round-trip exactly as WPT pins them, isolating the escape to namespaced <<attr-name>> normalization.
+        untrusted_attacker: ordinary content declarations using namespaced attr() references are the trust boundary; qualification loss changes which attribute is referenced after round-trip.
+        current_deployment_relevance: serialize-values.html is the cssom-1 <wpt>-listed conformance fixture for this surface; confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - semantic change of the attribute reference on reparse; no memory-safety dimension.
+        attacker_profitability: not profit-driven; persisted stylesheets silently retarget attr() lookups.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-121-attr-namespaced-name-dropped-overlay-260824.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; distinct from KI-21 escaped-identifier breakout; cve_surface none.
+        operational_path_verified: failing legs drive setProperty/getPropertyValue and parse->serialize->parse paths.
+        reachability_verified: public declaration API IS the product surface; no gating between host and serializer.
 kill_domain: serializer_equivalence
 do_not_refile_as: cssText structural breakout via escaped identifiers (KI-21)

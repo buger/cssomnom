@@ -34,5 +34,37 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:52Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-122.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public StylePropertyMap.set/get/getAll over parsed declaration - no mocks; WPT testsuite.js assert_is_equal_with_range_handling contract pinned verbatim.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - flex-grow -3.14 (<number [0,∞]>) and border-top-left-radius -3.14em (<length-percentage [0,∞]>) store bare CSSUnitValues so get()/getAll() reify unwrapped (3 defect legs); in-range 3/0 controls stay bare per spec.
+        control_test: in-range values must NOT be wrapped and remain bare in the same run, so failures are range-clause-specific, not constructor plumbing.
+        untrusted_attacker: ordinary Typed OM set() calls with negative unit values are the trust boundary; no privilege needed to store out-of-range numbers.
+        current_deployment_relevance: wpt-sandbox baseline carries 150 failing rows across 42 typed-om property fixtures (border-radius, scroll-padding, flex-*, column-count, ...); confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - wrap shape is observable API state per #create-an-internal-representation; no memory-safety dimension.
+        attacker_profitability: not profit-driven; consumers branching on value constructor type mis-handle clamping state.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair in notes.
+        no_inflation: severity medium matches blast radius; never asserts serialization text (KI-39 disjoint); cve_surface none.
+        operational_path_verified: failing legs drive the real set -> internal representation -> get/getAll reify path.
+        reachability_verified: public StylePropertyMap IS the product surface; no gating between host and storage.
 kill_domain: numeric_range_wrapping
 do_not_refile_as: 'calc serialization fixpoint/parenthesization drift (KI-39): this KI never asserts serialization text, only the get()/getAll() wrap shape after a typed set(); registered-syntax initial-value validation (KI-111): different surface (CSS.registerProperty validation vs StylePropertyMap.set storage)'

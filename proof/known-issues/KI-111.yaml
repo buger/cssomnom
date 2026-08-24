@@ -1,0 +1,68 @@
+id: KI-111
+title: Registered syntax matcher accepts invalid length and image initial values
+description: CSS.registerProperty accepts arbitrary function tokens as initial values for registered <length> and <image> syntaxes. The Properties and Values API requires initialValue to parse according to the consumed syntax definition and throw SyntaxError on failure; the implementation matcher only checks function shape for these types.
+affected_requirements:
+    - SYS-REQ-260822-V111
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts
+evidence_manifests:
+    - proof/evidence/ki-111.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.registerProperty({syntax, initialValue})
+attacker_input: ordinary registered-property definition; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not register typed custom properties with function-shaped initial values unless independently validated against the declared syntax.
+remediation: Parse initialValue with the complete registered syntax definition and throw SyntaxError when <length> or <image> matching fails.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T17:55:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T17:55:51Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-111.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain
+    - at: "2026-08-24T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-111.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSS.registerProperty from src/parser-api.ts - no mocks; unique property names per definition avoid cross-test state.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - calc(foo) registers for <length> and not-an-image(1) registers for <image> without SyntaxError (2 defect legs); valid 10px and url(ki111.png) registrations succeed in the same run, isolating the shallow function-shape matcher.
+        control_test: valid initial values for both syntaxes register cleanly, proving registration plumbing itself works.
+        untrusted_attacker: ordinary registered-property definitions are the trust boundary; library code registering typed properties reaches the matcher with zero privileges.
+        current_deployment_relevance: CSS.registerProperty is the Properties-and-Values API headline surface; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: medium correctness - invalid typed registries poison later computed-value flows; no memory-safety impact.
+        attacker_profitability: not profit-driven; downstream animation/typed-om consumers trust registered syntaxes and inherit the corruption.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-111-registered-syntax-matcher-overlay-260822.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs call the exact public registerProperty validation path.
+        reachability_verified: public CSS namespace IS the product surface; no gating between host and matcher.
+kill_domain: registered_initial_value_matching
+do_not_refile_as: 'syntax-string consumption checks (already validated elsewhere) and StylePropertyMap.set storage-time range wrapping (KI-122): different API and lifecycle stage'

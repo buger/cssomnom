@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T09:00:15Z"
+executed_at: "2026-08-24T11:12:52Z"
 input_set:
     - proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts: sha256:5a6dfb6bd61e8980d1b8f8ead399bd7751b6b381804baa3819b7ef773e86fdae
+    proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts: sha256:b4135d6254b0a9657ea4c0623fbe4329be9df94d5e73fbe2f53365a105c219e9
 known_issues:
     - KI-122

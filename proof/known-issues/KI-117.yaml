@@ -32,5 +32,37 @@ history:
       by: agent:ox-alpha
       action: capture-evidence
       detail: proof/evidence/ki-117.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:50Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-117.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSStyleRule.style.getPropertyValue/length/item only - no mocks; rows taken verbatim from local WPT css/css-color/parsing/color-invalid-relative-color.html.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - 10 grammar-invalid relative-color spellings (rgb/hsl/hwb/lab/oklch channel-type mismatches and invalid component names) are RETAINED with getPropertyValue(color) non-empty and style.length >= 1 (11 defect tests fail); the valid-value control 'lch(from orchid l 30 h)' round-trips, pinning retention-of-invalid rather than blanket rejection.
+        control_test: valid relative color survives parse() intact in the same run, so failures are not blanket-rejection setup artifacts.
+        untrusted_attacker: ordinary stylesheet text is the trust boundary; any host parsing user CSS retains values browsers reject, breaking cross-engine fidelity.
+        current_deployment_relevance: declaration-block drop semantics gate every stylesheet ingest; confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - invalid values leak into computed pipelines instead of being dropped; no memory-safety dimension.
+        attacker_profitability: not profit-driven; consumers diffing against browser behavior see phantom accepted spellings.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair recorded at capture time.
+        no_inflation: severity medium matches blast radius; cve_surface none; scope-honesty ledger correction recorded in the reproducer header.
+        operational_path_verified: failing legs call the exact parse -> style map -> getPropertyValue path hosts use.
+        reachability_verified: public parse() IS the product surface; no ingress layer between host and declaration handling.
 kill_domain: grammar_drop_omission
 do_not_refile_as: 'ledger-cluster framing "valid lch(from ...) drops whole rules / stylesheet serializes empty": investigated and DISPROVEN — valid relative colors round-trip and bare-value stylesheets correctly yield zero rules per css-syntax'

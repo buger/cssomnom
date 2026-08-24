@@ -32,5 +32,37 @@ history:
       by: agent:ox-alpha
       action: capture-evidence
       detail: proof/evidence/ki-120.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:51Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-120.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and getPropertyValue/cssText - no mocks.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - getPropertyValue returns 'red ', 'calc(1px) ', and url value with trailing whitespace across 3 defect legs (ident/calc/url shapes); clean-declaration control returns canonical 'red'.
+        control_test: whitespace-free input round-trips canonically, isolating the escape to missing trailing-whitespace-token removal at #consume-declaration storage time.
+        untrusted_attacker: ordinary stylesheet formatting (space before semicolon) is the trust boundary; trivially present in real-world CSS.
+        current_deployment_relevance: stored values feed every serialized surface per cssom-1 #serialize-a-css-declaration verbatim-append; confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - byte-exact comparisons and equality sets break on insignificant whitespace; no memory-safety dimension.
+        attacker_profitability: not profit-driven; snapshot/diff tooling sees phantom value drift.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-120-declaration-value-trailing-whitespace-overlay-260824.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; distinct from KI-41 prelude filtering (recorded in do_not_refile_as); cve_surface none.
+        operational_path_verified: failing legs call the exact consume/store/read pipeline.
+        reachability_verified: public parse() IS the product surface; no gating between host and storage.
 kill_domain: canonical_serialization
 do_not_refile_as: at-rule prelude whitespace corruption in the parser API (KI-41)

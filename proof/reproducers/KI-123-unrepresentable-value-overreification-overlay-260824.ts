@@ -5,7 +5,7 @@
  * DIRECT CSSStyleValue instead of a subclass instance.
  *
  * Reproduces: KI-123
- * Verifies: <draft requirement owned by this batch — see KI yaml>
+ * Verifies: SYS-REQ-260824-XE59
  *
  * Spec anchors:
  * - css-typed-om-1 #reify-stylevalue "Property-specific Rules" (#reify-property,
@@ -50,8 +50,10 @@ function mapFor(cssText: string): StylePropertyMap {
   return new StylePropertyMap(sheet.cssRules[0].style);
 }
 
+// Verifies: SYS-REQ-260824-XE59 (KI-123 reproducer helper: StylePropertyMap probe)
 // Positive control (green today): the currentcolor keyword reifies as an
 // identifier per the 'color' row step 1 (CSSKeywordValue is correct here).
+// Verifies: SYS-REQ-260824-XE59 (currentcolor identifier-reification control)
 describe('KI-123 control', () => {
   test('currentcolor reifies as an identifier (CSSKeywordValue)', () => {
     const v = mapFor('color: currentcolor').get('color');
@@ -60,9 +62,11 @@ describe('KI-123 control', () => {
   });
 });
 
+// Reproduces: KI-123
+// Verifies: SYS-REQ-260824-XE59 (base-only reification defect legs)
 describe('KI-123: unrepresentable <color> values must reify as a direct CSSStyleValue', () => {
   // WPT color.html runUnsupportedPropertyTests rows.
-  // Verifies: draft requirement "base-only reification" (see KI-123).
+  // Verifies: SYS-REQ-260824-XE59 (WPT color.html unsupported-value rows).
   const UNSUPPORTED_COLORS = [
     ['red', 'keyword color'],
     ['#bbff00', 'hex color'],

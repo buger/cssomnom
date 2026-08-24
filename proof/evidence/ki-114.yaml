@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-114
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260823-1V3K
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-24T11:12:49Z"
+input_set:
+    - proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
+freshness_hashes:
+    proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts: sha256:e887f338bb1aab2d44d64015e9165d22133edd869dc59f7975f1f1f20b41970e
+known_issues:
+    - KI-114

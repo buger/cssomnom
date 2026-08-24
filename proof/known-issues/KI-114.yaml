@@ -1,0 +1,81 @@
+id: KI-114
+title: Quoted-url border-image declarations are laundered to initial longhands and vanish from declaration-block serialization
+description: 'Parsing ''.o{border-width:1px;border-style:solid;border-color:red;border-image:url("x") 60}'' stores an all-initial border-image-* expansion instead of the declared value: getPropertyValue(''border-image'') returns ''none'', cssText serializes only ''border: 1px solid red;'', and the border shorthand reconstructs even though the author set border-image. Root subsystem: expandBorderImage (src/shorthands.ts ~955-1001) recognizes only token-type ''url'' sources, but css-syntax-3 #consume-ident-like-token delivers quoted urls as function tokens named url, so the source silently stays none; it additionally discards trailing slice components without invalidating the partial result (url(x) 60 keeps source=url("x") but slice stays 100% and re-serializes truncated). css-backgrounds-3 #borderimage makes url("x") 60 grammatically valid, cssom-1 #parse-a-css-declaration-block step 3.1 licenses dropping only grammar-failing declarations, and cssom-1 #serialize-a-css-declaration-block (~line 2523) has no omission step and explicitly lists local WPT css/cssom/border-shorthand-serialization.html whose .b row asserts border is not serialized while border-image longhands are non-initial. Distinct from KI-116 (fixpoint instability): this is first-parse data loss through expansion, observable without any second parse.'
+affected_requirements:
+    - SYS-REQ-260823-1V3K
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
+evidence_manifests:
+    - proof/evidence/ki-114.yaml
+severity: high
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() declaration-block parsing / CSSStyleDeclaration.getPropertyValue('border-image'|'border') / cssText
+attacker_input: ordinary CSS border/border-image declarations using quoted url() sources; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
+tripwire_mutation: Teaching expandBorderImage to treat a function token named url as an image source (and to apply or invalidate trailing slice components) flips all four defect legs green while leaving the three WPT control legs untouched
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on border-image surviving a parse cycle when the source url is quoted, and treat reconstructed 'border:' shorthand text as unreliable whenever border-image was authored alongside it.
+remediation: Make expandBorderImage recognize function tokens named url as border-image-source values and either apply or invalidate the full declared value (slice included); contractBorder already suppresses the border shorthand once border-image-* are genuinely non-initial.
+notes:
+    - 'Evidence captured via ''proof evidence capture KI-114'' by genuine re-execution at 2026-08-23T13:30:52Z (proof/evidence/ki-114.yaml); reproducer ran red twice before filing (exit 1 both runs: 7 tests, 3 green WPT controls from border-shorthand-serialization.html rows .a/.b/.c, 4 defect failures). Bound to draft requirement SYS-REQ-260823-1V3K created through ''proof req new''; informal until cssom variables can be declared in specs/system/variables/cssom.vars.yaml, which this batch may not edit.'
+owner: agent:ox-alpha
+review_date: "2026-09-23"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T13:30:19Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-23T13:31:33Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-23T13:31:39Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-23T13:32:25Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: note
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality,kill-domain,dedup-armor
+    - at: "2026-08-24T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-114.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSStyleDeclaration getters/cssText only - no mocks; WPT css/cssom/border-shorthand-serialization.html rows .a/.b/.c asserted verbatim as controls.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - border-image:url("x") 60 launders to all-initial longhands (getPropertyValue('border-image') === 'none', cssText omits the declaration entirely, 3 retention legs fail) and url(x) 60 silently truncates the slice (leg 4); 7 tests total, 4 defect legs red, 3 green WPT controls.
+        control_test: gradient border-image survives (row .b modeled) and border shorthand suppression works when longhands are genuinely non-initial, proving the escape is quoted-url/slice handling inside expandBorderImage (src/shorthands.ts ~955-1001).
+        untrusted_attacker: ordinary stylesheet text with quoted-url border-image declarations is the trust boundary; any host parsing user/theme CSS hits first-parse data loss with zero privileges.
+        current_deployment_relevance: border-image with quoted urls is the most common authoring form; confirmed live via two red runs at HEAD plus evidence re-execution.
+        honest_severity: high correctness - a whole author declaration vanishes from the object model and serialization, corrupting persisted stylesheets; still no memory-safety dimension.
+        attacker_profitability: not profit-driven; CMS/build round-trips deterministically drop author intent for a mainstream declaration pattern.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts exited 1 twice at landing validation (2026-08-24), matching the pre-filing red pair recorded in the filing note.
+        no_inflation: high severity is justified by silent whole-declaration loss on a common pattern; severity_basis reproducer with executed manifest attached; cve_surface none.
+        operational_path_verified: failing legs drive the real parse -> expandBorderImage -> contractBorderImage -> cssText pipeline.
+        reachability_verified: public parse() IS the product surface; no ingress layer exists between host and expansion.
+dedup_armor: |
+    expandBorderImage (src/shorthands.ts ~955-1001) launders a GRAMMATICALLY VALID border-image declaration into an all-initial expansion at FIRST parse whenever the url source arrives as a function token named url (the quoted form css-syntax-3 #consume-ident-like-token produces), and additionally discards numeric slice components without invalidating the partial result. Distinct from KI-116 (same trigger surface but the violated contract there is one-cycle fixpoint stability of our own serializer output) and from KI-112/KI-113/KI-36 (font shorthand family, different subsystem). Do not merge into a generic shorthand-data-loss framing without first-parse retention evidence for quoted urls AND slice application; merging would hide that leg 4 (slice truncation) survives even once quoted urls are recognized.
+kill_domain: shorthand_expansion_data_loss
+do_not_refile_as: 'fixpoint instability across re-parse cycles (KI-116: distinct violated contract - round-trip stability vs first-parse retention) and the font shorthand family (KI-112 system-keyword serialization, KI-113 invalid-mix retention, KI-36 missing expansion table)'

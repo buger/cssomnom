@@ -32,5 +32,37 @@ history:
       by: agent:ox-alpha
       action: capture-evidence
       detail: proof/evidence/ki-118.yaml
+    - at: "2026-08-24T11:06:42Z"
+      by: agent:champ
+      action: edit
+      detail: complete-filing,poc-quality
+    - at: "2026-08-24T11:12:51Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-118.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSStyleValue.parse().toString() from src/index.ts - no mocks; assertions mirror local WPT calc-infinity-nan-serialize-length.html rows.
+        quantitative_impact: measured at HEAD on Node v24.11.1 - CSSStyleValue.parse('width', 'calc(NaN)').toString() === 'calc(nan)' and calc(1px * NaN) leaks a lowercase nan token (3 defect legs fail); infinity keyword control stays canonical in the same run.
+        control_test: 'infinity' serializes canonically per css-values-4 #calc-serialize step 2 while NaN does not, isolating the escape to NaN keyword casing.
+        untrusted_attacker: ordinary calc() strings evaluating to NaN are the trust boundary; any Typed OM consumer serializing user math reaches the defect with zero privileges.
+        current_deployment_relevance: wpt-cssom known-failure baseline carries 160 entries across the five calc-infinity-nan-serialize-* fixtures; confirmed live via two red runs at landing validation plus evidence re-execution.
+        honest_severity: medium correctness - non-canonical spelling breaks byte-exact WPT comparisons; no memory-safety dimension.
+        attacker_profitability: not profit-driven; serialization diffs across engines silently disagree on NaN-bearing values.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts exited 1 twice at landing validation (2026-08-24).
+        no_inflation: severity medium matches blast radius; structure-independent predicate avoids overlap inflation vs KI-39; cve_surface none.
+        operational_path_verified: failing legs call the exact parse -> serialize pipeline consumers use.
+        reachability_verified: public CSSStyleValue IS the product surface; no gating between host and serializer.
 kill_domain: serializer_equivalence
 do_not_refile_as: 'calc serialization fixpoint/parenthesization drift (KI-39): wrapper structure is intentionally NOT asserted here so the two reproducers fail independently'

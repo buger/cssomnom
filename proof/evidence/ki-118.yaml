@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T07:14:59Z"
+executed_at: "2026-08-24T11:12:51Z"
 input_set:
     - proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts
 freshness_hashes:
-    proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts: sha256:b8b60b460063086d8adce52af813565f41764053721c5a1a939553bf3ae1eaf4
+    proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts: sha256:051e9c7ffb925d327480aa53e6a44e0dbfbd7582ce973b71eaedc43ab7d45a3f
 known_issues:
     - KI-118
