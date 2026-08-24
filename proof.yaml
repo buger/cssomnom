@@ -128,6 +128,27 @@ project:
                 # (no globstar). Cwd is the package root: patched proof
                 # walks up from target.scope (./src) to package.json.
                 command: node --test --test-reporter=dot tests/**/*.test.ts
+            # Known-issue tripwire lanes (ki-101..ki-105 evidence profiles).
+            # Each binds exactly one expected-red node:test reproducer from
+            # proof/reproducers/ via --experimental-strip-types (Node 24 runs
+            # TS directly). Deliberately not part of default tests_pass: these
+            # stay red until the filed known issue is fixed, and a green run
+            # is how `proof known-issue capture` observes the fix.
+            ki-101-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+            ki-102-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+            ki-103-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+            ki-104-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+            ki-105-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
         # Opt-in DoS fuzz lane (proof audit --fuzz / evidence_type: fuzz).
         # Not on default tests_pass. Runs the annotated cssomnom css-fuzz
         # file, including `deep nesting gate against cssomnom` and
@@ -141,6 +162,15 @@ project:
     # proof/catalog/domain/no_external_io_on_parse.yaml as an orphan.
     obligation_classes:
         - no_external_io_on_parse
+    # Known-issue capture stamps evidence_type: known_issue_tripwire on every
+    # proof/evidence/ki-*.yaml manifest it writes, but the token is not
+    # shipped-catalog vocabulary (catalog data/evidence_types/ ships only
+    # nominal/negative/race/fuzz/lemma/review/acceptance/integration/
+    # differential). Declaring it here puts it in project.evidence_types so
+    # obligation_profile_evidence_complete credits the ki-10x profiles.
+    evidence_types:
+        known_issue_tripwire:
+            description: Expected-red overlay reproducer run proving a filed known issue still reproduces at HEAD (proof known-issue capture).
     lint:
         exclude:
             # Generated or build output: scripts/codegen writes src/data/gen/*;
@@ -164,39 +194,59 @@ project:
                 - SYS-REQ-260821-SBJ7
                 - SW-REQ-260821-7M07
                 - SW-REQ-260821-QV2H
+        # ki-101..ki-105 are known-issue tripwire surveillance profiles. They
+        # are bound by BUG CLASS via required_for, not by a requirements list:
+        # their affected requirements (SYS-REQ-260822-YEQZ/FM19/XEPS/50T6/HARM/
+        # 1MB8 and SYS/SW-REQ-260821-8TGB/HNRG) are narrow drafts whose
+        # obligation_checklists are still empty at filing time, so an explicit
+        # requirements scope would witness nothing (the exact misconfiguration
+        # obligation_profile_evidence_complete rejects). With no list, a
+        # profile binds every requirement that formalizes its class — today
+        # none do, so the tripwires stay pure KI surveillance; the day a
+        # requirement carries e.g. intrusive_collection_links_preserved, its
+        # cell is discharged by this profile's result manifest. The manifests
+        # under proof/evidence/ki-10x.yaml keep naming the affected reqs.
         ki-101:
             evidence_type: known_issue_tripwire
-            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+            command: ki-101-tripwire
             result: proof/evidence/ki-101.yaml
-            requirements:
-                - SYS-REQ-260822-YEQZ
-                - SYS-REQ-260822-FM19
+            # Keyframe child parentRule/parentStyleSheet structural links not
+            # attached and not cleared on deleteRule.
+            required_for:
+                - intrusive_collection_links_preserved
         ki-102:
             evidence_type: known_issue_tripwire
-            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+            command: ki-102-tripwire
             result: proof/evidence/ki-102.yaml
-            requirements:
-                - SYS-REQ-260822-XEPS
+            # Valid CSSCounterStyleRule descriptor setter leaves cssText stale:
+            # derived serialization state not recomputed on source mutation.
+            required_for:
+                - derived_state_consistency
         ki-103:
             evidence_type: known_issue_tripwire
-            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+            command: ki-103-tripwire
             result: proof/evidence/ki-103.yaml
-            requirements:
-                - SYS-REQ-260822-50T6
+            # appendRule accepts trailing non-whitespace garbage: accepts what
+            # the CSSOM spec would reject.
+            required_for:
+                - parser_accepts_only_chain_valid_transactions
         ki-104:
             evidence_type: known_issue_tripwire
-            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+            command: ki-104-tripwire
             result: proof/evidence/ki-104.yaml
-            requirements:
-                - SYS-REQ-260822-HARM
+            # Keyframe parsing retains animation properties and !important
+            # values CSS Animations declares invalid: same acceptance contract.
+            required_for:
+                - parser_accepts_only_chain_valid_transactions
         ki-105:
             evidence_type: known_issue_tripwire
-            command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+            command: ki-105-tripwire
             result: proof/evidence/ki-105.yaml
-            requirements:
-                - SYS-REQ-260822-1MB8
-                - SYS-REQ-260821-8TGB
-                - SW-REQ-260821-HNRG
+            # Stylesheet parse retains declarations with values invalid under
+            # the property grammar; setProperty contracts ride the same
+            # accept-exactly-the-valid-set family.
+            required_for:
+                - parser_accepts_only_chain_valid_transactions
     documentation:
         sources:
             - path: docs/
