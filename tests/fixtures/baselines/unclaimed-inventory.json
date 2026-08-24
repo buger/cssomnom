@@ -1,0 +1,4934 @@
+{
+  "lightning-known-failures.json": [
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|--foo: lab(40% 56.6 39);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|border-inline-start: 2px solid red"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: #0000"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: lab(40% 56.6 39);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: rgba(0, 0, 0, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: rgba(255, 0, 0, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: transparent"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|color: yellow; flex: 1 1 auto"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "attr_test|text-decoration: var(--foo) lab(40% 56.6 39);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css_modules_error_test|@value compact: (max-width: 37.4375em);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --a (color); @custom-media --b (--a); @media (--b) and (width > 1024px) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @custom-media --not-color not all and (--color); @media (--not-color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @custom-media --not-print not print; @media (--not-print) and (--color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @custom-media --print print; @media (--print) and (--color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @custom-media --screen screen; @custom-media --print print; @media (--print) and (--color), (--screen) and (--color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @media (--color) and (width > 1024px) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color (color); @media not all and (--color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color print and (color), print and (script); @media (--color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color-print print and (color); @media (--color-print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --color-print print and (color); @media print and (--color-print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --modern (color), (hover); @media (--modern) and (width > 1024px) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --not-color not (color); @media not (--not-color) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --not-color-print not print and (color); @media not print and (--not-color-print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --not-width not (min-width: 300px); @media screen and ((prefers-color-scheme: dark) or (--not-width)) { .foo { order: 6; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --print not print; @media not (--print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --print print; @media ((--print)) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --print print; @media (--print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@custom-media --print print; @media not (--print) { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "custom_media_test|@media (--print) { .a { color: green; } } @custom-media --print print;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_recovery_test|.container { --local-var: --styled-jsx-placeholder-0__; color: var(--text-color); background: linear-gradient(to right, --styled-jsx-placeholder-1__, --styled-jsx-placeholder-2__); .item { transform: translate(calc(var(--x) + --styled-jsx-placeholder-3__px), calc(var(--y) + --styled-jsx-placeholder-4__px)); } div { margin: calc(10px + --styled-jsx-placeholder-5__px); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_recovery_test|.container { padding: 3rem; @media (max-width: --styled-jsx-placeholder-0__) { .responsive { color: purple; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_recovery_test|@container unknown(foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_recovery_test|@import './actual-styles.css';"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_recovery_test|@media unknown(foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.a{--foo: url(foo\\\\) b\\\\)ar)}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.a{color: hsla(120, 62.32%;}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.foo /deep/ .bar {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.foo >>> .bar {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.foo { color: red } @import url(bar.css);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|.foo { color: red } @namespace \"http://example.com/foo\";"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@-moz-document url-prefix(\"foo\") {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@-moz-document url-prefix(foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container () {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container (inline-size <= foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container (orientation <= 10px) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container and (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container foo () {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container foo bar (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container foo bar {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container initial (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container none (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container or (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container revert-layer (width < 100vw) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container scroll-state(scroll-state(scrollable: top)) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container style(style(--foo: bar)) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container unknown(foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@container {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@font-face {src: url(\"foo.ttf\") tech(\"color-colrv0\");}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@font-face {src: url(\"foo.ttf\") tech(\"features-opentype\");}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@font-face {src: url(\"foo.ttf\") tech();}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@font-face {src: url(\"foo.ttf\") tech(features-opentype) format(opentype);}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@import 'test.css' layer(foo, bar) {};"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@keyframes NONE {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@keyframes none {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@keyframes revert {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@keyframes revert-layer {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@layer foo, bar {};"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@layer foo; @import url(foo.css); @layer bar; @import url(bar.css)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@layer;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media &test { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media &test, speech { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media () {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (1px <= min-width <= 2px) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (1px <= scan <= 2px) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (1px <= width <= bar) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (600px <= min-height) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (example, all,), speech { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (grid: 10) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (min-scan: interlace) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (min-width: hi) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (prefers-color-scheme = dark) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (scan >= 1) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (width >= 2/1) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media (width >= hi) { .foo { color: chartreuse }}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media print { .foo { color: red }} @import url(bar.css);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media screen and () {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@media unknown(foo) {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@namespace \"http://example.com/foo\"; @import url(bar.css);"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@page { @foo { margin: 1in; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@page { @top-left-corner { @bottom-left { margin: 1in; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property --property-name { inherits: false; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property --property-name { syntax: '*'; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property --property-name { syntax: '<color>'; inherits: false; initial-value: 25px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property --property-name { syntax: '<color>'; inherits: false; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property --property-name { syntax: '<length>'; inherits: false; initial-value: var(--some-value); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|@property property-name { syntax: '*'; inherits: false; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|a::first-letter:last-child {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before #id {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before .my-class {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before [attr] {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before h1 {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before#id {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before.my-class {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "error_test|input.defaultCheckbox::before[attr] {width: 20px}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|& .foo { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|&.foo { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|&html { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.error, .invalid { &:hover > .baz { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { &.baz { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { &h1 .baz { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { &h1 { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { .baz & { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { .baz& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { :is(h1) .baz& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { :is(h1)& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { @nest .baz & { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { @nest .baz& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { @nest h1 .baz& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo .bar { @nest h1& { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { & h1 { background: green; } :not(&) { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { & h1 { background: green; } @nest :not(&) { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { & h1 { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { &::before, &::after { background: blue; @media screen { background: orange; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { &:is(.bar, &.baz) { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { &article > figure { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { .bar { color: blue; } color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { :not(&) { color: red; } & h1 { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { @media (min-width: 640px) { color: red !important; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { @nest :not(&) { color: red; } & h1 { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { @scope (.bar) { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; & .bar & .baz & .qux { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; & > .bar { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; & { padding: 2ch; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; && { padding: 2ch; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; &.bar { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; .bar & { color: red; &.baz { color: green; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; @nest .bar & { color: red; &.baz { color: green; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: blue; div { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; + .bar + & { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; .bar & { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; .bar { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; .parent & { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; :not(&) { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; @nest & > .bar { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; @nest .parent & { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { color: red; @nest :not(&) { color: blue; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @container (min-width: 100px) { grid-auto-flow: column; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @layer test { grid-auto-flow: column; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @layer { grid-auto-flow: column; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @media (orientation: landscape) { grid-auto-flow: column; @media (width > 1024px) { max-inline-size: 1024px; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @media (orientation: landscape) { grid-auto-flow: column; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo { display: grid; @supports (foo: bar) { grid-auto-flow: column; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo& { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo, .bar { color: blue; & + .baz, &.qux { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.foo.bar { &h1 { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|.parent { color: blue; @scope (& > .scope) to (& .limit) { & .content { color: yellow; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|@namespace"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|article { color: green; & { color: blue; } color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|custom-element { color: blue; &:state(loading) { opacity: 0.5; & .spinner { display: block; } } &:state(error) { border: 2px solid red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|div > .foo { &span { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|div { &.bar { background: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|div { color: blue; --button:focus { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|div { color: blue; button:focus { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|figure { margin: 0; & > figcaption { background: hsl(0 0% 0% / 50%); & > p { font-size: .9rem; } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "nesting_test|h1 { background: red; @starting-style { background: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|*, ::before, ::after, ::backdrop { padding: 5px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.a { padding-inline: var(--foo); } .a:-webkit-any(.b, .c) { padding-inline: var(--foo); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo :is(.bar) { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo :is(.bar), .bar :is(.baz) { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo :is(.bar:focus-visible), .bar :is(.baz:hover) { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo > .bar { text-align: start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --a: hsl(270 100% 50% / var(--alpha)); --b: hsl(var(--x) 0 0); --c: hsl(0 var(--x) 0); --d: hsl(0 0 var(--x)); --e: hsl(var(--x) 0 0 / var(--alpha)); --f: hsl(0 var(--x) 0 / var(--alpha)); --g: hsl(0 0 var(--x) / var(--alpha)); --h: hsl(270 100% 50% / calc(var(--alpha) / 2)); --i: hsl(none 100% 50% / var(--alpha)); --j: hsl(from yellow h s l / var(--alpha)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --a: rgb(0 0 0 / var(--alpha)); --b: rgb(50% 50% 50% / var(--alpha)); --c: rgb(var(--x) 0 0); --d: rgb(0 var(--x) 0); --e: rgb(0 0 var(--x)); --f: rgb(var(--x) 0 0 / var(--alpha)); --g: rgb(0 var(--x) 0 / var(--alpha)); --h: rgb(0 0 var(--x) / var(--alpha)); --i: rgb(none 0 0 / var(--alpha)); --j: rgb(from yellow r g b / var(--alpha)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --custom: lab(40% 56.6 39) !important; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --custom: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --custom: lab(40% 56.6 39); } .foo { text-decoration: underline; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --custom: oklab(59.686% 0.1009 0.1192); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --foo: color(display-p3 0 1 0); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { --foo: oklab(59.686% 0.1009 0.1192); --bar: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -moz-text-align-last: left; text-align-last: left; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-item-align: center; -webkit-align-self: center; place-self: center flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-item-align: end; -webkit-align-self: flex-end; align-self: flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-line-pack: justify; -webkit-align-content: space-between; align-content: space-between; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-line-pack: justify; -webkit-box-pack: end; -moz-box-pack: end; -ms-flex-pack: end; -webkit-align-content: space-between; -webkit-justify-content: flex-end; place-content: space-between flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-negative: 1; -webkit-flex-shrink: 1; flex-shrink: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -ms-flex-preferred-size: 1px; -webkit-flex-basis: 1px; flex-basis: 1px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -o-text-overflow: ellipsis; text-overflow: ellipsis; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-animation: .2s ease-in-out bar; -moz-animation: .2s ease-in-out bar; animation: .2s ease-in-out bar; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; appearance: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-border-image: url(foo.png) 60; -moz-border-image: url(foo.png) 60; -o-border-image: url(foo.png) 60; border-image: url(foo.png) 60; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-border-radius: 30px; -moz-border-radius: 30px; border-radius: 30px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-border-top-left-radius: 30px; -moz-border-top-left-radius: 30px; border-top-left-radius: 30px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-align: end; -moz-box-align: end; -ms-flex-align: end; -webkit-align-items: flex-end; align-items: flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-align: end; -moz-box-align: end; -ms-flex-align: end; -webkit-align-items: flex-end; place-items: flex-end center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-flex: 1; -moz-box-flex: 1; -ms-flex-positive: 1; -webkit-flex-grow: 1; flex-grow: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-flex: 1; -moz-box-flex: 1; -webkit-flex: 1; -ms-flex: 1; flex: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-lines: multiple; -moz-box-lines: multiple; -webkit-flex-wrap: wrap; -ms-flex-wrap: wrap; flex-wrap: wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-ordinal-group: 1; -moz-box-ordinal-group: 1; -ms-flex-order: 1; -webkit-order: 1; order: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-orient: horizontal; -moz-box-orient: horizontal; -webkit-box-direction: normal; -moz-box-direction: normal; -webkit-flex-flow: wrap; -ms-flex-flow: wrap; flex-flow: wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-orient: horizontal; -webkit-box-direction: normal; -moz-box-orient: horizontal; -moz-box-direction: normal; -webkit-flex-direction: row; -ms-flex-direction: row; flex-direction: row; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-orient: horizontal; -webkit-box-direction: normal; flex-direction: row; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-pack: justify; -moz-box-pack: justify; -ms-flex-pack: justify; -webkit-justify-content: space-between; justify-content: space-between; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-shadow: 12px 12px #0006 }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-shadow: 12px 12px #0006; -moz-box-shadow: 12px 12px #0006; box-shadow: 12px 12px #0006; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-box-shadow: 12px 12px #0006; -moz-box-shadow: 12px 12px #0009; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-hyphens: manual; -moz-hyphens: manual; -ms-hyphens: manual; hyphens: manual; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-mask-box-image-source: url(foo.png); -webkit-mask-box-image-slice: 10 40 10 40; -webkit-mask-box-image-width: 10px; -webkit-mask-box-image-outset: 0; -webkit-mask-box-image-repeat: round round; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-mask-image: url(x.svg); mask-image: url(x.svg); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-text-emphasis-style: filled; text-emphasis-style: filled; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-text-size-adjust: none; -moz-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-transition: background 200ms; -moz-transition: background 200ms; transition: background 230ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-transition: opacity 200ms; -moz-transition: opacity 200ms; transition: opacity 200ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { align-content: space-between; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { align-items: flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { align-self: flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { animation: .2s ease-in-out bar scroll(); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { animation: .2s ease-in-out bar; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { animation: 200ms var(--ease) bar; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { appearance: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { backdrop-filter: blur(5px) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: #4263eb; background-color: color(display-p3 0 .5 1); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(a98-rgb 0.44091 0.49971 0.37408); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(display-p3 0.43313 0.50108 0.37950); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(prophoto-rgb 0.36589 0.41717 0.31333); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(rec2020 0.42210 0.47580 0.35605); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(sRGB 0.41587 0.503670 0.36664); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(xyz-d50 0.2005 0.14089 0.4472); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: color(xyz-d65 0.21661 0.14602 0.59452); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: lch(40% 68.735435 34.568626) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: oklab(59.686% 0.1009 0.1192); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: oklch(40% 0.1268735435 34.568626) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-color: oklch(59.686% 0.15619 49.7694); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: -webkit-gradient(radial, left top, 0, left top, 20, from(red), to(#00f)); background-image: -webkit-radial-gradient(20px at 0% 0%, red, #00f); background-image: radial-gradient(20px at 0% 0%, red, #00f); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(45deg, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(90deg, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(oklab(59.686% 0.1009 0.1192), oklab(54.0% -0.10 -0.02)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(red, green); background-image: linear-gradient(lch(50% 132 50), lch(50% 130 150)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(to left bottom, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(to left, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(to right, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(to top right, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: linear-gradient(to top, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: radial-gradient(20px at top left, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: radial-gradient(20px, red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: radial-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background-image: url(img.png); background-clip: text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: #4263eb; background: color(display-p3 0 .5 1); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: -webkit-gradient(linear, left top, left bottom, from(red), to(blue)); background: -webkit-linear-gradient(red, blue); background: -moz-linear-gradient(red, blue); background: -o-linear-gradient(red, blue); background: linear-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: -webkit-gradient(linear, left top, left bottom, from(red), to(blue)); background: -webkit-linear-gradient(red, blue); background: -moz-linear-gradient(red, blue); background: -o-linear-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: -webkit-gradient(radial, left top, 0, left top, 20, from(red), to(#00f)); background: -webkit-radial-gradient(20px at 0% 0%, red, #00f); background: radial-gradient(20px at 0% 0%, red, #00f); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: -webkit-image-set(url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: image-set(url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: lab(51.5117% 43.3777 -29.0443) linear-gradient(lab(52.2319% 40.1449 59.9171), lab(47.7776% -34.2947 -7.65904)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: lab(51.5117% 43.3777 -29.0443) url(foo.png); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: lab(51.5117% 43.3777 -29.0443); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: linear-gradient(red, green); background: linear-gradient(lch(50% 132 50), lch(50% 130 150)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: linear-gradient(yellow, red 30% 40%, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: radial-gradient(red, blue), linear-gradient(yellow, red), url(bg.jpg); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: radial-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: red url(foo.png); background: lch(50% 132 50) url(foo.png); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: red; background: linear-gradient(lch(50% 132 50), lch(50% 130 150)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: url(img.png) text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: url(img.png); -webkit-background-clip: text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: url(img.png); background-clip: text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { background: var(--image) lch(40% 68.735435 34.568626) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { block-size: 25px; inline-size: 25px; min-block-size: 25px; min-inline-size: 25px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { block-size: var(--size); min-block-size: var(--size); inline-size: var(--size); min-inline-size: var(--size); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-block-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-block-start: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-block-width: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-block: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-color: #4263eb; border-color: color(display-p3 0 .5 1); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-color: var(--fallback); border-color: color(display-p3 0 .5 1); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-end-end-radius: 10px; border-end-start-radius: 5px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image-source: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image-source: linear-gradient(red, green); border-image-source: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) 60; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) var(--foo); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: linear-gradient(red, green); border-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: url(foo.png) 10 40 fill / 10px round; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-image: var(--test) 60; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-end-color: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-end: 2px solid lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-end: var(--border-width) solid lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-end: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start-color: lab(40% 56.6 39); border-inline-end-color: lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start-color: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start-width: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: 2px solid lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: 2px solid red; border-inline-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: 2px solid red; border-inline-end: 5px solid green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: 2px solid red; border-inline-end: 5px solid green; } .bar { border-inline-start: 1px dotted gray; border-inline-end: 1px solid black; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-start: var(--start); border-inline-end: var(--end); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-style: solid; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline-width: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-inline: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-radius: 30px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-radius: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-start-start-radius: 5px; border-start-end-radius: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-start-start-radius: 5px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-start-start-radius: var(--radius); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-start-start-radius: var(--start); border-start-end-radius: var(--end); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-top-left-radius: 30px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-width: 22px; border-width: max(2cqw, 22px); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border-width: clamp(1em, 2px, 4vh) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { border: 1px solid #4263eb; border-color: color(display-p3 0 .5 1); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-decoration-break: clone; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: 0px 0px 22px red; box-shadow: 0px 0px 22px lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: 0px 0px 22px red; box-shadow: 0px 0px max(2cqw, 22px) red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: 12px 12px lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: 12px 12px lab(40% 56.6 39), 12px 12px yellow }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: oklch(100% 0 0deg / 50%) 0 0.63rem 0.94rem -0.19rem, currentColor 0 0.44rem 0.8rem -0.58rem; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: var(--fallback); box-shadow: 0px 0px 22px lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { box-shadow: var(--foo) 12px lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { caret-color: lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { caret: lch(50.998% 135.363 338) block }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { caret: lch(50.998% 135.363 338) var(--foo) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { clip-path: circle(50px); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color-scheme: dark; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color-scheme: light dark; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color-scheme: light; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: #7bffff80 }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: color(from light-dark(yellow, red) srgb r g b / 10%); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: color-mix(in srgb, light-dark(yellow, red), light-dark(red, pink)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: color-mix(in xyz, transparent, green 65%); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: env(--brand-color, color(display-p3 0 1 0)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: light-dark(oklch(40% 0.1268735435 34.568626), oklab(59.686% 0.1009 0.1192)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: light-dark(var(--light), var(--dark)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: red; color: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: red; color: var(--foo, lab(40% 56.6 39)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: red; } :hover, :focus-visible { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: rgb(from light-dark(yellow, red) r g b / 10%); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: rgb(from light-dark(yellow, red) r g b / var(--alpha)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: rgba(123, 255, 255, 0.5) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: rgba(123, 456, 789, 0.5) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { color: var(--fallback); color: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { display: -webkit-box; display: flex; display: -moz-box; display: -webkit-flex; display: -ms-flexbox; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { fill: lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { fill: url(#foo) lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { fill: var(--url) lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: blur(5px) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: contrast(175%) drop-shadow(16px 16px 20px lab(40% 56.6 39)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: drop-shadow(16px 16px 20px lab(40% 56.6 39)) drop-shadow(16px 16px 20px yellow) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: drop-shadow(16px 16px 20px lab(40% 56.6 39)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: var(--foo) drop-shadow(16px 16px 20px lab(40% 56.6 39)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { filter: var(--foo) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-basis: 1px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-direction: row; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-flow: row wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-grow: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-shrink: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex-wrap: wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { flex: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-family: Helvetica, system-ui, sans-serif; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-family: Helvetica; font-family: system-ui; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-size: 22px; font-size: max(2cqw, 22px); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-size: 22px; font-size: xxx-large; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-style: oblique; font-style: oblique 40deg; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font-weight: 700; font-weight: 789; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font: 100%/1.5 Helvetica, system-ui, sans-serif; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { font: 22px Helvetica; font: xxx-large system-ui; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { inset-block-end: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { inset-block-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { inset-inline-start: 2px; inset-inline-end: 4px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { inset-inline-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { inset-inline: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { justify-content: space-between; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { list-style-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { list-style: \"★\" linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { list-style: var(--foo) linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-block-end: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-block-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-inline-start: 2px; margin-inline-end: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-inline-start: 2px; margin-inline-end: 4px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-inline-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { margin-inline: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border-slice: 10 40 10 40; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border-slice: var(--foo); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border-source: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border-source: url(foo.png); mask-border-slice: 10 40 10 40; mask-border-width: 10px; mask-border-outset: 0; mask-border-repeat: round round; mask-border-mode: luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) 25 / 35px / 12px space luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) var(--foo); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-border: url('border-mask.png') 25 / 35px / 12px space luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-composite: subtract; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-image: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)); mask-position: 25% 75%; mask-size: cover; mask-repeat: no-repeat; mask-clip: padding-box; mask-origin: content-box; mask-composite: subtract; mask-mode: luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-image: linear-gradient(red, green) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-image: url(masks.svg#star) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-image: url(masks.svg#star); mask-position: 25% 75%; mask-size: cover; mask-repeat: no-repeat; mask-clip: padding-box; mask-origin: content-box; mask-composite: subtract; mask-mode: luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask-mode: luminance; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask: -webkit-linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) 40px 20px }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) 40px 20px }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask: linear-gradient(lch(56.208% 136.76 46.312), lch(51% 135.366 301.364)) 40px var(--foo) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { mask: url(masks.svg#star) luminance }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { order: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { outline-color: lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { outline: 2px solid lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { outline: var(--width) solid lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { overflow: hidden auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-block-end: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-block-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-inline-start: 2px; padding-inline-end: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-inline-start: 2px; padding-inline-end: 4px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-inline-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-inline-start: var(--padding); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { padding-inline: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { place-content: space-between flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { place-items: flex-end center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { place-self: center flex-end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { position: sticky; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { print-color-adjust: exact; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { stroke: lch(50.998% 135.363 338) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-align: end; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-align: start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration-color: lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration-color: yellow; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration-line: underline; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration-style: dotted; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration-thickness: 10%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: double underline; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: lch(50.998% 135.363 338) underline; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: lch(50.998% 135.363 338) var(--style); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline 10%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline dotted; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline; text-decoration-color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline; text-decoration-style: double; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: underline; } .foo { --custom: lab(40% 56.6 39); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-decoration: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis-color: lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis-position: over; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis-position: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis-style: filled; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis: filled lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-emphasis: lch(50.998% 135.363 338) var(--style); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-overflow: ellipsis; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-shadow: 12px 12px lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-shadow: 12px 12px lab(40% 56.6 39), 12px 12px yellow }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-shadow: var(--foo) 12px lab(40% 56.6 39) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { text-size-adjust: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { top: 1px; left: 2px; bottom: 3px; right: 4px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transform: scale(0.5); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transform: var(--transform); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: -webkit-backdrop-filter, backdrop-filter; } .bar { transition-property: backdrop-filter; } .baz { transition-property: -webkit-backdrop-filter; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: -webkit-border-radius, -webkit-border-radius, -moz-border-radius; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: margin-block; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: margin-inline-start, opacity, padding-inline-start, color; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: margin-inline-start, padding-inline-start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: margin-inline-start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: mask-border; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: mask-composite, mask-mode; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition-property: mask; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: -webkit-backdrop-filter, backdrop-filter; } .bar { transition: backdrop-filter; } .baz { transition: -webkit-backdrop-filter; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: border-start-start-radius; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: margin-block-start 2s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: margin-inline-start 2s, padding-inline-start 2s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: margin-inline-start 2s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: mask 200ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: mask-border 200ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { transition: transform; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo { user-select: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo.foo:hover, .bar:focus-visible { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-moz-read-only { color: red; } .bar { color: yellow; } .foo:read-only { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-moz-read-only { color: red; } .foo:read-only { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-webkit-any(.bar):after { color: red; } .foo:is(.bar, .baz):after { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-webkit-any(.bar, .baz):after { color: red; } .foo:-moz-any(.bar, .baz):after { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-webkit-any(.bar, .baz):after { color: red; } .foo:is(.bar, .baz):after { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:-webkit-full-screen { color: red; } .foo:-moz-full-screen { color: red; } .foo:-ms-fullscreen { color: red; } .foo:fullscreen { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo::file-selector-button { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo::file-selector-button { margin-inline-start: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo::placeholder { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:after { text-align: start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:fullscreen { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:hover { text-align: start; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:placeholder-shown .bar { color: red; } .foo:autofill .baz { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:placeholder-shown .bar, .foo:-webkit-autofill .baz { color: red; } .foo:placeholder-shown .bar, .foo:autofill .baz { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:placeholder-shown .bar,.foo:autofill .baz{color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo:read-only { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ display: -webkit-box; display: flex; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ display: flex }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ display: inline-flex }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ hyphens: manual }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ tab-size: 4 }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{ text-align-last: left }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.foo{transition:opacity 200ms}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|.test:not(.foo, .bar) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|:focus-within, :focus-visible { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|:hover, :focus-visible { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|:hover, :focus-visible { margin-inline-start: 24px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@-webkit-keyframes test { from { background: green; } to { background: blue; } } @-moz-keyframes test { from { background: green; } to { background: blue; } } @keyframes test { from { background: green; } to { background: blue } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@-webkit-keyframes test { from { background: green; } to { background: red; } } @-moz-keyframes test { from { background: green; } to { background: pink; } } @keyframes test { from { background: green; } to { background: blue } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@-webkit-keyframes test1 { from { background: green; } to { background: blue; } } @-moz-keyframes test2 { from { background: green; } to { background: blue; } } @keyframes test3 { from { background: green; } to { background: blue } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@container (min-width: 100px) { .foo { padding: 5px; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@font-palette-values --Cooler { font-family: Handover Sans; base-palette: 3; override-colors: 1 rgb(43, 12, 9), 3 lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@font-palette-values --Cooler { font-family: Handover Sans; base-palette: 3; override-colors: 1 var(--foo), 3 lch(50.998% 135.363 338); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@keyframes foo { from { --custom: #ff0; opacity: 0; } to { --custom: lch(50.998% 135.363 338); opacity: 1; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@keyframes foo { from { --custom: lab(40% 56.6 39); } to { --custom: lch(50.998% 135.363 338); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@keyframes foo { from { text-decoration: var(--foo) lab(29.2345% 39.3825 20.0664); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@keyframes test { from { background: green; } to { background: blue } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (100px < width < 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (100px <= width <= 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (200px >= width >= 100px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (color < 2) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (color > 2) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (color) and (min-resolution: 2dppx) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (hover) and (100px <= width <= 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (hover) or (100px <= width <= 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (min-resolution: 113.38dpcm) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (min-resolution: 2dppx) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (min-resolution: 2dppx), (min-resolution: 192dpi) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (resolution > 2dppx) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (resolution >= 300dpi) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (resolution: 1dppx) { body { background: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width < 240px) and (hover) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width < 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width <= 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width > 0) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width > 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width > calc(1px + 1rem)) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width > max(10px, 1rem)) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media (width >= 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media not (100px < width < 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media not (100px <= width <= 200px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media not (width < 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@media only screen and (min-resolution: 124.8dpi) { .foo { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) { div { backdrop-filter: blur(10px); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(10px))) { div { backdrop-filter: blur(10px); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (backdrop-filter: blur(10px)) { div { backdrop-filter: blur(10px); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: color(display-p3 0 0 0)) { @keyframes foo { from { --custom: color(display-p3 .643308 .192455 .167712); } to { --custom: color(display-p3 .972962 -.362078 .804206); } } } @supports (color: lab(0% 0 0)) { @keyframes foo { from { --custom: lab(40% 56.6 39); } to { --custom: lab(50.998% 125.506 -50.7078); } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: lab(0% 0 0)) and (color: color(display-p3 0 0 0)) { .foo { color: lab(40% 56.6 39); } .bar { color: color(display-p3 .643308 .192455 .167712); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: lab(0% 0 0)) and (not (color: color(display-p3 0 0 0))) { .foo { color: lab(40% 56.6 39); } .bar { color: color(display-p3 .643308 .192455 .167712); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: lab(0% 0 0)) or (color: color(display-p3 0 0 0)) { .foo { color: lab(40% 56.6 39); } .bar { color: color(display-p3 .643308 .192455 .167712); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: lab(0% 0 0)) { .foo { mask: linear-gradient(lab(56.208% 94.4644 98.8928), lab(51% 70.4544 -115.586)) 40px var(--foo); } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|@supports (color: lab(0% 0 0)) { @keyframes foo { from { --custom: lab(40% 56.6 39); } to { --custom: lab(50.998% 125.506 -50.7078); } } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|[foo="
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a { background: linear-gradient(350.5deg, white, black), linear-gradient(-130deg, black, white), linear-gradient(45deg, black, white); } b { background-image: linear-gradient(rgba(0,0,0,1), white), linear-gradient(white, black); } strong { background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.8) 20px, #000 30px, #000) no-repeat; } div { background-image: radial-gradient(to left, white, black), repeating-linear-gradient(to bottom right, black, white), repeating-radial-gradient(to top, aqua, red); } .old-radial { background: radial-gradient(0 50%, ellipse farthest-corner, black, white); } .simple1 { background: linear-gradient(black, white); } .simple2 { background: linear-gradient(to left, black 0%, rgba(0, 0, 0, 0.5)50%, white 100%); } .simple3 { background: linear-gradient(to left, black 50%, white 100%); } .simple4 { background: linear-gradient(to right top, black, white); } .direction { background: linear-gradient(top left, black, rgba(0, 0, 0, 0.5), white); } .silent { background: -webkit-linear-gradient(top left, black, white); } .radial { background: radial-gradient(farthest-side at 0 50%, white, black); } .second { background: red linear-gradient(red, blue); background: url('logo.png'), linear-gradient(#fff, #000); } .px { background: linear-gradient(black 0, white 100px); } .list { list-style-image: linear-gradient(white, black); } .mask { mask: linear-gradient(white, black); } .newline { background-image: linear-gradient( white, black ), linear-gradient( black, white ); } .convert { background: linear-gradient(0deg, white, black); background: linear-gradient(90deg, white, black); background: linear-gradient(180deg, white, black); background: linear-gradient(270deg, white, black); } .grad { background: linear-gradient(1grad, white, black); } .rad { background: linear-gradient(1rad, white, black); } .turn { background: linear-gradient(0.3turn, white, black); } .norm { background: linear-gradient(-90deg, white, black); } .mask { mask-image: radial-gradient(circle at 86% 86%, transparent 8px, black 8px); } .cover { background: radial-gradient(ellipse cover at center, white, black); } .contain { background: radial-gradient(contain at center, white, black); } .no-div { background: linear-gradient(black); } .background-shorthand { background: radial-gradient(#FFF, transparent) 0 0 / cover no-repeat #F0F; } .background-advanced { background: radial-gradient(ellipse farthest-corner at 5px 15px, rgba(214, 168, 18, 0.7) 0%, rgba(255, 21, 177, 0.7) 50%, rgba(210, 7, 148, 0.7) 95%), radial-gradient(#FFF, transparent), url(path/to/image.jpg) 50%/cover; } .multiradial { mask-image: radial-gradient(circle closest-corner at 100% 50%, #000, transparent); } .broken { mask-image: radial-gradient(white, black); } .loop { background-image: url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a::after:hover, a::after:focus-visible { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a::unknown-a, a::unknown-b { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:dir(ltr) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:dir(rtl) div {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:dir(rtl) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:dir(rtl)::after {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:has(:dir(rtl)) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:has(:hover), a:has(:focus-visible) { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:is(.foo, .bar) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:is(:dir(rtl)) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:lang(en, fr) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:not(:dir(rtl)) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:not(:hover), a:not(:focus-visible) { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "prefix_test|a:where(:dir(rtl)) {color:red}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|$1"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|--a"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|--foo"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|--test"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { border-radius: 10px; } .b { color: green; } .a { border-radius: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { border-radius: 10px; } .b { color: green; } .a { border-radius: 20px; color: pink; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { border-radius: 10px; } .b { color: green; } .a { border-radius: var(--foo); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { color: red; } .b { color: green; } .a { color: pink; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { color: red; } .b { color: green; } .a { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a { color: red; } .b { color: green; } .a { color: red; } .b { color: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.a:foo(#000) { color: red; } .b { color: green; } .a:foo(#ff0) { color: pink; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { --a: rgb(50% 50% 50% / calc(100% / 2)); --b: hsl(calc(360deg / 2) 50% 50%); --c: oklab(40.101% calc(0.1 + 0.2) 0.0453); --d: color(display-p3 0.43313 0.50108 calc(0.1 + 0.2)); --e: rgb(calc(255 / 2), calc(255 / 2), calc(255 / 2)); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { --foo: red; --foo: purple; } .foo { --foo: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -moz-animation: bar 200ms; -moz-animation-timing-function: ease-in-out; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-animation-name: foo; -webkit-animation-duration: 0.09s; -webkit-animation-timing-function: ease-in-out; -webkit-animation-iteration-count: 2; -webkit-animation-direction: alternate; -webkit-animation-play-state: running; -webkit-animation-delay: 100ms; -webkit-animation-fill-mode: forwards; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-animation: bar 200ms; -webkit-animation-timing-function: ease-in-out; -moz-animation: bar 200ms; -moz-animation-timing-function: ease-in-out; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-border-image: url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-border-radius: 10px 100px 10px 100px; -moz-border-radius: 10px 100px 10px 100px; border-radius: 10px 100px 10px 100px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-border-radius: 10px 100px 10px 100px; -moz-border-radius: 20px; border-radius: 30px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-flex-grow: 1; -webkit-flex-shrink: 1; -webkit-flex-basis: auto; flex-grow: 1; flex-shrink: 1; flex-basis: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-flex-grow: 1; -webkit-flex-shrink: 1; -webkit-flex-basis: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-text-decoration: underline; -webkit-text-decoration-style: dotted; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition-property: opacity, color; -moz-transition-property: opacity, color; transition-property: opacity, color; -webkit-transition-duration: 2s, 4s; -moz-transition-duration: 2s, 4s; transition-duration: 2s, 4s; -webkit-transition-timing-function: ease-in-out, ease-in; transition-timing-function: ease-in-out, ease-in; -moz-transition-timing-function: ease-in-out, ease-in; -webkit-transition-delay: 500ms, 0s; -moz-transition-delay: 500ms, 0s; transition-delay: 500ms, 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition-property: opacity, color; -webkit-transition-duration: 2s, 4s; -webkit-transition-timing-function: ease-in-out, ease-in; -webkit-transition-delay: 500ms, 0s; -moz-transition-property: opacity, color; -moz-transition-duration: 2s, 4s; -moz-transition-timing-function: ease-in-out, ease-in; -moz-transition-delay: 500ms, 0s; transition-property: opacity, color; transition-duration: 2s, 4s; transition-timing-function: ease-in-out, ease-in; transition-delay: 500ms, 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition-property: opacity, color; -webkit-transition-duration: 2s, 4s; -webkit-transition-timing-function: ease-in-out, ease-in; -webkit-transition-delay: 500ms, 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition-property: opacity; -moz-transition-property: color; transition-property: opacity, color; -webkit-transition-duration: 2s; -moz-transition-duration: 4s; transition-duration: 2s, 4s; -webkit-transition-timing-function: ease-in-out; -moz-transition-timing-function: ease-in-out; transition-timing-function: ease-in-out, ease-in; -webkit-transition-delay: 500ms; -moz-transition-delay: 0s; transition-delay: 500ms, 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition-property: opacity; transition-property: opacity, color; -moz-transition-property: color; -webkit-transition-duration: 2s; transition-duration: 2s, 4s; -moz-transition-duration: 4s; -webkit-transition-timing-function: ease-in-out; transition-timing-function: ease-in-out, ease-in; -moz-transition-timing-function: ease-in-out; -webkit-transition-delay: 500ms; transition-delay: 500ms, 0s; -moz-transition-delay: 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { -webkit-transition: background 200ms; -moz-transition: background 200ms; transition: background 230ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-content: center; justify-content: center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-content: first baseline; justify-content: safe right; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-items: center; justify-items: center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-items: center; justify-items: legacy left; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-self: center; justify-self: center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { align-self: center; justify-self: unsafe left; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-name: foo, bar; animation-duration: 0.09s, 200ms; animation-timing-function: ease-in-out, ease; animation-iteration-count: 2, 1; animation-direction: alternate, normal; animation-play-state: running, paused; animation-delay: 100ms, 0s; animation-fill-mode: forwards, none; animation-timeline: auto, auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-name: foo, bar; animation-duration: 0.09s; animation-timing-function: ease-in-out; animation-iteration-count: 2; animation-direction: alternate; animation-play-state: running; animation-delay: 100ms; animation-fill-mode: forwards; animation-timeline: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-name: foo; animation-duration: 0.09s; animation-timing-function: ease-in-out; animation-iteration-count: 2; animation-direction: alternate; animation-play-state: running; animation-delay: 100ms; animation-fill-mode: forwards; animation-timeline: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-name: foo; animation-duration: 0.09s; animation-timing-function: ease-in-out; animation-iteration-count: 2; animation-direction: alternate; animation-play-state: running; animation-delay: 100ms; animation-fill-mode: forwards; animation-timeline: scroll(), view(); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-name: foo; animation-duration: 0.09s; animation-timing-function: ease-in-out; animation-iteration-count: 2; animation-direction: alternate; animation-play-state: running; animation-delay: 100ms; animation-fill-mode: forwards; animation-timeline: scroll(); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: 10%; animation-range-end: 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: 10%; animation-range-end: exit 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: 10%; animation-range-end: normal; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 0%; animation-range-end: entry 100%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 0%; animation-range-end: exit 100%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 10%, entry 50%; animation-range-end: exit 90%, exit 100%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 10%; animation-range-end: 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 10%; animation-range-end: exit 100%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range-start: entry 10%; animation-range-end: exit 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range: entry; animation-range-end: 90%; animation: spin 100ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range: entry; animation-range-end: 90%; animation: var(--animation) 100ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation-range: entry; animation-range-end: 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation: bar 200ms; animation-timing-function: ease-in-out; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation: bar 200ms; animation-timing-function: var(--ease); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { animation: spin 100ms; animation-range: entry; animation-range-end: 90%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background-color: gray; background-position: 40% 50%; background-size: 10em auto; background-repeat: round; background-clip: border-box; background-origin: border-box; background-attachment: fixed; background-image: url('chess.png'); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background-image: url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background-image: url(0123abcd); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: -webkit-gradient(linear, left top, left bottom, from(red), to(blue)); background: -webkit-linear-gradient(red, blue); background: -moz-linear-gradient(red, blue); background: -o-linear-gradient(red, blue); background: linear-gradient(red, blue); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: -webkit-image-set(url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: calc(var(--v) / 0.3)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: image-set(linear-gradient(cornflowerblue, white) 1x, url("
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: red; } .bar { background: red; } .foo { color: green; } .bar { color: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: red; } .foo { background: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: red; } .foo { color: green; } .bar { background: red; } .bar { color: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png) gray; -webkit-background-clip: text; background-clip: content-box; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png) gray; background-clip: content-box; -webkit-background-clip: text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png) gray; background-position: var(--pos); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png), url(test.jpg) gray; background-position-x: right 20px, 10px; background-position-y: top 20px, 15px; background-size: 50px 50px, auto; background-repeat: repeat no-repeat, no-repeat; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png); background-clip: text; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { background: url(img.png); background-position-x: 20px; background-position-y: 10px; background-size: 50px 100px; background-repeat: repeat no-repeat; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start-width: 1px; border-block-end-width: 1px; border-inline-start-width: 1px; border-inline-end-width: 1px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start-width: 1px; border-block-end-width: 1px; border-inline-start-width: 2px; border-inline-end-width: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start-width: 1px; border-block-end-width: 1px; border-inline-start-width: 2px; border-inline-end-width: 3px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 1px solid black; border-block-end: 1px solid black; border-inline-start: 1px solid red; border-inline-end: 1px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 1px solid black; border-block-end: 1px solid black; border-inline-start: 2px solid black; border-inline-end: 2px solid black; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 1px solid black; border-block-end: 1px solid black; border-inline-start: 2px solid red; border-inline-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 1px solid black; border-block-end: 1px solid black; border-inline-start: 2px solid red; border-inline-end: 3px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 2px solid black; border-block-end: 1px solid black; border-inline-start: 2px solid red; border-inline-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 2px solid red; border-block-end: 1px solid red; border-inline-start: 2px solid red; border-inline-end: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-start: 2px solid red; border-block-end: 2px solid red; border-inline-start: 2px solid red; border-inline-end: 1px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-block-width: 1px; border-inline-width: 1px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-image-source: url(foo.png); border-image-slice: 10 40 10 40 fill; border-image-width: 10px; border-image-outset: 0; border-image-repeat: round round; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-image: url(foo.png) 60; border-image-source: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-image: url(test.png) 60; border-image-source: url(foo.png); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-image: url(test.png) 60; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-left: 2px solid red; border-right: 2px solid red; border-bottom: 2px solid red; border-top: 2px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-radius: 10px; border-top-left-radius: var(--test); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-start-start-radius: 10px; border-radius: 10px 100px 10px 100px / 120px 120px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-top: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid red; border-right: 1px solid red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-top: 1px solid black; border-bottom: 1px solid black; border-left: 2px solid black; border-right: 1px solid black; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-top: 1px solid black; border-bottom: 1px solid black; border-left: 2px solid black; border-right: 2px solid black; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border-width: 0; border-bottom: var(--test, 1px) solid; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: 1px solid black; border-width: 1px 1px 0 0; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: 1px solid red; border-image: url(test.png) 60; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: 1px solid red; border-image: var(--border-image); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: thin dotted red; border-block-start-width: thick; border-left-width: medium; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: thin dotted red; border-right-width: thick; border-right-style: solid; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: thin dotted red; border-right-width: thick; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { border: thin dotted red; border-right: thick dotted red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { color: red; } .bar { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { color: red; } .baz { color: blue; } .bar { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { color: red; } .foo { background: green !important; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { color: red; } .foo { background: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { column-gap: 20px; gap: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-direction: column; flex-wrap: nowrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-direction: column; flex-wrap: wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-direction: row; flex-wrap: nowrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-direction: row; flex-wrap: wrap; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 0; flex-basis: 0%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 1; flex-basis: 0%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 1; flex-basis: 0; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 1; flex-basis: 0px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 1; flex-basis: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 1; flex-shrink: 2; flex-basis: 0%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 2; flex-shrink: 1; flex-basis: 0%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 2; flex-shrink: 1; flex-basis: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex-grow: 2; flex-shrink: 2; flex-basis: 0%; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex: 0 0; flex-grow: 1; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { flex: 0 0; flex-grow: var(--grow); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { font-family:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { font: 12px"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { gap: 10px; column-gap: 20px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { inset-block-start: 2px; inset-block-end: 2px; inset-inline-start: 4px; inset-inline-end: 4px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { inset-block-start: 2px; inset-block-end: 3px; inset-inline-start: 4px; inset-inline-end: 5px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { inset-block-start: 2px; inset-block-end: 3px; inset: 4px; inset-inline-start: 4px; inset-inline-end: 5px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { justify-items: center !important; align-items: center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { list-style-type: disc; list-style-image: url(ellipse.png); list-style-position: outside; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { list-style: \\"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { margin: 10px; margin-top: var(--top); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { outline-width: 2px; outline-style: solid; outline-color: blue; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { outline: 2px solid blue; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { outline: 2px solid red; outline-color: blue; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { outline: 2px solid yellow; outline-color: var(--color); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { overflow: hidden; overflow-y: var(--y); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { place-content: center center; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { place-content: first baseline unsafe left; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { position: -webkit-sticky; position: sticky; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { row-gap: 10px; column-gap: 10px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { row-gap: 10px; column-gap: 20px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { row-gap: normal; column-gap: 20px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { scale: 50% 1 200% }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-color: yellow; text-decoration-thickness: 2px; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { text-decoration: underline; text-decoration-style: dotted; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { text-emphasis-style: filled; text-emphasis-color: yellow; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { text-emphasis: filled red; text-emphasis-color: yellow; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { text-emphasis: filled yellow; text-emphasis-color: var(--color); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transform: perspective(500px)translate3d(10px, 0, 20px)rotateY(30deg) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transform: scale3d(50%, 1, 200%) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transform: translate3d(12px,50%,3em)scale(2,.5) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transform: translateX(-50%); transform: translateX(20px); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transform:matrix(1,2,-1,1,80,80) }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition-property: opacity, color, width, height; transition-duration: 2s, 4s; transition-timing-function: ease; transition-delay: 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition-property: opacity, color; transition-duration: 2s, 4s; transition-timing-function: ease-in-out, ease-in; transition-delay: 500ms, 0s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition-property: opacity, color; transition-duration: 2s; transition-timing-function: ease-in-out; transition-delay: 500ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition-property: opacity; transition-duration: 0.09s; transition-timing-function: ease-in-out; transition-delay: 500ms; transition: color 2s; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition-property: opacity; transition-duration: 0.09s; transition-timing-function: ease-in-out; transition-delay: 500ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition: opacity 2s; transition-timing-function: ease; transition-delay: 500ms; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo { transition: opacity 500ms; transition-timing-function: var(--ease); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo, .bar { background: red; } .foo { color: green; } .bar { color: green; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo:-moz-read-only { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo:-moz-read-only { color: red; } .foo:read-only { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo:-webkit-any(.bar, .baz):after { color: red; } .foo:is(.bar, .baz):after { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo:placeholder-shown .bar, .foo:-webkit-autofill .baz { color: red; } .foo:placeholder-shown .bar, .foo:autofill .baz { color: red; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-column-start: a; grid-column-end: a; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-row-start: 1; grid-row-end: 2; grid-column-start: 3; grid-column-end: 4; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-row-start: a; grid-row-end: a; grid-column-start: a; grid-column-end: a; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-row-start: a; grid-row-end: a; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-areas: none; grid-template-columns: auto 1fr auto; grid-template-rows: repeat(2, 1fr); grid-auto-flow: row; grid-auto-rows: auto; grid-auto-columns: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-areas: none; grid-template-columns: auto 1fr auto; grid-template-rows: repeat(2, 1fr); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-areas: none; grid-template-columns: none; grid-template-rows: none; grid-auto-flow: row; grid-auto-rows: auto; grid-auto-columns: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-areas: none; grid-template-columns: none; grid-template-rows: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr auto; grid-template-columns: none; grid-template-areas: none; grid-auto-flow: column dense; grid-auto-rows: auto; grid-auto-columns: 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr auto; grid-template-columns: none; grid-template-areas: none; grid-auto-flow: column; grid-auto-rows: auto; grid-auto-columns: 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr auto; grid-template-columns: none; grid-template-areas: none; grid-auto-flow: var(--auto-flow); grid-auto-rows: auto; grid-auto-columns: 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr; grid-template-columns: auto 1fr auto; grid-template-areas: none; grid-auto-flow: column; grid-auto-rows: 1fr; grid-auto-columns: 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr; grid-template-columns: auto 1fr auto; grid-template-areas: none; grid-auto-flow: row; grid-auto-rows: auto; grid-auto-columns: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: auto 1fr; grid-template-columns: auto 1fr auto; grid-template-areas: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: none; grid-template-columns: auto 1fr auto; grid-template-areas: none; grid-auto-flow: column; grid-auto-rows: 1fr; grid-auto-columns: 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: none; grid-template-columns: auto 1fr auto; grid-template-areas: none; grid-auto-flow: row dense; grid-auto-rows: 1fr; grid-auto-columns: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid-template-rows: none; grid-template-columns: auto 1fr auto; grid-template-areas: none; grid-auto-flow: row; grid-auto-rows: 1fr; grid-auto-columns: auto; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{ grid: auto 1fr auto / auto-flow dense 1fr; grid-template-rows: 1fr 1fr 1fr; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{grid-template:[header-top]\"a a a\"[header-bottom main-top]\"b b b\"1fr[main-bottom]/auto 1fr auto}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.foo{grid-template:[header-top]\"a a a\"[main-top]\"b b b\"1fr/auto 1fr auto}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test { width: calc(var(--test) + 2px); width: calc(var(--test) - 2px); }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-column-1 { grid: 300px / auto-flow; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-column-2 { grid: 200px 1fr / auto-flow auto; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-column-dense { grid: 1fr 2fr / dense auto-flow; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-dense { grid: dense auto-flow / 1fr 2fr; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-row-1 { grid: auto-flow / 1fr 2fr 1fr; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-auto-flow-row-2 { grid: auto-flow auto / 100px 100px; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-miss-areas-2 { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 30px 60px 100px; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-miss-areas-3 { grid-template: 30px 60px 100px / 1fr 1fr 1fr; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|.test-miss-areas-4 { grid: 30px 60px 100px / 1fr 1fr 1fr; grid-template-areas:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@charset"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@counter-style circled-alpha { system: fixed; symbols: Ⓐ Ⓑ Ⓒ; suffix:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a {} @layer b {} @layer b { foo { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a {} @layer b {} @layer b { foo { color: red; } } @layer a { bar { color: yellow; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a {} @layer b {} @layer c {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a, b, c; @layer a { foo { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a, b; @layer c {} @layer d { foo { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a; @import"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a; @layer b { .foo { color: red; } } @layer c {}"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a; @layer b; @import"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer a; @layer b; @layer c;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer foo { .foo { color: red; } } @layer foo { .foo { background: #fff; } .baz { color: #fff; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@layer foo { @property --property-name { syntax: '*'; inherits: false; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media (hover) { .foo { color: red; } } @media (hover) { .foo { background: #fff; } .baz { color: #fff; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media (hover) { .foo { color: red; } } @media (min-width: 250px) { .foo { background: #fff; } .baz { color: #fff; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media (width < 800px) { @property --property-name { syntax: '*'; inherits: false; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media not (width < 240px) { .foo { color: chartreuse; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media not all { .a { color: green; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@media print { .a { color: red; } .b { color: green; } .a { color: red; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@namespace"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@namespace toto"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@page :right { margin: 1in; @bottom-left-corner { content:"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@property --property-name { syntax: '*'; inherits: false; initial-value: ; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@property --property-name { syntax: '*'; inherits: false; initial-value:; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@property --property-name { syntax: '<length>|none'; inherits: false; initial-value: none; }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@supports (((foo: bar) and (bar: baz))) { .test { foo: bar; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@supports (((foo: bar) or (bar: baz))) { .test { foo: bar; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@supports (flex: 1) { .foo { color: red; } } @supports (flex: 1) { .foo { background: #fff; } .baz { color: #fff; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@supports (foo: bar) and (((bar: baz) or (test: foo))) { .test { foo: bar; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|@supports not (((foo: bar) and (bar: baz))) { .test { foo: bar; } }"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|[foo="
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from color(display-p3 0 1 0) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg 20% 50% / .5) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg 20% 50% / .5) h s l / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg 20% 50% / .5) h s none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg 20% 50% / .5) none s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg 20% 50% / none) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(120deg none 50% / .5) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(from rebeccapurple h s l) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(none 20% 50% / .5) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(none none none / none) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from hsl(none none none) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from lab(0% 104.3 -50.9) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from lab(100% 104.3 -50.9) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from lch(0% 116 334) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from lch(100% 116 334) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from oklab(0% 0.365 -0.16) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from oklab(100% 0.365 -0.16) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from oklch(0% 0.399 336.3) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from oklch(100% 0.399 336.3) h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0 0% 0% / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0 0% 0%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0 s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0deg 0% 0% / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0deg 0% 0%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 0deg s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 25 s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple 25deg s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple calc(h) calc(s) calc(l))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h 0% l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h 20% l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h calc(alpha * 100) calc(alpha * 100) / calc(alpha * 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h calc(alpha * 100) l / calc(s / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h l l / calc(l / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h l s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s 0% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s l / .25)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s l / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s l / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s l)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple h s none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple none none none / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple none none none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rebeccapurple none s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) 0 s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) 0deg s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) 25 s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) 25deg s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) calc(h) calc(s) calc(l) / calc(alpha))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h 0% l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h 20% l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h calc(alpha * 100) calc(alpha * 100) / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h calc(alpha * 100) l / calc(s / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h l l / calc(l / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h l s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h s 0% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h s 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h s l / .2)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h s l / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hsl(from rgb(20%, 40%, 60%, 80%) h s l / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from color(display-p3 0 1 0) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hsl(120deg 20% 50% / .5) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(120deg 20% 50% / .5) h w b / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(120deg 20% 50% / .5) h w none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(120deg 20% 50% / .5) none w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(120deg 20% 50% / none) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(120deg none 50% / .5) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(from rebeccapurple h w b) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(none 20% 50% / .5) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(none none none / none) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from hwb(none none none) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from lab(0% 104.3 -50.9) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from lab(100% 104.3 -50.9) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from lch(0% 116 334) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from lch(100% 116 334) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from oklab(0% 0.365 -0.16) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from oklab(100% 0.365 -0.16) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from oklch(0% 0.399 336.3) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from oklch(100% 0.399 336.3) h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0 0% 0% / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0 0% 0%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0 w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0deg 0% 0% / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0deg 0% 0%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 0deg w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 25 w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple 25deg w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple calc(h) calc(w) calc(b))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h 0% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h 20% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h b w)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h calc(alpha * 100) calc(alpha * 100) / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h calc(alpha * 100) w / calc(b / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w 0% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w b / .2)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w b / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w b / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple h w w / calc(w / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple none none none / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple none none none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rebeccapurple none w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) 0 w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) 0deg w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) 25 w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) 25deg w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) calc(h) calc(w) calc(b) / calc(alpha))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h 0% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h 20% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h b w)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h calc(alpha * 100) calc(alpha * 100) / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h calc(alpha * 100) w / calc(b / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w 0% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w b / .2)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w b / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|hwb(from rgb(20%, 40%, 60%, 80%) h w w / calc(w / 100))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lab(from indianred calc(l * .8) a b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred calc(10 + 20) c h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred calc(10% + 20%) c h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred calc(l + 10) c h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l c calc(10 + 20))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l c calc(10deg + 0.35rad))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l c calc(10deg + 20deg))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l c calc(h + 180deg))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l c sin(h))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l calc(c - 50) h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l sin(c) h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from indianred l sqrt(c) h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from orchid l 30 h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|lch(from peru calc(l * 0.8) c h)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from color(display-p3 0 1 0) r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from hsl(120deg 20% 50% / .5) r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from indianred 255 g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from indianred r g b / .5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from lab(0% 104.3 -50.9) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from lab(100% 104.3 -50.9) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from lch(0% 116 334) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from lch(100% 116 334) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from oklab(0% 0.365 -0.16) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from oklab(100% 0.365 -0.16) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from oklch(0% 0.399 336.3) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from oklch(100% 0.399 336.3) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 0 0 0 / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 0 0 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 0 g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 0% 10 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 20% g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 25 g b / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple 25 g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple alpha alpha alpha / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple b alpha r / g)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple b calc(r * .5) 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple calc(r) calc(g) calc(b))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple g b r)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple none none none / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple none none none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 0 b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 10 20%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 20% 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 20% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 25 b / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r 25 b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r calc(b * .5 - g * .5) 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r calc(g * .5 + g * .5) 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r calc(g * 2) 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g 0 / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g 25 / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g 25 / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b / .25)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b / 20%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r g none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rebeccapurple r r r / r)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20% 40% 60% / 80%) r g b / none)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20% 40% 60% / 80%) r g none / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20% 40% 60% / none) r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20% none 60%) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) 0 g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) 0% 10 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) 20% g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) 25 g b / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) 25 g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) alpha alpha alpha / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) b alpha r / g)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) calc(r) calc(g) calc(b) / calc(alpha))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) g b r)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 0 b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 10 20%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 20% 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 20% b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 25 b / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r 25 b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g 0 / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g 20% / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g 25 / 25%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g 25 / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g b / .20)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g b / 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g b / 20%)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(20%, 40%, 60%, 80%) r r r / r)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(from rebeccapurple r g b) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(none none none / none) r g b / alpha)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgb(none none none) r g b)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "test|rgb(from rgba(205, 92, 92, .5) r g b / calc(alpha + .2))"
+    }
+  ],
+  "wpt-cssom-known-failures.json": [
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(-1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(-1.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(0.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(1 - 0.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(1.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(2)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|acos(pi - pi)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(-1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(-1.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(0.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(1 - 0.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(1.5)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(2)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|asin(pi - pi + 1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan(0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan(0.577350269)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan(1)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan(infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(-infinity, -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(10, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(1s, 1000ms)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(37.320508075, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(NaN, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-acos-asin-atan-atan2-serialize|color|atan2(infinity, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1 * clamp(-INFINITY*20deg, 0deg, infiniTY*10deg)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1 * max(INFinity*3deg, 0deg)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1 * max(nAn*2deg, 0deg)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1 * min(inFInity*4deg, 0deg)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1 * min(nan*3deg, 0deg)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * (-infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * (-infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * (infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * (infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * (infinity - infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * -infinity * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * 0 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * 1/infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * clamp(-Infinity, 0, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * clamp(-inFinity, infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * clamp(0, 10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * clamp(0, NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * clamp(NaN, 0, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * iNFinIty"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * infinity * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * infinity / infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * max(0, min(10, NaN))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * max(0, min(NaN, 10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1deg * max(NaN, min(0,10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1grad * nan"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1rad * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-angle|transform|1turn * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * clamp(-INFINITY*20px, 0px, infiniTY*10px)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * clamp(NaN * 2em, NaN * 4px, NaN * 8pt)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * max(INFinity*3px, 0px)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * max(NaN * 1cm, NaN * 2Q)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * max(nAn*2px, 0px)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * min(NaN * 1pt, NaN * 1cm)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * min(NaN * 2px, NaN * 4em)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * min(inFInity*4px, 0px)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1 * min(nan*3px, 0px)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1% * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1% * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1% * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1cm * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1in * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1mm * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1pc * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1pt * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * (-infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * (-infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * (infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * (infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * (infinity - infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * -infinity * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * 0 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * 1/infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * clamp(-Infinity, 0, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * clamp(-inFinity, infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * clamp(0, 10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * clamp(0, NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * clamp(NaN, 0, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * iNFinIty"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * infinity * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * infinity / infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * max(0, min(10, NaN))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * max(0, min(NaN, 10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * max(NaN, min(0,10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1px * nan"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-length|width|1q * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|-infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * (-infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * (-infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * (infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * (infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * (infinity - infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * -infinity * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * 0 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * 1/infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(-INFINITY*20, 0, infiniTY*10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(-Infinity, 0, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(-inFinity, infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(0, 10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(0, NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * clamp(NaN, 0, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * iNFinIty"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * infinity * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * infinity / infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * max(0, min(10, NaN))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * max(0, min(NaN, 10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * max(INFinity*3, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * max(NaN, min(0,10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * max(nAn*2, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * min(inFInity*4, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * min(nan*3, 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|1 * nan"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-number|opacity|infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1 * clamp(-INFINITY*20dppx, 0dppx, infiniTY*10dppx)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1 * max(INFinity*3dppx, 0dppx)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1 * max(nAn*2dppx, 0dppx)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1 * min(inFInity*4dppx, 0dppx)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1 * min(nan*3dppx, 0dppx)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * (-infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * (-infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * (infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * (infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * (infinity - infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * -infinity * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * 0 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * 1/infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * clamp(-Infinity, 0, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * clamp(-inFinity, infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * clamp(0, 10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * clamp(0, NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * clamp(NaN, 0, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * iNFinIty"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * infinity * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * infinity / infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * max(0, min(10, NaN))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * max(0, min(NaN, 10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1dppx * max(NaN, min(0,10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1x * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-resolution|image-resolution|1x * nan"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1 * clamp(-INFINITY*20s, 0s, infiniTY*10s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1 * max(INFinity*3s, 0s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1 * max(nAn*2s, 0s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1 * min(inFInity*4s, 0s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1 * min(nan*3s, 0s)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1ms * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * (-infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * (-infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * (infinity + -infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * (infinity + infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * (infinity - infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * -infinity * -infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * 0 * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * 1/infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * NaN"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * clamp(-Infinity, 0, infinity)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * clamp(-inFinity, infinity, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * clamp(0, 10, NaN)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * clamp(0, NaN, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * clamp(NaN, 0, 10)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * iNFinIty"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * infinity * infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * infinity / infinity"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * max(0, min(10, NaN))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * max(0, min(NaN, 10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * max(NaN, min(0,10))"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "css-values-calc-infinity-nan-serialize-time|transition-duration|1s * nan"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|#id"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|*"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|*|\\\\\\\\"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|.class"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:hover"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:lang( j\\\\ a )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:lang( ja )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:not( #head )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:not( .head )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:not( :hover )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:not( abc )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:nth-child( 1n - 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|:nth-child( 3n - 0)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|@namespace 'blah'; *|\\\\\\\\"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|[\\\\30zonk]"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "selector-serialize|color|div"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "serialize-values|content|attr( |bar )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "serialize-values|content|attr( |foo , \"\" )"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "serialize-values|content|attr(|bar)"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "serialize-values|content|attr(|bar, \"fallback\")"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border-top: 1px; border-right: 1px; border-bottom: 1px; border-left: 1px;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border-top: 1px; border-right: 1px; border-bottom: 1px; border-left: 1px; border-image: none;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border-top: 1px; border-right: 2px; border-bottom: 3px; border-left: 4px;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border: 1px; border-top-color: red;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border: 1px; border-top: 1px !important;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border: 1px; border-top: 1px;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border: 1px; border-top: 2px;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|border: solid; border-style: dotted"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|list-style-type: circle; list-style-position: inside; list-style-image: none;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: 4px;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|outline-width: 2px; outline-style: dotted; outline-color: blue;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|overflow-x: scroll; overflow-y: hidden;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|overflow-x: scroll; overflow-y: scroll;"
+    },
+    {
+      "added": "2026-08-24",
+      "id": "shorthand-values|color|padding-top: 1px; padding-right: 2px; padding-bottom: 3px; padding-left: 4px;"
+    }
+  ]
+}
