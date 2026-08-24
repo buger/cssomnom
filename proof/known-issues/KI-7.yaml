@@ -1,6 +1,9 @@
 id: KI-7
-title: CSSImportRule.styleSheet is always null; @import never fetches (documented offline parser)
-description: 'README documents CSSImportRule.styleSheet as null because the library is a static offline parser with no network or disk I/O to load external stylesheets. Full CSSOM associates the imported CSSStyleSheet on CSSImportRule.styleSheet. HEAD never fetches the href. The public getter now returns null to match README (no empty placeholder sheet). The user-observable capability gap remains: @import never loads. This KnownIssue tracks SYS-REQ-260821-H3BD (external_sheet_fetched=T => FALSE) and SW-REQ-260821-5W6X (css_import_rule_constructed=T, external_sheet_fetched=T, import_url_present=T => FALSE).'
+title: 'FIXED: CSSImportRule.styleSheet is the associated offline stylesheet (never null); @import never fetches'
+description: |
+    ORIGINAL HOLE: CSSImportRule.styleSheet exposed no usable associated stylesheet — README-documented null, then (pre-fix HEAD) a lazily-built empty internal sheet whose constructed flag was false, so hosts could not even supply content offline via replaceSync() (NotAllowedError). cssom-1 § 6.4.3 #the-cssimportrule-interface requires styleSheet to return the associated CSSStyleSheet object for the import rule; an unloaded import legitimately exposes an empty stylesheet (browser pre-load state).
+
+    FIXED 2026-08-23 (user-authorized): styleSheet now returns a real, constructed, publicly linked CSSStyleSheet (ownerRule === the import rule; parentStyleSheet resolves live through ownerRule to the owning sheet). Fetching href content remains OUT OF SCOPE permanently as a documented deviation, so the associated sheet stays empty until a host supplies content offline via replaceSync(). This KnownIssue tracked SYS-REQ-260821-H3BD (external_sheet_fetched=T => FALSE row remains unreachable by design) and SW-REQ-260821-5W6X (constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE after fix).
 affected_requirements:
     - SYS-REQ-260821-H3BD
     - SW-REQ-260821-5W6X
@@ -29,8 +32,10 @@ reproduction_steps:
     - '@import url(x.css) print; — associated loaded sheet / cssRules from fixtures/x.css plus media print'
 introduced_in: inception
 defect_class: latent
-remediation: Load the imported href so CSSImportRule.styleSheet is the associated CSSStyleSheet (or keep the documented offline contract and treat full CSSOM import loading as out of scope). Close this KI only after the product change lands. Overlay cannot land that change.
+remediation: FIXED 2026-08-23 (user-authorized, no-fetch object-graph fix). src/CSSOM.ts CSSImportRule.styleSheet now builds the associated sheet via the public constructed constructor path and sets _ownerRule + child href; parentStyleSheet/ownerRule resolve publicly and live. replaceSync() works so a host can populate the sheet offline. Fetching remains permanently out of scope (README documented deviation). Class-closure DEFECT report records the fix.
 notes:
+    - '2026-08-23: USER AUTHORIZED closing the object-graph defect offline: styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 (empty pre-load state), while fetch stays excluded forever as a documented deviation. The original loaded-sheet contract encoded the banned-fetch stalemate; both overlay reproducers were rewritten to the amended contract.'
+    - '2026-08-23: class-fix landed in src/CSSOM.ts. Both reproducers fail on parent commit (exit 1 x2 measured against HEAD code in an isolated copy) and pass on fixed HEAD (exit 0 x2 each). Full unit suite: all import-related failures green. DEFECT report records the class-fix.'
     - Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.
     - 'Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=T, fetched=T, import_url_present=T => FALSE. Do not ignore SAT for fetch=false. Status remains open (documented offline parser, no fetch).'
     - 'Acknowledge on approved guarantee SW-REQ-260821-5W6X: ship the documented offline no-fetch contract (SAT TRUE css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T). KI-7 tripwire remains the full-CSSOM FALSE row constructed=T, fetched=T, import_url_present=T. Status stays open; no fetch I/O; do not treat the DEFECT-3T1G href SAT as a fetch claim.'
@@ -38,8 +43,8 @@ notes:
     - 'Refreshed proof/evidence/ki-7.yaml so both overlay tripwires are in commands and input_set/freshness_hashes: KI-7-import-stylesheet-null.ts (reproducer_command) and KI-7-import-url-token.ts (extra e2e). Also hashed fixtures/x.css, src/parser.ts, src/CSSOM.ts. Tripwires still FAIL (exit 1); no fetch; status remains open.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
-release_disposition: ship_with_known_issue
-status: open
+release_disposition: fixed
+status: fixed
 history:
     - at: "2026-08-21T18:24:24Z"
       by: agent:grok-4.6
@@ -75,6 +80,20 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: append-note
+    - at: "2026-08-23T00:00:00Z"
+      by: agent:champ
+      action: scope-amendment-approved
+      detail: |
+        User authorized closing the KI-7 object-graph defect offline (2026-08-23): CSSImportRule.styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 #the-cssimportrule-interface — an empty stylesheet is the legitimate browser pre-load state for an unloaded import — while fetching href content stays excluded PERMANENTLY as a documented deviation. The original two-leg loaded-sheet contract encoded a banned-fetch stalemate and could never pass honestly; overlay reproducers were rewritten to the amended contract.
+    - at: "2026-08-24T07:05:00Z"
+      by: agent:champ
+      action: fixed
+      detail: |
+        Class-fix landed in src/CSSOM.ts (CSSImportRule.styleSheet getter): associated sheet now built via the constructed constructor path, _ownerRule set, child href synced, parentStyleSheet resolved live through ownerRule (stale cached field removed). replaceSync()/replace() work on the associated sheet so hosts supply content offline; no fetch anywhere. Verified: both reproducers exit 1 x2 on parent code (isolated copy of HEAD), exit 0 x2 on fixed HEAD; full unit suite import-related failures all green. Problem report: DEFECT (see proof/problem-reports/). Status open -> fixed; release_disposition ship_with_known_issue -> fixed.
+    - at: "2026-08-24T07:04:24Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-7.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -108,10 +127,8 @@ poc_quality:
             No signer, privileged role, or trust-boundary attacker. Any caller of parse() with @import can hit the hole. Rule 4 is Web3-only.
 template_class: offline_import_never_fetches
 isomorphic_sites:
-    - src/CSSOM.ts:1469
-    - src/CSSOM.ts:1502
-    - src/CSSOM.ts:1504
-    - src/parser.ts:734
-    - src/parser.ts:800
+    - 'src/CSSOM.ts #fixed class-fix: CSSImportRule.styleSheet getter builds the constructed associated sheet'
+    - 'src/CSSOM.ts #fixed class-fix: _ownerRule set; child href synced; live parentStyleSheet via ownerRule'
+    - 'src/parser.ts:827 #unchanged handleImportRule already extracts href/media/layer/supports from prelude'
 dedup_armor: |
     Only CSSImportRule.styleSheet / handleImportRule skip fetch of the imported href. Distinct from KI-2 (replace queueMicrotask) and from generic parse-recovery holes. Do not merge this KI into a generic @import prelude parse issue.

@@ -5,9 +5,9 @@ requirements:
     - SYS-REQ-260821-H3BD
     - SW-REQ-260821-5W6X
 command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
-status: fail
-observed_result: known_issue_reproduced
-executed_at: "2026-08-22T10:25:38Z"
+status: pass
+observed_result: known_issue_not_reproduced
+executed_at: "2026-08-24T07:04:24Z"
 input_set:
     - proof/reproducers/KI-7-import-stylesheet-null.ts
     - proof/reproducers/KI-7-import-url-token.ts
@@ -16,10 +16,12 @@ input_set:
     - src/CSSOM.ts
     - parser.ts
 freshness_hashes:
-    proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:7b9554a00b0a13881c95e4b541cc651357a181acb759011a767c6211bb900cb1
-    proof/reproducers/KI-7-import-url-token.ts: sha256:ff5a5c216bedf1362b256fb83480af040f181900fd594cc7de07b702583dab4b
+    proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:5601335bb8997dd14cc760433885fe5d34f4fa2e69067402d7c6bcaa628619d4
+    proof/reproducers/KI-7-import-url-token.ts: sha256:b3184291c4d76dadee9e24046fc3471190b35f46806f046a851a5464b308861d
     proof/reproducers/fixtures/x.css: sha256:7ecd2da96c2b58fdb9f239b8159e64c070c41d23702aa30ba02f988b6a13cb71
-    src/CSSOM.ts: sha256:5c014621049093b45a23e05ebcf7d26e781129fc22d74ab1022ecce5334bdf4a
+    src/CSSOM.ts: sha256:8f8d240691837f8c6af3e018eb0526a8358136843087cffa7e67c0a4063346b3
     src/parser.ts: sha256:ec99306fcb95e8ed446969253afa75f1f6f122bb1286af83f055bc501737ca48
 known_issues:
     - KI-7
+problem_reports:
+    - DEFECT-260824-5SWC

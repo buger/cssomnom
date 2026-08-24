@@ -1,0 +1,117 @@
+schema_version: 1
+id: DEFECT-260824-5SWC
+title: CSSImportRule.styleSheet exposed no usable associated stylesheet offline (null then non-constructable empty sheet)
+introduced_in: inception
+source:
+    type: audit_finding
+classification:
+    surface: runtime_code
+    severity: medium
+    defect_class: broken_object_graph_association
+    security_relevant: false
+description: |
+    cssom-1 § 6.4.3 #the-cssimportrule-interface requires CSSImportRule.styleSheet to
+    return the associated CSS style sheet object for the import rule; an unloaded
+    import legitimately exposes an empty stylesheet (browser pre-load state). This
+    library is an offline parser and never fetches @import hrefs (README documented
+    deviation, permanent), so the associated object graph had to carry the whole
+    contract — and it did not:
+
+      1. README/older HEAD: styleSheet evaluated to null (no associated object at all).
+      2. Pre-fix audit HEAD: a lazily-built EMPTY internal sheet was returned, but it
+         was created via createInternal with constructed flag false, so
+         replace()/replaceSync() threw NotAllowedError ("non-constructed") — a host
+         could not supply content offline either. The association was also only half
+         public (ownerRule set; parentStyleSheet cached eagerly at first access).
+
+    FIX (user authorized 2026-08-23; fetching stays out of scope forever): src/CSSOM.ts
+    builds the associated sheet via the public constructed constructor path, sets
+    _ownerRule, syncs the child href, and drops the stale parentStyleSheet cache so
+    linkage resolves live through ownerRule (cssom-1 § 6.4.3 associated stylesheet
+    notes). styleSheet is now always a real, linked, host-fillable CSSStyleSheet.
+root_cause:
+    missing_requirement: false
+    missing_test_partition: true
+    missing_mcdc_variable: false
+    notes: |
+        The assurance gap was contract-shaped: committed unit tests asserted
+        `styleSheet === null` (the README deviation), which canonized the hole instead of
+        catching it. The capability itself (associated stylesheet object per cssom-1) had
+        no passing witness anywhere in tests/. Proof's own overlay reproducer WAS the
+        catch: proof/reproducers/KI-7-import-stylesheet-null.ts failed continuously on the
+        public e2e surface from filing until this fix (exit 1 measured on pre-fix HEAD),
+        and the amended reproducers fail on parent code (exit 1 x2) and pass on fixed HEAD
+        (exit 0 x2). Tripwire both ways.
+impact_analysis:
+    affected_requirements:
+        - SYS-REQ-260821-H3BD
+        - SW-REQ-260821-5W6X
+    affected_interfaces: []
+    affected_code:
+        - src/CSSOM.ts
+disposition:
+    status: covered_by_requirement
+    owner: agent:champ
+    reviewer: agent:champ
+    reviewed_at: "2026-08-24T07:10:00Z"
+    requirements:
+        - SYS-REQ-260821-H3BD
+        - SW-REQ-260821-5W6X
+    evidence:
+        verified_by:
+            - tests/cssom-interfaces.test.ts
+            - tests/safe-exec-memory-guard.test.ts
+            - proof/reproducers/KI-7-import-stylesheet-null.ts
+            - proof/reproducers/KI-7-import-url-token.ts
+        requirement_mcdc_witnesses:
+            - requirement: SW-REQ-260821-5W6X
+              witness: "css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE"
+            - requirement: SYS-REQ-260821-H3BD
+              witness: "external_sheet_fetched=F => TRUE (fetch permanently excluded as documented deviation)"
+verification_note: |
+    Would Proof have caught it? YES — Proof's own overlay reproducer WAS the catch.
+    proof/reproducers/KI-7-import-stylesheet-null.ts asserted the cssom-1 associated-sheet
+    contract on the public API and failed continuously since KI-7 was filed (exit 1
+    measured today against pre-fix HEAD), independent of the unit suite that asserted
+    the null deviation. After the fix, the amended tripwire pair fails on parent commit
+    (exit 1 x2 each, measured against HEAD code in an isolated copy at
+    /tmp/opencode/ki7-parent) and passes on fixed HEAD (exit 0 x2 each).
+affects:
+    - SYS-REQ-260821-H3BD
+    - SW-REQ-260821-5W6X
+hardening:
+    strengthened_requirements:
+        - SYS-REQ-260821-H3BD
+        - SW-REQ-260821-5W6X
+    sibling_sweep:
+        scope:
+            - src/CSSOM.ts
+        checked_at: "2026-08-24"
+        reviewer: agent:champ
+        result: clean
+        notes: |
+            Only the CSSImportRule.styleSheet getter implemented the broken association;
+            handleImportRule (src/parser.ts) already extracted href/media/layer/supports
+            correctly and needed no change. No other rule class lazily synthesizes child
+            objects. walkRules/cascade never recursed into CSSImportRule children, so no
+            cascade behavior changes. Verified href/media probes: r.href and r.media.mediaText
+            were already spec-correct; r.mediaText does not exist as a direct property because
+            cssom-1 defines none on CSSImportRule (probe artifact, intentionally not "fixed").
+    regression_tests:
+        - tests/cssom-interfaces.test.ts
+        - tests/safe-exec-memory-guard.test.ts
+        - proof/reproducers/KI-7-import-stylesheet-null.ts
+        - proof/reproducers/KI-7-import-url-token.ts
+    mcdc_witnesses:
+        - requirement: SW-REQ-260821-5W6X
+          witness: "css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T => TRUE"
+history:
+    - at: "2026-08-24T07:01:29Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-24T07:10:00Z"
+      by: agent:champ
+      action: disposition-covered_by_requirement
+      detail: |
+        Class-fix shipped for KI-7 (user-authorized offline object-graph fix; fetch permanently excluded).
+        Reproducer tripwire verified both ways — exit 1 x2 on parent, exit 0 x2 on fixed HEAD.
