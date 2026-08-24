@@ -1,6 +1,6 @@
 id: KI-42
 title: parseComponentValueSync('url(a b)') returns truncated token 'a' instead of SyntaxError for <bad-url-token>
-description: 'parseComponentValueSync("url(a b)") returns CSSParserToken("a") - the truncated ident inside a <bad-url-token> - instead of throwing. css-syntax-3 ~2013-2016 marks <bad-url-token>/<bad-string-token> always-parse-errors; #parse-a-component-value (~2457-2484) turns consumption failure into a syntax error. The library own >1-value branch already throws for "a b" (src/parser-api.ts ~600-602), so rejecting the lone bad token is consistent internal behavior, not new policy. Same defect for url(a\\nb).'
+description: 'parseComponentValueSync("url(a b)") returns CSSParserToken("a") - the truncated ident inside a <bad-url-token> - instead of throwing. css-syntax-3 ~2013-2016 marks <bad-url-token>/<bad-string-token> always-parse-errors; #parse-a-component-value (~2457-2484) turns consumption failure into a syntax error. The library owns >1-value branch already throws for "a b" (src/parser-api.ts ~600-602), so rejecting the lone bad token is consistent internal behavior, not new policy. Same defect for url(a\\nb).'
 affected_requirements:
     - SYS-REQ-260823-BTC4
 evidence_manifests:
@@ -14,9 +14,13 @@ attacker_input: component-value strings containing bad-url constructs (raw white
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
 tripwire_mutation: In parseComponentValueSync, reject non-whitespace values whose type is bad-url/bad-string (or run ensureEOF-style failure detection after consume) before toParserToken; both bad-url legs flip red->green while the multi-value control stays green.
+mitigation: Until this closes, do not feed unquoted url() containing raw whitespace to parseComponentValueSync expecting a SyntaxError; pre-validate url() preludes or wrap calls and re-check returned token types for bad-url/bad-string.
+remediation: In parseComponentValueSync, reject non-whitespace component values whose consumed token type is bad-url/bad-string (ensureEOF-style failure detection after consume) before toParserToken, so lone bad tokens throw like the >1-value branch already does.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
+notes:
+    - '2026-08-24: ledger hygiene pass (mechanical): grammar fix in description (library own -> library owns the >1-value branch). No other content changed.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -29,9 +33,14 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: kill-domain=grammar_closed_set_validation
-kill_domain: grammar_closed_set_validation
-do_not_refile_as: 'valid url() href extraction loss in @import/border-image (KI-8 fixed; KI-114/KI-116): those cover VALID urls losing content; this is an always-parse-error bad token that must be REJECTED'
-
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
+    - at: "2026-08-24T22:25:02Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-42.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -56,3 +65,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call the exact documented parseComponentValueSync entry point; no gated or debug path involved.
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and the length-check filter.
+kill_domain: grammar_closed_set_validation
+do_not_refile_as: 'valid url() href extraction loss in @import/border-image (KI-8 fixed; KI-114/KI-116): those cover VALID urls losing content; this is an always-parse-error bad token that must be REJECTED'

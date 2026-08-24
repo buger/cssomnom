@@ -11,6 +11,7 @@ risk: availability
 cve_surface: none
 affected_api: getCascadedStyle() / Parser.resolveVariables() / cascade variable-resolver
 attacker_input: untrusted stylesheet text with a fan-out (doubling) acyclic custom-property chain plus one consuming property (a dozen declarations suffice)
+sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
@@ -21,8 +22,18 @@ owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
 status: open
-kill_domain: resource_exhaustion
-do_not_refile_as: var()/env() substitution blow-up (cycle or acyclic)
+history:
+    - at: "2026-08-22T20:12:11Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:18Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-17.yaml
+    - at: "2026-08-24T16:29:43Z"
+      by: agent:champ
+      action: edit
+      detail: set-sanitizer
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -61,11 +72,5 @@ poc_quality:
         no internal-only shortcut.
         reachability_verified: any host resolving var() on untrusted CSS via getCascadedStyle /
         Parser.resolveVariables reaches the unbounded expansion directly through public API.
-history:
-    - at: "2026-08-22T20:12:11Z"
-      by: agent:champ
-      action: created
-    - at: "2026-08-22T20:13:18Z"
-      by: human:cli
-      action: capture-evidence
-      detail: proof/evidence/ki-17.yaml
+kill_domain: resource_exhaustion
+do_not_refile_as: var()/env() substitution blow-up (cycle or acyclic)

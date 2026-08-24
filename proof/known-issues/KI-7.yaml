@@ -17,6 +17,7 @@ severity_basis: risk
 risk: correctness
 cve_surface: none
 affected_api: CSSImportRule.styleSheet
+attacker_input: caller-supplied @import URL inside stylesheet text handed to parse; local library input, network fetch intentionally out of scope (README documented deviation), no trust boundary crossed
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
 reproduction_steps:
@@ -32,6 +33,7 @@ reproduction_steps:
     - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] @import url(x.css) print; — associated loaded sheet / cssRules from fixtures/x.css plus media print'
 introduced_in: inception
 defect_class: latent
+minimization_status: not_applicable
 remediation: FIXED 2026-08-23 (user-authorized, no-fetch object-graph fix). src/CSSOM.ts CSSImportRule.styleSheet now builds the associated sheet via the public constructed constructor path and sets _ownerRule + child href; parentStyleSheet/ownerRule resolve publicly and live. replaceSync() works so a host can populate the sheet offline. Fetching remains permanently out of scope (README documented deviation). Class-closure DEFECT report records the fix.
 notes:
     - '2026-08-23: USER AUTHORIZED closing the object-graph defect offline: styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 (empty pre-load state), while fetch stays excluded forever as a documented deviation. The original loaded-sheet contract encoded the banned-fetch stalemate; both overlay reproducers were rewritten to the amended contract.'
@@ -39,8 +41,9 @@ notes:
     - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Product getter aligned to README-null (no empty placeholder CSSStyleSheet). Overlay reproducer still asserts the full CSSOM associated-loaded-sheet contract and FAILS while never-fetch remains. Did not close KI-7.'
     - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Overlay MC/DC keeps capability-gap + failing tripwire [known-issue] [ki: KI-7] on SYS-REQ-260821-H3BD fetched=T => FALSE and SW-REQ-260821-5W6X constructed=T, fetched=T, import_url_present=T => FALSE. Do not ignore SAT for fetch=false. Status remains open (documented offline parser, no fetch).'
     - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Acknowledge on approved guarantee SW-REQ-260821-5W6X: ship the documented offline no-fetch contract (SAT TRUE css_import_rule_constructed=T, external_sheet_fetched=F, import_url_present=T). KI-7 tripwire remains the full-CSSOM FALSE row constructed=T, fetched=T, import_url_present=T. Status stays open; no fetch I/O; do not treat the DEFECT-3T1G href SAT as a fetch claim.'
-    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Extra overlay e2e proof/reproducers/KI-7-import-url-token.ts covers user-shaped @import "x.css", url(x.css), url("https://example.com/x.css"), url(x.css) print;. Each asserts associated loaded sheet / cssRules from the imported file and FAILS while no-fetch holds. Did not implement fetch. KI-7 stays open.'
+    - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Extra overlay e2e proof/reproducers/KI-7-import-url-token.ts covers user-shaped @import "x.css", url(x.css), url("https://example.com/x.css"), url(x.css) print;. Each asserts associated loaded sheet / cssRules from the imported file and FAILS while no-fetch holds. Did not implement fetch. KI-7 remained unclosed when this note was written; it was closed as fixed on 2026-08-23 by the class-fix recorded above.'
     - '[superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] Refreshed proof/evidence/ki-7.yaml so both overlay tripwires are in commands and input_set/freshness_hashes: KI-7-import-stylesheet-null.ts (reproducer_command) and KI-7-import-url-token.ts (extra e2e). Also hashed fixtures/x.css, src/parser.ts, src/CSSOM.ts. Tripwires still FAIL (exit 1); no fetch; status remains open.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; minimization_status/attacker_input backfilled via proof CLI (release_disposition: fixed already present).'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 release_disposition: fixed
@@ -51,53 +54,74 @@ history:
       action: created
       detail: |
         Documented offline-parser capability gap vs full CSSOM import loading: CSSImportRule.styleSheet is README-null / HEAD empty placeholder; @import never fetches. Filed against SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X, and every requirement that currently carries a defensive unique-cause FALSE ignore so those rows are KI-tracked, not silent. Distinct from KI-1 (setProperty all), KI-2 (replace queueMicrotask), KI-3 (typed OM object-position), KI-4 (registerProperty after @property), KI-5 (invalid media not-all), and KI-6 (parser-api type 0). No product change.
+
+    - at: "2026-08-21T20:11:54Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-description,append-note
+
+    - at: "2026-08-21T20:20:17Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-7.yaml
+
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
+
     - at: "2026-08-21T21:10:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Narrowed affected_requirements to SYS-REQ-260821-H3BD and SW-REQ-260821-5W6X only. Removed dumpster tracking of unrelated defensive unique-cause FALSE ignores. KI-7 is solely the offline @import / CSSImportRule.styleSheet-null hole. No product change.
-    - at: "2026-08-21T20:11:54Z"
-      by: agent:grok-4.6
-      action: edit
-      detail: set-description,append-note
-    - at: "2026-08-21T20:20:17Z"
-      by: agent:grok-4.6
-      action: capture-evidence
-      detail: proof/evidence/ki-7.yaml
-    - at: "2026-08-21T20:32:43Z"
-      by: agent:grok-4.6
-      action: edit
-      detail: append-note
+
     - at: "2026-08-22T07:13:44Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note,set-release-disposition=ship_with_known_issue
+
     - at: "2026-08-22T09:15:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note,add-command
+
     - at: "2026-08-22T10:20:27Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
+
     - at: "2026-08-23T00:00:00Z"
       by: agent:champ
       action: scope-amendment-approved
       detail: |
         User authorized closing the KI-7 object-graph defect offline (2026-08-23): CSSImportRule.styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 #the-cssimportrule-interface — an empty stylesheet is the legitimate browser pre-load state for an unloaded import — while fetching href content stays excluded PERMANENTLY as a documented deviation. The original two-leg loaded-sheet contract encoded a banned-fetch stalemate and could never pass honestly; overlay reproducers were rewritten to the amended contract.
+
+    - at: "2026-08-24T07:04:24Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-7.yaml
+
     - at: "2026-08-24T07:05:00Z"
       by: agent:champ
       action: fixed
       detail: |
         Class-fix landed in src/CSSOM.ts (CSSImportRule.styleSheet getter): associated sheet now built via the constructed constructor path, _ownerRule set, child href synced, parentStyleSheet resolved live through ownerRule (stale cached field removed). replaceSync()/replace() work on the associated sheet so hosts supply content offline; no fetch anywhere. Verified: both reproducers exit 1 x2 on parent code (isolated copy of HEAD), exit 0 x2 on fixed HEAD; full unit suite import-related failures all green. Problem report: DEFECT (see proof/problem-reports/). Status open -> fixed; release_disposition ship_with_known_issue -> fixed.
-    - at: "2026-08-24T07:04:24Z"
-      by: agent:champ
-      action: refresh-evidence
-      detail: proof/evidence/ki-7.yaml
+
     - at: "2026-08-24T08:57:49Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-7.yaml
+
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable
+
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -116,19 +140,19 @@ poc_quality:
         real_infrastructure: constructs parse() from src/parser.ts and reads public CSSImportRule.styleSheet (not a mock).
         control_test / operational_path_verified: runner setup asserts @import produced a CSSImportRule (exit 2 if setup fails).
         current_deployment_relevance: [superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] hole is on HEAD CSSImportRule.styleSheet / handleImportRule; never fetches; README documents null; getter currently returns empty placeholder.
-        honest_severity / no_inflation: medium correctness matches missing imported sheet, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches missing imported sheet. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: [superseded 2026-08-23: object-graph fixed, fetch remains documented deviation] single node command, under 5 min. Asserts the full CSSOM associated-loaded-sheet contract so it FAILS while the hole is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is a never-fetched @import associated sheet, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Impact is a never-fetched @import associated sheet, not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            CSS OM documented-offline-parser hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS OM documented-offline-parser hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral capability gap: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of parse() with @import can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of parse() with @import can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: offline_import_never_fetches
 isomorphic_sites:
     - 'src/CSSOM.ts #fixed class-fix: CSSImportRule.styleSheet getter builds the constructed associated sheet'

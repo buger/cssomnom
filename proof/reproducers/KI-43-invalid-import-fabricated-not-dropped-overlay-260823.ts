@@ -65,7 +65,7 @@ describe('KI-43 grammar-invalid @import does not fabricate a CSSImportRule', () 
   // css-cascade-5 #at-import grammar: url(a b)x.css cannot match <url>|<string>,
   // so no CSSImportRule may enter cssRules for this input.
   // Verifies: SYS-REQ-260823-DRP5
-  test(`bad-url @import is dropped, not fabricated (${FABRICATED_IMPORT_RULE_BUDGET} fabrications allowed)`, () => {
+  test(`bad-url @import is rejected, never fabricated (budget ${FABRICATED_IMPORT_RULE_BUDGET})`, () => {
     const sheet = parse('@import url(a b)x.css;');
     const fabricated = Array.from(sheet.cssRules).filter((r) => r instanceof CSSImportRule);
     assert.equal(

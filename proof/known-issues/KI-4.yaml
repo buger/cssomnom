@@ -25,38 +25,50 @@ mitigation: 'Not a product defect. Restored origin gating: IME only when existin
 remediation: Withdrawn as overlay-wrong. Overlay proof/reproducers/KI-4-register-after-at-property.ts is a passing spec test (CSS-then-JS succeeds, JS-then-JS IME). Residual L-KI4 parks the angle. DEFECT-260821-F4MQ retracted.
 notes:
     - 'Scrutineer verdict: do not throw after @property. Restored CSS-then-JS succeed+JS-wins. JS-then-JS IME retained. KI-1,2,3,5,6 untouched.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note. release_disposition intentionally left unset: status=withdrawn has no honest value in the tool closed release_disposition set.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
 status: withdrawn
 history:
-    - at: "2026-08-21T21:00:00Z"
-      by: agent:grok-4.6
-      action: created
     - at: "2026-08-21T17:22:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
+
     - at: "2026-08-21T20:15:20Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+
     - at: "2026-08-21T20:20:16Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-4.yaml
+
     - at: "2026-08-21T20:24:47Z"
       by: agent:grok-4.6
       action: edit
       detail: set-title,set-description,set-mitigation,set-remediation,append-note,set-status=withdrawn
+
     - at: "2026-08-21T20:25:32Z"
       by: agent:grok-4.6
       action: edit
       detail: remove-evidence-manifest
+
+    - at: "2026-08-21T21:00:00Z"
+      by: agent:grok-4.6
+      action: created
+
     - at: "2026-08-21T22:50:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Rewrote poc_quality for withdrawn JS-wins (not IME throw). Overlay runner PASSES CSS-then-JS succeed+overwrite; JS-then-JS IME is retained. Unique-cause SAT for SYS-REQ-260821-EGCP JS-then-JS IME is witnessed on tests/mcdc-witness-registry.test.ts (bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE).
+
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -75,19 +87,19 @@ poc_quality:
         real_infrastructure: parse() registers @property then CSS.registerProperty (not a mock).
         control_test / operational_path_verified: runner setup asserts @property stored the name (exit 2 if setup fails); withdrawn contract is CSS-then-JS succeeds and JS wins (no IME). A second JS register still throws InvalidModificationError.
         current_deployment_relevance: withdrawn — HEAD origin gating is spec-correct (JS-then-JS IME; CSS-then-JS overwrite). Overlay runner PASSES.
-        honest_severity / no_inflation: medium was for a false IME-after-@property hole; withdrawn as overlay-wrong JS-wins, not theft. No submission.
+        honest_severity / no_inflation: medium was for a false IME-after-@property hole; withdrawn as overlay-wrong JS-wins. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Overlay runner PASSES the JS-wins contract (CSS-then-JS no throw; JS-then-JS IME).
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Withdrawn overlay-wrong IME-after-@property is not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Withdrawn overlay-wrong IME-after-@property is not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            CSS OM correctness class, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS OM correctness class. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral correctness class: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest exercises the JS-wins path. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.registerProperty after @property ingest exercises the JS-wins path. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: duplicate_register_skips_ime
 isomorphic_sites:
     - src/PropertyRegistry.ts:349

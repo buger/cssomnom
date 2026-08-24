@@ -39,6 +39,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-31.yaml
+    - at: "2026-08-24T22:24:59Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-31.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -63,7 +67,7 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public parse()/conditionText path hosts use; no gated or debug path involved.
         reachability_verified: public parse() IS the product surface; no ingress layer exists between host and serializer.
-kill_domain: condition_serialization_equivalence
-do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)
 dedup_armor: |
     serializeMediaCondition drops grouping parentheses between and/or operands, corrupting condition semantics on re-parse. Distinct from KI-5 (unbalanced-paren input recovery) and KI-41 (Parser-API adapter joins prelude tokens with '' - token-stream layer). Do not merge into generic media-text normalization without re-parse semantic-equivalence evidence.
+kill_domain: condition_serialization_equivalence
+do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)

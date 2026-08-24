@@ -14,6 +14,8 @@ attacker_input: CSSOM property writes of keyText with JS-coercible non-grammar s
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
 tripwire_mutation: Remove raw Number(valStr) coercion from src/CSSOM.ts normalizeKeyframeSelector so the setter validates via the tokenizer grammar and throws SyntaxError for non-percentage forms like '0x10%' — the secure setter legs then pass while the parser characterization leg stays green.
+mitigation: Wrap keyText writes in try/catch and set only grammar-valid forms (from, to, or a percentage in [0,100]); do not rely on the setter to reject JS-Number-coercible strings like '0x10%' until this closes.
+remediation: Drop the raw Number(valStr) coercion from normalizeKeyframeSelector so the keyText setter validates via the tokenizer grammar and throws SyntaxError with the value unchanged for non-percentage forms, agreeing with the parse path.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -34,6 +36,10 @@ history:
       action: edit
       detail: set-tripwire-mutation
     - at: "2026-08-24T08:49:58Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-44.yaml
+    - at: "2026-08-24T22:25:03Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-44.yaml

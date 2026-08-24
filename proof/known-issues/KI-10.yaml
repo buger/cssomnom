@@ -1,49 +1,64 @@
 id: KI-10
-title: ':disabled treats first-legend descendants as disabled (html concept-fieldset-disabled)'
+title: :disabled treats first-legend descendants as disabled (html concept-fieldset-disabled)
 description: |
     html #concept-fieldset-disabled: a fieldset is disabled if its disabled attribute is specified, or it is a descendant of another disabled fieldset and is not a descendant of that fieldset's first legend child. html #concept-fe-disabled uses the same first-legend skip for form controls. isElementDisabled walks to the ancestor fieldset then treats that ancestor's own disabled attribute as the element's, so #nested-in-legend and #in-legend both match :disabled. Overlay audit cannot change product code.
 affected_requirements:
     - SW-REQ-260821-6D9T
     - SYS-REQ-260821-PJ76
-severity: medium
-severity_basis: risk
-risk: correctness
-cve_surface: none
-affected_api: matches
-sanitizer: manual:logic
-reproducer_command: node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts
-reproduction_steps:
-    - 'Parse a fieldset[disabled] whose first legend contains an input and a nested fieldset (no own disabled).'
-    - 'Call matches(nestedFieldset, ":disabled") and matches(inputInLegend, ":disabled").'
-    - 'Observe both true. Intended both false.'
-    - 'Controls: the outer fieldset and an input outside the first legend still match :disabled.'
-    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts'
-introduced_in: inception
-defect_class: latent
 commands:
     - node --test tests/matcher.test.ts
     - node --experimental-strip-types --test proof/reproducers/KI-10-fieldset-disabled.ts
 evidence_manifests:
     - proof/evidence/ki-10.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches
+attacker_input: caller-supplied selector text matched by matches against a host DOM-like tree with :disabled; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts
+reproduction_steps:
+    - Parse a fieldset[disabled] whose first legend contains an input and a nested fieldset (no own disabled).
+    - Call matches(nestedFieldset, ":disabled") and matches(inputInLegend, ":disabled").
+    - Observe both true. Intended both false.
+    - 'Controls: the outer fieldset and an input outside the first legend still match :disabled.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-10-fieldset-disabled.ts'
+introduced_in: inception
+defect_class: latent
+minimization_status: not_applicable
 mitigation: Product fix landed in src/matcher.ts. isDisabledByAncestorFieldset walks each ancestor fieldset independently and skips descendants of that fieldset's first legend; it does not treat the ancestor's own disabled attribute as the element's.
-remediation: Closed after class-fix. html#concept-fieldset-disabled / #concept-fe-disabled first-legend skip is implemented. #nested-in-legend, #in-legend, and nested-legend-input are not :disabled. Class-closure DEFECT-260822-FSFK (renamed from invalid Crockford id DEFECT-260822-FSFL).
+remediation: Closed after class-fix. html#concept-fieldset-disabled /
 notes:
     - '2026-08-22: filed after fe7defa restore. Distinct from selector-parse empty-match (6D9T FRETish); attached because matcher is the selectors surface.'
     - '2026-08-22: class-fix landed. Overlay reproducer and tests/matcher.test.ts pass. Distinct from KI-13 listed-control gate.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; release_disposition/minimization_status/attacker_input backfilled via proof CLI using tool-accepted enum values.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: fixed
 status: fixed
 history:
-    - at: "2026-08-22T12:00:00Z"
-      by: agent:grok-4.6
-      action: created
-      detail: |
-        Live :disabled hole after fe7defa restore: first-legend nested fieldset and input match :disabled. Overlay reproducer FAILS. No product fix. No DEFECT.
     - at: "2026-08-22T06:00:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Product class-fix: isDisabledByAncestorFieldset / isDisabledFieldset / isFormControlDisabled skip first-legend descendants instead of walking up and treating the ancestor fieldset's disabled as the element's. Overlay reproducer and matcher.test.ts pass twice. DEFECT-260822-FSFK (was FSFL). Status fixed.
+
+    - at: "2026-08-22T12:00:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live :disabled hole after fe7defa restore: first-legend nested fieldset and input match :disabled. Overlay reproducer FAILS. No product fix. No DEFECT.
+
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
+
+    - at: "2026-08-24T16:30:10Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -62,26 +77,26 @@ poc_quality:
         real_infrastructure: linkedom document + matches() (not a mock).
         control_test / operational_path_verified: runner setup asserts fieldset[disabled] and input outside first legend still match :disabled.
         current_deployment_relevance: hole was on HEAD isElementDisabled walking to the ancestor's own disabled attribute; class-fix landed.
-        honest_severity / no_inflation: medium correctness matches wrong :disabled, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches wrong :disabled. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Asserts first-legend false so it FAILS while the bug is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            Selector matching hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            Selector matching hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: fieldset_first_legend_disabled
 isomorphic_sites:
-    - "src/matcher.ts:623 #fixed class-fix: :disabled uses isElementDisabled first-legend walk"
-    - "src/matcher.ts:844 #fixed class-fix: isInsideFirstLegend"
-    - "src/matcher.ts:873 #fixed class-fix: isDisabledByAncestorFieldset per-fieldset first-legend skip"
-    - "src/matcher.ts:889 #fixed class-fix: isFormControlDisabled"
-    - "src/matcher.ts:897 #fixed class-fix: isDisabledFieldset"
-    - "src/matcher.ts:926 #fixed class-fix: isElementDisabled listed-type + first-legend walk"
+    - 'src/matcher.ts:623 #fixed class-fix: :disabled uses isElementDisabled first-legend walk'
+    - 'src/matcher.ts:844 #fixed class-fix: isInsideFirstLegend'
+    - 'src/matcher.ts:873 #fixed class-fix: isDisabledByAncestorFieldset per-fieldset first-legend skip'
+    - 'src/matcher.ts:889 #fixed class-fix: isFormControlDisabled'
+    - 'src/matcher.ts:897 #fixed class-fix: isDisabledFieldset'
+    - 'src/matcher.ts:926 #fixed class-fix: isElementDisabled listed-type + first-legend walk'
 dedup_armor: |
     Only :disabled / :enabled via isElementDisabled on fieldset first-legend descendants. Distinct from bad-selector empty-match (6D9T FRETish). Do not merge this KI into a generic matcher miss without a second live :disabled hole.

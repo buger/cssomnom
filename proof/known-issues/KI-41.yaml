@@ -1,6 +1,6 @@
 id: KI-41
-title: 'Parser API at-rule prelude whitespace filter corrupts serialization: @media screen re-parses as at-rule named mediascreen'
-description: 'parseRuleListSync("@media screen{a{b:c}}")[0] serializes to "@mediascreen{a{}}, which re-parses to an at-rule NAMED mediascreen; @keyframes k -> @keyframesk{...} (named keyframesk), @layer l -> @layerl, @namespace svg url(...) -> @namespacesvgurl. Root cause: CSSParserAtRule.toString joins prelude tokens with empty separator directly after @name (src/parser-api.ts ~122-128) and tokensToPrelude strips whitespace/comment component values (~202-205), so the structural boundary between at-keyword and prelude is lost. Expected: css-syntax-3 round-trip requirement (#serialization ~3706-3713) - parse(serialize(parse(x))) must yield the same data structures; WICG note: whitespace is parsed into DOMStrings, i.e. preserved information, not garbage.'
+title: 'Parser API prelude whitespace filter corrupts serialization: @media screen re-parses as mediascreen'
+description: 'parseRuleListSync("@media screen{a{b:c}}")[0] serializes to "@mediascreen{a{}}", which re-parses to an at-rule NAMED mediascreen; @keyframes k -> @keyframesk{...} (named keyframesk), @layer l -> @layerl, @namespace svg url(...) -> @namespacesvgurl. Root cause: CSSParserAtRule.toString joins prelude tokens with empty separator directly after @name (src/parser-api.ts ~122-128) and tokensToPrelude strips whitespace/comment component values (~202-205), so the structural boundary between at-keyword and prelude is lost. Expected: css-syntax-3 round-trip requirement (#serialization ~3706-3713) - parse(serialize(parse(x))) must yield the same data structures; WICG note: whitespace is parsed into DOMStrings, i.e. preserved information, not garbage.'
 affected_requirements:
     - SYS-REQ-260823-PRT3
 evidence_manifests:
@@ -19,6 +19,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: 'Treat Parser API at-rule stringifier output as non-round-trippable today: do not persist or re-parse String(CSSParserAtRule) results; reconstruct preludes from the token arrays instead.'
 remediation: 'Preserve a separator between at-keyword and prelude in CSSParserAtRule.toString and stop tokensToPrelude from dropping whitespace tokens (src/parser-api.ts ~122-128, ~202-205) so serialization round-trips per css-syntax-3 #serialization; all four identity legs flip red->green.'
+notes:
+    - '2026-08-24: ledger hygiene pass (mechanical): balanced the unterminated double quote around the serialized at-rule sample in description. No other content changed.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -31,8 +33,14 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: set-mitigation,set-remediation
-kill_domain: data_corruption
-do_not_refile_as: 'media-condition text corruption inside MediaParser/CSSOM (KI-31/KI-115): this is the Parser-API adapter layer losing the keyword/prelude separator itself'
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
+    - at: "2026-08-24T22:25:02Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-41.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -59,3 +67,5 @@ poc_quality:
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and tokensToPrelude.
 dedup_armor: |
     CSSParserAtRule.toString/tokensToPrelude join prelude tokens with '' dropping whitespace ('@mediascreen'). Parser-API adapter layer; distinct from KI-31 (condition semantics inside MediaParser) and KI-21 (identifier escaping in serializer). Do not merge into serializer escaping work.
+kill_domain: data_corruption
+do_not_refile_as: 'media-condition text corruption inside MediaParser/CSSOM (KI-31/KI-115): this is the Parser-API adapter layer losing the keyword/prelude separator itself'

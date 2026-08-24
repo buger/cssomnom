@@ -1,37 +1,41 @@
 id: KI-13
-title: ':disabled matches non-form controls (div[disabled], p in fieldset[disabled])'
+title: :disabled matches non-form controls (div[disabled], p in fieldset[disabled])
 description: |
     html #selector-disabled matches actually-disabled elements only (html #concept-element-disabled / #concept-fe-disabled): listed form controls, fieldsets, and form-associated custom elements. isElementDisabled returns true for any element with a disabled attribute and for any descendant of a disabled fieldset, so matches(div[disabled], ':disabled') and matches(p inside fieldset[disabled], ':disabled') are true. :enabled already gates on the listed tag set. Distinct from KI-10 (first-legend exemption on a listed control / nested fieldset). Overlay audit cannot change product code.
 affected_requirements:
     - SW-REQ-260821-6D9T
     - SYS-REQ-260821-PJ76
-severity: medium
-severity_basis: risk
-risk: correctness
-cve_surface: none
-affected_api: matches
-sanitizer: manual:logic
-reproducer_command: node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts
-reproduction_steps:
-    - 'Parse <div disabled> and <fieldset disabled><p id=p></fieldset> with linkedom.'
-    - 'Call matches(div, ":disabled") and matches(p, ":disabled").'
-    - 'Observe both true. Intended both false (not listed form controls).'
-    - 'Controls: input[disabled], button[disabled], fieldset[disabled], and input inside fieldset[disabled] still match :disabled.'
-    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts'
-introduced_in: inception
-defect_class: latent
 commands:
     - node --test tests/matcher.test.ts
     - node --experimental-strip-types --test proof/reproducers/KI-13-disabled-non-form.ts
 evidence_manifests:
     - proof/evidence/ki-13.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches
+attacker_input: caller-supplied selector text matched by matches against a host DOM-like tree with disabled/fieldset ancestry; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts
+reproduction_steps:
+    - Parse <div disabled> and <fieldset disabled><p id=p></fieldset> with linkedom.
+    - Call matches(div, ":disabled") and matches(p, ":disabled").
+    - Observe both true. Intended both false (not listed form controls).
+    - 'Controls: input[disabled], button[disabled], fieldset[disabled], and input inside fieldset[disabled] still match :disabled.'
+    - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-13-disabled-non-form.ts'
+introduced_in: inception
+defect_class: latent
+minimization_status: not_applicable
 mitigation: Product fix landed in src/matcher.ts. isElementDisabled gates on html#concept-element-disabled listed types (button/input/select/textarea/optgroup/option/fieldset and form-associated custom elements) before applying concept-fe-disabled / concept-fieldset-disabled.
 remediation: Closed after class-fix. div[disabled] and p-in-fieldset[disabled] do not match :disabled. Listed form controls still match. Class-closure DEFECT-260822-DTYP.
 notes:
     - '2026-08-22: discovered during code MC/DC unique-cause leftover work after restore fe7defa. Distinct from KI-10 first-legend. Overlay reproducer is a failing tripwire.'
     - '2026-08-22: class-fix landed. Overlay reproducer and tests/matcher.test.ts pass. Distinct from KI-10 first-legend walk.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; release_disposition/minimization_status/attacker_input backfilled via proof CLI using tool-accepted enum values.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: fixed
 status: fixed
 history:
     - at: "2026-08-22T05:46:00Z"
@@ -44,6 +48,14 @@ history:
       action: edited
       detail: |
         Product class-fix: isElementDisabled returns false unless the element is actually disabled (html#concept-element-disabled). Overlay reproducer and matcher.test.ts pass twice. DEFECT-260822-DTYP. Status fixed.
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -62,26 +74,26 @@ poc_quality:
         real_infrastructure: linkedom document + matches() (not a mock).
         control_test / operational_path_verified: runner setup asserts listed form controls / fieldset[disabled] still match :disabled.
         current_deployment_relevance: hole was on HEAD isElementDisabled with no listed-control gate; class-fix landed.
-        honest_severity / no_inflation: medium correctness matches wrong :disabled, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches wrong :disabled. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Asserts non-form false so it FAILS while the bug is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Impact is a wrong :disabled match, not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            Selector matching hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            Selector matching hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of matches(':disabled') can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: disabled_non_form_control
 isomorphic_sites:
-    - "src/matcher.ts:623 #fixed class-fix: :disabled only via isElementDisabled listed types"
-    - "src/matcher.ts:628 #fixed class-fix: :enabled already gated by isDisableableElement"
-    - "src/matcher.ts:859 #fixed class-fix: isDisableableElement listed-tag + form-associated custom"
-    - "src/matcher.ts:926 #fixed class-fix: isElementDisabled returns false for non-listed elements"
-    - "src/matcher.ts:931 #fixed class-fix: listed form-control tags"
-    - "src/matcher.ts:942 #fixed class-fix: form-associated custom then false for div/span/p"
+    - 'src/matcher.ts:623 #fixed class-fix: :disabled only via isElementDisabled listed types'
+    - 'src/matcher.ts:628 #fixed class-fix: :enabled already gated by isDisableableElement'
+    - 'src/matcher.ts:859 #fixed class-fix: isDisableableElement listed-tag + form-associated custom'
+    - 'src/matcher.ts:926 #fixed class-fix: isElementDisabled returns false for non-listed elements'
+    - 'src/matcher.ts:931 #fixed class-fix: listed form-control tags'
+    - 'src/matcher.ts:942 #fixed class-fix: form-associated custom then false for div/span/p'
 dedup_armor: |
     Only :disabled overmatch on non-listed elements (div[disabled], p/span descendants of fieldset[disabled]). Distinct from KI-10, which is the first-legend exemption on listed controls / nested fieldsets. :enabled already checks the listed tag set at matcher.ts:628. Do not merge this KI into KI-10 without collapsing the listed-control gate vs first-legend walk-up distinction.

@@ -1,5 +1,5 @@
 id: KI-45
-title: 'CSS.parseValue(''10% x'') silently returns 10% while CSS.parseComponentValue(''10% x'') throws; both wrap css-syntax-3 #parse-a-component-value'
+title: 'CSS.parseValue(''10% x'') silently returns 10% while parseComponentValue throws on trailing garbage'
 description: 'parseValueSync lacks the EOF check its sibling parseComponentValueSync performs, so trailing garbage after one value is silently truncated. css-syntax-3 #parse-a-component-value (~2457-2484) returns a syntax error when input is non-empty after one component value, and both APIs document themselves as exposing those algorithms. Honest caveat: the thin WICG draft does not spell out parseValue failure semantics explicitly; the violation is anchored on the shared css-syntax algorithm plus internal inconsistency (sibling throws), not explicit parseValue prose. README documents both APIs without a leniency deviation.'
 affected_requirements:
     - SYS-REQ-260823-PVE7
@@ -14,6 +14,8 @@ attacker_input: value strings with trailing garbage after one component value; c
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
 tripwire_mutation: Add the same EOF/leftover check to parseValueSync that its sibling performs (~583-587) so it throws on trailing garbage; both rejection legs flip red->green while clean-value controls stay green.
+mitigation: For untrusted or hand-edited input use CSS.parseComponentValue(Sync), which already rejects trailing garbage, or pre-validate that the string contains exactly one component value before calling parseValue.
+remediation: Add the same EOF/leftover-input check to parseValueSync that parseComponentValueSync performs so it throws a syntax error on trailing garbage after one component value, matching css-syntax-3 #parse-a-component-value.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -25,9 +27,10 @@ history:
     - at: "2026-08-23T20:32:13Z"
       by: human:Leonid Bugaev
       action: created
-kill_domain: api_inconsistency
-do_not_refile_as: 'KI-42 lone <bad-url-token> inside a single component value: this issue is VALID single values followed by REMAINDER input rejected at the EOF step'
-
+    - at: "2026-08-24T22:25:03Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-45.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -52,3 +55,5 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names correctness honestly; severity low with the draft-spec caveat stated rather than inflated; cve_surface none.
         operational_path_verified: failing legs call the exact documented namespace members; no gated or debug path involved.
         reachability_verified: public CSS namespace IS the product surface; nothing stands between a host and parseValueSync.
+kill_domain: api_inconsistency
+do_not_refile_as: 'KI-42 lone <bad-url-token> inside a single component value: this issue is VALID single values followed by REMAINDER input rejected at the EOF step'

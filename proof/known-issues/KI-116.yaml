@@ -1,5 +1,5 @@
 id: KI-116
-title: 'border-image:url() serialization is not fixpoint-stable: pass 2 collapses url("") to none while background:url() round-trips'
+title: 'border-image:url() serialization is not fixpoint-stable: re-parse collapses url("") to none'
 description: 'Parsing ''.o{border-image:url()}'' retains the declaration on pass 1 (cssText ''border-image: url("");'', five border-image-* longhands set with source=url("")), but re-parsing its own serialization collapses to ''border-image: none;'' with border-image-source silently reset. css-syntax-3 #serialization requires parsing, serializing, and parsing again to produce the same data structures, and css-backgrounds-3 #borderimage admits an empty <<url>> source. Property-specific inconsistency proves an implementation bug rather than inherent syntax ambiguity: ''.o{background:url()}'' is fixpoint-stable across passes. Root subsystem: the same expandBorderImage quoted-url blindness as KI-114 — the serializer emits the quoted function form url(""), which css-syntax-3 #consume-ident-like-token delivers as a function token named url that expandBorderImage (src/shorthands.ts ~955-1001) fails to recognize as a source, leaving none in place; contractBorderImage then reconstructs ''none''. Adjacent trigger surface shared with KI-114 but distinct violated contract (round-trip stability vs first-parse retention), hence filed separately.'
 affected_requirements:
     - SYS-REQ-260823-BNDX
@@ -39,6 +39,10 @@ history:
       action: edit
       detail: complete-filing,poc-quality,kill-domain
     - at: "2026-08-24T11:12:50Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-116.yaml
+    - at: "2026-08-24T22:25:07Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-116.yaml

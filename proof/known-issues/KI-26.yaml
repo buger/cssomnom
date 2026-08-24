@@ -11,6 +11,7 @@ risk: data_integrity
 cve_surface: none
 affected_api: fetchWptFyiRun() cache persistence (scripts/wpt/browser/fetch-wptfyi.ts; pnpm run wpt:fetch-upstream)
 attacker_input: operator-supplied --cachePath option (absolute targets or ../ traversal relative forms)
+sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-26-wptfyi-cachepath-resolve-write-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
@@ -26,6 +27,14 @@ history:
       by: agent:champ
       action: created
     - at: "2026-08-23T19:40:31Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-26.yaml
+    - at: "2026-08-24T16:29:43Z"
+      by: agent:champ
+      action: edit
+      detail: set-sanitizer
+    - at: "2026-08-24T22:24:57Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-26.yaml

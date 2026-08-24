@@ -14,6 +14,7 @@ severity_basis: risk
 risk: correctness
 cve_surface: none
 affected_api: CSSStyleSheet.replace
+attacker_input: caller-supplied replacement stylesheet text passed to CSSStyleSheet.replace; local library input, no trust boundary crossed
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts
 reproduction_steps:
@@ -24,61 +25,83 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-2-replace-sync.ts'
 introduced_in: inception
 defect_class: latent
-mitigation: "replace() calls replaceSync on this turn and returns Promise.resolve(this). cssRules is populated before replace() returns."
-remediation: "Landed in src/CSSOM.ts. Overlay and tests/ki-2-8-12-class-fix.test.ts pass. DEFECT-260822-X46W. DEFECT-260821-QHWP kept (stale paperwork)."
+minimization_status: not_applicable
+mitigation: replace() calls replaceSync on this turn and returns Promise.resolve(this). cssRules is populated before replace() returns.
+remediation: Landed in src/CSSOM.ts. Overlay and tests/ki-2-8-12-class-fix.test.ts pass. DEFECT-260822-X46W. DEFECT-260821-QHWP kept (stale paperwork).
 notes:
     - |
-        2026-08-22: class-fix with KI-8/KI-12. replace() no longer queues parse in queueMicrotask. Overlay GREEN twice.
+      2026-08-22: class-fix with KI-8/KI-12. replace() no longer queues parse in queueMicrotask. Overlay GREEN twice.
     - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-QHWP is stale class-closure paperwork — do not delete.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; release_disposition/minimization_status/attacker_input backfilled via proof CLI using tool-accepted enum values.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: fixed
 status: fixed
 history:
-    - at: "2026-08-22T06:10:00Z"
-      by: agent:grok-4.6
-      action: edited
-      detail: |
-        Class-fix landed. Overlay GREEN twice. status=fixed.
-    - at: "2026-08-21T20:30:00Z"
-      by: agent:grok-4.6
-      action: created
-      detail: |
-        Live documented-deviation hole: CSSStyleSheet.replace parses inside queueMicrotask rather than Promise.resolve after replaceSync. Filed against SW-REQ-260821-PAKB / SYS-REQ-260821-GR67 MC/DC FALSE rows. No product fix. No DEFECT.
     - at: "2026-08-21T17:22:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
+
     - at: "2026-08-21T18:24:24Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         SAT TRUE row (deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE) is blocked by this live hole, not mute. Overlay reproducer now carries that assignment as [known-issue] [ki: KI-2] immediately above the failing test. No product fix.
+
+    - at: "2026-08-21T20:15:20Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: set-mitigation,set-remediation,set-status=fixed,add-command
+
+    - at: "2026-08-21T20:20:16Z"
+      by: agent:grok-4.6
+      action: capture-evidence
+      detail: proof/evidence/ki-2.yaml
+
+    - at: "2026-08-21T20:30:00Z"
+      by: agent:grok-4.6
+      action: created
+      detail: |
+        Live documented-deviation hole: CSSStyleSheet.replace parses inside queueMicrotask rather than Promise.resolve after replaceSync. Filed against SW-REQ-260821-PAKB / SYS-REQ-260821-GR67 MC/DC FALSE rows. No product fix. No DEFECT.
+
+    - at: "2026-08-21T20:32:43Z"
+      by: agent:grok-4.6
+      action: edit
+      detail: append-note
+
     - at: "2026-08-21T21:10:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Removed the claim that the overlay reproducer witnesses the PAKB SAT TRUE assignment as [known-issue]. The tripwire observes honored=F (cssRules empty on return) and must not claim honored=T. SAT TRUE remains named as blocked by this live hole (red is honest). No //mcdc:ignore on the SAT row. No product fix.
-    - at: "2026-08-21T20:15:20Z"
-      by: agent:grok-4.6
-      action: edit
-      detail: set-mitigation,set-remediation,set-status=fixed,add-command
-    - at: "2026-08-21T20:20:16Z"
-      by: agent:grok-4.6
-      action: capture-evidence
-      detail: proof/evidence/ki-2.yaml
-    - at: "2026-08-21T20:32:43Z"
-      by: agent:grok-4.6
-      action: edit
-      detail: append-note
+
     - at: "2026-08-21T22:50:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Rewrote reproduction_steps, dedup_armor, and poc_quality for the fixed contract: cssRules is populated before await. Overlay runner PASSES. Unique-cause SAT TRUE is witnessed on tests/mcdc-witness-cssom.test.ts replace(); honored=F is //mcdc:ignore:defensive next to that replace() test.
+
     - at: "2026-08-22T05:37:50Z"
       by: agent:grok-4.6
       action: edit
       detail: set-description,set-mitigation,set-remediation,append-note,set-status=open
+
+    - at: "2026-08-22T06:10:00Z"
+      by: agent:grok-4.6
+      action: edited
+      detail: |
+        Class-fix landed. Overlay GREEN twice. status=fixed.
+
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
+
+    - at: "2026-08-24T16:30:10Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -97,24 +120,24 @@ poc_quality:
         real_infrastructure: constructs src/CSSOM.ts CSSStyleSheet and calls public replace (not a mock).
         control_test / operational_path_verified: runner setup asserts constructed sheet starts empty and replace() returns a Promise (exit 2 if setup fails).
         current_deployment_relevance: hole is on HEAD replace(); parse runs in queueMicrotask so cssRules is empty when replace() returns.
-        honest_severity / no_inflation: medium correctness matches empty cssRules at return, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches empty cssRules at return. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Asserts the README sync contract so it FAILS while the bug is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Historical impact was empty cssRules until a microtask, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Historical impact was empty cssRules until a microtask, not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            CSS OM documented-deviation class, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS OM documented-deviation class. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral correctness class: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleSheet.replace can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSSStyleSheet.replace can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: documented_sync_parse_deferred
 isomorphic_sites:
-    - "src/CSSOM.ts:339 #fixed class-fix: replace() runs replaceSync on this turn"
-    - "src/CSSOM.ts:350 #fixed class-fix: replaceSync before the promise settles"
-    - "src/CSSOM.ts:351 #fixed class-fix: Promise.resolve(this) so cssRules is populated"
-    - "src/CSSOM.ts:401 #na insertRule; replaceSync tokenize path is not a queueMicrotask sibling"
+    - 'src/CSSOM.ts:339 #fixed class-fix: replace() runs replaceSync on this turn'
+    - 'src/CSSOM.ts:350 #fixed class-fix: replaceSync before the promise settles'
+    - 'src/CSSOM.ts:351 #fixed class-fix: Promise.resolve(this) so cssRules is populated'
+    - 'src/CSSOM.ts:401 #na insertRule; replaceSync tokenize path is not a queueMicrotask sibling'
 dedup_armor: |
     Only CSSStyleSheet.replace is the documented-sync-parse hole (queueMicrotask vs Promise.resolve after replaceSync). replaceSync at CSSOM.ts:401 still tokenizes and consumeListOfRules immediately. Do not merge this KI into a generic Promise/async stylesheet hole.

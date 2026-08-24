@@ -1,5 +1,5 @@
 id: KI-123
-title: Unrepresentable declaration values over-reify into subclasses instead of direct CSSStyleValue with [[associatedProperty]]
+title: Unrepresentable declaration values over-reify into subclasses instead of direct CSSStyleValue
 description: 'StylePropertyMap.get() reifies values of properties whose css-typed-om-1 normalization row ends in reify-as-a-CSSStyleValue as subclass instances: get(color) after color: red returns CSSKeywordValue, after #bbff00 or rgb() returns a CSSRGB color value. #reify-stylevalue "Property-specific Rules" defines reification for every property and the color/border-top-color rows step 2 say "Otherwise, reify as a CSSStyleValue and return the result"; #reify-failure + #reify-as-a-cssstylevalue require a new direct CSSStyleValue whose [[associatedProperty]] internal slot is set to the property. Local WPT color.html runUnsupportedPropertyTests pins "Unsupported value must be a CSSStyleValue and not one of its subclasses"; the wpt-sandbox baseline carries 204 such failing rows across the typed-om property fixtures (color.html x5, border-color.html x20+). The currentcolor keyword control (identifier reification) is correct today.'
 affected_requirements:
     - SYS-REQ-260824-XE59
@@ -39,6 +39,10 @@ history:
       action: edit
       detail: complete-filing,poc-quality
     - at: "2026-08-24T11:12:53Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-123.yaml
+    - at: "2026-08-24T22:25:09Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-123.yaml

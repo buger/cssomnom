@@ -31,8 +31,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: set-mitigation,set-remediation
-kill_domain: silent_data_loss
-do_not_refile_as: 'toParserRule type mapping misclassification (KI-6/KI-14, fixed): this is content loss inside correctly-typed CSSParserQualifiedRule nodes, not raw-rule/at-rule misclassification'
+    - at: "2026-08-24T22:25:02Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-40.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -59,3 +61,5 @@ poc_quality:
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and toParserRule.
 dedup_armor: |
     Parser-API CSSParserQualifiedRule.body loses declaration nodes (style branch dead behind truthy empty cssRules). Distinct from KI-6/KI-14 (rule-type mapping, fixed). Do not merge into adapter mapping bugs without a body-fidelity parse round-trip.
+kill_domain: silent_data_loss
+do_not_refile_as: 'toParserRule type mapping misclassification (KI-6/KI-14, fixed): this is content loss inside correctly-typed CSSParserQualifiedRule nodes, not raw-rule/at-rule misclassification'

@@ -14,6 +14,7 @@ severity_basis: risk
 risk: correctness
 cve_surface: none
 affected_api: MediaParser.parse
+attacker_input: caller-supplied media-condition text passed to MediaParser.parse; local library input, no trust boundary crossed
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-5-media-unbalanced.ts
 reproduction_steps:
@@ -23,42 +24,61 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-5-media-unbalanced.ts'
 introduced_in: inception
 defect_class: latent
+minimization_status: not_applicable
 mitigation: Unclosed () / functions in a media query force invalid so serializeMediaQuery emits not all. css-syntax-3 EOF auto-close is marked unclosed; MediaParser.normalizeAndValidate rejects those constructs before canonical re-serialize.
 remediation: Landed in src/parser.ts (unclosed on consume-simple-block / consume-function EOF), src/types.ts, and src/MediaParser.ts (hasUnclosedConstruct). Class-closure DEFECT-260821-H3KB.
 notes:
     - '2026-08-22: src logic restored to origin/main (264c2ea / 0.1.4) in fe7defa; Implements comments kept. Campaign class-fixes are gone. Reopened. Overlay reproducer is again a failing tripwire. DEFECT-260821-H3KB is stale class-closure paperwork — do not delete.'
     - '2026-08-22: class-fix re-landed after fe7defa restore. RED tests/media-validation.test.ts (( -> (()). GREEN twice Node 24: ((, (color, foo(, mixed lists serialize as not all; balanced (foo()) / (color) / (example, all,) unchanged. mediaqueries-4 § 3.2 #error-handling; css-syntax-3 § 5.5.9 / § 5.5.10 / § 2.2 #autoclosing.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; release_disposition/minimization_status/attacker_input backfilled via proof CLI using tool-accepted enum values.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: fixed
 status: fixed
 history:
-    - at: "2026-08-21T21:00:00Z"
-      by: agent:grok-4.6
-      action: created
     - at: "2026-08-21T17:22:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
+
     - at: "2026-08-21T20:15:20Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
+
     - at: "2026-08-21T20:20:16Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-5.yaml
+
     - at: "2026-08-21T20:32:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
+
+    - at: "2026-08-21T21:00:00Z"
+      by: agent:grok-4.6
+      action: created
+
     - at: "2026-08-22T05:37:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=open
+
     - at: "2026-08-22T06:05:49Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=fixed
+
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
+
+    - at: "2026-08-24T16:30:10Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -77,27 +97,27 @@ poc_quality:
         real_infrastructure: calls MediaParser.parse and serializeMediaQuery (not a mock).
         control_test / operational_path_verified: runner asserts '&test' still serializes as not all (exit 2 if that control fails); intended contract is '((' -> 'not all'.
         current_deployment_relevance: hole was on HEAD MediaParser.normalizeAndValidate / serializeMediaQuery before the class-fix.
-        honest_severity / no_inflation: medium correctness matches recovered parens, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches recovered parens. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Asserts the intended not-all serialization so it FAILS while the bug is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is '(())' instead of 'not all', not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Impact is '(())' instead of 'not all', not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            CSS OM correctness hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS OM correctness hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral correctness defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of MediaParser.parse can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of MediaParser.parse can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: invalid_mq_not_not_all
 isomorphic_sites:
-    - "src/MediaParser.ts:33 #fixed class-fix: hasUnclosedConstruct walks recovered blocks"
-    - "src/MediaParser.ts:120 #fixed class-fix: unclosed query is invalid / not all"
-    - "src/parser.ts:1502 #fixed class-fix: consumeBlock marks unclosed on EOF"
-    - "src/parser.ts:1533 #fixed class-fix: consumeFunction marks unclosed on EOF"
-    - "src/types.ts:176 #fixed class-fix: SimpleBlock.unclosed recovered-EOF flag"
-    - "src/types.ts:184 #fixed class-fix: CSSFunction.unclosed recovered-EOF flag"
-    - "src/MediaParser.ts:821 #na serializeMediaQuery already emits not all when invalid; not the validator hole"
+    - 'src/MediaParser.ts:33 #fixed class-fix: hasUnclosedConstruct walks recovered blocks'
+    - 'src/MediaParser.ts:120 #fixed class-fix: unclosed query is invalid / not all'
+    - 'src/parser.ts:1502 #fixed class-fix: consumeBlock marks unclosed on EOF'
+    - 'src/parser.ts:1533 #fixed class-fix: consumeFunction marks unclosed on EOF'
+    - 'src/types.ts:176 #fixed class-fix: SimpleBlock.unclosed recovered-EOF flag'
+    - 'src/types.ts:184 #fixed class-fix: CSSFunction.unclosed recovered-EOF flag'
+    - 'src/MediaParser.ts:821 #na serializeMediaQuery already emits not all when invalid; not the validator hole'
 dedup_armor: |
     serializeMediaQuery already returns 'not all' when query.invalid is true (&test, screen and, trailing comma). The hole is MediaQueryValidator accepting unbalanced '((' as general-enclosed so invalid stays unset. Do not merge this KI into a generic serializer defect without a second live recovered-invalid query.

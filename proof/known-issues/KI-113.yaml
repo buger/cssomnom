@@ -20,6 +20,32 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not treat getPropertyValue('font') text as grammar-validated after parsing stylesheets containing keyword-mixed font declarations.
 remediation: Run the same shorthand grammar validation used by setProperty over declarations produced by parse-a-css-declaration-block so grammar-failing values are dropped instead of stored verbatim.
+notes:
+    - 'Evidence captured via ''proof evidence capture KI-113'' by genuine re-execution at 2026-08-23T11:36:30Z (proof/evidence/ki-113.yaml); reproducer ran red twice before filing (exit 1 both runs: 6 tests, 2 control passes, 4 defect failures). Distinct root from KI-112: accept-invalid on the parse-a-css-declaration-block path only (setProperty/insertRule drop correctly). Adjacent observation recorded honestly: the same path also retains other grammar-failing values verbatim (e.g. ''.o{color:10px;}''), so the root is absence of value-grammar validation in declaration-block parsing. Bound to draft SYS-REQ-260823-0BRJ created through ''proof req new''; informal until cssom variables can be declared.'
+owner: agent:ox-alpha
+review_date: "2026-09-23"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-23T11:33:23Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-23T11:34:47Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+    - at: "2026-08-23T11:54:35Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: set-review-date
+    - at: "2026-08-23T11:54:35Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: note
+    - at: "2026-08-24T22:25:06Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-113.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -44,25 +70,3 @@ poc_quality:
         no_inflation: single property grammar, medium ceiling.
         operational_path_verified: all three ingestion paths compared through public APIs.
         reachability_verified: N/A-eligible local-behavioral finding through real parse() ingress.
-notes:
-    - 'Evidence captured via ''proof evidence capture KI-113'' by genuine re-execution at 2026-08-23T11:36:30Z (proof/evidence/ki-113.yaml); reproducer ran red twice before filing (exit 1 both runs: 6 tests, 2 control passes, 4 defect failures). Distinct root from KI-112: accept-invalid on the parse-a-css-declaration-block path only (setProperty/insertRule drop correctly). Adjacent observation recorded honestly: the same path also retains other grammar-failing values verbatim (e.g. ''.o{color:10px;}''), so the root is absence of value-grammar validation in declaration-block parsing. Bound to draft SYS-REQ-260823-0BRJ created through ''proof req new''; informal until cssom variables can be declared.'
-owner: agent:ox-alpha
-review_date: "2026-09-23"
-release_disposition: ship_with_known_issue
-status: open
-history:
-    - at: "2026-08-23T11:33:23Z"
-      by: agent:ox-alpha
-      action: created
-    - at: "2026-08-23T11:34:47Z"
-      by: agent:ox-alpha
-      action: edit
-      detail: append-note
-    - at: "2026-08-23T11:54:35Z"
-      by: agent:ox-alpha
-      action: edit
-      detail: set-review-date
-    - at: "2026-08-23T11:54:35Z"
-      by: agent:ox-alpha
-      action: edit
-      detail: note

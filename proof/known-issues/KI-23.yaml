@@ -11,6 +11,7 @@ risk: data_integrity
 cve_surface: none
 affected_api: scripts/wpt/browser/run.ts CLI (pnpm run wpt:browser:*)
 attacker_input: --browser argv value carrying ../ traversal segments (operator-typed or forwarded by wrappers/CI matrices)
+sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-23-wpt-browser-flag-path-escape-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
@@ -26,6 +27,14 @@ history:
       by: agent:champ
       action: created
     - at: "2026-08-23T19:40:30Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-23.yaml
+    - at: "2026-08-24T16:29:43Z"
+      by: agent:champ
+      action: edit
+      detail: set-sanitizer
+    - at: "2026-08-24T22:24:56Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-23.yaml

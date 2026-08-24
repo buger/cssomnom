@@ -11,6 +11,7 @@ risk: data_integrity
 cve_surface: none
 affected_api: CSSStyleRule.cssText / serializer.serialize() / serializeDeclarations()
 attacker_input: 'untrusted stylesheet text containing escaped hash spellings (#\3B, #\7d) or escaped function names (a\7d(...)) that survive naive allowlists precisely because they are escaped'
+sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-21-serializer-hash-identifier-escape-overlay-260822.ts
 introduced_in: inception
 defect_class: latent
@@ -21,8 +22,18 @@ owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
 status: open
-kill_domain: injection_breakout
-do_not_refile_as: serializer identifier-context escape omission (hash/function)
+history:
+    - at: "2026-08-22T20:12:42Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-22T20:13:20Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-21.yaml
+    - at: "2026-08-24T16:29:43Z"
+      by: agent:champ
+      action: edit
+      detail: set-sanitizer
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -62,11 +73,5 @@ poc_quality:
         serialize/re-embed loop hosts perform.
         reachability_verified: public serializer surface is the product surface; any host that
         serializes parsed attacker CSS and re-reads it reaches the breakout with no extra privileges.
-history:
-    - at: "2026-08-22T20:12:42Z"
-      by: agent:champ
-      action: created
-    - at: "2026-08-22T20:13:20Z"
-      by: human:cli
-      action: capture-evidence
-      detail: proof/evidence/ki-21.yaml
+kill_domain: injection_breakout
+do_not_refile_as: serializer identifier-context escape omission (hash/function)

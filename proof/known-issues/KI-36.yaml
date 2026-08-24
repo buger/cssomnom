@@ -1,5 +1,5 @@
 id: KI-36
-title: '122 generated shorthands missing from runtime expansion table: setProperty never expands gap/transition/grid/etc., corrupting cascade order'
+title: '122 generated shorthands missing from runtime table: setProperty never expands gap/transition/grid'
 description: 'src/shorthands.ts SHORTHANDS (~L1943) hand-wires only 44 entries while src/data/gen/shorthands.ts generates 165; 122 generated shorthands (gap, transition, animation, grid, columns, place-items/place-content/place-self, column-rule, text-decoration, mask, offset and more) never resolve at runtime, so setProperty(''gap'',''10px'') stores the shorthand verbatim instead of expanding it. Observed: getPropertyValue(''row-gap'') returns '''' after setProperty(''gap'',''10px'') although the declaration block conceptually contains row-gap:10px; setting row-gap first and gap second leaves cssText ''row-gap: 30px; gap: 10px;'' with row-gap still reading 30px - the later gap declaration must win per greatest cascading order; setting gap then row-gap yields cssText ''gap: 10px; row-gap: 20px;'' keeping a stale unexpanded shorthand beside its override. Re-parsing such cssText preserves the wrong winner (cascade corruption across round-trips). cssom-1 #concept-declarations-specified-order (Overview.bs:2243-2245) requires declarations in specified order to have shorthand properties expanded into their longhands in canonical order with only the greatest cascading order representative kept; css-gaps-1 #gap-shorthand (Overview.bs:236) defines gap as a shorthand that sets row-gap and column-gap in one declaration; css-transitions-1 #transition-shorthand-property (Overview.bs:510) defines transition as combining its longhands into one property. Project-contract anchor: AGENTS.md Automation Over Hardcoding requires codegen output to back runtime tables. Correctness fault (silent data loss / cascade corruption): any longhand read or persisted cssText silently disagrees with the authored declaration block. Distinctness: KI-112/113 cover font shorthand grammar roots; KI-114/116 cover expandBorderImage quoted-url handling; this issue is the missing table coverage itself.'
 affected_requirements:
     - SYS-REQ-260823-SHX6
@@ -39,6 +39,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-36.yaml
+    - at: "2026-08-24T22:25:00Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-36.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -63,7 +67,7 @@ poc_quality:
         no_inflation: severity_basis reproducer with executed manifest attached; risk names data_integrity honestly; cve_surface none.
         operational_path_verified: failing legs call the exact public setProperty/getPropertyValue/cssText path hosts use; no gated or debug path involved.
         reachability_verified: public CSSStyleDeclaration IS the product surface; no ingress layer exists between host and the expansion table.
-kill_domain: silent_data_loss
-do_not_refile_as: font shorthand grammar root divergence (KI-112/KI-113); border-image quoted-url expansion loss (KI-114/KI-116)
 dedup_armor: |
     Runtime SHORTHANDS map lacks 122 generated entries - silent non-expansion / cascade-order corruption class. Distinct from KI-112/113 (font shorthand grammar and serialization roots) and KI-114/116 (border-image quoted-url expansion). Do not merge single-shorthand grammar fixes into table completeness; each missing family needs its own tripwire.
+kill_domain: silent_data_loss
+do_not_refile_as: font shorthand grammar root divergence (KI-112/KI-113); border-image quoted-url expansion loss (KI-114/KI-116)

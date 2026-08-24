@@ -4,17 +4,18 @@ description: |
     CSS.parseStylesheetSync('@keyframes x { from { color: red } }') adapted the parent CSSKeyframesRule (type 7) to a CSSParserAtRule, then mapped each CSSKeyframeRule child (type 8) through the numeric at-rule branch because type is not 1/17/0. The child has no .name / .media / .cssRules, so the adapter emitted {name:"unknown", prelude:[], body:null} instead of a CSSParserQualifiedRule with prelude "from" and a color declaration. Distinct from KI-6 (type-0 CSSLayer*/CSSContainerRule became CSSParserRawRule). Product fix: type 8 / CSSKeyframeRule maps to CSSParserQualifiedRule via keyText+style (from/to grammar) or cssText re-tokenize. Class-closure DEFECT-260822-KF14.
 affected_requirements:
     - INT-REQ-260821-WTPD
-severity: medium
-severity_basis: risk
-risk: correctness
-cve_surface: none
-affected_api: CSS.parseStylesheetSync
-sanitizer: manual:logic
 commands:
     - node --test tests/parser-api.test.ts
     - node --test tests/parser-api-keyframe-adapter.test.ts
 evidence_manifests:
     - proof/evidence/ki-14.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseStylesheetSync
+attacker_input: caller-supplied keyframes block containing an unknown child at-rule parsed by CSS.parseStylesheetSync; local library input, no trust boundary crossed
+sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types proof/reproducers/KI-14-keyframes-parser-api.ts
 reproduction_steps:
     - 'Call CSS.parseStylesheetSync(''@keyframes x { from { color: red } }'').'
@@ -24,13 +25,16 @@ reproduction_steps:
     - 'Optional overlay runner (not in pnpm test:node): node --experimental-strip-types proof/reproducers/KI-14-keyframes-parser-api.ts'
 introduced_in: inception
 defect_class: latent
+minimization_status: not_applicable
 mitigation: CSSKeyframeRule (type 8) adapts to CSSParserQualifiedRule with keyframe-selector prelude and style declarations as body.
 remediation: Landed in src/parser-api.ts (cssomKeyframeToQualified). Class-closure DEFECT-260822-KF14.
 notes:
     - '2026-08-22: discovered during code MC/DC unique-cause leftover work after restore fe7defa. Not KI-6 (type-0 at-rules). Overlay reproducer is a failing tripwire.'
     - '2026-08-22: product class-fix. Type 8 maps to CSSParserQualifiedRule (from/to grammar keywords). Overlay reproducer and tests/parser-api-keyframe-adapter.test.ts pass. DEFECT-260822-KF14.'
+    - '2026-08-24: ledger hygiene pass (mechanical): replaced copy-pasted Web3 rubric boilerplate in poc_quality notes/not_applicable with a single dated domain note; release_disposition/minimization_status/attacker_input backfilled via proof CLI using tool-accepted enum values.'
 owner: agent:grok-4.6
 review_date: "2026-09-21"
+release_disposition: fixed
 status: fixed
 history:
     - at: "2026-08-22T05:46:00Z"
@@ -42,6 +46,14 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=fixed,add-command
+    - at: "2026-08-24T16:29:55Z"
+      by: agent:champ
+      action: edit
+      detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
+    - at: "2026-08-24T16:30:11Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
@@ -60,24 +72,24 @@ poc_quality:
         real_infrastructure: CSS.parseStylesheetSync from src/index.ts (not a mock).
         control_test / operational_path_verified: runner setup asserts @media nested style and top-level from { } still adapt to CSSParserQualifiedRule.
         current_deployment_relevance: hole was on HEAD toParserRule numeric at-rule branch including type 8 before the class-fix.
-        honest_severity / no_inflation: medium correctness matches unknown at-rule child, not theft. No submission.
+        honest_severity / no_inflation: medium correctness matches unknown at-rule child. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reproducible: single node command, under 5 min. Asserts CSSParserQualifiedRule so it FAILS while the bug is present.
-        Web3 rules 2/4/7 left false with not_applicable reasons (skipped on this non-Web3 project).
+        Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified N/A: local-behavioral, no trust-boundary crossing.
     not_applicable:
         attacker_profitability: |
-            No attacker cost vs revenue. Impact is an unknown at-rule instead of a keyframe qualified rule, not extractable value. Rule 7 is Web3-only.
+            No attacker cost vs revenue. Impact is an unknown at-rule instead of a keyframe qualified rule, not extractable value. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         quantitative_impact: |
-            CSS Parser API adapter hole, not DeFi. No token balances, TVL, or on-chain value. Rule 2 is Web3-only.
+            CSS Parser API adapter hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
         reachability_verified: |
             local-behavioral adapter defect: no ingress access-control layer to traverse, so end-to-end reachability is not applicable
         untrusted_attacker: |
-            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync with @keyframes can hit the hole. Rule 4 is Web3-only.
+            No signer, privileged role, or trust-boundary attacker. Any caller of CSS.parseStylesheetSync with @keyframes can hit the hole. Domain note (2026-08-24): CSS parsing library — pure text-processing surface, no asset/value dimension; Web3 rule-set not applicable.
 template_class: adapter_keyframe_type_eight
 isomorphic_sites:
-    - "src/parser-api.ts:305 #fixed class-fix: cssomKeyframeToQualified maps type 8 to qualified rule"
-    - "src/parser-api.ts:414 #fixed class-fix: CSSKeyframeRule / type 8 branch before numeric at-rule"
-    - "src/parser-api.ts:415 #fixed class-fix: keyframe child is CSSParserQualifiedRule"
-    - "src/CSSOM.ts:1331 #na CSSFontFaceDescriptors; not the keyframe adapter sibling"
+    - 'src/parser-api.ts:305 #fixed class-fix: cssomKeyframeToQualified maps type 8 to qualified rule'
+    - 'src/parser-api.ts:414 #fixed class-fix: CSSKeyframeRule / type 8 branch before numeric at-rule'
+    - 'src/parser-api.ts:415 #fixed class-fix: keyframe child is CSSParserQualifiedRule'
+    - 'src/CSSOM.ts:1331 #na CSSFontFaceDescriptors; not the keyframe adapter sibling'
 dedup_armor: |
     Only CSSKeyframeRule (CSSRule.type === 8) is mapped as an at-rule named unknown (no .name, empty prelude, body null). Distinct from KI-6, which is type === 0 (CSSLayerStatementRule / CSSLayerBlockRule / CSSContainerRule) falling through to CSSParserRawRule. CSSKeyframesRule type 7 still enters the numeric at-rule branch. Do not merge this KI into KI-6 without a second live type-8 hole.
