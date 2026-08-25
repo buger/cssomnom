@@ -123,8 +123,8 @@ function getFirstToken(node: ComponentValue): Token | null {
   if (node.type === 'function' && 'name' in node) {
     return { type: 'function', value: (node as CSSFunction).name } as Token;
   }
-  //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   const t = node as Token;
+  //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   if (t.type === 'EOF') return null;
   return t;
 }
@@ -142,6 +142,7 @@ function getLastToken(node: ComponentValue): Token | null {
   }
   //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   const t = node as Token;
+  //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   if (t.type === 'EOF') return null;
   return t;
 }

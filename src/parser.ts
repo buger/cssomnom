@@ -316,8 +316,8 @@ export class Parser {
         if (topLevel) {
           this.discardToken();
         } else {
-          //mcdc:ignore:defensive rule=T is unreachable — a CDO/CDC enters consume-rule as a prelude-leading token which invalidates any selector/at-rule prelude, so consumeRule returns null; F (EOF after CDO) already witnessed [reviewed: agent:champ]
           const rule = this.consumeRule();
+          //mcdc:ignore:defensive rule=T is unreachable — a CDO/CDC enters consume-rule as a prelude-leading token which invalidates any selector/at-rule prelude, so consumeRule returns null; F (EOF after CDO) already witnessed [reviewed: agent:champ]
           if (rule) rules.push(rule);
         }
       } else {

@@ -100,8 +100,8 @@ export function expandShorthandWithVariables(
   if (isCSSWide) {
     const results: MatchedDeclaration[] = [];
     for (const lh of shorthand.longhands) {
-      //mcdc:ignore:defensive subShorthand T is unreachable — no entry of SHORTHANDS[*].longhands is itself a SHORTHANDS key (longhand lists terminate in true longhands), so the lookup is always undefined here; F already witnessed [reviewed: agent:champ]
       const subShorthand = SHORTHANDS[lh];
+      //mcdc:ignore:defensive subShorthand T is unreachable — no entry of SHORTHANDS[*].longhands is itself a SHORTHANDS key (longhand lists terminate in true longhands), so the lookup is always undefined here; F already witnessed [reviewed: agent:champ]
       if (subShorthand) {
         results.push(...expandShorthandWithVariables({
           ...decl,
@@ -124,10 +124,10 @@ export function expandShorthandWithVariables(
   const expanded = shorthand.expand(compValues);
   if (expanded) {
     const results: MatchedDeclaration[] = [];
-      //mcdc:ignore:defensive subShorthand T is unreachable — expand() maps shorthand names to true longhands only, so no expanded key resolves in SHORTHANDS; F already witnessed [reviewed: agent:champ]
     for (const [lh, val] of Object.entries(expanded)) {
       const subShorthand = SHORTHANDS[lh];
       const valStr = serialize(val).trim();
+      //mcdc:ignore:defensive subShorthand T is unreachable — expand() maps shorthand names to true longhands only, so no expanded key resolves in SHORTHANDS; F already witnessed [reviewed: agent:champ]
       if (subShorthand) {
         results.push(...expandShorthandWithVariables({
           ...decl,
