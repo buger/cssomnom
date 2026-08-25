@@ -120,6 +120,83 @@ variables:
       type: bool
       direction: output
       description: Removed keyframe child exposes null parentRule and parentStyleSheet.
+    - name: declaration_block_parsed
+      type: bool
+      direction: input
+      description: 'A declaration block entered parse() (reproducer KI-124 probes width:red, color:10px, animation-timing-function:bogus(), margin-left:solid plus green controls).'
+    - name: retained_invalid_declarations
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of declarations whose value fails its property grammar yet stays readable through getPropertyValue(); must be zero per cssom-1 #parse-a-css-declaration-block step 3.1.'
+      range:
+        min: 0
+        max: 0
+    - name: grammar_valid_parse_attempted
+      type: bool
+      direction: input
+      description: 'CSSStyleValue.parse receives a value its property grammar accepts (reproducer KI-125 spells stable both-edges, styleset(ss01), 10px hanging, --my-palette plus green controls).'
+    - name: valid_value_rejections
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of grammar-valid values CSSStyleValue.parse rejects against registry syntax strings; must be zero per css-typed-om-1 #parse-a-cssstylevalue.'
+      range:
+        min: 0
+        max: 0
+    - name: unknown_at_rule_parsed
+      type: bool
+      direction: input
+      description: 'An unknown at-rule carrying a block reaches each parse entry point (component-value-stream path and token-stream parse() path; reproducer KI-126).'
+    - name: childrules_path_divergences
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of entry points whose CSSAtRule.childRules stays empty although the retained block holds rules; must be zero for consistent population.'
+      range:
+        min: 0
+        max: 0
+    - name: unitless_zero_matches_number_leg
+      type: bool
+      direction: input
+      description: 'Typed CSSUnitValue zero with unit number is stored on border-image-outset or border-image-width, whose dual grammar matches the number leg (reproducer KI-130 with non-zero and px controls).'
+    - name: zero_to_px_coercions
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of typed zero reads reified with unit px although the matched grammar leg is number; must be zero per css-typed-om-1 #reify-a-numeric-value steps 2 and 3.'
+      range:
+        min: 0
+        max: 0
+    - name: declared_style_map_is_iterated
+      type: bool
+      direction: input
+      description: 'Iteration walks a declared StylePropertyMap whose owning rule mixes standard and custom properties (WPT iterable.tentative.html pins keys A width C transition-duration color B).'
+    - name: sorted_order_violations
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of iterated key positions deviating from source declaration order; must be zero per css-typed-om-1 #declared-stylepropertymap slot initialization.'
+      range:
+        min: 0
+        max: 0
+    - name: url_image_value_read_back
+      type: bool
+      direction: input
+      description: 'StylePropertyMap get() reads a url() image value across background-image, border-image-source, list-style-image, mask-image, and shape-outside rows (reproducer KI-127).'
+    - name: non_opaque_image_value_reads
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of url() reads whose constructor identity or toString tag differs from CSSImageValue; must be zero per css-typed-om-1 #imagevalue-objects.'
+      range:
+        min: 0
+        max: 0
+    - name: append_targets_pending_substitution_longhand
+      type: bool
+      direction: input
+      description: 'append() targets a longhand entry holding a var() reference inherited from a shorthand declaration (WPT append.tentative.html transition case; own-text longhand control throws today).'
+    - name: missing_typeerror_throws
+      type: int
+      direction: output
+      description: 'Quantitative budget - count of appends over pending-substitution entries that store without throwing TypeError; must be zero per css-typed-om-1 #append-to-a-stylepropertymap step 7.'
+      range:
+        min: 0
+        max: 0
 independence:
     declared: true
     reason: SYS cssom pairs (insertRule, setProperty, origin-clean, documented deviation) skip as cross-component INT-backed contracts; no intra-component shared-output pair remains to check.
