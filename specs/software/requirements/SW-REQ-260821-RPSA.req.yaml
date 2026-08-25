@@ -18,6 +18,9 @@ tags: []
 variables:
     - cascade_public_exports_read
     - get_computed_style_exported
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse export-surface constraint: RPSA pins the public export list (no getComputedStyle, getCascadedStyle present); witnessed by tests/mcdc-witness-cascade.test.ts. Matched cascade implementation richness is owned by the FWNH/HJVC cascade models."
 references:
     - type: document
       id: README.md

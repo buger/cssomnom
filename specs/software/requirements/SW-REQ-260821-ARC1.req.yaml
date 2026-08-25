@@ -19,6 +19,9 @@ variables:
     - bad_at_property
     - at_property_validate_fails
     - property_rule_dropped
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse at-property drop contract: bad descriptors drop the rule and leave PropertyRegistry untouched; witnessed by tests/mcdc-witness-registry.test.ts and tests/mcdc-property-registry-leftover-unique-cause.test.ts. Descriptor grammar depth is owned by SYS-REQ-260822-JY0V models."
 references:
     - type: document
       id: README.md

@@ -19,6 +19,9 @@ variables:
     - parse_stylesheet_sync_called
     - to_parser_rule_maps_ast
     - css_parser_rule_returned
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse toParserRule mapping contract: parseStylesheetSync output maps to CSSParserRule nodes; witnessed by tests/mcdc-parser-api-toparser.test.ts and tests/parser-api-keyframe-adapter.test.ts. Adapter breadth is owned by the WTPD/ZP03 parser_api family."
 references:
     - type: document
       id: README.md

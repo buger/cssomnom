@@ -20,6 +20,9 @@ variables:
     - trailing_garbage
     - ensure_eof_runs
     - parse_rule_throws
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse trailing-garbage contract: CSS.parseRule throws SyntaxError via ensureEOF when tokens remain; witnessed by tests/mcdc-witness-parser-api.test.ts and tests/parser-api.test.ts. Deeper arity decisions live in the parser component family."
 references:
     - type: document
       id: README.md

@@ -18,6 +18,9 @@ tags: []
 variables:
     - bad_dictionary
     - register_throws
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse bad-dictionary contract: registerProperty raises SyntaxError or TypeError on malformed dictionaries; witnessed by tests/mcdc-witness-registry.test.ts and tests/register-property.test.ts. Dictionary field validation depth is owned by the EGCP/JY0V registry models."
 references:
     - type: document
       id: README.md

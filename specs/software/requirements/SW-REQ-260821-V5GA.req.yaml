@@ -18,6 +18,9 @@ tags: []
 variables:
     - duplicate_js_register
     - invalid_modification_error
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse duplicate-registration contract: duplicate JS registration raises InvalidModificationError while first registration is clean; witnessed by tests/mcdc-witness-registry.test.ts and tests/register-property.test.ts. Registry store semantics are owned by the EGCP registry family."
 references:
     - type: document
       id: README.md

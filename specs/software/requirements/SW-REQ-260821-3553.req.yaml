@@ -18,6 +18,9 @@ tags: []
 variables:
     - css_namespace_object_bound
     - css_namespace_methods_exported
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse namespace-binding contract: the CSS object binds escape/supports/registerProperty plus parse methods; witnessed by tests/mcdc-witness-parser-api.test.ts. Method internals are owned by their own component requirements (tokenizer, selectors, registry)."
 references:
     - type: document
       id: README.md

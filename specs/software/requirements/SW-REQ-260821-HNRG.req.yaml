@@ -19,6 +19,9 @@ variables:
     - declaration_unchanged
     - value_validation_fails
     - set_property_ignored
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse validation-failure contract: failed setProperty leaves declaration and cssText byte-identical including the all: var(--x) window; witnessed by tests/mcdc-witness-cssom.test.ts and tests/cssom-style-declaration-bridge.test.ts. Validation grammar depth is owned by ParseHooks property models."
 references:
     - type: document
       id: README.md

@@ -19,6 +19,9 @@ variables:
     - media_query_invalid
     - serialize_media_query_runs
     - serialized_as_not_all
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse serialize contract: serializeMediaQuery emits not all for invalid queries and backfills aspect-ratio denominators; witnessed by tests/mcdc-media-canonical-serialize-unique-cause.test.ts and tests/mcdc-media-ratio-length-public-unique-cause.test.ts. Query algebra is owned by the 5283 media model."
 references:
     - type: document
       id: README.md

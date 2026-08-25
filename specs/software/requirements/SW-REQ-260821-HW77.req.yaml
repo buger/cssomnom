@@ -20,6 +20,9 @@ variables:
     - css_namespace_object_bound
     - boolean_returned
     - supports_throws
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse supports contract: one/two-argument and malformed supports queries return booleans; witnessed by tests/mcdc-witness-parser-api.test.ts and tests/parser-api.test.ts. Condition parsing depth is owned by the media/selectors families."
 references:
     - type: document
       id: README.md

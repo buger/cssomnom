@@ -19,6 +19,9 @@ variables:
     - css_text_supplied
     - ordinary_invalid_css
     - parse_does_not_throw
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse ordinary-invalid recovery contract: non-string input throws TypeError while ordinary invalid CSS never throws; witnessed by tests/mcdc-witness-parser.test.ts and tests/mcdc-branch-parser.test.ts. Recovery bookkeeping is shared parser infrastructure."
 references:
     - type: document
       id: README.md

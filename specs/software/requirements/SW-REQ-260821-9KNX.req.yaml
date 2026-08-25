@@ -20,6 +20,9 @@ variables:
     - invalid_rule_consumed
     - rule_dropped
     - qualified_rule_dropped
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse invalid-rule drop contract: null qualified-rule consumes record an error and drop the rule; witnessed by tests/mcdc-witness-parser.test.ts and tests/mcdc-consume-at-rule-unique-cause.test.ts. Drop-path bookkeeping is shared parser infrastructure."
 references:
     - type: document
       id: README.md

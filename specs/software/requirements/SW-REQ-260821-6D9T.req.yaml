@@ -19,6 +19,9 @@ variables:
     - bad_selector_supplied
     - parse_selector_rejects
     - empty_match
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse forgiving-selector contract: rejected selectors yield empty matches instead of throwing; witnessed by tests/mcdc-witness-selectors-media.test.ts and tests/mcdc-is-valid-selector-unique-cause.test.ts. Selector grammar depth is owned by the SelectorParser family models."
 references:
     - type: document
       id: README.md

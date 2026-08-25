@@ -19,6 +19,9 @@ variables:
     - nested_declarations_after_nested_rule
     - flush_decls_runs
     - css_nested_declarations_emitted
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse flushDecls contract: nested declarations after a nested rule flush as CSSNestedDeclarations; witnessed by tests/mcdc-witness-parser.test.ts and tests/mcdc-consume-declaration-stream-unique-cause.test.ts. Nesting grammar depth belongs to the SYS parser recovery family."
 references:
     - type: document
       id: README.md

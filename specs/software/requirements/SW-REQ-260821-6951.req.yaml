@@ -19,6 +19,9 @@ variables:
     - css_rules_getter_runs
     - origin_clean
     - security_error_thrown
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse origin-clean contract: cssRules getter throws SecurityError exactly on tainted sheets; witnessed by tests/mcdc-witness-cssom.test.ts and tests/mcdc-escape-utils-leftover-unique-cause.test.ts. Declaration-layer decision volume is shared CSSOM infrastructure."
 references:
     - type: document
       id: README.md

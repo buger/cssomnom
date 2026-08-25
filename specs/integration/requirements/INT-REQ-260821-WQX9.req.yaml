@@ -18,6 +18,9 @@ tags: []
 variables:
     - style_declaration_duck_typed
     - style_map_mutated
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse duck-typing contract: WQX9 pins the StylePropertyMap set/get round-trip with TypeError on invalid width, witnessed by tests/integration-int-req.test.ts and tests/mcdc-witness-cssom.test.ts; StylePropertyMap.ts shares the CSSStyleDeclaration implementation whose error-handling richness is owned by the HNRG/8TGB models."
 references:
     - type: document
       id: README.md

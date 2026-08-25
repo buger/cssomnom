@@ -19,6 +19,9 @@ variables:
     - consume_stylesheet_completed
     - css_text_supplied
     - stylesheet_returned
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse stylesheet consumption contract: supplied CSS text completes consumeListOfRules and returns a stylesheet within the depth-80 fuzz gate; witnessed by tests/css-fuzz-cssomnom.test.ts, tests/api.test.ts, and tests/mcdc-witness-parser.test.ts. Consume-algorithm internals are shared parser infrastructure."
 references:
     - type: document
       id: README.md

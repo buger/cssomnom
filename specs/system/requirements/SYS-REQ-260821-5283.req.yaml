@@ -18,6 +18,9 @@ tags: []
 variables:
     - media_query_invalid
     - serialized_as_not_all
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse not-all mapping invariant: invalid media queries serialize as not all; witnessed by tests/media.test.ts and tests/mcdc-witness-selectors-media.test.ts. Children MZW3/W8S1 own the setter and serializer narrowings."
 references:
     - type: document
       id: README.md

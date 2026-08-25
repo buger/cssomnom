@@ -18,6 +18,9 @@ tags: []
 variables:
     - media_parser_parse_called
     - media_text_set
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse MediaList setter contract: mediaText must route through MediaParser.parse with invalid-to-not-all mapping; witnessed by tests/mcdc-witness-cssom.test.ts and tests/integration-int-req.test.ts. Serialization quantities are owned by the W8S1/5283 media models."
 references:
     - type: document
       id: README.md

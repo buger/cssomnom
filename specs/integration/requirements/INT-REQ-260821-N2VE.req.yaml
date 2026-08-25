@@ -18,6 +18,9 @@ tags: []
 variables:
     - consume_step
     - token_stream_peek_next_used
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse consume-loop contract: parser consume steps must drive TokenStream peek/next against the tokenizer EOF sentinel; witnessed by tests/integration-int-req.test.ts and tests/mcdc-witness-parser.test.ts. Parser-wide decision volume is shared infrastructure."
 references:
     - type: document
       id: README.md

@@ -19,6 +19,9 @@ variables:
     - parse_hooks_component_values_called
     - parse_style_value
     - parser_imported
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse hook-boundary contract: parse_style_value must call ParseHooks.parseComponentValues without importing Parser; witnessed by tests/mcdc-witness-typed-om.test.ts and tests/integration-int-req.test.ts. The matched parser.ts surface is shared infrastructure whose numeric decisions belong to the parser requirement family."
 references:
     - type: document
       id: README.md

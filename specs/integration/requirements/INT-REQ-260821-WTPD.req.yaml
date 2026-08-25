@@ -18,6 +18,9 @@ tags: []
 variables:
     - parse_stylesheet_sync_called
     - parser_ast_adapted
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse AST adapter contract: parseStylesheetSync maps Parser AST nodes to CSSParserRule subclasses; witnessed by tests/mcdc-witness-parser-api.test.ts and tests/ki-2-8-12-class-fix.test.ts. Adapter dispatch depth is owned by the SW parser_api family."
 references:
     - type: document
       id: README.md

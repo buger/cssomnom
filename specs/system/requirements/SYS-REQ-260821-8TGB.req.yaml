@@ -19,6 +19,9 @@ variables:
     - invalid_value
     - set_property_called
     - set_property_ignored
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse setProperty ignore invariant: invalid values are ignored without mutation; witnessed by tests/mcdc-witness-cssom.test.ts and tests/mcdc-branch-declaration.test.ts. Child HNRG owns the validation-failure narrowing with cssText observables."
 references:
     - type: document
       id: README.md

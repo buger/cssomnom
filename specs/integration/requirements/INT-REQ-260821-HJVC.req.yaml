@@ -18,6 +18,9 @@ tags: []
 variables:
     - cascaded_style_requested
     - matcher_and_media_consulted
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse cascade-walk contract: matcher/MediaParser/supports consultation on getCascadedStyle; witnessed by tests/mcdc-witness-cascade.test.ts and tests/integration-int-req.test.ts. Cascade sorting math is owned by the SW cascade models rather than this interface clause."
 references:
     - type: document
       id: README.md

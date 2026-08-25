@@ -19,6 +19,9 @@ variables:
     - import_url_present
     - css_import_rule_constructed
     - external_sheet_fetched
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse import construction contract: @import constructs CSSImportRule with offline styleSheet and no fetch (KI-7 documented deviation); witnessed by tests/mcdc-witness-parser.test.ts and tests/cssom-interfaces.test.ts. Network policy is owned by SYS-REQ-260821-H3BD."
 references:
     - type: document
       id: README.md

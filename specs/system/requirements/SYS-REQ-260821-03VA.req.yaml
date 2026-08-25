@@ -20,6 +20,9 @@ variables:
     - ordinary_invalid_css
     - parse_does_not_throw
     - rule_dropped
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse recovery invariant: ordinary invalid CSS never throws and drops only the invalid rule; witnessed by tests/mcdc-witness-parser.test.ts and tests/mcdc-branch-parser*.test.ts. SW children 9KNX/YG9J own the drop and no-throw narrowings."
 references:
     - type: document
       id: README.md

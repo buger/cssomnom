@@ -20,6 +20,9 @@ variables:
     - native_matrix_string
     - matrix_index
     - typed_om_transform_hook_used
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse interface contract: JTY2 pins the DOMMatrix parse-transform hook and multiply is2D/alias outputs witnessed by tests/integration-int-req.test.ts and tests/mcdc-dommatrix-multiply-alias-public-unique-cause.test.ts; the shared typed-om/index.ts facade exposes no per-function decision metrics, and finer value-level models (E5D5, 9SGA) own the numeric richness."
 references:
     - type: document
       id: README.md

@@ -19,6 +19,9 @@ variables:
     - tokens_from_btn_rule
     - serialize_token_list_runs
     - serialized_equals_source
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse token serialization contract: serialized output equals source text with separator decisions and U+FFFD replacement; witnessed by tests/mcdc-serializer-unique-cause.test.ts and tests/mcdc-escape-utils-leftover-unique-cause.test.ts. Escape tables are shared css-syntax-3 infrastructure."
 references:
     - type: document
       id: README.md

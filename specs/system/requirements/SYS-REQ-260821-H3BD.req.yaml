@@ -17,6 +17,9 @@ rationale: Offline parse shall never load an external stylesheet, with or withou
 tags: []
 variables:
     - external_sheet_fetched
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse no-external-IO invariant: parsing @import performs zero network fetches with href preserved offline (KI-7 documented deviation); witnessed by tests/mcdc-witness-parser.test.ts, tests/cssom-interfaces.test.ts, and tests/ki-2-8-12-class-fix.test.ts."
 references:
     - type: document
       id: README.md

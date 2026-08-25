@@ -18,6 +18,9 @@ tags: []
 variables:
     - cssom_rule_constructed
     - grouping_rule_built
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse grouping-rule contract: grouping rules construct CSSOM rule classes and receive the insertRule parse callback; witnessed by tests/integration-int-req.test.ts and tests/mcdc-witness-parser.test.ts. Shared parser.ts infrastructure carries the remaining decisions."
 references:
     - type: document
       id: README.md

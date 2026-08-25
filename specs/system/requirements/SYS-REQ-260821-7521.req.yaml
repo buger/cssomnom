@@ -18,6 +18,9 @@ tags: []
 variables:
     - css_text_supplied
     - stylesheet_returned
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse stylesheet-return invariant: supplied CSS text always returns a CSSStyleSheet, safely at the depth-80 fuzz gate; witnessed by tests/css-fuzz-cssomnom.test.ts, tests/api.test.ts, and tests/mcdc-assemble-unicode-ranges.test.ts. Children HHVE/73TM/AACP own consume and dispatch narrowings."
 references:
     - type: document
       id: README.md
