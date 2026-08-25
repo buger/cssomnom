@@ -34,7 +34,7 @@ verification:
     formalization_status: valid
     review:
         status: in_review
-        reviewer: "REVIEW-57"
+        reviewer: REVIEW-57
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
 history:
@@ -42,6 +42,7 @@ history:
     created_at: "2026-08-22T17:12:07Z"
     last_modified_by: agent:codex
     last_modified_at: "2026-08-22T17:42:58Z"
+verification_state: failing
 lifecycle:
     change_history:
         - date: "2026-08-22T17:12:36Z"
@@ -49,3 +50,8 @@ lifecycle:
           to: review
           reason: '[LOOP-followup] Draft requirement is formalized and parent-linked; held in review pending independent audit evidence, with no approval asserted.'
           changed_by: agent:codex
+        - date: "2026-08-25T01:58:46Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=2; evidence_profile:ki-101=failing | known_issue:KI-101=failing
+          changed_by: agent:auto-derive

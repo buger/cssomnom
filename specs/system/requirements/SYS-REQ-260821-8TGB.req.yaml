@@ -58,6 +58,7 @@ obligation_hazards:
     - class: malformed_recovers_or_errors_loudly
       worst_case: setProperty that throws on an invalid value instead of ignoring it breaks CSSOM-1 silent-failure callers.
       severity: medium
+verification_state: failing
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
@@ -70,3 +71,8 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T12:00:01Z comment="Class-closure DEFECT-XZAS: invalid all after stored var/env is a no-op.")'
           changed_by: agent:grok-4.6
+        - date: "2026-08-25T01:58:45Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=3; evidence_profile:ki-105=failing | known_issue:KI-1=none | known_issue:KI-105=failing
+          changed_by: agent:auto-derive

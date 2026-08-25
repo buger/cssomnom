@@ -1,6 +1,6 @@
 id: SYS-REQ-260822-JD78
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
@@ -31,12 +31,25 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: REVIEW-59
+        reviewed_at: "2026-08-25T02:04:16Z"
         ai_generated: true
 history:
     created_by: agent:champ
     created_at: "2026-08-22T20:06:06Z"
-    last_modified_by: agent:champ
-    last_modified_at: "2026-08-24T11:42:00Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-25T02:05:03Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-25T01:58:46Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=1; known_issue:KI-22=failing
+          changed_by: agent:auto-derive
+        - date: "2026-08-25T02:05:03Z"
+          from: draft
+          to: review
+          reason: '[REVIEW-59] spec audit w3: formula/variable dims via validate --variable-drift (143 reqs, 0 errors), trace-target existence, and open-KI reproducer exit-1 witness direction all verified sound per proof/reviews/REVIEW-59.yaml; verification_state=failing alignment recorded'
+          changed_by: human:Leonid Bugaev

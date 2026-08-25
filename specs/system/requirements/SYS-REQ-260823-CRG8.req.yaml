@@ -1,6 +1,6 @@
 id: SYS-REQ-260823-CRG8
 version: 1
-status: draft
+status: review
 priority: shall
 category: functional
 req_type: guarantee
@@ -35,12 +35,25 @@ verification:
     assurance_level: C
     formalization_status: valid
     review:
-        status: pending
-        reviewer: ""
-        reviewed_at: ""
+        status: in_review
+        reviewer: REVIEW-59
+        reviewed_at: "2026-08-25T02:04:16Z"
         ai_generated: true
 history:
     created_by: agent:champ
     created_at: "2026-08-23T17:31:07Z"
-    last_modified_by: agent:champ
-    last_modified_at: "2026-08-23T17:31:07Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-25T02:05:04Z"
+verification_state: failing
+lifecycle:
+    change_history:
+        - date: "2026-08-25T01:58:48Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=1; known_issue:KI-38=failing
+          changed_by: agent:auto-derive
+        - date: "2026-08-25T02:05:04Z"
+          from: draft
+          to: review
+          reason: '[REVIEW-59] spec audit w3: formula/variable dims via validate --variable-drift (143 reqs, 0 errors), trace-target existence, and open-KI reproducer exit-1 witness direction all verified sound per proof/reviews/REVIEW-59.yaml; verification_state=failing alignment recorded'
+          changed_by: human:Leonid Bugaev

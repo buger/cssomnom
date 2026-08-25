@@ -74,7 +74,7 @@ obligation_hazards:
     - class: recursion_depth_bounded
       worst_case: Deeply nested @media/@supports/style rules recurse without a depth cap and overflow the JS stack, crashing the host process.
       severity: high
-verification_state: passing
+verification_state: failing
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
@@ -92,3 +92,8 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T06:56:42Z comment="Class-closure DEFECT-3T1G: @import url-token copies into href.")'
           changed_by: agent:grok-4.6
+        - date: "2026-08-25T01:58:45Z"
+          from: verification=passing
+          to: verification=failing
+          reason: auto-derived [passing→failing] signals=4; evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing | known_issue:KI-12=none | known_issue:KI-18=failing | known_issue:KI-8=none
+          changed_by: agent:auto-derive

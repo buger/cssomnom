@@ -1,0 +1,139 @@
+id: REVIEW-59
+kind: spec_conformance
+reviewer: loop-gate:ox-alpha 2026-08-25
+reviewed_at: "2026-08-25T02:04:16Z"
+subject: SYS-REQ-260822-{8BK4,EGPW,JD78,ZQJT} SYS-REQ-260823-{00C0,BTC4,CRG8,DRP5,KTS6,MFS9,MRT1,PRT3,PVE7,QBD2,SCD7,SCS2,SHX6,SMA3}
+decision: approved
+comment: >-
+    Third-wave spec audit of the eighteen system requirements still at status=draft
+    surfaced by changed_requirements_reviewed after the verification_state_consistent
+    alignment pass set each one's derived failing state. Disjoint from REVIEW-58's
+    twelve-subject cohort (8HDQ et al. were already promoted there); no req is counted
+    twice. All eighteen are open-KI-binding records: each links exactly one KnownIssue
+    (status open) whose reproducer was executed this session at HEAD returning exit 1
+    with failing contract assertions (49 distinct KIs across the 53-req alignment
+    cohort; the 18 here pair 1:1 with KI-16,17,19,22,31..34,36..45), confirming the
+    failing-state direction matches formalization_status=valid — requirement currently
+    violated, honestly tracked, no green-witness contradiction.
+    Per-req checks: (1) Formula/variable dimensions verified corpus-wide by
+    `proof validate --variable-drift` this session: 143 requirements valid, 50 variable
+    files valid, 0 warnings 0 errors. (2) Trace-target existence: every traces.satisfies
+    parent resolves; all eighteen satisfy STK-REQ-260821-BQKD, which exists at
+    specs/stakeholder/requirements/STK-REQ-260821-BQKD.req.yaml. (3) Witness direction:
+    paired reproducer commands from proof/known-issues/KI-*.yaml run via node --test all
+    exited 1 asserting the intended (violated) contract, e.g. KI-19 toSum 2^n expansion,
+    KI-22 calc() recursion overflow, KI-36 shorthand table gaps, KI-38 PropertyRegistry
+    bypass — so verification_state=failing recorded by the auto-derive pass is the
+    honest state and agrees with the derivation engine's proposal. No defects; all
+    eighteen stamped in_review by this record.
+scope:
+    - specs/system/requirements/SYS-REQ-260822-8BK4.req.yaml
+    - specs/system/requirements/SYS-REQ-260822-EGPW.req.yaml
+    - specs/system/requirements/SYS-REQ-260822-JD78.req.yaml
+    - specs/system/requirements/SYS-REQ-260822-ZQJT.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-00C0.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-BTC4.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-CRG8.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-DRP5.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-KTS6.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-MFS9.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-MRT1.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-PRT3.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-PVE7.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-QBD2.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-SCD7.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-SCS2.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-SHX6.req.yaml
+    - specs/system/requirements/SYS-REQ-260823-SMA3.req.yaml
+verdicts:
+    - id: SYS-REQ-260822-8BK4
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-19
+      decision: sound
+    - id: SYS-REQ-260822-EGPW
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-17
+      decision: sound
+    - id: SYS-REQ-260822-JD78
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-22
+      decision: sound
+    - id: SYS-REQ-260822-ZQJT
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-16
+      decision: sound
+    - id: SYS-REQ-260823-00C0
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-34
+      decision: sound
+    - id: SYS-REQ-260823-BTC4
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-42
+      decision: sound
+    - id: SYS-REQ-260823-CRG8
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-38
+      decision: sound
+    - id: SYS-REQ-260823-DRP5
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-43
+      decision: sound
+    - id: SYS-REQ-260823-KTS6
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-44
+      decision: sound
+    - id: SYS-REQ-260823-MFS9
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-39
+      decision: sound
+    - id: SYS-REQ-260823-MRT1
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-31
+      decision: sound
+    - id: SYS-REQ-260823-PRT3
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-41
+      decision: sound
+    - id: SYS-REQ-260823-PVE7
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-45
+      decision: sound
+    - id: SYS-REQ-260823-QBD2
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-40
+      decision: sound
+    - id: SYS-REQ-260823-SCD7
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-37
+      decision: sound
+    - id: SYS-REQ-260823-SCS2
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-32
+      decision: sound
+    - id: SYS-REQ-260823-SHX6
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-36
+      decision: sound
+    - id: SYS-REQ-260823-SMA3
+      dimensions_checked: [formula_compile, variable_domains, trace_target_existence, witness_direction]
+      ki: KI-33
+      decision: sound
+citations:
+    - proof/reproducers/KI-16-has-combinator-no-match-budget-overlay-260822.ts
+    - proof/reproducers/KI-17-var-env-exponential-expansion-overlay-260822.ts
+    - proof/reproducers/KI-19-numeric-tosum-cartesian-expansion-overlay-260822.ts
+    - proof/reproducers/KI-22-math-parser-unbounded-recursion-overlay-260822.ts
+    - proof/reproducers/KI-31-media-condition-paren-dropping-overlay-260823.ts
+    - proof/reproducers/KI-32-svg-type-selector-case-sensitivity-overlay-260823.ts
+    - proof/reproducers/KI-33-supports-rule-matches-idl-overlay-260823.ts
+    - proof/reproducers/KI-34-lang-wildcard-extended-filtering-overlay-260823.ts
+    - proof/reproducers/KI-36-generated-shorthand-table-incomplete-overlay-260823.ts
+    - proof/reproducers/KI-37-selector-comment-descendant-drop-overlay-260823.ts
+    - proof/reproducers/KI-38-cascade-ignores-property-registry-overlay-260823.ts
+    - proof/reproducers/KI-39-calc-serialize-not-fixpoint-overlay-260823.ts
+    - proof/reproducers/KI-40-parser-api-style-rule-body-drops-declarations-overlay-260823.ts
+    - proof/reproducers/KI-41-atrule-prelude-whitespace-roundtrip-overlay-260823.ts
+    - proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
+    - proof/reproducers/KI-43-invalid-import-fabricated-not-dropped-overlay-260823.ts
+    - proof/reproducers/KI-44-keytext-setter-js-coercion-overlay-260823.ts
+    - proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
