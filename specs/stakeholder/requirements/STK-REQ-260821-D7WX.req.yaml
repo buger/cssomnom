@@ -19,9 +19,9 @@ references:
     - type: document
       id: README.md
 traces:
-    reviewed_at: "2026-08-24T13:20:42.050229702Z"
-    reviewed_by: agent:champ
-    reviewed_fingerprint: sha256:6a5a79fc4135cd8281b6cf3cbfec26cb97fee25d9ea4b8c367c6a7ba17efb9f6
+    reviewed_at: "2026-08-25T00:03:23.109706791Z"
+    reviewed_by: human:Leonid Bugaev
+    reviewed_fingerprint: sha256:4405c8e48199cc51017980ffa46c617d323fc41e971a9c47566073572aa364d6
     review_history:
         - reviewed_at: "2026-08-24T13:20:42.050229702Z"
           reviewed_by: agent:champ
@@ -32,12 +32,22 @@ traces:
             - docs/proof-onboard-research.md:3
             - docs/proof-skeleton-id-map.md:3
             - tests/acceptance-stk.test.ts:78
+        - reviewed_at: "2026-08-25T00:03:23.109706791Z"
+          reviewed_by: human:Leonid Bugaev
+          method: inspection
+          rationale: manual trace review via proof trace review
+          source: proof trace review --citation
+          citations:
+            - docs/proof-onboard-research.md:3
+            - docs/proof-skeleton-id-map.md:17
+            - docs/requirements-hsl-variable-model.md:13
+            - tests/acceptance-stk.test.ts:78
 verification:
     assurance_level: C
     formalization_status: none
     review:
         status: in_review
-        reviewer: "REVIEW-55"
+        reviewer: REVIEW-55
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
 history:
@@ -79,22 +89,22 @@ stakeholder:
         - id: AC-004
           text: The cascade HSL converter shall assign chroma to red below 60 degrees, to green from 60 through 180 degrees, and to blue from 180 through 300 degrees when hsl has 3 or 4 components. It shall reject component lists of other lengths.
           verification_method: test
-          witness_deferred:
-              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-              tracking: spec-model-quality-lints
           derived_reqs:
             - SYS-REQ-260822-CFRA
             - SYS-REQ-260824-4RGN
             - SYS-REQ-260824-BRYV
             - SYS-REQ-260824-DAS2
+          witness_deferred:
+            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+            tracking: spec-model-quality-lints
         - id: AC-005
           text: The selector matcher shall return a non-empty match for an element matched by the disabled or enabled pseudo-class.
           verification_method: test
-          witness_deferred:
-              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-              tracking: spec-model-quality-lints
           derived_reqs:
             - SYS-REQ-260822-XDRG
+          witness_deferred:
+            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+            tracking: spec-model-quality-lints
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

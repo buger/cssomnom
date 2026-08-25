@@ -19,9 +19,9 @@ references:
     - type: document
       id: README.md
 traces:
-    reviewed_at: "2026-08-24T13:20:32.426330628Z"
-    reviewed_by: agent:champ
-    reviewed_fingerprint: sha256:2bcf548a9b00403e97dfba2f48bf65718ef094aa24d0276c347e029fc2eca022
+    reviewed_at: "2026-08-25T00:03:10.68451465Z"
+    reviewed_by: human:Leonid Bugaev
+    reviewed_fingerprint: sha256:a5378f78d8d1e4825e1594c72c509caa241676d6f505cb4d5e1f4385a0562ba4
     review_history:
         - reviewed_at: "2026-08-24T13:20:32.426330628Z"
           reviewed_by: agent:champ
@@ -32,12 +32,21 @@ traces:
             - docs/proof-onboard-research.md:3
             - docs/proof-skeleton-id-map.md:3
             - tests/acceptance-stk.test.ts:131
+        - reviewed_at: "2026-08-25T00:03:10.68451465Z"
+          reviewed_by: human:Leonid Bugaev
+          method: inspection
+          rationale: manual trace review via proof trace review
+          source: proof trace review --citation
+          citations:
+            - docs/proof-onboard-research.md:3
+            - docs/proof-skeleton-id-map.md:18
+            - tests/acceptance-stk.test.ts:131
 verification:
     assurance_level: C
     formalization_status: none
     review:
         status: in_review
-        reviewer: "REVIEW-55"
+        reviewer: REVIEW-55
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
 history:
@@ -83,11 +92,11 @@ stakeholder:
         - id: AC-004
           text: Typed OM reification of a 1-to-4 component position shall produce a CSSPositionValue without throwing.
           verification_method: test
-          witness_deferred:
-              reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-              tracking: spec-model-quality-lints
           derived_reqs:
             - SYS-REQ-260822-SNP4
+          witness_deferred:
+            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+            tracking: spec-model-quality-lints
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
