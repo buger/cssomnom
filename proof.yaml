@@ -163,24 +163,36 @@ project:
             # Known-issue tripwire lanes (ki-101..ki-105 evidence profiles).
             # Each binds exactly one expected-red node:test reproducer from
             # proof/reproducers/ via --experimental-strip-types (Node 24 runs
-            # TS directly). Deliberately not part of default tests_pass: these
-            # stay red until the filed known issue is fixed, and a green run
-            # is how `proof known-issue capture` observes the fix.
+            # TS directly). Declared `expected: fail`: tests_pass verifies
+            # they DO fail while the KI is open (a green run would be flagged
+            # as a regression — remove the lane or flip the expectation when
+            # `proof known-issue capture` observes the fix) and a confirmed-red
+            # tripwire never counts toward product-suite red.
             ki-101-tripwire:
                 language: ts
                 command: node --experimental-strip-types --test proof/reproducers/KI-101-keyframe-parent-links-overlay-260822.ts
+                expected: fail
+                reason: open known issue tripwire — see KI-101
             ki-102-tripwire:
                 language: ts
                 command: node --experimental-strip-types --test proof/reproducers/KI-102-counter-style-setter-cssText-overlay-260822.ts
+                expected: fail
+                reason: open known issue tripwire — see KI-102
             ki-103-tripwire:
                 language: ts
                 command: node --experimental-strip-types --test proof/reproducers/KI-103-keyframes-append-trailing-garbage-overlay-260822.ts
+                expected: fail
+                reason: open known issue tripwire — see KI-103
             ki-104-tripwire:
                 language: ts
                 command: node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
+                expected: fail
+                reason: open known issue tripwire — see KI-104
             ki-105-tripwire:
                 language: ts
                 command: node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
+                expected: fail
+                reason: open known issue tripwire — see KI-105
         # Opt-in DoS fuzz lane (proof audit --fuzz / evidence_type: fuzz).
         # Not on default tests_pass. Runs the annotated cssomnom css-fuzz
         # file, including `deep nesting gate against cssomnom` and
