@@ -33,5 +33,29 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-128.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public keys()/values()/entries()/iterator over a declared StylePropertyMap parsed from a style rule - no mocks.
+        quantitative_impact: measured at HEAD - a mixed declaration pins keys A width C transition-duration color B in WPT declared iterable.tentative.html while the map returns the fully sorted sequence (both traversal legs fail); two sandbox ledger rows carry the same failure.
+        control_test: positive reification controls stay green, isolating the escape to traversal order rather than value parsing.
+        untrusted_attacker: ordinary declarations mixing standard and custom properties read back through declared map iteration are the input surface.
+        current_deployment_relevance: declared map iteration backs authoring tooling and grader comparisons over style rules; live at HEAD.
+        honest_severity: medium correctness - source order is spec-normative for the declarations slot, so sorted output misrepresents authored stylesheets; no memory-safety dimension.
+        attacker_profitability: not profit-driven; order-sensitive consumers mis-attribute declarations.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts exits 1 deterministically across runs and evidence capture.
+        no_inflation: severity medium matches the traversal-order blast radius; repeated-declaration collapse (KI-119) and computed-map shape stay separate filings; cve_surface none.
+        operational_path_verified: failing legs drive the real declared-map slot initialization and iterator path.
+        reachability_verified: public StylePropertyMap IS the product surface; no gating layer exists between parsed rule and iteration.
 kill_domain: declared_map_iteration_order
 do_not_refile_as: 'repeated declarations collapsing to one entry (KI-119): pins entry count, not traversal order; computed-map iteration shape: different surface with its own default rule'

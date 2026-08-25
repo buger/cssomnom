@@ -33,5 +33,29 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-127.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public StylePropertyMap get()/getAll() over parsed url() declarations - no mocks; fixtures mirror local WPT background-image.html and border-image-source.html assertions.
+        quantitative_impact: measured at HEAD - constructor identity or toString tag differs from CSSImageValue on all five property rows (background-image, border-image-source, list-style-image, mask-image, shape-outside); five wpt-sandbox rows fail on the same leg.
+        control_test: keyword controls reify to the exact expected class and the instanceof CSSImageValue hierarchy leg passes, isolating the leak to the concrete subclass identity alone.
+        untrusted_attacker: ordinary declarations with url() values read back through Typed OM are the trust boundary; class identity is public API surface.
+        current_deployment_relevance: get() class-string checks run in WPT typed-om property fixtures repo-wide; live at HEAD.
+        honest_severity: medium correctness - the specification calls CSSImageValue intentionally opaque, so a leaked subclass tag breaks assert_class_string contracts; no memory-safety dimension.
+        attacker_profitability: not profit-driven; consumers branching on constructor.name silently misroute image values.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts exits 1 deterministically across runs and evidence capture.
+        no_inflation: severity medium matches the identity-only blast radius; base-only overreification (KI-123) and serialization collapse (KI-116) stay separate mechanisms; cve_surface none.
+        operational_path_verified: failing legs drive the real style value factory reification path on get().
+        reachability_verified: public StylePropertyMap IS the product surface; no gating layer exists between stored declaration and reification.
 kill_domain: opaque_image_reification
 do_not_refile_as: 'base-only properties over-reifying into subclasses (KI-123): different table row and direction; border-image url() serialization collapse (KI-116): pins cssText round-trip text, not class identity'

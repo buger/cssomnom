@@ -33,5 +33,29 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-129.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public StylePropertyMap.append over shorthand-derived longhand storage - no mocks; scenario mirrors local WPT declared append.tentative.html.
+        quantitative_impact: measured at HEAD - append on transition-duration after transition var a stores silently (shorthand-hidden leg) and the second shorthand-hidden leg behaves identically, while the same append against an own-text var() reference throws today.
+        control_test: two dedicated controls - the own-text longhand throw proves the guard exists, and the plain append without var() stays green - isolate the escape to shorthand-derived entry resolution.
+        untrusted_attacker: ordinary shorthand declarations containing var() followed by Typed OM append calls are the input surface.
+        current_deployment_relevance: pending-substitution values are ubiquitous in real stylesheets; the silent store corrupts Typed OM state at HEAD.
+        honest_severity: medium correctness - step 7 orders the TypeError before mutation, so silent storage breaks both the error contract and state integrity.
+        attacker_profitability: not profit-driven; skipped throws let substitution-pending garbage enter typed maps.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-129-append-pending-substitution-shorthand-overlay-260825.ts exits 1 deterministically across runs and evidence capture.
+        no_inflation: severity medium matches the guard-gap blast radius; set() replacement behind shorthands and KI-107/KI-108/KI-109 var() surfaces stay separate filings; cve_surface none.
+        operational_path_verified: failing legs drive the real append guard path over stored declaration entries.
+        reachability_verified: public StylePropertyMap IS the product surface; no gating layer exists between caller arguments and entry mutation.
 kill_domain: pending_substitution_guard_gap
 do_not_refile_as: 'var() feature-query grammar (KI-107), substitution order in cascade (KI-108), case-insensitive dispatch (KI-109): different surfaces; set() replacement behind shorthands: no spec clause mandates a throw there'

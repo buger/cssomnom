@@ -33,5 +33,29 @@ history:
       by: agent:ox-alpha
       action: refresh-evidence
       detail: proof/evidence/ki-125.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSStyleValue.parse against the generated PropertyRegistry syntax strings - no mocks.
+        quantitative_impact: measured at HEAD - scrollbar-gutter stable both-edges, font-variant-alternates styleset(ss01), text-indent 10px hanging, and font-palette --my-palette all throw (4 defect legs) although each owning specification defines the spelling.
+        control_test: two dedicated controls - registry-covered spellings keep parsing, and var()-containing values defer as unparsed instead of rejecting - isolate the escape to stale syntax data.
+        untrusted_attacker: ordinary Typed OM parse calls with grammar-valid values of newly specified properties are the input surface.
+        current_deployment_relevance: CSSStyleValue.parse is the public validation entry for tooling and polyfills; stale rows hit every consumer of these four properties at HEAD.
+        honest_severity: medium correctness - valid values rejected violates #parse-a-cssstylevalue acceptance; blast radius bounded to properties whose grammars outgrew the registry snapshot.
+        attacker_profitability: not profit-driven; rejections block conforming authoring and skew parity graders.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-125-registry-stale-syntax-rejects-valid-overlay-260825.ts exits 1 deterministically across runs and evidence capture.
+        no_inflation: severity medium matches the four-property scope; opposite-direction filings KI-35/KI-111 (accept-invalid) and KI-38 (cascade ignoring descriptors) stay separate; cve_surface none.
+        operational_path_verified: failing legs drive the real PropertyRegistry validate path reached through CSSStyleValue.parse.
+        reachability_verified: public parse IS the product surface; no gating layer exists between caller text and registry lookup.
 kill_domain: registry_data_drift
 do_not_refile_as: 'registerProperty accepting invalid brace-multiplier syntax (KI-35) or invalid initial values (KI-111): opposite direction, accept-invalid vs reject-valid; cascade ignoring PropertyRegistry descriptors (KI-38): different consumer surface'

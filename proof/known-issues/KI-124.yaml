@@ -33,5 +33,31 @@ history:
       by: agent:ox-alpha
       action: refresh-evidence
       detail: proof/evidence/ki-124.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: false
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and getPropertyValue() over stylesheet text - no mocks; probes span ident, dimension, function, and keyword value types.
+        quantitative_impact: measured at HEAD - width:red, color:10px, animation-timing-function:bogus(), and margin-left:solid all survive with non-empty reads (4 defect legs) while both controls stay green; invalid-superset oracle measured 6627 retained-invalid instances over 811 properties at seed 260825.
+        control_test: two dedicated controls isolate the escape - grammar-valid neighbors of every probed type survive, and css-syntax declaration splitting still works, so the loss sits in grammar validation alone.
+        untrusted_attacker: ordinary stylesheet input carrying any grammar-invalid declaration reaches the unvalidated retention path.
+        current_deployment_relevance: every parse() style-rule declaration block at HEAD routes through this path; live on the default ingestion surface.
+        honest_severity: high correctness - spec mandates dropping ignored parts, so invalid values persisting into the CSSOM breaks getPropertyValue emptiness guarantees repo-wide.
+        attacker_profitability: not profit-driven; persisted garbage skews computed-style comparisons in graders and tooling.
+        reproducible: node --experimental-strip-types --test proof/reproducers/KI-124-declaration-block-grammar-invalid-retained-overlay-260825.ts exits 1 deterministically across runs and evidence capture.
+        no_inflation: severity high matches the all-properties blast radius measured by the oracle; instance filings (KI-113/KI-117/KI-105/KI-104) stay narrow slices; cve_surface none.
+        operational_path_verified: failing legs drive the real declaration-block remnant handling path, not a shimmed parser.
+        reachability_verified: public parse() IS the product surface; no gating layer exists between host text and block parsing.
+dedup_armor: |
+    Declaration blocks retain values that FAIL their property grammars (cssom-1 #parse-a-css-declaration-block step 3.1 says such parts are ignored), so getPropertyValue must return empty but returns raw text. Nearest open high sibling KI-40 is an adjacent stage in the OPPOSITE direction: the Parser API adapter drops EVERY declaration from CSSParserQualifiedRule.body (API surface loss), while KI-124 keeps exposed declarations it should have rejected. Fixing KI-40 body plumbing performs no grammar validation, so merging the filings hides one leg behind the other. KI-36 (missing generated shorthand expansion table) is a different mechanism - expansion data absence, not acceptance of invalid values. Instance slices KI-113 font, KI-117 relative color, KI-105 display, and KI-104 keyframes pin distinct property families until the generic validator lands; do not cross-close them.
 kill_domain: grammar_validation_absence
 do_not_refile_as: 'grammar-invalid value retained for one specific property: file as an instance of this generic root unless a distinct validation mechanism applies; relative color retention (KI-117), font shorthand retention (KI-113), display retention (KI-105), keyframe retention (KI-104): existing instance filings of this same root'
