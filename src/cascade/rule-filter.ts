@@ -146,6 +146,7 @@ export function collectStyleSheetsAndRules(
     if (!title && !isAlternate) {
       return true;
     }
+    //mcdc:ignore:defensive preferredTitle !== null F is impossible — preferredTitle is assigned a non-null title at the same time preferredTitleFound flips true, so found implies non-null; T row already witnessed [reviewed: agent:champ]
     if (preferredTitleFound && preferredTitle !== null) {
       return title === preferredTitle;
     }
@@ -386,6 +387,7 @@ export function collectMatchedDeclarations(
           }
         }
 
+    //mcdc:ignore:defensive maxSpecificity falsy is unreachable — getMatchingSpecificity returns an array literal ([0,0,0] at worst), which is always truthy once assigned; isMatchingSelector F row already witnessed [reviewed: agent:champ]
         if (isMatchingSelector && maxSpecificity) {
           const spec = maxSpecificity;
           const style = (rule as CSSStyleRule).style;

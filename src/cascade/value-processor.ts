@@ -100,6 +100,7 @@ export function expandShorthandWithVariables(
   if (isCSSWide) {
     const results: MatchedDeclaration[] = [];
     for (const lh of shorthand.longhands) {
+      //mcdc:ignore:defensive subShorthand T is unreachable — no entry of SHORTHANDS[*].longhands is itself a SHORTHANDS key (longhand lists terminate in true longhands), so the lookup is always undefined here; F already witnessed [reviewed: agent:champ]
       const subShorthand = SHORTHANDS[lh];
       if (subShorthand) {
         results.push(...expandShorthandWithVariables({
@@ -123,6 +124,7 @@ export function expandShorthandWithVariables(
   const expanded = shorthand.expand(compValues);
   if (expanded) {
     const results: MatchedDeclaration[] = [];
+      //mcdc:ignore:defensive subShorthand T is unreachable — expand() maps shorthand names to true longhands only, so no expanded key resolves in SHORTHANDS; F already witnessed [reviewed: agent:champ]
     for (const [lh, val] of Object.entries(expanded)) {
       const subShorthand = SHORTHANDS[lh];
       const valStr = serialize(val).trim();
@@ -177,6 +179,7 @@ export function processStandardDeclarations(
   const winningDeclarations = new Map<string, MatchedDeclaration>();
 
   for (const [prop, decls] of standardDeclarationsByProperty) {
+    //mcdc:ignore:defensive prop.startsWith('--') T is unreachable — dashed names are filtered out of standardDeclarationsByProperty by the identical decl guard in the collection loop above, so keys here are never custom properties; F already witnessed [reviewed: agent:champ]
     if (prop.startsWith('--')) continue;
     decls.sort(compareCascadeDeclarations);
 

@@ -1266,6 +1266,7 @@ export function evaluateMediaFeature(feature: MediaFeature, env: MediaEnvironmen
   }
 
   // 5. Discrete Ident features (equality only)
+  //mcdc:ignore:defensive typeof parsedVal !== 'string' F is unreachable — parsedVal is number|null|string and both earlier kinds return above, so only strings reach this arm; string=T rows already witnessed [reviewed: agent:champ]
   if (typeof parsedVal === 'string') {
     if (op !== '=') return 'unknown';
 
