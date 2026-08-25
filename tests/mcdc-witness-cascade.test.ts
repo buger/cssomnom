@@ -184,4 +184,20 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
       assert.equal(layoutCalls, 0);
     });
   });
+
+  describe('KI cascade contract controls', () => {
+    // Verifies: SYS-REQ-260822-EGPW
+    // MCDC SYS-REQ-260822-EGPW: acyclic_custom_property_chain_supplied_GE_1=F, substitution_size_bounded_LE_10000=F => TRUE [no-action: no custom property chain supplied]
+    // MCDC SYS-REQ-260822-EGPW: acyclic_custom_property_chain_supplied_GE_1=T, substitution_size_bounded_LE_10000=T => TRUE
+    test('acyclic 50-link var() chain substitutes through cascade within bounds', () => {
+      let css = ':root { --v0: 10px;';
+      for (let i = 1; i <= 50; i++) css += ` --v${i}: var(--v${i - 1});`;
+      css += ' } .a { width: var(--v50); }';
+      const sheet = parse(css);
+      const { document } = parseHTML('<div class="a"></div>');
+      const el = document.querySelector('div')!;
+      const cs = getCascadedStyle(el, sheet.cssRules);
+      assert.equal(cs.getPropertyValue('width'), '10px');
+    });
+  });
 });

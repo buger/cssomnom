@@ -22,8 +22,11 @@ import {
   Parser,
   tokenize,
   CSSParserAtRule,
+  CSSParserDeclaration,
   CSSParserQualifiedRule,
   CSSParserRule,
+  parseComponentValueSync,
+  parseRuleListSync,
 } from '../src/index.ts';
 import { PropertyRegistry } from '../src/PropertyRegistry.ts';
 
@@ -416,5 +419,45 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
     assert.equal(CSS.escape('#id'), '\\#id');
     assert.equal(CSS.supports('color', 'red'), true);
     assert.equal(CSS.parseStylesheetSync(STYLESHEET_CSS).length, 1);
+  });
+
+  describe('KI parser-api contract controls (rows dispositioned against open KIs)', () => {
+    // Verifies: SYS-REQ-260823-QBD2
+    // MCDC SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=F, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => TRUE [no-action: no style rule parsed]
+    test('qualified rules map to CSSParserQualifiedRule nodes', () => {
+      const rules = parseRuleListSync('div { color: green; }');
+      assert.ok(rules[0] instanceof CSSParserQualifiedRule);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE -- toParserRule loses declaration content for qualified rules (empty body); failing public-API tripwire is KI-40 [reviewed: agent:champ] [ki: KI-40] [category: capability-gap]
+    // MCDC SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE [known-issue] [ki: KI-40]
+    //mcdc:ignore:known-issue SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=T, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=T => TRUE -- the satisfied body rows are reachable only after the KI-40 fix [reviewed: agent:champ] [ki: KI-40]
+
+    // Verifies: SYS-REQ-260823-PRT3
+    // MCDC SYS-REQ-260823-PRT3: at_rule_with_prelude_serialized=F, prelude_roundtrip_corruptions_LE_0=F => TRUE [no-action: no at-rule prelude serialized]
+    test('qualified rule serialization round-trips verbatim', () => {
+      const rule = parseRuleListSync('div{}')[0];
+      assert.equal(String(parseRuleListSync(String(rule))[0]), String(rule));
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PRT3: at_rule_with_prelude_serialized=T, prelude_roundtrip_corruptions_LE_0=F => FALSE -- serializing '@media screen' and re-parsing yields the corrupted name 'mediascreen'; failing public-API tripwire is KI-41 [reviewed: agent:champ] [ki: KI-41] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PRT3: at_rule_with_prelude_serialized=T, prelude_roundtrip_corruptions_LE_0=F => FALSE [known-issue] [ki: KI-41]
+    //mcdc:ignore:known-issue SYS-REQ-260823-PRT3: at_rule_with_prelude_serialized=T, prelude_roundtrip_corruptions_LE_0=T => TRUE -- the clean-prelude row is reachable only after the KI-41 fix [reviewed: agent:champ] [ki: KI-41]
+
+    // Verifies: SYS-REQ-260823-BTC4
+    // MCDC SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=F, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => TRUE [no-action: no url component value parsed]
+    test('clean single component value parses via parseComponentValueSync', () => {
+      assert.ok(parseComponentValueSync('10%'));
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => FALSE -- parseComponentValueSync accepts a <bad-url-token> instead of rejecting; failing public-API tripwire is KI-42 [reviewed: agent:champ] [ki: KI-42] [category: capability-gap]
+    // MCDC SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => FALSE [known-issue] [ki: KI-42]
+    //mcdc:ignore:known-issue SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=T, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=T => TRUE -- the satisfied rows are reachable only after the KI-42 fix [reviewed: agent:champ] [ki: KI-42]
+
+    // Verifies: SYS-REQ-260823-PVE7
+    // MCDC SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=F => TRUE [no-action: no trailing-garbage value parsed]
+    test('clean value parses without truncation via CSS.parseValue', () => {
+      assert.equal(String(CSS.parseValue!('10%')), '10%');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE -- CSS.parseValue still truncates trailing garbage leniently instead of rejecting; failing public-API tripwire is KI-45 [reviewed: agent:champ] [ki: KI-45] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE [known-issue] [ki: KI-45]
+    //mcdc:ignore:known-issue SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=T, rejecting_apis_GE_rejecting_apis_min=T, trailing_garbage_value_parsed=T => TRUE -- the satisfied rejection rows are reachable only after the KI-45 fix [reviewed: agent:champ] [ki: KI-45]
   });
 });

@@ -16,6 +16,8 @@
  */
 // Verifies: INT-REQ-260821-30ZA, INT-REQ-260821-MZW3, INT-REQ-260821-WQX9, SW-REQ-260821-6951, SW-REQ-260821-HNRG, SW-REQ-260821-PAKB, SW-REQ-260821-TF5T, SYS-REQ-260821-8TGB, SYS-REQ-260821-GR67, SYS-REQ-260821-X3KX, SYS-REQ-260821-YMEY
 import '../src/parser.ts';
+import { parse } from '../src/parser.ts';
+import { CSS } from '../src/index.ts';
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -29,6 +31,9 @@ import {
   CSSStyleRule,
   CSSImportRule,
   CSSRule,
+  CSSKeyframesRule,
+  CSSKeyframeRule,
+  CSSCounterStyleRule,
   MediaList,
 } from '../src/CSSOM.ts';
 import type { Token, Rule } from '../src/types.ts';
@@ -622,6 +627,228 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       assert.equal(index, 0);
       assert.equal(sheet.cssRules.length, 1);
       assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('color'), 'navy');
+    });
+  });
+
+  describe('KI contract requirement controls (rows dispositioned against open KIs)', () => {
+    // Verifies: SYS-REQ-260822-HARM, SYS-REQ-260822-50T6, SYS-REQ-260822-YEQZ, SYS-REQ-260822-FM19
+    // MCDC SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=F, trailing_tokens=F => TRUE
+    test('appendRule appends a complete keyframe rule when no trailing tokens follow', () => {
+      const sheet = parse('@keyframes fade {}');
+      const frames = sheet.cssRules[0] as CSSKeyframesRule;
+      frames.appendRule('from { opacity: 0; }');
+      assert.equal(frames.length, 1);
+    });
+    // Verifies: SYS-REQ-260822-HARM, SYS-REQ-260822-YEQZ, SYS-REQ-260822-FM19
+    // MCDC SYS-REQ-260822-HARM: declaration_dropped=F, keyframe_declaration_forbidden=F => TRUE [no-action: no forbidden keyframe declaration supplied]
+    // MCDC SYS-REQ-260822-50T6: append_rule_called=F, keyframe_not_appended=F, trailing_tokens=T => TRUE [no-action: CSSKeyframesRule.appendRule not called]
+    // MCDC SYS-REQ-260822-YEQZ: keyframe_child_attached=F, parent_links_set=F => TRUE [no-action: no child attach performed]
+    // MCDC SYS-REQ-260822-FM19: keyframe_child_removed=F, parent_links_cleared=F => TRUE [no-action: CSSKeyframesRule.deleteRule not called]
+    test('plain keyframes parse keeps animatable declarations and rule counts', () => {
+      const sheet = parse('@keyframes fade { from { opacity: 0; } }');
+      const frames = sheet.cssRules[0] as CSSKeyframesRule;
+      assert.ok(frames instanceof CSSKeyframesRule);
+      const child = frames.cssRules[0] as CSSKeyframeRule;
+      assert.equal(child.style.getPropertyValue('opacity'), '0');
+      assert.equal(frames.length, 1);
+    });
+    // Violation and satisfied rows for these requirements are reachable only after
+    // the KI fixes land; each row is dispositioned below against its open KI.
+    //mcdc:ignore:capability-gap SYS-REQ-260822-HARM: declaration_dropped=F, keyframe_declaration_forbidden=T => FALSE -- animation-name/animation-duration and !important declarations are currently retained inside @keyframes blocks; failing public-API tripwire is KI-104 [reviewed: agent:champ] [ki: KI-104] [category: capability-gap]
+    // MCDC SYS-REQ-260822-HARM: declaration_dropped=F, keyframe_declaration_forbidden=T => FALSE [known-issue] [ki: KI-104]
+    //mcdc:ignore:known-issue SYS-REQ-260822-HARM: declaration_dropped=T, keyframe_declaration_forbidden=T => TRUE -- the satisfied drop row is reachable only after the KI-104 parser fix [reviewed: agent:champ] [ki: KI-104]
+    // MCDC SYS-REQ-260822-HARM: declaration_dropped=T, keyframe_declaration_forbidden=T => TRUE [known-issue] [ki: KI-104]
+    //mcdc:ignore:capability-gap SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=F, trailing_tokens=T => FALSE -- appendRule with trailing garbage still appends the keyframe; failing public-API tripwire is KI-103 [reviewed: agent:champ] [ki: KI-103] [category: capability-gap]
+    // MCDC SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=F, trailing_tokens=T => FALSE [known-issue] [ki: KI-103]
+    //mcdc:ignore:known-issue SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=T, trailing_tokens=T => TRUE -- the satisfied rejection row is reachable only after the KI-103 fix [reviewed: agent:champ] [ki: KI-103]
+    //mcdc:ignore:capability-gap SYS-REQ-260822-YEQZ: keyframe_child_attached=T, parent_links_set=F => FALSE -- parsed keyframe children do not expose parentRule links; failing public-API tripwire is KI-101 [reviewed: agent:champ] [ki: KI-101] [category: capability-gap]
+    // MCDC SYS-REQ-260822-YEQZ: keyframe_child_attached=T, parent_links_set=F => FALSE [known-issue] [ki: KI-101]
+    //mcdc:ignore:known-issue SYS-REQ-260822-YEQZ: keyframe_child_attached=T, parent_links_set=T => TRUE -- the attached-links row is reachable only after the KI-101 fix [reviewed: agent:champ] [ki: KI-101]
+    // MCDC SYS-REQ-260822-YEQZ: keyframe_child_attached=T, parent_links_set=T => TRUE [known-issue] [ki: KI-101]
+    //mcdc:ignore:capability-gap SYS-REQ-260822-FM19: keyframe_child_removed=T, parent_links_cleared=F => FALSE -- deleteRule leaves owner links on the detached keyframe child; failing public-API tripwire is KI-101 [reviewed: agent:champ] [ki: KI-101] [category: capability-gap]
+    // MCDC SYS-REQ-260822-FM19: keyframe_child_removed=T, parent_links_cleared=F => FALSE [known-issue] [ki: KI-101]
+    //mcdc:ignore:known-issue SYS-REQ-260822-FM19: keyframe_child_removed=T, parent_links_cleared=T => TRUE -- the cleared-links row is reachable only after the KI-101 fix [reviewed: agent:champ] [ki: KI-101]
+    // MCDC SYS-REQ-260822-FM19: keyframe_child_removed=T, parent_links_cleared=T => TRUE [known-issue] [ki: KI-101]
+
+    // Verifies: SYS-REQ-260822-XEPS
+    // MCDC SYS-REQ-260822-XEPS: counter_descriptor_set=F, serialized_descriptor_current=F => TRUE [no-action: descriptor setter not called]
+    test('parsed counter-style rule exposes its descriptors verbatim', () => {
+      const sheet = parse('@counter-style thumbs { system: cyclic; }');
+      const rule = sheet.cssRules[0];
+      assert.ok(rule instanceof CSSCounterStyleRule);
+      assert.equal((rule as CSSCounterStyleRule).system, 'cyclic');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260822-XEPS: counter_descriptor_set=T, serialized_descriptor_current=F => FALSE -- a valid CSSCounterStyleRule descriptor setter does not update cssText; failing public-API tripwire is KI-102 [reviewed: agent:champ] [ki: KI-102] [category: capability-gap]
+    // MCDC SYS-REQ-260822-XEPS: counter_descriptor_set=T, serialized_descriptor_current=F => FALSE [known-issue] [ki: KI-102]
+    //mcdc:ignore:known-issue SYS-REQ-260822-XEPS: counter_descriptor_set=T, serialized_descriptor_current=T => TRUE -- the current-serialization row is reachable only after the KI-102 fix [reviewed: agent:champ] [ki: KI-102]
+
+    // Verifies: SYS-REQ-260823-DRP5
+    // MCDC SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=F, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => TRUE [no-action: no import parsed in this scenario]
+    test('valid @import parses to a CSSImportRule whose href round-trips', () => {
+      const sheet = parse('@import url(x.css);');
+      const imp = Array.from(sheet.cssRules).find((r): r is CSSImportRule => r instanceof CSSImportRule);
+      assert.ok(imp, 'valid import must parse to a CSSImportRule');
+      assert.equal(imp.href, 'x.css');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE -- a grammar-invalid @import still fabricates a CSSImportRule; failing public-API tripwire is KI-43 [reviewed: agent:champ] [ki: KI-43] [category: capability-gap]
+    // MCDC SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE [known-issue] [ki: KI-43]
+    //mcdc:ignore:known-issue SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=T, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=T => TRUE -- both satisfied rows are reachable only after the KI-43 fix [reviewed: agent:champ] [ki: KI-43]
+
+    // Verifies: SYS-REQ-260823-S4DW, SYS-REQ-260823-YQPJ
+    // MCDC SYS-REQ-260823-S4DW: system_font_keyword_declared=F, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=F => TRUE [no-action: no system font keyword declared]
+    // MCDC SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=F, system_font_keyword_declared=F => TRUE [no-action: no system font keyword declared]
+    test('ordinary font shorthand serializes and round-trips its longhands', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('.o { font: 12px serif; }');
+      const style = (sheet.cssRules[0] as CSSStyleRule).style;
+      assert.equal(style.getPropertyValue('font'), '12px serif');
+      assert.equal(style.getPropertyValue('font-size'), '12px');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=F => FALSE -- font: caption leaves the shorthand read empty instead of set; failing public-API tripwire is KI-112 [reviewed: agent:champ] [ki: KI-112] [category: capability-gap]
+    // MCDC SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=F => FALSE [known-issue] [ki: KI-112]
+    //mcdc:ignore:known-issue SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=T, system_font_shorthand_empty_reads_LE_0=T => TRUE -- the satisfied rows are reachable only after the KI-112 fix [reviewed: agent:champ] [ki: KI-112]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=F, system_font_keyword_declared=T => FALSE -- system font keywords currently pollute longhand storage; failing public-API tripwire is KI-112 [reviewed: agent:champ] [ki: KI-112] [category: capability-gap]
+    // MCDC SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=F, system_font_keyword_declared=T => FALSE [known-issue] [ki: KI-112]
+    //mcdc:ignore:known-issue SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=T, system_font_keyword_declared=T => TRUE -- the pollution-free row is reachable only after the KI-112 fix [reviewed: agent:champ] [ki: KI-112]
+
+    // Verifies: SYS-REQ-260823-0BRJ
+    // MCDC SYS-REQ-260823-0BRJ: font_invalid_keyword_mix_supplied=F, font_invalid_mix_retained_declarations_LE_0=F => TRUE [no-action: no invalid keyword mix supplied]
+    test('grammar-valid font shorthand is accepted', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('.o { font: bold 12px serif; }');
+      assert.notEqual((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('font'), '');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-0BRJ: font_invalid_keyword_mix_supplied=T, font_invalid_mix_retained_declarations_LE_0=F => FALSE -- an invalid keyword+size+family mix is currently accepted and retained; failing public-API tripwire is KI-113 [reviewed: agent:champ] [ki: KI-113] [category: capability-gap]
+    // MCDC SYS-REQ-260823-0BRJ: font_invalid_keyword_mix_supplied=T, font_invalid_mix_retained_declarations_LE_0=F => FALSE [known-issue] [ki: KI-113]
+    //mcdc:ignore:known-issue SYS-REQ-260823-0BRJ: font_invalid_keyword_mix_supplied=T, font_invalid_mix_retained_declarations_LE_0=T => TRUE -- the dropped-mix row is reachable only after the KI-113 fix [reviewed: agent:champ] [ki: KI-113]
+
+    // Verifies: SYS-REQ-260823-1V3K, SYS-REQ-260823-BNDX
+    // MCDC SYS-REQ-260823-1V3K: border_image_retention_loss_LE_0=F, quoted_url_border_image_declared=F => TRUE [no-action: no border-image declared]
+    // MCDC SYS-REQ-260823-BNDX: border_image_fixpoint_drift_LE_0=F, border_image_url_reparsed=F => TRUE [no-action: border-image url not reparsed]
+    test('independent color declaration is retained untouched', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { color: red; }');
+      assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('color'), 'red');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-1V3K: border_image_retention_loss_LE_0=F, quoted_url_border_image_declared=T => FALSE -- a quoted-url border-image declaration is dropped entirely on serialization; failing public-API tripwire is KI-114 [reviewed: agent:champ] [ki: KI-114] [category: capability-gap]
+    // MCDC SYS-REQ-260823-1V3K: border_image_retention_loss_LE_0=F, quoted_url_border_image_declared=T => FALSE [known-issue] [ki: KI-114]
+    //mcdc:ignore:known-issue SYS-REQ-260823-1V3K: border_image_retention_loss_LE_0=T, quoted_url_border_image_declared=T => TRUE -- the retention row is reachable only after the KI-114 fix [reviewed: agent:champ] [ki: KI-114]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-BNDX: border_image_fixpoint_drift_LE_0=F, border_image_url_reparsed=T => FALSE -- re-parsing a serialized border-image value drifts instead of reaching a fixpoint; failing public-API tripwire is KI-116 [reviewed: agent:champ] [ki: KI-116] [category: capability-gap]
+    // MCDC SYS-REQ-260823-BNDX: border_image_fixpoint_drift_LE_0=F, border_image_url_reparsed=T => FALSE [known-issue] [ki: KI-116]
+    //mcdc:ignore:known-issue SYS-REQ-260823-BNDX: border_image_fixpoint_drift_LE_0=T, border_image_url_reparsed=T => TRUE -- the fixpoint row is reachable only after the KI-116 fix [reviewed: agent:champ] [ki: KI-116]
+
+    // Verifies: SYS-REQ-260824-CFQG
+    // MCDC SYS-REQ-260824-CFQG: grammar_invalid_color_declared=F, invalid_color_retention_count_LE_0=F => TRUE [no-action: no grammar-invalid color declared]
+    test('grammar-valid color declaration is retained', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { color: red; }');
+      assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('color'), 'red');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260824-CFQG: grammar_invalid_color_declared=T, invalid_color_retention_count_LE_0=F => FALSE -- a grammar-invalid relative color value is retained instead of dropped; failing public-API tripwire is KI-117 [reviewed: agent:champ] [ki: KI-117] [category: capability-gap]
+    // MCDC SYS-REQ-260824-CFQG: grammar_invalid_color_declared=T, invalid_color_retention_count_LE_0=F => FALSE [known-issue] [ki: KI-117]
+    //mcdc:ignore:known-issue SYS-REQ-260824-CFQG: grammar_invalid_color_declared=T, invalid_color_retention_count_LE_0=T => TRUE -- the dropped-invalid row is reachable only after the KI-117 fix [reviewed: agent:champ] [ki: KI-117]
+
+    // Verifies: SYS-REQ-260824-N9AE
+    // MCDC SYS-REQ-260824-N9AE: nan_math_result_serialized=F, noncanonical_nan_keyword_count_LE_0=F => TRUE [no-action: no NaN math result serialized]
+    test('non-NaN calc serialization stays stable across a serialize/parse cycle', () => {
+      const first = String(CSS.parseValue!('calc(1px + 1em * 2)'));
+      const second = String(CSS.parseValue!(first));
+      assert.equal(second, first);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260824-N9AE: nan_math_result_serialized=T, noncanonical_nan_keyword_count_LE_0=F => FALSE -- NaN calc results serialize as raw arithmetic rather than the canonical NaN clamp; failing public-API tripwire is KI-118 [reviewed: agent:champ] [ki: KI-118] [category: capability-gap]
+    // MCDC SYS-REQ-260824-N9AE: nan_math_result_serialized=T, noncanonical_nan_keyword_count_LE_0=F => FALSE [known-issue] [ki: KI-118]
+    //mcdc:ignore:known-issue SYS-REQ-260824-N9AE: nan_math_result_serialized=T, noncanonical_nan_keyword_count_LE_0=T => TRUE -- the canonical-keyword row is reachable only after the KI-118 fix [reviewed: agent:champ] [ki: KI-118]
+
+    // Verifies: SYS-REQ-260823-SMA3
+    // MCDC SYS-REQ-260823-SMA3: missing_supports_matches_attributes_LE_0=F, supports_conditions_evaluated_GE_1=F => TRUE [no-action: no supports condition evaluated]
+    test('CSSSupportsRule exposes its serialized condition text', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('@supports (display: grid) { div {} }');
+      const supports = sheet.cssRules[0];
+      assert.ok('conditionText' in supports);
+      assert.equal((supports as unknown as { conditionText: string }).conditionText, '(display: grid)');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SMA3: missing_supports_matches_attributes_LE_0=F, supports_conditions_evaluated_GE_1=T => FALSE -- CSSSupportsRule lacks the IDL matches() attribute so evaluations cannot report results; failing public-API tripwire is KI-33 [reviewed: agent:champ] [ki: KI-33] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SMA3: missing_supports_matches_attributes_LE_0=F, supports_conditions_evaluated_GE_1=T => FALSE [known-issue] [ki: KI-33]
+    //mcdc:ignore:known-issue SYS-REQ-260823-SMA3: missing_supports_matches_attributes_LE_0=T, supports_conditions_evaluated_GE_1=T => TRUE -- the matches-equipped row is reachable only after the KI-33 fix [reviewed: agent:champ] [ki: KI-33]
+
+    // Verifies: SYS-REQ-260824-EVNP
+    // MCDC SYS-REQ-260824-EVNP: dropped_duplicate_count_LE_0=F, duplicate_declaration_parsed=F => TRUE [no-action: no duplicate declaration parsed]
+    //mcdc:ignore:defensive SYS-REQ-260824-EVNP: dropped_duplicate_count_LE_0=F, duplicate_declaration_parsed=T => FALSE -- duplicate declarations cascade by winner, they are never silently lost (KI-119 fixed) [reviewed: agent:champ]
+    // MCDC SYS-REQ-260824-EVNP: duplicate_declaration_parsed=T, dropped_duplicate_count_LE_0=T => TRUE
+    test('repeated declaration cascades to the later winner without data loss', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { margin-top: 1px; margin-top: 2px; }');
+      assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-top'), '2px');
+    });
+
+    // Verifies: SYS-REQ-260824-XRYP
+    // MCDC SYS-REQ-260824-XRYP: attr_namespace_drop_count_LE_0=F, namespaced_attr_value_set=F => TRUE [no-action: no namespaced attr() value set]
+    //mcdc:ignore:defensive SYS-REQ-260824-XRYP: attr_namespace_drop_count_LE_0=F, namespaced_attr_value_set=T => FALSE -- namespaced attr() names always survive serialization (KI-121 fixed) [reviewed: agent:champ]
+    // MCDC SYS-REQ-260824-XRYP: namespaced_attr_value_set=T, attr_namespace_drop_count_LE_0=T => TRUE
+    test('namespaced attr() serializes with namespace pipe and fallback intact', () => {
+      assert.equal(String(CSS.parseValue!('attr(|bar)')), 'attr(|bar)');
+      assert.equal(String(CSS.parseValue!('attr(foo |bar, "f")')).replace(/\s+/g, ' '), 'attr(foo |bar, "f")');
+    });
+
+    // Verifies: SYS-REQ-260823-KTS6
+    // MCDC SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=F, invalid_keytext_acceptances_LE_0=F, keytext_setter_called_with_grammar_violation=F => TRUE [no-action: keyText setter not driven with a grammar violation]
+    // MCDC SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=T, invalid_keytext_acceptances_LE_0=T, keytext_setter_called_with_grammar_violation=T => TRUE
+    test('keyText setter rejects grammar violations and keeps the selector unchanged', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('@keyframes k { 0% { opacity: 0; } }');
+      const rule = (sheet.cssRules[0] as CSSKeyframesRule).cssRules[0] as CSSKeyframeRule;
+      assert.throws(() => {
+        rule.keyText = '50%%';
+      }, (err: unknown) => err instanceof Error && err.name === 'SyntaxError');
+      assert.equal(rule.keyText, '0%');
+    });
+
+    // Verifies: SYS-REQ-260824-BJTQ
+    // MCDC SYS-REQ-260824-BJTQ: trailing_whitespace_declared=F, value_whitespace_leak_count_LE_0=F => TRUE [no-action: no trailing whitespace declared]
+    test('declaration without trailing whitespace serializes cleanly', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { color: red; }');
+      assert.equal((sheet.cssRules[0] as CSSStyleRule).style.getPropertyValue('color'), 'red');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260824-BJTQ: trailing_whitespace_declared=T, value_whitespace_leak_count_LE_0=F => FALSE -- declaration-value trailing whitespace currently leaks into the computed value read; failing public-API tripwire is KI-120 [reviewed: agent:champ] [ki: KI-120] [category: capability-gap]
+    // MCDC SYS-REQ-260824-BJTQ: trailing_whitespace_declared=T, value_whitespace_leak_count_LE_0=F => FALSE [known-issue] [ki: KI-120]
+    //mcdc:ignore:known-issue SYS-REQ-260824-BJTQ: trailing_whitespace_declared=T, value_whitespace_leak_count_LE_0=T => TRUE -- the trimmed row is reachable only after the KI-120 fix [reviewed: agent:champ] [ki: KI-120]
+
+    // Verifies: SYS-REQ-260822-8HDQ
+    // MCDC SYS-REQ-260822-8HDQ: decoded_identifier_serialized=F, round_trip_structure_preserved=F => TRUE [no-action: no decoded identifier serialized]
+    test('plain identifier declarations round-trip structure', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { color: red; }');
+      const style = (sheet.cssRules[0] as CSSStyleRule).style;
+      assert.equal(style.getPropertyValue('color'), 'red');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260822-8HDQ: decoded_identifier_serialized=T, round_trip_structure_preserved=F => FALSE -- escaped/hash identifiers decode on serialization and break round-trip structure; failing public-API tripwire is KI-21 [reviewed: agent:champ] [ki: KI-21] [category: capability-gap]
+    // MCDC SYS-REQ-260822-8HDQ: decoded_identifier_serialized=T, round_trip_structure_preserved=F => FALSE [known-issue] [ki: KI-21]
+    //mcdc:ignore:known-issue SYS-REQ-260822-8HDQ: decoded_identifier_serialized=T, round_trip_structure_preserved=T => TRUE -- the preserved-structure row is reachable only after the KI-21 fix [reviewed: agent:champ] [ki: KI-21]
+
+    // Verifies: SYS-REQ-260823-SHX6
+    // MCDC SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=F => TRUE [no-action: no shorthand expansion requested]
+    test('margin shorthand expansion covers its longhands without winner flips', () => {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync('div { margin: 1px 2px; overflow: hidden; }');
+      const style = (sheet.cssRules[0] as CSSStyleRule).style;
+      assert.equal(style.getPropertyValue('margin-top'), '1px');
+      assert.equal(style.getPropertyValue('overflow'), 'hidden');
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE -- generated shorthand tables are incomplete so some expansions fall out of coverage and flip winners; failing public-API tripwire is KI-36 [reviewed: agent:champ] [ki: KI-36] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE [known-issue] [ki: KI-36]
+    //mcdc:ignore:known-issue SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=T, shorthand_coverage_GE_shorthand_coverage_min=T, shorthand_expansion_requested=T => TRUE -- the fully-covered rows are reachable only after the KI-36 fix [reviewed: agent:champ] [ki: KI-36]
+
+    // Verifies: SYS-REQ-260823-EEQN
+    // MCDC SYS-REQ-260823-EEQN: grouped_negation_media_roundtripped=F, media_condition_collapse_count_LE_0=F => TRUE [no-action: no grouped negation media roundtripped]
+    //mcdc:ignore:defensive SYS-REQ-260823-EEQN: grouped_negation_media_roundtripped=T, media_condition_collapse_count_LE_0=F => FALSE -- grouped negation conditions round-trip without collapsing (KI-115 fixed) [reviewed: agent:champ]
+    // MCDC SYS-REQ-260823-EEQN: grouped_negation_media_roundtripped=T, media_condition_collapse_count_LE_0=T => TRUE
+    test('grouped negation media condition survives a serialize/reparse cycle', () => {
+      const sheet = parse('@media (not (min-width: 100px)) { div {} }');
+      const media = (sheet.cssRules[0] as unknown as { media?: MediaList }).media;
+      assert.ok(media);
+      assert.equal(media.mediaText, 'not (min-width: 100px)');
     });
   });
 });

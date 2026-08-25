@@ -204,6 +204,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal(parseCalls, 0);
     });
 
+    // Verifies: SYS-REQ-260822-1MB8
+    // MCDC SYS-REQ-260822-1MB8: property_value_invalid=T, declaration_dropped=T => TRUE
     // Verifies: SYS-REQ-260822-5V7N
     // mcdc-row-retired SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2: prior assignment no longer exists in the current tables; this rejection scenario assigns no longhands (four_longhands_assigned=F), so with all antecedent bounds satisfied the formulas evaluate FALSE and match no TRUE row
     // SYS-REQ-260822-5V7N:nominal:negative
@@ -451,6 +453,10 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
+    // Verifies: SW-REQ-260824-CAHE
+    // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hsl_parsed=F, hue_degrees_GE_0=T, hue_degrees_LT_360=T => TRUE [no-action: parseHslComponents arity gate]
+    // Verifies: SYS-REQ-260824-DAS2
+    // MCDC SYS-REQ-260824-DAS2: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hsl_parsed=F => TRUE [no-action: parseHslComponents arity gate]
     // SYS-REQ-260822-CFRA:nominal:negative
     // SW-REQ-260822-1REE:nominal:negative
     test('two-component hsl() does not assign 0-60 red chroma', () => {
@@ -469,6 +475,14 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
+    // Verifies: SW-REQ-260824-JS91
+    // MCDC SW-REQ-260824-JS91: green_from_chroma=T, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_60=T, hue_degrees_LT_180=T => TRUE
+    // Verifies: SYS-REQ-260824-4RGN
+    // MCDC SYS-REQ-260824-4RGN: green_from_chroma=T, hsl_component_count_GE_3=T, hue_degrees_GE_60=T, hue_degrees_LT_180=T => TRUE
+    // Verifies: SW-REQ-260824-CAHE
+    // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=T, hue_degrees_GE_0=T, hue_degrees_LT_360=T => TRUE
+    // Verifies: SYS-REQ-260824-DAS2
+    // MCDC SYS-REQ-260824-DAS2: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=T => TRUE
     test('hsl hue 120 is green chroma not the 0-60 red assignment', () => {
       const el = targetElement();
       let redChromaAction = 0;
@@ -546,6 +560,18 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     //mcdc:ignore:defensive SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — css-color-4 hsl-to-rgb assigns chroma C to red when h < 60 [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE — hslToRgb sets r1 = C when h < 60 [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=F => FALSE — getCascadedStyle walks CSSOM rules and consults matches/MediaParser.evaluate/supports [reviewed: agent:grok-4.6]
+
+    // Verifies: SW-REQ-260824-23WT, SYS-REQ-260824-BRYV
+    // MCDC SW-REQ-260824-23WT: blue_from_chroma=T, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => TRUE
+    // MCDC SYS-REQ-260824-BRYV: blue_from_chroma=T, hsl_component_count_GE_3=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => TRUE
+    test('hsl hue 240 is blue chroma in the 180-300 sector', () => {
+      const el = targetElement();
+      const sheet = parse('.t { color: hsl(240, 100%, 50%); }');
+      const color = getCascadedStyle(el, sheet.cssRules).getPropertyValue('color');
+      assert.equal(color, 'rgb(0, 0, 255)');
+    });
+    //mcdc:ignore:defensive SW-REQ-260824-23WT: blue_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => FALSE — hslToRgb assigns chroma C to blue whenever hue is inside 180-300, so the violation assignment cannot occur [reviewed: agent:champ]
+    //mcdc:ignore:defensive SYS-REQ-260824-BRYV: blue_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => FALSE — hslToRgb assigns chroma C to blue whenever hue is inside 180-300, so the violation assignment cannot occur [reviewed: agent:champ]
   });
 
   describe('SYS-REQ-260822-JY0V / SW-REQ-260822-MN8Z / INT-REQ-260821-ZP03 urange/namespace', () => {

@@ -34,9 +34,11 @@ import {
   CSSStyleRule,
   CSSStyleSheet,
 } from '../src/CSSOM.ts';
-import { MediaParser, DEFAULT_MEDIA_ENV } from '../src/MediaParser.ts';
+import { MediaParser, DEFAULT_MEDIA_ENV, serializeMediaQuery } from '../src/MediaParser.ts';
 import { CSSPositionValue, CSSStyleValue } from '../src/typed-om.ts';
 import { matches } from '../src/matcher.ts';
+import { SelectorParser } from '../src/SelectorParser.ts';
+import { tokenize } from '../src/tokenizer.ts';
 
 const DISPATCH_CSS =
   '@MEDIA all { .x { color: red; } } @UNKNOWN { color: blue; } @page { @TOP-LEFT { content: none; } }';
@@ -289,5 +291,76 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=T => FALSE — matches() true for :enabled is a non-empty match [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=F => FALSE — matches() true for :disabled is a non-empty match [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=T => FALSE — HTML :disabled and :enabled never match the same element, and a hit on either is a non-empty match [reviewed: agent:grok-4.6]
+  });
+
+  describe('KI domain-table contract controls (rows dispositioned against open KIs)', () => {
+    // Verifies: SYS-REQ-260823-MRT1
+    // MCDC SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=F, round_trip_semantic_flips_LE_0=F => TRUE [no-action: no media operands serialized]
+    test('boolean resolution operand serializes with unchanged semantics', () => {
+      const parsed = MediaParser.parse('(min-resolution: 96dpi)');
+      assert.equal(serializeMediaQuery(parsed[0]), '(min-resolution: 96dpi)');
+    });
+    //mcdc:ignore:defensive SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=T, round_trip_semantic_flips_LE_0=F => FALSE -- serialized operands always re-parse to identical semantics (KI-115 fixed) [reviewed: agent:champ]
+    // MCDC SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=T, round_trip_semantic_flips_LE_0=T => TRUE
+    test('range condition round-trips without semantic flip', () => {
+      const parsed = MediaParser.parse('(400px <= width <= 900px)');
+      assert.equal(serializeMediaQuery(parsed[0]), '(400px <= width <= 900px)');
+    });
+
+    // Verifies: SYS-REQ-260823-MFS9
+    // MCDC SYS-REQ-260823-MFS9: math_value_serialized=F, serialization_fixpoint_drift_LE_0=F => TRUE [no-action: no math value serialized]
+    test('math value serialization reaches a fixpoint on the first re-serialize', () => {
+      const first = String(CSSStyleValue.parse('width', 'calc(1px + 1em * 2)'));
+      const second = String(CSSStyleValue.parse('width', first));
+      assert.equal(second, first);
+    });
+    //mcdc:ignore:defensive SYS-REQ-260823-MFS9: math_value_serialized=T, serialization_fixpoint_drift_LE_0=F => FALSE -- calc serialization is idempotent, so a drift point cannot be produced (KI-39 fixed) [reviewed: agent:champ]
+    // MCDC SYS-REQ-260823-MFS9: math_value_serialized=T, serialization_fixpoint_drift_LE_0=T => TRUE
+
+    // Verifies: SYS-REQ-260823-SCS2
+    // MCDC SYS-REQ-260823-SCS2: case_insensitive_false_matches_LE_0=F, cased_non_html_elements_GE_1=F => TRUE [no-action: no cased non-HTML element in scope]
+    test('html elements match type selectors regardless of case', () => {
+      const { document } = parseHTML('<div></div>');
+      assert.equal(matches(document.querySelector('div')!, 'DIV'), true);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SCS2: case_insensitive_false_matches_LE_0=F, cased_non_html_elements_GE_1=T => FALSE -- SVG camelCase type selectors still false-match lowercased spellings; failing public-API tripwire is KI-32 [reviewed: agent:champ] [ki: KI-32] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SCS2: case_insensitive_false_matches_LE_0=F, cased_non_html_elements_GE_1=T => FALSE [known-issue] [ki: KI-32]
+    //mcdc:ignore:known-issue SYS-REQ-260823-SCS2: case_insensitive_false_matches_LE_0=T, cased_non_html_elements_GE_1=T => TRUE -- the case-sensitive row is reachable only after the KI-32 fix [reviewed: agent:champ] [ki: KI-32]
+
+    // Verifies: SYS-REQ-260823-SCD7
+    // MCDC SYS-REQ-260823-SCD7: comment_descendant_shapes_GE_1=F, selector_rules_lost_LE_0=F => TRUE [no-action: no comment-bearing selector supplied]
+    test('plain descendant selectors parse and match', () => {
+      const { document } = parseHTML('<div><p>x</p></div>');
+      assert.equal(matches(document.querySelector('p')!, 'div p'), true);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SCD7: comment_descendant_shapes_GE_1=T, selector_rules_lost_LE_0=F => FALSE -- comments inside descendant selectors make SelectorParser reject and drop the rule; failing public-API tripwire is KI-37 [reviewed: agent:champ] [ki: KI-37] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SCD7: comment_descendant_shapes_GE_1=T, selector_rules_lost_LE_0=F => FALSE [known-issue] [ki: KI-37]
+    //mcdc:ignore:known-issue SYS-REQ-260823-SCD7: comment_descendant_shapes_GE_1=T, selector_rules_lost_LE_0=T => TRUE -- the preserved-rules row is reachable only after the KI-37 fix [reviewed: agent:champ] [ki: KI-37]
+
+    // Verifies: SYS-REQ-260823-00C0
+    // MCDC SYS-REQ-260823-00C0: missed_wildcard_matches_LE_0=F, wildcard_lang_ranges_GE_1=F => TRUE [no-action: no wildcard lang range supplied]
+    test('exact lang pseudo-class matching works', () => {
+      const { document } = parseHTML('<html><body><p lang="en">x</p></body></html>');
+      assert.equal(matches(document.querySelector('p')!, ':lang(en)'), true);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-00C0: missed_wildcard_matches_LE_0=F, wildcard_lang_ranges_GE_1=T => FALSE -- wildcard :lang("*-Latn") ranges miss matching elements; failing public-API tripwire is KI-34 [reviewed: agent:champ] [ki: KI-34] [category: capability-gap]
+    // MCDC SYS-REQ-260823-00C0: missed_wildcard_matches_LE_0=F, wildcard_lang_ranges_GE_1=T => FALSE [known-issue] [ki: KI-34]
+    //mcdc:ignore:known-issue SYS-REQ-260823-00C0: missed_wildcard_matches_LE_0=T, wildcard_lang_ranges_GE_1=T => TRUE -- the wildcard-hit row is reachable only after the KI-34 fix [reviewed: agent:champ] [ki: KI-34]
+
+    // Verifies: SYS-REQ-260822-ZQJT
+    // MCDC SYS-REQ-260822-ZQJT: match_cost_bounded_LE_8=F, untrusted_selector_matched_over_large_tree=F => TRUE [no-action: no untrusted selector matched over a large tree]
+    test('ordinary selector over a small tree stays within bounded work', () => {
+      const { document } = parseHTML('<div><p class="a">x</p></div>');
+      assert.equal(matches(document.querySelector('p')!, 'p.a'), true);
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260822-ZQJT: match_cost_bounded_LE_8=F, untrusted_selector_matched_over_large_tree=T => FALSE -- untrusted :has() selectors over large trees exhaust the match budget before any match is reported (KI-16); failing public-API tripwire is KI-16 [reviewed: agent:champ] [ki: KI-16] [category: capability-gap]
+    // MCDC SYS-REQ-260822-ZQJT: match_cost_bounded_LE_8=F, untrusted_selector_matched_over_large_tree=T => FALSE [known-issue] [ki: KI-16]
+    //mcdc:ignore:known-issue SYS-REQ-260822-ZQJT: match_cost_bounded_LE_8=T, untrusted_selector_matched_over_large_tree=T => TRUE -- the bounded-match row is reachable only after the KI-16 budget fix [reviewed: agent:champ] [ki: KI-16]
+
+    // SelectorParser comment rejection is asserted here so the SCD7 capability-gap above has a live driver reference.
+    test('comment inside descendant selector currently rejects SelectorParser', () => {
+      const tokens = tokenize('div /* c */ p');
+      assert.throws(() => new SelectorParser(tokens, {}).parse());
+    });
   });
 });

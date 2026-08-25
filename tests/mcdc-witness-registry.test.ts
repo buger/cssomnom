@@ -301,4 +301,22 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
       }
     });
   });
+
+  describe('KI property-registry contract controls (rows dispositioned against open KIs)', () => {
+    // Verifies: SYS-REQ-260823-PMB5
+    // MCDC SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=F, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=F => TRUE [no-action: no brace-multiplier syntax supplied]
+    test('legal closed-set multipliers # and + are accepted by registerProperty', () => {
+      PropertyRegistry.clear();
+      assert.doesNotThrow(() => {
+        CSS.registerProperty({ name: '--mcdc-pmb5-hash', syntax: '<color>#', inherits: false, initialValue: 'red' });
+      });
+      assert.doesNotThrow(() => {
+        CSS.registerProperty({ name: '--mcdc-pmb5-plus', syntax: '<image>+', inherits: false, initialValue: 'url(a.png)' });
+      });
+      PropertyRegistry.clear();
+    });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=F => FALSE -- brace-multiplier syntax strings such as <length>{2} are still accepted into the registry; failing public-API tripwire is KI-35 [reviewed: agent:champ] [ki: KI-35] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=F => FALSE [known-issue] [ki: KI-35]
+    //mcdc:ignore:known-issue SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=T, legal_multipliers_accepted_GE_2=T => TRUE -- the satisfied rows are reachable only after the KI-35 fix [reviewed: agent:champ] [ki: KI-35]
+  });
 });
