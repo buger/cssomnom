@@ -30,6 +30,7 @@ export abstract class CSSMathValue extends CSSNumericValue {
   abstract serialize(): string;
   override toString(): string {
     const s = this.serialize();
+    //mcdc:ignore:defensive operator === 'number' T is unreachable — no CSSMathValue subclass defines the 'number' operator (numbers are CSSUnitValue with its own toString), so bare-number emission never routes here; min/max/clamp and calc-wrap arms are already witnessed [reviewed: agent:champ]
     if (this.operator === 'number') return s;
     if (['min', 'max', 'clamp'].includes(this.operator)) return s;
     return `calc(${stripOuterParens(s)})`;

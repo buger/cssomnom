@@ -194,6 +194,7 @@ export function normalizeComputedColor(val: string): string {
   // 1. Named colors (css-color-4 § 15 #named-colors)
   if (lower in NAMED_COLORS) {
     const [r, g, b, a] = NAMED_COLORS[lower];
+    //mcdc:ignore:defensive a < 1 F is unreachable — NAMED_COLORS has exactly one 4-tuple (transparent [0,0,0,0]), so a defined alpha is always < 1; the transparent rgba row is already witnessed by normalizeComputedColor tests [reviewed: agent:champ]
     if (a !== undefined && a < 1) {
       return `rgba(${r}, ${g}, ${b}, ${formatAlpha(a)})`;
     }

@@ -73,6 +73,7 @@ function validateMathFunctions(tokens: ComponentValue[]): boolean {
         }
       }
       if (!validateMathFunctions(t.value)) return false;
+    //mcdc:ignore:defensive Array.isArray F is unreachable — tokenizer-produced simple blocks always carry an array value, so the guard is a tautology on reached rows; function-token rows are already witnessed [reviewed: agent:champ]
     } else if (t.type === 'simple-block' && Array.isArray(t.value)) {
       if (!validateMathFunctions(t.value)) return false;
     }
@@ -350,6 +351,7 @@ function _parseAll(property: string, css: string): CSSStyleValue[] {
     if (trimmed.length === 1 && trimmed[0].type === 'ident') {
       const kw = (trimmed[0] as IdentToken).value.toLowerCase();
       const syntax = STANDARD_PROPERTIES_SYNTAX[propLower];
+      //mcdc:ignore:defensive kw === 'transparent' has no independence pair — for <color> properties every later rescue arm ('auto'/'invert'/'none'/syntax-list) is unreachable, so no row can hold the outcome fixed while flipping this leg alone; transparent and currentcolor rows are already witnessed [reviewed: agent:champ]
       if (
         kw in NAMED_COLORS ||
         kw === 'currentcolor' ||
@@ -448,6 +450,7 @@ ParseHooks.validatePropertyValue = (property: string, value: string): boolean =>
   }
 
   // Reject negative dimensions on non-negative properties
+  //mcdc:ignore:defensive dimension .value !== undefined F is unreachable — the tokenizer always assigns a numeric value to dimension tokens, so the guard is a tautology on reached rows; negative-dimension rejection rows are already witnessed [reviewed: agent:champ]
   if (tokens.length === 1 && tokens[0].type === 'dimension' && (tokens[0] as { value?: number }).value !== undefined && (tokens[0] as { value: number }).value < 0) {
     const syntax = STANDARD_PROPERTIES_SYNTAX[lowerProp] || '';
     if (syntax.includes('[0,∞]') || syntax.includes('[0,') || syntax.includes('[0.0,')) {

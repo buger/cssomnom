@@ -146,6 +146,7 @@ export class CSSComputedStyleDeclaration extends CSSStyleDeclaration {
       const wm = super.getPropertyValue('writing-mode') || 'horizontal-tb';
       const dir = super.getPropertyValue('direction') || 'ltr';
       const resolvedPhysical = resolveLogicalProperty(dashed, wm, dir);
+      //mcdc:ignore:defensive resolvedPhysical !== dashed F is unreachable — every LOGICAL_MAPPING entry resolves to a distinct physical name across all writing-mode/direction combinations (verified exhaustively), so the comparison is always true here; logical-resolution rows are already witnessed [reviewed: agent:champ]
       if (resolvedPhysical !== dashed) {
         return this.getPropertyValue(resolvedPhysical);
       }
@@ -243,6 +244,7 @@ export class CSSComputedStyleDeclaration extends CSSStyleDeclaration {
             const remaining = parentWidth - elWidth;
             const leftAuto = (super.getPropertyValue('margin-left') || '').trim() === 'auto' || (this._declarations.some(d => d.name === 'margin-left' && serialize(d.value).trim() === 'auto'));
             const rightAuto = (super.getPropertyValue('margin-right') || '').trim() === 'auto' || (this._declarations.some(d => d.name === 'margin-right' && serialize(d.value).trim() === 'auto'));
+            //mcdc:ignore:defensive leftAuto is constantly true — the enclosing guard only admits elements whose computed margin-left === 'auto', so this disjunction's first leg cannot be false; centering and one-side rows are already witnessed via margin auto resolution tests [reviewed: agent:champ]
             if (leftAuto && rightAuto) {
               return `${remaining / 2}px`;
             } else if (leftAuto || rightAuto) {
@@ -305,6 +307,7 @@ export class CSSComputedStyleDeclaration extends CSSStyleDeclaration {
           }
           if (lower in NAMED_COLORS) {
             const [r, g, b, a] = NAMED_COLORS[lower];
+            //mcdc:ignore:defensive a < 1 F is unreachable — NAMED_COLORS has exactly one 4-tuple (transparent [0,0,0,0]), so a defined alpha is always < 1; transparent box-shadow rows are already witnessed via normalizeComputedColor tests [reviewed: agent:champ]
             if (a !== undefined && a < 1) return `rgba(${r}, ${g}, ${b}, ${formatAlpha(a)})`;
             return `rgb(${r}, ${g}, ${b})`;
           }

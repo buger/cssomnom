@@ -28,6 +28,7 @@ import { ensureNumeric, stripOuterParens } from '../../utils/formatting.ts';
 
 // reqproof:proptest:skip internal precondition validator inside the sum/min/max arms; witnessed by tests/mcdc-math-product-parsefn-unique-cause.test.ts
 function validateCompatibleSumTypes(numericArgs: CSSNumericValue[], context: string): void {
+  //mcdc:ignore:defensive numericArgs.length > 0 F is unreachable — CSSMathSum/Min/Max constructors throw DOMException on zero arguments before calling this validator, so args always has entries; compatible and incompatible rows are already witnessed [reviewed: agent:champ]
   if (numericArgs.length > 0) {
     const firstType = numericArgs[0].type();
     for (let i = 1; i < numericArgs.length; i++) {
@@ -269,6 +270,7 @@ export class CSSMathClamp extends CSSMathValue {
     let result = this.value.type();
     if (this.lower && typeof (this.lower as CSSNumericValue).type === 'function') {
       const combined = addTypesForSum(result, (this.lower as CSSNumericValue).type());
+      //mcdc:ignore:defensive combined F is unreachable — the constructor rejects lower/value and upper/value base mismatches up front, so addTypesForSum(valueType, lowerType) cannot fail once construction succeeds; combined-T rows are already witnessed [reviewed: agent:champ]
       if (combined) result = combined;
     }
     if (this.upper && typeof (this.upper as CSSNumericValue).type === 'function') {
@@ -438,6 +440,7 @@ export class CSSMathFunction extends CSSMathValue {
     }
 
     if (name === 'log') {
+      //mcdc:ignore:defensive values.length < 1 T is unreachable — type() early-returns an empty type for empty values before name dispatch reaches this arm; log one- and three-argument rows are already witnessed [reviewed: agent:champ]
       if (this.values.length < 1 || this.values.length > 2) throw new TypeError('log requires 1 or 2 arguments');
       for (let i = 0; i < this.values.length; i++) {
         if (addTypesForSum(this.values.item(i)!.type(), {}) === null) {

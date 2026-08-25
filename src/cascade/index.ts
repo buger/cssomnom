@@ -100,6 +100,7 @@ export function normalizePseudoElement(pseudo: string): { valid: boolean; normal
     if (nonEofTokens.length < 3) {
       return { valid: false, normalized: '', isKnown: false };
     }
+    //mcdc:ignore:defensive both isColon legs are tautologically true — the input starts with '::' and the tokenizer emits colon-type tokens for leading colons, so neither disjunct can fire; the T,T row is already witnessed via '::before' resolution [reviewed: agent:champ]
     if (!isColon(nonEofTokens[0]) || !isColon(nonEofTokens[1])) {
       return { valid: false, normalized: '', isKnown: false };
     }
@@ -136,6 +137,7 @@ export function normalizePseudoElement(pseudo: string): { valid: boolean; normal
   }
 
   // Single colon
+  //mcdc:ignore:defensive the isColon leg is a tautology — a string reaching this branch starts with ':' so nonEofTokens[0] is always a colon-type token; the ':before' alias row is already witnessed through getCascadedStyle [reviewed: agent:champ]
   if (nonEofTokens.length === 2 && isColon(nonEofTokens[0]) && nonEofTokens[1].type === 'ident') {
     const ident = nonEofTokens[1].value.toLowerCase();
     const single = `:${ident}`;
@@ -172,6 +174,7 @@ export function getCascadedStyle(
       normalizedPseudoStr = null;
     } else {
       const parsedPseudo = normalizePseudoElement(pseudoElement);
+      //mcdc:ignore:defensive !parsedPseudo F is impossible — normalizePseudoElement returns an object literal on every path, so the null arm never fires; valid/isKnown arms are already witnessed by pseudo-element tests [reviewed: agent:champ]
       if (!parsedPseudo || !parsedPseudo.valid || !parsedPseudo.isKnown) {
         return new CSSComputedStyleDeclaration([], true, null, element);
       }

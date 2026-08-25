@@ -307,6 +307,7 @@ function matchSimpleSelector(element: DOMElement, simple: SimpleSelector, scope?
           if (element.namespaceURI && element.namespaceURI !== 'http://www.w3.org/1999/xhtml') return false;
           if (isSvg) return false;
         } else if (simple.namespace === 'svg') {
+          //mcdc:ignore:defensive the namespaceURI leg is implied — A=!isSvg already asserts namespaceURI !== svg-ns (isSvg ORs localName==='svg' with the same comparison), so this third condition is true whenever it evaluates; svg-prefix and xhtml-element rows are already witnessed via svg|rect matching [reviewed: agent:champ]
           if (!isSvg && element.prefix !== 'svg' && element.namespaceURI !== 'http://www.w3.org/2000/svg') return false;
         } else {
           if (element.prefix !== simple.namespace && element.namespaceURI !== simple.namespace) return false;
@@ -325,6 +326,7 @@ function matchSimpleSelector(element: DOMElement, simple: SimpleSelector, scope?
           if (element.namespaceURI && element.namespaceURI !== 'http://www.w3.org/1999/xhtml') return false;
           if (isSvg) return false;
         } else if (simple.namespace === 'svg') {
+          //mcdc:ignore:defensive the namespaceURI leg is implied, as in the type-selector arm above — !isSvg guarantees namespaceURI differs from the SVG namespace whenever this row evaluates; witness rows shared with that arm [reviewed: agent:champ]
           if (!isSvg && element.prefix !== 'svg' && element.namespaceURI !== 'http://www.w3.org/2000/svg') return false;
         } else {
           if (element.prefix !== simple.namespace && element.namespaceURI !== simple.namespace) return false;

@@ -44,6 +44,7 @@ export class CSSUnparsedValue extends CSSStyleValue {
       set(target, prop, value, receiver) {
         if (typeof prop === 'string' && /^\d+$/.test(prop)) {
           const index = parseInt(prop, 10);
+          //mcdc:ignore:defensive index < 0 T is unreachable — the numeric-key regex ^\d+$ admits only unsigned digit strings, so parseInt never yields a negative index; upper-bound and in-range rows are already witnessed [reviewed: agent:champ]
           if (index < 0 || index > target._values.length) {
             throw new RangeError(`Index ${index} is out of bounds (length ${target._values.length})`);
           }

@@ -452,6 +452,7 @@ export function toParserRule(rule: unknown): CSSParserRule {
   }
   
   // Handle CSSOM style-rule or qualified rule
+  //mcdc:ignore:defensive the r !== null leg is unreachable — a null r dereferences at the r.type comparisons above before this arm evaluates; style-rule and qualified-rule conversion rows are already witnessed [reviewed: agent:champ]
   if (r.type === 1 || r.type === 'style-rule' || (typeof r === 'object' && r !== null && 'selectorText' in r)) {
       const qr = r as unknown as { selectorText?: string, prelude?: ComponentValue[], cssRules?: Iterable<unknown>, style?: Iterable<string> & { getPropertyValue(n: string): string } };
       return new CSSParserQualifiedRule(
@@ -687,6 +688,7 @@ function evalSupportsInParens(item: ComponentValue): boolean {
     try {
       const selParser = new SelectorParser(selValues, { strictSupports: true });
       const list = selParser.parse();
+      //mcdc:ignore:defensive both disjuncts are unreachable — strictSupports parsing either throws (converted to false by the catch below) or yields exactly one complex-selector, and top-level commas are rejected earlier; supported and unsupported selector() outcomes are already witnessed [reviewed: agent:champ]
       if (list.selectors.length !== 1 || list.selectors[0].type === 'invalid-selector') return false;
       return true;
     } catch {

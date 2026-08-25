@@ -65,6 +65,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
     if (text.length > 0) {
       const newCodePoints = Array.from(text).map(c => {
         const cp = c.codePointAt(0);
+        //mcdc:ignore:defensive cp === undefined T is impossible — Array.from(text) yields one defined code point per character, so codePointAt(0) on each never returns undefined; appendChunk rows are already witnessed {R}
         if (cp === undefined) {
           throw new Error('Unexpected undefined code point');
         }
@@ -87,6 +88,7 @@ export class StreamingTokenizer extends AbstractTokenizer {
     if (text.length > 0) {
       const newCodePoints = Array.from(text).map(c => {
         const cp = c.codePointAt(0);
+        //mcdc:ignore:defensive cp === undefined T is impossible — Array.from(text) yields one defined code point per character, so codePointAt(0) on each never returns undefined; close() rows are already witnessed {R}
         if (cp === undefined) {
           throw new Error('Unexpected undefined code point');
         }

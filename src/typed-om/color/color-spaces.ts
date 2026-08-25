@@ -160,6 +160,7 @@ export class CSSHWB extends CSSColorValue {
   get h(): CSSNumericValue { checkBrand(this, CSSHWB); return this._h; }
   set h(val: CSSNumericValue) {
     checkBrand(this, CSSHWB);
+    //mcdc:ignore:defensive typeof val === 'number' has no independence pair — a primitive number is never an instanceof CSSNumericValue, so the first leg already decides before typeof can differ on a reached row; non-numeric rejection rows are already witnessed [reviewed: agent:champ]
     if (!(val instanceof CSSNumericValue) || typeof val === 'number') {
       throw new TypeError(`CSSHWB.h must be a CSSNumericValue`);
     }

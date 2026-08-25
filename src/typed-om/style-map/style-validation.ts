@@ -224,6 +224,7 @@ export function matchesStyleValueSyntax(value: CSSStyleValue, syntax: string, pr
         'infotext', 'menu', 'menutext', 'scrollbar', 'threeddarkshadow', 'threedface', 'threedhighlight',
         'threedlightshadow', 'threedshadow', 'window', 'windowframe', 'windowtext', 'currentcolor'
       ]);
+      //mcdc:ignore:defensive kw === 'currentcolor' F-side pair is impossible — SYSTEM_COLORS already contains 'currentcolor', so the second disjunct short-circuits before the third can independently decide; named/system/currentcolor accept rows are already witnessed [reviewed: agent:champ]
       if (kw in NAMED_COLORS || SYSTEM_COLORS.has(kw) || kw === 'currentcolor') {
         return true;
       }

@@ -658,6 +658,7 @@ export class Parser {
     const stream = new ArrayComponentValueStream(block.value);
     while (stream.peek().type !== 'EOF') {
       const token = stream.peek();
+      //mcdc:ignore:defensive the comment leg is constant false — this tokenizer consumes comments during preprocessing and never emits comment tokens; whitespace-skip rows are already witnessed [reviewed: agent:champ]
       if (token.type === 'whitespace' || token.type === 'comment') {
         stream.next();
         continue;
@@ -666,6 +667,7 @@ export class Parser {
         const atToken = stream.next() as import('./types.ts').AtKeywordToken;
         const blockName = atToken.value.toLowerCase();
         // Skip whitespace
+        //mcdc:ignore:defensive comment tokens do not exist in this stream for the same reason; whitespace-skip rows are already witnessed [reviewed: agent:champ]
         while (stream.peek().type === 'whitespace' || stream.peek().type === 'comment') {
           stream.next();
         }

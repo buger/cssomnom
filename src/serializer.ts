@@ -855,6 +855,7 @@ function tryCombineFont(
   declIndices: Map<Declaration, number>
 ): string | null {
   const def = SHORTHANDS['font'];
+  //mcdc:ignore:defensive !def T is unreachable — SHORTHANDS['font'] is a static generated entry, so the lookup always succeeds; longhand-membership rows are already witnessed by font contraction tests [reviewed: agent:champ]
   if (!def || !def.longhands.includes(d.name)) return null;
 
   const allDecls = def.longhands.map(name => declMap.get(name));
@@ -884,6 +885,7 @@ function tryCombineFontVariant(
   declIndices: Map<Declaration, number>
 ): string | null {
   const def = SHORTHANDS['font-variant'];
+  //mcdc:ignore:defensive !def T is unreachable — SHORTHANDS['font-variant'] is a static generated entry; longhand-membership rows are already witnessed by font-variant contraction tests [reviewed: agent:champ]
   if (!def || !def.longhands.includes(d.name)) return null;
 
   const allDecls = def.longhands.map(name => declMap.get(name));
