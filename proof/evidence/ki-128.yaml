@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-128
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260825-V4ZS
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-25T13:47:49Z"
+input_set:
+    - proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts
+freshness_hashes:
+    proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts: sha256:0a775d97d25b1cbc40e657d5214d6c8e6f18c8513378d2b69b4766290fca4176
+known_issues:
+    - KI-128

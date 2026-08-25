@@ -1,0 +1,37 @@
+id: KI-125
+title: Stale registry syntax strings reject grammar-valid property values
+description: 'CSSStyleValue.parse throws for spellings that the owning property grammars define. The generated registry stores scrollbar-gutter as auto | stable while css-overflow-3 defines auto | stable && both-edges?. It stores font-variant-alternates as normal | historical-forms while css-fonts-4 defines the styleset(), character-variant(), swash(), ornaments(), and annotation() functions. It stores text-indent as length-percentage while css-text-4 appends && hanging? && each-line?. It stores font-palette as normal | light | dark while css-fonts-4 adds the palette-identifier production parsed as a dashed ident. Verified rejections today: stable both-edges, styleset(ss01), 10px hanging, and --my-palette. Distinct from KI-35 and KI-111, which cover acceptance of invalid registry input, and from KI-38, which covers cascade ignorance of the registry.'
+affected_requirements:
+    - SYS-REQ-260825-7T66
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-125-registry-stale-syntax-rejects-valid-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-125.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse(property, value) against PropertyRegistry syntax strings
+attacker_input: ordinary Typed OM parse calls with grammar-valid values of newly specified properties; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-125-registry-stale-syntax-rejects-valid-overlay-260825.ts
+tripwire_mutation: Regenerate the four syntax strings from their defining specifications so each failing leg parses and round-trips while both green controls stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Callers can bypass validation with CSSStyleValue.parse of a generic property or raw component-value parsing until registry data refreshes.
+remediation: Regenerate property syntax strings from mdn-data or @webref/css through scripts/codegen so scrollbar-gutter, font-variant-alternates, text-indent, and font-palette match their defining grammars.
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T10:04:20Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-25T10:04:58Z"
+      by: agent:ox-alpha
+      action: refresh-evidence
+      detail: proof/evidence/ki-125.yaml
+kill_domain: registry_data_drift
+do_not_refile_as: 'registerProperty accepting invalid brace-multiplier syntax (KI-35) or invalid initial values (KI-111): opposite direction, accept-invalid vs reject-valid; cascade ignoring PropertyRegistry descriptors (KI-38): different consumer surface'

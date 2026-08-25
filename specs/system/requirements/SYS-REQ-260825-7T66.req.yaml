@@ -1,0 +1,41 @@
+id: SYS-REQ-260825-7T66
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: ""
+description: Property syntax strings in the generated registry shall match current property grammars, so CSSStyleValue.parse accepts every grammar-valid value. css-overflow-3 gives scrollbar-gutter the grammar auto | stable && both-edges?. css-fonts-4 gives font-variant-alternates the styleset(), character-variant(), swash(), ornaments(), and annotation() functions and gives font-palette the palette-identifier production. css-text-4 gives text-indent the grammar length-percentage && hanging? && each-line?. The registry stores stale one-line grammars for these properties and rejects valid values.
+formalization_strategy: informal
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: 'The generated registry strings drift from the submodule specifications they codegen from. Grammar-valid spellings scrollbar-gutter stable both-edges, font-variant-alternates styleset(ss01), text-indent 10px hanging, and font-palette --my-palette all throw today. A conforming parse must accept them and reify per css-typed-om-1 #parse-a-cssstylevalue.'
+tags: []
+variables: []
+references:
+    - type: document
+      id: submodules/csswg-drafts/css-overflow-3/Overview.bs#scrollbar-gutter-property
+    - type: document
+      id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-variant-alternates-prop
+    - type: document
+      id: submodules/csswg-drafts/css-text-4/Overview.bs#text-indent-property
+    - type: document
+      id: submodules/csswg-drafts/css-fonts-4/Overview.bs#font-palette-prop
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: none
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-25T10:01:12Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-25T10:01:12Z"

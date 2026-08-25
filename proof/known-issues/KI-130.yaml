@@ -1,0 +1,37 @@
+id: KI-130
+title: Unitless zero reifies as px instead of preserving the number leg on border-image-outset and width
+description: 'Typed zero values on border-image-outset and border-image-width reify with unit px instead of unit number. css-typed-om-1 #reify-a-numeric-value step 2 maps a unitless zero to px only when the value is a dimension. Step 3 sets unit number for a number value. The dual length-or-number grammars of these properties match the number leg, and typed inputs carry that leg explicitly. Non-zero numbers round-trip correctly today, so the coercion keys on the zero magnitude alone. Local WPT border-image-outset.html pins the number case through assert_is_equal_with_range_handling.'
+affected_requirements:
+    - SYS-REQ-260825-26NJ
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-130-border-image-unitless-zero-number-leg-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-130.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.set()/get() and CSSStyleValue.parseAll() unit handling for border-image-outset / border-image-width
+attacker_input: ordinary Typed OM set calls with CSSUnitValue(0, number); no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-130-border-image-unitless-zero-number-leg-overlay-260825.ts
+tripwire_mutation: Remove the zero-to-dimension special case from the number-leg re-parse path so all three defect legs return number while non-zero and pure-length controls stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers can compare value equality only or pass explicit px lengths on these two properties until units stabilize.
+remediation: 'Reify unitless zero against the matched grammar leg: number stays number; only a dimension zero maps to px per #reify-a-numeric-value steps 2 and 3.'
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T13:47:28Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-25T13:47:50Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-130.yaml
+kill_domain: numeric_unit_coercion
+do_not_refile_as: 'out-of-range negative values missing the fresh CSSMathSum wrap (KI-122): different algorithm clause and observable, no wrap involved here'

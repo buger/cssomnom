@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-127
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260825-VKNX
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-25T13:47:49Z"
+input_set:
+    - proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts
+freshness_hashes:
+    proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts: sha256:d7315887bd79f7f851950d1e9a646721fe9a8a1f8b5134e56c48f8461054774f
+known_issues:
+    - KI-127

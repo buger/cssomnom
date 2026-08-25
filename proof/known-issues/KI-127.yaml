@@ -1,0 +1,37 @@
+id: KI-127
+title: url() reifies as concrete CSSURLImageValue subclass instead of opaque exact CSSImageValue on get()
+description: 'StylePropertyMap get() reifies url() image values as instances of a concrete CSSURLImageValue subclass. css-typed-om-1 #imagevalue-objects declares only interface CSSImageValue : CSSStyleValue and calls the object intentionally opaque. No CSSURLImageValue interface exists anywhere in the Level 1 surface. Local WPT fixtures pin assert_class_string(result, CSSImageValue), so the leaked subclass tag fails five sandbox rows across background-image, border-image-source, list-style-image, mask-image, and shape-outside. The instanceof hierarchy leg stays correct today; only the public class identity leaks.'
+affected_requirements:
+    - SYS-REQ-260825-VKNX
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-127.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.get() / StylePropertyMap.getAll() reification of url() image values
+attacker_input: ordinary declarations with url() values read back through Typed OM get(); no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-127-typed-om-url-imagevalue-opaque-leak-overlay-260825.ts
+tripwire_mutation: Reify url() as direct CSSImageValue instances so all three identity legs pass while the keyword control and the instanceof hierarchy leg stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers can keep using instanceof CSSImageValue, which already passes; avoid constructor.name and toString-tag branching until reification changes.
+remediation: 'Instantiate the exact opaque CSSImageValue for url() productions in the style value factory per #imagevalue-objects.'
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T13:46:42Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-25T13:47:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-127.yaml
+kill_domain: opaque_image_reification
+do_not_refile_as: 'base-only properties over-reifying into subclasses (KI-123): different table row and direction; border-image url() serialization collapse (KI-116): pins cssText round-trip text, not class identity'

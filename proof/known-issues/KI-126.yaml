@@ -1,0 +1,41 @@
+id: KI-126
+title: parse() leaves CSSAtRule.childRules unset so unknown at-rule children stay unreachable
+description: 'Unknown at-rules with blocks parse into CSSAtRule objects whose childRules field stays undefined on the parse() entry point. css-syntax-3 #consume-an-at-rule retains unknown at-rules in full, and the CSSAtRule class declares childRules with a serializer branch over it. The cascade walker reads the same field, and the component-value-stream parser path populates it, so population is an established internal contract. The token-stream path constructs CSSAtRule with the block only, so inner qualified rules stay reachable only through re-parsing raw cssText. cssom-1 defines no unknown-rule interface and leaves child access unregulated; this filing records interop fidelity against our own contract and postcss issue 8, not a cssom-1 violation.'
+affected_requirements:
+    - SYS-REQ-260825-ENH2
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-126-unknown-atrule-childrules-unset-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-126.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSAtRule.childRules for unrecognized at-rules
+attacker_input: ordinary stylesheet text with unrecognized at-rule names such as misspelled supports; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-126-unknown-atrule-childrules-unset-overlay-260825.ts
+tripwire_mutation: Pass consumeBlockContents results into the CSSAtRule construction at the token-stream fallback so each failing leg sees populated children while both green controls stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers can recover inner rules by re-parsing the at-rule block text from cssText.
+remediation: Populate childRules in the token-stream unknown at-rule fallback exactly as the component-value-stream path already does.
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T10:04:42Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-25T10:04:58Z"
+      by: agent:ox-alpha
+      action: refresh-evidence
+      detail: proof/evidence/ki-126.yaml
+    - at: "2026-08-25T10:06:20Z"
+      by: agent:ox-alpha
+      action: refresh-evidence
+      detail: proof/evidence/ki-126.yaml
+kill_domain: atrule_child_visibility
+do_not_refile_as: 'parser-api CSSParserQualifiedRule body dropping (KI-40) or type mapping of known rules (KI-6, KI-14): different surfaces and classes'

@@ -1,0 +1,37 @@
+id: KI-128
+title: Declared StylePropertyMap iterates in sorted key order instead of inline declaration order
+description: 'Declared StylePropertyMap iteration sorts keys instead of following the source declaration order. css-typed-om-1 #declared-stylepropertymap initializes the declarations slot in the same order as the owning style rule or inline style. That clause states otherwise and therefore overrides the default sorted ordering rule, which applies only unless otherwise stated. Custom properties must interleave at their source positions. Local WPT declared iterable.tentative.html pins keys A width C transition-duration color B for a mixed declaration; HEAD returns the fully sorted sequence.'
+affected_requirements:
+    - SYS-REQ-260825-V4ZS
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-128.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: Declared StylePropertyMap keys() / values() / entries() / iterator over parsed style rules
+attacker_input: ordinary declarations mixing standard and custom properties read back through declared map iteration; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-128-declared-stylemap-declaration-order-overlay-260825.ts
+tripwire_mutation: Initialize the declared declarations slot in declaration order so both traversal legs match source order while all three reification controls stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers needing source order can re-parse the declaration block text until the map preserves it.
+remediation: 'Initialize the declared StylePropertyMap declarations slot in declaration order per #declared-stylepropertymap, interleaving custom properties.'
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T13:46:56Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-25T13:47:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-128.yaml
+kill_domain: declared_map_iteration_order
+do_not_refile_as: 'repeated declarations collapsing to one entry (KI-119): pins entry count, not traversal order; computed-map iteration shape: different surface with its own default rule'

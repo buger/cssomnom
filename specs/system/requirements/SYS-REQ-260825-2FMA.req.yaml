@@ -1,0 +1,40 @@
+id: SYS-REQ-260825-2FMA
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when append_targets_pending_substitution_longhand the cssom shall always satisfy missing_typeerror_throws <= 0
+description: 'StylePropertyMap.append shall throw TypeError when the stored longhand entry contains a var() reference. css-typed-om-1 #append-to-a-stylepropertymap step 7 orders that check before any mutation. A var() held by a shorthand value reaches each derived longhand entry.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: WPT declared append.tentative.html pins the throw for transition var a followed by append on transition-duration. The longhand control throws today while the shorthand leg stores silently. The budget counts silent appends over the KI-129 legs.
+tags:
+    - cssom
+    - typed-om
+    - variables
+variables: []
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#append-to-a-stylepropertymap
+    - type: document
+      id: submodules/web-platform-tests/css/css-typed-om/the-stylepropertymap/declared/append.tentative.html
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-25T13:46:08Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-25T13:46:08Z"

@@ -1,0 +1,15 @@
+schema_version: proof.evidence_profile.v1
+profile: ki-130
+evidence_type: known_issue_tripwire
+requirements:
+    - SYS-REQ-260825-26NJ
+command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-130-border-image-unitless-zero-number-leg-overlay-260825.ts
+status: fail
+observed_result: known_issue_reproduced
+executed_at: "2026-08-25T13:47:50Z"
+input_set:
+    - proof/reproducers/KI-130-border-image-unitless-zero-number-leg-overlay-260825.ts
+freshness_hashes:
+    proof/reproducers/KI-130-border-image-unitless-zero-number-leg-overlay-260825.ts: sha256:22c7dfad61f64e3bdcab62a38a549fb663c4a734b16a034d0d664dc6264aa004
+known_issues:
+    - KI-130

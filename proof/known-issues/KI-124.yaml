@@ -1,0 +1,37 @@
+id: KI-124
+title: Declaration-block parsing retains grammar-invalid values instead of dropping them
+description: 'Declaration-block parsing keeps declarations whose values fail the property grammar. cssom-1 #parse-a-css-declaration-block step 3.1 parses each declaration per the appropriate specifications and drops the parts said to be ignored. A value that fails its property grammar is ignored, so getPropertyValue must return empty. At HEAD the probes width:red, color:10px, animation-timing-function:bogus(), and margin-left:solid all survive with non-empty reads. The invalid-superset oracle measured 6627 retained-invalid instances across 811 properties at seed 260825 on HEAD. KI-113 font, KI-117 relative color, KI-105 display, and KI-104 keyframes pin narrow instance slices; this issue owns the generic missing grammar-validation root.'
+affected_requirements:
+    - SYS-REQ-260825-4R9S
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-124-declaration-block-grammar-invalid-retained-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-124.yaml
+severity: high
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / CSSStyleRule.style.getPropertyValue() declaration-block path
+attacker_input: ordinary stylesheet text with any grammar-invalid declaration; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-124-declaration-block-grammar-invalid-retained-overlay-260825.ts
+tripwire_mutation: Wire per-property grammar validation into declaration-block remnant handling so each failing leg returns empty while both green controls keep their four and two surviving declarations
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat parsed declaration values as unvalidated text until grammar validation lands downstream.
+remediation: Validate declaration values against generated per-property grammars during block parsing and drop failures per cssom-1 step 3.1 while keeping neighboring valid declarations.
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T10:04:05Z"
+      by: agent:ox-alpha
+      action: created
+    - at: "2026-08-25T10:04:57Z"
+      by: agent:ox-alpha
+      action: refresh-evidence
+      detail: proof/evidence/ki-124.yaml
+kill_domain: grammar_validation_absence
+do_not_refile_as: 'grammar-invalid value retained for one specific property: file as an instance of this generic root unless a distinct validation mechanism applies; relative color retention (KI-117), font shorthand retention (KI-113), display retention (KI-105), keyframe retention (KI-104): existing instance filings of this same root'

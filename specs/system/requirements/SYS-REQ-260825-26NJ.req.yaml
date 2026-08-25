@@ -1,0 +1,40 @@
+id: SYS-REQ-260825-26NJ
+version: 1
+status: draft
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when unitless_zero_matches_number_leg the cssom shall always satisfy zero_to_px_coercions <= 0
+description: 'Reification shall set the unit slot to number for number values on dual length-or-number grammars. css-typed-om-1 #reify-a-numeric-value reserves px for a unitless zero that is a dimension. Typed inputs carry their grammar leg explicitly, so typed zero round-trips with unit number.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: WPT border-image-outset.html pins the number case through assert_is_equal_with_range_handling round-trip equality. Border-image-outset and border-image-width coerce typed zero to px at HEAD while non-zero numbers stay number. The budget counts zero coercions over the KI-130 legs.
+tags:
+    - cssom
+    - typed-om
+    - reification
+variables: []
+references:
+    - type: document
+      id: submodules/css-houdini-drafts/css-typed-om/Overview.bs#reify-a-numeric-value
+    - type: document
+      id: submodules/web-platform-tests/css/css-typed-om/the-stylepropertymap/properties/border-image-outset.html
+traces: {}
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: pending
+        reviewer: ""
+        reviewed_at: ""
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-25T13:46:16Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-25T13:46:16Z"

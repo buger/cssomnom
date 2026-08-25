@@ -1,0 +1,37 @@
+id: KI-129
+title: StylePropertyMap.append skips the pending-substitution TypeError when var() hides behind a shorthand
+description: 'StylePropertyMap.append stores values silently when the target longhand carries a var() reference inherited from a shorthand declaration. css-typed-om-1 #append-to-a-stylepropertymap step 7 throws TypeError when the stored entry contains a var() reference, before any mutation. A var() held by transition keeps every derived longhand carrying the reference. Local WPT declared append.tentative.html pins the throw for the transition var a case. The same append against an own-text var() reference throws today, so the guard exists but reads only the property text.'
+affected_requirements:
+    - SYS-REQ-260825-2FMA
+commands:
+    - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-129-append-pending-substitution-shorthand-overlay-260825.ts
+evidence_manifests:
+    - proof/evidence/ki-129.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.append() pending-substitution guard over shorthand-expanded declarations
+attacker_input: ordinary shorthand declarations containing var() followed by Typed OM append calls; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-129-append-pending-substitution-shorthand-overlay-260825.ts
+tripwire_mutation: Extend the pending-substitution check to shorthand-derived entries so both defect legs throw while the longhand control and the plain-append control stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers can probe the shorthand cssText for var() themselves before calling append on derived longhands.
+remediation: 'Make the append guard resolve shorthand-expanded storage and throw TypeError per #append-to-a-stylepropertymap step 7 without mutating state.'
+owner: agent:ox-alpha
+review_date: "2026-09-25"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-25T13:47:12Z"
+      by: agent:champ
+      action: created
+    - at: "2026-08-25T13:47:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-129.yaml
+kill_domain: pending_substitution_guard_gap
+do_not_refile_as: 'var() feature-query grammar (KI-107), substitution order in cascade (KI-108), case-insensitive dispatch (KI-109): different surfaces; set() replacement behind shorthands: no spec clause mandates a throw there'
