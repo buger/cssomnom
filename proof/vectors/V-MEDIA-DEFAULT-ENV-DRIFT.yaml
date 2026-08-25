@@ -1,0 +1,8 @@
+id: V-MEDIA-DEFAULT-ENV-DRIFT
+title: Media-query default-environment drift hunt
+description: 'MediaParser.evaluate(query, env?) fabricates an environment when none is supplied (resolution 96dpi, environmentBlending opaque, etc.). Media query evaluation results depend on defaults that can drift apart across code, docs/css-domain-models.md, and recorded WPT expectations. Pin the full default-env matrix and hunt for drift: undocumented defaults, defaults inconsistent with the pinned dpi range, or evaluate/mediaText outcomes that change when a caller supplies partial env objects. Conformance claims about (resolution)-style features are only meaningful per-env. Not yet executed.'
+priority: P3
+status: unresearched
+related_obligation_classes: []
+stacks:
+    - typescript

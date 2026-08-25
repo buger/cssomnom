@@ -1,0 +1,445 @@
+# Threat Surface — machine core
+#
+# SCHEMA v0 (dogfood). Filled by onboarding threat-surface analysis.
+# Rules:
+#   - Every claim here MUST be grounded in a repo artifact you read (cite path in `grounding`).
+#   - `oracle_families` entries with relational checks REQUIRE `equivalence_contract`
+#     to be non-empty before they may arm (contract: describe the exact comparison
+#     that makes findings trustworthy, incl. known false-positive classes).
+#   - Non-applicable ladder questions go under `degenerations` with `na_reason`.
+#     Silence is a defect.
+#   - Do not invent surfaces: cite code paths/docs as grounding.
+#
+# Analysis date: 2026-08-25. Probes cited as pN are scripts under /tmp/opencode/probe/
+# run against src/index.ts via /opt/node24/bin/node v24.11.0 (results quoted in docs/threat-surface.md §10).
+#
+# SCHEMA v1 TUNINGS (applied 2026-08-25 during ground-truth reconciliation of the
+# blind record; the blind content itself is preserved verbatim):
+#   - schema_version 0 -> 1.
+#   - New top-level section `resource_bounds:` — home for ladder Q9 answers
+#     (measured bounds from probes; each entry links a vector and/or known issue).
+#   - Entry types may carry an optional `grounding:` field — supported per entry
+#     TYPE, not universal — formalizing what the blind run improvised ad hoc
+#     under v0.
+#   - `grammar_tables` rows now REQUIRE two derived-family declarations:
+#     `drives_valid_sampling` + `drives_rejection_completeness`, valued with an
+#     `oracle_families` family name or 'none-yet'. This supersedes the v0 boolean
+#     capability flags (`drives_valid_sampling: yes/no`, and `drives_invalid_mutation`
+#     is folded into `drives_rejection_completeness`).
+#   - `vectors_proposed` entries carry {id, reconciliation}; reconciliation is one of:
+#     {covered_by_vector[,ki]} | {covered_by_ki} | {new_vector} | {test_lane}.
+#     Proposals that are test-lane concerns rather than attack vectors moved to
+#     `test_lanes:`.
+#   - `oracle_families` entries added AFTER the initial fill REQUIRE a provenance
+#     `source:` tag (e.g. 'schema-v1-tuning') so they stay distinguishable from
+#     the original blind-day record.
+
+schema_version: 1
+profile:
+  languages: [typescript]           # pure TS, zero runtime deps (package.json devDependencies only)
+  artifact_kind: library            # npm package `cssomnom`, ESM, exports "." and "./ts" (package.json:34-44)
+  primary_guarantees:
+    - "Spec-compliant CSS Syntax 3 / CSSOM-1 / Nesting / Selectors 4 / MQ4 / Typed OM parse without a browser (README Features)"
+    - "Zero-dependency, offline/hermetic: parse performs no network or filesystem I/O (README deviations; proof/catalog/domain/no_external_io_on_parse.yaml)"
+    - "Standard W3C CSSOM object model, not a custom AST (README Why)"
+    - "Deterministic declarative cascade via getCascadedStyle; deliberately NO getComputedStyle (README Intentional Non-Goals)"
+    - "Recover-don't-crash stylesheet ingest per css-syntax-3 error recovery; throwing APIs documented below"
+
+entry_surfaces:
+  - name: "parse(css) / Parser.parseStyleSheetText / replaceSync / CSS.parseStylesheetSync"
+    kind: parse-transform
+    invalid_input_posture: recover-drop   # keeps valid prefix rules, drops bad ones; collects ParseError[]
+    grounding: "src/parser.ts:2085-2087; probe p1 (garbage '@unknown-rule x{; color:red} }}} <<<>>>' -> 2 rules kept, no throw); src/parser.ts:50,136 errors[]"
+  - name: "tokenize(text) / StreamingTokenizer.appendChunk-close"
+    kind: parse-transform
+    invalid_input_posture: recover-drop   # css-syntax-3 § 3.3 preprocessing (NUL->FFFD, lone surrogates->FFFD); tokenizer is total, never throws on content
+    grounding: "src/tokenizer.ts:41-52; src/streaming-tokenizer.ts:118-144; probe p7 (tokenize survives 50k-deep nesting, 250007 tokens)"
+  - name: "CSSStyleSheet.insertRule(rule, index)"
+    kind: mutation
+    invalid_input_posture: throw          # SyntaxError on unparseable rule; IndexSizeError on bad index; HierarchyRequestError ordering; NotAllowedError/SecurityError state guards
+    grounding: "src/CSSOM.ts:405-461; probe p2/B1 insertRule('garbage') -> SyntaxError"
+  - name: "CSSStyleDeclaration.setProperty / cssText setter"
+    kind: mutation
+    invalid_input_posture: ignore         # invalid values/priorities/dashed-idents return without mutating; NoModificationAllowedError only when readonly
+    grounding: "src/CSSStyleDeclaration.ts:470-550; probe p2/C1,C2 (invalid custom prop dropped silently)"
+    note: "Validation is LENIENT: setProperty('color','totally not a color') is KEPT (probe p2/C1) — generic-token checks reject only bad-string/bad-url/unitless-length/negative-dimension classes (typed-om/values/style-value-parser.ts ParseHooks.validatePropertyValue)"
+  - name: "CSSStyleRule.selectorText setter"
+    kind: mutation
+    invalid_input_posture: ignore         # invalid selector leaves selectorText unchanged, no throw
+    grounding: "probe p2/D1 (selectorText='>>>bad<<<' stays 'b')"
+  - name: "matches(el, sel) / querySelectorAll(root, sel) / querySelector"
+    kind: query
+    invalid_input_posture: recover-drop   # forgiving: invalid selectors parse into {type:'invalid-selector'} items that are skipped, or whole list empties; NEVER throws (DOM matches() would throw SyntaxError)
+    grounding: "src/matcher.ts:87-128 (catch -> empty selector-list); probe p3/E1-E3 (matches('div:')=false, qSA('::??')=[])"
+  - name: "CSSNumericValue.parse / CSSStyleValue.parse / parseAll"
+    kind: parse-transform
+    invalid_input_posture: throw          # DOMException SyntaxError (numeric), TypeError (style-value); argument-count TypeErrors
+    grounding: "src/typed-om/numeric/numeric-methods.ts:283-330; src/typed-om/values/style-value-parser.ts:419-427; probe p4/G2,G3,G5,G6"
+  - name: "Parser API CSS.parseComponentValue(Sync) / parseRule(Sync)"
+    kind: parse-transform
+    invalid_input_posture: mixed          # null on failure (empty), but SyntaxError DOMException when >1 component value remains; parseRule returns null on failure
+    grounding: "src/parser-api.ts:532-545,595-613"
+  - name: "MediaList / MediaParser.parse"
+    kind: parse-transform
+    invalid_input_posture: recover-drop   # invalid media queries evaluate/serialize as 'not all' per mediaqueries-4 #error-handling
+    grounding: "docs/css-domain-models.md table invalid_media_serializes_as_not_all; docs/proof-onboard-research.md untrusted-input policy row"
+  - name: "escape(ident) (CSS.escape)"
+    kind: parse-transform
+    invalid_input_posture: throw-on-missing-arg-only  # TypeError with 0 args; otherwise coerces any value via String()
+    grounding: "src/css-escape.ts:12-14; probe p3/F2,F3 (escape(null)->'null' escaped)"
+
+transformation_boundaries:
+  - boundary: "text --preprocess/tokenize--> Token[]"
+    has_serializer_inverse: true          # serialize(Token[]) reconstructs text; not identity (canonicalizing)
+    notes: "Preprocessing is duplicated in two implementations (tokenizer.ts:41-52 sync vs streaming-tokenizer.ts:118-144 chunked with remnant buffering for CR/high-surrogate) — divergence candidate."
+    grounding: "src/tokenizer.ts, src/streaming-tokenizer.ts, src/serializer.ts:151-171"
+  - boundary: "Token[] --Parser--> ComponentValue/Rule AST"
+    has_serializer_inverse: true
+    notes: "Recursive-descent; serializer emits /**/ separators where re-tokenization would merge tokens (cssom-1 § 2.1 requires this). Round-trip is a fixpoint relation, not equality: first pass canonicalizes (fn names lowercased, counter(...,'decimal') trimmed, url() whitespace trimmed, attr() fallback stripped)."
+    grounding: "src/serializer.ts:151-259 (canonicalization sites); probe p5 (url( \"f i.png\" ) normalized, then idempotent)"
+  - boundary: "AST --> CSSOM rule objects (--cssText--> text)"
+    has_serializer_inverse: true
+    notes: "serializeDeclarations does shorthand contraction; cssText re-parse should be stable. Asymmetry risk: shorthand expand on ingest vs longhand storage."
+    grounding: "src/serializer.ts:970+; src/shorthands.ts; src/CSSOM.ts rule .cssText getters"
+  - boundary: "selector text --> SelectorList AST --> serialized selector text"
+    has_serializer_inverse: true
+    notes: "Invalid selectors become invalid-selector AST nodes (forgiving) — serialization of such nodes must round-trip or the swallow is observable."
+    grounding: "src/SelectorParser.ts; src/serializer.ts:1118+; src/matcher.ts:87-96"
+  - boundary: "media query list text --> MediaQuery[] --> mediaText"
+    has_serializer_inverse: true
+    notes: "Invalid queries serialize as 'not all' (mediaqueries-4 #error-handling); parse(serialize(parse(x))) should equal serialize(parse(x))."
+    grounding: "src/MediaParser.ts:824; docs/css-domain-models.md"
+  - boundary: "value text --> Typed OM values --> toString()"
+    has_serializer_inverse: true
+    notes: "Math trees intentionally preserved structurally (trig not flattened) though compatible sums may canonicalize units (calc(1in+96px)->192px) — toString() is canonicalizing."
+    grounding: "README Houdini Deviations (Math Simplification); probe README example"
+
+stateful_objects:
+  - object: "PropertyRegistry global registry Map (module singleton)"
+    lifecycle_invariants:
+      - "registerProperty(name) twice without unregister hits 'existing' branch (error/reject path)"
+      - "clear() resets process-global state; sequences leak across unrelated parses/tests"
+      - "@property rules parsed from any stylesheet mutate the same global registry"
+    grounding: "src/PropertyRegistry.ts:298,353-377 (registry Map, register/unregister/get/clear)"
+  - object: "CSSStyleSheet state flags (constructedFlag, disallowModificationFlag, originCleanFlag)"
+    lifecycle_invariants:
+      - "replace()/replaceSync() only on constructed sheets (NotAllowedError otherwise)"
+      - "origin-clean false blocks insertRule/deleteRule/toCssText? (SecurityError)"
+      - "mutation allowed only pre-disallow; set of legal transitions is sequence-sensitive"
+    grounding: "src/CSSOM.ts:295-315 (constructor), 344-367 (replace guards), 406-411 (insertRule guards)"
+  - object: "CSSStyleDeclaration (_declarations array + _declMap + _onChange invalidation hook)"
+    lifecycle_invariants:
+      - "array and Map views must agree after set/remove/shorthand-expansion fan-out"
+      - "shorthand set expands to longhands recursively via setProperty(notify=false); 'all'+var drop ordering was a past bug (in-code comment)"
+      - "_onChange drives downstream caches; wrong notify flag desyncs dependent state"
+    grounding: "src/CSSStyleDeclaration.ts:514-538 (expansion + 'Drop a stored all...' regression comment), 552-559"
+  - object: "StreamingTokenizer (codePoints buffer, remnant, pos, tokens queue, isEOF)"
+    lifecycle_invariants:
+      - "getTokens() DRAINS queue and truncates consumed buffer (pos reset) — interleavings of appendChunk/getTokens change indexing/originalText bases"
+      - "close() must precede treating EOF as final; appendChunk after close undefined-behavior candidate"
+      - "remnant holds trailing CR / high surrogate across chunk boundary — split-point sensitivity"
+    grounding: "src/streaming-tokenizer.ts:63-113,118-144"
+  - object: "ParseHooks injection registry (import-time globals)"
+    lifecycle_invariants:
+      - "hooks assigned once at bottom of parser.ts; consumers (CSSOM/typed-om) fail loudly if parser never imported — import-order sensitivity"
+    grounding: "src/parser.ts:2068-2081; AGENTS.md Circular Dependency Management"
+
+environment_dependent_outputs:
+  - output: "MediaParser.evaluate(query, env?) booleans"
+    missing_context: "viewport width/height/aspect, device resolution, scripting/supports state, environment blending; library fabricates defaults (resolution:96, environmentBlending:'opaque', ...)"
+    ruling: implement            # keep, but document default-env matrix; conformance claims only meaningful per-env
+    grounding: "src/MediaParser.ts:91-104,788-816; docs/css-domain-models.md Resolution dpi section"
+  - output: "new CSSStyleSheet({baseURL}) resolution"
+    missing_context: "document baseURI; constructor SNIFFS globalThis.document/globalThis.location when present (CSSOM.ts:305-306) — same input yields different href depending on host globals"
+    ruling: implement            # pin resolution order in a test; document sniffing
+    grounding: "src/CSSOM.ts:303-313"
+  - output: "var()/env() substitution results"
+    missing_context: "host-supplied env() map (Parser.resolveVariables(style, property, envMap?)) and registered-property initial values"
+    ruling: defer                # env map is caller-provided by design; document determinism given fixed map
+    grounding: "README Parser.resolveVariables signature; docs/proof-onboard-research.md components table"
+  - output: "getCascadedStyle(element, rules) outcomes"
+    missing_context: "element tree/attributes come from host mock (linkedom or duck-typed); :hover/:visited-style dynamics refused by design"
+    ruling: refuse               # README non-goal: no computed style; cascade only over supplied mock
+    grounding: "README Intentional Non-Goals; src/cascade/index.ts:161"
+
+grammar_tables:
+  # v1: `drives_valid_sampling` / `drives_rejection_completeness` now declare
+  # DERIVED FAMILIES (oracle_families names or 'none-yet'), superseding the v0
+  # yes/no capability flags. `drives_invalid_mutation` from v0 folds into
+  # `drives_rejection_completeness` (mutation testing IS the rejection probe).
+  - table: "src/data/gen/properties.ts + standard-syntax.ts (property value syntax strings)"
+    drives_valid_sampling: "Grammar-table valid-subset sampling (data-driven differential)"       # syntax strings like '<length>|auto' enumerate/generate valid values
+    drives_rejection_completeness: "Grammar-table-driven rejection completeness (data-driven differential)"     # mutate valid samples (unit swaps, sign flips, arity changes) and assert rejection at each ingestion posture
+    grounding: "src/data/gen/standard-syntax.ts (833 lines, @generated header); scripts/codegen/generate_properties.ts, generate_standard_syntax.ts; PropertyRegistry.matchesSyntax consumes these (src/PropertyRegistry.ts:167)"
+  - table: "src/data/gen/shorthands.ts + LogicalMapping.ts"
+    drives_valid_sampling: "Grammar-table valid-subset sampling (data-driven differential)"       # via expanded longhands; var()/env() store-as-is excluded by family contract
+    drives_rejection_completeness: "Grammar-table-driven rejection completeness (data-driven differential)"     # shorthands route through SHORTHANDS.expand, not per-property syntax (family known-FP class)
+    grounding: "src/data/gen/ dir listing; scripts/codegen/generate_shorthands.ts; SHORTHANDS use in CSSStyleDeclaration.ts:514"
+  - table: "src/data/gen/units.ts (unit->base conversion), math-functions.ts, colors.ts, media-features.ts, selectors.ts"
+    drives_valid_sampling: "Grammar-table valid-subset sampling (data-driven differential)"       # units/colors are the leaf generators inside valid value synthesis
+    drives_rejection_completeness: "Grammar-table-driven rejection completeness (data-driven differential)"     # unit-swap mutants are drawn from this table
+    grounding: "src/data/gen listing; scripts/codegen/generate_all.ts master script; unitToBase referenced in numeric-methods.ts:307"
+  - table: "domain tables in docs/css-domain-models.md (at_rule_dispatch mutexes, resolution_dpi range, position_arity_reification)"
+    drives_valid_sampling: none-yet                  # no generator consumes these yet; candidate edge-cell corpus for both families
+    drives_rejection_completeness: none-yet
+    grounding: "docs/css-domain-models.md (tables authored in 5f73ceb/b7c76d3)"
+  - table: "css-syntax-3 token grammar implemented in AbstractTokenizer.ts"
+    drives_valid_sampling: none-yet                  # token-level grammar feeds the tokenizer-equivalence/token-conservation families, not the property-syntax families below
+    drives_rejection_completeness: none-yet          # bad-string/bad-url variant handling is probed by posture-triage + sync/stream families instead
+    grounding: "src/AbstractTokenizer.ts; submodules/csswg-drafts/css-syntax-3/Overview.bs § 4"
+
+existing_failure_ledgers:
+  - ledger: "tests/fixtures/baselines/wpt-passing-set-baseline.json"
+    owned_entries: "778 top-level entries; verified via wpt:verify exact-baseline gate (package.json:75)"
+    unowned_entries: "none claimed unknown; ownership tracked separately"
+    staleness_note: "file mtime 2026-08-24; regenerated by wpt:baseline runs"
+    grounding: "tests/fixtures/baselines listing; package.json wpt:baseline/wpt:verify"
+  - ledger: "tests/fixtures/baselines/ownership.json + unclaimed-inventory.json"
+    owned_entries: "claims map baseline entryIds -> KI ids (e.g. KI-38, kind open-KI, claimedAt timestamps)"
+    unowned_entries: "unclaimed-inventory.json is 508KB of entries with NO owner — largest unowned backlog visible on day one"
+    staleness_note: "2026-08-24"
+    grounding: "ownership.json sample read (claim KI-38 variable-css-wide-keywords.html); file sizes in baselines listing"
+  - ledger: "tests/fixtures/baselines/{wpt-cssom,wpt-sandbox,lightning}-known-failures.json"
+    owned_entries: "known-failure sets consumed by external-*-test.ts suites"
+    unowned_entries: "entries not cross-referenced to KIs are effectively frozen expectations"
+    staleness_note: "2026-08-24 (lightning/cssom), sandbox similar"
+    grounding: "baselines listing mtimes; tests/external-lightning.test.ts etc. by name"
+  - ledger: "wpt-progress.md"
+    owned_entries: "historical pass-rate log, auto-written by wpt:crawl/--write-progress-markdown"
+    unowned_entries: "n/a (aggregate metrics only, no per-failure ownership)"
+    staleness_note: "last log row 2026-08-18 (7 days before analysis); README embedded summary matches it"
+    grounding: "wpt-progress.md head; README WPT_PROGRESS_SUMMARY block"
+  - ledger: "proof/vectors/*.yaml (7 vectors)"
+    owned_entries: "all status: unresearched — owned by nobody yet"
+    unowned_entries: "V-MALFORMED-INPUT, V-DOS-PARSE, V-RECURSION-DEPTH, V-NO-EXT-IO, V-MALFORMED-RECOVER, V-ERROR-HANDLING, V-ACCESS-DENIED all P1 unresearched"
+    staleness_note: "created ~2026-08-21; unexecuted as of 2026-08-25"
+    grounding: "proof/vectors/V-*.yaml read (status fields)"
+  - ledger: "proof/checklists/onboard_v1.state.yaml"
+    owned_entries: "campaign checklist steps (hazard confirmed 2026-08-21; ac-sweep/coverage/history-mine pending)"
+    unowned_entries: "pending steps unowned"
+    staleness_note: "updated_at 2026-08-25T10:19:41Z (fresh today)"
+    grounding: "proof/checklists/onboard_v1.state.yaml head"
+
+external_expectation_corpora:
+  - corpus: "tests/fixtures/wpt/*.json (wpt-cssom, wpt-extra, wpt-modern-features, wpt-nesting, wpt-properties-values, wpt-values)"
+    expectation_shape: "recorded WPT assertions per test file/subtest with expected outcomes"
+    differential_feasible: yes      # harness already wired: pnpm wpt / wpt:run against submodules/web-platform-tests
+    grounding: "tests/fixtures/wpt listing; package.json:70-80; AGENTS.md WPT Fixtures policy"
+  - corpus: "tests/fixtures/external/{csstree-tests,csstree-errors,postcss-tests,nv-tests,rrweb-tests,lightningcss}.json"
+    expectation_shape: "other parsers' accepted/rejected inputs and serializations (cross-parser differential)"
+    differential_feasible: yes      # external-*.test.ts files exist by name; NOTE policy: must not override W3C on disagreement (docs/proof-onboard-research.md Conformance oracles)
+    grounding: "external fixture listing (frozen 2026-08-21); onboard-research conformance-oracles paragraph"
+  - corpus: "tests/fixtures/baselines/wpt-chrome-expected.txt (988KB) + wpt.fyi Chrome 153 numbers"
+    expectation_shape: "per-subtest expected results from a reference engine"
+    differential_feasible: yes      # parity CLI exists (wpt:parity, wpt:diff)
+    grounding: "baselines listing; package.json:78; README parity table"
+
+oracle_families:
+  - family: "WPT recorded-expectation differential (regression oracle)"
+    status: armed                    # harness + fixtures + verify gate already execute continuously
+    applies_to: [parse-transform, query, mutation]
+    equivalence_contract:
+      normalized_comparison: "subtest-level pass/fail equality against tests/fixtures/wpt/*.json and passing-set baseline; scalar compare of counts (never deep-compare cyclic CSSOM nodes — AGENTS.md DOM assertion rule)"
+      known_fp_classes:
+        - "browser-only subtests cataloged in tests/fixtures/wpt-browser-only-manifest.json must be excluded"
+        - "intentional deviations (README Architecture §1-2) make some WPT failures authorized, e.g. CSSImportRule.styleSheet null-vs-empty"
+        - "upstream WPT churn after submodule upgrade changes expectations without code change"
+      open_questions: ["baseline regeneration cadence vs submodule upgrades"]
+    priority: P0
+    grounding: "package.json wpt:* scripts; tests/fixtures/*; AGENTS.md Spec Compliance section"
+  - family: "Serializer fixpoint/idempotence (metamorphic)"
+    status: proposed
+    applies_to: [parse-transform]
+    equivalence_contract:
+      normalized_comparison: "let s0=serialize(tokenize(x) minus EOF); s1=serialize(tokenize(s0)); assert s1==s0 (fixpoint after <=1 application). NOT assert s0==x — first pass canonicalizes by design (serializer.ts:187-252)."
+      known_fp_classes:
+        - "intentional canonicalization (counter(,'decimal') trim, url whitespace trim, attr fallback strip, fn-name lowercasing) makes pass-1 differ — excluded by construction"
+        - "/**/ separator insertion near token-merging boundaries is required by cssom-1 § 2.1 and must not be flagged"
+        - "preserveCase=true invocations follow a different contract; fix comparison on default path"
+      open_questions: ["does any canonical output RE-PARSE to a different AST (non-fixpoint)? that is the bug signal", "interaction with propertyName-aware serializeFontFamily dispatch (serializer.ts:152-154)"]
+    priority: P1
+    grounding: "probe p5 (idempotent on 3 samples incl. url canonicalization); src/serializer.ts:151-259"
+  - family: "Sync-vs-streaming tokenizer equivalence (differential)"
+    status: proposed
+    applies_to: [parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for any string x and EVERY split of x into chunks c1..cn: tokens(StreamingTokenizer over chunks + close()) == tokenize(x) elementwise on (type,value); originalText concatenation == x-preprocessed"
+      known_fp_classes:
+        - "startIndex/endIndex differ by design across chunkings until getTokens() drain semantics accounted — compare (type,value) and concatenated originalText only"
+        - "EOF sentinel token appears once in both — exclude from elementwise diff tail"
+      open_questions: ["remnant buffering covers CR and lone high surrogate (streaming-tokenizer.ts:122-134); is a trailing '\\r' followed by high-surrogate split across THREE chunks handled?", "appendChunk after close()"]
+    priority: P1
+    grounding: "two independent preprocess implementations: src/tokenizer.ts:41-52 vs src/streaming-tokenizer.ts:118-144; NeedMoreDataError protocol src/streaming-tokenizer.ts:146-167"
+  - family: "Posture-consistency triage (same malformed text across ingestion surfaces)"
+    status: proposed
+    applies_to: [parse-transform, mutation]
+    equivalence_contract:
+      normalized_comparison: "for corpus item t: classify outcome at each surface {stylesheet-ingest: recovered/dropped, insertRule: threw SyntaxError?, setProperty: ignored?, parseRule API: null?}; assert mapping matches the declared posture table above; any UNCAUGHT exception type (RangeError, TypeError from internals) is a finding regardless of surface"
+      known_fp_classes:
+        - "context-sensitivity is legitimate: a declaration body is valid for setProperty but not for insertRule; compare only inputs valid-at-that-layer per css-syntax-3 consume-algorithm entry points"
+        - "readonly/state-guard exceptions (NoModificationAllowedError, NotAllowedError) are posture, not malformation"
+      open_questions: ["exact set of inputs where stylesheet-ingest recovers but insertRule throws beyond genuine rule-boundary failures"]
+    priority: P1
+    grounding: "probes p1,p2,p4 (three distinct postures demonstrated); src/CSSOM.ts:422-426 vs src/CSSStyleDeclaration.ts:495-512"
+  - family: "Grammar-table-driven rejection completeness (data-driven differential)"
+    status: proposed
+    applies_to: [mutation, parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for each property p with syntax string S in data/gen/standard-syntax.ts: generate valid values V (from S) and mutations M (V with single-token edits); assert validatePropertyValue/setProperty accepts all V and rejects mutations violating S — EXCEPT whitelisted leniency classes (var()/env()/calc()-containing, CSS-wide keywords) which bypass validation by code path (style-value-parser.ts ParseHooks.validatePropertyValue early-returns)"
+      known_fp_classes:
+        - "shorthand properties route through SHORTHANDS.expand not per-property syntax — exclude shorthands or use their expanded longhands"
+        - "custom properties '--*' accept almost anything by design (css-variables-1)"
+        - "syntax-table itself may be stale vs mdn-data/@webref — regenerate via pnpm codegen first"
+      open_questions: ["is matchesSyntax (PropertyRegistry.ts:167) equivalent to validatePropertyValue's heuristics? divergence = finding"]
+    priority: P1
+    grounding: "src/data/gen/standard-syntax.ts; probe p2/C1 (leniency: 'totally not a color' accepted for color)"
+  - family: "Shorthand<->longhand expansion equivalence (relational)"
+    status: proposed
+    applies_to: [mutation]
+    equivalence_contract:
+      normalized_comparison: "setProperty(shorthand, v) then reading each longhand == directly setting each longhand to expand(v) results, compared as serialized longhand values; also removeProperty(shorthand) clears exactly its longhands"
+      known_fp_classes:
+        - "values containing var()/env() intentionally skip eager expansion (CSSStyleDeclaration.ts:517-545) — store-as-is is correct, not a mismatch"
+        - "'all' shorthand special-case drop ordering (line 526-529 regression comment)"
+        - "case-insensitive property names; compare lowercased"
+      open_questions: ["logical-property aliasing via LogicalMapping.ts double-writes physical+logical keys?"]
+    priority: P2
+    grounding: "src/CSSStyleDeclaration.ts:514-545; src/shorthands.ts; src/data/gen/LogicalMapping.ts"
+  - family: "Case-folding metamorphic relation (ASCII case-insensitive keywords)"
+    status: proposed
+    applies_to: [query, parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for x and case-permuted x' (at-rules, type selectors, keyword values, media features): match results identical AND cascaded getPropertyValue identical; serialized canonical form identical"
+      known_fp_classes:
+        - "DO NOT permute: custom idents (--*, animation-name, @layer names, counter-style names, font-family custom names) are case-SENSITIVE per spec — restrict permutation mask to keyword positions only"
+        - "attribute values and string tokens must never be permuted"
+      open_questions: ["which SelectorParser positions preserve author case in serialization (attr names vs values)"]
+    priority: P2
+    grounding: "docs/css-domain-models.md at-rule dispatch (ASCII-case fold css-values-4 § 4.1); src/serializer.ts:189 (fn name lowercasing)"
+  - family: "Selector forgiveness boundary (invalid-selector containment)"
+    status: proposed
+    applies_to: [query]
+    equivalence_contract:
+      normalized_comparison: "a selector list containing >=1 valid selector must match elements for the VALID members even when others are invalid (:is()/:where()-style forgiving semantics); fully-invalid lists yield empty/false and MUST NOT throw — compare against recorded selectors-4/WPT expectations"
+      known_fp_classes:
+        - "matcher.ts swallows ALL invalid lists to false while DOM matches() throws SyntaxError for some forms — deviation must be classified intentional-or-gap BEFORE trusting diffs"
+        - "'invalid-selector' AST nodes skipped at matcher.ts:111,122 — serialization of partially-invalid lists is observable via selectorText"
+      open_questions: ["which pseudo-classes are forgiving vs strict in this implementation (SelectorParserOptions.forgiving)"]
+    priority: P1
+    grounding: "src/matcher.ts:87-128; probes p3/E1-E3; README documents no deviation for matches() throwing"
+  - family: "Token-conservation partition invariant (metamorphic)"
+    status: proposed
+    source: schema-v1-tuning          # lane missed by the blind run; added during schema-v1 reconciliation
+    applies_to: [parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for any text x and any split of x at a css-syntax-3 token boundary into a++b: tokenize(a++b) == tokenize(a) ++ tokenize(b) elementwise on (type,value), EOF sentinel excluded from the tail; equivalently, re-partitioning x must conserve the token multiset"
+      known_fp_classes:
+        - "splits INSIDE a comment/string/url/ident legitimately merge or split differently — only token-boundary splits are in scope"
+        - "startIndex/endIndex are partition-dependent by design; compare (type,value) only"
+      open_questions: ["does css-syntax-3 define any token pair that is boundary-split-safe for concatenation but not for re-lexing after preprocessing (CR/CRLF, NUL->FFFD)?"]
+    priority: P2
+    grounding: "src/tokenizer.ts consume loop; src/streaming-tokenizer.ts remnant buffering (118-144); formalizes the conservation intuition behind the sync/stream family above"
+  - family: "Grammar-table valid-subset sampling (data-driven differential)"
+    status: proposed
+    source: schema-v1-tuning          # lane missed by the blind run; added during schema-v1 reconciliation
+    applies_to: [mutation, parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for each property p with syntax string S in data/gen/standard-syntax.ts: values V sampled FROM S must be ACCEPTED by validatePropertyValue/setProperty/matchesSyntax — the valid side of the two-sided fuzzer; any rejection of a sampled-valid value is a finding"
+      known_fp_classes:
+        - "shorthand properties route through SHORTHANDS.expand — sample via expanded longhands only"
+        - "custom properties '--*' accept almost anything by design (css-variables-1); excluded as sampler targets"
+        - "sampler bugs (generator emits values outside S) masquerade as parser findings — each rejection must be re-derived against S before filing"
+      open_questions: ["does the generator cover S alternatives/quantifiers (*,+,{m,n}) uniformly, or does sampling bias hide whole branches of S?"]
+    priority: P1
+    grounding: "src/data/gen/standard-syntax.ts; PropertyRegistry.matchesSyntax (src/PropertyRegistry.ts:167); complements the rejection-completeness family below"
+  - family: "Identifier-escape round-trip relation (relational)"
+    status: proposed
+    source: schema-v1-tuning          # lane missed by the blind run; added during schema-v1 reconciliation
+    applies_to: [query, parse-transform]
+    equivalence_contract:
+      normalized_comparison: "for identifier strings s: escape(s) re-consumed as a css-syntax-3 ident (and embedded in a selector) yields exactly s back (code-point equality); elements matched by selector containing escape(s) == matched by an equivalent literal selector where one exists"
+      known_fp_classes:
+        - "lone surrogates: both DOM CSS.escape and ours map to U+FFFD per spec — round-trip to FFFD is correct, not drift"
+        - "digit-leading/'-'-leading identifiers REQUIRE escaping — unescaped comparisons are invalid, not findings"
+      open_questions: ["which SelectorParser positions re-serialize escapes vs decode them (attr names, idents, hash tokens)"]
+    priority: P3
+    grounding: "src/css-escape.ts:12-14; probes p3/F2,F3 (escape(null)->'null'); selectors-4 escaping grammar"
+
+# Ladder check Q1-Q12: all twelve questions were found applicable to this artifact;
+# no question degenerated to N/A. Explicitly recorded so silence cannot be misread.
+degenerations: []
+
+# Q9 home (schema v1). Populated ONLY from this analysis' own probes, not campaign knowledge.
+resource_bounds:
+  - bound: "parser recursion depth ~1000 nested blocks -> RangeError: Maximum call stack size exceeded on parse() (default Node stack; ~linear stack/level, max-safe 2000 under --stack-size=2000); tokenizer is iterative and survives 50k-deep nesting / 250007 tokens"
+    source: blind-onboarding probes p6/p7
+    linked_vector: V-RECURSION-DEPTH
+    linked_ki: KI-18
+    grounding: "docs/threat-surface.md §10 probe log p6/p7; src/parser.ts recursive consume algorithms vs src/tokenizer.ts iterative loop"
+
+# Proposals that are TEST-LANE concerns, not attack vectors (schema v1). Each lane
+# rides an oracle_families equivalence contract; arming_status mirrors that family's
+# status in the blind record. Vectors are hunted by campaigns; lanes are armed as
+# standing suite infrastructure.
+test_lanes:
+  - lane: sync-stream-tokenizer-equivalence
+    arming_status: proposed            # per blind yaml family status
+    contract_ref: "oracle_families[] 'Sync-vs-streaming tokenizer equivalence (differential)'"
+    folds_proposals: [PROPOSED-sync-stream-preprocess-divergence, PROPOSED-streaming-chunk-split-equivalence]
+    grounding: "src/tokenizer.ts:41-52 vs src/streaming-tokenizer.ts:118-144"
+  - lane: shorthand-longhand-expansion-equivalence
+    arming_status: proposed
+    contract_ref: "oracle_families[] 'Shorthand<->longhand expansion equivalence (relational)'"
+    folds_proposals: [PROPOSED-shorthand-longhand-expansion-equivalence]
+    grounding: "src/CSSStyleDeclaration.ts:514-545; src/shorthands.ts"
+  - lane: case-folding-metamorphic
+    arming_status: proposed
+    contract_ref: "oracle_families[] 'Case-folding metamorphic relation (ASCII case-insensitive keywords)'"
+    grounding: "docs/css-domain-models.md at-rule dispatch; src/serializer.ts:189"
+  - lane: serializer-fixpoint
+    arming_status: proposed
+    contract_ref: "oracle_families[] 'Serializer fixpoint/idempotence (metamorphic)'"
+    grounding: "src/serializer.ts:151-259; probe p5"
+
+vectors_proposed:
+  # Blind-day proposals with ground-truth reconciliation (schema v1). Ids preserved
+  # verbatim so the blind record stays greppable; dispositions are final.
+  - id: PROPOSED-parser-recursion-depth-rangeerror
+    reconciliation:
+      covered_by_vector: V-RECURSION-DEPTH   # existing vector (status unresearched); blind probes appended to its notes
+      ki: KI-18
+  - id: PROPOSED-setproperty-lenient-acceptance
+    reconciliation:
+      covered_by_ki: KI-124                  # + requirement SYS-REQ-260825-4R9S
+  - id: PROPOSED-serialize-fixpoint-nonconvergence
+    reconciliation:
+      new_vector: V-SERIALIZATION-FIXPOINT   # P1; serialization-round-trip-stability obligation class
+  - id: PROPOSED-csstext-roundtrip-drift
+    reconciliation:
+      new_vector: V-SHORTHAND-EXPANSION-EQUIVALENCE   # P2; folds drift + shorthand/longhand equivalence family
+  - id: PROPOSED-global-registry-sequence-contamination
+    reconciliation:
+      new_vector: V-REGISTRY-SEQUENCE-CONTAMINATION   # P2
+  - id: PROPOSED-selector-forgiveness-swallow
+    reconciliation:
+      new_vector: V-SELECTOR-FORGIVENESS-DIVERGENCE   # P2; verify README deviation stance during filing, not now
+  - id: PROPOSED-media-default-env-drift
+    reconciliation:
+      new_vector: V-MEDIA-DEFAULT-ENV-DRIFT           # P3
+  - id: PROPOSED-posture-triage-inconsistency
+    reconciliation:
+      new_vector: V-CROSS-SURFACE-POSTURE-TRIAGE      # P2
+  - id: PROPOSED-sync-stream-preprocess-divergence
+    reconciliation:
+      test_lane: sync-stream-tokenizer-equivalence    # not a vector; see test_lanes
+  - id: PROPOSED-streaming-chunk-split-equivalence
+    reconciliation:
+      test_lane: sync-stream-tokenizer-equivalence    # not a vector; same lane, chunk-split facet
+  - id: PROPOSED-shorthand-longhand-expansion-equivalence
+    reconciliation:
+      test_lane: shorthand-longhand-expansion-equivalence   # not a vector; see test_lanes
+  - id: PROPOSED-selector-backtracking-cost-blowup
+    reconciliation:
+      new_vector: V-SELECTOR-BACKTRACKING-COST        # P2, needs verification
+
+narrative: docs/threat-surface.md

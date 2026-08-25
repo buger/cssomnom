@@ -1,0 +1,8 @@
+id: V-SELECTOR-FORGIVENESS-DIVERGENCE
+title: Selector forgiveness boundary divergence hunt (DOM SyntaxError vs silent swallow)
+description: 'Our matcher never throws: fully-invalid selector lists return false/[] and invalid-selector AST nodes are skipped mid-list, while DOM matches() throws SyntaxError for some of those forms. Classify each boundary case as documented intentional deviation vs conformance gap against selectors-4 forgiving-list semantics (:is()/:where() containment; valid members of mixed lists must still match). README deviation stance must be verified during filing/research — do not presume it. Serialization of partially-invalid lists via selectorText makes the swallow observable even when matching looks correct. Not yet executed.'
+priority: P2
+status: unresearched
+related_obligation_classes: []
+stacks:
+    - typescript

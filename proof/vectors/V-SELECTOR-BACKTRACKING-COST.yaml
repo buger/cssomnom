@@ -1,0 +1,9 @@
+id: V-SELECTOR-BACKTRACKING-COST
+title: Selector backtracking super-linear cost hunt
+description: 'Combinator evaluation in the matcher uses recursive backtracking (src/matcher.ts:185+), so adversarial selector shapes against adversarial-but-small element trees may exhibit super-linear or stack-risk cost, complementing V-DOS-PARSE on the query surface. Hunt for pathological (selector, tree) pairs whose match time or recursion depth grows disproportionately, using bounded budgets so the harness itself stays safe. NEEDS VERIFICATION: confirm the backtracking implementation shape and whether any memoization/pruning already bounds worst cases before treating cost growth as a hazard. Not yet executed.'
+priority: P2
+status: unresearched
+related_obligation_classes:
+    - denial_of_service_resistant
+stacks:
+    - typescript

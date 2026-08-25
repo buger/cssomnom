@@ -1,0 +1,8 @@
+id: V-REGISTRY-SEQUENCE-CONTAMINATION
+title: Global PropertyRegistry sequence-contamination hunt
+description: 'The PropertyRegistry registry is a module-global Map mutated by registerProperty/unregisterProperty/clear(), by @property rules parsed from ANY stylesheet, and implicitly across unrelated parses in one process. Hunt mutation sequences (register/re-register, @property ingest interleaved with API calls, unregister-then-parse, clear mid-sequence) for state that leaks into or contaminates subsequent, logically unrelated parses or tests. Sequence-sensitive global state is where cross-test flakiness hides; every ordering finding reproduces only under a specific sequence. Not yet executed.'
+priority: P2
+status: unresearched
+related_obligation_classes: []
+stacks:
+    - typescript

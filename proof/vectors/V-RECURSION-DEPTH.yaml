@@ -7,3 +7,6 @@ related_obligation_classes:
     - recursion_depth_bounded
 stacks:
     - typescript
+notes:
+    - '2026-08-25: blind onboarding probe independently reproduced the crash signature (parse() RangeError at >=~1000 nested blocks on default Node stack; tokenize() survives 50k depth iteratively), corroborating this vector; see filed KI-18.'
+

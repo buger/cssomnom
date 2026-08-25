@@ -1,0 +1,8 @@
+id: V-SHORTHAND-EXPANSION-EQUIVALENCE
+title: cssText round-trip drift and shorthand/longhand expansion equivalence hunt
+description: 'Folds two blind proposals (PROPOSED-csstext-roundtrip-drift + the shorthand/longhand expansion equivalence oracle family): parse -> cssText -> re-parse must not drift via shorthand expand/contract asymmetry, and setProperty(shorthand, v) read back per-longhand must equal directly setting each longhand to expand(v); removeProperty(shorthand) clears exactly its longhands. Values containing var()/env() intentionally store as-is without eager expansion and are whitelisted, not findings. The declaration object carries a documented past bug of exactly this class ("Drop a stored all" regression comment), so prior probability is high. Not yet executed.'
+priority: P2
+status: unresearched
+related_obligation_classes: []
+stacks:
+    - typescript

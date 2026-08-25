@@ -1,0 +1,9 @@
+id: V-CROSS-SURFACE-POSTURE-TRIAGE
+title: Cross-surface malformed-input posture triage hunt
+description: 'The same malformed text takes different verdicts at each ingestion surface (stylesheet ingest recovers-drops, insertRule throws SyntaxError, setProperty ignores silently, Parser API returns null/throws), and this campaign triages that matrix against the declared posture table in proof/surfaces/threat-surface.yaml. Any UNCAUGHT exception type (RangeError, TypeError from internals) at any surface is a finding regardless of declared posture, as is a verdict not explainable by legitimate layer-context differences (a declaration body valid for setProperty but not insertRule). Malformed input must recover or error loudly per its surface contract — never crash incidentally. Not yet executed.'
+priority: P2
+status: unresearched
+related_obligation_classes:
+    - malformed_recovers_or_errors_loudly
+stacks:
+    - typescript

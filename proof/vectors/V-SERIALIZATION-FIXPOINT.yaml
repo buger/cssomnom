@@ -1,0 +1,9 @@
+id: V-SERIALIZATION-FIXPOINT
+title: Serializer fixpoint non-convergence hunt
+description: 'Hunt campaign for serialization-round-trip stability (registered builtin class encoding_safety): s0 = serialize(tokenize(x) minus EOF), s1 = serialize(tokenize(s0)); a finding is s1 != s0, or a canonical form that re-parses to a different AST. Byte-identity with the original input is NOT asserted — first-pass canonicalization (url() whitespace trim, counter default-style trim, fn-name lowercasing, attr fallback strip) is by design per cssom-1 § 2.1. Not yet executed.'
+priority: P1
+status: unresearched
+related_obligation_classes:
+    - encoding_safety
+stacks:
+    - typescript
