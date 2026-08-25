@@ -1,21 +1,10 @@
 checklist: onboard_v1
-updated_at: "2026-08-25T04:42:44Z"
+updated_at: "2026-08-25T22:24:59Z"
 steps:
     ac-sweep:
         status: pending
     annotations-heavy:
-        status: confirmed
-        confirmed_at: "2026-08-21T14:18:18Z"
-        confirmed_by: agent:grok-4.6
-        note: '84 obligation triples on existing unit tests. Independent audit: annotation_validity pass; obligation_witness_grounded 99 witnesses, 74 static-grounded, 10 JS coverage-unavailable advisory. Not confirmed theater.'
-        scope_key: cssomnom
-        check_results:
-            - id: annotation_validity
-              status: pass
-              at: "2026-08-25T04:42:24Z"
-            - id: obligation_witness_grounded
-              status: pass
-              at: "2026-08-25T04:42:24Z"
+        status: pending
     coverage:
         status: pending
     debt-standing:
@@ -29,7 +18,7 @@ steps:
         check_results:
             - id: spec_lint_hazard_consequence
               status: info
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
     history-mine:
         status: pending
     init:
@@ -62,7 +51,7 @@ steps:
         check_results:
             - id: residual_kill_hygiene
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
     skeleton:
         status: not_applicable
         confirmed_at: "2026-08-21T12:42:21Z"
@@ -90,60 +79,48 @@ steps:
         check_results:
             - id: spec_lint_decomposition_adds_refinement
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
             - id: spec_lint_formalization_quality
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
             - id: solver_modeling_opportunity
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
             - id: under_modeled_requirements_clean
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
     spec-review-2:
-        status: confirmed
-        confirmed_at: "2026-08-25T04:40:19Z"
-        confirmed_by: dev
-        note: Deep spec-review pass over cssom-1/css-syntax-3/selectors-4/values-4 graph; decomposition refinements and formalization quality gates re-run clean
-        scope_key: cssomnom
-        check_results:
-            - id: spec_lint_spec_conformance_review_grounded
-              status: pass
-              at: "2026-08-25T04:42:24Z"
-            - id: software_formalization_complete
-              status: pass
-              at: "2026-08-25T04:42:24Z"
+        status: pending
     surface-matrix:
         status: confirmed
         confirmed_at: "2026-08-21T13:56:35Z"
         confirmed_by: agent:grok-4.6
         note: 'Cold extract --unbiased --package cssomnom: 0 surfaces (ledger/matrix/scorecard in proof/surfaces/runs/cssomnom-cold). surface_coverage passes empty. Extractors are security-surface shaped; no CSS parser sinks detected. Honest empty matrix, not a fake GAP close. DX-027/DX-030.'
         scope_key: cssomnom
-    traces-light:
+    threat_surface_synthesis:
         status: confirmed
-        confirmed_at: "2026-08-24T23:46:36Z"
-        confirmed_by: agent:champ-claude
-        note: 'Light Implements/Documents graph in place and verified this audit batch: orphan_code_clean 1391/1391 code functions traced (0 orphans, exit 0), annotation_validity all IDs/obligations match current spec files. Gates re-run independently before stamping.'
+        confirmed_at: "2026-08-25T21:38:39Z"
+        confirmed_by: agent:champ
+        note: 'already done: threat surface synthesized at proof/surfaces/threat-surface.yaml schema_version 1 (blind record preserved + v1 tunings: resource_bounds, grounding fields, grammar_tables derived-family declarations, vectors_proposed reconciliation); human-readable analysis in docs/threat-surface.md with probe-grounded sections (2026-08-25)'
         scope_key: cssomnom
         check_results:
-            - id: annotation_validity
+            - id: spec_lint_threat_surface_present
               status: pass
-              at: "2026-08-25T04:42:24Z"
-            - id: orphan_code_clean
-              status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
+    traces-light:
+        status: pending
     variables:
         status: confirmed
-        confirmed_at: "2026-08-24T23:47:13Z"
-        confirmed_by: agent:champ-claude
-        note: 'All three gates re-run and pass this batch: variable_orphans_clean 0 issues, variables_declared 34 formalized components pass solver preflight, variable_drift 138 reqs consistent with FRETish.'
+        confirmed_at: "2026-08-25T21:37:34Z"
+        confirmed_by: agent:champ
+        note: 'already done: all 14 cssom variables named by the SYS-REQ-260825 batch declared in specs/system/variables/cssom.vars.yaml (bool inputs + must-be-zero budget outputs per paired KI-124..130 semantics); solver preflight variables_declared passes 34/34 components (2026-08-25)'
         check_results:
             - id: variable_orphans_clean
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
             - id: variables_declared
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
             - id: variable_drift
               status: pass
-              at: "2026-08-25T04:42:24Z"
+              at: "2026-08-25T22:24:48Z"
