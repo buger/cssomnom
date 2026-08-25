@@ -93,6 +93,8 @@ stakeholder:
             - SYS-REQ-260822-1MB8
             - SYS-REQ-260824-BJTQ
             - SYS-REQ-260823-QBD2
+            - SYS-REQ-260825-4R9S
+            - SYS-REQ-260825-ENH2
         - id: AC-006
           text: A font declaration that mixes a system font keyword with size or family components shall not be stored. A font declaration whose value is exactly one system font keyword shall keep the keyword and shall not stamp keyword names into the specified values of its longhands. Setting a generated-family shorthand property shall expand into its longhands.
           verification_method: test
@@ -173,6 +175,10 @@ stakeholder:
             - SYS-REQ-260824-N9AE
             - SYS-REQ-260824-QGJE
             - SYS-REQ-260824-XE59
+            - SYS-REQ-260825-26NJ
+            - SYS-REQ-260825-VKNX
+            - SYS-REQ-260825-2FMA
+            - SYS-REQ-260825-V4ZS
         - id: AC-013
           text: Serializing hash tokens and function names shall escape identifier-context code points so structure survives re-parse. Serialization of attr shall preserve the namespaced attribute name exactly as the grammar allows it. Parsing or setting a grammatically valid border-image declaration shall preserve its components, and serializing then re-parsing such a declaration shall reach a fixpoint after one cycle.
           verification_method: test
@@ -195,6 +201,7 @@ stakeholder:
             - SYS-REQ-260822-V110
             - SYS-REQ-260822-V111
             - SYS-REQ-260823-PMB5
+            - SYS-REQ-260825-7T66
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
