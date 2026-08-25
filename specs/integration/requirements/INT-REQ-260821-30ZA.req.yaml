@@ -40,9 +40,22 @@ verification:
     formalization_status: valid
     review:
         status: in_review
-        reviewer: "REVIEW-54"
+        reviewer: REVIEW-54
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:54:39.504039989Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|cssom|INT-REQ-260821-30ZA|SW-REQ-260822-YBF2
+          reviewer: agent:champ
+          reason: 'Box-shorthand expansion family reviewed. SYS-REQ-260822-5V7N owns the expansion contract on the declared domain (box_side_count<=4, position_token_count<=4, keyframe_offset_percent<=100, font_weight_number<=1000 -> four_longhands_assigned & (shorthand_expanded | shorthand_rejected)); its child SW-REQ-260822-YBF2 pins the implemented lower bound box_side_count>=1 since expandBox rejects empty side lists. INT-REQ-260821-30ZA governs a different layer and entry point: the insertRule pathway, whose distinctive obligations are parse_hooks_consume_rule_called & !parser_imported (ParseHooks dependency inversion - no parser import cycle). Both flagged pairs join the insertRule view with a direct-assignment view: trigger windows differ (insert_rule_path vs shorthand assignment) and the shared expansion outputs carry consistent consequents within the same domain bounds.'
+          reviewed_at: "2026-08-25T00:54:39.504039989Z"
+        - check: ambiguity
+          issue_key: ambiguity|cssom|INT-REQ-260821-30ZA|SYS-REQ-260822-5V7N
+          reviewer: agent:champ
+          reason: 'Box-shorthand expansion family reviewed. SYS-REQ-260822-5V7N owns the expansion contract on the declared domain (box_side_count<=4, position_token_count<=4, keyframe_offset_percent<=100, font_weight_number<=1000 -> four_longhands_assigned & (shorthand_expanded | shorthand_rejected)); its child SW-REQ-260822-YBF2 pins the implemented lower bound box_side_count>=1 since expandBox rejects empty side lists. INT-REQ-260821-30ZA governs a different layer and entry point: the insertRule pathway, whose distinctive obligations are parse_hooks_consume_rule_called & !parser_imported (ParseHooks dependency inversion - no parser import cycle). Both flagged pairs join the insertRule view with a direct-assignment view: trigger windows differ (insert_rule_path vs shorthand assignment) and the shared expansion outputs carry consistent consequents within the same domain bounds.'
+          reviewed_at: "2026-08-25T00:54:39.504039989Z"
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"

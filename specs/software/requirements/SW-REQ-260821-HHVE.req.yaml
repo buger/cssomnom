@@ -33,6 +33,19 @@ verification:
         reviewer: agent:grok-4.6
         reviewed_at: "2026-08-21T13:53:27Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:54:55.099842449Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|parser|SW-REQ-260821-HHVE|SW-REQ-260822-73TM
+          reviewer: agent:champ
+          reason: 'Stylesheet-return family reviewed. SYS-REQ-260821-7521 covers raw CSS text input (css_text_supplied -> stylesheet_returned); SYS-REQ-260822-AACP covers a disjoint trigger window: at-rule dispatch constructing a typed CSSOM rule or hitting the CSSAtRule fallback (typed_cssom_rule | unknown_at_rule_fallback). The SW children add the internal-step obligation consume_stylesheet_completed per cssom-1 #consume-a-stylesheet before the sheet is returned: SW-REQ-260821-HHVE on the text path, SW-REQ-260822-73TM on the dispatch path where getAtRuleHandler ASCII-folds the at-keyword and still completes consumption. Every flagged pair either joins disjoint trigger windows or is a cross-level ancestor/descendant view whose consequents are conjunctively consistent; no contradictory outputs.'
+          reviewed_at: "2026-08-25T00:54:55.099842449Z"
+        - check: ambiguity
+          issue_key: ambiguity|parser|SW-REQ-260821-HHVE|SYS-REQ-260822-AACP
+          reviewer: agent:champ
+          reason: 'Stylesheet-return family reviewed. SYS-REQ-260821-7521 covers raw CSS text input (css_text_supplied -> stylesheet_returned); SYS-REQ-260822-AACP covers a disjoint trigger window: at-rule dispatch constructing a typed CSSOM rule or hitting the CSSAtRule fallback (typed_cssom_rule | unknown_at_rule_fallback). The SW children add the internal-step obligation consume_stylesheet_completed per cssom-1 #consume-a-stylesheet before the sheet is returned: SW-REQ-260821-HHVE on the text path, SW-REQ-260822-73TM on the dispatch path where getAtRuleHandler ASCII-folds the at-keyword and still completes consumption. Every flagged pair either joins disjoint trigger windows or is a cross-level ancestor/descendant view whose consequents are conjunctively consistent; no contradictory outputs.'
+          reviewed_at: "2026-08-25T00:54:55.099842449Z"
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"

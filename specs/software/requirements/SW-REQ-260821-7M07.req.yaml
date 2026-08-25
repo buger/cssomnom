@@ -33,6 +33,19 @@ verification:
         reviewer: agent:grok-4.6
         reviewed_at: "2026-08-21T13:46:46Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:51:18.916514417Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|tokenizer|SW-REQ-260821-7M07|SW-REQ-260822-7R6Z
+          reviewer: agent:champ
+          reason: 'Tokenizer family reviewed: SYS-REQ-260821-SBJ7 owns the unconditional tokenize contract (css_text_supplied -> token_list_returned); SYS-REQ-260822-YQQZ narrows the trigger to escaped-code-point/unicode-range runs within the css-syntax-3 six-hex-digit cap; SW-REQ-260821-7M07 adds the consume-token loop mechanics; SW-REQ-260822-7R6Z is the conjunction of both refinements. Each pair is parent-child refinement or shared-output coexistence over disjoint antecedent conjuncts - no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:51:18.916514417Z"
+        - check: ambiguity
+          issue_key: ambiguity|tokenizer|SW-REQ-260821-7M07|SYS-REQ-260822-YQQZ
+          reviewer: agent:champ
+          reason: 'Tokenizer family reviewed: SYS-REQ-260821-SBJ7 owns the unconditional tokenize contract (css_text_supplied -> token_list_returned); SYS-REQ-260822-YQQZ narrows the trigger to escaped-code-point/unicode-range runs within the css-syntax-3 six-hex-digit cap; SW-REQ-260821-7M07 adds the consume-token loop mechanics; SW-REQ-260822-7R6Z is the conjunction of both refinements. Each pair is parent-child refinement or shared-output coexistence over disjoint antecedent conjuncts - no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:51:18.916514417Z"
     not_modeled:
         - predicate: count < 6
           reason: "Unicode escaped-code-point hex digit counter (max 6); structural tokenizer helper, not a requirement domain [structural]"

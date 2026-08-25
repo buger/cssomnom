@@ -41,6 +41,14 @@ verification:
         motivation:
             kind: defect
             ref: DEFECT-260822-SK9P
+    gaps_reviewed_at: "2026-08-25T00:51:18.916514417Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|tokenizer|SW-REQ-260822-7R6Z|SYS-REQ-260821-SBJ7
+          reviewer: agent:champ
+          reason: 'Tokenizer family reviewed: SYS-REQ-260821-SBJ7 owns the unconditional tokenize contract (css_text_supplied -> token_list_returned); SYS-REQ-260822-YQQZ narrows the trigger to escaped-code-point/unicode-range runs within the css-syntax-3 six-hex-digit cap; SW-REQ-260821-7M07 adds the consume-token loop mechanics; SW-REQ-260822-7R6Z is the conjunction of both refinements. Each pair is parent-child refinement or shared-output coexistence over disjoint antecedent conjuncts - no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:51:18.916514417Z"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:34:49Z"

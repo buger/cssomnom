@@ -46,6 +46,19 @@ verification:
               ref: DEFECT-260822-DTYP
               superseded_at: "2026-08-22T06:56:43Z"
               superseded_by: agent:grok-4.6
+    gaps_reviewed_at: "2026-08-25T00:55:16.745543536Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|selectors|SW-REQ-260821-6D9T|SW-REQ-260822-ZN94
+          reviewer: agent:champ
+          reason: 'Selector match family reviewed. SYS-REQ-260821-PJ76 owns the reject path: bad_selector_supplied -> empty_match via parseSelector rejection. SYS-REQ-260822-XDRG owns the match path: :disabled/:enabled matching an element -> !empty_match. The paths are separated by the parse gate - matches() resolves parseSelector before any pseudo-class evaluation, so a rejected selector never reaches the match path XDRG covers (recorded in SW-REQ-260822-ZN94''s rationale). SW-REQ-260821-6D9T and SW-REQ-260822-ZN94 pin that gate explicitly through parse_selector_rejects / !parse_selector_rejects. Every flagged pair is a reject-vs-match path pairing or its cross-level ancestor/descendant view; no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:55:16.745543536Z"
+        - check: ambiguity
+          issue_key: ambiguity|selectors|SW-REQ-260821-6D9T|SYS-REQ-260822-XDRG
+          reviewer: agent:champ
+          reason: 'Selector match family reviewed. SYS-REQ-260821-PJ76 owns the reject path: bad_selector_supplied -> empty_match via parseSelector rejection. SYS-REQ-260822-XDRG owns the match path: :disabled/:enabled matching an element -> !empty_match. The paths are separated by the parse gate - matches() resolves parseSelector before any pseudo-class evaluation, so a rejected selector never reaches the match path XDRG covers (recorded in SW-REQ-260822-ZN94''s rationale). SW-REQ-260821-6D9T and SW-REQ-260822-ZN94 pin that gate explicitly through parse_selector_rejects / !parse_selector_rejects. Every flagged pair is a reject-vs-match path pairing or its cross-level ancestor/descendant view; no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:55:16.745543536Z"
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:58Z"

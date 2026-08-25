@@ -33,6 +33,19 @@ verification:
         reviewer: agent:grok-4.6
         reviewed_at: "2026-08-21T13:51:23Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:54:30.886047263Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|property_registry|SW-REQ-260821-ARC1|SW-REQ-260822-MN8Z
+          reviewer: agent:champ
+          reason: 'Property-registry drop family reviewed. SYS-REQ-260821-9YM3 owns the ingest contract bad_at_property -> property_rule_dropped. Two independent narrowings hang off it: SW-REQ-260821-ARC1 fires on descriptor validation failure alone (at_property_validate_fails), while SYS-REQ-260822-JY0V fires inside the css-syntax-3/css-namespaces-3 grammar windows (urange_hex_digits<=6, namespace_prelude_count>=1, keyframe_offset_percent>=0) and uniquely strengthens the consequent with !urange_sixth_digit_stops, an output ARC1 never constrains. SW-REQ-260822-MN8Z is the SW-layer conjunction of both narrowings. Every flagged pair is a strictly-narrower antecedent over the same or strengthened consequent; no pair asserts contradictory outputs.'
+          reviewed_at: "2026-08-25T00:54:30.886047263Z"
+        - check: ambiguity
+          issue_key: ambiguity|property_registry|SW-REQ-260821-ARC1|SYS-REQ-260822-JY0V
+          reviewer: agent:champ
+          reason: 'Property-registry drop family reviewed. SYS-REQ-260821-9YM3 owns the ingest contract bad_at_property -> property_rule_dropped. Two independent narrowings hang off it: SW-REQ-260821-ARC1 fires on descriptor validation failure alone (at_property_validate_fails), while SYS-REQ-260822-JY0V fires inside the css-syntax-3/css-namespaces-3 grammar windows (urange_hex_digits<=6, namespace_prelude_count>=1, keyframe_offset_percent>=0) and uniquely strengthens the consequent with !urange_sixth_digit_stops, an output ARC1 never constrains. SW-REQ-260822-MN8Z is the SW-layer conjunction of both narrowings. Every flagged pair is a strictly-narrower antecedent over the same or strengthened consequent; no pair asserts contradictory outputs.'
+          reviewed_at: "2026-08-25T00:54:30.886047263Z"
     not_modeled:
         - predicate: length <= 6
           reason: "CSS escaped-code-point hex digit cap (css-syntax max 6 hex digits); structural tokenizer helper, not a requirement domain [structural]"

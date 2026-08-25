@@ -32,9 +32,17 @@ verification:
     formalization_status: valid
     review:
         status: in_review
-        reviewer: "REVIEW-57"
+        reviewer: REVIEW-57
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:55:02.236607606Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|parser|SYS-REQ-260822-1MB8|SYS-REQ-260822-HARM
+          reviewer: agent:champ
+          reason: Declaration-drop siblings reviewed. SYS-REQ-260822-1MB8 fires when property_value_invalid - the value fails the applicable property grammar during declaration-block consumption (KI-105 oracle). SYS-REQ-260822-HARM fires when keyframe_declaration_forbidden - a declaration prohibited inside @keyframes blocks per css-animations-1, including !important forms (KI-104 oracle). The trigger guards are disjoint input conditions bound to distinct known-issue oracles; declaration_dropped is only the shared output-behavior name. Neither formula constrains the other's trigger and both demand the same drop on their own window, so no contradiction is possible.
+          reviewed_at: "2026-08-25T00:55:02.236607606Z"
 history:
     created_by: agent:codex
     created_at: "2026-08-22T16:51:32Z"

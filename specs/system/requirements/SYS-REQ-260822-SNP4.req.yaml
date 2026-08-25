@@ -30,9 +30,22 @@ verification:
     formalization_status: valid
     review:
         status: in_review
-        reviewer: "REVIEW-57"
+        reviewer: REVIEW-57
         reviewed_at: "2026-08-24T15:46:40Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-25T00:55:09.402508229Z"
+    gaps_reviewed_by: agent:champ
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|typed_om|SW-REQ-260821-7AKJ|SYS-REQ-260822-SNP4
+          reviewer: agent:champ
+          reason: 'Typed OM parse family reviewed. SYS-REQ-260821-HGFK owns the loud-failure path: invalid_typed_input -> parse_throws. SYS-REQ-260822-SNP4 owns the complementary success path: a reifiable 1-to-4 component position (position_reifies within arity bounds 1..4) -> !parse_throws. The antecedent sets are mutually exclusive by construction - one demands invalid input, the other successful position reification - so the throw and no-throw consequents never contend on the same input. SW-REQ-260821-7AKJ and SW-REQ-260822-Z6J1 restate each path through the parse_style_value entry point (CSSStyleValue.parse). Every flagged pair is a positive/negative-path pairing or its cross-level ancestor/descendant view; no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:55:09.402508229Z"
+        - check: ambiguity
+          issue_key: ambiguity|typed_om|SYS-REQ-260821-HGFK|SYS-REQ-260822-SNP4
+          reviewer: agent:champ
+          reason: 'Typed OM parse family reviewed. SYS-REQ-260821-HGFK owns the loud-failure path: invalid_typed_input -> parse_throws. SYS-REQ-260822-SNP4 owns the complementary success path: a reifiable 1-to-4 component position (position_reifies within arity bounds 1..4) -> !parse_throws. The antecedent sets are mutually exclusive by construction - one demands invalid input, the other successful position reification - so the throw and no-throw consequents never contend on the same input. SW-REQ-260821-7AKJ and SW-REQ-260822-Z6J1 restate each path through the parse_style_value entry point (CSSStyleValue.parse). Every flagged pair is a positive/negative-path pairing or its cross-level ancestor/descendant view; no contradictory consequents.'
+          reviewed_at: "2026-08-25T00:55:09.402508229Z"
 history:
     created_by: human:cli
     created_at: "2026-08-22T09:18:12Z"
