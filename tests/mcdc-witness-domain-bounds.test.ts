@@ -98,7 +98,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize/consumeToken]
+    // mcdc-row-retired SW-REQ-260822-7R6Z: prior 6-variable assignment no longer exists in the current table (escaped_hex_digits_LE_6 re-added to the antecedent); this seven-hex scenario is doubly trigger-false (consume_token_loop_runs=F and escaped_hex_digits_LE_6=F) and matches no minimal row
     test('seven-hex escape source is supplied but consumeToken never runs', () => {
       const overflowHex = '.\\1234567 { color: red; }';
       let tokenizeCalls = 0;
@@ -127,7 +127,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-YQQZ
     // MCDC SYS-REQ-260822-YQQZ: css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // Verifies: SW-REQ-260822-7R6Z
-    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
+    // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=T, uses_escaped_code_point=T, uses_replacement_character=T => TRUE
     // SYS-REQ-260822-YQQZ:nominal:nominal
     // SW-REQ-260822-7R6Z:nominal:nominal
     test('tokenize returns tokens for escaped scalar, U+FFFD replacement, and 7-hex stop', () => {
@@ -159,9 +159,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
   describe('SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2 box 1..4, keyframe 0..100, font-weight 1..1000', () => {
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=F, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=F, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync expandBox]
     test('five-value margin is not expanded when parse/replaceSync stay idle', () => {
       const fiveSides = 'div { margin: 1px 2px 3px 4px 5px; }';
       let parseCalls = 0;
@@ -172,9 +172,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync font shorthand]
     test('font-weight 1001 is not expanded when parse/replaceSync stay idle', () => {
       const heavy = 'div { font: 1001 12px sans-serif; }';
       let parseCalls = 0;
@@ -183,9 +183,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync keyframe selector]
     test('101% keyframe selector is not consumed when parse/replaceSync stay idle', () => {
       const over = '@keyframes a { 101% { color: red; } }';
       let parseCalls = 0;
@@ -194,9 +194,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
+    // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: parse/replaceSync background-position]
     test('five-token background-position is not expanded when parse/replaceSync stay idle', () => {
       const fivePos = 'div { background-position: left 10px top 20px center; }';
       let parseCalls = 0;
@@ -205,9 +205,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
-    // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // mcdc-row-retired SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2: prior assignment no longer exists in the current tables; this rejection scenario assigns no longhands (four_longhands_assigned=F), so with all antecedent bounds satisfied the formulas evaluate FALSE and match no TRUE row
     // SYS-REQ-260822-5V7N:nominal:negative
     // SW-REQ-260822-YBF2:nominal:negative
     test('in-bound invalid margin and font without family are rejected without assigning longhands', () => {
@@ -223,9 +221,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
-    // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // mcdc-row-retired SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2: prior assignment no longer exists in the current tables; this font/background-position scenario does not run expandBox so four_longhands_assigned=F and the formulas evaluate FALSE, matching no TRUE row
     test('font shorthand 1..1000 and 1-to-4 background-position expand', () => {
       const font = styleRule('div { font: 400 12px sans-serif; }');
       assert.equal(font.style.getPropertyValue('font-weight'), '400');
@@ -248,9 +244,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-5V7N
-    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     // Verifies: SW-REQ-260822-YBF2
-    // MCDC SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
     // SYS-REQ-260822-5V7N:nominal:nominal
     // SW-REQ-260822-YBF2:nominal:nominal
     test('1-to-4 value margin via parse and replaceSync assigns four longhands', () => {
@@ -287,7 +283,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
   describe('INT-REQ-260821-30ZA insertRule plus box/keyframe/font bounds', () => {
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=F, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-value margin insertRule text is idle so consumeRule is not called', () => {
       assert.equal(cssomImportsParser(), false);
       const fiveSides = 'div { margin: 1px 2px 3px 4px 5px; }';
@@ -306,7 +302,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=F, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('font-weight 1001 insertRule text is idle so consumeRule is not called', () => {
       const heavy = 'div { font: 1001 12px sans-serif; }';
       let consumeCalls = 0;
@@ -315,7 +311,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=F, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('insertRule path is idle without calling consumeRule', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -334,7 +330,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=F, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('101% keyframe insertRule text is idle so consumeRule is not called', () => {
       const over = '@keyframes a { 101% { color: red; } }';
       let consumeCalls = 0;
@@ -343,7 +339,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=F, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: CSSStyleSheet.insertRule]
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=F, shorthand_expanded=T, shorthand_rejected=T => TRUE [no-action: CSSStyleSheet.insertRule]
     test('five-token position insertRule text is idle so consumeRule is not called', () => {
       const fivePos = 'div { background-position: left 10px top 20px center; }';
       let consumeCalls = 0;
@@ -352,7 +348,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    // mcdc-row-retired INT-REQ-260821-30ZA: prior assignment no longer exists in the current table; this in-bound value-invalid margin is rejected without assigning longhands (four_longhands_assigned=F), so the formula evaluates FALSE and matches no TRUE row
     test('insertRule of in-bound invalid margin calls consumeRule and rejects the shorthand', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -373,7 +369,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // mcdc-row-retired INT-REQ-260821-30ZA: prior assignment no longer exists in the current table; a font-only declaration does not run expandBox (four_longhands_assigned=F), so the formula evaluates FALSE at this point and matches no TRUE row
     test('insertRule of font shorthand expands without importing Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -395,7 +391,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
     test('insertRule of 4-value margin calls consumeRule and assigns four longhands', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -421,7 +417,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-30ZA
-    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
+    // MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
     test('insertRule of mixed box, font, and rejected margin does not import Parser', () => {
       assert.equal(cssomImportsParser(), false);
       const original = ParseHooks.consumeRule;
@@ -452,7 +448,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-CFRA
     // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     // SYS-REQ-260822-CFRA:nominal:negative
@@ -470,7 +466,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-CFRA
     // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_LT_60=F, red_from_chroma=F => TRUE [no-action: hslToRgb 0-60 red chroma]
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     test('hsl hue 120 is green chroma not the 0-60 red assignment', () => {
@@ -506,7 +502,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: SYS-REQ-260822-CFRA
     // MCDC SYS-REQ-260822-CFRA: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
     // Verifies: SW-REQ-260822-1REE
-    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
+    // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_LT_60=T, red_from_chroma=T => TRUE
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     // SYS-REQ-260822-CFRA:nominal:nominal
@@ -554,9 +550,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
 
   describe('SYS-REQ-260822-JY0V / SW-REQ-260822-MN8Z / INT-REQ-260821-ZP03 urange/namespace', () => {
     // Verifies: SYS-REQ-260822-JY0V
-    // MCDC SYS-REQ-260822-JY0V: bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SYS-REQ-260822-JY0V: bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=F, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     // SYS-REQ-260822-JY0V:nominal:nominal
     // SW-REQ-260822-MN8Z:nominal:nominal
     test('valid @property is not dropped so the drop action stays idle', () => {
@@ -577,9 +573,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-JY0V
-    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     test('negative keyframe offset is dropped without invoking at-property drop', () => {
       let propertyDrop = 0;
       const sheet = parse('@keyframes a { -1% { color: red; } 0% { color: green; } }');
@@ -594,9 +590,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-JY0V
-    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     test('empty @namespace prelude is parsed without dropping an at-property', () => {
       let propertyDrop = 0;
       const sheet = parse('@namespace;');
@@ -607,9 +603,9 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-JY0V
-    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=F => TRUE [no-action: handlePropertyRule drop]
+    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=T => TRUE [no-action: handlePropertyRule drop]
     test('unicode-range source longer than 6 is not parsed as at-property drop', () => {
       let propertyDrop = 0;
       const seven = 'U+1234567';
@@ -618,7 +614,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=F, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: PropertyRegistry.validate]
+    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=F, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: PropertyRegistry.validate]
     test('malformed @property prelude is idle for validate when parse is not invoked', () => {
       const badPrelude = '@property --x extra { syntax: "*"; inherits: false; }';
       let validateCalls = 0;
@@ -627,9 +623,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-JY0V
-    // MCDC SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE
-    // Verifies: SW-REQ-260822-MN8Z
-    // MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE
+    // mcdc-row-retired SYS-REQ-260822-JY0V / SW-REQ-260822-MN8Z: prior assignment no longer exists in the current tables; this tokenizer-stop scenario involves no @property rule (property_rule_dropped=F), so with sixth_digit_stops=T the formulas evaluate FALSE and match no TRUE row
     test('unicode-range 7-hex stops at 6 digits on the tokenizer and @font-face path', () => {
       const tokens = tokenize('U+10FFFF7', true);
       assert.equal(tokens[0].type, 'unicode-range');
@@ -674,7 +668,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     //mcdc:ignore:defensive SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => FALSE — handlePropertyRule returns null when PropertyRegistry.validate throws [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-ZP03
-    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: CSS.registerProperty]
+    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=F, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: CSS.registerProperty]
     test('negative keyframe offset does not call registerProperty', () => {
       PropertyRegistry.clear();
       let registerPropertyCalls = 0;
@@ -694,7 +688,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-ZP03
-    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_registry_updated=F, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: CSS.registerProperty]
+    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=F, property_registry_updated=T, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: CSS.registerProperty]
     test('empty namespace prelude does not call registerProperty', () => {
       PropertyRegistry.clear();
       let registerPropertyCalls = 0;
@@ -708,7 +702,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-ZP03
-    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: registerPropertyCalls=0]
+    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: registerPropertyCalls=0]
     test('registerProperty is not called so the registry is unchanged', () => {
       PropertyRegistry.clear();
       let registerPropertyCalls = 0;
@@ -730,7 +724,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-ZP03
-    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=T, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=F => TRUE [no-action: CSS.registerProperty]
+    // mcdc-row-retired INT-REQ-260821-ZP03: prior assignment no longer exists in the current table; this seven-hex stub never calls registerProperty so register_property_called=F while urange_hex_digits_LE_6=F too, a doubly trigger-false point matching no minimal row
     test('7-hex unicode-range source does not call registerProperty', () => {
       PropertyRegistry.clear();
       let registerPropertyCalls = 0;
@@ -744,7 +738,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: INT-REQ-260821-ZP03
-    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE
+    // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE
     test('7-hex unicode-range stops at 6 without updating the registry', () => {
       PropertyRegistry.clear();
       try {

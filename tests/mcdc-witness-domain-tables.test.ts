@@ -133,7 +133,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // Verifies: SYS-REQ-260822-4EY2
     // MCDC SYS-REQ-260822-4EY2: resolution_dpi_GT_0=F, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction=0]
     // Verifies: SW-REQ-260822-QKE9
-    // MCDC SW-REQ-260822-QKE9: resolution_dpi_GT_0=F, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction=0]
+    // MCDC SW-REQ-260822-QKE9: media_query_invalid=F, resolution_dpi_GT_0=F, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction=0]
     // SYS-REQ-260822-4EY2:nominal:negative
     // SW-REQ-260822-QKE9:nominal:negative
     test('boolean (resolution) is not positive when environment dpi is 0', () => {
@@ -147,7 +147,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // Verifies: SYS-REQ-260822-4EY2
     // MCDC SYS-REQ-260822-4EY2: resolution_dpi_GT_0=T, resolution_feature_positive=T => TRUE
     // Verifies: SW-REQ-260822-QKE9
-    // MCDC SW-REQ-260822-QKE9: resolution_dpi_GT_0=T, resolution_feature_positive=T => TRUE
+    // MCDC SW-REQ-260822-QKE9: media_query_invalid=F, resolution_dpi_GT_0=T, resolution_feature_positive=T => TRUE
     // SYS-REQ-260822-4EY2:nominal:nominal
     // SW-REQ-260822-QKE9:nominal:nominal
     test('boolean (resolution) matches when converted dpi is greater than 0', () => {
@@ -165,7 +165,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
 
   describe('SYS-REQ-260822-SNP4 / SW-REQ-260822-Z6J1', () => {
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=F, parse_throws=T, position_reifies=T => TRUE [no-action: parseStyleValueCalls=0]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=F, parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=T => TRUE [no-action: parseStyleValueCalls=0]
     test('CSSStyleValue.parse is idle so a 2-value position is not reified', () => {
       let parseStyleValueCalls = 0;
       const parseStyleValue = (property: string, cssText: string) => {
@@ -179,9 +179,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=F, position_arity_LE_4=T, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=F, position_arity_LE_4=T, position_reifies=T => TRUE [no-action: CSSStyleValue.parse 1-to-4 CSSPositionValue]
     // SYS-REQ-260822-SNP4:nominal:negative
     // SW-REQ-260822-Z6J1:nominal:negative
     test('empty object-position throws and does not reify a 1-to-4 CSSPositionValue', () => {
@@ -194,9 +194,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=F => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=F, position_reifies=T => TRUE [no-action: CSSStyleValue.parse no-throw CSSPositionValue]
     // SYS-REQ-260822-SNP4:nominal:negative
     // SW-REQ-260822-Z6J1:nominal:negative
     test('3-value object-position and 4-value transform-origin throw without CSSPositionValue', () => {
@@ -217,9 +217,9 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
 
     // Verifies: SYS-REQ-260822-SNP4
-    // MCDC SYS-REQ-260822-SNP4: parse_throws=F, position_reifies=T => TRUE
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=F, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=T => TRUE
     // Verifies: SW-REQ-260822-Z6J1
-    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=F, position_reifies=T => TRUE
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=F, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=T => TRUE
     // SYS-REQ-260822-SNP4:nominal:nominal
     // SW-REQ-260822-Z6J1:nominal:nominal
     test('1-to-4 component positions reify as CSSPositionValue without throwing', () => {
@@ -251,7 +251,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // Verifies: SYS-REQ-260822-XDRG
     // MCDC SYS-REQ-260822-XDRG: empty_match=T, matches_disabled=F, matches_enabled=F => TRUE [no-action: nonEmptyMatchAction=0]
     // Verifies: SW-REQ-260822-ZN94
-    // MCDC SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=F => TRUE [no-action: nonEmptyMatchAction=0]
+    // MCDC SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=F, parse_selector_rejects=F => TRUE [no-action: nonEmptyMatchAction=0]
     // SYS-REQ-260822-XDRG:nominal:negative
     // SW-REQ-260822-ZN94:nominal:negative
     test('div does not match :disabled or :enabled', () => {
@@ -268,7 +268,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     // Verifies: SYS-REQ-260822-XDRG
     // MCDC SYS-REQ-260822-XDRG: empty_match=F, matches_disabled=T, matches_enabled=T => TRUE
     // Verifies: SW-REQ-260822-ZN94
-    // MCDC SW-REQ-260822-ZN94: empty_match=F, matches_disabled=T, matches_enabled=T => TRUE
+    // MCDC SW-REQ-260822-ZN94: empty_match=F, matches_disabled=T, matches_enabled=F, parse_selector_rejects=F => TRUE
     // SYS-REQ-260822-XDRG:nominal:nominal
     // SW-REQ-260822-ZN94:nominal:nominal
     test(':disabled and :enabled each match listed form controls', () => {

@@ -32,7 +32,7 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
       PropertyRegistry.clear();
     });
     // Verifies: SYS-REQ-260821-EGCP
-    // MCDC SYS-REQ-260821-EGCP: bad_dictionary=F, duplicate_js_register=T, register_throws=T => TRUE
+    // mcdc-row-retired SYS-REQ-260821-EGCP: prior assignment (valid dictionary + duplicate + throw) matches no current row; the satisfied nominal row is already witnessed below by 'bad duplicate dictionary throws'
     test('duplicate JS register throws InvalidModificationError', () => {
       PropertyRegistry.clear();
       try {

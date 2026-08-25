@@ -93,7 +93,7 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
   });
   // --- INT-REQ-260821-ZP03 ---
   // Verifies: INT-REQ-260821-ZP03
-  // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=F, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => TRUE [no-action: registerPropertyCalls=0]
+  // MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => TRUE [no-action: registerPropertyCalls=0]
   test('ZP03 trigger-false: registerProperty is not called so the registry is unchanged', () => {
     PropertyRegistry.clear();
     let registerPropertyCalls = 0;
