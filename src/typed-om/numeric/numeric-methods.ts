@@ -55,6 +55,7 @@ function isCompatible(u1: string, u2: string): boolean {
   if (u1 === u2) return true;
   const b1 = unitToBase[u1];
   const b2 = unitToBase[u2];
+  //mcdc:ignore:defensive !b1 / !b2 T is unreachable — both units come from constructor-validated CSSUnitValues so unitToBase always has entries for them; the remaining legs' F rows already witnessed [reviewed: agent:champ]
   if (!b1 || !b2 || b1 === 'number' || b1 === 'percent') return false;
   if (b1 !== b2) return false;
   const abs = ['px', 'cm', 'mm', 'in', 'pt', 'pc', 'q', 'deg', 'grad', 'rad', 'turn', 's', 'ms', 'hz', 'khz', 'dpi', 'dpcm', 'dppx'];
@@ -65,6 +66,7 @@ function createCSSUnitValueFromSumValueItem(item: SumValueItem): CSSUnitValue | 
   if (item.unitMap.size > 1) return null;
   if (item.unitMap.size === 0) return new CSSUnitValue(item.value, 'number');
   const entry = item.unitMap.entries().next().value;
+  //mcdc:ignore:defensive !entry T is unreachable — the size === 0 case returns at the guard immediately above, so entries().next().value is always defined here; F already witnessed [reviewed: agent:champ]
   if (!entry) return new CSSUnitValue(item.value, 'number');
   const [unit, power] = entry;
   if (power !== 1) return null;
@@ -79,9 +81,11 @@ function createSumValue(node: CSSNumericValue): SumValue | null {
     if (unitToBase[unit] === 'length' && unitToPixels[unit]) {
       value *= unitToPixels[unit];
       unit = 'px';
+    //mcdc:ignore:defensive unitToRadians T/F pairing is impossible — every angle-base unit (deg/grad/rad/turn) has a radians factor, so the second leg cannot be false when the first is true; the canonicalizing T row already witnessed [reviewed: agent:champ]
     } else if (unitToBase[unit] === 'angle' && unitToRadians[unit]) {
       value *= unitToRadians[unit] / unitToRadians['deg'];
       unit = 'deg';
+    //mcdc:ignore:defensive unitToSeconds T/F pairing is impossible — every time-base unit (ms/s) has a seconds factor, so the second leg cannot be false when the first is true; the canonicalizing T row already witnessed [reviewed: agent:champ]
     } else if (unitToBase[unit] === 'time' && unitToSeconds[unit]) {
       value *= unitToSeconds[unit];
       unit = 's';
@@ -297,6 +301,7 @@ export function parseNumericValue(css: string): CSSNumericValue {
         }
       }
       const sv = createCSSStyleValue(v as Token);
+      //mcdc:ignore:defensive sv instanceof CSSNumericValue F is unreachable — number/percentage/dimension tokens always reify to a CSSNumericValue subclass via createCSSStyleValue; T already witnessed [reviewed: agent:champ]
       if (sv instanceof CSSNumericValue) return sv;
       throw new DOMException(`Invalid numeric value: ${css}`, 'SyntaxError');
     }

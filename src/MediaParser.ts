@@ -1078,6 +1078,7 @@ function compareOp(actual: number, op: string, queried: number, isNegativeRangeF
   if (isNegativeRangeFeature && queried < 0) {
     if (op === '=') return false;
     if (op === '<' || op === '<=') return false;
+    //mcdc:ignore:defensive both legs are provably unpairable — compareOp only receives ops from {=,<,<=,>,>=}, and '=', '<' and '<=' return at the guards above, so op is '>' or '>=' whenever this line evaluates and neither condition can flip the outcome alone; T rows already witnessed via negative-range width/height queries [reviewed: agent:champ]
     if (op === '>' || op === '>=') return true;
   }
 

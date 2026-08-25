@@ -120,6 +120,7 @@ export function parseColor(css: string): CSSColorValue | CSSKeywordValue {
 
   let singleValue: ComponentValue | null = null;
   for (const v of componentValues) {
+    //mcdc:ignore:defensive comment T is MUTE leftover — parseColor consumes tokenize() output and the tokenizer folds comments away, so a comment component never appears here; whitespace T row already witnessed [reviewed: agent:champ]
     if (v.type === 'whitespace' || v.type === 'comment') {
       continue;
     }

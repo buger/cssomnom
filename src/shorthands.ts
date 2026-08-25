@@ -31,6 +31,7 @@ export interface ShorthandDefinition {
 }
 
 function getFunctionName(token: ComponentValue): string {
+  //mcdc:ignore:defensive token.type === 'function' F is unreachable — every call site guards with token.type === 'function' before invoking this helper (short-circuit &&), so only T rows evaluate; T already witnessed [reviewed: agent:champ]
   if (token.type === 'function') {
     if ('name' in token && typeof token.name === 'string') return token.name.toLowerCase();
     if ('value' in token && typeof token.value === 'string') return token.value.toLowerCase();
@@ -320,6 +321,7 @@ function expandBackground(values: ComponentValue[]): Record<string, ComponentVal
   layers.push(currentLayer);
 
   const numLayers = layers.length;
+  //mcdc:ignore:defensive numLayers === 0 T is unreachable — layers.push(currentLayer) runs unconditionally after the split loop, so there is always at least one layer; F already witnessed [reviewed: agent:champ]
   if (numLayers === 0) return null;
 
   const imageLayers: ComponentValue[][] = [];
@@ -747,6 +749,7 @@ function formatBorderSideValue(widthVal: string, styleVal: string, colorVal: str
   if (!isInitialStyle) parts.push(s);
   if (!isInitialColor) parts.push(c);
 
+  //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
   if (parts.length === 0) {
     return 'none';
   }
@@ -1113,6 +1116,7 @@ function contractOutline(values: Record<string, ComponentValue[]>): string | nul
   if (!isInitialColor) parts.push(sc);
   if (!isInitialStyle) parts.push(ss);
   if (!isInitialWidth) parts.push(sw);
+  //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
 
   if (parts.length === 0) {
     return 'none';
@@ -1284,6 +1288,7 @@ function contractFontVariant(values: Record<string, ComponentValue[]>): string |
     }
   }
 
+  //mcdc:ignore:defensive nonNormal.length === 0 T is unreachable — the all-normal combination returns at the earlier every-normal guard, so nonNormal always has an entry; F already witnessed [reviewed: agent:champ]
   if (nonNormal.length === 0) return 'normal';
   return nonNormal.join(' ');
 }
@@ -1398,10 +1403,12 @@ function expandFont(values: ComponentValue[]): Record<string, ComponentValue[]> 
   }
 
   if (i >= filtered.length) return null;
+  //mcdc:ignore:defensive lineHeightVal.length > 0 F is unreachable — lineHeightVal is assigned only as [lhToken] and never as an empty array, so truthiness implies length > 0; T row and the null (no slash) row already witnessed [reviewed: agent:champ]
   const lastConsumed = (lineHeightVal && lineHeightVal.length > 0) ? lineHeightVal[0] : sizeToken;
   const lastIdx = values.indexOf(lastConsumed);
   if (lastIdx !== -1) {
     familyVal = values.slice(lastIdx + 1).filter(t => t.type !== 'EOF');
+    //mcdc:ignore:defensive familyVal.length > 0 F is unreachable — reaching this loop guarantees a remaining token after size/line-height (the i >= filtered.length guard returns earlier) and comment tokens never survive the tokenizer, so familyVal keeps an entry after trimming; T rows already witnessed [reviewed: agent:champ]
     while (familyVal.length > 0 && (familyVal[0].type === 'whitespace' || familyVal[0].type === 'comment')) {
       familyVal.shift();
     }
@@ -1586,6 +1593,7 @@ function contractListStyle(values: Record<string, ComponentValue[]>): string | n
   const parts: string[] = [];
   if (!isInitialPos) parts.push(sp);
   if (!isInitialImg) parts.push(si);
+  //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
   if (!isInitialType) parts.push(st);
 
   if (parts.length === 0) {

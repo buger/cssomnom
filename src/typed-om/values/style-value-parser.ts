@@ -139,6 +139,7 @@ export function parseAllStyleValues(property: string, css: string): CSSStyleValu
   if (typeof property !== 'string' || property === '') {
     throw new TypeError("Invalid property name: property must be a non-empty string");
   }
+  //mcdc:ignore:defensive startsWith/length legs are provably redundant — B && C implies A (a string starting with "--" of length < 3 is exactly "--"), so no independence pair can exist for either leg; the A=T throw row and both F rows already witnessed [reviewed: agent:champ]
   if (property === '--' || (property.startsWith('--') && property.length < 3)) {
     throw new TypeError(`Invalid property name: '${property}'`);
   }
@@ -157,6 +158,7 @@ export function parseAllStyleValues(property: string, css: string): CSSStyleValu
 }
 
 function _parseAll(property: string, css: string): CSSStyleValue[] {
+  //mcdc:ignore:defensive this duplicated guard is dead — the only caller parseAllStyleValues runs the identical check first and throws, so property === '--' can never reach here and B && C implies A anyway; F (real custom property) rows already witnessed [reviewed: agent:champ]
   if (property === '--' || (property.startsWith('--') && property.length < 3)) {
     throw new TypeError(`Invalid property name: '${property}'`);
   }

@@ -28,6 +28,7 @@ export function escape(ident: unknown): string {
 
     // 2. If the character is in the range [\1-\1f] (U+0001 to U+001F) or is U+007F, then the character escaped as code point.
     // cssom-1 § 2.3 #serialize-an-identifier
+  //mcdc:ignore:defensive codeUnit >= 1 F is unreachable — U+0000 is replaced with U+FFFD (cssom-1 § 2.3 #serialize-an-identifier step 1) and skipped before this check; escaped T rows already witnessed [reviewed: agent:champ]
     if ((codeUnit >= 0x0001 && codeUnit <= 0x001F) || codeUnit === 0x007F) {
       result += '\\' + codeUnit.toString(16) + ' ';
       continue;

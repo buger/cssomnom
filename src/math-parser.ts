@@ -46,6 +46,7 @@ function toCanonical(val: CSSUnitValue): { value: number, unit: CSSUnit } {
   } else if (base === 'resolution') {
     if (val.unit === 'dpi') return { value: val.value, unit: 'dpi' };
     if (val.unit === 'dpcm') return { value: val.value * 2.54, unit: 'dpi' };
+    //mcdc:ignore:defensive the (F,F) fall-through row is unreachable — the resolution base holds exactly {dpi,dpcm,dppx,x} and dpi/dpcm return above, so one of dppx/x is always T when this line evaluates; both T rows already witnessed [reviewed: agent:champ]
     if (val.unit === 'dppx' || val.unit === 'x') return { value: val.value * 96, unit: 'dpi' };
   }
   return { value: val.value, unit: val.unit };

@@ -106,6 +106,7 @@ export function requiresTokenSeparator(t1: Token, t2: Token): boolean {
   }
 
   // Row: / (css-syntax-3 § 8 #serialization)
+  //mcdc:ignore:defensive isDelimSlash1 F is unreachable — the entry guard admits exactly eleven t1 token kinds and every kind except delim '/' returns in an earlier arm, so this row only evaluates with a leading '/'; T already witnessed [reviewed: agent:champ]
   if (isDelimSlash1) {
     return isDelimStar2;
   }
@@ -114,6 +115,7 @@ export function requiresTokenSeparator(t1: Token, t2: Token): boolean {
 }
 
 function getFirstToken(node: ComponentValue): Token | null {
+  //mcdc:ignore:defensive node === null T is unreachable — the sole caller serialize dereferences node.type (EOF skip) before dispatching here, so a null element throws before reaching these helpers; non-object F already witnessed [reviewed: agent:champ]
   if (typeof node !== 'object' || node === null) return null;
   if (node.type === 'simple-block') {
     return (node as SimpleBlock).associatedToken;
@@ -121,12 +123,14 @@ function getFirstToken(node: ComponentValue): Token | null {
   if (node.type === 'function' && 'name' in node) {
     return { type: 'function', value: (node as CSSFunction).name } as Token;
   }
+  //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   const t = node as Token;
   if (t.type === 'EOF') return null;
   return t;
 }
 
 function getLastToken(node: ComponentValue): Token | null {
+  //mcdc:ignore:defensive node === null T is unreachable — the sole caller serialize dereferences node.type (EOF skip) before dispatching here, so a null element throws before reaching these helpers; non-object F already witnessed [reviewed: agent:champ]
   if (typeof node !== 'object' || node === null) return null;
   if (node.type === 'simple-block') {
     const start = (node as SimpleBlock).associatedToken?.value as string;
@@ -136,6 +140,7 @@ function getLastToken(node: ComponentValue): Token | null {
   if (node.type === 'function' && 'name' in node) {
     return { type: ')', value: ')' } as Token;
   }
+  //mcdc:ignore:defensive EOF T is unreachable — serialize filters EOF elements at loop entry before calling these helpers, so an EOF token never reaches the tail cast; F already witnessed [reviewed: agent:champ]
   const t = node as Token;
   if (t.type === 'EOF') return null;
   return t;
@@ -165,6 +170,7 @@ export function serialize(nodes: ComponentValue[], preserveCase: boolean = false
 }
 
 function serializeNode(node: ComponentValue, preserveCase: boolean): string {
+  //mcdc:ignore:defensive node === null T is unreachable — the sole caller serialize dereferences node.type (EOF skip) before dispatching here, so a null element throws before reaching this helper; non-object F already witnessed [reviewed: agent:champ]
   if (typeof node !== 'object' || node === null) {
     return '';
   }
@@ -354,6 +360,7 @@ export function serializeIdentifier(id: string): string {
     }
 
     // 2. [\1-\1f] (U+0001 to U+001F) or U+007F -> escaped as code point
+    //mcdc:ignore:defensive charCode >= 1 F is unreachable — U+0000 is replaced with U+FFFD (cssom-1 #serialize-an-identifier step 1) and skipped before this check, so the low bound never fails; escaped T rows already witnessed [reviewed: agent:champ]
     if ((charCode >= 0x0001 && charCode <= 0x001F) || charCode === 0x007F) {
       result += escapeAsCodePoint(charCode);
       continue;
@@ -412,6 +419,7 @@ export function serializeString(s: string): string {
     }
 
     // 2. [\1-\1f] (U+0001 to U+001F) or U+007F -> escaped as code point
+    //mcdc:ignore:defensive charCode >= 1 F is unreachable — U+0000 is replaced with U+FFFD (cssom-1 #serialize-an-identifier step 1) and skipped before this check, so the low bound never fails; escaped T rows already witnessed [reviewed: agent:champ]
     if ((charCode >= 0x0001 && charCode <= 0x001F) || charCode === 0x007F) {
       result += escapeAsCodePoint(charCode);
       continue;
@@ -556,6 +564,7 @@ function checkIntervening(decls: Declaration[], allDecls: Declaration[], declInd
 
     if (isSideShorthand) {
       const sidePrefix = decls[0].name.replace(/-(width|style|color)$/, '');
+      //mcdc:ignore:defensive the includes leg is unreachable — 'all' and 'border' have no propertyToGroup entry, so such intervening declarations are skipped by the !interveningGroup guard above and never reach this test; startsWith T rows already witnessed [reviewed: agent:champ]
       if (intervening.name.startsWith(sidePrefix + '-') || ['all', 'border'].includes(intervening.name)) {
         return true;
       }
@@ -563,6 +572,7 @@ function checkIntervening(decls: Declaration[], allDecls: Declaration[], declInd
       if (groups.has(interveningGroup)) {
         return true;
       }
+      //mcdc:ignore:defensive this includes leg is unreachable — 'all' and 'border' have no propertyToGroup entry, so they are skipped by the !interveningGroup guard above; F already witnessed [reviewed: agent:champ]
       if (['all', 'border'].includes(intervening.name)) {
         return true;
       }
@@ -581,6 +591,7 @@ function tryCombineBoxShorthand(
   for (const [shorthand, def] of Object.entries(SHORTHANDS)) {
     if (!["margin", "padding", "border-width", "border-style", "border-color", "scroll-margin", "scroll-padding", "inset", "overflow-clip-margin", "border-radius"].includes(shorthand)) continue;
     
+    //mcdc:ignore:defensive !def.logicalLonghands T is unreachable — every SHORTHANDS entry admitted by the box filter above declares a 4-element logicalLonghands list, so neither leg can be T on an admitted shorthand; F already witnessed [reviewed: agent:champ]
     if (!def.logicalLonghands || def.logicalLonghands.length !== 4) continue;
     const physical = def.longhands;
     const logical = def.logicalLonghands;
@@ -666,6 +677,7 @@ function tryCombineGenericShorthand(
       });
 
       const def = SHORTHANDS[shorthand];
+      //mcdc:ignore:defensive def F is unreachable — every key of genericShorthands (border sides, outline, list-style, flex, border-image, line-clamp) is also a SHORTHANDS key, so the lookup always succeeds; T already witnessed [reviewed: agent:champ]
       if (def) {
         const contracted = def.contract(record);
         if (contracted !== null) {
@@ -726,6 +738,7 @@ function tryCombineBorderFull(
     }
 
     const contracted = SHORTHANDS['border']?.contract(record);
+    //mcdc:ignore:defensive contracted !== undefined T is unreachable — the SHORTHANDS entry for this shorthand always exists and its contract returns string|null, so the optional chain never yields undefined; null F already witnessed [reviewed: agent:champ]
     if (contracted !== null && contracted !== undefined) {
       allDecls.forEach(other => processed.add(other!));
       imageDecls.forEach(img => processed.add(img));
@@ -750,6 +763,7 @@ function tryCombineBackground(
 
   const allDecls = longhands.map(name => declMap.get(name));
   if (allDecls.every(other => other && !processed.has(other) && other.important === d.important)) {
+    //mcdc:ignore:defensive T is unreachable — background longhands have no propertyToGroup entries so the groups set is empty and neither the same-group nor side/all-border legs can fire; F already witnessed [reviewed: agent:champ]
     if (checkIntervening(allDecls as Declaration[], declarations, declIndices)) return null;
 
     const record: Record<string, ComponentValue[]> = {};
@@ -781,6 +795,7 @@ function tryCombineBorderBlock(
 
   const allDecls = longhands.map(name => declMap.get(name));
   if (allDecls.every(other => other && !processed.has(other) && other.important === d.important)) {
+    //mcdc:ignore:defensive T is unreachable — decls[0] fixes sidePrefix to this axis's own edge, every grouped name carrying that prefix is one of the six required longhands (skipped by the names.has guard), and remaining grouped names lack the prefix while 'all'/'border' have no group; F already witnessed [reviewed: agent:champ]
     if (checkIntervening(allDecls as Declaration[], declarations, declIndices)) return null;
 
     const record: Record<string, ComponentValue[]> = {};
@@ -789,6 +804,7 @@ function tryCombineBorderBlock(
     }
 
     const contracted = SHORTHANDS['border-block']?.contract(record);
+    //mcdc:ignore:defensive contracted !== undefined T is unreachable — the SHORTHANDS entry for this shorthand always exists and its contract returns string|null, so the optional chain never yields undefined; null F already witnessed [reviewed: agent:champ]
     if (contracted !== null && contracted !== undefined) {
       allDecls.forEach(other => processed.add(other!));
       return `border-block: ${contracted}${d.important ? ' !important' : ''}`;
@@ -812,6 +828,7 @@ function tryCombineBorderInline(
 
   const allDecls = longhands.map(name => declMap.get(name));
   if (allDecls.every(other => other && !processed.has(other) && other.important === d.important)) {
+    //mcdc:ignore:defensive T is unreachable — decls[0] fixes sidePrefix to this axis's own edge, every grouped name carrying that prefix is one of the six required longhands (skipped by the names.has guard), and remaining grouped names lack the prefix while 'all'/'border' have no group; F already witnessed [reviewed: agent:champ]
     if (checkIntervening(allDecls as Declaration[], declarations, declIndices)) return null;
 
     const record: Record<string, ComponentValue[]> = {};
@@ -820,6 +837,7 @@ function tryCombineBorderInline(
     }
 
     const contracted = SHORTHANDS['border-inline']?.contract(record);
+    //mcdc:ignore:defensive contracted !== undefined T is unreachable — the SHORTHANDS entry for this shorthand always exists and its contract returns string|null, so the optional chain never yields undefined; null F already witnessed [reviewed: agent:champ]
     if (contracted !== null && contracted !== undefined) {
       allDecls.forEach(other => processed.add(other!));
       return `border-inline: ${contracted}${d.important ? ' !important' : ''}`;
@@ -840,6 +858,7 @@ function tryCombineFont(
 
   const allDecls = def.longhands.map(name => declMap.get(name));
   if (allDecls.every(other => other && !processed.has(other) && other.important === d.important)) {
+    //mcdc:ignore:defensive T is unreachable — every propertyToGroup 'font' name belongs to SHORTHANDS.font.longhands, so a same-group intervening declaration is always skipped by the names.has guard; F already witnessed [reviewed: agent:champ]
     if (checkIntervening(allDecls as Declaration[], declarations, declIndices)) return null;
 
     const record: Record<string, ComponentValue[]> = {};
@@ -868,6 +887,7 @@ function tryCombineFontVariant(
 
   const allDecls = def.longhands.map(name => declMap.get(name));
   if (allDecls.every(other => other && !processed.has(other) && other.important === d.important)) {
+    //mcdc:ignore:defensive T is unreachable — every propertyToGroup 'font-variant' name belongs to SHORTHANDS['font-variant'].longhands, so a same-group intervening declaration is always skipped by the names.has guard; F already witnessed [reviewed: agent:champ]
     if (checkIntervening(allDecls as Declaration[], declarations, declIndices)) return null;
 
     const record: Record<string, ComponentValue[]> = {};
@@ -1035,6 +1055,7 @@ export function serializeDeclarations(declarations: Declaration[]): string {
             if (existing && !processed.has(existing)) return { name: side, value: serialize(existing.value).trim(), important: existing.important, decl: existing };
 
             const longhands = genericShorthands[side];
+            //mcdc:ignore:defensive !longhands T is unreachable — generic.name passed the sides membership test immediately above and all four side keys exist in genericShorthands; F already witnessed [reviewed: agent:champ]
             if (!longhands) return null;
             const sideLonghands = longhands.map(lh => declMap.get(lh));
             if (sideLonghands.every(lh => lh && !processed.has(lh) && lh.important === generic.important)) {
@@ -1047,7 +1068,9 @@ export function serializeDeclarations(declarations: Declaration[]): string {
 
           if (sideResults.every(r => r !== null && r.value === generic.value && r.important === generic.important)) {
             sideResults.forEach(r => {
+              //mcdc:ignore:defensive r falsy is unreachable — the every(r !== null) guard above filtered nulls before this loop; "longhands" in r F row already witnessed [reviewed: agent:champ]
               if (r && 'longhands' in r) (r.longhands as Declaration[]).forEach(lh => processed.add(lh));
+              //mcdc:ignore:defensive r falsy is unreachable — the every(r !== null) guard above filtered nulls before this loop; "decl" in r F row already witnessed [reviewed: agent:champ]
               else if (r && 'decl' in r) processed.add(r.decl as Declaration);
             });
             combined = `border: ${generic.value}${generic.important ? ' !important' : ''}`;

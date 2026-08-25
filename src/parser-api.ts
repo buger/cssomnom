@@ -237,6 +237,7 @@ function styleToParserDeclarations(style: unknown): CSSParserRule[] {
 function atRulePartsFromCssText(cssText: string): { name: string; prelude: CSSToken[]; hasBody: boolean } | null {
   const values = new Parser(tokenize(cssText)).parseComponentValues();
   let i = 0;
+  //mcdc:ignore:defensive comment T is MUTE leftover — these helpers consume tokenize() output and the tokenizer folds comments away (no preserveComments), so a comment token never reaches this loop; whitespace T row already witnessed [reviewed: agent:champ]
   while (i < values.length && (values[i].type === 'whitespace' || values[i].type === 'comment')) i++;
   if (i >= values.length || values[i].type !== 'at-keyword') return null;
   const name = String((values[i] as Token).value).toLowerCase();
@@ -262,6 +263,7 @@ function atRulePartsFromCssText(cssText: string): { name: string; prelude: CSSTo
 function qualifiedFromCssText(cssText: string): CSSParserQualifiedRule | null {
   const values = new Parser(tokenize(cssText)).parseComponentValues();
   let i = 0;
+  //mcdc:ignore:defensive comment T is MUTE leftover — these helpers consume tokenize() output and the tokenizer folds comments away (no preserveComments), so a comment token never reaches this loop; whitespace T row already witnessed [reviewed: agent:champ]
   while (i < values.length && (values[i].type === 'whitespace' || values[i].type === 'comment')) i++;
   if (i >= values.length || values[i].type === 'at-keyword') return null;
   const preludeVals: ComponentValue[] = [];

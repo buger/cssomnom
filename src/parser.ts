@@ -316,6 +316,7 @@ export class Parser {
         if (topLevel) {
           this.discardToken();
         } else {
+          //mcdc:ignore:defensive rule=T is unreachable — a CDO/CDC enters consume-rule as a prelude-leading token which invalidates any selector/at-rule prelude, so consumeRule returns null; F (EOF after CDO) already witnessed [reviewed: agent:champ]
           const rule = this.consumeRule();
           if (rule) rules.push(rule);
         }
@@ -372,6 +373,7 @@ export class Parser {
         if (handler) {
           return handler(this, rule, undefined, nested);
         }
+        //mcdc:ignore:defensive nested T is unreachable — every nested-supported name (NESTED_GROUP_AT_RULES ∪ margin rules) has a handler, so the handler arm returns first; F (top-level CSSAtRule fallback) already witnessed [reviewed: agent:champ]
         if (nested) return null;
         return new CSSAtRule(rule.name, rule.prelude);
       } else if (next.type === '}') {
@@ -387,6 +389,7 @@ export class Parser {
           return handler(this, rule, block, nested);
         }
 
+        //mcdc:ignore:defensive nested T is unreachable — every nested-supported name (NESTED_GROUP_AT_RULES ∪ margin rules) has a handler, so the handler arm returns first; F (top-level fallback paths below) already witnessed [reviewed: agent:champ]
         if (nested) return null;
 
         // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive
@@ -457,6 +460,7 @@ export class Parser {
       } catch (e) {
         return null;
       }
+      //mcdc:ignore:defensive startSelector F is unreachable — whitespace-only/empty parens throw in SelectorParser (caught → return null) before serialize can yield '', and comment tokens do not survive the tokenizer; T already witnessed [reviewed: agent:champ]
       if (startSelector) {
         startSelector = `(${startSelector})`;
       }
@@ -478,6 +482,7 @@ export class Parser {
         } catch (e) {
           return null;
         }
+        //mcdc:ignore:defensive endSelector F is unreachable — whitespace-only/empty parens throw in SelectorParser (caught → return null) before serialize can yield ''; T already witnessed [reviewed: agent:champ]
         if (endSelector) {
           endSelector = `(${endSelector})`;
         }
@@ -839,6 +844,7 @@ export class Parser {
       }
       if (token.type === 'function' && (token as CSSFunction).name === 'url') {
         const urlArg = (token as CSSFunction).value.find(v => v.type === 'string');
+        //mcdc:ignore:defensive urlArg F is unreachable — the tokenizer maps unquoted url( to a url-token (css-syntax-3 § 4.3.6 #consume-url-token), so a function named url only arises from a quoted form whose string arg is always found; T already witnessed [reviewed: agent:champ]
         if (urlArg) return (urlArg as StringToken).value;
         const raw = (token as CSSFunction).value.map(v => serialize([v])).join('');
         return raw.trim();
@@ -888,6 +894,7 @@ export class Parser {
     } else {
       const mediaText = serialize(prelude.slice(i)).trim();
       const parsed = ParseHooks.parseMediaQueryList(mediaText);
+      //mcdc:ignore:defensive parsed.length === 0 T is unreachable — mediaText serializes from a non-empty filtered prelude so it is never ''/' ', the only inputs MediaParser.parse returns [] for; F (non-empty list) already witnessed [reviewed: agent:champ]
       if (parsed.length === 0 || parsed.some(q => q.invalid)) {
         return null;
       }
@@ -1306,8 +1313,10 @@ export class Parser {
   }
 
   private skipToNextSemicolonOrBlock(stream: ComponentValueStream): void {
+    //mcdc:ignore:defensive while(true) T is dead code — this helper has no call sites in src/; the equivalent skip logic in consumeRemnantsOfABadDeclaration is witnessed [reviewed: agent:champ]
     while (true) {
       const val = stream.next();
+      //mcdc:ignore:defensive both legs are dead code — this helper has no call sites in src/; the equivalent EOF/semicolon stop in consumeRemnantsOfABadDeclaration is witnessed [reviewed: agent:champ]
       if (val.type === 'EOF' || val.type === 'semicolon') {
         break;
       }
@@ -1325,7 +1334,9 @@ export class Parser {
       if (val.type === 'EOF' || val.type === 'semicolon') {
         stream.next();
         break;
+      //mcdc:ignore:defensive val.type === '}' T is unreachable — remnants always runs on a block-content stream of balanced component values (css-syntax-3 § 5.5.6 #consume-remnants-of-a-bad-declaration) and LazyComponentValueStream mirrors the closing '}' to EOF, so a bare '}' is never peeked; F (other tokens) already witnessed [reviewed: agent:champ]
       } else if (val.type === '}') {
+        //mcdc:ignore:defensive nested T/F are dead code — both rows live behind the unreachable '}' branch above; semicolon/EOF stop paths already witnessed [reviewed: agent:champ]
         if (nested) {
           break;
         } else {
@@ -1365,6 +1376,7 @@ export class Parser {
       const val = prelude[i];
       if (val.type === 'delim' && val.value === '.') {
         let next = i + 1;
+        //mcdc:ignore:defensive next > end T is unreachable — a '.' on the trimmed last index is rejected by the lastToken guard above the loop, so in-loop dots always have i < end; F (mid-selector dot) already witnessed [reviewed: agent:champ]
         if (next > end || prelude[next].type !== 'ident') {
           return false;
         }
@@ -1374,6 +1386,7 @@ export class Parser {
       }
       if (val.type === 'colon') {
         let next = i + 1;
+        //mcdc:ignore:defensive next <= end F is unreachable — a colon on the trimmed last index is rejected by the lastToken colon guard above the loop, so in-loop colons always have i < end; T already witnessed [reviewed: agent:champ]
         if (next <= end) {
            const nextVal = prelude[next];
            if (nextVal.type !== 'ident' && nextVal.type !== 'function' && nextVal.type !== 'colon') {
@@ -1458,6 +1471,7 @@ export class Parser {
     let currentSegment: ComponentValue[] = [];
     
     for (const val of prelude) {
+      //mcdc:ignore:defensive delim ',' legs are unreachable — the tokenizer maps U+002C to a comma token (css-syntax-3 § 4.3.9 #consume-consume-token), so prelude components never carry type 'delim' with value ','; comma=T row already witnessed [reviewed: agent:champ]
       if (val.type === 'comma' || (val.type === 'delim' && val.value === ',')) {
         segments.push(currentSegment);
         currentSegment = [];
@@ -1799,6 +1813,7 @@ export class Parser {
           ['inherit', 'initial', 'unset', 'revert', 'revert-layer'].includes(cleanResolved[0].value.toLowerCase());
         
         if (!isCSSWideKeyword && !matchesSyntax(cleanResolved, syntax)) {
+            //mcdc:ignore:defensive initialValue === undefined F is impossible — PropertyRegistry.validate requires initialValue for non-universal syntax, and with universal syntax matchesSyntax('*') is constant true so this guard is never entered; T fallback already witnessed [reviewed: agent:champ]
           if (def.initialValue !== undefined) {
             const tokens = tokenize(def.initialValue);
             const parser = new Parser(tokens);

@@ -83,6 +83,7 @@ export class CSSUnitValue extends CSSNumericValue {
     if (this.unit === unit) return this;
     const base = unitToBase[this.unit];
     const targetBase = unitToBase[unit];
+    //mcdc:ignore:defensive base === 'number'/'percent' T is unreachable — those bases are produced only by the identically-named units, which return at the this.unit === unit identity guard above, so these legs evaluate only when a different base pair reaches them with both checks false; !base/base!==targetBase pairs already witnessed [reviewed: agent:champ]
     if (!base || base !== targetBase || base === 'number' || base === 'percent') {
       throw new TypeError(`Cannot convert ${this.unit} to ${unit}`);
     }
@@ -107,6 +108,7 @@ export class CSSUnitValue extends CSSNumericValue {
         'dpi': 1 / 96,
         'dpcm': 2.54 / 96
       };
+      //mcdc:ignore:defensive both T rows are unreachable — this branch admits only resolution-base units {dppx,x,dpi,dpcm}, all present in the toDppx table on both sides, so the guard is constant false; the normal conversion row already witnessed [reviewed: agent:champ]
       if (!toDppx[this.unit] || !toDppx[unit]) throw new TypeError('Unsupported resolution conversion');
       canonical = this.value * toDppx[this.unit];
       targetFactor = toDppx[unit];
