@@ -82,7 +82,7 @@ function hashUntilL234Number(): ComponentValue {
   return {
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:234\b/.test(stack) ? 'number' : 'hash';
+      return /MediaParser\.ts:237\b/.test(stack) ? 'number' : 'hash';
     },
     value: 'fff',
     hashType: 'unrestricted',
@@ -113,11 +113,11 @@ function numberThenOperatorSpace(): ComponentValue {
   return {
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:212\b/.test(stack) ? 'delim' : 'number';
+      return /MediaParser\.ts:215\b/.test(stack) ? 'delim' : 'number';
     },
     get value() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:212\b/.test(stack) ? '+' : 16;
+      return /MediaParser\.ts:215\b/.test(stack) ? '+' : 16;
     },
     numberType: 'integer',
     sign: null,
@@ -130,11 +130,11 @@ function calcThenOperatorSpace(): ComponentValue {
     name: 'calc',
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:212\b/.test(stack) ? 'delim' : 'function';
+      return /MediaParser\.ts:215\b/.test(stack) ? 'delim' : 'function';
     },
     get value() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:212\b/.test(stack) ? '+' : inner;
+      return /MediaParser\.ts:215\b/.test(stack) ? '+' : inner;
     },
   } as unknown as ComponentValue;
 }

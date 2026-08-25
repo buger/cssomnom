@@ -29,10 +29,22 @@ function sampleDiv(): Element {
 function withCompareSortCounter(fn: () => void): number {
   let compareSorts = 0;
   const original = Array.prototype.sort;
-  Array.prototype.sort = function (this: unknown[], compareFn?: (a: unknown, b: unknown) => number) {
-    if (compareFn === compareCascadeDeclarations) compareSorts += 1;
-    return original.call(this, compareFn as (a: unknown, b: unknown) => number);
+  // Reentrancy-safe: while the patched body runs, the prototype holds the
+  // pristine sort so nested sorts (including the coverage runtime's own
+  // sample flushes, which fire from instrumented condition evaluations
+  // inside this body) never re-enter the patch. Otherwise a flush inside
+  // the patched comparison recurses patch -> flush -> patch until the
+  // stack overflows.
+  const patched = function (this: unknown[], compareFn?: (a: unknown, b: unknown) => number) {
+    Array.prototype.sort = original;
+    try {
+      if (compareFn === compareCascadeDeclarations) compareSorts += 1;
+      return original.call(this, compareFn as (a: unknown, b: unknown) => number);
+    } finally {
+      Array.prototype.sort = patched;
+    }
   };
+  Array.prototype.sort = patched;
   try {
     fn();
     return compareSorts;
