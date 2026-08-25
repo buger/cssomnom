@@ -6,6 +6,6 @@ subject: SW-REQ-260821-5W6X
 decision: approved
 comment: 'FRETish trigger import_url_present & css_import_rule_constructed maps to handleImportRule reading href from a string or url() prelude token and returning new CSSImportRule(href, mediaText, layerName, supportsText) with no fetch/XHR. Response !external_sheet_fetched: CSSImportRule.styleSheet lazily createInternal([]) an empty sheet and never loads the URL from network or disk.'
 citations:
-    - src/parser.ts:748@handleImportRule
+    - src/parser.ts:765@handleImportRule
     - src/CSSOM.ts:1465@CSSImportRule
     - src/parser.ts:47@Parser
