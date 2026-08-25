@@ -26,6 +26,8 @@ describe('CSSOM: all Shorthand Property Expansion & Contraction (CSSOM § 6.4.3 
     assert.strictEqual(style.getPropertyValue('all'), '');
   });
 
+  // css-values-4 § 4.1.1 (#css-wide-keywords): every property accepts initial/inherit/unset/revert,
+  // so `all: revert` stores and returns the keyword verbatim.
   it('getPropertyValue("all") returns css-wide keyword when all is set', () => {
     const style = new CSSStyleDeclaration();
     style.cssText = 'all: revert';

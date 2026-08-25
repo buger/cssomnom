@@ -29,11 +29,3 @@ allowlist:
     anchor: reference-pixel
     reason: physical reference-pixel constant is device/browser rendering policy; nothing to parse or serialize
     expires: 2026-11-30
-  - spec: cssom-1
-    anchor: parse-a-media-query-list
-    reason: CITATION DEBT (actionable finding) - media query list parsing is implemented in src/MediaParser.ts and exercised via sibling anchors (#error-handling/#serializing-media-queries), but no dedicated citation of this anchor exists anywhere yet; needs a requirement/citation
-    expires: 2026-11-30
-  - spec: css-values-4
-    anchor: css-wide-keywords
-    reason: CITATION DEBT (actionable finding) - initial/inherit/unset/revert/revert-layer handling is implemented across src/parser.ts, src/CSSStyleDeclaration.ts and src/serializer.ts, but no #css-wide-keywords citation exists anywhere yet; needs a requirement/citation
-    expires: 2026-11-30

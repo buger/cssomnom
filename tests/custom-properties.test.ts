@@ -361,6 +361,8 @@ test('CSSOM: Custom property resolved to CSS-wide keyword', () => {
 
   // Resolving color should substitute var(--my-color) which resolves to 'initial'.
   // Even though 'initial' is not a <color>, it is a CSS-wide keyword and should not trigger fallback/invalid.
+  // css-values-4 § 4.1.1 (#css-wide-keywords): 'initial' is accepted by every property, so var()
+  // substitution yields the keyword itself instead of the guaranteed-invalid value.
   assert.strictEqual(Parser.resolveVariables(styleRule.style, 'color').trim(), 'initial');
 });
 

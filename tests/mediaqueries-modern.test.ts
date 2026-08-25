@@ -128,6 +128,8 @@ describe('Media Queries Level 4/5 Range Syntax & Feature Evaluation', () => {
     assert.strictEqual(MediaParser.evaluate('(width)', env), true); // width = 800 > 0
   });
 
+  // cssom-1 § 4.1 (#parse-a-media-query-list): a comma-separated string parses into a list of
+  // media queries, each evaluated independently and OR-ed across the list.
   test('Boolean logic: not, and, or, comma separation', () => {
     assert.strictEqual(MediaParser.evaluate('screen and (min-width: 600px)', env), true);
     assert.strictEqual(MediaParser.evaluate('print and (min-width: 600px)', env), false);
