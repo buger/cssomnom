@@ -1,3 +1,4 @@
+// Documents: SYS-REQ-260825-VKNX, SYS-REQ-260825-V4ZS, SYS-REQ-260825-2FMA, SYS-REQ-260825-26NJ
 # Proof escape analysis: KI-127…KI-130 (Typed OM subsystem fidelity — WAVE-C clusters)
 
 Companion to the WAVE-C typed-OM batch filed from the wpt-sandbox known-failure mass

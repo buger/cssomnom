@@ -1,3 +1,4 @@
+// Documents: SYS-REQ-260825-4R9S, SYS-REQ-260825-7T66, SYS-REQ-260825-ENH2
 # Proof escape analysis: KI-124 … KI-126 (grammar-validation absence, registry syntax drift, unknown-at-rule child visibility)
 
 This is the Proof escape companion for the consolidated four-candidate hunt wave
