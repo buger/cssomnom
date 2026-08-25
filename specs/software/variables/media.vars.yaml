@@ -41,3 +41,6 @@ domain:
           rows:
             - {media_query_validity: valid, serialized_as_not_all: false}
             - {media_query_validity: invalid, serialized_as_not_all: true}
+independence:
+    declared: true
+    reason: "SW media pairs (W8S1 invalid-query serializes-as-not-all vs QKE9 resolution-feature matching) skip as cross-component contracts against cssom/serializer; the two guarantees govern disjoint outputs (serialized_as_not_all vs resolution_feature_positive) with no shared mode variable."

@@ -45,4 +45,7 @@ variables:
 no_interface:
     declared: true
     reason: "fetch-wptfyi.ts exports fetchWptFyiRun/decompressBuffer consumed only by operator CLI flows (pnpm run wpt:fetch-upstream); no separately versioned caller/callee INT exists"
+independence:
+    declared: true
+    reason: "SYS wptfyi_ingest pairs (JS16 gzip-bomb decompression budget vs MPS4 cache-path escape guard vs Z8HR allowlisted-downloads guard) skip as cross-component contracts against wpt_runner/wpt_browser_cli; the three guarantees govern disjoint outputs (decompressed_output_budget_bytes, cache_writes_outside_base_zero, non_allowlisted_downloads_zero), each an independent input-guarded containment bound with no shared mode variable."
 

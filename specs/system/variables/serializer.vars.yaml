@@ -19,3 +19,6 @@ variables:
 no_interface:
     declared: true
     reason: "serialize walks a token list as a pure function; SYS/SW guarantees are the README round-trip example, not a caller/callee INT contract"
+independence:
+    declared: true
+    reason: "SYS serializer pairs (KV30 serialized-equals-source identity vs 8HDQ re-parse structure preservation) skip as cross-component contracts against cssom; the two guarantees govern disjoint outputs (serialized_equals_source vs round_trip_structure_preserved) with no shared mode variable."

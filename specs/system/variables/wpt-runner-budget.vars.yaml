@@ -45,4 +45,7 @@ variables:
 no_interface:
     declared: true
     reason: "sandbox.fetch and getScriptContent are internal seams of the maintainer-only WPT node runner (scripts/wpt/node/run.ts), not versioned caller/callee interfaces of the published library; SYS-level guarantees on runner containment are the contract"
+independence:
+    declared: true
+    reason: "SYS wpt_runner pairs (2P2Q script-src traversal guard vs 7TCQ sandbox-fetch fallthrough guard vs KYB6 idl-fetch escape guard) skip as cross-component contracts against wpt_browser_cli/wptfyi_ingest; the three guarantees govern disjoint outputs (out_of_tree_script_executions_zero, host_fetch_fallthrough_zero, out_of_tree_idl_disclosures_zero), each an independent input-guarded containment bound with no shared mode variable."
 

@@ -37,3 +37,6 @@ domain:
           rows:
             - {media_query_validity: valid, serialized_as_not_all: false}
             - {media_query_validity: invalid, serialized_as_not_all: true}
+independence:
+    declared: true
+    reason: "SYS media pairs (5283 invalid-query not-all serialization vs 4EY2 resolution-feature matching vs MRT1 conditionText round-trip) skip as cross-component contracts; the three guarantees govern disjoint outputs (serialized_as_not_all, resolution_feature_positive, round_trip_semantic_flips) with no shared mode variable."
