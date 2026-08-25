@@ -10,6 +10,9 @@ severity_basis: reproducer
 risk: data_integrity
 cve_surface: none
 affected_api: scripts/wpt/node/run.ts sandbox.fetch bridge inside runWptFile()
+# ACC-08 dedup signal: distinct sink file from KI-26 (scripts/wpt/browser/fetch-wptfyi.ts) so
+# the shared path_traversal kill_domain does not collapse read-disclosure vs write-overlay.
+affected_file: scripts/wpt/node/run.ts
 attacker_input: fixture-controlled fetch URLs starting with /interfaces/ (../ traversal segments after the prefix)
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
@@ -38,6 +41,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-24.yaml
+    - at: "2026-08-25T19:21:32Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: set-dedup-armor
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -77,5 +84,7 @@ poc_quality:
         runWptFile() call (run.ts:141).
         reachability_verified: fixture-reachable with zero extra privileges; existsSync gate is
         the only thing between probe and contents.
+dedup_armor: |
+    Only runWptFile's sandbox.fetch /interfaces/ bridge escapes containment (scripts/wpt/node/run.ts:143-147 — path.join + existsSync + readFileSync serving local files to fixture JS: a READ disclosure driven by fixture-controlled fetch URLs). Distinct from KI-26 (fetchWptFyiRun cache persistence in scripts/wpt/browser/fetch-wptfyi.ts:222-227 — a WRITE overlay primitive driven by the operator-supplied --cachePath option; no read-to-page-js sink). Different API surface, opposite sink direction (read vs write), different attacker input (fixture page JS vs operator CLI option). Do not merge into a generic path-containment fix without covering both sinks.
 kill_domain: path_traversal
 do_not_refile_as: WPT runner /interfaces/ fetch path traversal disclosure
