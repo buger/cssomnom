@@ -50,7 +50,16 @@ project:
                 - scripts/**
                 - fuzz/**
                 - proof/**
-            rationale: production_include is src/** only (the cssomnom library). lint.exclude is src/data/gen/** (generated tables). tests/** is the unit/WPT harness (verification_scope.include for autolink Verifies only). dist/ is tsup build output. scripts/ is codegen, WPT runner, and CI tooling. fuzz/ is the optional css-fuzz corpus driver. proof/ holds overlay reproducers, evidence manifests, and System Truth Layer YAML — not library code. docs/ and README.md are documentation sources, not production. Those roots are intentionally out of the MC/DC and orphan production universe.
+                # Vendored upstream checkouts (csswg-drafts spec sources,
+                # web-platform-tests fixtures, csstree/postcss/lightningcss
+                # reference parsers). Reference material for differential
+                # conformance and spec lookup — never shipped, never built
+                # into dist/, no cssomnom requirements trace INTO these
+                # sources; wpt tooling reqs (SYS-REQ-260823-*) verify via
+                # expected-red tripwire reproducers under proof/reproducers/,
+                # not via annotations in submodule trees.
+                - submodules/**
+            rationale: production_include is src/** only (the cssomnom library). lint.exclude is src/data/gen/** (generated tables). tests/** is the unit/WPT harness (verification_scope.include for autolink Verifies only). dist/ is tsup build output. scripts/ is codegen, WPT runner, and CI tooling. fuzz/ is the optional css-fuzz corpus driver. proof/ holds overlay reproducers, evidence manifests, and System Truth Layer YAML — not library code. docs/ and README.md are documentation sources, not production. submodules/ holds vendored W3C spec sources and third-party reference parsers used read-only for differential conformance and spec lookup; nothing there is built, shipped, or traced as cssomnom production. Those roots are intentionally out of the MC/DC and orphan production universe.
     checks:
         slow_tests:
             enabled: true
