@@ -115,6 +115,62 @@ project:
         # repo has none of those artifacts.
         # security_surface_covered:
         #     enabled: false
+        # ThreatProfile adoption (Phase 2): mirrors
+        # proof/surfaces/threat-surface.yaml (schema_version 1). Family names
+        # and statuses are copied verbatim from its oracle_families list;
+        # contract_ref names the docs/threat-surface.md section that carries
+        # the equivalence contracts. Deferrals are limited to the two tracked
+        # vectors so closure nags remain honest.
+        threat_surface:
+            profile:
+                artifact_kind: library
+                languages: [typescript]
+                recovery_posture: mixed
+                transformation_boundaries:
+                    - text -> tokens -> AST -> CSSOM -> cssText
+            oracle_families:
+                - family: 'WPT recorded-expectation differential (regression oracle)'
+                  status: armed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Serializer fixpoint/idempotence (metamorphic)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Sync-vs-streaming tokenizer equivalence (differential)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Posture-consistency triage (same malformed text across ingestion surfaces)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Grammar-table-driven rejection completeness (data-driven differential)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Shorthand<->longhand expansion equivalence (relational)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Case-folding metamorphic relation (ASCII case-insensitive keywords)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Selector forgiveness boundary (invalid-selector containment)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Token-conservation partition invariant (metamorphic)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Grammar-table valid-subset sampling (data-driven differential)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                - family: 'Identifier-escape round-trip relation (relational)'
+                  status: proposed
+                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+            na_reasons: []
+            deferrals:
+                - vector_id: V-RELATIVE-COLOR-ENGINE
+                  reason: blocked on computed-value surface unlock (product decision pending); tracked as vector
+                  until: 2026-12-31
+                - vector_id: V-MEDIA-DEFAULT-ENV-DRIFT
+                  reason: P3 environment-posture lane; scheduled behind P1/P2 hunt waves
+                  until: 2026-10-31
+            warn_after_days: 0
     known_issue_text_hygiene:
         ste100:
             enabled: true
