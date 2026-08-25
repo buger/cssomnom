@@ -94,17 +94,11 @@ stakeholder:
             - SYS-REQ-260824-4RGN
             - SYS-REQ-260824-BRYV
             - SYS-REQ-260824-DAS2
-          witness_deferred:
-            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-            tracking: spec-model-quality-lints
         - id: AC-005
           text: The selector matcher shall return a non-empty match for an element matched by the disabled or enabled pseudo-class.
           verification_method: test
           derived_reqs:
             - SYS-REQ-260822-XDRG
-          witness_deferred:
-            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-            tracking: spec-model-quality-lints
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

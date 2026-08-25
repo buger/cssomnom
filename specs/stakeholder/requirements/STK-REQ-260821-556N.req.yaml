@@ -90,7 +90,7 @@ stakeholder:
             - SYS-REQ-260823-Z8HR
             - SYS-REQ-260823-ZM55
           witness_deferred:
-            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
+            reason: "Clause-level triage 2026-08-25: argv-element execution and mechanical enforcement (check-safe-exec + safe kernel) hold statically, but witnessing them end-to-end requires spawning child processes, which the tests/**/*.test.ts in-memory isolation policy forbids; sandboxed-fetch fail-closed outside the interfaces root, results-url scheme/host allowlist, and decompression maxOutputLength remain open known issues reproduced by tripwires KI-24/KI-25/KI-26/KI-27 (proof/evidence, status: known_issue_reproduced), so an honest acceptance test cannot assert those clauses offline today."
             tracking: spec-model-quality-lints
 lifecycle:
     change_history:

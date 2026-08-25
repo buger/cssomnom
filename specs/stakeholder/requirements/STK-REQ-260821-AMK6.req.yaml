@@ -94,9 +94,6 @@ stakeholder:
           verification_method: test
           derived_reqs:
             - SYS-REQ-260822-SNP4
-          witness_deferred:
-            reason: "Acceptance-test wiring for this staged criterion lands with the next code batch; src/** and tests/** are frozen in this spec-model repair batch."
-            tracking: spec-model-quality-lints
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"
