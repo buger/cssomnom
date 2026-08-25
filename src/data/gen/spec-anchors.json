@@ -1,0 +1,6349 @@
+{
+  "specs": {
+    "css-backgrounds-3": {
+      "file": "submodules/csswg-drafts/css-backgrounds-3/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "acknowledgments",
+          "title": "Acknowledgments",
+          "kind": "heading"
+        },
+        {
+          "anchor": "adjusted-radius-dimension",
+          "title": "adjusted radius dimension",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "background-color",
+          "title": "background color",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "background-image-layers",
+          "title": "background image layers",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "background-images",
+          "title": "background image(s)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "background-painting-area",
+          "title": "background painting area",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "background-positioning-area",
+          "title": "background positioning area",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "backgrounds",
+          "title": "Backgrounds",
+          "kind": "heading"
+        },
+        {
+          "anchor": "bg-position-serialization",
+          "title": "Serialization of 'background-position' values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "bg-size-serialization",
+          "title": "Serialization of 'background-size' values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "blur-radius",
+          "title": "blur radius",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "body-background",
+          "title": "The Canvas Background and the HTML Element",
+          "kind": "heading"
+        },
+        {
+          "anchor": "border-box",
+          "title": "border-box",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "border-image",
+          "title": "border image",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "border-image-area",
+          "title": "border image area",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "border-image-process",
+          "title": "Drawing the Border Image",
+          "kind": "heading"
+        },
+        {
+          "anchor": "border-images",
+          "title": "Border Images",
+          "kind": "heading"
+        },
+        {
+          "anchor": "border-radius-tables",
+          "title": "Effect on Tables",
+          "kind": "heading"
+        },
+        {
+          "anchor": "border-width",
+          "title": "border width",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "borders",
+          "title": "Borders",
+          "kind": "heading"
+        },
+        {
+          "anchor": "bottom",
+          "title": "''bottom''",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "canvas-background",
+          "title": "canvas background",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "canvas-surface",
+          "title": "canvas surface",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "center",
+          "title": "''center''",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "changes",
+          "title": "Changes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2009",
+          "title": "Changes Since the 17 December 2009 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2011",
+          "title": "Changes Since the 15 February 2011 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2012-04",
+          "title": "Changes since the 17 April 2012 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2012-07",
+          "title": "Changes since the 24 July 2012 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2012LC",
+          "title": "Changes since the 14 February 2012 “Last Call” Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2014-02",
+          "title": "Changes since the 4 February 2014 Last Call Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2014-09",
+          "title": "Changes since the 9 September 2014 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2017-10",
+          "title": "Changes since the 17 October 2017 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2020-12",
+          "title": "Changes since the 22 December 2020 Candidate Recommendation Snapshot",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2023-02",
+          "title": "Changes since the 14 February 2023 Candidate Recommendation Snapshot",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2024-03",
+          "title": "Changes since the 11 March 2024 Candidate Recommendation Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "contain",
+          "title": "contain",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "content-box",
+          "title": "content-box",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "corner-clipping",
+          "title": "Corner Clipping",
+          "kind": "heading"
+        },
+        {
+          "anchor": "corner-overlap",
+          "title": "Overlapping Curves",
+          "kind": "heading"
+        },
+        {
+          "anchor": "corner-shaping",
+          "title": "Corner Shaping",
+          "kind": "heading"
+        },
+        {
+          "anchor": "corner-transitions",
+          "title": "Color and Style Transitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "corners",
+          "title": "Rounded Corners",
+          "kind": "heading"
+        },
+        {
+          "anchor": "dashed",
+          "title": "dashed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dotted",
+          "title": "dotted",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "double",
+          "title": "double",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "first-line-background",
+          "title": "The ''::first-line'' Pseudo-element‘s Background",
+          "kind": "heading"
+        },
+        {
+          "anchor": "groove",
+          "title": "groove",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "hidden",
+          "title": "hidden",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "horizontal-offset",
+          "title": "horizontal offset",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "inner-box-shadow",
+          "title": "inner box-shadow",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "introduction",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "layering",
+          "title": "Layering Multiple Background Images",
+          "kind": "heading"
+        },
+        {
+          "anchor": "level-1",
+          "title": "Level 1",
+          "kind": "heading"
+        },
+        {
+          "anchor": "level-2",
+          "title": "Level 2",
+          "kind": "heading"
+        },
+        {
+          "anchor": "level-3",
+          "title": "Level 3",
+          "kind": "heading"
+        },
+        {
+          "anchor": "levels",
+          "title": "Levels",
+          "kind": "heading"
+        },
+        {
+          "anchor": "ltbg-layer",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfinal-bg-layer",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medium",
+          "title": "medium",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "misc",
+          "title": "Miscellaneous Effects",
+          "kind": "heading"
+        },
+        {
+          "anchor": "no-repeat",
+          "title": "no-repeat",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "outer-box-shadow",
+          "title": "outer box-shadow",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "outset",
+          "title": "outset",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "outset-adjusted-border-radius",
+          "title": "outset-adjusted border radius",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "padding-box",
+          "title": "padding-box",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "placement",
+          "title": "Module Interactions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "regions",
+          "title": "regions",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "repeat",
+          "title": "repeat",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "repeat-x",
+          "title": "repeat-x",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "repeat-y",
+          "title": "repeat-y",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "root-background",
+          "title": "The Canvas Background and the Root Element",
+          "kind": "heading"
+        },
+        {
+          "anchor": "scroll",
+          "title": "scroll",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "shadow-blur",
+          "title": "Blurring Shadow Edges",
+          "kind": "heading"
+        },
+        {
+          "anchor": "shadow-layers",
+          "title": "Layering, Layout, and Other Details",
+          "kind": "heading"
+        },
+        {
+          "anchor": "shadow-shape",
+          "title": "Shadow Shape, Spread, and Knockout",
+          "kind": "heading"
+        },
+        {
+          "anchor": "special-backgrounds",
+          "title": "Backgrounds of Special Elements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "spread-distance",
+          "title": "spread distance",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stretch",
+          "title": "stretch",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "values",
+          "title": "Value Definitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "vertical-offset",
+          "title": "vertical offset",
+          "kind": "dfn"
+        }
+      ]
+    },
+    "css-fonts-4": {
+      "file": "submodules/csswg-drafts/css-fonts-4/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "a11y",
+          "title": "Accessibility Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "absolute-size-mapping",
+          "title": "Absolute Size Keyword Mapping Table",
+          "kind": "heading"
+        },
+        {
+          "anchor": "acknowledgments",
+          "title": "Acknowledgments",
+          "kind": "heading"
+        },
+        {
+          "anchor": "all-petite-caps",
+          "title": "all-petite-caps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "all-small-caps",
+          "title": "all-small-caps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "annotation",
+          "title": "annotation(font-feature-value-name)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "aspect-value",
+          "title": "aspect value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "base-palette-desc",
+          "title": "Specifying the base palette: the 'base-palette!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "basic-font-props",
+          "title": "Basic Font Properties",
+          "kind": "heading"
+        },
+        {
+          "anchor": "bolder",
+          "title": "bolder",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "caption",
+          "title": "caption",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "changes",
+          "title": "Changes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2018-04-10",
+          "title": "Changes from the 10 April 2018 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2018-09-20",
+          "title": "Changes from the 20 September 2018 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2019-11-13",
+          "title": "Changes from the 13 November 2019 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2020-11-17",
+          "title": "Changes from the 17 November 2020 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2021-07-29",
+          "title": "Changes from the 29 July 2021 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2021-12-21",
+          "title": "Changes from the 21 December 2021 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-20240201",
+          "title": "Changes from the 1 February 2024 working draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-fonts-3",
+          "title": "Changes from the 20 September 2018 CSS Fonts 3 Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "char-handling-issues",
+          "title": "Character handling issues",
+          "kind": "heading"
+        },
+        {
+          "anchor": "character-map",
+          "title": "character map",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "character-variant",
+          "title": "character-variant(font-feature-value-name#)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cluster-matching",
+          "title": "Cluster matching",
+          "kind": "heading"
+        },
+        {
+          "anchor": "color-font-support",
+          "title": "Color Font Support",
+          "kind": "heading"
+        },
+        {
+          "anchor": "color-font-tech-color-cbdt",
+          "title": "[for=color-cbdt",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "color-font-tech-color-colrv0",
+          "title": "[for=color-colrv0",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "color-font-tech-color-colrv1",
+          "title": "[for=color-colrv1",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "color-font-tech-color-sbix",
+          "title": "[for=color-sbix",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "color-font-tech-color-svg",
+          "title": "[for=color-svg",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "common-ligatures",
+          "title": "common-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "composite-font-face",
+          "title": "composite font face",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "composite-fonts",
+          "title": "Using character ranges to define composite fonts",
+          "kind": "heading"
+        },
+        {
+          "anchor": "condensed",
+          "title": "condensed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "contextual",
+          "title": "contextual",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssfontfacerule",
+          "title": "CSSFontFaceRule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssfontfeaturevaluesrule",
+          "title": "CSSFontFeatureValuesRule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cursive",
+          "title": "cursive",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "default-features",
+          "title": "Default features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "default-font-face",
+          "title": "default font face",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "diagonal-fractions",
+          "title": "diagonal-fractions",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "discretionary-ligatures",
+          "title": "discretionary-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "effective-character-map",
+          "title": "effective character map",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "emoji-presentation-participating-code-points",
+          "title": "Emoji Presentation Participating Code Points",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "expanded",
+          "title": "expanded",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "extra-condensed",
+          "title": "extra-condensed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "extra-expanded",
+          "title": "extra-expanded",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "fallback",
+          "title": "fallback",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "fantasy",
+          "title": "fantasy",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "feature-precedence-examples",
+          "title": "Feature precedence examples",
+          "kind": "heading"
+        },
+        {
+          "anchor": "feature-value-blocks",
+          "title": "feature value blocks",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "feature-variation-precedence",
+          "title": "Feature and variation precedence",
+          "kind": "heading"
+        },
+        {
+          "anchor": "fetch-a-font",
+          "title": "fetch a font",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "first-available-font",
+          "title": "first available font",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-block-period",
+          "title": "font block period",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-display-desc",
+          "title": "Controlling Font Display Per Font-Face: the '@font-face/font-display!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-display-font-feature-values",
+          "title": "Controlling Font Display Per Font-Family via ''@font-feature-values''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-display-timeline",
+          "title": "The Font Display Timeline",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-download-timer",
+          "title": "font download timer",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-face",
+          "title": "''@font-face''",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-face-font-stretch",
+          "title": "[for=@font-face] font-stretch",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-face-loading",
+          "title": "Font loading guidelines",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-face-rule",
+          "title": "The ''@font-face'' rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-face-src-formats",
+          "title": "Selecting items in the 'src!!descriptor'",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-face-src-loading",
+          "title": "Loading an individual item in the 'src!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-face-src-parsing",
+          "title": "Parsing the 'src!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-facesrc-format",
+          "title": "[for=@font-face/src] format( font-format )",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-failure-period",
+          "title": "font failure period",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-families",
+          "title": "Relationship Between Faces and Families",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-family-2-desc",
+          "title": "Font family: the '@font-palette-values/font-family' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-family-desc",
+          "title": "Font family: the '@font-face/font-family' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-family-name-syntax",
+          "title": "Syntax of font-family-name",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-family-prop",
+          "title": "Font family: the 'font-family!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-feature-settings-prop",
+          "title": "Low-level font feature settings control: the 'font-feature-settings!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-feature-value-declarations",
+          "title": "font feature value declarations",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values",
+          "title": "Defining font specific alternates: the @font-feature-values rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-feature-values-annotation",
+          "title": "[for=@font-feature-values] @annotation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-character-variant",
+          "title": "[for=@font-feature-values] @character-variant",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-historical-forms",
+          "title": "[for=@font-feature-values] @historical-forms",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-ltfont-feature-value-type",
+          "title": "[for=@font-feature-values]",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-ornaments",
+          "title": "[for=@font-feature-values] @ornaments",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-styleset",
+          "title": "[for=@font-feature-values] @styleset",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-stylistic",
+          "title": "[for=@font-feature-values] @stylistic",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-feature-values-syntax",
+          "title": "Basic syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-feature-variation-resolution",
+          "title": "Font Feature and Variation Resolution",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-features-tech-features-aat",
+          "title": "[for=features-aat",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-features-tech-features-graphite",
+          "title": "[for=features-graphite",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-features-tech-features-opentype",
+          "title": "[for=features-opentype",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-format-definitions",
+          "title": "Font formats",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-kerning-prop",
+          "title": "Kerning: the 'font-kerning' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-language-override-desc",
+          "title": "Default font language overriding: the 'font-language-override' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-language-override-prop",
+          "title": "Font language override: the 'font-language-override' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-matching-algorithm",
+          "title": "Font Matching Algorithm",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-matching-changes",
+          "title": "Font matching changes since CSS Fonts 3",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-matching-examples",
+          "title": "Font matching examples",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-metrics-override-desc",
+          "title": "Default font metrics overriding:\nthe 'ascent-override!!descriptor',\n'descent-override!!descriptor' and\n'line-gap-override!!descriptor' descriptors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-named-instance",
+          "title": "Using named instances from variable fonts: the 'font-named-instance!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-optical-sizing-def",
+          "title": "Optical sizing control: the 'font-optical-sizing' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-palette-prop",
+          "title": "Controlling Color Font Palettes: The 'font-palette' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-palette-values",
+          "title": "User-defined font color palettes: The ''@font-palette-values'' rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-prop",
+          "title": "Shorthand font property: the 'font' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-prop-desc",
+          "title": "Font property descriptors: the 'font-style!!descriptor', 'font-weight!!descriptor', and\n'font-width!!descriptor' descriptors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-rend-desc",
+          "title": "Font features and variations: the 'font-feature-settings!!descriptor' and 'font-variation-settings!!descriptor' descriptors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-rend-props",
+          "title": "Font Feature Properties",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-rendering-controls",
+          "title": "Font Rendering Controls",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-rendering-controls-introduction",
+          "title": "Introduction to Font Rendering Controls",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-requests",
+          "title": "Font request guidelines",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-resources",
+          "title": "Font Resources",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-size-adjust-prop",
+          "title": "Relative sizing: the 'font-size-adjust' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-size-prop",
+          "title": "Font size: the 'font-size' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-specific",
+          "title": "font specific",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-stretch",
+          "title": "font-stretch",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-stretch-desc",
+          "title": "Font width: the '@font-face/font-stretch!!descriptor' legacy name alias",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-stretch-prop",
+          "title": "Font width: the 'font-stretch!!property' legacy name alias",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-style-matching",
+          "title": "Matching font styles",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-style-prop",
+          "title": "Font style: the 'font-style!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-swap-period",
+          "title": "font swap period",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-synthesis",
+          "title": "Controlling synthetic faces: the 'font-synthesis' shorthand",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-synthesis-intro",
+          "title": "Controlling synthetic faces",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-synthesis-position",
+          "title": "Controlling synthesized super- and subscripts: The 'font-synthesis-position' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-synthesis-small-caps",
+          "title": "Controlling synthesized small caps: The 'font-synthesis-small-caps' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-synthesis-style",
+          "title": "Controlling synthesized oblique: The 'font-synthesis-style' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-synthesis-weight",
+          "title": "Controlling synthesized bold: The 'font-synthesis-weight' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-taxonomy",
+          "title": "Font Taxonomy",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-tech-definitions",
+          "title": "Font tech",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-tech-incremental",
+          "title": "[for=incremental",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-tech-palettes",
+          "title": "[for=palettes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-tech-variations",
+          "title": "[for=variations",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-technologies-formats",
+          "title": "Font Technologies and Formats",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-alternates-prop",
+          "title": "Alternates and swashes: the 'font-variant-alternates' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-caps-prop",
+          "title": "Capitalization: the 'font-variant-caps' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-east-asian-prop",
+          "title": "East Asian text rendering: the 'font-variant-east-asian' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-emoji-prop",
+          "title": "Selecting the text presentation style: The 'font-variant-emoji' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-ligatures-prop",
+          "title": "Ligatures: the 'font-variant-ligatures' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-ligaturesnone",
+          "title": "''font-variant-ligatures/none''",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-variant-numeric-prop",
+          "title": "Numerical formatting: the 'font-variant-numeric' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-position-prop",
+          "title": "Subscript and superscript forms: the 'font-variant-position' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variant-prop",
+          "title": "Overall shorthand for font rendering: the 'font-variant!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variation-props",
+          "title": "Font Variation Properties",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-variation-settings-def",
+          "title": "Low-level font variation settings control: the 'font-variation-settings' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-weight-prop",
+          "title": "Font weight: the 'font-weight!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "font-width-prop",
+          "title": "Font width: the 'font-width!!property' property",
+          "kind": "heading"
+        },
+        {
+          "anchor": "full-width",
+          "title": "full-width",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "generic-family-name-syntax",
+          "title": "Syntax of generic-font-family",
+          "kind": "heading"
+        },
+        {
+          "anchor": "generic-font-families",
+          "title": "Generic font families",
+          "kind": "heading"
+        },
+        {
+          "anchor": "genericfangsong",
+          "title": "generic(fangsong)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "generickai",
+          "title": "generic(kai)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "generickhmer-mul",
+          "title": "generic(khmer-mul)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "genericnastaliq",
+          "title": "generic(nastaliq)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "glyph-selection-positioning",
+          "title": "Glyph selection and positioning",
+          "kind": "heading"
+        },
+        {
+          "anchor": "historical-forms",
+          "title": "historical-forms",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "historical-ligatures",
+          "title": "historical-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "installed-font-fallback",
+          "title": "installed font\n fallback",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "installed-fonts",
+          "title": "Installed Fonts",
+          "kind": "heading"
+        },
+        {
+          "anchor": "introduction",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "italic",
+          "title": "italic",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "language-specific-support",
+          "title": "Language-specific display",
+          "kind": "heading"
+        },
+        {
+          "anchor": "lighter",
+          "title": "lighter",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lining-nums",
+          "title": "lining-nums",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "local-font-fallback",
+          "title": "Local font fallback",
+          "kind": "heading"
+        },
+        {
+          "anchor": "localized-name-matching",
+          "title": "Localized name matching",
+          "kind": "heading"
+        },
+        {
+          "anchor": "ltcolor-font-techgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcommon-lig-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcontextual-alt-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdiscretionary-lig-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lteast-asian-variant-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lteast-asian-width-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfeature-tag-valuegt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-feature-indexgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-feature-value-namegt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-features-techgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-formatgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-src",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-techgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfont-weight-absolutegt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lthistorical-lig-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltnumeric-figure-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltnumeric-fraction-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltnumeric-spacing-valuesgt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltopentype-taggt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "message-box",
+          "title": "message-box",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "missing-weights",
+          "title": "Missing weights",
+          "kind": "heading"
+        },
+        {
+          "anchor": "monospace",
+          "title": "monospace",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "multi-value-features",
+          "title": "Multi-valued feature value definitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "no-common-ligatures",
+          "title": "no-common-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "no-contextual",
+          "title": "no-contextual",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "no-discretionary-ligatures",
+          "title": "no-discretionary-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "no-historical-ligatures",
+          "title": "no-historical-ligatures",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "normal",
+          "title": "normal",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "object-model",
+          "title": "Object Model",
+          "kind": "heading"
+        },
+        {
+          "anchor": "oblique",
+          "title": "oblique angle [-90deg,90deg]?",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "oblique-only",
+          "title": "oblique-only",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "oldstyle-nums",
+          "title": "oldstyle-nums",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "om-fontface",
+          "title": "The CSSFontFaceRule interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "om-fontfeaturevalues",
+          "title": "The CSSFontFeatureValuesRule interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "om-fontpalettevalues",
+          "title": "The CSSFontPaletteValuesRule interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "optional",
+          "title": "optional",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ordinal",
+          "title": "ordinal",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ornaments",
+          "title": "ornaments(font-feature-value-name)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "override-color",
+          "title": "Overriding a colors from a palette: The 'override-colors!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "palette-mix",
+          "title": "palette-mix()",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "petite-caps",
+          "title": "petite-caps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "preinstalled-and-user-installed-fonts",
+          "title": "Preinstalled Fonts and User-Installed Fonts",
+          "kind": "heading"
+        },
+        {
+          "anchor": "privacy",
+          "title": "Privacy Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "proportional-nums",
+          "title": "proportional-nums",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "proportional-width",
+          "title": "proportional-width",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "relative-weights",
+          "title": "Relative Weights",
+          "kind": "heading"
+        },
+        {
+          "anchor": "render-with-a-fallback-font-face",
+          "title": "render with a fallback font face",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "render-with-an-invisible-fallback-font-face",
+          "title": "render with an invisible fallback font face",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "sans-serif",
+          "title": "sans-serif",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "security",
+          "title": "Security Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "semi-condensed",
+          "title": "semi-condensed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "semi-expanded",
+          "title": "semi-expanded",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serializing",
+          "title": "Serializing",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-at-rules",
+          "title": "Serializing font-related at-rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-properties",
+          "title": "Serializing font-related properties",
+          "kind": "heading"
+        },
+        {
+          "anchor": "simplified",
+          "title": "simplified",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "slashed-zero",
+          "title": "slashed-zero",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "small-caps",
+          "title": "small-caps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "small-caption",
+          "title": "small-caption",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "sp201",
+          "title": "What information might this feature expose to Web sites or other parties, and for what purposes is that exposure necessary?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp202",
+          "title": "Is this specification exposing the minimum amount of information necessary to power the feature?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp203",
+          "title": "How does this specification deal with personal information or personally-identifiable information or information derived thereof?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp204",
+          "title": "How does this specification deal with sensitive information?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp205",
+          "title": "Does this specification introduce new state for an origin that persists across browsing sessions?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp206",
+          "title": "What information from the underlying platform, e.g. configuration data, is exposed by this specification to an origin?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp207",
+          "title": "Does this specification allow an origin access to sensors on a user’s device",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp208",
+          "title": "What data does this specification expose to an origin? Please also document what data is identical to data exposed by other features, in the same or different contexts.",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp209",
+          "title": "Does this specification enable new script execution/loading mechanisms?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp210",
+          "title": "Does this specification allow an origin to access other devices?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp211",
+          "title": "Does this specification allow an origin some measure of control over a user agent’s native UI?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp212",
+          "title": "What temporary identifiers might this specification create or expose to the web?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp213",
+          "title": "How does this specification distinguish between behavior in first-party and third-party contexts?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp214",
+          "title": "How does this specification work in the context of a user agent’s Private Browsing or \"incognito\" mode?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp215",
+          "title": "Does this specification have a \"Security Considerations\" and \"Privacy Considerations\" section?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp216",
+          "title": "Does this specification allow downgrading default security characteristics?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sp217",
+          "title": "What should this questionnaire have asked?",
+          "kind": "heading"
+        },
+        {
+          "anchor": "src-desc",
+          "title": "Font reference: the 'src!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "stacked-fractions",
+          "title": "stacked-fractions",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "status-bar",
+          "title": "status-bar",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "styleset",
+          "title": "styleset(font-feature-value-name#)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylistic",
+          "title": "stylistic(font-feature-value-name)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "support",
+          "title": "support",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "system",
+          "title": "Syntax of system-font-family-name",
+          "kind": "heading"
+        },
+        {
+          "anchor": "system-font",
+          "title": "System Font",
+          "kind": "heading"
+        },
+        {
+          "anchor": "system-ui",
+          "title": "system-ui",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "tabular-nums",
+          "title": "tabular-nums",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "titling-caps",
+          "title": "titling-caps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "traditional",
+          "title": "traditional",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ui-monospace",
+          "title": "ui-monospace",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ui-rounded",
+          "title": "ui-rounded",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ui-sans-serif",
+          "title": "ui-sans-serif",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ui-serif",
+          "title": "ui-serif",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ultra-condensed",
+          "title": "ultra-condensed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ultra-expanded",
+          "title": "ultra-expanded",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "unicase",
+          "title": "unicase",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "unicode",
+          "title": "unicode",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "unicode-range-desc",
+          "title": "Character range: the 'unicode-range!!descriptor' descriptor",
+          "kind": "heading"
+        },
+        {
+          "anchor": "values",
+          "title": "Value Definitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "web-fonts",
+          "title": "Web Fonts",
+          "kind": "heading"
+        }
+      ]
+    },
+    "css-nesting-1": {
+      "file": "submodules/csswg-drafts/css-nesting-1/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "changes",
+          "title": "Changes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "conditionals",
+          "title": "Nesting Other At-Rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "contain-the-nesting-selector",
+          "title": "contain the nesting selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssom",
+          "title": "CSSOM",
+          "kind": "heading"
+        },
+        {
+          "anchor": "explainer",
+          "title": "Explainer",
+          "kind": "heading"
+        },
+        {
+          "anchor": "intro",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mixing",
+          "title": "Mixing Nesting Rules and Declarations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "nest-selector",
+          "title": "Nesting Selector: the ''&'' selector",
+          "kind": "heading"
+        },
+        {
+          "anchor": "nested-declarations-rule",
+          "title": "nested declarations rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nested-group-rules",
+          "title": "nested group rules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nested-style-rules",
+          "title": "nested style rules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nesting",
+          "title": "Nesting Style Rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "nesting-selector",
+          "title": "nesting selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "placement",
+          "title": "Module Interactions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "syntax",
+          "title": "Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssnestrule",
+          "title": "The CSSNestedDeclarations Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "values",
+          "title": "Values",
+          "kind": "heading"
+        }
+      ]
+    },
+    "css-syntax-3": {
+      "file": "submodules/csswg-drafts/css-syntax-3/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "-block",
+          "title": "{}-block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "anb-microsyntax",
+          "title": "The An+B microsyntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "anb-syntax",
+          "title": "Informal Syntax Description",
+          "kind": "heading"
+        },
+        {
+          "anchor": "any-value",
+          "title": "Defining Arbitrary Contents: the declaration-value and any-value productions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "at-rule",
+          "title": "at-rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "at-rules",
+          "title": "At-rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "block-at-rules",
+          "title": "block at-rules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "block-contents",
+          "title": "Defining Block Contents: the block-contents, declaration-list, qualified-rule-list, declaration-rule-list, and rule-list productions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-CR-20140220",
+          "title": "Changes from the 20 February 2014 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-CR-20190716",
+          "title": "Changes from the 16 August 2019 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-CR-20211224",
+          "title": "Changes from the 24 December 2021 Candidate Recommendation Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-WD-20130919",
+          "title": "Changes from the 19 September 2013 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-WD-20131105",
+          "title": "Changes from the 5 November 2013 Last Call Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-css21",
+          "title": "Changes from CSS 2.1 and Selectors Level 3",
+          "kind": "heading"
+        },
+        {
+          "anchor": "charset",
+          "title": "@charset",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "charset-rule",
+          "title": "The ''@charset'' Rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "check-if-three-code-points-would-start-a-number",
+          "title": "check if three code points would start a number",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "check-if-three-code-points-would-start-a-unicode-range",
+          "title": "check if three code points would start a unicode-range",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "check-if-three-code-points-would-start-an-ident-sequence",
+          "title": "check if three code points would start an ident sequence",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "check-if-two-code-points-are-a-valid-escape",
+          "title": "check if two code points are a valid escape",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "component-value",
+          "title": "component value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-block",
+          "title": "consume a block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-blocks-contents",
+          "title": "consume a block's contents",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-component-value",
+          "title": "consume a component value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-declaration",
+          "title": "consume a declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-function",
+          "title": "consume a function",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-list-of-component-values",
+          "title": "consume a list of component values",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-number",
+          "title": "consume a number",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-numeric-token",
+          "title": "consume a numeric token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-qualified-rule",
+          "title": "consume a qualified rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-simple-block",
+          "title": "consume a simple block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-string-token",
+          "title": "consume a string token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-stylesheets-contents",
+          "title": "consume a stylesheet's contents",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-token",
+          "title": "consume a token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-unicode-range-token",
+          "title": "consume a unicode-range token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-a-url-token",
+          "title": "consume a url token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-an-at-rule",
+          "title": "consume an at-rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-an-escaped-code-point",
+          "title": "consume an escaped code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-an-ident-like-token",
+          "title": "consume an ident-like token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-an-ident-sequence",
+          "title": "consume an ident sequence",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-at-rule",
+          "title": "Consume an at-rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-block",
+          "title": "Consume a block",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-comment",
+          "title": "Consume comments",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-comments",
+          "title": "consume comments",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-component-value",
+          "title": "Consume a component value",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-declaration",
+          "title": "Consume a declaration",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-escaped-code-point",
+          "title": "Consume an escaped code point",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-function",
+          "title": "Consume a function",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-ident-like-token",
+          "title": "Consume an ident-like token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-list-of-components",
+          "title": "Consume a list of component values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-name",
+          "title": "Consume an ident sequence",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-number",
+          "title": "Consume a number",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-numeric-token",
+          "title": "Consume a numeric token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-qualified-rule",
+          "title": "Consume a qualified rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-remnants-of-bad-url",
+          "title": "Consume the remnants of a bad url",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-simple-block",
+          "title": "Consume a simple block",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-string-token",
+          "title": "Consume a string token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-the-remnants-of-a-bad-declaration",
+          "title": "consume the remnants of a bad declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-the-remnants-of-a-bad-url",
+          "title": "consume the remnants of a bad url",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-the-value-of-a-unicode-range-descriptor",
+          "title": "consume the value of a unicode-range descriptor",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "consume-token",
+          "title": "Consume a token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-unicode-range-token",
+          "title": "Consume a unicode-range token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-unicode-range-value",
+          "title": "Consume a '@font-face/unicode-range' value",
+          "kind": "heading"
+        },
+        {
+          "anchor": "consume-url-token",
+          "title": "Consume a url token",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-decode",
+          "title": "[for=CSS] decode",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-descriptors",
+          "title": "[for=CSS] Descriptors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-filter-code-points",
+          "title": "[for=CSS] filter code points",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-ignored",
+          "title": "[for=css] ignored",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-invalid",
+          "title": "[for=css] invalid",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-parse-a-comma-separated-list-according-to-a-css-grammar",
+          "title": "[for=CSS] parse a comma-separated list according to a CSS grammar",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-parse-something-according-to-a-css-grammar",
+          "title": "[for=CSS] parse something according to a CSS grammar",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-stylesheets",
+          "title": "CSS stylesheets",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-token-stream",
+          "title": "[for=CSS] token stream",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-tokenize",
+          "title": "[for=CSS] tokenize",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-tree",
+          "title": "CSS Parsing Results",
+          "kind": "heading"
+        },
+        {
+          "anchor": "current-input-code-point",
+          "title": "current input code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "declaration",
+          "title": "declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "descriptor-declarations",
+          "title": "descriptor declarations",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "determine-the-fallback-encoding",
+          "title": "determine the fallback encoding",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "discard-a-mark",
+          "title": "discard a mark",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "discard-a-token",
+          "title": "discard a token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "discard-whitespace",
+          "title": "discard whitespace",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "environment-encoding",
+          "title": "environment encoding",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "eof-code-point",
+          "title": "EOF code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "error-handling",
+          "title": "Error Handling",
+          "kind": "heading"
+        },
+        {
+          "anchor": "escaping",
+          "title": "Escaping",
+          "kind": "heading"
+        },
+        {
+          "anchor": "function",
+          "title": "function",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "hex-digit",
+          "title": "hex digit",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ident-code-point",
+          "title": "ident code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ident-sequence",
+          "title": "ident sequence",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ident-start-code-point",
+          "title": "ident-start code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "input-byte-stream",
+          "title": "The input byte stream",
+          "kind": "heading"
+        },
+        {
+          "anchor": "input-preprocessing",
+          "title": "Preprocessing the input stream",
+          "kind": "heading"
+        },
+        {
+          "anchor": "input-stream",
+          "title": "input stream",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "intro",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "invalid-rule-error",
+          "title": "invalid rule error",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "letter",
+          "title": "letter",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lowercase-letter",
+          "title": "lowercase letter",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lt-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lta-n-plus-b",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltany-value",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltat-keyword-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltat-rule-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltbad-string-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltbad-url-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltblock-contents",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcdc-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcdo-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcolon-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomma-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdashndashdigit-ident",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdeclaration-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdeclaration-rule-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdeclaration-value",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdelim-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdimension-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfunction-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lthash-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltident-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltinteger",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltn-dimension",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltndash-dimension",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltndashdigit-dimension",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltndashdigit-ident",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltnumber-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltpercentage-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltqualified-rule-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltrule-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsemicolon-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsigned-integer",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsignless-integer",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltstring-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltunicode-range-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lturl-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltwhitespace-token",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "marked-indexes",
+          "title": "marked indexes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "maximum-allowed-code-point",
+          "title": "maximum allowed code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "newline",
+          "title": "newline",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "next-input-code-point",
+          "title": "next input code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "next-token",
+          "title": "next token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "non-ascii-ident-code-point",
+          "title": "non-ASCII ident code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "non-printable-code-point",
+          "title": "non-printable code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "normalize-into-a-token-stream",
+          "title": "normalize into a token stream",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-blocks-contents",
+          "title": "parse a block's contents",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-comma-separated-list-of-component-values",
+          "title": "parse a comma-separated list of component values",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-component-value",
+          "title": "parse a component value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-css-stylesheet",
+          "title": "parse a CSS stylesheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-declaration",
+          "title": "parse a declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-list-of-component-values",
+          "title": "parse a list of component values",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-rule",
+          "title": "parse a rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-stylesheet",
+          "title": "parse a stylesheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-stylesheets-contents",
+          "title": "parse a stylesheet's contents",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-comma-list",
+          "title": "Parse a comma-separated list according to a CSS grammar",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-comma-separated-list-of-component-values",
+          "title": "Parse a comma-separated list of component values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-component-value",
+          "title": "Parse a component value",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-declaration",
+          "title": "Parse a declaration",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-errors",
+          "title": "parse errors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-grammar",
+          "title": "Parse something according to a CSS grammar",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-list-of-component-values",
+          "title": "Parse a list of component values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-rule",
+          "title": "Parse a rule",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-stylesheet",
+          "title": "Parse a stylesheet",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parser-algorithms",
+          "title": "Parser Algorithms",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parser-definitions",
+          "title": "Token Streams",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parser-diagrams",
+          "title": "Parser Railroad Diagrams",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parser-entry-points",
+          "title": "Parser Entry Points",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parsing",
+          "title": "Parsing",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parsing-overview",
+          "title": "Overview of the Parsing Model",
+          "kind": "heading"
+        },
+        {
+          "anchor": "placement",
+          "title": "Module interactions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "preserved-tokens",
+          "title": "preserved tokens",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "privacy",
+          "title": "Privacy Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "process",
+          "title": "process",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "property-declarations",
+          "title": "property declarations",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "qualified-rule",
+          "title": "qualified rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "reconsume-the-current-input-code-point",
+          "title": "reconsume the current input code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "restore-a-mark",
+          "title": "restore a mark",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "rule-defs",
+          "title": "Defining Grammars for Rules and Other Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serialization",
+          "title": "Serialization",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serialize-an-value",
+          "title": "serialize an a-n-plus-b value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serializing-anb",
+          "title": "Serializing",
+          "kind": "heading"
+        },
+        {
+          "anchor": "simple-block",
+          "title": "simple block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "starts-a-unicode-range",
+          "title": "Check if three code points would start a unicode-range",
+          "kind": "heading"
+        },
+        {
+          "anchor": "starts-with-a-number",
+          "title": "Check if three code points would start a number",
+          "kind": "heading"
+        },
+        {
+          "anchor": "starts-with-a-valid-escape",
+          "title": "Check if two code points are a valid escape",
+          "kind": "heading"
+        },
+        {
+          "anchor": "statement-at-rules",
+          "title": "statement at-rules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "style-rule",
+          "title": "style rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "style-rules",
+          "title": "Style rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "stylesheet",
+          "title": "stylesheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "syntax-description",
+          "title": "Description of CSS's Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-anb-type",
+          "title": "The type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "token-diagrams",
+          "title": "Token Railroad Diagrams",
+          "kind": "heading"
+        },
+        {
+          "anchor": "tokenization",
+          "title": "Tokenization",
+          "kind": "heading"
+        },
+        {
+          "anchor": "tokenizer-algorithms",
+          "title": "Tokenizer Algorithms",
+          "kind": "heading"
+        },
+        {
+          "anchor": "tokenizer-consume-a-token",
+          "title": "[for=tokenizer] consume a token",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "tokenizer-definitions",
+          "title": "Definitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "tokenizing-and-parsing",
+          "title": "Tokenizing and Parsing CSS",
+          "kind": "heading"
+        },
+        {
+          "anchor": "tokens",
+          "title": "tokens",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "uppercase-letter",
+          "title": "uppercase letter",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "whitespace",
+          "title": "whitespace",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "would-start-an-identifier",
+          "title": "Check if three code points would start an ident sequence",
+          "kind": "heading"
+        }
+      ]
+    },
+    "css-values-4": {
+      "file": "submodules/csswg-drafts/css-values-4/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "-infinity",
+          "title": "-infinity",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "about-invalid",
+          "title": "Registration for the about:invalid URL scheme",
+          "kind": "heading"
+        },
+        {
+          "anchor": "absolute-length-units",
+          "title": "absolute length units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "absolute-lengths",
+          "title": "Absolute Lengths: the ''cm'', ''mm'', ''Q'', ''in'', ''pt'', ''pc'', ''px'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "accumulation",
+          "title": "accumulation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "addition",
+          "title": "addition",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "advance-measure",
+          "title": "advance measure",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "anchored",
+          "title": "anchored",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "angles",
+          "title": "Angle Units: the angle type and ''deg'', ''grad'', ''rad'', ''turn'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "atan2a-b",
+          "title": "atan2(A, B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "bearing-angle",
+          "title": "bearing angle",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "between-zero-and-b",
+          "title": "between zero and B",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "calc-calculation",
+          "title": "[for=calc()] calculation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "calc-computed-value",
+          "title": "Computed Value",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-constants",
+          "title": "Numeric Constants: ''e'', ''pi''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-context",
+          "title": "Calculation Contexts",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-error-constants",
+          "title": "Degenerate Numeric Constants: ''infinity'', ''-infinity'', ''NaN''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-ieee",
+          "title": "Infinities, NaN, and Signed Zero",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-internal",
+          "title": "Internal Representation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-keywords",
+          "title": "Numeric Keywords",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-range",
+          "title": "Range Checking",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-serialize",
+          "title": "Serialization",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-simplification",
+          "title": "Simplification",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-syntax",
+          "title": "Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-type-checking",
+          "title": "Type Checking",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calc-variables",
+          "title": "Numeric Variables",
+          "kind": "heading"
+        },
+        {
+          "anchor": "calculation-calc-operator-nodes",
+          "title": "[for=calculation] calc-operator nodes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "calculation-contexts",
+          "title": "calculation contexts",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "calculation-operator-nodes",
+          "title": "[for=calculation] operator nodes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "calculation-tree",
+          "title": "calculation tree",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "canonical-unit",
+          "title": "canonical unit",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "colors",
+          "title": "Colors: the color type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combinator-multiplier-patterns",
+          "title": "Combinator and Multiplier Patterns",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine",
+          "title": "combine",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "combine-colors",
+          "title": "Combination of color",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-dimensions",
+          "title": "Combination of Dimensions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-images",
+          "title": "Combination of image",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-integers",
+          "title": "Computation and Combination of integer",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-math",
+          "title": "Combination of Math Functions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-mixed",
+          "title": "Computation and Combination of Percentage and Dimension Mixes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-numbers",
+          "title": "Computation and Combination of number",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-percentages",
+          "title": "Computation and Combination of percentage",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-positions",
+          "title": "Combination of position",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combine-ratio",
+          "title": "Combination of ratio",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combining-range",
+          "title": "Range Checking",
+          "kind": "heading"
+        },
+        {
+          "anchor": "combining-values",
+          "title": "Combining Values: Interpolation, Addition, and Accumulation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "commas",
+          "title": "Commas",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "common-keywords",
+          "title": "CSS-wide keywords: ''initial'', ''inherit'' and ''unset''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "compat",
+          "title": "Compatible Units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "compatible-units",
+          "title": "compatible units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "component-combinators",
+          "title": "Component Value Combinators",
+          "kind": "heading"
+        },
+        {
+          "anchor": "component-functions",
+          "title": "Functional Notation Definitions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "component-multipliers",
+          "title": "Component Value Multipliers",
+          "kind": "heading"
+        },
+        {
+          "anchor": "component-types",
+          "title": "Component Value Types",
+          "kind": "heading"
+        },
+        {
+          "anchor": "component-whitespace",
+          "title": "Component Values and White Space",
+          "kind": "heading"
+        },
+        {
+          "anchor": "computed-length",
+          "title": "computed length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "coordinated-value-list",
+          "title": "coordinated value list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "coordinating-list-base-property",
+          "title": "coordinating list base property",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "coordinating-list-property-group",
+          "title": "coordinating list property group",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-bracketed-range-notation",
+          "title": "CSS bracketed range notation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-consistent-type",
+          "title": "[for=CSS] consistent type",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-contains-a-percentage",
+          "title": "[for=CSS] contains a percentage",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-grammar-production-block",
+          "title": "CSS grammar production block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-identifiers",
+          "title": "[for=CSS] identifiers",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-infinities",
+          "title": "[for=CSS] Infinities",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-keywords",
+          "title": "[for=CSS] keywords",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-make-a-type-base-consistent",
+          "title": "[for=CSS] make a type |base| consistent",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-rounding-to-the-nearest-integer",
+          "title": "[for=CSS] rounding to the nearest integer",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-signed-zeros",
+          "title": "[for=CSS] Signed zeros",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-textual-data-types",
+          "title": "[for=CSS] textual data types",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-value-definition-syntax",
+          "title": "[for=CSS] value definition syntax",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-wide-keywords",
+          "title": "CSS-wide keywords",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "custom-idents",
+          "title": "Unprefixed Author-defined Identifiers: the custom-ident type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "dashed-idents",
+          "title": "Prefixed Author-defined Identifiers: the dashed-ident type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "default-viewport-percentage-units",
+          "title": "default viewport-percentage units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "defined-elsewhere",
+          "title": "Data Types Defined Elsewhere",
+          "kind": "heading"
+        },
+        {
+          "anchor": "degenerate-ratio",
+          "title": "degenerate ratio",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "deprecated-quirky-length",
+          "title": "Appendix C: Quirky Lengths",
+          "kind": "heading"
+        },
+        {
+          "anchor": "determine-the-type-of-a-calculation",
+          "title": "determine the type of a calculation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "device-pixel",
+          "title": "device pixel",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dimension",
+          "title": "dimension",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dimensions",
+          "title": "Numbers with Units: dimension values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "dynamic-viewport-percentage-units",
+          "title": "dynamic viewport-percentage units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dynamic-viewport-size",
+          "title": "dynamic viewport size",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "exponent-infinities",
+          "title": "Argument Ranges",
+          "kind": "heading"
+        },
+        {
+          "anchor": "fetch-a-style-resource",
+          "title": "fetch a style resource",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "font-relative-lengths",
+          "title": "Font-relative Lengths: the ''em'', ''rem'', ''ex'', ''rex'', ''cap'', ''rcap'', ''ch'', ''rch'', ''ic'', ''ric'', ''lh'', ''rlh'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "frequency",
+          "title": "Frequency Units: the frequency type and ''Hz'', ''kHz'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "fuctional-serialization",
+          "title": "Serialization of Functional Notations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "functional-notation",
+          "title": "functional notation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "functional-notations",
+          "title": "Functional Notations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "hypota",
+          "title": "hypot(A, …)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "iana",
+          "title": "Appendix B: IANA Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "images",
+          "title": "Images: the image type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "implementation-defined-limit-for-values-approaching-infinity",
+          "title": "implementation-defined limit for values approaching infinity",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "infinity",
+          "title": "infinity",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "integer",
+          "title": "integer",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "integers",
+          "title": "Integers: the integer type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "interpolation",
+          "title": "interpolation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "intro",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "keywords",
+          "title": "Pre-defined Keywords",
+          "kind": "heading"
+        },
+        {
+          "anchor": "large-viewport-percentage-units",
+          "title": "large viewport-percentage units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "large-viewport-size",
+          "title": "large viewport size",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lengths",
+          "title": "Distance Units: the length type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "limits",
+          "title": "Appendix A: Recommended Minimum Ranges and Precision of Computed Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "line-width",
+          "title": "line-width",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "linked-properties",
+          "title": "Appendix A: Coordinating List-Valued Properties",
+          "kind": "heading"
+        },
+        {
+          "anchor": "local-font-relative-lengths",
+          "title": "local font-relative lengths",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "local-urls",
+          "title": "Fragment URLs",
+          "kind": "heading"
+        },
+        {
+          "anchor": "loga-b",
+          "title": "log(A, B?)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltangle",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltangle-percentage",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcalc-keyword",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcalc-product",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcalc-sum",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcalc-value",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcustom-ident",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltdimension",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfrequency",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltfrequency-percentage",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltident",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltinteger",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltlength",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltlength-percentage",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltnumber",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltpercentage",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltratio",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltresolution",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltstring",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lttime",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lttime-percentage",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lturl-modifier",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltzero",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "math-functions",
+          "title": "math functions",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "mixed-percentages",
+          "title": "Mixing Percentages and Dimensions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "moda-b",
+          "title": "mod(A, B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nearest",
+          "title": "nearest",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "not-additive",
+          "title": "not additive",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "number",
+          "title": "number",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "numbers",
+          "title": "Real Numbers: the number type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "numeric-data-types",
+          "title": "numeric data types",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "numeric-ranges",
+          "title": "Range Restrictions and Range Definition Notation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "numeric-types",
+          "title": "Numeric Data Types",
+          "kind": "heading"
+        },
+        {
+          "anchor": "other-units",
+          "title": "Other Quantities",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-a-calculation",
+          "title": "parse a calculation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "percentage",
+          "title": "percentage",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "percentages",
+          "title": "Percentages: the percentage type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "physical-units",
+          "title": "physical units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "placement",
+          "title": "Module Interactions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "position",
+          "title": "2D Positioning: the position type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "position-parsing",
+          "title": "Parsing position",
+          "kind": "heading"
+        },
+        {
+          "anchor": "position-serialization",
+          "title": "Serializing position",
+          "kind": "heading"
+        },
+        {
+          "anchor": "powa-b",
+          "title": "pow(A, B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "production-blocks",
+          "title": "Non-Terminal Definitions and Grammar Production Blocks",
+          "kind": "heading"
+        },
+        {
+          "anchor": "ratios",
+          "title": "Ratios: the ratio type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "reference-pixel",
+          "title": "reference pixel",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "relative-length-units",
+          "title": "Relative length units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "relative-lengths",
+          "title": "Relative Lengths",
+          "kind": "heading"
+        },
+        {
+          "anchor": "relative-urls",
+          "title": "Relative URLs",
+          "kind": "heading"
+        },
+        {
+          "anchor": "rema-b",
+          "title": "rem(A, B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolution",
+          "title": "Resolution Units: the resolution type and ''/dpi'', ''/dpcm'', ''/dppx'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "resolve-a-style-resource-url",
+          "title": "resolve a style resource URL",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "root-font-relative-lengths",
+          "title": "root font-relative lengths",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "round-a-b",
+          "title": "round(rounding-strategy?, A, B?)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-calculation-tree",
+          "title": "serialize a calculation tree",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-functional-notation",
+          "title": "serialize a functional notation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-math-function",
+          "title": "serialize a math function",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "sign-funcs",
+          "title": "Sign-Related Functions: ''abs()'', ''sign()''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "simplify-a-calculation-tree",
+          "title": "simplify a calculation tree",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "small-viewport-percentage-units",
+          "title": "small viewport-percentage units",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "small-viewport-size",
+          "title": "small viewport size",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "snap-a-length-as-a-line-width",
+          "title": "snap a length as a line width",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "sort-a-calculations-children",
+          "title": "sort a calculation's children",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "specified-length",
+          "title": "specified length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "strings",
+          "title": "Quoted Strings: the string type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "style-resource-base-url",
+          "title": "style resource base URL",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "textual-values",
+          "title": "Textual Data Types",
+          "kind": "heading"
+        },
+        {
+          "anchor": "time",
+          "title": "Duration Units: the time type and ''s'', ''ms'' units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "to-zero",
+          "title": "to-zero",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "top-level-calculation",
+          "title": "top-level calculation",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "trig-infinities",
+          "title": "Argument Ranges",
+          "kind": "heading"
+        },
+        {
+          "anchor": "url-empty",
+          "title": "Empty URLs",
+          "kind": "heading"
+        },
+        {
+          "anchor": "url-local-url-flag",
+          "title": "[for=local url flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "url-modifiers",
+          "title": "URL Modifiers",
+          "kind": "heading"
+        },
+        {
+          "anchor": "url-processing",
+          "title": "URL Processing Model",
+          "kind": "heading"
+        },
+        {
+          "anchor": "url-request-modifier-steps",
+          "title": "URL request modifier steps",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "urls",
+          "title": "Resource Locators: the url type",
+          "kind": "heading"
+        },
+        {
+          "anchor": "value-defs",
+          "title": "Value Definition Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "value-examples",
+          "title": "Property Value Examples",
+          "kind": "heading"
+        },
+        {
+          "anchor": "viewport-percentage-lengths",
+          "title": "viewport-percentage lengths",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "visual-angle-unit-pixel-unit",
+          "title": "visual angle unit (pixel unit)",
+          "kind": "dfn"
+        }
+      ]
+    },
+    "cssom-1": {
+      "file": "submodules/csswg-drafts/cssom-1/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "acknowledgments",
+          "title": "Acknowledgments",
+          "kind": "heading"
+        },
+        {
+          "anchor": "add-a-css-style-sheet",
+          "title": "add a CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "alternate-flag",
+          "title": "alternate flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "associated-css-style-sheet",
+          "title": "associated CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "change-history",
+          "title": "Change History",
+          "kind": "heading"
+        },
+        {
+          "anchor": "change-the-preferred-css-style-sheet-set-name",
+          "title": "change the preferred CSS style sheet set name",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "changes-from-12-july-2011-to-5-december-2013",
+          "title": "Changes From 12 July 2011 To 5 December 2013",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-from-17-march-2016",
+          "title": "Changes From 17 March 2016",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-from-5-december-2013",
+          "title": "Changes From 5 December 2013",
+          "kind": "heading"
+        },
+        {
+          "anchor": "child-css-rules",
+          "title": "child CSS rules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "common-serializing-idioms",
+          "title": "Common Serializing Idioms",
+          "kind": "heading"
+        },
+        {
+          "anchor": "compare-media-queries",
+          "title": "compare media queries",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "comparing-media-queries",
+          "title": "Comparing Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "computed-flag",
+          "title": "computed flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "constructed-flag",
+          "title": "constructed flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "constructor-document",
+          "title": "constructor document",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "create-a-constructed-cssstylesheet",
+          "title": "create a constructed /CSSStyleSheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "create-a-css-style-sheet",
+          "title": "create a CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "create-a-medialist-object",
+          "title": "create a MediaList object",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-case-sensitive-flag",
+          "title": "[for=CSS] case-sensitive flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-declaration",
+          "title": "CSS declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-declaration-block",
+          "title": "CSS declaration block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-declaration-blocks",
+          "title": "CSS Declaration Blocks",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-declarations",
+          "title": "CSS Declarations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-escape-ident",
+          "title": "[for=CSS] escape(ident)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-important-flag",
+          "title": "[for=CSS] important flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-object-model",
+          "title": "CSS",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-property-name",
+          "title": "[for=CSS] property name",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-property-to-idl-attribute",
+          "title": "CSS property to IDL attribute",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-rule",
+          "title": "CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-rules",
+          "title": "CSS Rules",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-serialize-a-function",
+          "title": "[for=CSS] serialize a function",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-style-sheet",
+          "title": "CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-style-sheet-collections",
+          "title": "CSS Style Sheet Collections",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-style-sheet-set",
+          "title": "CSS style sheet set",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-style-sheet-set-name",
+          "title": "CSS style sheet set name",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "css-style-sheets",
+          "title": "CSS Style Sheets",
+          "kind": "heading"
+        },
+        {
+          "anchor": "css-values",
+          "title": "CSS Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "cssgroupingrule-cssrules",
+          "title": "[for=CSSGroupingRule] cssRules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssgroupingrule-deleterule-index",
+          "title": "[for=CSSGroupingRule] deleteRule(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssgroupingrule-insertrule-rule-index",
+          "title": "[for=CSSGroupingRule] insertRule(rule, index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssimportrule-layername",
+          "title": "[for=CSSImportRule] layerName",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssimportrule-stylesheet",
+          "title": "[for=CSSImportRule] styleSheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssimportrule-supportstext",
+          "title": "[for=CSSImportRule] supportsText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssnamespacerule-namespaceuri",
+          "title": "[for=CSSNamespaceRule] namespaceURI",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssnamespacerule-prefix",
+          "title": "[for=CSSNamespaceRule] prefix",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssomstring",
+          "title": "CSSOMString",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssomstring-type",
+          "title": "CSSOMString",
+          "kind": "heading"
+        },
+        {
+          "anchor": "csspagerule-selectortext",
+          "title": "[for=CSSPageRule] selectorText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssrule-csstext",
+          "title": "[for=CSSRule] cssText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssrule-parentrule",
+          "title": "[for=CSSRule] parentRule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssrule-parentstylesheet",
+          "title": "[for=CSSRule] parentStyleSheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssrulelist-item-index",
+          "title": "[for=CSSRuleList] item(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssrulelist-length",
+          "title": "[for=CSSRuleList] length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-csstext",
+          "title": "[for=CSSStyleDeclaration] cssText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-getpropertypriority-property",
+          "title": "[for=CSSStyleDeclaration] getPropertyPriority(property)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-getpropertyvalue-property",
+          "title": "[for=CSSStyleDeclaration] getPropertyValue(property)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-item-index",
+          "title": "[for=CSSStyleDeclaration] item(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-length",
+          "title": "[for=CSSStyleDeclaration] length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-parentrule",
+          "title": "[for=CSSStyleDeclaration] parentRule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-removeproperty-property",
+          "title": "[for=CSSStyleDeclaration] removeProperty(property)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyledeclaration-setproperty-property-value-priority",
+          "title": "[for=CSSStyleDeclaration] setProperty(property, value, priority)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyleproperties-camel-cased-attribute",
+          "title": "[for=CSSStyleProperties] camel-cased attribute",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyleproperties-cssfloat",
+          "title": "[for=CSSStyleProperties] cssFloat",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyleproperties-dashed-attribute",
+          "title": "[for=CSSStyleProperties] dashed attribute",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstyleproperties-webkit-cased-attribute",
+          "title": "[for=CSSStyleProperties] webkit-cased attribute",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylerule-selectortext",
+          "title": "[for=CSSStyleRule] selectorText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-addrule-selector-block-optionalindex",
+          "title": "[for=CSSStyleSheet] addRule(selector, block, optionalIndex)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-cssrules",
+          "title": "[for=CSSStyleSheet] cssRules",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-cssstylesheet-options",
+          "title": "[for=CSSStyleSheet] CSSStyleSheet(options)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-deleterule-index",
+          "title": "[for=CSSStyleSheet] deleteRule(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-insertrule-rule-index",
+          "title": "[for=CSSStyleSheet] insertRule(rule, index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-ownerrule",
+          "title": "[for=CSSStyleSheet] ownerRule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-removerule-index",
+          "title": "[for=CSSStyleSheet] removeRule(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-replace-text",
+          "title": "[for=CSSStyleSheet] replace(text)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "cssstylesheet-replacesync-text",
+          "title": "[for=CSSStyleSheet] replaceSync(text)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "declarations",
+          "title": "declarations",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "default-style",
+          "title": "Default-Style",
+          "kind": "heading"
+        },
+        {
+          "anchor": "disabled-flag",
+          "title": "disabled flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "disallow-modification-flag",
+          "title": "disallow modification flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "documentorshadowroot-adoptedstylesheets",
+          "title": "[for=DocumentOrShadowRoot] adoptedStyleSheets",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "documentorshadowroot-document-or-shadow-root-css-style-sheets",
+          "title": "[for=DocumentOrShadowRoot] document or shadow root CSS style sheets",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "documentorshadowroot-final-css-style-sheets",
+          "title": "[for=DocumentOrShadowRoot] final CSS style sheets",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "documentorshadowroot-stylesheets",
+          "title": "[for=DocumentOrShadowRoot] styleSheets",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dom-access-to-css-declaration-blocks",
+          "title": "DOM Access to CSS Declaration Blocks",
+          "kind": "heading"
+        },
+        {
+          "anchor": "enable-a-css-style-sheet-set",
+          "title": "enable a CSS style sheet set",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "enabled-css-style-sheet-set",
+          "title": "enabled CSS style sheet set",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "escape-a-character",
+          "title": "escape a character",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "escape-a-character-as-code-point",
+          "title": "escape a character as code point",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "extensions-to-the-document-or-shadow-root-interface",
+          "title": "Extensions to the DocumentOrShadowRoot Interface Mixin",
+          "kind": "heading"
+        },
+        {
+          "anchor": "extensions-to-the-window-interface",
+          "title": "Extensions to the Window Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "fetch-a-css-style-sheet",
+          "title": "fetch a CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "fetching-css-style-sheets",
+          "title": "Fetching CSS style sheets",
+          "kind": "heading"
+        },
+        {
+          "anchor": "iana-considerations",
+          "title": "IANA Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "idl-attribute-to-css-property",
+          "title": "IDL attribute to CSS property",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "insert-a-css-rule",
+          "title": "insert a CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "introduction",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "last-css-style-sheet-set-name",
+          "title": "last CSS style sheet set name",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "legacy-css-style-sheet-members",
+          "title": "Deprecated CSSStyleSheet members",
+          "kind": "heading"
+        },
+        {
+          "anchor": "location",
+          "title": "location",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-queries",
+          "title": "Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "medialist-appendmedium-medium",
+          "title": "[for=MediaList] appendMedium(medium)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medialist-collection-of-media-queries",
+          "title": "[for=MediaList] collection of media queries",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medialist-deletemedium-medium",
+          "title": "[for=MediaList] deleteMedium(medium)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medialist-item-index",
+          "title": "[for=MediaList] item(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medialist-length",
+          "title": "[for=MediaList] length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "medialist-mediatext",
+          "title": "[for=MediaList] mediaText",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "origin-clean-flag",
+          "title": "origin-clean flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "owner-css-rule",
+          "title": "owner CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "owner-node",
+          "title": "owner node",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parent-css-rule",
+          "title": "parent CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parent-css-style-sheet",
+          "title": "parent CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-css-declaration-block",
+          "title": "parse a CSS declaration block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-css-rule",
+          "title": "parse a CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-css-value",
+          "title": "parse a CSS value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-group-of-selectors",
+          "title": "parse a group of selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-list-of-css-page-selectors",
+          "title": "parse a list of CSS page selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-media-query",
+          "title": "parse a media query",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-media-query-list",
+          "title": "parse a media query list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parsing-css-values",
+          "title": "Parsing CSS Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parsing-media-queries",
+          "title": "Parsing Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parsing-selectors",
+          "title": "Parsing Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "persistent-css-style-sheet",
+          "title": "persistent CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "preferred-css-style-sheet-set-name",
+          "title": "preferred CSS style sheet set name",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "preferred-order",
+          "title": "preferred order",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "priv",
+          "title": "Privacy Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "prolog",
+          "title": "prolog",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "readonly-flag",
+          "title": "readonly flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "remove-a-css-rule",
+          "title": "remove a CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "remove-a-css-style-sheet",
+          "title": "remove a CSS style sheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "requirements-on-specifications",
+          "title": "Requirements on specifications",
+          "kind": "heading"
+        },
+        {
+          "anchor": "requirements-on-user-agents-implementing-the-http-link-header",
+          "title": "Requirements on user agents Implementing the HTTP Link Header",
+          "kind": "heading"
+        },
+        {
+          "anchor": "requirements-on-user-agents-implementing-the-xml-stylesheet-processing-instruction",
+          "title": "Requirements on user agents Implementing the xml-stylesheet processing instruction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "resolved-value",
+          "title": "resolved value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolved-value-special-case-property",
+          "title": "resolved value special case property",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolved-value-special-case-property-like-color",
+          "title": "resolved value special case property like 'color'",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolved-value-special-case-property-like-height",
+          "title": "resolved value special case property like 'height'",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolved-value-special-case-property-like-top",
+          "title": "resolved value special case property like 'top'",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resolved-values",
+          "title": "Resolved Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sec",
+          "title": "Security Considerations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "select-a-css-style-sheet-set",
+          "title": "select a CSS style sheet set",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "selectors",
+          "title": "Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serialize-a-comma-separated-list",
+          "title": "serialize a comma-separated list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-css-component-value",
+          "title": "serialize a CSS component value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-css-declaration",
+          "title": "serialize a CSS declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-css-declaration-block",
+          "title": "serialize a CSS declaration block",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-css-rule",
+          "title": "serialize a CSS rule",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-css-value",
+          "title": "serialize a CSS value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-group-of-selectors",
+          "title": "serialize a group of selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-list-of-css-page-selectors",
+          "title": "serialize a list of CSS page selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-local",
+          "title": "serialize a LOCAL",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-media-feature-value",
+          "title": "serialize a media feature value",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-media-query",
+          "title": "serialize a media query",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-media-query-list",
+          "title": "serialize a media query list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-selector",
+          "title": "serialize a selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-simple-selector",
+          "title": "serialize a simple selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-string",
+          "title": "serialize a string",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-url",
+          "title": "serialize a URL",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-a-whitespace-separated-list",
+          "title": "serialize a whitespace-separated list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serialize-an-identifier",
+          "title": "serialize an identifier",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "serializing-css-values",
+          "title": "Serializing CSS Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-css-values-examples",
+          "title": "Examples",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-media-feature-values",
+          "title": "Serializing Media Feature Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-media-queries",
+          "title": "Serializing Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "serializing-selectors",
+          "title": "Serializing Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "set-a-css-declaration",
+          "title": "set a CSS declaration",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "specified-order",
+          "title": "specified order",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "style-sheet-association",
+          "title": "Style Sheet Association",
+          "kind": "heading"
+        },
+        {
+          "anchor": "stylesheet-base-url",
+          "title": "stylesheet base URL",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylesheet-disabled",
+          "title": "[for=StyleSheet] disabled",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylesheet-ownernode",
+          "title": "[for=StyleSheet] ownerNode",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylesheet-parentstylesheet",
+          "title": "[for=StyleSheet] parentStyleSheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylesheetlist-item-index",
+          "title": "[for=StyleSheetList] item(index)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "stylesheetlist-length",
+          "title": "[for=StyleSheetList] length",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "supported-css-property",
+          "title": "supported CSS property",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "supported-styling-language",
+          "title": "supported styling language",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "synchronously-replace-the-rules-of-a-cssstylesheet",
+          "title": "synchronously replace the rules of a CSSStyleSheet",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "terminology",
+          "title": "Terminology",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssgroupingrule-interface",
+          "title": "The CSSGroupingRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssimportrule-interface",
+          "title": "The CSSImportRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssmarginrule-interface",
+          "title": "The CSSMarginRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssmediarule-interface",
+          "title": "The CSSMediaRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssnamespacerule-interface",
+          "title": "The CSSNamespaceRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-csspagerule-interface",
+          "title": "The CSSPageRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssrule-interface",
+          "title": "The CSSRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssrulelist-interface",
+          "title": "The CSSRuleList Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssstyledeclaration-interface",
+          "title": "The CSSStyleDeclaration Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssstylerule-interface",
+          "title": "The CSSStyleRule Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-cssstylesheet-interface",
+          "title": "The CSSStyleSheet Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-http-default-style-header",
+          "title": "The HTTP Default-Style Header",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-linkstyle-interface",
+          "title": "The LinkStyle Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-medialist-interface",
+          "title": "The MediaList Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-stylesheet-interface",
+          "title": "The StyleSheet Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-stylesheetlist-interface",
+          "title": "The StyleSheetList Interface",
+          "kind": "heading"
+        },
+        {
+          "anchor": "update-style-attribute-for",
+          "title": "update style attribute for",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "updating-flag",
+          "title": "updating flag",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "utility-apis",
+          "title": "Utility APIs",
+          "kind": "heading"
+        },
+        {
+          "anchor": "window-getcomputedstyle-elt-pseudoelt",
+          "title": "[for=Window] getComputedStyle(elt, pseudoElt)",
+          "kind": "dfn"
+        }
+      ]
+    },
+    "mediaqueries-4": {
+      "file": "submodules/csswg-drafts/mediaqueries-4/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "@media/any-input",
+          "title": "All Available Interaction Capabilities: the '@media/any-pointer' and '@media/any-hover' features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "aspect-ratio",
+          "title": "Aspect-Ratio: the '@media/aspect-ratio' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "assorted-issues",
+          "title": "Assorted Issues",
+          "kind": "heading"
+        },
+        {
+          "anchor": "boolean-context",
+          "title": "boolean context",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "braille",
+          "title": "braille",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "changes-2012",
+          "title": "Changes Since Media Queries Level 3",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2017",
+          "title": "Changes since the 19 May 2017 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2017-9",
+          "title": "Changes since the 5 September 2017 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2020-7",
+          "title": "Changes since the 21 July 2020 Candidate Recommendation",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2021-12",
+          "title": "Changes since the 25 December 2021 Candidate Recommendation Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "coarse",
+          "title": "coarse",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "color",
+          "title": "Color Depth: the '@media/color' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "color-gamut",
+          "title": "Color Display Quality: the '@media/color-gamut' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "color-index",
+          "title": "Paletted Color Screens: the '@media/color-index' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "continuous-media",
+          "title": "continuous media",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "embossed",
+          "title": "embossed",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "error-handling",
+          "title": "Error Handling",
+          "kind": "heading"
+        },
+        {
+          "anchor": "evaluating",
+          "title": "Evaluating Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "false-in-the-negative-range",
+          "title": "false in the negative range",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "grid",
+          "title": "Detecting Console Displays: the '@media/grid' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "handheld",
+          "title": "handheld",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "height",
+          "title": "Height: the '@media/height' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "hover",
+          "title": "Hover Capability: the '@media/hover' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "interlace",
+          "title": "interlace",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "intro",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "landscape",
+          "title": "landscape",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltgeneral-enclosed",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-and",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-condition",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-condition-without-or",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-feature",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-in-parens",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-not",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-or",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-query",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-query-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmedia-type",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-boolean",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-comparison",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-eq",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-gt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-lt",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-name",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-plain",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-range",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmf-value",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltmq-boolean",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media",
+          "title": "Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "media-condition",
+          "title": "media condition",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-conditions",
+          "title": "Combining Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "media-feature",
+          "title": "media feature",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-query",
+          "title": "media query",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-query-list",
+          "title": "media query list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-query-modifier",
+          "title": "media query modifier",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-type",
+          "title": "media type",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-types",
+          "title": "Media Types",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mediaresolution-infinite",
+          "title": "[for=@media/resolution] infinite",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "mf-colors",
+          "title": "Color Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mf-deprecated",
+          "title": "Appendix A: Deprecated Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mf-dimensions",
+          "title": "Viewport/Page Dimensions Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mf-display-quality",
+          "title": "Display Quality Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mf-overflow-block",
+          "title": "Block-Axis Overflow: the '@media/overflow-block' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mf-overflow-inline",
+          "title": "Inline-Axis Overflow: the '@media/overflow-inline' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "monochrome",
+          "title": "Monochrome Screens: the '@media/monochrome' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-boolean-context",
+          "title": "Evaluating Media Features in a Boolean Context",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-features",
+          "title": "Media Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-list",
+          "title": "Combining Media Queries",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-min-max",
+          "title": "Using “min-” and “max-” Prefixes On Range Features",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-not",
+          "title": "Negating a Media Query: the ''not'' keyword",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-only",
+          "title": "Hiding a Media Query From Legacy user agents: the ''only'' keyword",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-prefix",
+          "title": "Media Query Modifiers",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-range-context",
+          "title": "Evaluating Media Features in a Range Context",
+          "kind": "heading"
+        },
+        {
+          "anchor": "mq-syntax",
+          "title": "Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "orientation",
+          "title": "Orientation: the '@media/orientation' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "paged-media",
+          "title": "paged media",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "placement",
+          "title": "Module interactions",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pointer",
+          "title": "Pointing Device Quality: the '@media/pointer' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "portrait",
+          "title": "portrait",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "progressive",
+          "title": "progressive",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "projection",
+          "title": "projection",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "range-context",
+          "title": "range context",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "rec2020",
+          "title": "rec2020",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "scan",
+          "title": "Display Type: the '@media/scan' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "screen",
+          "title": "screen",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "scroll",
+          "title": "scroll",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "speech",
+          "title": "speech",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "units",
+          "title": "Units",
+          "kind": "heading"
+        },
+        {
+          "anchor": "update",
+          "title": "Display Update Frequency: the '@media/update' feature",
+          "kind": "heading"
+        },
+        {
+          "anchor": "values",
+          "title": "Values",
+          "kind": "heading"
+        },
+        {
+          "anchor": "width",
+          "title": "Width: the '@media/width' feature",
+          "kind": "heading"
+        }
+      ]
+    },
+    "selectors-4": {
+      "file": "submodules/csswg-drafts/selectors-4/Overview.bs",
+      "anchors": [
+        {
+          "anchor": "acknowledgements",
+          "title": "Acknowledgements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "active",
+          "title": ":active",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "adjacent-sibling-combinators",
+          "title": "Next-sibling combinator (+)",
+          "kind": "heading"
+        },
+        {
+          "anchor": "any-link",
+          "title": ":any-link",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "api-hooks",
+          "title": "API Hooks",
+          "kind": "heading"
+        },
+        {
+          "anchor": "attribute-representation",
+          "title": "Attribute presence and value selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "attribute-selector",
+          "title": "attribute selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "attribute-selectors",
+          "title": "Attribute selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "attribute-substrings",
+          "title": "Substring matching attribute selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "attrnmsp",
+          "title": "Attribute selectors and namespaces",
+          "kind": "heading"
+        },
+        {
+          "anchor": "autofill",
+          "title": "The Automatic Input Pseudo-class: '':autofill''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "buffering",
+          "title": ":buffering",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "case-sensitive",
+          "title": "Characters and case sensitivity",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes",
+          "title": "Changes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2011",
+          "title": "Changes since the 29 September 2011 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2012",
+          "title": "Changes since the 23 August 2012 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2013",
+          "title": "Changes since the 2 May 2013 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2018-02",
+          "title": "Changes since the 2 February 2018 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2018-11",
+          "title": "Changes since the 21 November 2018 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2022-05",
+          "title": "Changes since the 7 May 2022 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2022-11",
+          "title": "Changes since the 11 November 2022 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-2026-01",
+          "title": "Changes since the 22 January 2026 Working Draft",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-authorial",
+          "title": "Clearer Expression of Authorial Intent",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-conditional",
+          "title": "Conditional Logic",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-forms",
+          "title": "Interaction, Input and Forms",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-hyperlinking",
+          "title": "Hyperlinking Support",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-i18n",
+          "title": "Internationalization Improvements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-level-3",
+          "title": "Changes Since Level 3",
+          "kind": "heading"
+        },
+        {
+          "anchor": "changes-media",
+          "title": "Media State",
+          "kind": "heading"
+        },
+        {
+          "anchor": "checked",
+          "title": ":checked",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "child-combinator",
+          "title": "child combinator",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "child-combinators",
+          "title": "Child combinator (>)",
+          "kind": "heading"
+        },
+        {
+          "anchor": "child-index",
+          "title": "Child-indexed Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "class-html",
+          "title": "Class selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "class-selector",
+          "title": "class selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "combinators",
+          "title": "Combinators",
+          "kind": "heading"
+        },
+        {
+          "anchor": "compat",
+          "title": "Appendix B: Obsolete but Required -webkit- Parsing Quirks for Web Compat",
+          "kind": "heading"
+        },
+        {
+          "anchor": "complex-selector",
+          "title": "complex selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "compound-selector",
+          "title": "compound selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "context",
+          "title": "Introduction",
+          "kind": "heading"
+        },
+        {
+          "anchor": "data-model",
+          "title": "Data Model",
+          "kind": "heading"
+        },
+        {
+          "anchor": "declared",
+          "title": "declared",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "def-values",
+          "title": "Default attribute values in DTDs",
+          "kind": "heading"
+        },
+        {
+          "anchor": "default",
+          "title": ":default",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "defined",
+          "title": ":defined",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "descendant-combinator",
+          "title": "descendant combinator",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "disabled",
+          "title": ":disabled",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "display-state-pseudos",
+          "title": "Element Display State Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "document-language",
+          "title": "document language",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "dom-mapping",
+          "title": "Appendix A: Guidance on Mapping Source Documents & Data to an Element Tree",
+          "kind": "heading"
+        },
+        {
+          "anchor": "elemental-selectors",
+          "title": "Elemental selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "enabled",
+          "title": ":enabled",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "enableddisabled",
+          "title": "The '':enabled'' and '':disabled'' Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "evaluating-a-selector",
+          "title": "evaluating a selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "featureless",
+          "title": "featureless",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "first-child",
+          "title": ":first-child",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "first-of-type",
+          "title": ":first-of-type",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "focus-visible",
+          "title": ":focus-visible",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "focus-within",
+          "title": ":focus-within",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "forgiving-selector",
+          "title": "forgiving-selector-list",
+          "kind": "heading"
+        },
+        {
+          "anchor": "fullscreen",
+          "title": ":fullscreen",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "fullscreen-state",
+          "title": "Fullscreen Presentation State: the '':fullscreen'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "functional-pseudo-class",
+          "title": "functional pseudo-class",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "functional-pseudo-element",
+          "title": "functional pseudo-element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "general-sibling-combinators",
+          "title": "Subsequent-sibling combinator (~)",
+          "kind": "heading"
+        },
+        {
+          "anchor": "grouping",
+          "title": "Selector Lists",
+          "kind": "heading"
+        },
+        {
+          "anchor": "has-allowed-pseudo-element",
+          "title": ":has-allowed pseudo-element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "host-language",
+          "title": "host language",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "id-selector",
+          "title": "ID selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "id-selectors",
+          "title": "ID selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "in-range",
+          "title": ":in-range",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "indeterminate",
+          "title": ":indeterminate",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "indicate-focus",
+          "title": "indicate focus",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "input-pseudos",
+          "title": "The Input Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "input-states",
+          "title": "Input Control States",
+          "kind": "heading"
+        },
+        {
+          "anchor": "input-value-pseudo-classes",
+          "title": "input value pseudo-classes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "input-value-states",
+          "title": "Input Value States",
+          "kind": "heading"
+        },
+        {
+          "anchor": "invalid",
+          "title": "Invalid Selectors and Error Handling",
+          "kind": "heading"
+        },
+        {
+          "anchor": "invalid-selectors",
+          "title": "invalid selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "language-range",
+          "title": "language range",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "last-child",
+          "title": ":last-child",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "last-of-type",
+          "title": ":last-of-type",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "legacy-aliasing",
+          "title": "Legacy Aliases",
+          "kind": "heading"
+        },
+        {
+          "anchor": "legacy-selector-alias",
+          "title": "legacy selector alias",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "linguistic-pseudos",
+          "title": "Linguistic Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "link",
+          "title": "The Link History Pseudo-classes: '':link'' and '':visited''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "list-of-simplecompoundcomplex-selectors",
+          "title": "list of simple/compound/complex selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "location",
+          "title": "Location Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "logical-combination",
+          "title": "Logical Combinations",
+          "kind": "heading"
+        },
+        {
+          "anchor": "logical-combination-pseudo-classes",
+          "title": "logical combination pseudo-classes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltattr-matcher",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltattr-modifier",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltattribute-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltclass-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcombinator",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomplex-real-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomplex-real-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomplex-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomplex-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcomplex-selector-unit",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcompound-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltcompound-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltid-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltlegacy-pseudo-element-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltns-prefix",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltpseudo-class-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltpseudo-compound-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltpseudo-element-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltrelative-real-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltrelative-real-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltrelative-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltrelative-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltselector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsimple-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsimple-selector-list",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltsubclass-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "lttype-selector",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "ltwq-name",
+          "title": "",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "match-a-complex-selector-against-an-element",
+          "title": "match a complex selector against an element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "match-a-selector-against-a-pseudo-element",
+          "title": "match a selector against a pseudo-element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "match-a-selector-against-a-tree",
+          "title": "match a selector against a tree",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "match-a-selector-against-an-element",
+          "title": "match a selector against an element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "matches",
+          "title": ":matches()",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "matching",
+          "title": "matching",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "media-loading-state",
+          "title": "Media Loading State: the '':buffering'' and '':stalled'' pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "modal-state",
+          "title": "Modal (Exclusive Interaction) State: the '':modal'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "namespaces",
+          "title": "Declaring Namespace Prefixes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "next-sibling-combinator",
+          "title": "next-sibling combinator",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nth-child-anb-of-s",
+          "title": ":nth-child(An+B [of S]? )",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nth-last-child-anb-of-s",
+          "title": ":nth-last-child(An+B [of S]? )",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nth-last-of-type-anb",
+          "title": ":nth-last-of-type(An+B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "nth-of-type-anb",
+          "title": ":nth-of-type(An+B)",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "only-child",
+          "title": ":only-child",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "only-of-type",
+          "title": ":only-of-type",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "open-state",
+          "title": "Collapse State: the '':open'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "opt-pseudos",
+          "title": "The Optionality Pseudo-classes: '':required'' and '':optional''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "optional",
+          "title": ":optional",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "originating-element",
+          "title": "originating element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "originating-pseudo-element",
+          "title": "originating pseudo-element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "out-of-range",
+          "title": ":out-of-range",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "overview",
+          "title": "Selectors Overview",
+          "kind": "heading"
+        },
+        {
+          "anchor": "parse-a-relative-selector",
+          "title": "parse a relative selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-a-selector",
+          "title": "parse a selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "parse-as-a-forgiving-selector-list",
+          "title": "parse as a forgiving selector list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "paused",
+          "title": ":paused",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "picture-in-picture",
+          "title": ":picture-in-picture",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "pip-state",
+          "title": "Picture-in-Picture Presentation State: the '':picture-in-picture'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "placeholder-shown",
+          "title": ":placeholder-shown",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "playing",
+          "title": ":playing",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "popover-open",
+          "title": ":popover-open",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "popover-open-state",
+          "title": "Popover State: the '':popover-open'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-classes",
+          "title": "Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-compound-selector",
+          "title": "pseudo-compound selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "pseudo-element",
+          "title": "pseudo-element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "pseudo-element-attachment",
+          "title": "Binding to the Document Tree",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-element-states",
+          "title": "Pseudo-classing Pseudo-elements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-element-structure",
+          "title": "Internal Structure",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-element-syntax",
+          "title": "Syntax",
+          "kind": "heading"
+        },
+        {
+          "anchor": "pseudo-elements",
+          "title": "Pseudo-elements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "read-only",
+          "title": ":read-only",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "read-write",
+          "title": ":read-write",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "relative",
+          "title": "Relative Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "relative-selector-anchor-elements",
+          "title": "relative selector anchor elements",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "relative-selectors",
+          "title": "relative selectors",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "required",
+          "title": ":required",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "resource-pseudos",
+          "title": "Resource State Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "rw-pseudos",
+          "title": "The Mutability Pseudo-classes: '':read-only'' and '':read-write''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "scoping",
+          "title": "Scoped Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "scoping-root",
+          "title": "scoping root",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "seeking",
+          "title": ":seeking",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "selector",
+          "title": "selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "selector-combinator",
+          "title": "[for=selector] combinator",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "selector-list",
+          "title": "selector list",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "selector-subject-of-a-selector",
+          "title": "[for=selector] subject of a selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "simple-selector",
+          "title": "simple selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "sound-state",
+          "title": "Sound State: the '':muted'' and '':volume-locked'' pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "specificity",
+          "title": "specificity",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "specificity-rules",
+          "title": "Calculating a selector's specificity",
+          "kind": "heading"
+        },
+        {
+          "anchor": "stalled",
+          "title": ":stalled",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "structural-pseudo-classes",
+          "title": "structural pseudo-classes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "structural-pseudos",
+          "title": "Tree-Structural pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "structure",
+          "title": "Structure and Terminology",
+          "kind": "heading"
+        },
+        {
+          "anchor": "sub-pseudo-elements",
+          "title": "Sub-pseudo-elements",
+          "kind": "heading"
+        },
+        {
+          "anchor": "subsequent-sibling-combinator",
+          "title": "subsequent-sibling combinator",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "syntax",
+          "title": "Selector Syntax and Structure",
+          "kind": "heading"
+        },
+        {
+          "anchor": "target",
+          "title": ":target",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "the-active-pseudo",
+          "title": "The Activation Pseudo-class: '':active''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-defined-pseudo",
+          "title": "The Defined Pseudo-class: '':defined''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-empty-pseudo",
+          "title": "'':empty'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-first-child-pseudo",
+          "title": "'':first-child'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-first-of-type-pseudo",
+          "title": "'':first-of-type'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-focus-pseudo",
+          "title": "The Input Focus Pseudo-class: '':focus''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-hover-pseudo",
+          "title": "The Pointer Hover Pseudo-class: '':hover''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-lang-pseudo",
+          "title": "The Language Pseudo-class: '':lang()''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-last-child-pseudo",
+          "title": "'':last-child'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-last-of-type-pseudo",
+          "title": "'':last-of-type'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-nth-last-child-pseudo",
+          "title": "'':nth-last-child()'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-nth-last-of-type-pseudo",
+          "title": "'':nth-last-of-type()'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-nth-of-type-pseudo",
+          "title": "'':nth-of-type()'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-only-child-pseudo",
+          "title": "'':only-child'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-only-of-type-pseudo",
+          "title": "'':only-of-type'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-root-pseudo",
+          "title": "'':root'' pseudo-class",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-scope-pseudo",
+          "title": "The Reference Element Pseudo-class: '':scope''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-target-pseudo",
+          "title": "The Target Pseudo-class: '':target''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "the-universal-selector",
+          "title": "Universal selector",
+          "kind": "heading"
+        },
+        {
+          "anchor": "type-nmsp",
+          "title": "Namespaces in Elemental Selectors",
+          "kind": "heading"
+        },
+        {
+          "anchor": "type-selector",
+          "title": "type selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "type-selectors",
+          "title": "Type (tag name) selector",
+          "kind": "heading"
+        },
+        {
+          "anchor": "typed-child-index",
+          "title": "Typed Child-indexed Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "ui-validity",
+          "title": "Input Value-checking",
+          "kind": "heading"
+        },
+        {
+          "anchor": "ultimate-originating-element",
+          "title": "ultimate originating element",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "unchecked",
+          "title": ":unchecked",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "universal-selector",
+          "title": "universal selector",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "unknown--webkit--pseudo-elements",
+          "title": "unknown -webkit- pseudo-elements",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "user-action-pseudo-classes",
+          "title": "user action pseudo-classes",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "user-invalid",
+          "title": ":user-invalid",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "user-pseudos",
+          "title": "The User-interaction Pseudo-classes: '':user-valid'' and '':user-invalid''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "user-valid",
+          "title": ":user-valid",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "useraction-pseudos",
+          "title": "User Action Pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "validity-pseudos",
+          "title": "The Validity Pseudo-classes: '':valid'' and '':invalid''",
+          "kind": "heading"
+        },
+        {
+          "anchor": "video-state",
+          "title": "Media Playback State: the '':playing'', '':paused'', and '':seeking'' pseudo-classes",
+          "kind": "heading"
+        },
+        {
+          "anchor": "visited",
+          "title": ":visited",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "volume-locked",
+          "title": ":volume-locked",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "white-space",
+          "title": "White space",
+          "kind": "dfn"
+        },
+        {
+          "anchor": "zero-matches",
+          "title": "The Specificity-adjustment Pseudo-class: '':where()''",
+          "kind": "heading"
+        }
+      ]
+    }
+  }
+}

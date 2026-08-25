@@ -1,0 +1,39 @@
+# Reviewed exemptions for the spec-anchor coverage check
+# (tests/spec-anchor-coverage.test.ts).
+#
+# Each row suppresses the zero-citation violation for exactly one `spec#anchor`
+# until its `expires` date (INCLUSIVE); expired rows resurface as violations
+# automatically, so this file cannot become a silent dump.
+#
+# Format is a deliberately rigid YAML subset parsed dependency-free by the test:
+# flat rows under `allowlist:`, keys exactly spec/anchor/reason/expires,
+# single-line scalars, full-line comments only (no trailing comments, no flow
+# collections, no multiline scalars). Anything else must throw, not be ignored.
+#
+# Two kinds of rows live here; both require a concrete reason:
+#   * out-of-scope: the anchor governs behavior cssomnom intentionally does not
+#     implement (rendering/DOM/font-matching runtime) per README deviations.
+#   * CITATION DEBT: the surface IS implemented but its dedicated spec anchor is
+#     cited nowhere (req/src/test/docs). These rows are tracked gaps awaiting a
+#     citation or requirement extraction -- they are NOT blessings.
+allowlist:
+  - spec: css-backgrounds-3
+    anchor: outset-adjusted-border-radius
+    reason: paint-time border-radius outset geometry is rendering-only; no parse/serialize surface in a pure CSSOM library (README deviation)
+    expires: 2026-11-30
+  - spec: cssom-1
+    anchor: resolved-value-special-case-property-like-color
+    reason: getComputedStyle resolved-value special case requires a DOM computed-style engine; lib implements parse/serialize only (README deviation)
+    expires: 2026-11-30
+  - spec: css-values-4
+    anchor: reference-pixel
+    reason: physical reference-pixel constant is device/browser rendering policy; nothing to parse or serialize
+    expires: 2026-11-30
+  - spec: cssom-1
+    anchor: parse-a-media-query-list
+    reason: CITATION DEBT (actionable finding) - media query list parsing is implemented in src/MediaParser.ts and exercised via sibling anchors (#error-handling/#serializing-media-queries), but no dedicated citation of this anchor exists anywhere yet; needs a requirement/citation
+    expires: 2026-11-30
+  - spec: css-values-4
+    anchor: css-wide-keywords
+    reason: CITATION DEBT (actionable finding) - initial/inherit/unset/revert/revert-layer handling is implemented across src/parser.ts, src/CSSStyleDeclaration.ts and src/serializer.ts, but no #css-wide-keywords citation exists anywhere yet; needs a requirement/citation
+    expires: 2026-11-30
