@@ -20,6 +20,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not trust parsed color values as grammar-validated input downstream; treat retained spellings as unvalidated text.
 remediation: 'Implement the css-color grammar check for the color property in declaration-block parsing and drop failing declarations per cssom-1 #parse-a-css-declaration-block step 3.1, preserving neighboring valid declarations (WPT color-invalid-relative-color.html).'
+notes:
+    - '2026-08-25 (freeze bookkeeping): computation-engine remediation direction now tracked as vector V-RELATIVE-COLOR-ENGINE; grammar-drop scope unchanged until the computedStyleMap surface unlock.'
 owner: agent:ox-alpha
 review_date: "2026-09-24"
 release_disposition: ship_with_known_issue
@@ -44,6 +46,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-117.yaml
+    - at: "2026-08-25T18:32:38Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

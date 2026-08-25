@@ -1,0 +1,8 @@
+id: V-RELATIVE-COLOR-ENGINE
+title: Relative color computation engine implementation wave
+description: 'KI-117 remediation direction: once computed-value support is claimed on the public surface (computedStyleMap export unlock per docs/proof-escape-ki-122-123.md A.1), implement the relative-color computation engine per css-color-5 #relative-colors, covering the deferred mass of lch()/oklch()/rgb(from ...) forms (~220 rows). Until that unlock lands, these remain refused-by-environment-limitation and grammar-invalid relative values stay tracked by open KI-117.'
+priority: P2
+status: unresearched
+related_obligation_classes: []
+stacks:
+  - typescript
