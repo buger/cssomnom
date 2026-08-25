@@ -20,32 +20,9 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Pre-validate appendRule strings and reject or ignore any non-whitespace trailing tokens.
 remediation: Parse appendRule input as exactly one complete keyframe rule, including end-of-input validation, before appending.
-poc_quality:
-    real_infrastructure: true
-    quantitative_impact: true
-    control_test: true
-    untrusted_attacker: true
-    current_deployment_relevance: true
-    honest_severity: true
-    attacker_profitability: true
-    reproducible: true
-    no_inflation: true
-    operational_path_verified: true
-    reachability_verified: true
-    notes: |
-        real_infrastructure: public CSSKeyframesRule.appendRule with plain CSS strings - no mocks.
-        quantitative_impact: measured at HEAD - appendRule accepts a rule with trailing garbage and stores it, while the green control shows well-formed appends work.
-        control_test: dedicated valid-append control leg passes, isolating the malformed-input failure.
-        untrusted_attacker: attacker-supplied keyframes text reaches appendRule in editor/preview integrations.
-        current_deployment_relevance: appendRule is standard CSSOM mutation API; live at HEAD per evidence capture.
-        honest_severity: medium correctness - silent retention of malformed constructs diverges from css-animations-1 append semantics.
-        attacker_profitability: not profit-driven; malformed persistence can poison later serialization/diff tooling.
-        reproducible: deterministic exit 1 on the malformed leg across runs.
-        no_inflation: single-method contract, medium ceiling.
-        operational_path_verified: real appendRule call through constructed stylesheet.
-        reachability_verified: N/A-eligible local-behavioral finding through the public mutation API.
 notes:
     - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+    - '2026-08-25 (F2 review fix): restored untrusted_attacker=true; note documents attacker-supplied keyframes text reaching appendRule — flag and note now agree.'
 owner: agent:codex
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -62,3 +39,31 @@ history:
       by: agent:codex
       action: edit
       detail: append-note,add-requirement
+    - at: "2026-08-25T06:35:53Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: false
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public CSSKeyframesRule.appendRule with plain CSS strings - no mocks.
+        quantitative_impact: measured at HEAD - appendRule accepts a rule with trailing garbage and stores it, while the green control shows well-formed appends work.
+        control_test: dedicated valid-append control leg passes, isolating the malformed-input failure.
+        untrusted_attacker: attacker-supplied keyframes text reaches appendRule in editor/preview integrations.
+        current_deployment_relevance: appendRule is standard CSSOM mutation API; live at HEAD per evidence capture.
+        honest_severity: medium correctness - silent retention of malformed constructs diverges from css-animations-1 append semantics.
+        attacker_profitability: not profit-driven; malformed persistence can poison later serialization/diff tooling.
+        reproducible: deterministic exit 1 on the malformed leg across runs.
+        no_inflation: single-method contract, medium ceiling.
+        operational_path_verified: real appendRule call through constructed stylesheet.
+        reachability_verified: N/A-eligible local-behavioral finding through the public mutation API.

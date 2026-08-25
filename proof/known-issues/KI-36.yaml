@@ -1,6 +1,6 @@
 id: KI-36
 title: '122 generated shorthands missing from runtime table: setProperty never expands gap/transition/grid'
-description: 'src/shorthands.ts SHORTHANDS (~L1943) hand-wires only 44 entries while src/data/gen/shorthands.ts generates 165; 122 generated shorthands (gap, transition, animation, grid, columns, place-items/place-content/place-self, column-rule, text-decoration, mask, offset and more) never resolve at runtime, so setProperty(''gap'',''10px'') stores the shorthand verbatim instead of expanding it. Observed: getPropertyValue(''row-gap'') returns '''' after setProperty(''gap'',''10px'') although the declaration block conceptually contains row-gap:10px; setting row-gap first and gap second leaves cssText ''row-gap: 30px; gap: 10px;'' with row-gap still reading 30px - the later gap declaration must win per greatest cascading order; setting gap then row-gap yields cssText ''gap: 10px; row-gap: 20px;'' keeping a stale unexpanded shorthand beside its override. Re-parsing such cssText preserves the wrong winner (cascade corruption across round-trips). cssom-1 #concept-declarations-specified-order (Overview.bs:2243-2245) requires declarations in specified order to have shorthand properties expanded into their longhands in canonical order with only the greatest cascading order representative kept; css-gaps-1 #gap-shorthand (Overview.bs:236) defines gap as a shorthand that sets row-gap and column-gap in one declaration; css-transitions-1 #transition-shorthand-property (Overview.bs:510) defines transition as combining its longhands into one property. Project-contract anchor: AGENTS.md Automation Over Hardcoding requires codegen output to back runtime tables. Correctness fault (silent data loss / cascade corruption): any longhand read or persisted cssText silently disagrees with the authored declaration block. Distinctness: KI-112/113 cover font shorthand grammar roots; KI-114/116 cover expandBorderImage quoted-url handling; this issue is the missing table coverage itself.'
+description: 'Observed: setProperty(''gap'',''10px'') stores it verbatim; getPropertyValue(''row-gap'') returns ''''; mixed write orders leave wrong cascade winners that re-parse unchanged. API: setProperty/getPropertyValue/cssText - SHORTHANDS (src/shorthands.ts ~L1943) wires 44/165 of src/data/gen/shorthands.ts; 122 never resolve (runtime-only keys absent from the generated table). Expected: canonical-order longhand expansion keeping the greatest cascading winner (cssom-1 #concept-declarations-specified-order Overview.bs:2243-2245; css-gaps-1 #gap-shorthand :236; css-transitions-1 #transition-shorthand-property :510). Impact: silent data loss / cascade corruption.'
 affected_requirements:
     - SYS-REQ-260823-SHX6
 evidence_manifests:
@@ -19,6 +19,9 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not read longhands through getPropertyValue after setting an uncovered shorthand, and do not persist cssText produced by this engine; expand affected shorthands by hand before writing stylesheets.
 remediation: Drive src/shorthands.ts SHORTHANDS entirely from src/data/gen/shorthands.ts SHORTHANDS_DATA (165 keys), supplying generic expanders for families lacking bespoke ones, so every generated shorthand expands into canonical-order longhands and serialization drops stale shorthands whose winners changed.
+notes:
+    - '2026-08-25: F2 ledger-hygiene description compression to <=600 chars (Observed/API/Expected/Impact shape); every dropped detail relocated verbatim here, zero content removed. Relocated: 122 uncovered families include gap, transition, animation, grid, columns, place-items/place-content/place-self, column-rule, text-decoration, mask and offset; getPropertyValue(''row-gap'') returns '''' after setProperty(''gap'',''10px'') although the block conceptually contains row-gap:10px; setting row-gap first and gap second leaves cssText ''row-gap: 30px; gap: 10px;'' with row-gap still reading 30px - the later gap declaration must win per greatest cascading order; setting gap then row-gap yields cssText ''gap: 10px; row-gap: 20px;'' keeping a stale unexpanded shorthand beside its override. Project-contract anchor: AGENTS.md Automation Over Hardcoding requires codegen output to back runtime tables. Distinctness: KI-112/113 cover font shorthand grammar roots; KI-114/116 cover expandBorderImage quoted-url handling; KI-36 is the missing table coverage itself.'
+    - 'Calibration rule (2026-08-25, F2): untrusted_attacker marks hostile-input REACHABILITY of the affected API surface, not adversarial intent; attacker_profitability false reflects pure correctness impact.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -43,6 +46,18 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-36.yaml
+    - at: "2026-08-25T06:22:37Z"
+      by: agent:champ
+      action: edit
+      detail: set-description,append-note
+    - at: "2026-08-25T06:35:53Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: set-description
+    - at: "2026-08-25T06:37:02Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

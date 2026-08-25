@@ -17,8 +17,11 @@ tripwire_mutation: In handleImportRule, detect a failed/unmatched href prelude (
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
-mitigation: After document-style parse(), scan cssRules for fabricated CSSImportRule entries (empty href, mediaText "not all") and remove them; author stylesheets with valid @import preludes so grammar-invalid rules never reach handleImportRule.
-remediation: In handleImportRule, detect a failed/unmatched href prelude (bad-url token or no <url>|<string> match) and drop the rule like other grammar-invalid at-rules instead of pushing a fabricated CSSImportRule into cssRules.
+mitigation: Do not assume grammar-invalid @import rules vanish from document-style parse results. After each parse call, scan sheet.cssRules for CSSImportRule entries carrying an empty href and a 'not all' media list. Remove any fabricated rule before consumers enumerate cssRules.
+remediation: 'In handleImportRule, detect href-prelude failures: bad-url tokens and missing <url> or <string> matches. Return no rule for these cases, matching the other grammar-invalid at-rules. Never push a fabricated CSSImportRule into cssRules.'
+notes:
+    - '2026-08-25: authored mitigation/remediation per ledger hygiene pass (F2): rewrote both fields into short imperative sentences grounded in the overlay reproducer.'
+    - 'Calibration rule (2026-08-25, F2): untrusted_attacker marks hostile-input REACHABILITY of the affected API surface, not adversarial intent; attacker_profitability false reflects pure correctness impact.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -43,6 +46,14 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-43.yaml
+    - at: "2026-08-25T06:07:46Z"
+      by: agent:champ
+      action: edit
+      detail: set-mitigation,set-remediation,append-note
+    - at: "2026-08-25T06:37:02Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

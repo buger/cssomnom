@@ -1,5 +1,5 @@
 id: KI-45
-title: 'CSS.parseValue(''10% x'') silently returns 10% while parseComponentValue throws on trailing garbage'
+title: CSS.parseValue('10% x') silently returns 10% while parseComponentValue throws on trailing garbage
 description: 'parseValueSync lacks the EOF check its sibling parseComponentValueSync performs, so trailing garbage after one value is silently truncated. css-syntax-3 #parse-a-component-value (~2457-2484) returns a syntax error when input is non-empty after one component value, and both APIs document themselves as exposing those algorithms. Honest caveat: the thin WICG draft does not spell out parseValue failure semantics explicitly; the violation is anchored on the shared css-syntax algorithm plus internal inconsistency (sibling throws), not explicit parseValue prose. README documents both APIs without a leniency deviation.'
 affected_requirements:
     - SYS-REQ-260823-PVE7
@@ -14,11 +14,14 @@ attacker_input: value strings with trailing garbage after one component value; c
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-45-parsevalue-trailing-garbage-lenient-overlay-260823.ts
 tripwire_mutation: Add the same EOF/leftover check to parseValueSync that its sibling performs (~583-587) so it throws on trailing garbage; both rejection legs flip red->green while clean-value controls stay green.
-mitigation: For untrusted or hand-edited input use CSS.parseComponentValue(Sync), which already rejects trailing garbage, or pre-validate that the string contains exactly one component value before calling parseValue.
-remediation: Add the same EOF/leftover-input check to parseValueSync that parseComponentValueSync performs so it throws a syntax error on trailing garbage after one component value, matching css-syntax-3 #parse-a-component-value.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
+mitigation: Use CSS.parseComponentValue(Sync) instead of parseValue for untrusted or hand-edited strings. That sibling API rejects trailing garbage today. Otherwise verify the string contains exactly one component value before calling parseValue.
+remediation: 'Add the leftover-input check to parseValueSync that parseComponentValueSync performs. Throw a syntax error when input remains after one component value. Match the css-syntax-3 #parse-a-component-value failure semantics.'
+notes:
+    - '2026-08-25: authored mitigation/remediation per ledger hygiene pass (F2): rewrote both fields into short imperative sentences grounded in the overlay reproducer.'
+    - 'Calibration rule (2026-08-25, F2): untrusted_attacker marks hostile-input REACHABILITY of the affected API surface, not adversarial intent; attacker_profitability false reflects pure correctness impact.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -31,6 +34,14 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-45.yaml
+    - at: "2026-08-25T06:07:46Z"
+      by: agent:champ
+      action: edit
+      detail: set-mitigation,set-remediation,append-note
+    - at: "2026-08-25T06:37:03Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

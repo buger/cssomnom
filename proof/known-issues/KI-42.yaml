@@ -14,13 +14,15 @@ attacker_input: component-value strings containing bad-url constructs (raw white
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-42-bad-url-component-value-not-rejected-overlay-260823.ts
 tripwire_mutation: In parseComponentValueSync, reject non-whitespace values whose type is bad-url/bad-string (or run ensureEOF-style failure detection after consume) before toParserToken; both bad-url legs flip red->green while the multi-value control stays green.
-mitigation: Until this closes, do not feed unquoted url() containing raw whitespace to parseComponentValueSync expecting a SyntaxError; pre-validate url() preludes or wrap calls and re-check returned token types for bad-url/bad-string.
-remediation: In parseComponentValueSync, reject non-whitespace component values whose consumed token type is bad-url/bad-string (ensureEOF-style failure detection after consume) before toParserToken, so lone bad tokens throw like the >1-value branch already does.
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
+mitigation: Do not rely on parseComponentValueSync to reject unquoted url() values containing raw whitespace. Pre-validate such strings before parsing. As an extra guard, inspect each returned token for bad-url or bad-string types.
+remediation: In parseComponentValueSync, reject any non-whitespace component value whose token type is bad-url or bad-string. Lone bad tokens then throw like the multi-value branch already does.
 notes:
     - '2026-08-24: ledger hygiene pass (mechanical): grammar fix in description (library own -> library owns the >1-value branch). No other content changed.'
+    - '2026-08-25: authored mitigation/remediation per ledger hygiene pass (F2): rewrote both fields into short imperative sentences grounded in the overlay reproducer.'
+    - 'Calibration rule (2026-08-25, F2): untrusted_attacker marks hostile-input REACHABILITY of the affected API surface, not adversarial intent; attacker_profitability false reflects pure correctness impact.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -41,6 +43,18 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-42.yaml
+    - at: "2026-08-25T06:07:12Z"
+      by: agent:champ
+      action: edit
+      detail: set-mitigation,set-remediation,append-note
+    - at: "2026-08-25T06:36:04Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: set-remediation
+    - at: "2026-08-25T06:37:02Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

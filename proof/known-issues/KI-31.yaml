@@ -1,6 +1,6 @@
 id: KI-31
 title: Media condition serialization drops required parentheses and corrupts round-trip semantics
-description: 'serializeMediaCondition (src/MediaParser.ts ~L839-844) joins condition children with bare '' <op> '' separators, dropping grouping parentheses around nested or/and operands. Parsing ''@media ((width >= 100px) or (grid)) and (hover){div{}}'' yields conditionText "(width >= 100px) or (grid) and (hover)", which RE-PARSES as an invalid mixed and/or chain and serializes as ''not all''; ''@media screen and ((color) or (monochrome))'' likewise degrades to ''not all''. mediaqueries-4 #mq-syntax (Overview.bs:900-904) requires every and/or operand to be a <media-in-parens>; css-conditional-3 #the-cssconditionrule-interface (Overview.bs:752-795) requires conditionText on getting to return ''the result of serializing the associated condition'' (:789); and the prohibition of logical simplifications such as removal of unneeded parentheses (''so that the returned condition will evaluate to the same result as the specified condition'') is stated in the CSSSupportsRule-specific conditionText definition inherited by conditional-rule subclasses (#the-csssupportsrule-interface, Overview.bs:861-876). Correctness fault (serializer equivalence violation): any consumer that persists or re-serializes conditionText silently flips matching semantics from satisfiable to never-match. Distinct from KI-5, which covers unbalanced-paren ''(( input rejection only.'
+description: 'Observed: serializeMediaCondition (src/MediaParser.ts ~L839-844) joins children with bare separators, dropping grouping parens around nested or/and operands; such conditions re-parse invalid and become ''not all''. API: parse() -> CSSMediaRule.conditionText. Expected: and/or operands must be <media-in-parens> (mediaqueries-4 #mq-syntax Overview.bs:900-904); conditionText serializes unsimplified (css-conditional-3 #the-cssconditionrule-interface :789). Impact: persisted conditionText silently flips matching from satisfiable to never-match. Distinct from KI-5 (unbalanced-paren rejection).'
 affected_requirements:
     - SYS-REQ-260823-MRT1
 evidence_manifests:
@@ -19,6 +19,10 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not persist or compare against serialized conditionText from this engine; keep the original source text for round-trips.
 remediation: In serializeMediaCondition, parenthesize every multi-child media-condition operand before joining with ' and '/' or ' (or serialize from the original token stream), preserving <media-in-parens> structure end-to-end.
+notes:
+    - '2026-08-25: F2 ledger-hygiene description compression to <=600 chars (Observed/API/Expected/Impact shape); every dropped detail relocated verbatim here, zero content removed. Relocated exact inputs: parsing ''@media ((width >= 100px) or (grid)) and (hover){div{}}'' yields conditionText ''(width >= 100px) or (grid) and (hover)'', which RE-PARSES as an invalid mixed and/or chain and serializes as ''not all''; ''@media screen and ((color) or (monochrome))'' likewise degrades to ''not all''. Relocated spec quotes/ranges: css-conditional-3 #the-cssconditionrule-interface (Overview.bs:752-795) requires conditionText on getting to return ''the result of serializing the associated condition'' (:789); the prohibition of logical simplifications such as removal of unneeded parentheses (''so that the returned condition will evaluate to the same result as the specified condition'') is stated in the CSSSupportsRule-specific conditionText definition inherited by conditional-rule subclasses (#the-csssupportsrule-interface, Overview.bs:861-876). serializeMediaCondition joins children with the bare separator literal '' <op> ''.'
+    - '2026-08-25: F2 dedup pairing resolution for the KI-31/KI-115 near-duplicate pair (audits found asymmetric cross-referencing): canonical seat goes to KI-115 as the older filing (created 2026-08-23T13:30:44Z vs this file''s 2026-08-23T13:41:59Z). Both stay open because a real trigger difference exists (grouped negation vs nested or/and operands); added the matching do_not_refile_as pointer instead of merging.'
+    - 'Calibration rule (2026-08-25, F2): untrusted_attacker marks hostile-input REACHABILITY of the affected API surface, not adversarial intent; attacker_profitability false reflects pure correctness impact.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -43,6 +47,18 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-31.yaml
+    - at: "2026-08-25T06:22:37Z"
+      by: agent:champ
+      action: edit
+      detail: set-description,append-note
+    - at: "2026-08-25T06:22:48Z"
+      by: agent:champ
+      action: edit
+      detail: append-note,do-not-refile-as
+    - at: "2026-08-25T06:37:02Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -70,4 +86,4 @@ poc_quality:
 dedup_armor: |
     serializeMediaCondition drops grouping parentheses between and/or operands, corrupting condition semantics on re-parse. Distinct from KI-5 (unbalanced-paren input recovery) and KI-41 (Parser-API adapter joins prelude tokens with '' - token-stream layer). Do not merge into generic media-text normalization without re-parse semantic-equivalence evidence.
 kill_domain: condition_serialization_equivalence
-do_not_refile_as: unbalanced-paren '(( media query serialization as not all (KI-5)
+do_not_refile_as: 'unbalanced-paren ''(( media query serialization as not all (KI-5); grouped-negation media-condition round-trip collapse (canonical: KI-115): same serializeMediaCondition paren-loss subsystem; this KI pins nested or/and operand grouping specifically'

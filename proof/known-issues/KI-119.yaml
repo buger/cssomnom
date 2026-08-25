@@ -48,10 +48,10 @@ poc_quality:
     real_infrastructure: true
     quantitative_impact: true
     control_test: true
-    untrusted_attacker: true
+    untrusted_attacker: false
     current_deployment_relevance: true
     honest_severity: true
-    attacker_profitability: true
+    attacker_profitability: false
     reproducible: true
     no_inflation: true
     operational_path_verified: true

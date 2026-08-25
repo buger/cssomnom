@@ -22,6 +22,8 @@ mitigation: Do not feed CSSMediaRule.conditionText back into parse() and expect 
 remediation: Preserve (or re-derive) the grouping parentheses of nested condition terms when reconstructing conditionText so serialized text re-parses to the same media query.
 notes:
     - 'Evidence captured via ''proof evidence capture KI-115'' by genuine re-execution at 2026-08-23T13:30:53Z (proof/evidence/ki-115.yaml); reproducer ran red twice before filing (exit 1 both runs: 7 tests, 5 green controls incl. all asserted mq-invalid-media-type-005 rows, 2 defect failures). Scope correction vs hunt briefing recorded: bare ''@media (x){}'' staying ''(x)'' is spec-correct per test_media_queries.html expression_should_be_unknown; only the grouped-negation round-trip collapse is the defect. Bound to draft SYS-REQ-260823-EEQN created through ''proof req new''; informal until cssom variables can be declared.'
+    - '2026-08-25: F2 dedup pairing resolution: designated canonical for the KI-31/KI-115 near-duplicate pair as the older filing (created 2026-08-23T13:30:44Z; KI-31 followed at 13:41:59Z). Both remain open - genuine trigger difference (this file pins not-under-grouping round-trip collapse; KI-31 pins nested or/and operand grouping), same serializeMediaCondition paren-loss subsystem.'
+    - '2026-08-25 (F2): canonical seat for the media-condition paren-loss cluster is THIS file (KI-115); KI-31 is the cross-linked sibling.'
 owner: agent:ox-alpha
 review_date: "2026-09-23"
 release_disposition: ship_with_known_issue
@@ -46,6 +48,14 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-115.yaml
+    - at: "2026-08-25T06:22:48Z"
+      by: agent:champ
+      action: edit
+      detail: append-note
+    - at: "2026-08-25T06:37:03Z"
+      by: agent:ox-alpha
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

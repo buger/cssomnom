@@ -27,7 +27,7 @@ poc_quality:
     untrusted_attacker: true
     current_deployment_relevance: true
     honest_severity: true
-    attacker_profitability: true
+    attacker_profitability: false
     reproducible: true
     no_inflation: true
     operational_path_verified: true
