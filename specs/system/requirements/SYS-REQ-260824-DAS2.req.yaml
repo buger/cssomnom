@@ -29,21 +29,16 @@ verification:
     formalization_status: valid
     review:
         status: in_review
-        reviewer: "agent:champ (REVIEW-53 pending-loop-gate)"
+        reviewer: agent:champ (REVIEW-53 pending-loop-gate)
         reviewed_at: "2026-08-24T17:20:00Z"
         ai_generated: false
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-24T12:10:10Z"
     last_modified_by: human:Leonid Bugaev
-    last_modified_at: "2026-08-24T12:29:06Z"
+    last_modified_at: "2026-08-26T16:26:32Z"
 obligation_checklist:
     - nominal
-obligation_deferrals:
-    - obligation_class: nominal
-      reason: 'Positive witness exists untagged: tests/mcdc-cascade-vars.test.ts:177-198 parses 4-part slash forms while hsl() and 5-part lists fall through unparsed; triple-form requirement tag lands with the next tests batch (tests/** frozen this batch).'
-      tracking: variable-model-cleanup
-      owner: human:Leonid Bugaev
 lifecycle:
     change_history:
         - date: "2026-08-24T12:28:44Z"
