@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260822-7R6Z
+parent: SYS-REQ-260822-YQQZ
 component: tokenizer
 rationale: 'Decomposes SW-REQ-260822-7R6Z causally at the cap edge: the >6 branch both stops and preserves; verified live (''\1234567'' serializes as U+FFFD followed by literal ''7'').'
 tags: []
@@ -24,6 +24,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260822-YQQZ
         - SW-REQ-260822-7R6Z
     components:
         - tokenizer

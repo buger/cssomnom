@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260821-7M07
+parent: SYS-REQ-260821-SBJ7
 component: tokenizer
 rationale: 'Decomposes SW-REQ-260821-7M07 causally: the EOF-terminated terminal condition is the distinctive batch contract; verified live via tokenize() on ''.a { color: red }'' ending in EOF with empty originalText.'
 tags: []
@@ -24,6 +24,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260821-SBJ7
         - SW-REQ-260821-7M07
     components:
         - tokenizer

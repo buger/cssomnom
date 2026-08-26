@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260821-FWNH
+parent: SYS-REQ-260821-ZXZW
 component: cascade
 rationale: 'Decomposes SW-REQ-260821-FWNH causally: the tie boundary and the specificity crossing are the deciding edges of the sort; verified live (''.t{color:red}.t{color:blue}'' -> blue; ''#x/.t/body .t'' ordering -> body .t wins).'
 tags: []
@@ -23,6 +23,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260821-ZXZW
         - SW-REQ-260821-FWNH
     components:
         - cascade

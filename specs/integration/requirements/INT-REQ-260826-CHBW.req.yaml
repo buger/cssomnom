@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260821-QV2H
+parent: SYS-REQ-260821-SBJ7
 component: tokenizer
 rationale: 'Decomposes SW-REQ-260821-QV2H causally at the chunk-split edge: withholding semantics of the incomplete trailing token; verified live (appendChunk(''.a { col'') yields the completed prefix tokens only, ''color'' reassembles after the completing chunk).'
 tags: []
@@ -24,6 +24,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260821-SBJ7
         - SW-REQ-260821-QV2H
     components:
         - tokenizer

@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260822-73TM
+parent: SYS-REQ-260822-AACP
 component: parser
 rationale: 'Decomposes SW-REQ-260822-73TM causally: the lowercase fold + hasOwn table hit is the dispatch dimension that produces a typed CSSOM rule; verified live (mixed-case @MEDIA -> CSSMediaRule, @-WEBKIT-KEYFRAMES alias -> CSSKeyframesRule, @__proto__ -> CSSAtRule fallback).'
 tags: []
@@ -24,6 +24,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260822-AACP
         - SW-REQ-260822-73TM
     components:
         - parser

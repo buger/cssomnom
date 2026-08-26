@@ -11,7 +11,7 @@ informal_verification:
     method: ""
     evidence: ""
     verified: false
-parent: SW-REQ-260824-CAHE
+parent: SYS-REQ-260824-DAS2
 component: cascade
 rationale: 'Decomposes SW-REQ-260824-CAHE causally at the arity edges: the <3 and >4 gates both reject and retain; verified live (hsl(0,100%) and hsl(1,2,3,4,5) round-trip unchanged).'
 tags: []
@@ -24,6 +24,7 @@ references:
       id: README.md
 traces:
     satisfies:
+        - SYS-REQ-260824-DAS2
         - SW-REQ-260824-CAHE
     components:
         - cascade
