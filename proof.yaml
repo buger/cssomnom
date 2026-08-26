@@ -263,6 +263,66 @@ project:
                 command: node --experimental-strip-types --test proof/reproducers/KI-105-stylesheet-invalid-display-overlay-260822.ts
                 expected: fail
                 reason: open known issue tripwire — see KI-105
+            # Typed-OM readiness tripwires (ts-readiness-1..10): one lane per
+            # expected-red witness in tests/ts-readiness.witness.ts, selected via
+            # --test-name-pattern "ts-r{N}\b" so partial unlocks flip lane by
+            # lane. Both subsystems are frozen by refusal, not defect:
+            # computedStyleMap ships only through src/browser-entry.ts and the
+            # relative-color engine is unimplemented (docs/proof-escape-
+            # ki-122-123.md appendix A.1; V-TYPED-OM-COMPUTED-UNITS;
+            # V-RELATIVE-COLOR-ENGINE). When a witness goes green, remove its
+            # `expected: fail` + `reason` pair (or delete the lane) in the same
+            # change as the unlock; controls in that file stay out of lanes.
+            ts-readiness-1-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r1\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-style surface — computedStyleMap export absent from src/index.ts at HEAD (appendix A.1)
+            ts-readiness-2-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r2\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-style surface — headless StylePropertyMapReadOnly entry path unimplementable until the export unlock
+            ts-readiness-3-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r3\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-unit mass (V-TYPED-OM-COMPUTED-UNITS leg 1) — em resolution needs element font-size context
+            ts-readiness-4-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r4\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-unit mass (V-TYPED-OM-COMPUTED-UNITS leg 1) — percentage resolution needs container width context
+            ts-readiness-5-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r5\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-unit mass (V-TYPED-OM-COMPUTED-UNITS leg 1) — font-weight keyword canonicalization rides the computed map
+            ts-readiness-6-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r6\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-unit mass (V-TYPED-OM-COMPUTED-UNITS leg 1) — letter-spacing normal computes to zero on the same surface
+            ts-readiness-7-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r7\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen computed-unit mass (V-TYPED-OM-COMPUTED-UNITS leg 1) — opacity clamps into the unit range at computed-value time
+            ts-readiness-8-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r8\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen easing canonicalization rows (V-TYPED-OM-COMPUTED-UNITS leg 2) — css-easing-2 steps() canonical form needs computed get
+            ts-readiness-9-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r9\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen relative-color engine (V-RELATIVE-COLOR-ENGINE) — rgb(from ...) channel computation blocked behind the KI-117 unlock
+            ts-readiness-10-tripwire:
+                language: ts
+                command: node --experimental-strip-types --test "--test-name-pattern=ts-r10\b" tests/ts-readiness.witness.ts
+                expected: fail
+                reason: frozen relative-color engine (V-RELATIVE-COLOR-ENGINE) — lch(from ...) origin extraction and channel math blocked behind the KI-117 unlock
         # Opt-in DoS fuzz lane (proof audit --fuzz / evidence_type: fuzz).
         # Not on default tests_pass. Runs the annotated cssomnom css-fuzz
         # file, including `deep nesting gate against cssomnom` and
