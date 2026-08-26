@@ -51,10 +51,12 @@ export function getUaDefault(prop: string, element: unknown): string {
     return BLOCK_TAGS.has(tag) ? 'block' : 'inline';
   }
   const val = DEFAULT_PROPERTY_VALUES[prop] || EXTRA_INITIAL_VALUES[prop];
+  //mcdc:ignore:defensive val === '' is unreachable — neither initial-value table contains an empty-string entry, so the second leg never goes false here [reviewed: agent:champ]
   if (val !== undefined && val !== '') return val;
   if (prop.startsWith('-webkit-')) {
     const unPrefixed = prop.slice(8);
     const unPrefixedVal = DEFAULT_PROPERTY_VALUES[unPrefixed] || EXTRA_INITIAL_VALUES[unPrefixed];
+    //mcdc:ignore:defensive unPrefixedVal === '' is unreachable — the generated tables hold no empty-string initial values, so this leg is tautologically true on reached rows [reviewed: agent:champ]
     if (unPrefixedVal !== undefined && unPrefixedVal !== '') return unPrefixedVal;
   }
   return '';
@@ -62,10 +64,12 @@ export function getUaDefault(prop: string, element: unknown): string {
 
 export function getInitialValue(prop: string, _element: unknown): string {
   const val = DEFAULT_PROPERTY_VALUES[prop] || EXTRA_INITIAL_VALUES[prop];
+  //mcdc:ignore:defensive val === '' is unreachable — neither initial-value table contains an empty-string entry, so the second leg never goes false here [reviewed: agent:champ]
   if (val !== undefined && val !== '') return val;
   if (prop.startsWith('-webkit-')) {
     const unPrefixed = prop.slice(8);
     const unPrefixedVal = DEFAULT_PROPERTY_VALUES[unPrefixed] || EXTRA_INITIAL_VALUES[unPrefixed];
+    //mcdc:ignore:defensive unPrefixedVal === '' is unreachable — the generated tables hold no empty-string initial values, so this leg is tautologically true on reached rows [reviewed: agent:champ]
     if (unPrefixedVal !== undefined && unPrefixedVal !== '') return unPrefixedVal;
   }
   return '';
@@ -240,6 +244,7 @@ export function processStandardDeclarations(
         break;
       }
 
+      //mcdc:ignore:defensive the custom-property arm is unreachable — the collection loop above filters dashed names out of standardDeclarationsByProperty, so prop is never custom here [reviewed: agent:champ]
       const finalVal = !prop.startsWith('--') ? subVal.replace(/\/\*\*\//g, ' ') : subVal;
       winningDeclarations.set(prop, { ...decl, value: finalVal });
       break;

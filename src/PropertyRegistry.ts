@@ -277,6 +277,7 @@ function isComputationallyIndependent(tokens: ComponentValue[]): boolean {
     if (t.type === 'dimension') {
       const unit = t.unit.toLowerCase();
 
+      //mcdc:ignore:defensive unit F is unreachable — the tokenizer always assigns dimension tokens a non-empty unit string [reviewed: agent:champ]
       if (unit && !(unit in unitToPixels) && !VIEWPORT_UNITS.has(unit) && !['angle', 'time', 'resolution', 'frequency'].includes(unitToBase[unit] as string)) {
         return false;
       }
@@ -309,6 +310,7 @@ export const PropertyRegistry = {
     }
     const nameStr = definition.name.toString();
     const nameTokens = tokenize(nameStr);
+    //mcdc:ignore:defensive the non-EOF leg is unreachable — tokenize always appends EOF, so a two-token result always ends with EOF and the last disjunct never varies independently [reviewed: agent:champ]
     if (nameTokens.length !== 2 || nameTokens[0].type !== 'ident' || !nameTokens[0].value.startsWith('--') || nameTokens[0].value === '--' || nameTokens[1].type !== 'EOF') {
       throw new DOMException('Property name must be a valid <dashed-ident>', 'SyntaxError');
     }

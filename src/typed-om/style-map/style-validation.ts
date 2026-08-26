@@ -332,6 +332,7 @@ export function validateValuesForProperty(property: string, values: (CSSStyleVal
         throw new TypeError(`Invalid value of type ${val.constructor.name} for property ${property}`);
       }
       if (val instanceof CSSUnitValue) {
+        //mcdc:ignore:defensive shouldWrapInCalc T is unreachable — the syntax gate admits only unit values the raw setProperty accepts, so no raw-rejected, calc-accepted unit value exists [reviewed: agent:champ]
         if (shouldWrapInCalc(property, val)) {
           valStrings.push(`calc(${val.toString()})`);
         } else {

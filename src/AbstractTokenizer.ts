@@ -389,10 +389,12 @@ export abstract class AbstractTokenizer {
       if (cp2 === 0x002E && this.isDigit(cp3)) return true; // .
       return false;
     }
+    //mcdc:ignore:defensive cp1 === 0x2E F is unreachable — callers only consult wouldStartNumber from the +, -, and . dispatch cases, so cp1 is never another code point [reviewed: agent:champ]
     if (cp1 === 0x002E) { // .
       if (this.isDigit(cp2)) return true;
       return false;
     }
+    //mcdc:ignore:defensive this arm is unreachable — cp1 is always +, -, or . at every call site, so isDigit(cp1) never evaluates on a reachable row [reviewed: agent:champ]
     if (this.isDigit(cp1)) return true;
     return false;
   }

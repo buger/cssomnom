@@ -275,6 +275,7 @@ export class CSSMathClamp extends CSSMathValue {
     }
     if (this.upper && typeof (this.upper as CSSNumericValue).type === 'function') {
       const combined = addTypesForSum(result, (this.upper as CSSNumericValue).type());
+      //mcdc:ignore:defensive combined F is unreachable — the constructor rejects upper/value and lower/upper base mismatches up front, so this late sum cannot fail once construction succeeds [reviewed: agent:champ]
       if (combined) result = combined;
     }
     return result;

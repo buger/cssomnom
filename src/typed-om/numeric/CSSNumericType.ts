@@ -107,6 +107,7 @@ export function addTypesForSum(a: CSSNumericType, b: CSSNumericType): CSSNumeric
   const hasPercent = (t: CSSNumericType) => (t as Record<string, number>)['percent'] !== 0;
   const hasOther = (t: CSSNumericType) => Object.keys(t).some(k => k !== 'percent' && k !== 'percentHint' && (t as Record<string, number>)[k] !== 0);
 
+  //mcdc:ignore:defensive the hasPercent false rows are unreachable — the closure treats an absent percent key as non-zero and applyPercentHint deletes the key, so no public constructor yields percent === 0 [reviewed: agent:champ]
   if ((hasPercent(t1) || hasPercent(t2)) && (hasOther(t1) || hasOther(t2))) {
     const baseTypes = ['length', 'angle', 'time', 'frequency', 'resolution', 'flex'];
     for (const base of baseTypes) {

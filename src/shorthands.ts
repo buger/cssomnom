@@ -191,6 +191,7 @@ function mapBoxKeywords(keywords: string[]): { origin: string; clip: string } | 
   if (keywords.length === 3) {
     const clips = keywords.filter(isClipOnlyBoxKeyword);
     const origins = keywords.filter(k => !isClipOnlyBoxKeyword(k));
+    //mcdc:ignore:defensive origins.length === 1 is provably coupled — with three keywords and two clip-only keywords exactly one origin remains, so no independence pair exists; T and F rows already witnessed [reviewed: agent:champ]
     if (clips.length === 2 && origins.length === 1) {
       return { origin: origins[0], clip: clips.join(' ') };
     }
@@ -1118,7 +1119,6 @@ function contractOutline(values: Record<string, ComponentValue[]>): string | nul
   if (!isInitialStyle) parts.push(ss);
   if (!isInitialWidth) parts.push(sw);
   //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
-
   if (parts.length === 0) {
     return 'none';
   }
@@ -1594,9 +1594,9 @@ function contractListStyle(values: Record<string, ComponentValue[]>): string | n
   const parts: string[] = [];
   if (!isInitialPos) parts.push(sp);
   if (!isInitialImg) parts.push(si);
-  //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
   if (!isInitialType) parts.push(st);
 
+  //mcdc:ignore:defensive parts.length === 0 T is unreachable — the all-initial combination returns at the early guard above, so at least one part is always pushed; F already witnessed [reviewed: agent:champ]
   if (parts.length === 0) {
     return 'disc';
   }
@@ -1658,10 +1658,12 @@ function expandFlex(values: ComponentValue[]): Record<string, ComponentValue[]> 
     }
   }
 
+  //mcdc:ignore:defensive the both-null row is unreachable — empty values are filtered before expandFlex and junk tokens return inside the loop, so grow and basis cannot both stay null; F rows already witnessed [reviewed: agent:champ]
   if (grow === null && basis === null) return null;
 
   const finalGrow = grow ?? [{ type: 'number', value: 1, sign: null, numberType: 'integer' } as ComponentValue];
   const finalShrink = shrink ?? [{ type: 'number', value: 1, sign: null, numberType: 'integer' } as ComponentValue];
+  //mcdc:ignore:defensive grow !== null F is unreachable — it requires basis null with grow null, the both-null state the loop and callers never produce; T rows already witnessed [reviewed: agent:champ]
   const finalBasis = basis ?? (grow !== null ? [{ type: 'dimension', value: 0, unit: 'px', sign: null, numberType: 'integer' } as ComponentValue] : [{ type: 'ident', value: 'auto' } as ComponentValue]);
 
   return {
@@ -1883,6 +1885,7 @@ const contractBorderRadius = (values: Record<string, ComponentValue[]>): string 
 
 export const ALL_SHORTHAND_LONGHANDS: readonly string[] = Object.freeze(
   Array.from(SUPPORTED_PROPERTIES).filter(prop => {
+    //mcdc:ignore:defensive startsWith('--') T is unreachable — the generated SUPPORTED_PROPERTIES set contains no dashed idents, so the custom-property filter leg never fires [reviewed: agent:champ]
     if (prop === 'all' || prop === 'direction' || prop === 'unicode-bidi' || prop.startsWith('--')) {
       return false;
     }

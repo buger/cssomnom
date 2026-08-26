@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-5-media-unbalanced.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-23T08:27:24Z"
+executed_at: "2026-08-26T19:26:00Z"
 input_set:
     - proof/reproducers/KI-5-media-unbalanced.ts
 freshness_hashes:
-    proof/reproducers/KI-5-media-unbalanced.ts: sha256:d51ec2724e846ee22563d2d1148523f03de64c77b9f2382f8a7cdad6e99ad856
+    proof/reproducers/KI-5-media-unbalanced.ts: sha256:77fc4b880172e09ea96be2b3461c2b1f101008825dfa8afcffae5bc1c4fcdf11
 known_issues:
     - KI-5

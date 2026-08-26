@@ -54,6 +54,10 @@ history:
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T19:25:59Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-14.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

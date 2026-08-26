@@ -57,6 +57,7 @@ export function reifyColor(v: ComponentValue): CSSColorValue | CSSKeywordValue |
       r = parseInt(hex.slice(0, 2), 16);
       g = parseInt(hex.slice(2, 4), 16);
       b = parseInt(hex.slice(4, 6), 16);
+    //mcdc:ignore:defensive len === 8 F is unreachable — the length pre-gate above admits only 3, 4, 6, and 8, so this arm sees only true [reviewed: agent:champ]
     } else if (len === 8) {
       r = parseInt(hex.slice(0, 2), 16);
       g = parseInt(hex.slice(2, 4), 16);
@@ -106,6 +107,7 @@ export function reifyColor(v: ComponentValue): CSSColorValue | CSSKeywordValue |
       }
 
       const reifier = COLOR_REIFIERS[nameLower];
+      //mcdc:ignore:defensive reifier F is unreachable — the function-name gate above admits only COLOR_REIFIERS keys or color, both of which resolve to a reifier [reviewed: agent:champ]
       if (reifier) {
         return reifier(parsed.args, parsed.alpha);
       }

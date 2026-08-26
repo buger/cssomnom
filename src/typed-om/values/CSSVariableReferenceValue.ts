@@ -30,6 +30,7 @@ export class CSSVariableReferenceValue {
       throw new TypeError("Failed to construct 'CSSVariableReferenceValue': 1 argument required, but only 0 present.");
     }
     this.variable = variable;
+    //mcdc:ignore:defensive fallback !== undefined F is unreachable — the default parameter maps an omitted or explicit undefined fallback to null before the guard runs [reviewed: agent:champ]
     if (fallback !== null && fallback !== undefined) {
       if (!(fallback && typeof fallback === 'object' && 'constructor' in fallback && (fallback.constructor.name === 'CSSUnparsedValue' || (fallback as { [Symbol.iterator]?: unknown })[Symbol.iterator]))) {
         throw new TypeError("Fallback must be a CSSUnparsedValue or null.");

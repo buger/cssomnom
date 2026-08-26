@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-11-position-grammar.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:00:55Z"
+executed_at: "2026-08-26T19:25:58Z"
 input_set:
     - proof/reproducers/KI-11-position-grammar.ts
 freshness_hashes:
-    proof/reproducers/KI-11-position-grammar.ts: sha256:baca52056cba950ffa0886d6c265f28341b15e5ce9c06c5a2b2a63e6d26d744c
+    proof/reproducers/KI-11-position-grammar.ts: sha256:4621a04de3a81ba1662bc72d8d90d683db7f5938b1b39375ead480ab7ab72109
 known_issues:
     - KI-11

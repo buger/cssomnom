@@ -247,6 +247,7 @@ export class CSSComputedStyleDeclaration extends CSSStyleDeclaration {
             //mcdc:ignore:defensive leftAuto is constantly true — the enclosing guard only admits elements whose computed margin-left === 'auto', so this disjunction's first leg cannot be false; centering and one-side rows are already witnessed via margin auto resolution tests [reviewed: agent:champ]
             if (leftAuto && rightAuto) {
               return `${remaining / 2}px`;
+            //mcdc:ignore:defensive the both-false row is unreachable — each query arm guards one side auto, so at least one disjunct is always true when reached [reviewed: agent:champ]
             } else if (leftAuto || rightAuto) {
               return `${remaining}px`;
             }

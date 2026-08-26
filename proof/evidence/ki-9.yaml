@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-9-streaming-peek-eof.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:00:33Z"
+executed_at: "2026-08-26T19:26:01Z"
 input_set:
     - proof/reproducers/KI-9-streaming-peek-eof.ts
 freshness_hashes:
-    proof/reproducers/KI-9-streaming-peek-eof.ts: sha256:6c04f00b488e86b726397ad68f81bc275223aed23dc7217f4c056ae8fce42f3a
+    proof/reproducers/KI-9-streaming-peek-eof.ts: sha256:224794b5fde9a82610e2a34110569d96c51e803c2d2f384d7ff59dd0a86eca31
 known_issues:
     - KI-9

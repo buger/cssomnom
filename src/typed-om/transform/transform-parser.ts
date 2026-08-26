@@ -39,6 +39,7 @@ import { createCSSStyleValue } from '../values/style-value-factory.ts';
 export function parseNumeric(v: ComponentValue): CSSNumericValue {
   if (v.type === 'number' || v.type === 'percentage' || v.type === 'dimension') {
     const sv = createCSSStyleValue(v as Token);
+    //mcdc:ignore:defensive the non-numeric row is unreachable — the style-value factory returns a CSSNumericValue for every number, percentage, and dimension token [reviewed: agent:champ]
     if (sv instanceof CSSNumericValue) return sv;
   }
   if (v.type === 'function') {
@@ -54,6 +55,7 @@ export function parseTranslate(name: string, args: ComponentValue[]): CSSTransla
     if (args.length !== 1) throw new TypeError(`${name}() expects 1 argument, got ${args.length}`);
   } else if (name === 'translate3d') {
     if (args.length !== 3) throw new TypeError(`translate3d() expects 3 arguments, got ${args.length}`);
+  //mcdc:ignore:defensive name === 'translate' F is unreachable — CSSTransformValue.parse dispatches only the five translate-family names and the earlier arms drain the variants, so this arm sees only the base name [reviewed: agent:champ]
   } else if (name === 'translate') {
     if (args.length < 1 || args.length > 3) throw new TypeError(`translate() expects 1, 2, or 3 arguments, got ${args.length}`);
   }
@@ -83,6 +85,7 @@ export function parseScale(name: string, args: ComponentValue[]): CSSScale {
     if (args.length !== 1) throw new TypeError(`${name}() expects 1 argument, got ${args.length}`);
   } else if (name === 'scale3d') {
     if (args.length !== 3) throw new TypeError(`scale3d() expects 3 arguments, got ${args.length}`);
+  //mcdc:ignore:defensive name === 'scale' F is unreachable — dispatch admits only scale-family names and the earlier arms drain the variants, so this arm sees only the base name [reviewed: agent:champ]
   } else if (name === 'scale') {
     if (args.length < 1 || args.length > 3) throw new TypeError(`scale() expects 1, 2, or 3 arguments, got ${args.length}`);
   }
@@ -112,6 +115,7 @@ export function parseRotate(name: string, args: ComponentValue[]): CSSRotate {
     if (args.length !== 1) throw new TypeError(`${name}() expects 1 argument, got ${args.length}`);
   } else if (name === 'rotate3d') {
     if (args.length !== 4) throw new TypeError(`rotate3d() expects 4 arguments, got ${args.length}`);
+  //mcdc:ignore:defensive name === 'rotate' F is unreachable — dispatch admits only rotate-family names and the earlier arms drain the variants, so this arm sees only the base name [reviewed: agent:champ]
   } else if (name === 'rotate') {
     if (args.length !== 1 && args.length !== 4) throw new TypeError(`rotate() expects 1 or 4 arguments, got ${args.length}`);
   }

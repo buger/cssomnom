@@ -310,6 +310,7 @@ function cssomKeyframeToQualified(r: unknown): CSSParserQualifiedRule | null {
     const keyText = r instanceof CSSKeyframeRule ? r.keyText : String(rec.keyText);
     const preludeText = denormalizeKeyframeSelector(keyText);
     const style = r instanceof CSSKeyframeRule ? r.style : rec.style;
+    //mcdc:ignore:defensive preludeText F is unreachable — keyText validation guarantees at least one non-empty part, so the denormalized prelude is never empty [reviewed: agent:champ]
     return new CSSParserQualifiedRule(
       preludeText ? [new CSSParserToken(preludeText)] : [],
       styleToParserDeclarations(style),

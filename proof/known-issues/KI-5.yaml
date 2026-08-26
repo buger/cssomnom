@@ -40,45 +40,41 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
-
     - at: "2026-08-21T20:15:20Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
-
     - at: "2026-08-21T20:20:16Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-5.yaml
-
     - at: "2026-08-21T20:32:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
-
     - at: "2026-08-21T21:00:00Z"
       by: agent:grok-4.6
       action: created
-
     - at: "2026-08-22T05:37:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=open
-
     - at: "2026-08-22T06:05:49Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=fixed
-
     - at: "2026-08-24T16:29:55Z"
       by: agent:champ
       action: edit
       detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
-
     - at: "2026-08-24T16:30:10Z"
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T19:26:00Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-5.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

@@ -41,22 +41,23 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=fixed,add-command
-
     - at: "2026-08-22T12:00:00Z"
       by: agent:grok-4.6
       action: created
       detail: |
         Live position-grammar holes after fe7defa restore. Overlay reproducer FAILS. Distinct from KI-3. No product fix. No DEFECT.
-
     - at: "2026-08-24T16:29:55Z"
       by: agent:champ
       action: edit
       detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
-
     - at: "2026-08-24T16:30:11Z"
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T19:25:58Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-11.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

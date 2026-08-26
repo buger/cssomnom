@@ -7,7 +7,7 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-26T15:05:12Z"
+executed_at: "2026-08-26T19:26:00Z"
 input_set:
     - proof/reproducers/KI-7-import-stylesheet-null.ts
     - proof/reproducers/KI-7-import-url-token.ts
@@ -20,7 +20,7 @@ freshness_hashes:
     proof/reproducers/KI-7-import-url-token.ts: sha256:b3184291c4d76dadee9e24046fc3471190b35f46806f046a851a5464b308861d
     proof/reproducers/fixtures/x.css: sha256:7ecd2da96c2b58fdb9f239b8159e64c070c41d23702aa30ba02f988b6a13cb71
     src/CSSOM.ts: sha256:aba23234f0cb5d9c362457e895efacb86ccd55595842205a78f3021cc15d9318
-    src/parser.ts: sha256:37fa9999b11b87ec0644d2fdb7d60e22d68c106554115ebc77f1fd728e16a514
+    src/parser.ts: sha256:6c048c4a9f3a1edc0174ab9a2914b41671c85907e7fce299c7ebca1e8b7e88a4
 known_issues:
     - KI-7
 problem_reports:

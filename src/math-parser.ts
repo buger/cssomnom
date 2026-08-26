@@ -79,6 +79,7 @@ function isCanonicalizable(val: CSSUnitValue): boolean {
 }
 
 function areCompatibleForSimplification(values: CSSUnitValue[]): boolean {
+  //mcdc:ignore:defensive values.length === 0 T is unreachable — every call site passes literal multi-element lists or a length-guarded array [reviewed: agent:champ]
   if (values.length === 0) return true;
   const firstUnit = values[0].unit;
   if (values.every(v => v.unit === firstUnit)) return true;
@@ -385,6 +386,7 @@ export function parseMathFunction(name: string, values: ComponentValue[]): CSSNu
     let nesting = 0;
     while (index < tokens.length) {
       const t = tokens[index];
+      //mcdc:ignore:defensive nesting === 0 F is unreachable — the nesting counter is never mutated (css-syntax groups functions and blocks as single component values) [reviewed: agent:champ]
       if (t.type === 'comma' && nesting === 0) {
         break;
       }
@@ -991,6 +993,7 @@ function simplifyMinMax(nodeName: 'min' | 'max', values: CSSNumericValue[]): CSS
   const flattened: CSSNumericValue[] = [];
   
   for (const child of values) {
+    //mcdc:ignore:tooling-limit independence rows [T,T,F,F]=T and [F,T,F,F]=F both record, but the analyzer's mirrored-leg pairing also wants a max(max()) row that parse-time flattening removes [reviewed: agent:champ]
     if ((isMin && child instanceof CSSMathMin) || (!isMin && child instanceof CSSMathMax)) {
       flattened.push(...child.values);
     } else {

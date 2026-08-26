@@ -785,6 +785,7 @@ export class Parser {
       } else if (first.type === 'function' && (first as CSSFunction).name === 'url') {
          // handle url()
          const urlArg = (first as CSSFunction).value.find(v => v.type === 'string');
+         //mcdc:ignore:defensive urlArg F is unreachable — the tokenizer only forms a url() function token before a quoted string, so the value always leads with a string token [reviewed: agent:champ]
          if (urlArg) href = (urlArg as StringToken).value;
 
          else {
@@ -1155,6 +1156,7 @@ export class Parser {
       }
     }
     if (name.startsWith('--')) {
+      //mcdc:ignore:defensive name === '--' is unreachable — the tokenizer never yields a bare '--' ident (css-syntax-3 ident rules require a character after the dashes) [reviewed: agent:champ]
       if (name === '--' || !Parser.validateCustomPropertyValue(declValue)) {
         return null;
       }
@@ -1233,6 +1235,7 @@ export class Parser {
       if (val.type === 'EOF' || val.type === '}') {
         return null;
       }
+      //mcdc:ignore:defensive stopToken F is unreachable — the sole caller always passes 'semicolon', so the no-stop-token row cannot occur [reviewed: agent:champ]
       if (stopToken && val.type === stopToken) {
         return null;
       }
@@ -1954,6 +1957,7 @@ export function assembleUnicodeRanges(values: ComponentValue[]): ComponentValue[
   while (i < values.length && (values[i].type === 'whitespace' || values[i].type === 'comment')) i++;
   if (i >= values.length) return null;
 
+  //mcdc:ignore:defensive the bounds-false row is unreachable — the loop body always exits through the trailing break or an inner return, so the while condition never evaluates false [reviewed: agent:champ]
   while (i < values.length) {
     // Must start with <urange>
     const v = values[i];

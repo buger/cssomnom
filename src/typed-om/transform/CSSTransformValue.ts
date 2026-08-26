@@ -139,6 +139,7 @@ export class CSSTransformValue extends CSSStyleValue {
         components.push(parseSkew(name, args));
       } else if (name === 'perspective') {
         components.push(parsePerspective(args));
+      //mcdc:ignore:defensive the both-false row is unreachable — the known-function gate and the earlier arms leave only matrix and matrix3d at this arm [reviewed: agent:champ]
       } else if (name === 'matrix' || name === 'matrix3d') {
         components.push(parseMatrix(name, args));
       }

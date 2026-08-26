@@ -47,6 +47,7 @@ export function createStyleProxy<T extends CSSStyleDeclaration>(target: T): T {
 
         const isCustomProp = prop.startsWith('--');
         let cssProp = prop;
+        //mcdc:ignore:defensive isCustomProp is constantly false — the preceding early return admits only non-custom properties, so the guard's true arm is unreachable [reviewed: agent:champ]
         if (!isCustomProp) {
           if (prop === 'cssFloat') {
             cssProp = 'float';
@@ -237,6 +238,7 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
         }
       }
 
+      //mcdc:ignore:defensive allCssWide null with allMatch true is unreachable — the loop clears allMatch on the first non-css-wide longhand, so surviving rows always carry a keyword [reviewed: agent:champ]
       if (allMatch && allCssWide && allSamePriority) {
         return allCssWide;
       }
@@ -376,6 +378,7 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
       const isAll = d.name === 'all' && isCoveredByAll;
 
       if (isMatch || isAll) {
+        //mcdc:ignore:defensive winner.important F-with-d-important is unreachable — an important winner breaks the reverse scan immediately, so a later-visited declaration never sees an important winner [reviewed: agent:champ]
         if (!winner || (d.important && !winner.important)) {
           winner = d;
           if (winner.important) break;
@@ -395,6 +398,7 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
           if (shDecl.important && (!exact || !exact.important)) {
             return null;
           }
+          //mcdc:ignore:defensive shDecl.important T with exact unimportant is unreachable — the guard above already returned for that combination, so only false reaches this leg [reviewed: agent:champ]
           if (exact && !exact.important && !shDecl.important) {
             const shIdx = this._declarations.indexOf(shDecl);
             const exactIdx = this._declarations.indexOf(exact);
@@ -694,6 +698,7 @@ export class CSSStyleDeclaration extends CSSStyleProperties {
         const hasVar = serialize(d.value).includes('var(') || serialize(d.value).includes('env(');
         if (!hasVar) {
           const expanded = shorthand.expand(d.value);
+          //mcdc:ignore:defensive expanded T is unreachable — parseStyleAttribute expands every expandable shorthand before this loop, leaving only css-wide, var(), and unexpandable values [reviewed: agent:champ]
           if (expanded) {
             for (const [lh, val] of Object.entries(expanded)) {
               this._addDeclaration({

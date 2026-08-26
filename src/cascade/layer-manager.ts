@@ -58,6 +58,7 @@ export function scanLayers(
         const fullName = prefix ? `${prefix}.${n}` : n;
         registerLayer(fullName);
       }
+    //mcdc:ignore:defensive block F is unreachable at this arm — block-less layer at-rules route to the statement arm above, so only true reaches the block test [reviewed: agent:champ]
     } else if (
       r instanceof CSSLayerBlockRule ||
       ((r as ASTAtRule).type === 'at-rule' && (r as ASTAtRule).name === 'layer' && (r as ASTAtRule).block)

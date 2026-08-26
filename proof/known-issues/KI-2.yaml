@@ -42,66 +42,59 @@ history:
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
-
     - at: "2026-08-21T18:24:24Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         SAT TRUE row (deviation_applies=T, documented_deviation_honored=T, replace_sync_parse_runs=T => TRUE) is blocked by this live hole, not mute. Overlay reproducer now carries that assignment as [known-issue] [ki: KI-2] immediately above the failing test. No product fix.
-
     - at: "2026-08-21T20:15:20Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
-
     - at: "2026-08-21T20:20:16Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-2.yaml
-
     - at: "2026-08-21T20:30:00Z"
       by: agent:grok-4.6
       action: created
       detail: |
         Live documented-deviation hole: CSSStyleSheet.replace parses inside queueMicrotask rather than Promise.resolve after replaceSync. Filed against SW-REQ-260821-PAKB / SYS-REQ-260821-GR67 MC/DC FALSE rows. No product fix. No DEFECT.
-
     - at: "2026-08-21T20:32:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
-
     - at: "2026-08-21T21:10:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Removed the claim that the overlay reproducer witnesses the PAKB SAT TRUE assignment as [known-issue]. The tripwire observes honored=F (cssRules empty on return) and must not claim honored=T. SAT TRUE remains named as blocked by this live hole (red is honest). No //mcdc:ignore on the SAT row. No product fix.
-
     - at: "2026-08-21T22:50:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Rewrote reproduction_steps, dedup_armor, and poc_quality for the fixed contract: cssRules is populated before await. Overlay runner PASSES. Unique-cause SAT TRUE is witnessed on tests/mcdc-witness-cssom.test.ts replace(); honored=F is //mcdc:ignore:defensive next to that replace() test.
-
     - at: "2026-08-22T05:37:50Z"
       by: agent:grok-4.6
       action: edit
       detail: set-description,set-mitigation,set-remediation,append-note,set-status=open
-
     - at: "2026-08-22T06:10:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Class-fix landed. Overlay GREEN twice. status=fixed.
-
     - at: "2026-08-24T16:29:55Z"
       by: agent:champ
       action: edit
       detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
-
     - at: "2026-08-24T16:30:10Z"
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T19:25:59Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-2.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

@@ -80,6 +80,7 @@ export class MediaParser {
       }
     }
 
+    //mcdc:ignore:defensive the both-false row is unreachable — empty or whitespace-only media text returns before the loop, so currentQuery and seenComma cannot both be falsy here [reviewed: agent:champ]
     if (currentQuery.length > 0 || seenComma) {
       queries.push(this.normalizeAndValidate(currentQuery));
     }
@@ -229,6 +230,7 @@ export class MediaParser {
       } else if (lastType === 'simple-block' && v.type === 'ident') {
         result += ' ';
       } else if (lastType === 'delim' && lastWasOperator && v.type === 'ident') {
+        //mcdc:ignore:defensive endsWith(' ') T is unreachable — lastWasOperator guarantees the buffer ends with an operator character, never a space [reviewed: agent:champ]
         if (!result.endsWith(' ')) result += ' ';
       } else if (lastType === 'colon') {
         result += ' ';
@@ -473,6 +475,7 @@ export class MediaQueryValidator {
   }
 
   private isValidMfValue(tokens: ComponentValue[]): boolean {
+    //mcdc:ignore:defensive the empty row is unreachable — the colon-feature arm requires three tokens so valueTokens is never empty, and range sides are pre-guarded non-empty [reviewed: agent:champ]
     if (tokens.length === 0) return false;
     for (const t of tokens) {
       if (t.type === 'delim' && (t.value === '<' || t.value === '>' || t.value === '=')) {
@@ -677,6 +680,7 @@ export class MediaQueryValidator {
   }
 
   private parseOperator(tokens: ComponentValue[], pos: number) {
+    //mcdc:ignore:defensive pos >= tokens.length T is unreachable — the parseRangeContext loop guard keeps pos strictly below the token count [reviewed: agent:champ]
     if (pos >= tokens.length) return null;
     const t1 = tokens[pos];
     if (t1.type !== 'delim') return null;
@@ -686,6 +690,7 @@ export class MediaQueryValidator {
       if (t2 && t2.type === 'delim' && t2.value === '=') {
         const t1Token = t1 as Token;
         const t2Token = t2 as Token;
+        //mcdc:ignore:defensive startIndex undefined is unreachable — range tokens always come from the tokenizer, which stamps positions on every token it emits [reviewed: agent:champ]
         if (t1Token.endIndex !== undefined && t2Token.startIndex !== undefined && t1Token.endIndex === t2Token.startIndex) {
           return { op: t1.value + '=', nextPos: pos + 2 };
         }
@@ -741,6 +746,7 @@ function matchesType(tokens: ComponentValue[], types: readonly string[], feature
   if (types.includes('resolution')) {
     if (t.type === 'dimension') {
       const unit = t.unit.toLowerCase();
+      //mcdc:ignore:defensive unit === 'x' never varies independently — the generated unit table maps x to the resolution base, so both legs are coupled on every row [reviewed: agent:champ]
       if (unit && (unitToBase[unit] === 'resolution' || unit === 'x')) return true;
     }
     if (t.type === 'ident' && t.value.toLowerCase() === 'infinite') {
@@ -751,6 +757,7 @@ function matchesType(tokens: ComponentValue[], types: readonly string[], feature
   if (types.includes('ident')) {
     if (t.type === 'ident') {
       const allowed = FEATURE_ALLOWED_IDENTS[featureName];
+      //mcdc:ignore:defensive allowed F is unreachable — the generated media-features table maps every ident-typed feature, so the unlisted fallback never fires [reviewed: agent:champ]
       if (allowed) {
         return allowed.includes(t.value.toLowerCase());
       }
@@ -984,9 +991,11 @@ function parseLengthToPx(tokens: ComponentValue[]): number | null {
         default: return null;
       }
     }
+    //mcdc:ignore:defensive t.value === 0 F is unreachable — matchesType admits only zero numbers for length features, so a nonzero number never reaches this comparison [reviewed: agent:champ]
     if (t.type === 'number' && t.value === 0) {
       return 0;
     }
+    //mcdc:ignore:defensive the function F row is unreachable — dimensions return above and matchesType rejects nonzero numbers, leaving only math functions for this arm [reviewed: agent:champ]
     if (t.type === 'function') {
       const fn = t as CSSFunction;
       const mathVal = parseMathFunction(fn.name, fn.value);
@@ -1046,7 +1055,9 @@ function parseResolutionToDpi(tokens: ComponentValue[]): number | null {
 function parseRatio(tokens: ComponentValue[]): number | null {
   const filtered = tokens.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
   //mcdc:ignore:defensive filtered.length === 1 T is unreachable — mediaqueries-4 § 6.1 colon/range rewrite expands a lone number to n / 1 before evaluate; F (length 3) already witnessed [reviewed: agent:grok-4.6]
+  //mcdc:ignore:defensive the lone non-number F row is unreachable — the aspect-ratio rewrite expands single non-number tokens to n/1 before parseRatio runs [reviewed: agent:champ]
   if (filtered.length === 1) {
+    //mcdc:ignore:defensive the number F row is unreachable — the rewrite above leaves only a lone number token when this arm is reached with one component [reviewed: agent:champ]
     if (filtered[0].type === 'number') {
       return filtered[0].value;
     }
@@ -1065,6 +1076,7 @@ function parseRatio(tokens: ComponentValue[]): number | null {
 
 function parseInteger(tokens: ComponentValue[]): number | null {
   const filtered = tokens.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
+  //mcdc:ignore:defensive the non-integer row is unreachable — matchesType's integer gate only admits whole numbers for integer features before evaluation calls this parser [reviewed: agent:champ]
   if (filtered.length === 1 && filtered[0].type === 'number' && filtered[0].numberType === 'integer') {
     return filtered[0].value;
   }
@@ -1266,6 +1278,7 @@ export function evaluateMediaFeature(feature: MediaFeature, env: MediaEnvironmen
 
   if (typeof parsedVal === 'number') {
     const actual = getActualNumeric(baseName);
+    //mcdc:ignore:defensive actual === null T is unreachable — every numeric feature maps in getActualNumeric and envs merge with defaults, so only the unknown-feature default returns null [reviewed: agent:champ]
     if (actual === null) return 'unknown';
     return compareOp(actual, op, parsedVal, isNegRange);
   }

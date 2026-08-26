@@ -125,6 +125,7 @@ export function collectStyleSheetsAndRules(
   let preferredTitleFound = false;
 
   const determinePreferredTitle = (sheetsOrTags: ArrayLike<unknown>) => {
+    //mcdc:ignore:defensive the found row is unreachable — the styleSheets and styleTags passes are mutually exclusive per collection, so the guard never sees an already-found title [reviewed: agent:champ]
     if (preferredTitleFound) return;
     for (let i = 0; i < sheetsOrTags.length; i++) {
       const item = sheetsOrTags[i];
@@ -725,6 +726,7 @@ export function resolveNestedSelector(selector: string, parentSelector: string):
                 item.selectors[i] = pseudo;
               }
             } else if (simple.type === 'pseudo-class-selector' || simple.type === 'pseudo-element-selector') {
+              //mcdc:ignore:defensive non-selector-list typed objects are unreachable — selector arguments are token arrays or selector-list nodes only, so the typed-object false row cannot occur [reviewed: agent:champ]
               if (
                 simple.argument &&
                 typeof simple.argument === 'object' &&

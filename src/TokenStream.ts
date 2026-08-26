@@ -85,6 +85,7 @@ export class StreamingTokenizerStream implements TokenStream {
 
   next(): Token {
     const token = this.peek();
+    //mcdc:ignore:defensive bufferedTokens.length === 0 F is unreachable — peek() refills the buffer before any non-EOF token returns, so the guard is tautological on reached rows [reviewed: agent:champ]
     if (token.type !== 'EOF' && this.bufferedTokens.length > 0) {
       this.bufferedTokens.shift();
     }

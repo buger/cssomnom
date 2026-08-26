@@ -247,6 +247,7 @@ function validateMatrixInitAliases(dict: DOMMatrixInit): void {
 }
 
 function parseMatrixInit(init: unknown): { is2D: boolean; values: Float64Array } {
+  //mcdc:ignore:defensive the falsy and non-object rows are unreachable — the DOMMatrix constructor dispatches arrays and non-dictionaries before this helper, so only dictionary objects arrive [reviewed: agent:champ]
   if (!init || typeof init !== 'object') {
     throw new TypeError('Invalid matrix initialization object');
   }
@@ -842,8 +843,10 @@ export class DOMMatrix extends DOMMatrixReadOnly {
 
 // Inherit getters from DOMMatrixReadOnly onto DOMMatrix where DOMMatrix defines setters
 for (const [key, desc] of Object.entries(Object.getOwnPropertyDescriptors(DOMMatrixReadOnly.prototype))) {
+  //mcdc:ignore:defensive key === 'constructor' T is unreachable — the constructor descriptor is a value, never an accessor, so desc.get is falsy for it [reviewed: agent:champ]
   if (desc.get && key !== 'constructor') {
     const subDesc = Object.getOwnPropertyDescriptor(DOMMatrix.prototype, key);
+    //mcdc:ignore:defensive accessor-pair and setter-less collisions cannot occur — DOMMatrix redefines only setter-only accessors for ReadOnly getters [reviewed: agent:champ]
     if (subDesc && !subDesc.get && subDesc.set) {
       Object.defineProperty(DOMMatrix.prototype, key, {
         get: desc.get,

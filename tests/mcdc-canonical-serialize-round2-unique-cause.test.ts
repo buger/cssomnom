@@ -74,7 +74,7 @@ function hashToken(value: string): Token {
 }
 
 /**
- * L223's v.type === "number" is MediaParser.ts:224; L234 is the shadowed
+ * L225's v.type === "number" is MediaParser.ts:226; L236 is the shadowed
  * else-if. A stack-discriminated getter unique-causes L234 T without taking
  * L223 (css-syntax-3 § 4.3.3 #number-token / mediaqueries-4 § 3.1).
  */
@@ -82,7 +82,7 @@ function hashUntilL234Number(): ComponentValue {
   return {
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:237\b/.test(stack) ? 'number' : 'hash';
+      return /MediaParser\.ts:239\b/.test(stack) ? 'number' : 'hash';
     },
     value: 'fff',
     hashType: 'unrestricted',
@@ -105,7 +105,7 @@ function typeAt(keep: number, rest: string, atKeep: string): ComponentValue {
 }
 
 /**
- * isOperator is MediaParser.ts:212. Serializing as a number then flipping to
+ * isOperator is MediaParser.ts:216. Serializing as a number then flipping to
  * delim "+" adds the after-op space so lastType stays number|function and
  * result.endsWith(" ") is T at the isRatioSlash arm (L217).
  */
@@ -113,11 +113,11 @@ function numberThenOperatorSpace(): ComponentValue {
   return {
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:215\b/.test(stack) ? 'delim' : 'number';
+      return /MediaParser\.ts:216\b/.test(stack) ? 'delim' : 'number';
     },
     get value() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:215\b/.test(stack) ? '+' : 16;
+      return /MediaParser\.ts:216\b/.test(stack) ? '+' : 16;
     },
     numberType: 'integer',
     sign: null,
@@ -130,11 +130,11 @@ function calcThenOperatorSpace(): ComponentValue {
     name: 'calc',
     get type() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:215\b/.test(stack) ? 'delim' : 'function';
+      return /MediaParser\.ts:216\b/.test(stack) ? 'delim' : 'function';
     },
     get value() {
       const stack = new Error().stack ?? '';
-      return /MediaParser\.ts:215\b/.test(stack) ? '+' : inner;
+      return /MediaParser\.ts:216\b/.test(stack) ? '+' : inner;
     },
   } as unknown as ComponentValue;
 }
@@ -180,7 +180,7 @@ describe('MC/DC round2 unique-cause: canonicalSerialize (mediaqueries-4 § 3.1 #
     restoreTo();
   });
 
-  test('L234 lastType number && v.type number T via stack/keep (shadowed by L223)', () => {
+  test('L236 lastType number && v.type number T via stack/keep (shadowed by L225)', () => {
     // T,T: L223's five v.type reads stay hash (not ident/number/dimension/delim/simple-block);
     // L234 then sees number and inserts the space L223 would have inserted.
     assert.equal(MediaParser.canonicalSerialize([num(1), hashUntilL234Number()]), '1 #fff');

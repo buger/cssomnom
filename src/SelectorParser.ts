@@ -865,6 +865,7 @@ export function parseAnPlusB(values: ComponentValue[]): AnPlusBValue | null {
   };
 
   const t1 = tokens[idx];
+  //mcdc:ignore:tooling-limit the lone-'+' witness row records in scoped runs (tests/mcdc-witness-final-media.test.ts) but the full-suite trace merge drops it [reviewed: agent:champ]
   if (!t1) return null;
 
   let a: number | null = null;

@@ -7,14 +7,14 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-10-fieldset-disabled.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-26T15:05:13Z"
+executed_at: "2026-08-26T19:25:58Z"
 input_set:
     - proof/reproducers/KI-10-fieldset-disabled.ts
     - tests/matcher.test.ts
     - src/matcher.ts
 freshness_hashes:
     proof/reproducers/KI-10-fieldset-disabled.ts: sha256:68a45c02dc978835b2d4558d1aa7d04aa972308ced647ed0063595d9e56f3559
-    src/matcher.ts: sha256:c1f556b487777f517859844afc0083a23a4116502b83afa945b748b6c4d82061
+    src/matcher.ts: sha256:d181b068d8f4cbe696f521a0788129a96af7b243bf026d4dda6af7da774e091c
     tests/matcher.test.ts: sha256:5b76c9f0ac861f1633a7eea437d9fd5d857233dda14f85aaa603e3aefbbb2a36
 known_issues:
     - KI-10

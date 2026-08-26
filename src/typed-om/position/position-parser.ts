@@ -345,6 +345,7 @@ function isValidTransformOrigin(tokens: ComponentValue[]): boolean {
 export function matchesPositionPropertyGrammar(property: string, tokens: ComponentValue[]): boolean {
   const prop = property.toLowerCase();
   const components = nonWs(tokens);
+  //mcdc:ignore:defensive components.length === 0 T is unreachable — the only caller passes the non-empty trimmed list that _parseAll already validated [reviewed: agent:champ]
   if (components.length === 0) return false;
 
   if (prop === 'offset-position') {

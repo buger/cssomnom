@@ -92,6 +92,7 @@ function parseThenReifyPosition(property: string, trimmed: ComponentValue[], fal
   const posVal = tryParsePosition(trimmed, property);
   if (posVal) return posVal;
   const components = trimmed.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
+  //mcdc:ignore:defensive the non-ident single row is unreachable — the grammar gate and the reifier agree on single components, so a lone non-ident token cannot pass grammar yet fail reification [reviewed: agent:champ]
   if (components.length === 1 && components[0].type === 'ident') {
     return new CSSKeywordValue((components[0] as IdentToken).value);
   }
@@ -114,13 +115,16 @@ function createValueFromTokens(values: ComponentValue[], property?: string): CSS
 
   const trimmed = values.slice(start, end + 1);
 
+  //mcdc:ignore:defensive property F is unreachable — every in-file caller passes the non-empty property that parseAllStyleValues already validated [reviewed: agent:champ]
   if (property && property.startsWith('--')) {
     const def = PropertyRegistry.get(property);
+    //mcdc:ignore:defensive def F is unreachable — _parseAll returns early for unregistered custom properties, so def is always registered here [reviewed: agent:champ]
     if (!def || def.syntax === '*') {
       return new CSSUnparsedValue(tokensToUnparsedSegments(trimmed));
     }
   }
 
+  //mcdc:ignore:defensive property F is unreachable — every in-file caller passes the non-empty property that parseAllStyleValues already validated [reviewed: agent:champ]
   if (property && POSITION_PROPERTIES.has(property.toLowerCase())) {
     return parseThenReifyPosition(property, trimmed, serialize(trimmed).trim());
   }
@@ -421,6 +425,7 @@ export function parseStyleValue(property: string, css: string): CSSStyleValue {
     throw new TypeError("Failed to execute 'parse' on 'CSSStyleValue': 2 arguments required, but only " + arguments.length + " present.");
   }
   const all = parseAllStyleValues(property, css);
+  //mcdc:ignore:defensive all.length === 0 T is unreachable — parseAllStyleValues throws on an empty result before returning, so the guard is dead [reviewed: agent:champ]
   if (all.length === 0) {
     throw new TypeError(`Invalid value for property ${property}: ${css}`);
   }

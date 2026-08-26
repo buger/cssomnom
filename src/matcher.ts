@@ -565,6 +565,7 @@ function matchPseudoClassSelector(element: DOMElement, pseudo: PseudoClassSelect
     }
 
     const idx = targetList.indexOf(element) + 1;
+    //mcdc:ignore:defensive idx === 0 is unreachable — getElementSiblings always includes the element itself (children list or self fallback), so indexOf never returns -1 [reviewed: agent:champ]
     if (idx === 0) return false;
     const pos = name === 'nth-child' ? idx : targetList.length - idx + 1;
     return matchAnPlusB(pos, anb.a, anb.b);

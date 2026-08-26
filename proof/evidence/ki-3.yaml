@@ -7,10 +7,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-3-object-position-parse.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-22T06:00:55Z"
+executed_at: "2026-08-26T19:26:00Z"
 input_set:
     - proof/reproducers/KI-3-object-position-parse.ts
 freshness_hashes:
-    proof/reproducers/KI-3-object-position-parse.ts: sha256:a7b53dcf365fb1bd6cc26c6b6b7766419f5621a8c67432c971e21d49a1c8f71d
+    proof/reproducers/KI-3-object-position-parse.ts: sha256:bbf92405fe55008920100701d00ad64bb0047a503739ebea12b9224f8226feae
 known_issues:
     - KI-3

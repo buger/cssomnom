@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-6-parser-api-type0.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-23T08:27:25Z"
+executed_at: "2026-08-26T19:26:00Z"
 input_set:
     - proof/reproducers/KI-6-parser-api-type0.ts
 freshness_hashes:
-    proof/reproducers/KI-6-parser-api-type0.ts: sha256:5899306f73659a4c3a633584ac7d4363a5c5f10bb76c193b95fc402fb82e1499
+    proof/reproducers/KI-6-parser-api-type0.ts: sha256:381923149c035a490a04d9ff5b0031886395fb78a5e304b81aea8ceed5cb7852
 known_issues:
     - KI-6

@@ -40,64 +40,57 @@ history:
     - at: "2026-08-21T14:18:52Z"
       by: agent:grok-4.6
       action: created
-
     - at: "2026-08-21T16:40:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Retracted sibling DEFECT-260821-1JGF. That report was filed in error during spec-conformance review (covered_by_known_issue parked on this KI). Live unfixed bugs stay on the KnownIssue; a DEFECT is created only after a product fix lands and the whole bug class is hardened. Reproducer tightened: all:unset is observably a no-op on failed expand; the visible drop is all: var(--x) then an invalid set.
-
     - at: "2026-08-21T17:20:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Hygiene only: filled isomorphic_sites with the all-path mutate-before-validate sites (delete at src/CSSStyleDeclaration.ts:512 and :514, var/env stored-all at :520 and :533, expandAll via :522/:537, src/shorthands.ts:1913 expandAll and :2216 SHORTHANDS all). Inspected other SHORTHANDS at setProperty expand-then-return; they do not pre-delete the shorthand name, so no sibling holes were invented. Added 11-rule poc_quality: 7 true, 4 false with not_applicable reasons (quantitative_impact, untrusted_attacker, attacker_profitability, reachability_verified). Status remains open. No product fix. No DEFECT.
-
     - at: "2026-08-21T17:22:51Z"
       by: agent:grok-4.6
       action: edit
       detail: set-reproducer-command
-
     - at: "2026-08-21T19:40:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         isomorphic_sites now lists only the pre-delete of all (CSSStyleDeclaration.ts:512 and :514) and the expand that fails (shorthands.ts:1913 expandAll, :2216 SHORTHANDS['all']). Removed generic shorthand lines 520/522/533/537; those do not pre-delete the shorthand name. No product fix. No DEFECT.
-
     - at: "2026-08-21T20:15:11Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,set-status=fixed,add-command
-
     - at: "2026-08-21T20:20:15Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-1.yaml
-
     - at: "2026-08-21T20:32:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
-
     - at: "2026-08-22T05:37:50Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=open
-
     - at: "2026-08-22T06:04:09Z"
       by: agent:grok-4.6
       action: edit
       detail: set-mitigation,set-remediation,append-note,set-status=fixed
-
     - at: "2026-08-24T16:29:55Z"
       by: agent:champ
       action: edit
       detail: set-attacker-input,set-minimization-status=not_applicable,set-release-disposition=fixed
-
     - at: "2026-08-24T16:30:11Z"
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T19:25:58Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-1.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false
