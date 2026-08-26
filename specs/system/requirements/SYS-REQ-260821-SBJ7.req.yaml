@@ -41,9 +41,14 @@ verification:
         motivation:
             kind: defect
             ref: DEFECT-260822-SK9P
-    gaps_reviewed_at: "2026-08-25T00:51:18.916514417Z"
-    gaps_reviewed_by: agent:champ
+    gaps_reviewed_at: "2026-08-26T22:55:22.46162454Z"
+    gaps_reviewed_by: dev
     gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|tokenizer|INT-REQ-260826-GTCS|SYS-REQ-260821-SBJ7
+          reviewer: dev
+          reason: 'Layered guarantee, not ambiguity: GTCS (INT) specifies the EOF-terminated batch contract on tokenize; SW-REQ-260822-7R6Z and SYS-REQ-260821-SBJ7 own the same output vocabulary at their layers per the standard four-layer V-model. Direct traces.satisfies links record the derivation; no contradictory consequents.'
+          reviewed_at: "2026-08-26T22:55:22.46162454Z"
         - check: ambiguity
           issue_key: ambiguity|tokenizer|SW-REQ-260822-7R6Z|SYS-REQ-260821-SBJ7
           reviewer: agent:champ

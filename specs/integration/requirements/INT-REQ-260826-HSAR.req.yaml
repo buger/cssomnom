@@ -35,6 +35,14 @@ verification:
         reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
         reviewed_at: "2026-08-26T19:15:00Z"
         ai_generated: false
+    gaps_reviewed_at: "2026-08-26T22:55:22.644769318Z"
+    gaps_reviewed_by: dev
+    gap_reviews:
+        - check: ambiguity
+          issue_key: ambiguity|cascade|INT-REQ-260826-HSAR|SYS-REQ-260824-DAS2
+          reviewer: dev
+          reason: 'Layered guarantee, not ambiguity: HSAR (INT) specifies the arity-gate rejection edge; SYS-REQ-260824-DAS2 owns the same hsl_parsed vocabulary one layer up with a direct satisfies link. Trigger windows differ (INT models the <3/>4 reject-and-retain edge only); no contradictory consequents.'
+          reviewed_at: "2026-08-26T22:55:22.644769318Z"
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-26T17:00:21Z"

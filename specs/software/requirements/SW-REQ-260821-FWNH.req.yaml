@@ -34,6 +34,19 @@ verification:
         reviewer: agent:grok-4.6
         reviewed_at: "2026-08-21T13:51:23Z"
         ai_generated: true
+    gaps_reviewed_at: "2026-08-26T22:54:18.946447536Z"
+    gaps_reviewed_by: dev
+    gap_reviews:
+        - check: decomposition
+          issue_key: decomposition|SW-REQ-260821-FWNH|cascaded_style_returned
+          reviewer: dev
+          reason: 'Partial interface decomposition is intentional: INT-REQ-260826-TBRK covers the tie-break causal edge only; parent outputs are witnessed at the SW layer.'
+          reviewed_at: "2026-08-26T22:54:18.946447536Z"
+        - check: decomposition
+          issue_key: decomposition|SW-REQ-260821-FWNH|layout_performed
+          reviewer: dev
+          reason: 'Partial interface decomposition is intentional: INT-REQ-260826-TBRK covers the tie-break causal edge only; parent outputs are witnessed at the SW layer.'
+          reviewed_at: "2026-08-26T22:54:18.946447536Z"
     not_modeled:
         - predicate: h < 120
           reason: "HSL hue-sector lookup table bound for color conversion; not a cascade/CSSOM contract domain [structural]"

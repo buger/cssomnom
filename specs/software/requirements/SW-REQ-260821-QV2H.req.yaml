@@ -41,6 +41,14 @@ verification:
         motivation:
             kind: defect
             ref: DEFECT-260822-SK9P
+    gaps_reviewed_at: "2026-08-26T22:54:23.358991363Z"
+    gaps_reviewed_by: dev
+    gap_reviews:
+        - check: decomposition
+          issue_key: decomposition|SW-REQ-260821-QV2H|tokens_available_after_get_tokens
+          reviewer: dev
+          reason: 'Partial interface decomposition is intentional: INT-REQ-260826-CHBW covers the chunk-boundary withholding edge only; tokens_available_after_get_tokens is witnessed at the SW layer (mcdc-branch-streaming-tokenizer-leftover, obligation-witness-streaming-boundary).'
+          reviewed_at: "2026-08-26T22:54:23.358991363Z"
     not_modeled:
         - predicate: count < 6
           reason: "Unicode escaped-code-point hex digit counter (max 6); structural tokenizer helper, not a requirement domain [structural]"
