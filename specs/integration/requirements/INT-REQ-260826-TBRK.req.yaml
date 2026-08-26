@@ -1,0 +1,36 @@
+id: INT-REQ-260826-TBRK
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when declarations_tie_on_sort_keys the cascade shall always satisfy later_in_document_order_wins
+description: 'compareCascadeDeclarations shall break an exact tie (importance, layer, origin, specificity all equal) by document order: the later declaration wins the cascade, and crossing the specificity edge wins over earlier document order.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SW-REQ-260821-FWNH
+component: cascade
+rationale: 'Decomposes SW-REQ-260821-FWNH causally: the tie boundary and the specificity crossing are the deciding edges of the sort; verified live (''.t{color:red}.t{color:blue}'' -> blue; ''#x/.t/body .t'' ordering -> body .t wins).'
+tags: []
+variables:
+    - declarations_tie_on_sort_keys
+    - later_in_document_order_wins
+traces:
+    satisfies:
+        - SW-REQ-260821-FWNH
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
+        reviewed_at: "2026-08-26T19:15:00Z"
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T17:00:21Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T17:38:38Z"

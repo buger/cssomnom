@@ -1,5 +1,9 @@
 component: parser
 variables:
+    - name: at_keyword_case_folded
+      type: bool
+      direction: input
+      description: 'True when the at-rule keyword is folded to ASCII lowercase before handler-table lookup (css-syntax-3 infra #ascii-case-insensitive).'
     - name: consume_step
       type: bool
       direction: internal
@@ -12,10 +16,18 @@ variables:
       type: bool
       direction: internal
       description: Boolean flag grouping rule built for component parser.
+    - name: handler_table_contains
+      type: bool
+      direction: input
+      description: True when the folded at-keyword resolves through the Object.hasOwn handler-table lookup (never the prototype chain).
     - name: token_stream_peek_next_used
       type: bool
       direction: output
       description: Boolean flag token stream peek next used for component parser.
+    - name: typed_cssom_rule_constructed
+      type: bool
+      direction: output
+      description: True when the matched handler constructs the typed CSSOM rule (e.g. CSSMediaRule for @media, CSSKeyframesRule for the -keyframes alias family).
 independence:
     declared: true
     reason: "INT parser pairs (TokenStream consume vs CSSOM rule construction) skip as cross-component contracts with tokenizer/cssom; no intra-component shared-output pair remains to check."

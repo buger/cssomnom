@@ -1,0 +1,37 @@
+id: INT-REQ-260826-HEXC
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when escaped_hex_digits > 6 the tokenizer shall always satisfy sixth_digit_stops_hex & remainder_preserved_as_ident
+description: 'consume-escaped-code-point shall stop the hex run at 6 digits (css-syntax-3 #consume-escaped-code-point) and keep every later code point as ordinary ident content, so an over-long escape neither consumes the remainder nor loses it.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SW-REQ-260822-7R6Z
+component: tokenizer
+rationale: 'Decomposes SW-REQ-260822-7R6Z causally at the cap edge: the >6 branch both stops and preserves; verified live (''\1234567'' serializes as U+FFFD followed by literal ''7'').'
+tags: []
+variables:
+    - escaped_hex_digits
+    - sixth_digit_stops_hex
+    - remainder_preserved_as_ident
+traces:
+    satisfies:
+        - SW-REQ-260822-7R6Z
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
+        reviewed_at: "2026-08-26T19:15:00Z"
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T17:00:13Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T17:31:38Z"

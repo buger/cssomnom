@@ -1,0 +1,37 @@
+id: INT-REQ-260826-HSAR
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when hsl_component_count < 3 | hsl_component_count > 4 the cascade shall always satisfy !hsl_parsed & authored_value_retained
+description: 'parseHslComponents shall return null outside the 3-4 component arity (css-color-4 #the-hsl-notation) and normalizeComputedColor shall keep the authored text verbatim for the unparsed list.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SW-REQ-260824-CAHE
+component: cascade
+rationale: 'Decomposes SW-REQ-260824-CAHE causally at the arity edges: the <3 and >4 gates both reject and retain; verified live (hsl(0,100%) and hsl(1,2,3,4,5) round-trip unchanged).'
+tags: []
+variables:
+    - hsl_component_count
+    - hsl_parsed
+    - authored_value_retained
+traces:
+    satisfies:
+        - SW-REQ-260824-CAHE
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
+        reviewed_at: "2026-08-26T19:15:00Z"
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T17:00:21Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T17:38:38Z"

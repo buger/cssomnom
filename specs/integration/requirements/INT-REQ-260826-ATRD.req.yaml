@@ -1,0 +1,37 @@
+id: INT-REQ-260826-ATRD
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when at_keyword_case_folded & handler_table_contains the parser shall always satisfy typed_cssom_rule_constructed
+description: 'At-rule dispatch under getAtRuleHandler shall ASCII-lowercase the at-keyword (css-syntax-3 infra #ascii-case-insensitive) and look it up in the handler table with Object.hasOwn so @__proto__ / @constructor cannot resolve through the prototype chain; a hit constructs the typed CSSOM rule.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SW-REQ-260822-73TM
+component: parser
+rationale: 'Decomposes SW-REQ-260822-73TM causally: the lowercase fold + hasOwn table hit is the dispatch dimension that produces a typed CSSOM rule; verified live (mixed-case @MEDIA -> CSSMediaRule, @-WEBKIT-KEYFRAMES alias -> CSSKeyframesRule, @__proto__ -> CSSAtRule fallback).'
+tags: []
+variables:
+    - at_keyword_case_folded
+    - handler_table_contains
+    - typed_cssom_rule_constructed
+traces:
+    satisfies:
+        - SW-REQ-260822-73TM
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
+        reviewed_at: "2026-08-26T19:15:00Z"
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T16:57:44Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T17:31:38Z"

@@ -20,9 +20,6 @@ variables:
     - compare_cascade_declarations_runs
     - cascaded_style_returned
     - layout_performed
-audit_ignore:
-    - check: under_modeled_requirements_clean
-      reason: "Intentionally coarse no-layout sorter contract: compareCascadeDeclarations picks the specificity winner with zero layout calls; witnessed by tests/mcdc-witness-cascade.test.ts and tests/cascade.test.ts. Layer/specificity arithmetic detail is shared cascade infrastructure."
 references:
     - type: document
       id: README.md
@@ -57,9 +54,10 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:58Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-21T20:43:40Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T16:42:16Z"
 obligation_checklist:
+    - boundary
     - nominal
 lifecycle:
     change_history:
@@ -68,3 +66,6 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse no-layout sorter contract: compareCascadeDeclarations picks the specificity winner with zero layout calls; witnessed by tests/mcdc-witness-cascade.test.ts and tests/cascade.test.ts. Layer/specificity arithmetic detail is shared cascade infrastructure."

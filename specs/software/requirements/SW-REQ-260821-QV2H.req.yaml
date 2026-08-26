@@ -19,9 +19,6 @@ variables:
     - chunk_appended
     - complete_token_in_chunk
     - tokens_available_after_get_tokens
-audit_ignore:
-    - check: under_modeled_requirements_clean
-      reason: "Intentionally coarse streaming-chunk contract: complete chunks drain tokens while incomplete ones hold NeedMoreData within the depth-80 fuzz gate; witnessed by tests/css-fuzz-cssomnom.test.ts and tests/mcdc-witness-tokenizer.test.ts. Stream rewind mechanics are shared tokenizer infrastructure."
 references:
     - type: document
       id: README.md
@@ -56,9 +53,10 @@ verification:
 history:
     created_by: agent:grok-4.6
     created_at: "2026-08-21T12:35:57Z"
-    last_modified_by: agent:grok-4.6
-    last_modified_at: "2026-08-22T06:56:44Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T16:53:17Z"
 obligation_checklist:
+    - boundary
     - denial_of_service_resistant
     - nominal
 obligation_hazards:
@@ -78,3 +76,6 @@ lifecycle:
           to: verification=passing
           reason: auto-derived [not_started→passing] signals=2; review_record:REVIEW-18=present | evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing
           changed_by: agent:grok-4.6
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse streaming-chunk contract: complete chunks drain tokens while incomplete ones hold NeedMoreData within the depth-80 fuzz gate; witnessed by tests/css-fuzz-cssomnom.test.ts and tests/mcdc-witness-tokenizer.test.ts. Stream rewind mechanics are shared tokenizer infrastructure."

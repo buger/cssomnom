@@ -18,7 +18,7 @@
 import { AbstractTokenizer } from './AbstractTokenizer.ts';
 import type { Token, ParseError } from './types.ts';
 
-// Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H
+// Implements: SW-REQ-260821-7M07, SW-REQ-260821-QV2H, INT-REQ-260826-GTCS
 export function tokenize(input: string, unicodeRangesAllowed: boolean = false, errors?: ParseError[]): Token[] {
   const tokenizer = new Tokenizer(input);
   tokenizer.unicodeRangesAllowed = unicodeRangesAllowed;

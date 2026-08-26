@@ -1,9 +1,31 @@
 component: cascade
 variables:
+    - name: authored_value_retained
+      type: bool
+      direction: output
+      description: True when normalizeComputedColor keeps the authored text verbatim for an unparsed hsl() list.
     - name: cascaded_style_requested
       type: bool
       direction: input
       description: Boolean flag cascaded style requested for component cascade.
+    - name: declarations_tie_on_sort_keys
+      type: bool
+      direction: input
+      description: True when two matching declarations tie on importance, layer, origin, and specificity.
+    - name: hsl_component_count
+      type: int
+      direction: input
+      description: Count of hsl()/hsla() components after slash split (css-color-4 admits 3 or 4).
+      range:
+        min: 0
+    - name: hsl_parsed
+      type: bool
+      direction: output
+      description: True when parseHslComponents accepts the component list (arity 3-4).
+    - name: later_in_document_order_wins
+      type: bool
+      direction: output
+      description: True when the later declaration in document order wins the tie.
     - name: matcher_and_media_consulted
       type: bool
       direction: output

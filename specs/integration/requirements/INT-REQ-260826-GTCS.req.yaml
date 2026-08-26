@@ -1,0 +1,39 @@
+id: INT-REQ-260826-GTCS
+version: 1
+status: review
+priority: shall
+category: interface
+req_type: guarantee
+fretish: when css_text_supplied the tokenizer shall always satisfy token_list_returned & eof_token_last
+description: 'Batch tokenize() shall return the full token list for the supplied CSS text, terminated by exactly one EOF token whose span is empty at end of input (css-syntax-3 #tokenizer Terminology EOF).'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: SW-REQ-260821-7M07
+component: tokenizer
+rationale: 'Decomposes SW-REQ-260821-7M07 causally: the EOF-terminated terminal condition is the distinctive batch contract; verified live via tokenize() on ''.a { color: red }'' ending in EOF with empty originalText.'
+tags: []
+variables:
+    - css_text_supplied
+    - token_list_returned
+    - eof_token_last
+traces:
+    satisfies:
+        - SW-REQ-260821-7M07
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: in_review
+        reviewer: agent:champ (witness-backed decomposition batch 2026-08-26)
+        reviewed_at: "2026-08-26T19:15:00Z"
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T17:00:06Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T17:01:24Z"
+obligation_checklist:
+    - nominal

@@ -1,0 +1,44 @@
+component: tokenizer
+variables:
+    - name: chunk_appended
+      type: bool
+      direction: input
+      description: True when StreamingTokenizer.appendChunk has buffered a chunk.
+    - name: complete_token_in_chunk
+      type: bool
+      direction: input
+      description: True when the buffered text so far completes at least one additional CSS token.
+    - name: css_text_supplied
+      type: bool
+      direction: input
+      description: True when tokenize() is called with a complete CSS text argument.
+    - name: eof_token_last
+      type: bool
+      direction: output
+      description: "True when the returned token list terminates in exactly one EOF token with an empty span at end of input."
+    - name: escaped_hex_digits
+      type: int
+      direction: input
+      description: Count of hex digits consumed for an escaped code point (css-syntax-3 consume-escaped-code-point; at most 6).
+      range:
+        max: 6
+        min: 0
+    - name: partial_token_withheld
+      type: bool
+      direction: output
+      description: True when the trailing incomplete token at a chunk boundary is withheld from getTokens until completed or closed.
+    - name: remainder_preserved_as_ident
+      type: bool
+      direction: output
+      description: True when every code point after the 6-digit cap survives as ordinary ident content.
+    - name: sixth_digit_stops_hex
+      type: bool
+      direction: output
+      description: True when the hex run stops at 6 digits.
+    - name: token_list_returned
+      type: bool
+      direction: output
+      description: True when tokenize() returns the full token list for the supplied text.
+independence:
+    declared: true
+    reason: "INT tokenizer models the batch tokenize() and StreamingTokenizer appendChunk/getTokens contracts; escaped-code-point decode internals are owned by the SW tokenizer layer, so no cross-component shared-output pair remains to check."
