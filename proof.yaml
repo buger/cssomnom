@@ -115,12 +115,15 @@ project:
         # repo has none of those artifacts.
         # security_surface_covered:
         #     enabled: false
-        # ThreatProfile adoption (Phase 2): mirrors
+        # ThreatProfile adoption (Phase 2 full): mirrors
         # proof/surfaces/threat-surface.yaml (schema_version 1). Family names
         # and statuses are copied verbatim from its oracle_families list;
-        # contract_ref names the docs/threat-surface.md section that carries
-        # the equivalence contracts. Deferrals are limited to the two tracked
-        # vectors so closure nags remain honest.
+        # each contract_ref anchor points at text that literally greps in
+        # docs/threat-surface.md (§7 narrative, or its schema-v1 tunings
+        # note), and armed families resolve at manifest load (L4 hard gate).
+        # Deferrals are limited to tracked vectors so closure nags remain
+        # honest; a deferral whose reason cites an artifact carries the
+        # supporting detail line.
         threat_surface:
             profile:
                 artifact_kind: library
@@ -131,45 +134,56 @@ project:
             oracle_families:
                 - family: 'WPT recorded-expectation differential (regression oracle)'
                   status: armed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#WPT recorded-expectation differential'
                 - family: 'Serializer fixpoint/idempotence (metamorphic)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#Serializer fixpoint'
                 - family: 'Sync-vs-streaming tokenizer equivalence (differential)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#Sync-vs-streaming tokenizer equivalence'
                 - family: 'Posture-consistency triage (same malformed text across ingestion surfaces)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#posture-consistency triage'
                 - family: 'Grammar-table-driven rejection completeness (data-driven differential)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#grammar-table-driven rejection completeness'
                 - family: 'Shorthand<->longhand expansion equivalence (relational)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#shorthand↔longhand expansion equivalence'
+                # This family's name does not occur in docs/threat-surface.md
+                # yet; the §7 heading is the resolvable equivalence-contract
+                # section until the doc grows the per-family narrative.
                 - family: 'Case-folding metamorphic relation (ASCII case-insensitive keywords)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#Armed oracle families & equivalence contracts'
                 - family: 'Selector forgiveness boundary (invalid-selector containment)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#selector forgiveness containment'
                 - family: 'Token-conservation partition invariant (metamorphic)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#token-conservation partition invariant'
                 - family: 'Grammar-table valid-subset sampling (data-driven differential)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#grammar-table valid-subset sampling'
                 - family: 'Identifier-escape round-trip relation (relational)'
                   status: proposed
-                  contract_ref: docs/threat-surface.md#Armed oracle families & equivalence contracts
+                  contract_ref: 'docs/threat-surface.md#identifier-escape round-trip relation'
             na_reasons: []
             deferrals:
                 - vector_id: V-RELATIVE-COLOR-ENGINE
                   reason: blocked on computed-value surface unlock (product decision pending); tracked as vector
                   until: 2026-12-31
+                # "P1/P2" reworded to "the P1 and P2 hunt waves": the slash form
+                # matches the artifact-citation regex and would demand a detail
+                # quote for a citation that names no real artifact.
                 - vector_id: V-MEDIA-DEFAULT-ENV-DRIFT
-                  reason: P3 environment-posture lane; scheduled behind P1/P2 hunt waves
+                  reason: P3 environment-posture lane; scheduled behind the P1 and P2 hunt waves
                   until: 2026-10-31
+                - vector_id: V-TYPED-OM-COMPUTED-UNITS
+                  reason: 'blocked on public-surface unlock: computedStyleMap wired only in src/browser-entry.ts, not exported by src/index.ts (docs/proof-escape-ki-122-123.md appendix A.1)'
+                  detail: 'Unlock condition: export computedStyleMap from src/index.ts OR accept fixed-root font-size approximation decision; then 67-row computed-unit mass + 4-step canonicalization legs become implementable headless.'
+                  until: 2026-12-31
+            campaign_closure: true
             warn_after_days: 0
     known_issue_text_hygiene:
         ste100:

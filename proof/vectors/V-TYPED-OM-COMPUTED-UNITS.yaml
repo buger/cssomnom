@@ -1,0 +1,8 @@
+id: V-TYPED-OM-COMPUTED-UNITS
+title: Typed OM computed-unit resolution and easing canonicalization hunt
+description: 'Hunt campaign for the largest refused Typed OM mass recorded in docs/proof-escape-ki-122-123.md appendix A.1. Leg 1 covers the computed unit-resolution mass across ~67 rows. em/% values compute to px. SVG plain numbers compute to px. Font-size keywords resolve through the CSS font-size keyword table. Weight normal/bold canonicalizes to 400/700. Letter-spacing normal computes to 0. Opacity clamps into the [0,1] range. Leg 2 covers 4 easing canonicalization rows: step-start serializes as steps(1, start) and step-end serializes as steps(1). css-easing-2 mandates this keyword canonicalization. Both legs stay blocked until the public-surface unlock lands: export computedStyleMap from src/index.ts, or accept the fixed-root font-size approximation decision. computedStyleMap currently ships only through the browser-entry lane, so neither leg runs headless yet.'
+priority: P1
+status: unresearched
+related_obligation_classes: []
+stacks:
+  - typescript
