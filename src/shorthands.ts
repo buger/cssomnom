@@ -603,6 +603,7 @@ function isValidLengthOrPercentage(val: ComponentValue): boolean {
   return false;
 }
 
+// Implements: SW-REQ-260822-YBF2
 const expandBox = (physical: readonly string[], logical: readonly string[]) => (values: ComponentValue[]): Record<string, ComponentValue[]> | null => {
   const filtered = values.filter(v => v.type !== 'whitespace' && v.type !== 'comment' && v.type !== 'EOF');
   if (filtered.length === 0) return null;

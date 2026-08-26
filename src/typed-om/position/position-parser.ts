@@ -57,6 +57,7 @@ function isIdentKeyword(c: ComponentValue, keywords: string[]): c is IdentToken 
   return isToken(c) && c.type === 'ident' && keywords.includes(c.value.toLowerCase());
 }
 
+// Implements: SW-REQ-260822-Z6J1
 export function tryParsePosition(trimmed: ComponentValue[], property?: string): CSSPositionValue | null {
   const components = trimmed.filter(t => t.type !== 'whitespace' && t.type !== 'comment');
   if (components.length === 0) return null;

@@ -7,7 +7,7 @@ requirements:
 command: node --experimental-strip-types proof/reproducers/KI-7-import-stylesheet-null.ts
 status: pass
 observed_result: known_issue_not_reproduced
-executed_at: "2026-08-24T08:57:49Z"
+executed_at: "2026-08-26T15:05:12Z"
 input_set:
     - proof/reproducers/KI-7-import-stylesheet-null.ts
     - proof/reproducers/KI-7-import-url-token.ts
@@ -16,11 +16,11 @@ input_set:
     - src/CSSOM.ts
     - parser.ts
 freshness_hashes:
-    proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:58aca597015a9763132d5674d35ec66a5b0fc104c4ec77de06074a1bee8231a3
+    proof/reproducers/KI-7-import-stylesheet-null.ts: sha256:e4a02045a3b4d4c4ce061601f3db8f7bf79381d999e6f87e2c0d895ca7ac87d2
     proof/reproducers/KI-7-import-url-token.ts: sha256:b3184291c4d76dadee9e24046fc3471190b35f46806f046a851a5464b308861d
     proof/reproducers/fixtures/x.css: sha256:7ecd2da96c2b58fdb9f239b8159e64c070c41d23702aa30ba02f988b6a13cb71
-    src/CSSOM.ts: sha256:8385e20463f6771d0d40c99d075ef1e4a9bfcea43f606df01e9ae8a8818a3b08
-    src/parser.ts: sha256:f098410d58e091a1add744cbd6803b182de6ae2176810d417bfcee46e3217250
+    src/CSSOM.ts: sha256:aba23234f0cb5d9c362457e895efacb86ccd55595842205a78f3021cc15d9318
+    src/parser.ts: sha256:37fa9999b11b87ec0644d2fdb7d60e22d68c106554115ebc77f1fd728e16a514
 known_issues:
     - KI-7
 problem_reports:

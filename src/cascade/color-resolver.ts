@@ -122,6 +122,7 @@ export function parseRgbComponents(content: string): [number, number, number, nu
   return [r, g, b, a];
 }
 
+// Implements: SW-REQ-260822-1REE
 export function parseHslComponents(content: string): [number, number, number, number] | null {
   let parts: string[];
   if (content.includes(',')) {

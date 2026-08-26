@@ -334,6 +334,7 @@ export abstract class AbstractTokenizer {
   }
 
   // 4.3.7 Consume an escaped code point
+  // Implements: SW-REQ-260822-7R6Z
   protected consumeEscapedCodePoint(): number {
     const cp = this.consume();
     if (this.isHexDigit(cp)) {
@@ -518,6 +519,7 @@ export abstract class AbstractTokenizer {
   }
 
   // 4.3.13 Consume a unicode-range token
+  // Implements: SW-REQ-260822-7R6Z
   protected consumeUnicodeRangeToken(): Token {
     let hex = '';
     let hasQuestionMarks = false;

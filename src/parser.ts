@@ -82,6 +82,7 @@ export class Parser {
   // css-values-4 § 4.1 #keywords / infra #ascii-case-insensitive:
   // CSS keywords (including at-keywords) are ASCII case-insensitive.
   // Object.hasOwn so @__proto__ / @constructor / @toString do not hit Object.prototype.
+  // Implements: SW-REQ-260822-73TM
   private getAtRuleHandler(name: string): ((parser: Parser, rule: ASTAtRule, block?: SimpleBlock, nested?: boolean) => Rule | null) | undefined {
     const lower = name.toLowerCase();
     if (Parser.MARGIN_RULE_NAMES.has(lower)) {
@@ -705,7 +706,7 @@ export class Parser {
     return fontFeatureRule;
   }
 
-  // Implements: SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1, INT-REQ-260821-ZP03
+  // Implements: SYS-REQ-260821-9YM3, SW-REQ-260821-ARC1, INT-REQ-260821-ZP03, SW-REQ-260822-MN8Z
   private handlePropertyRule(rule: ASTAtRule, block: SimpleBlock): Rule | null {
     const prelude = rule.prelude;
     let name = '';

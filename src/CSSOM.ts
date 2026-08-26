@@ -1142,6 +1142,7 @@ export class CSSViewTransitionRule extends CSSRule {
   set cssText(_value: string) {}
 }
 
+// Implements: SW-REQ-260822-YBF2
 function normalizeKeyframeSelector(selector: string): string {
   const parts = selector.split(',');
   const normalized: string[] = [];

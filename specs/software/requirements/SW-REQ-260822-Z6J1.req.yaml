@@ -51,14 +51,9 @@ history:
     created_by: human:cli
     created_at: "2026-08-22T09:18:23Z"
     last_modified_by: agent:champ
-    last_modified_at: "2026-08-24T13:15:34Z"
+    last_modified_at: "2026-08-26T15:04:30Z"
 obligation_checklist:
     - nominal
-obligation_deferrals:
-    - obligation_class: nominal
-      reason: 'Leaf nominal lacks an implemented_by owner: the real carrier (src/typed-om/values/style-value-parser.ts tryParsePosition one/two-value reification) is frozen this audit batch (src/** untouched); Verifies:-tagged tests already exist (tests/typed-om-position.test.ts:72-90, tests/mcdc-tryparseposition-round3-unique-cause.test.ts:193-224). Implements annotation lands with the next code batch.'
-      tracking: variable-model-cleanup
-      owner: agent:champ
 lifecycle:
     change_history:
         - date: "2026-08-22T09:19:21Z"

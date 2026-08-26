@@ -54,14 +54,9 @@ history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:49Z"
     last_modified_by: agent:champ
-    last_modified_at: "2026-08-24T13:13:39Z"
+    last_modified_at: "2026-08-26T15:04:29Z"
 obligation_checklist:
     - nominal
-obligation_deferrals:
-    - obligation_class: nominal
-      reason: 'Leaf nominal lacks an implemented_by owner: the real carriers (src/AbstractTokenizer.ts consumeEscapedCodePoint and consumeUnicodeRangeToken six-hex-digit stops) are frozen this audit batch (src/** untouched); Verifies:-tagged tests already exist (tests/mcdc-branch-tokenizer-serializer.test.ts:48,57). Implements annotation lands with the next code batch.'
-      tracking: variable-model-cleanup
-      owner: agent:champ
 lifecycle:
     change_history:
         - date: "2026-08-22T09:38:36Z"

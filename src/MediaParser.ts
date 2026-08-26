@@ -1006,6 +1006,7 @@ function parseLengthToPx(tokens: ComponentValue[]): number | null {
   return null;
 }
 
+// Implements: SW-REQ-260822-QKE9
 function parseResolutionToDpi(tokens: ComponentValue[]): number | null {
   const filtered = tokens.filter(v => v.type !== 'whitespace' && v.type !== 'comment');
   if (filtered.length === 1) {

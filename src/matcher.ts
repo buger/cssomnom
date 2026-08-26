@@ -925,6 +925,7 @@ function isOptionDisabled(element: DOMElement): boolean {
   return false;
 }
 
+// Implements: SW-REQ-260822-ZN94
 function isElementDisabled(element: DOMElement): boolean {
   // html#selector-disabled / html#concept-element-disabled:
   // only actually-disabled form controls, optgroup/option, fieldset, and
