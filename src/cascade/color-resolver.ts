@@ -138,6 +138,7 @@ export function parseHslComponents(content: string): [number, number, number, nu
     }
   }
 
+  // Implements: SW-REQ-260824-CAHE
   if (parts.length < 3 || parts.length > 4) return null;
 
   const parseHue = (val: string): number => {
@@ -165,8 +166,10 @@ export function parseHslComponents(content: string): [number, number, number, nu
 
   let r1 = 0, g1 = 0, b1 = 0;
   if (h < 60) { r1 = c; g1 = x; b1 = 0; }
+  // Implements: SW-REQ-260824-JS91 (green sector [60,180): chroma to g across the h<120 and h<180 branches)
   else if (h < 120) { r1 = x; g1 = c; b1 = 0; }
   else if (h < 180) { r1 = 0; g1 = c; b1 = x; }
+  // Implements: SW-REQ-260824-23WT (blue sector [180,300): chroma to b across the h<240 and h<300 branches)
   else if (h < 240) { r1 = 0; g1 = x; b1 = c; }
   else if (h < 300) { r1 = x; g1 = 0; b1 = c; }
   else { r1 = c; g1 = 0; b1 = x; }

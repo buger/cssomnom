@@ -60,14 +60,9 @@ history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-24T12:11:23Z"
     last_modified_by: human:Leonid Bugaev
-    last_modified_at: "2026-08-24T12:29:06Z"
+    last_modified_at: "2026-08-26T15:52:24Z"
 obligation_checklist:
     - nominal
-obligation_deferrals:
-    - obligation_class: nominal
-      reason: 'Positive witness exists untagged: tests/mcdc-cascade-vars.test.ts:163-168 asserts hsl(180), hsl(210), and hsl(240) resolve to blue-chroma rgb values; triple-form requirement tag lands with the next tests batch (tests/** frozen this batch).'
-      tracking: variable-model-cleanup
-      owner: human:Leonid Bugaev
 lifecycle:
     change_history:
         - date: "2026-08-24T12:28:45Z"

@@ -157,6 +157,7 @@ describe('MC/DC unique-cause: cascade color-resolver via getCascadedStyle', { co
     const turn = box('.t { color: hsl(0.5turn 100% 50%); }');
     assert.equal(turn.getPropertyValue('color'), 'rgb(0, 255, 255)');
 
+    // Verifies: SYS-REQ-260824-BRYV, SW-REQ-260824-23WT, SYS-REQ-260824-4RGN, SW-REQ-260824-JS91, SYS-REQ-260824-DAS2, SW-REQ-260824-CAHE
     // Unique-cause hue-sector chain: h<120 T, h<180 F, h<240 T/F, h<300 T/F.
     const yellow = box('.t { color: hsl(60 100% 50%); }');
     assert.equal(yellow.getPropertyValue('color'), 'rgb(255, 255, 0)');
