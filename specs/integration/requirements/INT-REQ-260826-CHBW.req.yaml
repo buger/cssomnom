@@ -19,9 +19,14 @@ variables:
     - chunk_appended
     - complete_token_in_chunk
     - partial_token_withheld
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260821-QV2H
+    components:
+        - tokenizer
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,3 +40,21 @@ history:
     created_at: "2026-08-26T17:00:06Z"
     last_modified_by: human:Leonid Bugaev
     last_modified_at: "2026-08-26T17:38:38Z"
+interface:
+    caller: tokenizer
+    callee: parser
+    type: function_call
+    signature: 'StreamingTokenizer.appendChunk(chunk: string) -> void; getTokens() -> Token[]'
+    assumptions: "The parser consumes tokens incrementally through getTokens while chunks arrive."
+    guarantees: "Completed prefix tokens stream on each getTokens call; the trailing partial token at a chunk boundary is withheld until the completing chunk or close; the reassembled stream equals batch tokenize of the same text."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ

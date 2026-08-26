@@ -19,9 +19,14 @@ variables:
     - at_keyword_case_folded
     - handler_table_contains
     - typed_cssom_rule_constructed
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260822-73TM
+    components:
+        - parser
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,3 +40,21 @@ history:
     created_at: "2026-08-26T16:57:44Z"
     last_modified_by: human:Leonid Bugaev
     last_modified_at: "2026-08-26T17:31:38Z"
+interface:
+    caller: parser
+    callee: cssom
+    type: function_call
+    signature: 'Parser.getAtRuleHandler(name: string) -> Rule handler | undefined; CSSOM rule constructors'
+    assumptions: "At-rule preludes arrive as ASTAtRule nodes from consume-an-at-rule; the handler table is a static record keyed by ASCII-lowercased at-keyword."
+    guarantees: "A handler hit constructs the typed CSSOM rule (CSSMediaRule for media incl. mixed case, CSSKeyframesRule for the -keyframes alias family). Object.hasOwn guards the lookup so @__proto__/@constructor miss and fall back to CSSAtRule."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ

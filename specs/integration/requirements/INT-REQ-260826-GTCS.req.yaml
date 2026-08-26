@@ -19,9 +19,14 @@ variables:
     - css_text_supplied
     - token_list_returned
     - eof_token_last
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260821-7M07
+    components:
+        - tokenizer
 verification:
     assurance_level: C
     formalization_status: valid
@@ -37,3 +42,21 @@ history:
     last_modified_at: "2026-08-26T17:01:24Z"
 obligation_checklist:
     - nominal
+interface:
+    caller: tokenizer
+    callee: parser
+    type: function_call
+    signature: 'tokenize(input: string, unicodeRangesAllowed?: boolean, errors?: ParseError[]) -> Token[]'
+    assumptions: "Parser owns no token state; tokenize is the batch entry point over the full text."
+    guarantees: "tokenize returns the complete token list for the supplied text terminated by exactly one EOF token with an empty span."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ

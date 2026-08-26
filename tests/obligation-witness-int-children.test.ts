@@ -35,6 +35,7 @@ function box(css: string): CSSStyleDeclaration {
   return getCascadedStyle(el, parseStyleSheet(css));
 }
 
+// INT-REQ-260826-GTCS:integration:integration
 // INT-REQ-260826-GTCS:nominal:nominal
 test('batch tokenize returns an EOF-terminated token list', () => {
   const tokens = tokenize('.a { color: red }');
@@ -45,8 +46,7 @@ test('batch tokenize returns an EOF-terminated token list', () => {
   assert.equal(tokens.filter(t => t.type === 'EOF').length, 1, 'exactly one EOF');
 });
 
-// SW-REQ-260821-QV2H:nominal:negative
-// SW-REQ-260821-QV2H:nominal:nominal
+// INT-REQ-260826-CHBW:integration:integration
 test('partial token at a chunk boundary is withheld until completed', () => {
   const st = new StreamingTokenizer();
   st.appendChunk('.a { col');
@@ -59,26 +59,26 @@ test('partial token at a chunk boundary is withheld until completed', () => {
   assert.ok(tail.includes('ident:color'), 'split ident reassembled');
 });
 
-// SW-REQ-260822-7R6Z:nominal:negative
+// INT-REQ-260826-HEXC:integration:integration
 test('escaped hex run stops at 6 digits and preserves the remainder', () => {
   const sheet = parse('.t { content: "\\1234567"; }');
   const value = (sheet.cssRules[0] as { style: { getPropertyValue(k: string): string } }).style.getPropertyValue('content');
   assert.equal(value, '"\uFFFD7"');
 });
 
-// SW-REQ-260821-FWNH:nominal:nominal
+// INT-REQ-260826-TBRK:integration:integration
 test('exact sort-key tie is broken by document order', () => {
   const tie = box('.t { color: red; } .t { color: blue; }');
   assert.equal(tie.getPropertyValue('color'), 'rgb(0, 0, 255)');
 });
 
-// SW-REQ-260821-FWNH:nominal:negative
+// INT-REQ-260826-TBRK:integration:integration
 test('crossing the specificity edge wins over earlier document order', () => {
   const spec = box('#x { color: green; } .t { color: red; } body .t { color: blue; }');
   assert.equal(spec.getPropertyValue('color'), 'rgb(0, 0, 255)');
 });
 
-// SW-REQ-260824-CAHE:nominal:negative
+// INT-REQ-260826-HSAR:integration:integration
 test('hsl arity gates reject and retain the authored text', () => {
   const two = box('.t { color: hsl(0, 100%); }');
   assert.equal(two.getPropertyValue('color'), 'hsl(0, 100%)');
@@ -86,7 +86,7 @@ test('hsl arity gates reject and retain the authored text', () => {
   assert.equal(five.getPropertyValue('color'), 'hsl(1, 2, 3, 4, 5)');
 });
 
-// SW-REQ-260824-CAHE:nominal:nominal
+// INT-REQ-260826-HSAR:integration:integration
 test('hsl arity gate admits the 3-4 component forms', () => {
   const three = box('.t { color: hsl(120, 100%, 50%); }');
   assert.equal(three.getPropertyValue('color'), 'rgb(0, 255, 0)');

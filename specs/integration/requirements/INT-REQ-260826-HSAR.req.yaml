@@ -19,9 +19,14 @@ variables:
     - hsl_component_count
     - hsl_parsed
     - authored_value_retained
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260824-CAHE
+    components:
+        - cascade
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,3 +40,21 @@ history:
     created_at: "2026-08-26T17:00:21Z"
     last_modified_by: human:Leonid Bugaev
     last_modified_at: "2026-08-26T17:38:38Z"
+interface:
+    caller: cascade
+    callee: parser
+    type: function_call
+    signature: 'parseHslComponents(content: string) -> [number, number, number, number] | null'
+    assumptions: "Color-valued declarations reach normalizeComputedColor with their authored function text."
+    guarantees: "A 3- or 4-component hsl()/hsla() list parses; other arities return null and the authored text is retained verbatim."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ

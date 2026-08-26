@@ -17,6 +17,7 @@ variables:
       direction: input
       description: Count of hsl()/hsla() components after slash split (css-color-4 admits 3 or 4).
       range:
+        max: 5
         min: 0
     - name: hsl_parsed
       type: bool

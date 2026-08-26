@@ -18,9 +18,14 @@ tags: []
 variables:
     - declarations_tie_on_sort_keys
     - later_in_document_order_wins
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260821-FWNH
+    components:
+        - cascade
 verification:
     assurance_level: C
     formalization_status: valid
@@ -34,3 +39,21 @@ history:
     created_at: "2026-08-26T17:00:21Z"
     last_modified_by: human:Leonid Bugaev
     last_modified_at: "2026-08-26T17:38:38Z"
+interface:
+    caller: cascade
+    callee: cssom
+    type: function_call
+    signature: 'compareCascadeDeclarations(a: MatchedDeclaration, b: MatchedDeclaration) -> number'
+    assumptions: "getCascadedStyle collects matched CSSOM declarations before sorting."
+    guarantees: "An exact tie on importance, layer, origin, and specificity is broken by document order (later wins); higher specificity wins over earlier document order."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ

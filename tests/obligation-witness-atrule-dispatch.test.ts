@@ -23,7 +23,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse, CSSMediaRule, CSSKeyframesRule, CSSAtRule } from '../src/index.ts';
 
-// SW-REQ-260822-73TM:nominal:nominal
+// INT-REQ-260826-ATRD:integration:integration
 test('mixed-case and alias at-keywords fold to a typed CSSOM rule', () => {
   // css-syntax-3 infra #ascii-case-insensitive: @MEDIA folds to @media.
   const media = parse('@MEDIA screen { a { b: c } }');
@@ -34,7 +34,7 @@ test('mixed-case and alias at-keywords fold to a typed CSSOM rule', () => {
   assert.ok(alias.cssRules[0] instanceof CSSKeyframesRule, 'typed CSSKeyframesRule');
 });
 
-// SW-REQ-260822-73TM:nominal:negative
+// INT-REQ-260826-ATRD:integration:integration
 test('handler-table misses fall back to CSSAtRule, never the prototype chain', () => {
   // Object.hasOwn guard: @__proto__ / @constructor are NOT table entries and
   // must not resolve through Object.prototype.

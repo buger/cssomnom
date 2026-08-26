@@ -94,3 +94,9 @@ Counts: **5 STK**, **24 SYS**, **27 SW**, **10 INT**.
 | INT-REQ-260821-MZW3 | cssom | 5283 | MediaList calls MediaParser.parse for mediaText |
 | INT-REQ-260821-ZP03 | parser_api | EGCP | CSS.registerProperty / @property share PropertyRegistry |
 | INT-REQ-260821-JTY2 | geometry | HGFK | DOMMatrix string ctor uses the typed_om transform parse hook |
+| INT-REQ-260826-ATRD | parser | 73TM | At-rule dispatch folds at-keywords to ASCII lowercase and resolves handlers via Object.hasOwn (typed rule or CSSAtRule fallback) |
+| INT-REQ-260826-GTCS | tokenizer | 7M07 | Batch tokenize returns the full token list terminated by exactly one EOF token |
+| INT-REQ-260826-CHBW | tokenizer | QV2H | Streaming chunk boundary withholds the trailing partial token until completed or closed |
+| INT-REQ-260826-HEXC | tokenizer | 7R6Z | Escaped hex run stops at 6 digits and preserves the remainder as ident content |
+| INT-REQ-260826-TBRK | cascade | FWNH | Exact sort-key tie breaks to the later declaration in document order |
+| INT-REQ-260826-HSAR | cascade | CAHE | hsl() arity gate (3-4 components) rejects other arities and retains the authored text |

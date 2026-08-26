@@ -19,9 +19,14 @@ variables:
     - escaped_hex_digits
     - sixth_digit_stops_hex
     - remainder_preserved_as_ident
+references:
+    - type: document
+      id: README.md
 traces:
     satisfies:
         - SW-REQ-260822-7R6Z
+    components:
+        - tokenizer
 verification:
     assurance_level: C
     formalization_status: valid
@@ -35,3 +40,21 @@ history:
     created_at: "2026-08-26T17:00:13Z"
     last_modified_by: human:Leonid Bugaev
     last_modified_at: "2026-08-26T17:31:38Z"
+interface:
+    caller: tokenizer
+    callee: parser
+    type: function_call
+    signature: 'AbstractTokenizer.consumeEscapedCodePoint() -> code point'
+    assumptions: "Ident and string tokens reach the escape consumer with a backslash delimiter."
+    guarantees: "The hex run stops at 6 digits; every later code point survives as ordinary ident content (over-long or non-scalar escapes decode to U+FFFD)."
+    owner: maintainer:conformance_owner
+    version: 1.0.0
+    compatibility_policy: semver-lax
+    risk_tier: 2
+lifecycle:
+    change_history:
+        - date: "2026-08-26T17:32:00Z"
+          from: draft
+          to: review
+          reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
+          changed_by: agent:champ
