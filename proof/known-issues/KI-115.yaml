@@ -3,6 +3,7 @@ title: conditionText serialization drops the grouping parens around a negated me
 description: 'Parsing ''@media(not (x))and (r){.q{c:d}}'' correctly retains the valid grouped condition on pass 1 (conditionText ''not (x) and (r)''), but the serializer emits that text WITHOUT the outer parentheses around ''not (x)''. mediaqueries-4 #mq-syntax defines <media-not> = not S* <media-in-parens> as a complete production that cannot take an and-chain, so the serialized text matches neither <media-condition> alternative; re-parsing it replaces the query with ''not all'' per mediaqueries-4 #error-handling (~line 1031), violating css-syntax-3 #serialization (parse(serialize(parse(x))) must yield the same data structures). Root subsystem: MediaParser/serializer flattens the condition tree when reconstructing conditionText. Scope honesty: bare ''@media (x){}'' keeping ''(x)'' is SPEC-CORRECT (test_media_queries.html expression_should_be_unknown requires unknown features to stay parseable, not become ''not all'') and is asserted as a green control here, as are mq-invalid-media-type-005.html''s eight grammar-error rows which already pass.'
 affected_requirements:
     - SYS-REQ-260823-EEQN
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
 evidence_manifests:
@@ -56,6 +57,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-26T16:20:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

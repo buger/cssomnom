@@ -3,6 +3,7 @@ profile: ki-115
 evidence_type: known_issue_tripwire
 requirements:
     - SYS-REQ-260823-EEQN
+    - STK-REQ-260821-BQKD
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-115-media-condition-roundtrip-collapse-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced

@@ -3,6 +3,7 @@ profile: ki-114
 evidence_type: known_issue_tripwire
 requirements:
     - SYS-REQ-260823-1V3K
+    - STK-REQ-260821-BQKD
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced

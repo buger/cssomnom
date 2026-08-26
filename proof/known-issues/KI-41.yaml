@@ -3,6 +3,7 @@ title: 'Parser API prelude whitespace filter corrupts serialization: @media scre
 description: 'parseRuleListSync("@media screen{a{b:c}}")[0] serializes to "@mediascreen{a{}}", which re-parses to an at-rule NAMED mediascreen; @keyframes k -> @keyframesk{...} (named keyframesk), @layer l -> @layerl, @namespace svg url(...) -> @namespacesvgurl. Root cause: CSSParserAtRule.toString joins prelude tokens with empty separator directly after @name (src/parser-api.ts ~122-128) and tokensToPrelude strips whitespace/comment component values (~202-205), so the structural boundary between at-keyword and prelude is lost. Expected: css-syntax-3 round-trip requirement (#serialization ~3706-3713) - parse(serialize(parse(x))) must yield the same data structures; WICG note: whitespace is parsed into DOMStrings, i.e. preserved information, not garbage.'
 affected_requirements:
     - SYS-REQ-260823-PRT3
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-41.yaml
 severity: high
@@ -41,6 +42,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-41.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

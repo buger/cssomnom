@@ -3,6 +3,7 @@ title: 'Cascade computed-value path ignores PropertyRegistry: initial value, inh
 description: 'registerProperty({name:''--len'',syntax:''<length>'',inherits:false,initialValue:''10px''}) is honored by Parser.#resolveVarFunction (src/parser.ts:1726-1823) but entirely ignored on the cascade path: substituteVariables/resolveCustomProperties (src/cascade/variable-resolver.ts:50+, :220+) consult only the cascaded custom-property maps - two resolvers in the same engine disagree. Observed legs: (1) width:var(--len) with no --len anywhere returns '''' instead of substituting the registered initial value 10px; (2) a TRUE descendant (child div carrying only the consuming class, inside <div class=p>) reads parent .p{--len:40px} through width:var(--len) as ''40px'' despite the inherits:false registration - an inherits:true control over the same descendant shape also propagates, isolating the missing inheritance gating; (3) .p{--len:red} fails <length> validation yet leaks through as width:''red'' instead of invalid-at-computed-value-time. Fixture honesty: an earlier draft of leg 2 placed both classes on the child (<div class="p c">), where .p applies DIRECTLY - correct even under inherits:false since the descriptor only blocks inheritance - so it could not evidence a leak; that direct-application confound was removed and the child now carries only class c. css-properties-values-api #calculation-of-computed-values (Overview.bs:202-216): the computed value of a registered custom property is determined by its registration syntax; a failing value makes the declaration invalid at computed-value time; #inherits-descriptor (:617,:627-629) controls whether the property inherits by default; #initial-value-descriptor controlling sentence (:642-644) specifies the initial value. Correctness fault (computed-value contract silently broken for every registered property consumer). Distinctness: KI-108/109/110 are substitution dispatch bugs; KI-111/KI-35 are registration-time validation; withdrawn KI-4 covered JS-vs-@property registration precedence, not cascade precedence.'
 affected_requirements:
     - SYS-REQ-260823-CRG8
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-38.yaml
 severity: medium
@@ -27,31 +28,30 @@ history:
     - at: "2026-08-23T17:31:36Z"
       by: agent:champ
       action: created
-
     - at: "2026-08-23T17:31:38Z"
       by: agent:champ
       action: capture-evidence
       detail: proof/evidence/ki-38.yaml
-
     - at: "2026-08-23T18:11:40Z"
       by: agent:champ
       action: refresh-evidence
       detail: proof/evidence/ki-38.yaml
-
     - at: "2026-08-23T18:40:00Z"
       by: agent:champ
       action: reviewer-repair
       detail: 'Rebuilt the inherits leg as a true descendant (child no longer matches .p directly, removing the direct-application confound), corrected citations (#resolveVarFunction span src/parser.ts:1726-1823, #initial-value-descriptor :642-644) and replaced the withdrawn KI-4 cascade-precedence claim.'
-
     - at: "2026-08-23T19:40:16Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-38.yaml
-
     - at: "2026-08-24T22:25:01Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-38.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

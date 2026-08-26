@@ -3,6 +3,7 @@ title: StylePropertyMap.set stores out-of-range negative unit values unwrapped i
 description: 'Setting a CSSUnitValue outside the property grammar''s limited numeric range (flex-grow -3.14 against <number [0,∞]>, border-top-left-radius -3.14em/-3.14% against <length-percentage [0,∞]>) stores a bare CSSUnitValue, so get()/getAll() reify the bare unit value. css-typed-om-1 #create-an-internal-representation requires replacing the out-of-range part "with the result of wrapping it in a fresh CSSMathSum whose values internal slot contains only that part of |value|", and #reify-property reflects that representation on get. WPT testsuite.js assert_is_equal_with_range_handling pins the wrap ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum"); the wpt-sandbox baseline carries 150 such failing rows across 42 typed-om property fixtures (border-radius, scroll-padding, flex-*, column-count, font-weight, orphans/widows, animation-duration, ...). In-range controls stay bare per spec and pass.'
 affected_requirements:
     - SYS-REQ-260824-QGJE
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-122-typed-om-negative-range-mathsum-wrap-overlay-260824.ts
 evidence_manifests:
@@ -46,6 +47,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-122.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

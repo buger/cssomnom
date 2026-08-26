@@ -3,6 +3,7 @@ title: Repeated declarations (font shorthand, color) silently replace the earlie
 description: 'Parsing p{font:22px Helvetica; font:xxx-large system-ui} retains only 13 declaration entries — the second font shorthand wholesale replaces the first; likewise a{color:red;color:green} collapses to length 1. cssom-1 #parse-a-css-declaration-block appends EVERY successfully parsed declaration and contains no same-name replacement step, and the CSSStyleDeclaration.length definition counts retained declarations, so both sets must survive with the second starting at index 13. Cascade arbitration (which duplicate wins) belongs at computed-value time, not to parse-time mutation. Interpretation flagged: expected counts follow the reproducer control demonstrating cssomnom own 13-longhand expansion granularity; the plain color case is granularity-independent. Validation of this interpretation pending Scrutineer pass. Dedup: distinct root from KI-112/KI-113 (system-keyword expansion / invalid-mix acceptance) and KI-36 (missing expansion table) — here both declarations are ordinary valid values.'
 affected_requirements:
     - SYS-REQ-260824-EVNP
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-119-repeated-shorthand-declaration-loss-overlay-260824.ts
 evidence_manifests:
@@ -44,6 +45,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-119.yaml
+    - at: "2026-08-26T16:22:34Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

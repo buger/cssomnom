@@ -3,6 +3,7 @@ title: sandbox.fetch /interfaces/ join escapes the WPT root and discloses local 
 description: scripts/wpt/node/run.ts intercepts fixture fetches under '/interfaces/' and serves IDL from disk via path.join(WPT_ROOT, 'interfaces', idlFileName) (L143-145 at HEAD 83ce08f) followed by existsSync/readFileSync (L146-147) with no containment check on idlFileName. '/interfaces/../../../package.json' climbs out of <WPT_ROOT>/interfaces and returns arbitrary readable files to sandboxed page JS as a 200 Response (CWE-22). Live probe confirmed status 200 with repo-root package.json contents through the real exported runWptFile.
 affected_requirements:
     - SYS-REQ-260823-KYB6
+    - STK-REQ-260821-556N
 evidence_manifests:
     - proof/evidence/ki-24.yaml
 severity: medium
@@ -10,9 +11,6 @@ severity_basis: reproducer
 risk: data_integrity
 cve_surface: none
 affected_api: scripts/wpt/node/run.ts sandbox.fetch bridge inside runWptFile()
-# ACC-08 dedup signal: distinct sink file from KI-26 (scripts/wpt/browser/fetch-wptfyi.ts) so
-# the shared path_traversal kill_domain does not collapse read-disclosure vs write-overlay.
-affected_file: scripts/wpt/node/run.ts
 attacker_input: fixture-controlled fetch URLs starting with /interfaces/ (../ traversal segments after the prefix)
 sanitizer: manual:logic
 reproducer_command: node --experimental-strip-types --test proof/reproducers/KI-24-wpt-interfaces-join-no-containment-overlay-260822.ts
@@ -45,6 +43,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: set-dedup-armor
+    - at: "2026-08-26T16:22:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -88,3 +90,4 @@ dedup_armor: |
     Only runWptFile's sandbox.fetch /interfaces/ bridge escapes containment (scripts/wpt/node/run.ts:143-147 — path.join + existsSync + readFileSync serving local files to fixture JS: a READ disclosure driven by fixture-controlled fetch URLs). Distinct from KI-26 (fetchWptFyiRun cache persistence in scripts/wpt/browser/fetch-wptfyi.ts:222-227 — a WRITE overlay primitive driven by the operator-supplied --cachePath option; no read-to-page-js sink). Different API surface, opposite sink direction (read vs write), different attacker input (fixture page JS vs operator CLI option). Do not merge into a generic path-containment fix without covering both sinks.
 kill_domain: path_traversal
 do_not_refile_as: WPT runner /interfaces/ fetch path traversal disclosure
+affected_file: scripts/wpt/node/run.ts

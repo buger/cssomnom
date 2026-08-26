@@ -3,6 +3,7 @@ title: SVG/MathML element names matched ASCII-case-insensitively by type selecto
 description: 'matchSimpleSelector''s type-selector arm (src/matcher.ts ~L300-303) lowercases BOTH the element local name and the selector name unconditionally, so matches({localName:''textPath'', namespaceURI:''http://www.w3.org/2000/svg''}, ''textpath'') returns true and ''foreignobject'' matches <foreignObject>. selectors-4 #case-sensitive (Overview.bs:1309-1318) defaults matching of element names to the string/identical-to operation (case sensitive); its only relaxation is a host-language exception for HTML-namespace elements (html#case-sensitivity-of-selectors), which does not extend to SVG/MathML where camelCase element names are normative (SVG 2 textPath, foreignObject). Correctness fault: SVG documents style wrongly whenever a selector''s case differs from the element name.'
 affected_requirements:
     - SYS-REQ-260823-SCS2
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-32.yaml
 severity: medium
@@ -47,6 +48,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-32.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

@@ -3,6 +3,7 @@ title: Parser API silently drops every style-rule declaration from CSSParserQual
 description: 'parseRuleSync("div { color: red; margin: 0px }").body.length === 0 and a style rule nested under parseRuleListSync("@media screen{a{b:c}}")[0].body[0].body.length === 0. Root cause: src/parser-api.ts ~452-461 evaluates qr.cssRules ? Array.from(qr.cssRules)... : (qr.style ...); every CSSOM CSSStyleRule inherits a (possibly empty) CSSRuleList so the truthy branch always wins and the qr.style -> CSSParserDeclaration mapping is dead code. The keyframe path (cssomKeyframeToQualified -> styleToParserDeclarations) DOES map declarations - inconsistent adapter behavior; tests/parser-api.test.ts ~122 only asserts the keyframe leg. Expected: WICG css-parser-api #parser-values defines body members as the rule declarations including CSSParserDeclaration nodes; css-syntax-3 #consume-a-qualified-rule + round-trip requirement (~3706-3713) require the data structures to survive serialize/re-parse. Correctness fault (silent data loss): every parsed style rule serializes with an empty body.'
 affected_requirements:
     - SYS-REQ-260823-QBD2
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-40.yaml
 severity: high
@@ -35,6 +36,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-40.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

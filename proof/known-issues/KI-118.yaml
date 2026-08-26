@@ -3,6 +3,7 @@ title: NaN math results serialize with a lowercase nan identifier instead of the
 description: 'CSSStyleValue.parse(...).toString() serializes evaluated NaN results as calc(nan) / calc(calc(nan * 1px)) — a lowercase identifier. css-values-4 #calc-serialize step 2 ("serialize a math function") makes the spelling normative: serialize the keyword infinity, -infinity, or NaN, as appropriate; for a length-typed result the form is calc(NaN * 1px), matching local WPT css/css-values/calc-infinity-nan-serialize-length.html rows (1px * NaN -> calc(NaN * 1px); 1px * iNFinIty -> calc(infinity * 1px)). The wpt-cssom known-failure baseline carries 160 entries across the five calc-infinity-nan-serialize-* fixtures. Root-dedup: distinct from KI-39 (degenerate-Sum parenthesization/structure drift); this KI pins only canonical keyword casing via structure-independent assertions.'
 affected_requirements:
     - SYS-REQ-260824-N9AE
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-118-calc-nan-canonical-keyword-overlay-260824.ts
 evidence_manifests:
@@ -44,6 +45,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-118.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

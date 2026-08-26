@@ -3,6 +3,7 @@ title: Nested var() custom-property names are not substituted
 description: The cascade does not substitute a nested var() in the first argument of an outer var() before parsing that argument as a custom-property name. The CSS Variables replace-a-var algorithm and its --other/--myvar/--result example require the inner function to resolve first, yielding the referenced custom property value.
 affected_requirements:
     - SYS-REQ-260822-V108
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
 evidence_manifests:
@@ -44,6 +45,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-108.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

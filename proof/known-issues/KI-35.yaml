@@ -3,6 +3,7 @@ title: registerProperty accepts invalid {N}/{N,M} brace-multiplier syntax string
 description: 'CSS.registerProperty({name:''--x'', syntax:''<length>{2}'', initialValue:''1px 2px'', inherits:false}) is ACCEPTED (no throw), and ''<length>{2,4}'' likewise registers. css-properties-values-api #multipliers (Overview.bs:976-991) closes the multiplier set to U+002B ''+'' (space-separated list) and U+0023 ''#'' (comma-separated list); no brace repetition form exists anywhere in the syntax-string grammar (#syntax-strings, Overview.bs:868), so ''<length>{2}'' is not a valid syntax string and register-a-custom-property must throw SyntaxError. Grammar closed-set validation fault: registrations that can never be honored by a conformant consumer enter the registry. Distinct from KI-111, which covers initial-value matcher validation against an ALREADY-valid syntax; here the syntax string itself violates the grammar.'
 affected_requirements:
     - SYS-REQ-260823-PMB5
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-35.yaml
 severity: medium
@@ -47,6 +48,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-35.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

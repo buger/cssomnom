@@ -3,6 +3,7 @@ profile: ki-108
 evidence_type: known_issue_tripwire
 requirements:
     - SYS-REQ-260822-V108
+    - STK-REQ-260821-BQKD
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-108-var-name-substitution-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced

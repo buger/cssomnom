@@ -3,6 +3,7 @@ title: :has()/combinator selector matching lacks a complexity budget
 description: 'matchHasPseudo eagerly materializes full descendant/sibling neighborhoods and querySelectorAll re-enters it for every visited node with no step count or deadline; matchComplexRecursive likewise retries ancestors/previous siblings without a cap. A flat miss selector '':has(~ .missing)'' over w siblings costs Theta(w^2) pair checks (~224ms at width 3000 vs ~1.2ms plain class scan, ~192x; ~800ms at width 5000 per security scan). Nested '':has(:has())'' is rejected at parse time — necessary but insufficient. Availability fault (CWE-400): event-loop stalls for hosts evaluating attacker-influenced selectors over large DOM-like trees, including cascade rule filtering.'
 affected_requirements:
     - SYS-REQ-260822-ZQJT
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-16.yaml
 severity: medium
@@ -34,6 +35,10 @@ history:
       by: agent:champ
       action: edit
       detail: set-sanitizer
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

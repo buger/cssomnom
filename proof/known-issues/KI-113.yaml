@@ -3,6 +3,7 @@ title: parse() retains font declarations mixing a system font keyword with size/
 description: 'Parsing ''.o{font: menu 10px serif;}'' (and any system keyword mixed with size or family, e.g. ''menu icon'') stores the declaration verbatim: getPropertyValue(''font'') returns ''menu 10px serif'' and cssText re-serializes it. The font grammar has only two alternatives - the full size/family production or a lone system font keyword (css-fonts-4 #font-prop); the #font-prop-desc note (~line 1990) treats the keywords as keywords only in initial position, and WPT css/css-fonts/parsing/font-invalid.html asserts test_invalid_value(''font'', ''menu icon''). cssom-1 #parse-a-css-declaration-block step 3.1 requires dropping declarations that fail their grammar. setProperty() and insertRule() already honor this ignore-invalid contract; only the parse-a-css-declaration-block path accepts the invalid mix.'
 affected_requirements:
     - SYS-REQ-260823-0BRJ
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-113-font-shorthand-invalid-mix-accepted-overlay-260823.ts
 evidence_manifests:
@@ -46,6 +47,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-113.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

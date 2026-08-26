@@ -3,6 +3,7 @@ title: Keyframe parsing retains forbidden animation declarations and important v
 description: Keyframe declaration parsing retains animation-name and animation-duration, even though CSS Animations requires animation properties to be ignored except animation-timing-function. It also retains opacity marked !important, which the specification declares invalid and ignored in keyframes.
 affected_requirements:
     - SYS-REQ-260822-HARM
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-104-keyframes-forbidden-declarations-overlay-260822.ts
 evidence_manifests:
@@ -20,6 +21,28 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not use keyframe style declarations as an animation source until forbidden declarations are filtered.
 remediation: Filter CSS Animations-defined properties other than animation-timing-function and drop declarations with the important flag while consuming keyframe blocks.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:32Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:00Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-104.yaml
+    - at: "2026-08-22T16:51:40Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -44,21 +67,3 @@ poc_quality:
         no_inflation: bounded to keyframe declaration filtering, medium ceiling.
         operational_path_verified: real parse->style inspection path.
         reachability_verified: N/A-eligible local-behavioral finding through the real parse() ingress.
-notes:
-    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
-owner: agent:codex
-review_date: "2026-09-22"
-release_disposition: ship_with_known_issue
-status: open
-history:
-    - at: "2026-08-22T16:47:32Z"
-      by: agent:codex
-      action: created
-    - at: "2026-08-22T16:48:00Z"
-      by: human:cli
-      action: capture-evidence
-      detail: proof/evidence/ki-104.yaml
-    - at: "2026-08-22T16:51:40Z"
-      by: agent:codex
-      action: edit
-      detail: append-note,add-requirement

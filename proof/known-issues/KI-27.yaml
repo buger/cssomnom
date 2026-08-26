@@ -3,6 +3,7 @@ title: fetchWptFyiRun downloads API-provided results URLs with no host allowlist
 description: 'scripts/wpt/browser/fetch-wptfyi.ts:178-196 (verified at HEAD 83ce08f): downloadUrl = run.raw_results_url || run.results_url is dereferenced verbatim through fetchFn with default redirect following and no scheme/host allowlist between ''bytes returned by the runs API'' and ''URL this process requests''. A compromised or MITM''d wpt.fyi record can coerce maintainer/CI hosts into requesting internal HTTP services (metadata 169.254.169.254, loopback, RFC1918) and cache the returned bytes as the trusted upstream WPT baseline used for parity gating (CWE-918 + baseline poisoning).'
 affected_requirements:
     - SYS-REQ-260823-Z8HR
+    - STK-REQ-260821-556N
 evidence_manifests:
     - proof/evidence/ki-27.yaml
 severity: medium
@@ -46,6 +47,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-27.yaml
+    - at: "2026-08-26T16:22:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

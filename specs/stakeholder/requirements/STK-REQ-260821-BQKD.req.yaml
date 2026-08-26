@@ -96,8 +96,9 @@ stakeholder:
             - SYS-REQ-260825-4R9S
             - SYS-REQ-260825-ENH2
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: at-rule dispatch/fallback and trailing-whitespace trimming verified end-to-end (tests/acceptance-stk.test.ts AC-001..003); still blocked by open known issues - parseValueSync accepts trailing garbage and parseComponentValueSync accepts bad-url/bad-string component values (KI-42), grammar-invalid color declarations incl. relative-color spellings are retained (KI-117), repeated-shorthand retention loss (KI-119), a residual declaration-value whitespace leak surface (KI-120), and the Parser API exposes no declarations on CSSParserQualifiedRule.body (KI-40)."
+            reason: "Clause-level triage 2026-08-25: at-rule dispatch/fallback and trailing-whitespace trimming verified end-to-end (tests/acceptance-stk.test.ts AC-001..003); still blocked by open known issues - parseValueSync accepts trailing garbage and parseComponentValueSync accepts bad-url/bad-string component values (KI-42), grammar-invalid color declarations incl. relative-color spellings are retained (KI-117), repeated-shorthand retention loss (KI-119), a residual declaration-value whitespace leak surface (KI-120), and the Parser API exposes no declarations on CSSParserQualifiedRule.body (KI-40). Primary blocker KI-40; also KI-42, KI-117, KI-119, KI-120."
             tracking: spec-model-quality-lints
+            ki_ref: KI-40
         - id: AC-006
           text: A font declaration that mixes a system font keyword with size or family components shall not be stored. A font declaration whose value is exactly one system font keyword shall keep the keyword and shall not stamp keyword names into the specified values of its longhands. Setting a generated-family shorthand property shall expand into its longhands.
           verification_method: test
@@ -107,8 +108,9 @@ stakeholder:
             - SYS-REQ-260823-YQPJ
             - SYS-REQ-260823-SHX6
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: only generated-family longhand expansion is observable end-to-end; still blocked by open known issues - invalid keyword+size/family mixes are retained instead of dropped (KI-113), system-font-keyword round-trip mismatches (KI-112), the keyword is stamped into font-family/font-size specified values (longhand pollution, YQPJ gap row in tests/mcdc-witness-cssom.test.ts), and generated-shorthand expansion coverage is incomplete (KI-36)."
+            reason: "Clause-level triage 2026-08-25: only generated-family longhand expansion is observable end-to-end; still blocked by open known issues - invalid keyword+size/family mixes are retained instead of dropped (KI-113), system-font-keyword round-trip mismatches (KI-112), the keyword is stamped into font-family/font-size specified values (longhand pollution, YQPJ gap row in tests/mcdc-witness-cssom.test.ts), and generated-shorthand expansion coverage is incomplete (KI-36). Primary blocker KI-112; also KI-113, KI-36."
             tracking: spec-model-quality-lints
+            ki_ref: KI-112
         - id: AC-007
           text: The CSSOM shall maintain parentRule and parentStyleSheet links for keyframe children while attached and clear both after removal. CSSKeyframesRule.appendRule shall not append a rule when the argument carries trailing non-whitespace tokens. The CSSKeyframeRule.keyText setter shall throw SyntaxError for an invalid keyframe selector and leave keyText unchanged. The parser shall drop declarations forbidden in keyframe blocks, including important declarations.
           verification_method: test
@@ -119,8 +121,9 @@ stakeholder:
             - SYS-REQ-260823-KTS6
             - SYS-REQ-260822-HARM
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: only the keyText-setter SyntaxError contract is verified working; still blocked by open known issues - parsed keyframe children expose no parentRule/parentStyleSheet links and deleteRule does not clear them (KI-101), appendRule appends despite trailing non-whitespace tokens (KI-103), and declarations forbidden in keyframe blocks incl. !important are retained (KI-104)."
+            reason: "Clause-level triage 2026-08-25: only the keyText-setter SyntaxError contract is verified working; still blocked by open known issues - parsed keyframe children expose no parentRule/parentStyleSheet links and deleteRule does not clear them (KI-101), appendRule appends despite trailing non-whitespace tokens (KI-103), and declarations forbidden in keyframe blocks incl. !important are retained (KI-104). Primary blocker KI-101; also KI-103, KI-104."
             tracking: spec-model-quality-lints
+            ki_ref: KI-101
         - id: AC-008
           text: The CSSOM shall serialize the current valid descriptor state of a CSSCounterStyleRule after a descriptor setter. Every CSSSupportsRule instance shall expose the readonly boolean matches attribute. An at-rule whose prelude violates the import grammar shall not enter cssRules. Serializing a Parser API at-rule and re-parsing it shall yield an at-rule with the same name and prelude content.
           verification_method: test
@@ -131,8 +134,9 @@ stakeholder:
             - SYS-REQ-260823-PRT3
             - SYS-REQ-260826-0MVR
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: all four clauses still blocked by open known issues - CSSCounterStyleRule descriptor setter state is missing from the serialization (XEPS gap row, tests/mcdc-witness-cssom.test.ts), CSSSupportsRule lacks the readonly matches attribute (KI-33), a grammar-invalid @import still fabricates a CSSImportRule in cssRules (KI-43), and at-rule prelude round-trip corrupts the name ('@media screen' re-parses as 'mediascreen', KI-41)."
+            reason: "Clause-level triage 2026-08-25: all four clauses still blocked by open known issues - CSSCounterStyleRule descriptor setter state is missing from the serialization (XEPS gap row, tests/mcdc-witness-cssom.test.ts), CSSSupportsRule lacks the readonly matches attribute (KI-33), a grammar-invalid @import still fabricates a CSSImportRule in cssRules (KI-43), and at-rule prelude round-trip corrupts the name ('@media screen' re-parses as 'mediascreen', KI-41). Primary blocker KI-41; also KI-33, KI-43."
             tracking: spec-model-quality-lints
+            ki_ref: KI-41
         - id: AC-009
           text: Serializing a valid media condition to conditionText and re-parsing it shall preserve evaluability, including a negated term inside grouping parentheses. The media parser shall treat a strictly positive resolution as a matching resolution feature.
           verification_method: test
@@ -143,6 +147,7 @@ stakeholder:
           witness_deferred:
             reason: "Clause-level triage 2026-08-25: simple conditionText round-trips preserve evaluability, but the required grouped-negation case collapses semantically on re-parse - '((not (width > 100px)) and (resolution > 1dppx))' serializes then re-parses as 'not all' (KI-115) - so evaluability is not preserved end-to-end; positive-resolution matching holds only on the internal MediaParser surface, which the public API does not expose for direct assertion."
             tracking: spec-model-quality-lints
+            ki_ref: KI-115
         - id: AC-010
           text: A preserved comment between compound selectors shall act as a descendant combinator. Type-selector matching outside the HTML namespace shall compare names case-sensitively. Language ranges shall match asterisk subtags as wildcards through extended filtering. Selector matching over a large tree shall bound evaluation cost per query.
           verification_method: test
@@ -152,8 +157,9 @@ stakeholder:
             - SYS-REQ-260823-00C0
             - SYS-REQ-260822-ZQJT
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: comment-as-descendant-combinator matching verified working, but still blocked by open known issues - type-selector matching outside the HTML namespace is case-insensitive ('clippath' matches SVG clipPath, SCS2 gap row in tests/mcdc-witness-domain-tables.test.ts), asterisk-subtag :lang() wildcards never match (':lang(\"*-US\")' misses lang=en-US, 00C0 gap row), and :has()/combinator backtracking cost over large trees exceeds the bounded-cost tripwire (ZQJT gap row)."
+            reason: "Clause-level triage 2026-08-25: comment-as-descendant-combinator matching verified working, but still blocked by open known issues - type-selector matching outside the HTML namespace is case-insensitive ('clippath' matches SVG clipPath, SCS2 gap row in tests/mcdc-witness-domain-tables.test.ts, KI-32), asterisk-subtag :lang() wildcards never match (':lang(\"*-US\")' misses lang=en-US, 00C0 gap row, KI-34), and :has()/combinator backtracking cost over large trees exceeds the bounded-cost tripwire (ZQJT gap row, KI-16). Primary blocker KI-32; also KI-34, KI-16."
             tracking: spec-model-quality-lints
+            ki_ref: KI-32
         - id: AC-011
           text: The cascade shall substitute a custom property name produced by a nested var function. The cascade shall dispatch mixed-case var and env function names as their lowercase forms. An env function with an invalid index shall be invalid at computed-value time. getCascadedStyle shall enforce registered custom property descriptors on the computed-value path. Acyclic var substitution shall bound expansion size.
           verification_method: test
@@ -164,8 +170,9 @@ stakeholder:
             - SYS-REQ-260823-CRG8
             - SYS-REQ-260822-EGPW
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: mixed-case VAR() dispatch and shallow math serialization fixpoints verified working, but still blocked by open known issues - nested var() custom-property-name substitution resolves to the initial value instead of the referenced property (KI-108), ENV() is not dispatched lowercase (KI-109), env() with an invalid index is not invalid at computed-value time (KI-110), getCascadedStyle ignores registered custom property descriptors on the computed-value path (KI-38), and deep acyclic var chains exhaust the stack (RangeError observed on a 4000-link chain, EGPW)."
+            reason: "Clause-level triage 2026-08-25: mixed-case VAR() dispatch and shallow math serialization fixpoints verified working, but still blocked by open known issues - nested var() custom-property-name substitution resolves to the initial value instead of the referenced property (KI-108), ENV() is not dispatched lowercase (KI-109), env() with an invalid index is not invalid at computed-value time (KI-110), getCascadedStyle ignores registered custom property descriptors on the computed-value path (KI-38), and deep acyclic var chains exhaust the stack (RangeError observed on a 4000-link chain, EGPW). Primary blocker KI-108; also KI-109, KI-110, KI-38."
             tracking: spec-model-quality-lints
+            ki_ref: KI-108
         - id: AC-012
           text: Math expression consumption and simplification shall be depth-bounded, and product distribution shall bound intermediate term count. CSSMathValue serialization shall re-parse to a value with an equal serialization. A math value evaluating to NaN shall serialize the canonical NaN keyword. StylePropertyMap typed storage shall enforce limited numeric ranges. Reification of declaration values shall follow the per-property normalization rules.
           verification_method: test
@@ -181,8 +188,9 @@ stakeholder:
             - SYS-REQ-260825-2FMA
             - SYS-REQ-260825-V4ZS
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: shallow CSSMathValue serialization fixpoints and unit normalization verified working, but still blocked by open known issues - deep math tree construction/simplification is not depth-bounded (RangeError on a 3000-deep CSSMathSum, JD78), NaN results serialize with a lowercase 'nan' identifier instead of the canonical NaN keyword (KI-118), StylePropertyMap typed storage silently accepts numerics outside limited property ranges (KI-122), and product-distribution term bounding lacks public end-to-end observability (8BK4)."
+            reason: "Clause-level triage 2026-08-25: shallow CSSMathValue serialization fixpoints and unit normalization verified working, but still blocked by open known issues - deep math tree construction/simplification is not depth-bounded (RangeError on a 3000-deep CSSMathSum, JD78), NaN results serialize with a lowercase 'nan' identifier instead of the canonical NaN keyword (KI-118), StylePropertyMap typed storage silently accepts numerics outside limited property ranges (KI-122), and product-distribution term bounding lacks public end-to-end observability (8BK4). Primary blocker KI-118; also KI-122."
             tracking: spec-model-quality-lints
+            ki_ref: KI-118
         - id: AC-013
           text: Serializing hash tokens and function names shall escape identifier-context code points so structure survives re-parse. Serialization of attr shall preserve the namespaced attribute name exactly as the grammar allows it. Parsing or setting a grammatically valid border-image declaration shall preserve its components, and serializing then re-parsing such a declaration shall reach a fixpoint after one cycle.
           verification_method: test
@@ -192,8 +200,9 @@ stakeholder:
             - SYS-REQ-260823-1V3K
             - SYS-REQ-260823-BNDX
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: still blocked by open known issues - namespaced attr() serialization drops the '|' separator ('attr(|bar)' serializes as 'attr(bar)', KI-121), quoted-url border-image declarations lose their slice/fill/width components on retention (KI-114), border-image serialize/re-parse drifts instead of reaching a one-cycle fixpoint (KI-116), and escaped/hash identifier round-trips can break rule structure (8HDQ gap row in tests/mcdc-witness-cssom.test.ts)."
+            reason: "Clause-level triage 2026-08-25: still blocked by open known issues - namespaced attr() serialization drops the '|' separator ('attr(|bar)' serializes as 'attr(bar)', KI-121), quoted-url border-image declarations lose their slice/fill/width components on retention (KI-114), border-image serialize/re-parse drifts instead of reaching a one-cycle fixpoint (KI-116), and escaped/hash identifier round-trips can break rule structure (8HDQ gap row in tests/mcdc-witness-cssom.test.ts). Primary blocker KI-116; also KI-121, KI-114."
             tracking: spec-model-quality-lints
+            ki_ref: KI-116
         - id: AC-014
           text: CSS.supports shall return false for malformed var syntax and accept a syntactically valid env value in a supported property. registerProperty shall reject an initial-value that fails its registered syntax. The at-property syntax multiplier set shall be closed to plus and comma-list markers, and brace repetition forms shall throw SyntaxError.
           verification_method: test
@@ -204,8 +213,9 @@ stakeholder:
             - SYS-REQ-260823-PMB5
             - SYS-REQ-260825-7T66
           witness_deferred:
-            reason: "Clause-level triage 2026-08-25: only the registerProperty initial-value syntax rejection is verified working; still blocked by open known issues - CSS.supports returns true for malformed var() values (KI-107), CSS.supports rejects syntactically valid env() values (KI-110), and legal '+'/'#' syntax-string multipliers throw SyntaxError while the multiplier set should be closed but accepting (KI-35)."
+            reason: "Clause-level triage 2026-08-25: only the registerProperty initial-value syntax rejection is verified working; still blocked by open known issues - CSS.supports returns true for malformed var() values (KI-107), CSS.supports rejects syntactically valid env() values (KI-110), and legal '+'/'#' syntax-string multipliers throw SyntaxError while the multiplier set should be closed but accepting (KI-35). Primary blocker KI-35; also KI-107, KI-110."
             tracking: spec-model-quality-lints
+            ki_ref: KI-35
 lifecycle:
     change_history:
         - date: "2026-08-21T12:39:07Z"

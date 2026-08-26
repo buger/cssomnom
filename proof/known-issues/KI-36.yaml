@@ -3,6 +3,7 @@ title: '122 generated shorthands missing from runtime table: setProperty never e
 description: 'Observed: setProperty(''gap'',''10px'') stores it verbatim; getPropertyValue(''row-gap'') returns ''''; mixed write orders leave wrong cascade winners that re-parse unchanged. API: setProperty/getPropertyValue/cssText - SHORTHANDS (src/shorthands.ts ~L1943) wires 44/165 of src/data/gen/shorthands.ts; 122 never resolve (runtime-only keys absent from the generated table). Expected: canonical-order longhand expansion keeping the greatest cascading winner (cssom-1 #concept-declarations-specified-order Overview.bs:2243-2245; css-gaps-1 #gap-shorthand :236; css-transitions-1 #transition-shorthand-property :510). Impact: silent data loss / cascade corruption.'
 affected_requirements:
     - SYS-REQ-260823-SHX6
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-36.yaml
 severity: high
@@ -58,6 +59,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

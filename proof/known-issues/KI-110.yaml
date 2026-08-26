@@ -4,6 +4,7 @@ description: 'One env() grammar root has two independently failing paths: CSS.su
 affected_requirements:
     - SYS-REQ-260822-V110
     - SYS-REQ-260822-V11A
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-110-env-grammar-supports-overlay-260822.ts
 evidence_manifests:
@@ -45,6 +46,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-110.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

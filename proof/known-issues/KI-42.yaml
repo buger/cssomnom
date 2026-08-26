@@ -3,6 +3,7 @@ title: parseComponentValueSync('url(a b)') returns truncated token 'a' instead o
 description: 'parseComponentValueSync("url(a b)") returns CSSParserToken("a") - the truncated ident inside a <bad-url-token> - instead of throwing. css-syntax-3 ~2013-2016 marks <bad-url-token>/<bad-string-token> always-parse-errors; #parse-a-component-value (~2457-2484) turns consumption failure into a syntax error. The library owns >1-value branch already throws for "a b" (src/parser-api.ts ~600-602), so rejecting the lone bad token is consistent internal behavior, not new policy. Same defect for url(a\\nb).'
 affected_requirements:
     - SYS-REQ-260823-BTC4
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-42.yaml
 severity: medium
@@ -55,6 +56,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-26T16:22:34Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

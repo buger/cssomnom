@@ -3,6 +3,7 @@ title: CSSSupportsRule.matches IDL attribute missing entirely
 description: 'parse(''@supports (display: grid){}'').cssRules[0].matches is undefined: CSSSupportsRule (src/CSSOM.ts ~L975) implements conditionText and cssText but no matches accessor at all. css-conditional-3 #the-csssupportsrule-interface defines ''readonly attribute boolean matches'' (Overview.bs:845-848) returning ''the evaluation of the CSS feature query represented in conditionText'' (:856-859). The attribute is implementable fully offline because the library''s own public CSS.supports() (src/parser-api.ts:757, SYS-REQ-260821-SMW6) already evaluates identical feature queries. Interface-completeness fault: every consumer probing rule support capability gets undefined instead of a boolean. Note (not filed): CSSMediaRule.matches (css-conditional-3 :806, semantics :820-827) is also absent, but its value is window/environment-dependent (''true if the rule is in a stylesheet attached to a document whose Window matches'') and cannot be honestly asserted in a headless harness.'
 affected_requirements:
     - SYS-REQ-260823-SMA3
+    - STK-REQ-260821-BQKD
 evidence_manifests:
     - proof/evidence/ki-33.yaml
 severity: medium
@@ -43,6 +44,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-33.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

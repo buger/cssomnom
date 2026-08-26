@@ -3,6 +3,7 @@ title: sandbox.fetch falls through to the host network stack for non-/interfaces
 description: 'scripts/wpt/node/run.ts overrides the fixture sandbox''s fetch to serve /interfaces/*.idl locally but ends with an unconditional ''return fetch(input, init)'' (L158 at HEAD 83ce08f) — no scheme/host allowlist. Page JS running in the vm sandbox can drive the privileged runner process against arbitrary URLs: cloud metadata 169.254.169.254, loopback/RFC1918 internal services, attacker exfil collectors; even a missing in-tree IDL falls through instead of failing closed. SSRF/confused-deputy egress (CWE-918) from maintainer/CI identities.'
 affected_requirements:
     - SYS-REQ-260823-7TCQ
+    - STK-REQ-260821-556N
 evidence_manifests:
     - proof/evidence/ki-25.yaml
 severity: medium
@@ -46,6 +47,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-25.yaml
+    - at: "2026-08-26T16:22:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

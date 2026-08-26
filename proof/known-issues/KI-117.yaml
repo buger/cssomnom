@@ -3,6 +3,7 @@ title: Grammar-invalid relative color values are retained instead of dropped by 
 description: 'Declaration-block parsing keeps color declarations whose values fail the css-color grammar, including every WPT css/css-color/parsing/color-invalid-relative-color.html row probed (rgb/hsl/hwb/lab/oklch channel-type mismatches and invalid component names such as rgb(from rebeccapurple r 10deg 10) and rgb(from rebeccapurple red g b)). cssom-1 #parse-a-css-declaration-block step 3.1 requires parsing each declaration per the appropriate specifications and DROPPING the parts said to be ignored; a grammar-invalid value must yield an empty getPropertyValue(color) while valid neighbors survive. The reproducer also carries a green positive control proving valid relative colors round-trip, pinning that this is retention-of-invalid, not blanket rejection.'
 affected_requirements:
     - SYS-REQ-260824-CFQG
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-117-relative-color-invalid-retained-overlay-260824.ts
 evidence_manifests:
@@ -50,6 +51,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-08-26T16:22:34Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

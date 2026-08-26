@@ -3,6 +3,7 @@ title: Mixed-case VAR() and ENV() are not dispatched in custom properties
 description: The custom-property cascade gate detects only lowercase var( and env( text, so mixed-case VAR() and ENV() stored in intermediate custom properties are not dispatched even though CSS function names are ASCII case-insensitive. Lowercase direct controls pass, while use-site replacement exposes the unresolved intermediate function.
 affected_requirements:
     - SYS-REQ-260822-V109
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-109-case-insensitive-var-env-overlay-260822.ts
 evidence_manifests:
@@ -44,6 +45,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-109.yaml
+    - at: "2026-08-26T16:22:35Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

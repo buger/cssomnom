@@ -3,6 +3,7 @@ title: Quoted-url border-image declarations are laundered to initial longhands a
 description: 'Parsing ''.o{border-width:1px;border-style:solid;border-color:red;border-image:url("x") 60}'' stores an all-initial border-image-* expansion instead of the declared value: getPropertyValue(''border-image'') returns ''none'', cssText serializes only ''border: 1px solid red;'', and the border shorthand reconstructs even though the author set border-image. Root subsystem: expandBorderImage (src/shorthands.ts ~955-1001) recognizes only token-type ''url'' sources, but css-syntax-3 #consume-ident-like-token delivers quoted urls as function tokens named url, so the source silently stays none; it additionally discards trailing slice components without invalidating the partial result (url(x) 60 keeps source=url("x") but slice stays 100% and re-serializes truncated). css-backgrounds-3 #borderimage makes url("x") 60 grammatically valid, cssom-1 #parse-a-css-declaration-block step 3.1 licenses dropping only grammar-failing declarations, and cssom-1 #serialize-a-css-declaration-block (~line 2523) has no omission step and explicitly lists local WPT css/cssom/border-shorthand-serialization.html whose .b row asserts border is not serialized while border-image longhands are non-initial. Distinct from KI-116 (fixpoint instability): this is first-parse data loss through expansion, observable without any second parse.'
 affected_requirements:
     - SYS-REQ-260823-1V3K
+    - STK-REQ-260821-BQKD
 commands:
     - /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-114-border-image-declaration-lost-overlay-260823.ts
 evidence_manifests:
@@ -55,6 +56,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-114.yaml
+    - at: "2026-08-26T16:22:36Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
