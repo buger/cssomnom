@@ -1,0 +1,50 @@
+id: KI-133
+title: Grammatically invalid @supports rules are retained at ingest instead of being ignored with all contents
+description: 'css-conditional-3 #supports-syntax requires processors to ignore any @supports rule whose condition fails the grammar, including all of its contents. The parser retains eight probed invalid shapes as CSSSupportsRule objects: empty declaration values, trailing close parentheses, bracket blocks in place of parens, mismatched closers, operand-less not, and dangling and operators. WPT fixtures at-supports-019 through at-supports-026 pin the same shapes as ignored rules. Retention makes dead conditions observable through cssRules and cssText and lets their contents apply under a condition no browser would construct. KI-107 covers malformed var() acceptance inside CSS.supports evaluation, which is a different surface and clause.'
+affected_requirements:
+    - SYS-REQ-260826-0MVR
+evidence_manifests:
+    - proof/evidence/ki-133.yaml
+source_vector: V-MALFORMED-RECOVER
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / replaceSync() stylesheet ingest of @supports rules
+attacker_input: ordinary stylesheet text with an unparseable @supports condition
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-133-supports-invalid-rule-retained-overlay-260826.ts
+tripwire_mutation: Add a grammar check on the parsed supports condition so failing conditions drop the whole rule while the valid-condition control stays retained
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat every @supports rule from this library as suspect until the condition parses; validate conditions independently before relying on rule presence.
+remediation: Validate the parsed condition against the css-conditional-3 grammar during ingest and drop invalid rules together with their contents, matching WPT at-supports recovery expectations.
+owner: agent:champ
+review_date: "2026-09-26"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-26T11:11:32Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-26T11:12:38Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-133.yaml
+    - at: "2026-08-26T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-133.yaml
+    - at: "2026-08-26T11:14:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
+    - at: "2026-08-26T11:34:42Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-133.yaml
+kill_domain: conditional_rule_ingest_grammar
+do_not_refile_as: KI-107 owns CSS.supports(property, value) returning true for malformed var() syntax on the boolean API; this filing owns rule retention at ingest for conditions that fail the css-conditional grammar outright.
+dedup_armor: |
+    css-conditional-3 rule-level ingest grammar versus boolean evaluation. KI-107 covers the CSS.supports(property, value) API returning true for malformed var() argument syntax after a condition already parsed. KI-133 covers stylesheet ingest retaining whole @supports rules whose condition matches no production of #supports-syntax, where css-conditional-3 mandates ignoring the rule with all of its contents. Different surfaces (CSS.supports call versus parse()/cssRules), different clauses (declaration-value parse versus condition grammar), different observables (boolean true versus retained rule). Fixing one performs no work on the other, so merging hides a leg. WPT legs at-supports-019 through at-supports-026 belong to this filing only.

@@ -1,0 +1,52 @@
+id: KI-132
+title: '@media rules with an unclosed parenthesis in the prelude vanish from the sheet instead of serializing as not all'
+description: 'A @media prelude that ends inside an unclosed parenthesis block deletes the whole grouping rule at stylesheet ingest. parse("@media ((width){a{color:red}}") returns zero rules where mediaqueries-4 #error-handling requires retention: a query that does not match the grammar becomes not all and the rule keeps its contents. The media layer itself already recovers correctly, because MediaParser.parse marks such queries invalid and serializeMediaQuery emits not all, so the CSSOM ingest layer drops what its own parser recovered. insertRule() compounds the cross-surface split and throws SyntaxError for text whose specified rule-level parse cannot fail. KI-5 fixed unclosed-construct serialization inside MediaParser; this filing pins the stylesheet-ingest deletion on top of that fix. The same input also exercises V-MALFORMED-RECOVER recovery posture.'
+affected_requirements:
+    - SYS-REQ-260826-XS91
+evidence_manifests:
+    - proof/evidence/ki-132.yaml
+source_vector: V-CROSS-SURFACE-POSTURE-TRIAGE
+severity: medium
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: parse() / replaceSync() stylesheet ingest of @media rules; CSSStyleSheet.insertRule()
+attacker_input: ordinary malformed stylesheet text; an unclosed parenthesis inside a @media prelude
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-132-media-unclosed-prelude-rule-deletion-overlay-260826.ts
+tripwire_mutation: Route unclosed-construct media queries from the ingest path through the existing invalid-to-not-all normalization so the rule is retained with its child rules while balanced controls stay unchanged
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Authors can close every parenthesis inside @media preludes; consumers cannot detect the loss without re-parsing.
+remediation: 'Retain the @media rule for any query MediaParser marks invalid, serialize its condition as not all per mediaqueries-4 #error-handling, and let insertRule accept the recovered rule.'
+owner: agent:champ
+review_date: "2026-09-26"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-26T11:10:12Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-26T11:12:38Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-132.yaml
+    - at: "2026-08-26T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-132.yaml
+    - at: "2026-08-26T11:14:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
+    - at: "2026-08-26T11:34:41Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-132.yaml
+    - at: "2026-08-26T11:39:14Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-132.yaml
+kill_domain: silent_structural_loss
+do_not_refile_as: KI-5 owns serializeMediaQuery emitting (()) for unclosed constructs and landed that fix; this defect is whole-rule deletion during CSSOM ingestion, a different observable on a different layer. KI-31 covers condition serialization dropping parentheses on valid conditions, not rule deletion.

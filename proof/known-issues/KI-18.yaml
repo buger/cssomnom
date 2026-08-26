@@ -18,6 +18,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Do not expose parse()/replaceSync() to untrusted CSS without a process-level stack guard or input depth pre-check.
 remediation: Thread a nesting-depth counter through consumeBlockContents/consumeNestedQualifiedRuleFromStream/consumeAtRule/consumeComponentValue and fail closed with a structured parse error before the engine stack is exhausted.
+notes:
+    - '2026-08-26: Vector campaign reconciliation — this filing owns hunt vector V-RECURSION-DEPTH (recursion_depth_bounded on nested grouping rules and CSSNestedDeclarations consume). The blind onboarding probe (parse() RangeError at >=~1000 nested blocks, tokenize() iterative at 50k depth) is recorded in proof/vectors/V-RECURSION-DEPTH.yaml notes. Media-condition parenthesis recursion is a distinct mechanism filed separately as KI-131.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -38,6 +40,10 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-18.yaml
+    - at: "2026-08-26T11:14:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

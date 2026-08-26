@@ -9,30 +9,30 @@ variables:
       direction: output
       description: 'Quantitative budget - count of parse cycles where a declared border-image value is laundered to all-initial longhands, silently loses its slice component, or is omitted from cssText serialization; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 (drop only grammar failures) and #serialize-a-css-declaration-block no-omission loop (reproducer constant BORDER_IMAGE_DEFECT_LEGS = 4, all of which must retain).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: border_image_url_reparsed
       type: bool
       direction: input
-      description: 'The serialized text of a parsed border-image:url() declaration is fed back through parse() (one-cycle fixpoint probe; reproducer KI-116 exercises shorthand read-back, border-image-source longhand, and cssText stability legs against a background:url() property-specific control).'
+      description: The serialized text of a parsed border-image:url() declaration is fed back through parse() (one-cycle fixpoint probe; reproducer KI-116 exercises shorthand read-back, border-image-source longhand, and cssText stability legs against a background:url() property-specific control).
     - name: border_image_fixpoint_drift
       type: int
       direction: output
       description: 'Quantitative budget - count of serialize/re-parse cycles where the re-parsed border-image differs from pass 1 (e.g. collapsing url("") to none); must be zero per css-syntax-3 #serialization round-trip mandate.'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: grouped_negation_media_roundtripped
       type: bool
       direction: input
-      description: 'A media condition containing a negated term wrapped in grouping parentheses ((not (x)) and (r)) is parsed, serialized via conditionText, and re-parsed (reproducer KI-115 exercises condition-level and whole-rule round-trip legs with mq-invalid-media-type-005.html grammar-error rows as green controls).'
+      description: A media condition containing a negated term wrapped in grouping parentheses ((not (x)) and (r)) is parsed, serialized via conditionText, and re-parsed (reproducer KI-115 exercises condition-level and whole-rule round-trip legs with mq-invalid-media-type-005.html grammar-error rows as green controls).
     - name: media_condition_collapse_count
       type: int
       direction: output
       description: 'Quantitative budget - count of round-trips where serialized conditionText fails the mediaqueries-4 #mq-syntax grammar on re-parse and is replaced by ''not all'' (#error-handling ~line 1031); must be zero per css-syntax-3 #serialization.'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: trailing_whitespace_declared
       type: bool
       direction: input
@@ -42,41 +42,41 @@ variables:
       direction: output
       description: 'Quantitative budget - count of stored declaration values whose trailing whitespace survives into getPropertyValue()/cssText; must be zero per css-syntax-3 #consume-declaration trailing-whitespace removal ("While the last item in decl value is a <whitespace-token>, remove that token").'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: grammar_invalid_color_declared
       type: bool
       direction: input
-      description: 'A color declaration whose value fails the css-color relative-color grammar (WPT css/css-color/parsing/color-invalid-relative-color.html test_invalid_value spellings) appears in a declaration block (reproducer KI-117 probes 10 such rows).'
+      description: A color declaration whose value fails the css-color relative-color grammar (WPT css/css-color/parsing/color-invalid-relative-color.html test_invalid_value spellings) appears in a declaration block (reproducer KI-117 probes 10 such rows).
     - name: invalid_color_retention_count
       type: int
       direction: output
       description: 'Quantitative budget - count of grammar-invalid color declarations retained instead of dropped by declaration-block parsing; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 while valid neighbors survive (reproducer constant INVALID_RELATIVE_COLORS = 10 rows, neighbor control expects exactly 2 surviving declarations).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: duplicate_declaration_parsed
       type: bool
       direction: input
-      description: 'A declaration block repeats a property or shorthand (color twice; font:22px Helvetica then font:xxx-large system-ui) and is parsed via parse() (reproducer KI-119; single-font control pins the 13-longhand expansion granularity used for expected counts).'
+      description: A declaration block repeats a property or shorthand (color twice; font:22px Helvetica then font:xxx-large system-ui) and is parsed via parse() (reproducer KI-119; single-font control pins the 13-longhand expansion granularity used for expected counts).
     - name: dropped_duplicate_count
       type: int
       direction: output
       description: 'Quantitative budget - count of successfully parsed declarations silently replaced instead of appended; must be zero per cssom-1 #parse-a-css-declaration-block append semantics (expected lengths: repeated color -> 2, repeated font -> 26 at the demonstrated 13-longhand granularity; reproducer constants EXPECTED_COLOR_LENGTH = 2, EXPECTED_FONT_LENGTH = 26).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: nan_math_result_serialized
       type: bool
       direction: input
-      description: 'A calc() expression evaluating to NaN (calc(NaN), calc(1px * NaN), calc(1px * infinity / infinity)) is serialized via CSSStyleValue.parse(...).toString() (reproducer KI-118; structure-independent casing predicate avoids KI-39 wrapper overlap).'
+      description: A calc() expression evaluating to NaN (calc(NaN), calc(1px * NaN), calc(1px * infinity / infinity)) is serialized via CSSStyleValue.parse(...).toString() (reproducer KI-118; structure-independent casing predicate avoids KI-39 wrapper overlap).
     - name: noncanonical_nan_keyword_count
       type: int
       direction: output
       description: 'Quantitative budget - count of NaN-result serializations containing a standalone lowercase nan token instead of the canonical NaN keyword; must be zero per css-values-4 #calc-serialize step 2 ("Serialize the keyword infinity, -infinity, or NaN") and local WPT calc-infinity-nan-serialize-length.html rows (reproducer constant NONCANONICAL_NAN_BUDGET = 0 across 3 probed forms; wpt-cssom baseline carries 160 related rows).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: namespaced_attr_value_set
       type: bool
       direction: input
@@ -84,10 +84,10 @@ variables:
     - name: attr_namespace_drop_count
       type: int
       direction: output
-      description: 'Quantitative budget - count of set/get or parse/serialize cycles where the namespace pipe is silently stripped from the attr() argument (attr(|bar) -> attr(bar)); must be zero for verbatim round-trip fidelity per WPT serialize-values.html pinned serializations (reproducer constant ATTR_NAMESPACE_DROPS = 0 across 4 probed rows plus a reparse witness).'
+      description: Quantitative budget - count of set/get or parse/serialize cycles where the namespace pipe is silently stripped from the attr() argument (attr(|bar) -> attr(bar)); must be zero for verbatim round-trip fidelity per WPT serialize-values.html pinned serializations (reproducer constant ATTR_NAMESPACE_DROPS = 0 across 4 probed rows plus a reparse witness).
       range:
-        min: 0
         max: 0
+        min: 0
     - name: system_font_keyword_declared
       type: bool
       direction: input
@@ -97,22 +97,22 @@ variables:
       direction: output
       description: 'Quantitative budget - count of lone system-font-keyword declarations whose getPropertyValue(''font'') reads back empty instead of the keyword; must be zero because css-fonts-4 #font-prop admits <<system-font-family-name>> as a valid alternative and cssom-1 #parse-a-css-declaration-block drops only grammar failures (reproducer KI-112 probes 6 keywords x 2 ingress legs = 12 reads; SYSTEM_FONT_EMPTY_READ_BUDGET = 0).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: system_font_roundtrip_mismatches
       type: int
       direction: output
-      description: 'Quantitative budget - count of read-back/re-set cycles where a retained system font keyword fails to round-trip (cssText or getPropertyValue(''font'') differs from the set keyword); must be zero per cssom-1 serialize-a-CSS-declaration-block emit-retained-shorthands mandate and WPT font-valid.html serialization assertions (reproducer constant SYSTEM_FONT_ROUNDTRIP_MISMATCH_BUDGET = 0).'
+      description: Quantitative budget - count of read-back/re-set cycles where a retained system font keyword fails to round-trip (cssText or getPropertyValue('font') differs from the set keyword); must be zero per cssom-1 serialize-a-CSS-declaration-block emit-retained-shorthands mandate and WPT font-valid.html serialization assertions (reproducer constant SYSTEM_FONT_ROUNDTRIP_MISMATCH_BUDGET = 0).
       range:
-        min: 0
         max: 0
+        min: 0
     - name: font_longhand_pollution_count
       type: int
       direction: output
       description: 'Quantitative budget - count of probed font longhands whose specified value contains the raw system font keyword instead of the empty string; must be zero per css-fonts-4 #font-prop-desc (longhand values stay at UA disposal, never the raw keyword) and WPT css/css-fonts/system-fonts-serialization.tentative.html empty-longhand assertions (reproducer KI-112 probes 13 longhands per keyword; currently red with the keyword stamped into all 13).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: font_invalid_keyword_mix_supplied
       type: bool
       direction: input
@@ -122,19 +122,19 @@ variables:
       direction: output
       description: 'Quantitative budget - count of keyword-mixed grammar-failing font declarations retained by declaration-block parsing instead of dropped with getPropertyValue(''font'') returning the empty string; must be zero per cssom-1 #parse-a-css-declaration-block step 3.1 (reproducer KI-113 observes 4 red legs; FONT_INVALID_MIX_RETAINED_BUDGET = 0).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: typed_out_of_range_unit_set
       type: bool
       direction: input
-      description: 'A CSSUnitValue part outside the property grammar''s limited numeric range (flex-grow -3.14 against <number [0,∞]>; border-top-left-radius -3.14em against <length-percentage [0,∞]>) is stored via StylePropertyMap.set() (reproducer KI-122 legs include the getAll re-read; in-range controls green).'
+      description: A CSSUnitValue part outside the property grammar's limited numeric range (flex-grow -3.14 against <number [0,∞]>; border-top-left-radius -3.14em against <length-percentage [0,∞]>) is stored via StylePropertyMap.set() (reproducer KI-122 legs include the getAll re-read; in-range controls green).
     - name: unwrapped_out_of_range_reads
       type: int
       direction: output
       description: 'Quantitative budget - count of get()/getAll() reads that reify an out-of-range part as a bare CSSUnitValue instead of wrapping it in a fresh CSSMathSum; must be zero per css-typed-om-1 #create-an-internal-representation and WPT testsuite.js assert_is_equal_with_range_handling ("Invalid (out-of-range) numeric values must be wrapped in a CSSMathSum"; reproducer constant UNWRAPPED_READ_BUDGET = 0 across flex-grow, border-top-left-radius and getAll legs).'
       range:
-        min: 0
         max: 0
+        min: 0
     - name: base_only_property_value_read
       type: bool
       direction: input
@@ -144,5 +144,29 @@ variables:
       direction: output
       description: 'Quantitative budget - count of such reads returning an instance of a CSSStyleValue subclass (CSSKeywordValue/CSSRGB/CSSColorValue boxing of unrepresentable values) instead of a direct CSSStyleValue carrying [[associatedProperty]]; must be zero per css-typed-om-1 #reify-failure and #reify-as-a-cssstylevalue and WPT color.html runUnsupportedPropertyTests pin "must be a CSSStyleValue and not one of its subclasses" (reproducer constant SUBCLASS_BOXED_BASE_READS = 0 across 5 defect legs).'
       range:
-        min: 0
         max: 0
+        min: 0
+    - name: deep_media_paren_nesting
+      type: bool
+      direction: input
+      description: Stylesheet text contains a media condition with parenthesis nesting depth beyond the bounded recursion limit
+    - name: uncaught_rangeerror_count
+      type: int
+      direction: output
+      description: Number of raw engine RangeErrors escaping parse()/insertRule() during stylesheet ingestion
+    - name: media_prelude_unclosed_parenthesis
+      type: bool
+      direction: input
+      description: A @media prelude ends inside an unclosed parenthesis block per css-syntax-3 consume-a-simple-block
+    - name: deleted_grouping_rule_count
+      type: int
+      direction: output
+      description: Number of grouping rules removed from the sheet at ingest instead of being retained with a recovered condition
+    - name: supports_condition_fails_grammar
+      type: bool
+      direction: input
+      description: An @supports condition does not match the css-conditional-3 supports-condition grammar including general-enclosed
+    - name: retained_invalid_supports_rule_count
+      type: int
+      direction: output
+      description: Number of grammatically invalid @supports rules kept in cssRules instead of being ignored with all contents

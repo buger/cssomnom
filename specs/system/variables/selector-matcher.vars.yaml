@@ -1,0 +1,10 @@
+component: selector-matcher
+variables:
+    - name: top_level_selector_parse_fails
+      type: bool
+      direction: input
+      description: The selector list fails non-forgiving parse per selectors-4 outside is() and where()
+    - name: silent_false_or_empty_results
+      type: int
+      direction: output
+      description: Number of matches/querySelectorAll/querySelector calls returning false or empty instead of raising SyntaxError for unparseable selectors

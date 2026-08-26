@@ -1,0 +1,48 @@
+id: KI-134
+title: matches() and querySelectorAll() swallow invalid selectors where the DOM contract throws SyntaxError
+description: The matcher returns false and querySelectorAll returns an empty list for every selector that fails to parse, including fully invalid lists and mixed valid-plus-invalid plain lists. DOM Standard matches(), closest(), and querySelectorAll throw a SyntaxError DOMException when the selector list is invalid, and selectors-4 grants forgiving parsing only to :is() and :where(). Our :is(span,>>>) correctly still matches span, so the forgiving-list machinery exists; the top-level APIs stay silent instead. README claims Selectors 4 support and records no deviation for this error posture, so the divergence is undocumented interop drift. Silent false hides author typos that browsers surface loudly.
+affected_requirements:
+    - SYS-REQ-260826-J4NJ
+evidence_manifests:
+    - proof/evidence/ki-134.yaml
+source_vector: V-SELECTOR-FORGIVENESS-DIVERGENCE
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: matches(element, selector), querySelectorAll(root, selector), querySelector(root, selector)
+attacker_input: ordinary selector strings with syntax errors; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-134-matcher-silent-forgiveness-divergence-overlay-260826.ts
+tripwire_mutation: Make parseSelector failures in matches/querySelectorAll/querySelector raise a SyntaxError DOMException while :is()/:where() forgiving parsing keeps accepting valid members of mixed lists
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate selector text against a browser before trusting silent-false results from these APIs.
+remediation: Throw SyntaxError from matches/querySelectorAll/querySelector on selector parse failure in non-forgiving contexts; keep :is()/:where() forgiving per selectors-4 and document any remaining intentional deviation in README.
+owner: agent:champ
+review_date: "2026-09-26"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-26T11:12:18Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-26T11:12:38Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-134.yaml
+    - at: "2026-08-26T11:12:49Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-134.yaml
+    - at: "2026-08-26T11:14:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
+    - at: "2026-08-26T11:34:42Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-134.yaml
+kill_domain: error_posture_divergence
+do_not_refile_as: KI-16 owns missing match-complexity budgets and KI-32/KI-34 own specific matching semantics (case sensitivity, wildcard lang). No existing KI owns the throw-versus-swallow error posture of the top-level matcher APIs.

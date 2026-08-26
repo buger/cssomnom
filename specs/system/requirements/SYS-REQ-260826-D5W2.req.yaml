@@ -1,0 +1,46 @@
+id: SYS-REQ-260826-D5W2
+version: 1
+status: approved
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when deep_media_paren_nesting the cssom shall always satisfy uncaught_rangeerror_count <= 0
+description: "Deeply nested parentheses inside a media condition keep uncaught_rangeerror_count at zero across parse() and insertRule(). css-syntax-3 #consume-stylesheet-contents requires ingestion to return a stylesheet, so pathological nesting fails closed into a structured error or recovers by dropping constructs. The tokenizer already runs iteratively, which isolates the bound to media-condition parsing."
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: "MediaParser descends recursively over parenthesis blocks with no depth counter; KI-131 witnesses stack exhaustion at roughly 2200 levels through public API entry points."
+tags: []
+variables: []
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: approved
+        reviewer: human:Leonid Bugaev
+        role: author
+        roles:
+            - author
+        reviewed_at: "2026-08-26T11:27:55Z"
+        comment: 'Informal-draft wave filing: FRETish modeled over declared variables; paired KI reproducers twice-red at HEAD'
+        fingerprint: sha256:555f9a71c506f2bbc57b5a7c32dbd4ac93fdb9d3a086ccdd0f333c3c9304f617
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T11:20:41Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T11:28:03Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-26T11:21:25Z"
+          from: draft
+          to: review
+          reason: ""
+          changed_by: human:Leonid Bugaev

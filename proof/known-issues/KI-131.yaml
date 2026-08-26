@@ -1,0 +1,50 @@
+id: KI-131
+title: Media condition parenthesis nesting overflows the JS stack with a raw RangeError through parse() and insertRule()
+description: 'MediaParser parses nested parenthesis blocks in a media condition through recursive descent with no depth counter. A @media prelude with about 2200 nested balanced parentheses drives parse() past the engine stack limit and a raw RangeError escapes to the caller. CSSStyleSheet.insertRule() leaks the identical RangeError for the same text. css-syntax-3 #consume-stylesheet-contents requires stylesheet ingestion to return a stylesheet, and the tokenizer itself survives 50000-deep nesting iteratively, so the recursion lives in the condition parser alone. This mechanism differs from the block-nesting recursion of KI-18 and from the math-expression recursion of KI-22.'
+affected_requirements:
+    - SYS-REQ-260826-D5W2
+evidence_manifests:
+    - proof/evidence/ki-131.yaml
+source_vector: V-DOS-PARSE
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: parse() / CSSStyleSheet.insertRule() reaching MediaParser condition parsing
+attacker_input: untrusted stylesheet text with deeply nested parentheses inside a @media prelude; a few KB of source
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-131-media-paren-depth-rangeerror-overlay-260826.ts
+tripwire_mutation: Thread a depth counter through the media-condition parser so deep parenthesization fails closed into a structured parse error while balanced shallow queries keep parsing
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject untrusted stylesheets that contain long runs of open parentheses before parsing, or run the parser under a process-level stack guard.
+remediation: Track condition depth in MediaParser and fail closed with a structured SyntaxError once a bounded limit is reached, mirroring the remediation plan of KI-18.
+owner: agent:champ
+review_date: "2026-09-26"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-26T11:09:30Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-08-26T11:12:37Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-131.yaml
+    - at: "2026-08-26T11:12:48Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-131.yaml
+    - at: "2026-08-26T11:14:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-requirement
+    - at: "2026-08-26T11:34:41Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-131.yaml
+kill_domain: resource_exhaustion
+do_not_refile_as: KI-18 covers consumeBlockContents/consumeAtRule recursion on nested style rules and grouping at-rules; KI-22 covers math expression recursion. Both name different recursive subsystems and different defect legs than this media-condition parser crash.
+dedup_armor: |
+    Three distinct recursive subsystems under one hazard class. KI-18 pins the consume-algorithms stack: nested style rules (a{a{...}}) and nested grouping at-rules (@media all{...}) overflow inside consumeBlockContents/consumeNestedQualifiedRuleFromStream, with no media parsing involved. KI-22 pins the math expression parser on nested calc() input. KI-131 pins MediaParser condition descent over nested parenthesis blocks in the @media prelude, where the crash survives with a single qualified rule as body. A fix threading a depth counter through one subsystem performs no work on the others; each filing keeps its own tripwire legs and must not cross-close.

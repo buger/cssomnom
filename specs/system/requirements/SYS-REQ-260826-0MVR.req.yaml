@@ -1,0 +1,46 @@
+id: SYS-REQ-260826-0MVR
+version: 1
+status: approved
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when supports_condition_fails_grammar the cssom shall always satisfy retained_invalid_supports_rule_count <= 0
+description: 'css-conditional-3 #supports-syntax requires processors to ignore any @supports rule whose condition fails the grammar, including all of its contents. WPT fixtures at-supports-019 through at-supports-026 pin the recovery shapes. Ingest must drop invalid conditions instead of retaining CSSSupportsRule objects for them.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: KI-133 witnesses eight retained invalid shapes including WPT-pinned legs, with a valid-condition control staying green.
+tags: []
+variables: []
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: approved
+        reviewer: human:Leonid Bugaev
+        role: author
+        roles:
+            - author
+        reviewed_at: "2026-08-26T11:27:55Z"
+        comment: 'Informal-draft wave filing: FRETish modeled over declared variables; paired KI reproducers twice-red at HEAD'
+        fingerprint: sha256:2072c6f3603224b2af06de1d16f46745c898020c52fa9ef7d39f0f90e3dace6e
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T11:21:25Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T11:27:55Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-26T11:21:26Z"
+          from: draft
+          to: review
+          reason: ""
+          changed_by: human:Leonid Bugaev

@@ -1,0 +1,46 @@
+id: SYS-REQ-260826-XS91
+version: 1
+status: approved
+priority: shall
+category: functional
+req_type: guarantee
+fretish: when media_prelude_unclosed_parenthesis the cssom shall always satisfy deleted_grouping_rule_count <= 0
+description: 'A media query that does not match the mediaqueries-4 grammar becomes not all during parsing and its rule stays in the stylesheet with its contents. Unclosed parenthesis blocks inside a @media prelude must therefore never delete the grouping rule at ingest. css-syntax-3 #consume-an-at-rule returns the at-rule and nothing licenses removal downstream.'
+formalization_strategy: fretish
+informal_verification:
+    method: ""
+    evidence: ""
+    verified: false
+parent: STK-REQ-260821-BQKD
+component: cssom
+rationale: KI-132 witnesses whole-rule deletion for three unclosed-paren shapes while balanced and dangling-keyword controls retain correctly.
+tags: []
+variables: []
+traces:
+    satisfies:
+        - STK-REQ-260821-BQKD
+verification:
+    assurance_level: C
+    formalization_status: valid
+    review:
+        status: approved
+        reviewer: human:Leonid Bugaev
+        role: author
+        roles:
+            - author
+        reviewed_at: "2026-08-26T11:27:55Z"
+        comment: 'Informal-draft wave filing: FRETish modeled over declared variables; paired KI reproducers twice-red at HEAD'
+        fingerprint: sha256:3cc240ab53101ad25756bbfbdfcf18d89e9e759275ce3e03c74c2dbd38c08930
+        ai_generated: false
+history:
+    created_by: human:Leonid Bugaev
+    created_at: "2026-08-26T11:21:25Z"
+    last_modified_by: human:Leonid Bugaev
+    last_modified_at: "2026-08-26T11:27:55Z"
+lifecycle:
+    change_history:
+        - date: "2026-08-26T11:21:25Z"
+          from: draft
+          to: review
+          reason: ""
+          changed_by: human:Leonid Bugaev
