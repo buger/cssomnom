@@ -64,6 +64,7 @@ test('hsl hue in [180,300) assigns chroma to blue (SYS-REQ-260824-BRYV)', () => 
 
 // SYS-REQ-260824-DAS2:nominal:nominal
 // SW-REQ-260824-CAHE:nominal:nominal
+// SW-REQ-260824-CAHE:malformed_input:nominal
 // SW-REQ-260824-CAHE:malformed_input:negative
 test('hsl() parses at 3-4 components and rejects other arities (SYS-REQ-260824-DAS2)', () => {
   // 4-component slash form parses and reaches the HSL converter.
