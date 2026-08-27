@@ -138,7 +138,6 @@ test('batch tokenize returns an EOF-terminated token list (row witness)', () => 
 //mcdc:ignore:defensive INT-REQ-260826-GTCS: css_text_supplied=T, eof_token_last=F, token_list_returned=T => FALSE -- tokenize(css) always terminates the list in exactly one empty-span EOF token, so eof_token_last=F cannot occur [reviewed: agent:champ]
 //mcdc:ignore:defensive INT-REQ-260826-GTCS: css_text_supplied=T, eof_token_last=T, token_list_returned=F => FALSE -- tokenize(css) always returns the full token list for the supplied text [reviewed: agent:champ]
 
-// INT-REQ-260826-CHBW:nominal:nominal
 // Verifies: INT-REQ-260826-CHBW
 // MCDC INT-REQ-260826-CHBW: chunk_appended=F, complete_token_in_chunk=F, partial_token_withheld=F => TRUE [no-action: fresh StreamingTokenizer().getTokens() is empty — no chunk buffered, withholding never engaged]
 test('fresh streaming tokenizer yields no tokens and withholds nothing', () => {
