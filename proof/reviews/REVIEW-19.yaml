@@ -6,6 +6,6 @@ subject: SW-REQ-260821-9KNX
 decision: approved
 comment: FRETish trigger consume_qualified_rule_returns_null maps to consumeQualifiedRule returning null on EOF, nested '}', or a custom-property-looking prelude after the '{' block is consumed. Response qualified_rule_dropped maps to consumeListOfRules inserting only when consumeRule is truthy (if (rule) rules.push(rule)), so a null consume never becomes a stylesheet rule.
 citations:
-    - src/parser.ts:905@consumeQualifiedRule
+    - src/parser.ts:917@consumeQualifiedRule
     - src/parser.ts:47@Parser
     - src/parser.ts:306@consumeListOfRules

@@ -6,5 +6,5 @@ subject: SW-REQ-260821-39E0
 decision: approved
 comment: 'FRETish trigger nested_declarations_after_nested_rule & flush_decls_runs maps to consumeBlockContents: accepted nested at-rules and qualified rules call flushDecls, which wraps pending decls as new CSSNestedDeclarations and clears the buffer; the same flush at EOF emits leftover declarations after that nested rule. Response css_nested_declarations_emitted is that CSSNestedDeclarations push.'
 citations:
-    - src/parser.ts:973@consumeBlockContents
+    - src/parser.ts:985@consumeBlockContents
     - src/parser.ts:47@Parser
