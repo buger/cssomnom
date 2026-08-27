@@ -27,7 +27,7 @@ import { parse } from '../src/index.ts';
 function contentOf(css: string): string {
   const sheet = parse(css);
   assert.equal(sheet.cssRules.length, 1, 'declaration rule survives malformed escape');
-  return (sheet.cssRules[0] as { style: { getPropertyValue(k: string): string } }).style.getPropertyValue('content');
+  return (sheet.cssRules[0] as unknown as { style: { getPropertyValue(k: string): string } }).style.getPropertyValue('content');
 }
 
 // SW-REQ-260822-7R6Z:malformed_recovers_or_errors_loudly:nominal

@@ -438,3 +438,91 @@ describe('MC/DC unique-cause: cascade variable-resolver via getCascadedStyle', {
     assert.equal(only.getPropertyValue('--x'), '');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Row-level MC/DC witnesses for the css-color-4 hsl() hue-sector and arity
+// families (rows copied verbatim from `proof mcdc show`). Out-of-sector and
+// out-of-arity rows are antecedent-false: the tests drive the exact input
+// state and prove the sector's chroma assignment never ran (authored text
+// retained for arity violations; the sector channel holds x, not c, for
+// out-of-sector hues).
+// ---------------------------------------------------------------------------
+describe('MC/DC hsl sector and arity spec rows', { concurrency: false }, () => {
+  // Verifies: SW-REQ-260824-JS91
+  // MCDC SW-REQ-260824-JS91: green_from_chroma=F, hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hue_degrees_GE_60=T, hue_degrees_LT_180=T => TRUE [no-action: under-arity hsl(90 50%) stays authored text — no rgb conversion runs, so the green chroma assignment never fires]
+  // MCDC SW-REQ-260824-JS91: green_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=F, hue_degrees_GE_60=T, hue_degrees_LT_180=T => TRUE [no-action: over-arity hsl(90,100%,50%,0.5,9) stays authored text — the arity gate rejects before any chroma assignment]
+  // MCDC SW-REQ-260824-JS91: green_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_60=F, hue_degrees_LT_180=T => TRUE [no-action: hsl(30) computes rgb(255,128,0) — the green channel holds x=128, never the chroma 255]
+  // MCDC SW-REQ-260824-JS91: green_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_60=T, hue_degrees_LT_180=F => TRUE [no-action: hsl(210) computes rgb(0,128,255) — the green channel holds x=128, never the chroma 255]
+  //mcdc:ignore:defensive SW-REQ-260824-JS91: green_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_60=T, hue_degrees_LT_180=T => FALSE -- hslToRgb's 60-180 sector ladder arm assigns chroma to green for every in-sector in-arity input; green_from_chroma=F cannot occur (css-color-4 figure 8 sector math) [reviewed: agent:champ]
+  test('hsl green-sector antecedent-false rows drive out-of-sector and out-of-arity states', () => {
+    assert.equal(box('.t { color: hsl(90 50%); }').getPropertyValue('color'), 'hsl(90 50%)');
+    assert.equal(box('.t { color: hsl(90,100%,50%,0.5,9); }').getPropertyValue('color'), 'hsl(90,100%,50%,0.5,9)');
+    assert.equal(box('.t { color: hsl(30, 100%, 50%); }').getPropertyValue('color'), 'rgb(255, 128, 0)');
+    assert.equal(box('.t { color: hsl(210, 100%, 50%); }').getPropertyValue('color'), 'rgb(0, 128, 255)');
+  });
+
+  // Verifies: SW-REQ-260824-23WT
+  // MCDC SW-REQ-260824-23WT: blue_from_chroma=F, hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => TRUE [no-action: under-arity hsl(210 50%) stays authored text — no conversion runs, so the blue chroma assignment never fires]
+  // MCDC SW-REQ-260824-23WT: blue_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=F, hue_degrees_GE_180=T, hue_degrees_LT_300=T => TRUE [no-action: over-arity hsl(210,100%,50%,0.5,9) stays authored text — the arity gate rejects before any chroma assignment]
+  // MCDC SW-REQ-260824-23WT: blue_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_180=F, hue_degrees_LT_300=T => TRUE [no-action: hsl(150) computes rgb(0,255,128) — the blue channel holds x=128, never the chroma 255]
+  // MCDC SW-REQ-260824-23WT: blue_from_chroma=F, hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_GE_180=T, hue_degrees_LT_300=F => TRUE [no-action: hsl(330) computes rgb(255,0,128) — the blue channel is 0, never the chroma 255]
+  test('hsl blue-sector antecedent-false rows drive out-of-sector and out-of-arity states', () => {
+    assert.equal(box('.t { color: hsl(210 50%); }').getPropertyValue('color'), 'hsl(210 50%)');
+    assert.equal(box('.t { color: hsl(210,100%,50%,0.5,9); }').getPropertyValue('color'), 'hsl(210,100%,50%,0.5,9)');
+    assert.equal(box('.t { color: hsl(150, 100%, 50%); }').getPropertyValue('color'), 'rgb(0, 255, 128)');
+    assert.equal(box('.t { color: hsl(330, 100%, 50%); }').getPropertyValue('color'), 'rgb(255, 0, 128)');
+  });
+
+  // Verifies: SYS-REQ-260824-4RGN
+  // MCDC SYS-REQ-260824-4RGN: green_from_chroma=F, hsl_component_count_GE_3=F, hue_degrees_GE_60=T, hue_degrees_LT_180=T => TRUE [no-action: under-arity hsl(90 50%) stays authored text — no rgb conversion runs, so the green chroma assignment never fires]
+  // MCDC SYS-REQ-260824-4RGN: green_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_60=F, hue_degrees_LT_180=T => TRUE [no-action: hsl(30) computes rgb(255,128,0) — the green channel holds x=128, never the chroma 255]
+  // MCDC SYS-REQ-260824-4RGN: green_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_60=T, hue_degrees_LT_180=F => TRUE [no-action: hsl(210) computes rgb(0,128,255) — the green channel holds x=128, never the chroma 255]
+  //mcdc:ignore:defensive SYS-REQ-260824-4RGN: green_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_60=T, hue_degrees_LT_180=T => FALSE -- the SYS-level green-sector contract: the 60-180 ladder arm always assigns chroma to green for in-sector in-arity input [reviewed: agent:champ]
+  test('hsl green-sector SYS antecedent-false rows', () => {
+    assert.equal(box('.t { color: hsl(90 50%); }').getPropertyValue('color'), 'hsl(90 50%)');
+    assert.equal(box('.t { color: hsl(30, 100%, 50%); }').getPropertyValue('color'), 'rgb(255, 128, 0)');
+    assert.equal(box('.t { color: hsl(210, 100%, 50%); }').getPropertyValue('color'), 'rgb(0, 128, 255)');
+  });
+
+  // Verifies: SYS-REQ-260824-BRYV
+  // MCDC SYS-REQ-260824-BRYV: blue_from_chroma=F, hsl_component_count_GE_3=F, hue_degrees_GE_180=T, hue_degrees_LT_300=T => TRUE [no-action: under-arity hsl(210 50%) stays authored text — no conversion runs, so the blue chroma assignment never fires]
+  // MCDC SYS-REQ-260824-BRYV: blue_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_180=F, hue_degrees_LT_300=T => TRUE [no-action: hsl(150) computes rgb(0,255,128) — the blue channel holds x=128, never the chroma 255]
+  // MCDC SYS-REQ-260824-BRYV: blue_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_180=T, hue_degrees_LT_300=F => TRUE [no-action: hsl(330) computes rgb(255,0,128) — the blue channel is 0, never the chroma 255]
+  //mcdc:ignore:defensive SYS-REQ-260824-BRYV: blue_from_chroma=F, hsl_component_count_GE_3=T, hue_degrees_GE_180=T, hue_degrees_LT_300=T => FALSE -- the SYS-level blue-sector contract: the 180-300 ladder arm always assigns chroma to blue for in-sector in-arity input [reviewed: agent:champ]
+  test('hsl blue-sector SYS antecedent-false rows', () => {
+    assert.equal(box('.t { color: hsl(210 50%); }').getPropertyValue('color'), 'hsl(210 50%)');
+    assert.equal(box('.t { color: hsl(150, 100%, 50%); }').getPropertyValue('color'), 'rgb(0, 255, 128)');
+    assert.equal(box('.t { color: hsl(330, 100%, 50%); }').getPropertyValue('color'), 'rgb(255, 0, 128)');
+  });
+
+  // Verifies: SW-REQ-260824-CAHE
+  // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hsl_parsed=F, hue_degrees_GE_0=F, hue_degrees_LT_360=F => TRUE [no-action: under-arity hsl(1 2) stays authored text — no parse runs, so a normalized hue never materializes]
+  // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=F, hsl_parsed=F, hue_degrees_GE_0=F, hue_degrees_LT_360=F => TRUE [no-action: over-arity hsl(1,2,3,4,5) stays authored text — the arity gate rejects before any hue normalization]
+  //mcdc:ignore:defensive SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=F, hue_degrees_GE_0=F, hue_degrees_LT_360=F => FALSE -- every 3-or-4 component hsl() list parses; the arity window never blocks parsing [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=F, hue_degrees_GE_0=T, hue_degrees_LT_360=T => FALSE -- a list that parses cannot be unparsed; hsl_parsed=F with a normalized hue in-domain cannot co-occur [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=T, hue_degrees_GE_0=F, hue_degrees_LT_360=T => FALSE -- parseHue normalizes deg/rad/turn modulo 360 (color-resolver.ts css-color-4), so a parsed hue is never negative [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=T, hue_degrees_GE_0=T, hue_degrees_LT_360=F => FALSE -- parseHue normalizes modulo 360 (color-resolver.ts css-color-4), so a parsed hue is never >= 360 [reviewed: agent:champ]
+  // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=T, hue_degrees_GE_0=T, hue_degrees_LT_360=T => TRUE
+  test('hsl parse-and-normalized-hue-domain spec rows', () => {
+    assert.equal(box('.t { color: hsl(1 2); }').getPropertyValue('color'), 'hsl(1 2)');
+    assert.equal(box('.t { color: hsl(1,2,3,4,5); }').getPropertyValue('color'), 'hsl(1,2,3,4,5)');
+    // Authored out-of-domain hues parse and land normalized inside [0,360):
+    // -90 -> 270 (rgb(128,0,255)) and 400 -> 40 (rgb(255,170,0)).
+    assert.equal(box('.t { color: hsl(-90, 100%, 50%); }').getPropertyValue('color'), 'rgb(128, 0, 255)');
+    assert.equal(box('.t { color: hsl(400, 100%, 50%); }').getPropertyValue('color'), 'rgb(255, 170, 0)');
+  });
+
+  // Verifies: SYS-REQ-260824-DAS2
+  // MCDC SYS-REQ-260824-DAS2: hsl_component_count_GE_3=T, hsl_component_count_LE_4=F, hsl_parsed=F => TRUE [no-action: over-arity hsl(1,2,3,4,5) stays authored text — the arity gate rejects before parsing]
+  //mcdc:ignore:defensive SYS-REQ-260824-DAS2: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hsl_parsed=F => FALSE -- every 3-or-4 component hsl() list parses; hsl_parsed=F cannot occur in the arity window [reviewed: agent:champ]
+  test('hsl arity SYS antecedent-false rows', () => {
+    assert.equal(box('.t { color: hsl(1,2,3,4,5); }').getPropertyValue('color'), 'hsl(1,2,3,4,5)');
+  });
+
+  // Verifies: SW-REQ-260822-1REE
+  // MCDC SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=F, hue_degrees_LT_60=T, red_from_chroma=F => TRUE [no-action: over-arity hsl(30,100%,50%,0.5,9) stays authored text — the arity gate rejects before any chroma assignment]
+  //mcdc:ignore:defensive SW-REQ-260822-1REE: hsl_component_count_GE_3=T, hsl_component_count_LE_4=T, hue_degrees_LT_60=T, red_from_chroma=F => FALSE -- hslToRgb's 0-60 sector ladder arm assigns chroma to red for every under-60 in-arity input [reviewed: agent:champ]
+  test('hsl red-sector antecedent-false rows', () => {
+    assert.equal(box('.t { color: hsl(30,100%,50%,0.5,9); }').getPropertyValue('color'), 'hsl(30,100%,50%,0.5,9)');
+  });
+});

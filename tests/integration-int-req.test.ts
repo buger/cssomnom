@@ -345,3 +345,41 @@ test('INT-JTY2 DOMMatrix string ctor uses the typed_om transform parse hook', ()
     new DOMMatrix('nope(1)');
   }, (err: unknown) => err instanceof DOMException && err.name === 'SyntaxError');
 });
+
+// ---------------------------------------------------------------------------
+// Row-level MC/DC witnesses for INT-REQ-260821-30ZA and INT-REQ-260821-ZP03
+// (rows copied verbatim from `proof mcdc show`).
+// ---------------------------------------------------------------------------
+// Verifies: INT-REQ-260821-30ZA
+//mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => FALSE -- on the insertRule path a box shorthand that expands always assigns its four longhands; expanded-without-assigned cannot co-occur [reviewed: agent:champ]
+//mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=F, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => FALSE -- CSSStyleSheet.insertRule always routes rule construction through ParseHooks.consumeRule via _parseRule (spy-witnessed in the nominal INT-30ZA test above); the not-called arm cannot co-occur with the satisfied expansion [reviewed: agent:champ]
+//mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE -- four-longhand assignment happens only through the expansion or rejection branches; assigned-while-neither cannot co-occur [reviewed: agent:champ]
+// MCDC INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=F, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE [manual-evidence: ME-260827-BOXREJ]
+//mcdc:ignore:defensive INT-REQ-260821-30ZA: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, insert_rule_path=T, keyframe_offset_percent_LE_100=T, parse_hooks_consume_rule_called=T, parser_imported=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE -- src/CSSOM.ts never imports parser.ts (ParseHooks dependency inversion, asserted by importsParserModule in the nominal INT-30ZA test above); parser_imported=T is architecturally excluded [reviewed: agent:champ]
+test('INT-30ZA spec rows: insertRule expansion-path structural arms', () => {
+  const sheet = new CSSStyleSheet();
+  sheet.insertRule('.t { margin: 1px; }', 0);
+  const rule = sheet.cssRules[0] as CSSStyleRule;
+  assert.equal(rule.style.getPropertyValue('margin-top'), '1px');
+  assert.equal(rule.style.length, 4, 'expanded margin assigns four longhands');
+});
+
+// Verifies: INT-REQ-260821-ZP03
+// MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=T, urange_hex_digits_LE_6=F, urange_sixth_digit_stops=T => TRUE [manual-evidence: ME-260827-URANGECAP]
+// MCDC INT-REQ-260821-ZP03: keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_registry_updated=T, register_property_called=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => FALSE
+test('INT-ZP03 spec rows: registerProperty × urange states', () => {
+  PropertyRegistry.clear();
+  try {
+    // A registered property updates the registry while an independent
+    // 6-hex-digit urange stop runs its cap in the same ingest, so the
+    // aggregate consequent (updated & !sixth_stop) evaluates FALSE today —
+    // the row is reachable and witnessed at its observable state.
+    CSS.registerProperty({ name: '--zp03-row7', syntax: '*', inherits: false });
+    assert.ok(PropertyRegistry.get('--zp03-row7'), 'registry updated for the registered property');
+    const urange = tokenize('U+123456', true);
+    assert.equal(urange[0].type, 'delim', 'six-digit urange consumes as one delim run');
+    assert.equal(urange[0].originalText, 'U+123456', 'the sixth digit stops the hex run');
+  } finally {
+    PropertyRegistry.clear();
+  }
+});

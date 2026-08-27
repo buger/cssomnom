@@ -52,7 +52,7 @@ describe('MC/DC witness: typed-om range wrapping and reification class', () => {
     // current build reifies the bare unit value (KI-122).
     const defect = freshMap();
     defect.map.set('flex-grow', new CSSUnitValue(-3.14, 'number'));
-    const back = defect.map.get('flex-grow');
+    const back = defect.map.get('flex-grow')!;
     assert.equal(back.constructor.name, 'CSSUnitValue');
     assert.ok(!(back instanceof CSSMathSum));
     assert.equal(defect.style.getPropertyValue('flex-grow'), '-3.14');

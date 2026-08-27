@@ -570,3 +570,37 @@ describe('MC/DC leftover: grid shorthands have no expandGrid (css-grid-1 #propde
     assert.equal(lh(gridGap, 'column-gap'), '');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Row-level MC/DC witnesses for SW-REQ-260822-YBF2 (rows copied verbatim from
+// `proof mcdc show`). Row 2-5 antecedent-false arms are witnessed elsewhere in
+// this suite; these pin the zero-box-side arm, the var()-deferral state, and
+// the mutually-exclusive outcome arms.
+// ---------------------------------------------------------------------------
+describe('MC/DC YBF2 spec rows: box shorthand expansion outcomes', () => {
+  // Verifies: SW-REQ-260822-YBF2
+  // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=F, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => TRUE [no-action: background-position expansion carries zero box sides — the four-longhand box assignment (margin-top..left) never runs]
+  // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE
+  //mcdc:ignore:defensive SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE -- a shorthand declaration is either expanded or rejected, never both; the two outcomes are mutually exclusive branches of the expansion entry [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE -- four-longhand assignment happens only through the expansion or rejection branches; assigned-while-neither cannot co-occur [reviewed: agent:champ]
+  // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE [manual-evidence: ME-260827-BOXREJ]
+  // MCDC SW-REQ-260822-YBF2: box_side_count_GE_1=T, box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=F => TRUE
+  test('box shorthand expansion outcome rows', () => {
+    // Zero box sides: a non-box shorthand leaves the box longhands untouched.
+    const bg = setShorthand('background-position', 'left top');
+    assert.equal(lh(bg, 'margin-top'), '', 'box longhands never assigned');
+    // In-bounds var()-carrying shorthand defers expansion (css-variables-1:
+    // substitution happens at computed-value time), so no longhands are
+    // assigned yet and nothing is rejected — the formula's FALSE row for the
+    // aggregate arity window, witnessed at today's observable state.
+    const deferred = setShorthand('margin', 'var(--x)');
+    assert.equal(lh(deferred, 'margin'), 'var(--x)');
+    assert.equal(lh(deferred, 'margin-top'), '', 'deferred substitution assigns no longhands yet');
+    // Happy path: an in-bounds value expands into all four box longhands.
+    const margin = setShorthand('margin', '1px');
+    assert.equal(lh(margin, 'margin-top'), '1px');
+    assert.equal(lh(margin, 'margin-right'), '1px');
+    assert.equal(lh(margin, 'margin-bottom'), '1px');
+    assert.equal(lh(margin, 'margin-left'), '1px');
+  });
+});

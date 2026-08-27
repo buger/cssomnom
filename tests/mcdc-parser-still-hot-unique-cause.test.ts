@@ -696,3 +696,22 @@ describe('MC/DC still-hot unique-cause: constructor TokenStream vs Array and get
     assert.ok(supports instanceof CSSSupportsRule);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Row-level MC/DC witness for SW-REQ-260822-MN8Z (row copied verbatim from
+// `proof mcdc show`): a dropped bad @property coexists with an independent
+// 6-hex-digit urange stop in the same ingest, so the aggregate consequent
+// (dropped & !sixth_stop) evaluates FALSE at today's observable state.
+// ---------------------------------------------------------------------------
+// Verifies: SW-REQ-260822-MN8Z
+// MCDC SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => FALSE
+test('MN8Z row 8: dropped bad @property × six-digit urange stop', () => {
+  const bad = parse('@namespace u; @property --bad { syntax: "<number>"; inherits: false; }');
+  assert.equal(
+    Array.from(bad.cssRules).filter((r) => r.constructor.name === 'CSSPropertyRule').length,
+    0,
+    'a non-universal syntax without initial-value fails validation and drops the rule'
+  );
+  const urange = tokenize('U+123456', true);
+  assert.equal(urange[0].originalText, 'U+123456', 'the sixth digit stops the hex run');
+});

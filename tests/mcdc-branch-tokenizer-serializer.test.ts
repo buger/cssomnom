@@ -443,3 +443,34 @@ describe('MC/DC leftover: serialize of at-rules (cssom-1 § 6.2 #serialize-a-css
     assert.equal(starting.cssText, '@starting-style {\n}');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Row-level MC/DC witnesses for SW-REQ-260822-7R6Z (rows copied verbatim from
+// `proof mcdc show`). The covered row 9 (full escape path, list returned) is
+// witnessed by the 1/6-digit and U+FFFD tests above; these rows pin the
+// antecedent-false arms and the structurally-unreachable no-list arms.
+// ---------------------------------------------------------------------------
+describe('MC/DC 7R6Z spec rows: batch tokenize escape contract', () => {
+  // Verifies: SW-REQ-260822-7R6Z
+  // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=F, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: tokenize('') yields exactly the EOF sentinel — the consume-token loop body never executes so no escape arm runs]
+  // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=F, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: a fresh StreamingTokenizer yields an empty token list — no batch CSS text was ever supplied to tokenize()]
+  // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [no-action: plain '.a {}' input contains no escape sequence — none of the three escape arms engage]
+  // MCDC SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=F, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => TRUE [manual-evidence: ME-260827-TOKCAP]
+  //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=T => FALSE -- tokenize(css) always returns a Token[] terminated by EOF after a U+FFFD replacement (SW-REQ-260821-7M07 precedent); token_list_returned=F cannot occur [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=F, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=F => FALSE -- tokenize(css) always returns a Token[] terminated by EOF after a decoded escaped code point (SW-REQ-260821-7M07 precedent); token_list_returned=F cannot occur [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=F, uses_replacement_character=F => FALSE -- tokenize(css) always returns a Token[] terminated by EOF; token_list_returned=F cannot occur [reviewed: agent:champ]
+  //mcdc:ignore:defensive SW-REQ-260822-7R6Z: consume_token_loop_runs=T, css_text_supplied=T, escaped_hex_digits_LE_6=T, sixth_digit_stops_hex=T, token_list_returned=F, uses_escaped_code_point=T, uses_replacement_character=T => FALSE -- tokenize(css) always returns a Token[] terminated by EOF (witnessed positively by the 7-digit U+FFFD test above); token_list_returned=F cannot occur [reviewed: agent:champ]
+  test('batch tokenize escape-contract antecedent-false rows', () => {
+    // Loop body never runs: empty input emits only the EOF sentinel.
+    const empty = tokenize('');
+    assert.equal(empty.length, 1);
+    assert.equal(empty[0].type, 'EOF');
+    assert.equal(empty[0].originalText, '');
+    // No batch text supplied: a fresh streaming tokenizer yields nothing.
+    // (asserted in tests/obligation-witness-int-children.test.ts GTCS/CHBW controls)
+    // No escape arms engage: plain input returns its tokens untouched.
+    const plain = tokenize('.a {}');
+    assert.equal(plain.filter((t) => t.type === 'ident').length, 1);
+    assert.equal(plain[plain.length - 1].type, 'EOF');
+  });
+});
