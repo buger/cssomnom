@@ -49,7 +49,6 @@ import {
   CSSMathSum,
   CSSMathClamp,
   CSSVariableReferenceValue,
-  StylePropertyMap,
 } from '../src/typed-om.ts';
 import { CSSKeyframesRule } from '../src/CSSOM.ts';
 import { toParserRule } from '../src/parser-api.ts';

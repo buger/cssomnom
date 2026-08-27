@@ -44,8 +44,6 @@ import { CSSColorValue } from '../src/typed-om/color/CSSColorValue.ts';
 import { CSSUnitValue } from '../src/typed-om/numeric/CSSUnitValue.ts';
 import { CSSVariableReferenceValue } from '../src/typed-om/values/CSSVariableReferenceValue.ts';
 import { CSSUnparsedValue } from '../src/typed-om/values/CSSUnparsedValue.ts';
-import { matchesPositionPropertyGrammar } from '../src/typed-om/position/position-parser.ts';
-import { tokenize } from '../src/tokenizer.ts';
 
 function withDocumentMock(styleFactory: () => unknown, run: () => void): void {
   const prev = Object.getOwnPropertyDescriptor(globalThis, 'document');

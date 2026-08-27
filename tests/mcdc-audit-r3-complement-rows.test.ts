@@ -32,12 +32,10 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import '../src/parser.ts';
-import { CSSStyleValue } from '../src/typed-om/values/CSSStyleValue.ts';
 import { CSSColorValue } from '../src/typed-om/color/CSSColorValue.ts';
 import { StylePropertyMapReadOnly } from '../src/typed-om/style-map/StylePropertyMapReadOnly.ts';
 import { parseNumericValue } from '../src/typed-om/numeric/numeric-methods.ts';
 import { tokenize } from '../src/tokenizer.ts';
-import { CSSKeywordValue } from '../src/typed-om/values/CSSKeywordValue.ts';
 import { CSSStyleDeclaration } from '../src/CSSStyleDeclaration.ts';
 import {
   MediaParser,

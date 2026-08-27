@@ -36,7 +36,7 @@ import { matches } from '../src/matcher.ts';
 import { DOMMatrix } from '../src/DOMMatrix.ts';
 import { StreamingTokenizer } from '../src/streaming-tokenizer.ts';
 import { StreamingTokenizerStream, LazyComponentValueStream } from '../src/TokenStream.ts';
-import { Parser, parse } from '../src/parser.ts';
+import { parse } from '../src/parser.ts';
 
 describe('MC/DC round 3: matcher namespace and structural legs', () => {
 

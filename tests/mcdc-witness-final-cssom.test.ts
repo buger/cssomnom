@@ -38,14 +38,7 @@ import { parse } from '../src/parser.ts';
 import { StylePropertyMapReadOnly } from '../src/typed-om/style-map/StylePropertyMapReadOnly.ts';
 import { CSSStyleRule } from '../src/CSSOM.ts';
 import { CSSStyleDeclaration } from '../src/CSSStyleDeclaration.ts';
-import { StylePropertyMap } from '../src/typed-om/style-map/StylePropertyMap.ts';
 
-function ruleStyle(css: string): CSSStyleDeclaration {
-  const sheet = parse(css);
-  const rule = sheet.cssRules[0];
-  assert.ok(rule instanceof CSSStyleRule, css);
-  return rule.style;
-}
 
 describe('MC/DC witness: CSSStyleDeclaration priority and contraction rows', () => {
   // cssom-1 § 6.7.1: a second !important shorthand set through setProperty
