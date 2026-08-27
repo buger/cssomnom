@@ -44,6 +44,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: append-note
+    - at: "2026-08-27T01:38:00Z"
+      by: agent:champ
+      action: edit
+      detail: set-dedup-armor + set-affected-file src/parser.ts (ACC-08 kill_domain split vs KI-131 src/MediaParser.ts)
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -84,3 +88,18 @@ poc_quality:
         privileges; no ingress ACL layer exists between host and parser.
 kill_domain: resource_exhaustion
 do_not_refile_as: parser stack overflow via nested rules/blocks
+dedup_armor: |
+    Two distinct recursive subsystems share the resource_exhaustion kill_domain and
+    now carry distinct affected_file basenames. KI-18 pins the css-syntax-3 consume
+    stack in src/parser.ts: consumeBlockContents / consumeNestedQualifiedRuleFromStream
+    / consumeAtRule recurse on nested style rules (a{a{...}}) and nested grouping
+    at-rule blocks (@media all{...}); ~4000-deep style rules and ~2000-deep @media
+    blocks overflow there with no media-condition parsing involved. KI-131 pins
+    MediaParser condition descent in src/MediaParser.ts: nested parenthesis blocks
+    inside a @media prelude overflow at ~2200 depth while the tokenizer survives
+    50000-deep nesting iteratively and a single qualified rule body is enough to
+    crash. KI-22 pins the math expression parser on nested calc() input. Different
+    subsystems and different sinks: a depth counter threaded through one performs
+    no work on the others; each filing keeps its own tripwire legs and must not
+    cross-close.
+affected_file: src/parser.ts

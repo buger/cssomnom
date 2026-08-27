@@ -1,14 +1,72 @@
 checklist: onboard_v1
-updated_at: "2026-08-25T22:24:59Z"
+updated_at: "2026-08-27T08:09:48Z"
 steps:
     ac-sweep:
-        status: pending
+        status: confirmed
+        confirmed_at: "2026-08-27T01:56:13Z"
+        confirmed_by: agent:champ
+        note: '2026-08-27: 29 testable ACs across 5 stakeholder reqs witnessed (18 direct acceptance tests, 11 KI-debt accepted with tripwire-backed auto-expiring evidence); acceptance_witness_quality green (no :acceptance tag shares a test carrier with a derived SYS/SW/INT witness). KI-131..134 AC fan-out legs landed with their evidence manifests this wave.'
+        scope_key: cssomnom
+        check_results:
+            - id: acceptance_criteria_witnessed
+              status: pass
+              at: "2026-08-27T08:06:59Z"
+            - id: acceptance_witness_quality
+              status: pass
+              at: "2026-08-27T08:06:59Z"
     annotations-heavy:
-        status: pending
+        status: confirmed
+        confirmed_at: "2026-08-27T08:09:06Z"
+        confirmed_by: agent:champ
+        note: '2026-08-27: 294 witnesses grounded in-tree (33 exempt, 210 coverage-unavailable advisory); annotation_validity green over 160 requirements after the INT-children wave landed; orphan_code_clean 1454/1454 traced. MC/DC witness rows total 610 with 59 accepted KI-debt rows (tripwire-backed, auto-expiring).'
+        scope_key: cssomnom
+        check_results:
+            - id: annotation_validity
+              status: pass
+              at: "2026-08-27T08:09:06Z"
+            - id: obligation_witness_grounded
+              status: pass
+              at: "2026-08-27T08:09:06Z"
     coverage:
-        status: pending
+        status: confirmed
+        confirmed_at: "2026-08-27T08:09:21Z"
+        confirmed_by: agent:champ
+        note: '2026-08-27: code-level MC/DC measurement established — code_mcdc_measure RAW for js target cssomnom-src (1454/1454 functions traced, orphan_code_clean and orphan_tests_clean both green under the coverage verify gate); tests_pass green across the full suite; code_mcdc_coverage remains the ongoing 95%-policy metric and is tracked separately (8 partial-row-coverage rows over limit, reported honestly, not gated here per checklist design).'
+        verify_result:
+            exit_code: 0
+            passed: true
+            at: "2026-08-27T08:09:29Z"
+            output: |
+                Verification scope: include=README.md, docs/**, proof/reproducers/**, src/**, tests/**
+
+
+                Requirements: 160 total
+
+                  ━━━ IMPLEMENTATION ━━━
+                    ✓ orphan_code_clean              1454/1454 code functions traced  (0ms)
+                    ✓ orphan_tests_clean             2462 test functions scanned, 0 orphans  (0ms)
+
+                  Errors: 0  Warnings: 0
+
+                Help: proof help audit
+                  Cache: 2 hits / 0 fresh (computed in 8s)
+        scope_key: cssomnom
+        check_results:
+            - id: code_mcdc_measure
+              status: pass
+              at: "2026-08-27T08:09:21Z"
     debt-standing:
-        status: pending
+        status: confirmed
+        confirmed_at: "2026-08-27T08:09:48Z"
+        confirmed_by: agent:champ
+        note: '2026-08-27: 64 active KIs visible with quality floor met (known_issues_reviewed green; ACC-08 dedup advisory cleared via affected_file split parser.ts vs MediaParser.ts); no active waivers (waivers_reviewed green); open debt is the tracked KI ledger + vector exits, all with owners and review dates.'
+        check_results:
+            - id: known_issues_reviewed
+              status: pass
+              at: "2026-08-27T08:09:48Z"
+            - id: waivers_reviewed
+              status: pass
+              at: "2026-08-27T08:09:48Z"
     hazard:
         status: confirmed
         confirmed_at: "2026-08-21T14:08:39Z"
@@ -18,9 +76,19 @@ steps:
         check_results:
             - id: spec_lint_hazard_consequence
               status: info
-              at: "2026-08-25T22:24:48Z"
+              at: "2026-08-27T08:06:59Z"
     history-mine:
-        status: pending
+        status: confirmed
+        confirmed_at: "2026-08-27T08:09:45Z"
+        confirmed_by: agent:champ
+        note: '2026-08-27: 17 problem reports all dispositioned; change evidence complete for every in-branch-changed change-typed review; recent hunt waves (KI-113..134, vector campaign N1) are mined into the KI ledger with evidence manifests and requirement anchors.'
+        check_results:
+            - id: problem_reports_reviewed
+              status: pass
+              at: "2026-08-27T08:09:45Z"
+            - id: change_evidence_complete
+              status: pass
+              at: "2026-08-27T08:09:45Z"
     init:
         status: not_applicable
         confirmed_at: "2026-08-21T12:22:39Z"
@@ -51,7 +119,7 @@ steps:
         check_results:
             - id: residual_kill_hygiene
               status: pass
-              at: "2026-08-25T22:24:48Z"
+              at: "2026-08-27T08:06:59Z"
     skeleton:
         status: not_applicable
         confirmed_at: "2026-08-21T12:42:21Z"
@@ -71,24 +139,7 @@ steps:
               status: pass
               at: "2026-08-21T14:20:45Z"
     spec-review-1:
-        status: confirmed
-        confirmed_at: "2026-08-25T04:39:52Z"
-        confirmed_by: dev
-        note: under_modeled resolved via audit_ignore dispositions naming verifying tests
-        scope_key: cssomnom
-        check_results:
-            - id: spec_lint_decomposition_adds_refinement
-              status: pass
-              at: "2026-08-25T22:24:48Z"
-            - id: spec_lint_formalization_quality
-              status: pass
-              at: "2026-08-25T22:24:48Z"
-            - id: solver_modeling_opportunity
-              status: pass
-              at: "2026-08-25T22:24:48Z"
-            - id: under_modeled_requirements_clean
-              status: pass
-              at: "2026-08-25T22:24:48Z"
+        status: pending
     spec-review-2:
         status: pending
     surface-matrix:
@@ -106,21 +157,8 @@ steps:
         check_results:
             - id: spec_lint_threat_surface_present
               status: pass
-              at: "2026-08-25T22:24:48Z"
+              at: "2026-08-27T08:06:59Z"
     traces-light:
         status: pending
     variables:
-        status: confirmed
-        confirmed_at: "2026-08-25T21:37:34Z"
-        confirmed_by: agent:champ
-        note: 'already done: all 14 cssom variables named by the SYS-REQ-260825 batch declared in specs/system/variables/cssom.vars.yaml (bool inputs + must-be-zero budget outputs per paired KI-124..130 semantics); solver preflight variables_declared passes 34/34 components (2026-08-25)'
-        check_results:
-            - id: variable_orphans_clean
-              status: pass
-              at: "2026-08-25T22:24:48Z"
-            - id: variables_declared
-              status: pass
-              at: "2026-08-25T22:24:48Z"
-            - id: variable_drift
-              status: pass
-              at: "2026-08-25T22:24:48Z"
+        status: pending

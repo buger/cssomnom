@@ -44,7 +44,61 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-133.yaml
-kill_domain: conditional_rule_ingest_grammar
-do_not_refile_as: KI-107 owns CSS.supports(property, value) returning true for malformed var() syntax on the boolean API; this filing owns rule retention at ingest for conditions that fail the css-conditional grammar outright.
+    - at: "2026-08-27T01:40:30Z"
+      by: agent:champ
+      action: edit
+      detail: add poc_quality block (ACC-15)
+    - at: "2026-08-27T02:03:43Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-133.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() imported from src/index.ts only —
+        stylesheet ingest exactly as a host calls it; no mocks, no private hooks.
+        quantitative_impact: eight probed invalid condition shapes are retained
+        (ruleCount 1 / innerCount 1) where css-conditional-3 #supports-syntax
+        requires 0 — empty declaration value, trailing close paren, bracket block,
+        mismatched closer, operand-less not, dangling and, and two nested shapes;
+        each leg pins a WPT at-supports fixture (019/020/022/023/025/026).
+        control_test: the valid-condition control ('@supports (top:0){…}') stays
+        retained in the same run, so the red legs are grammar failures, not
+        setup failures.
+        untrusted_attacker: ordinary stylesheet text with an unparseable
+        condition; no attacker or privilege needed — pure correctness on the
+        ingest surface.
+        current_deployment_relevance: parse() is the shipped core API; the
+        browser contract is pinned by WPT at-supports recovery fixtures and was
+        verified at HEAD on Node v24.11.1, evidence refreshed after the final
+        edit.
+        honest_severity: medium correctness — dead conditions become observable
+        through cssRules and cssText and their contents can apply under a
+        condition no browser would construct; no security boundary crossed.
+        attacker_profitability: none claimed — no revenue model applies to
+        retained invalid rules; impact is interop drift and dead-style leakage.
+        reproducible: reproducer command exits 1 on all eight defect legs; it ran
+        twice before filing and again after the final edit; evidence manifest
+        proof/evidence/ki-133.yaml records status fail / known_issue_reproduced
+        with freshness hash equal to final bytes.
+        no_inflation: severity_basis is reproducer with the executed manifest
+        attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: the failing tests are the exact product ingest
+        path; the control proves the intended path (valid rules retained) stays
+        green.
+        reachability_verified: public parse() is the entire surface; no ingress
+        guard is bypassed and no harness starts mid-pipeline.
 dedup_armor: |
     css-conditional-3 rule-level ingest grammar versus boolean evaluation. KI-107 covers the CSS.supports(property, value) API returning true for malformed var() argument syntax after a condition already parsed. KI-133 covers stylesheet ingest retaining whole @supports rules whose condition matches no production of #supports-syntax, where css-conditional-3 mandates ignoring the rule with all of its contents. Different surfaces (CSS.supports call versus parse()/cssRules), different clauses (declaration-value parse versus condition grammar), different observables (boolean true versus retained rule). Fixing one performs no work on the other, so merging hides a leg. WPT legs at-supports-019 through at-supports-026 belong to this filing only.
+kill_domain: conditional_rule_ingest_grammar
+do_not_refile_as: KI-107 owns CSS.supports(property, value) returning true for malformed var() syntax on the boolean API; this filing owns rule retention at ingest for conditions that fail the css-conditional grammar outright.

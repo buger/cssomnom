@@ -2,11 +2,16 @@ id: V-RECURSION-DEPTH
 title: Nested CSS recursion-depth bound hunt
 description: Hunt campaign for high-severity recursion_depth_bounded on nested grouping rules and CSSNestedDeclarations consume (NHZ8/39E0/7521/HHVE). Not yet executed.
 priority: P1
-status: unresearched
+status: closed-ki
 related_obligation_classes:
     - recursion_depth_bounded
 stacks:
     - typescript
-notes:
-    - '2026-08-25: blind onboarding probe independently reproduced the crash signature (parse() RangeError at >=~1000 nested blocks on default Node stack; tokenize() survives 50k depth iteratively), corroborating this vector; see filed KI-18.'
-
+related_known_issues:
+    - KI-18
+close_note: 'Hunt exit 2026-08-25/26: nested-rule recursion crash reproduced at >=~1000 nested blocks; owned by KI-18 (consume-algorithms recursion, reconciled via its 2026-08-26 note). Media-condition parenthesis recursion split out as KI-131, math recursion as KI-22. See docs/proof-escape-ki-131-134.md.'
+campaign_log:
+    - at: "2026-08-27T01:48:12Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-25/26: nested-rule recursion crash reproduced at >=~1000 nested blocks; owned by KI-18 (consume-algorithms recursion, reconciled via its 2026-08-26 note). Media-condition parenthesis recursion split out as KI-131, math recursion as KI-22. See docs/proof-escape-ki-131-134.md.'
+      actor: agent:champ

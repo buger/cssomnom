@@ -34,16 +34,18 @@ import assert from 'node:assert/strict';
 import { parse, CSSStyleSheet } from '../../src/index.ts';
 import type { CSSMediaRule } from '../../src/index.ts';
 
-// Verifies: V-CROSS-SURFACE-POSTURE-TRIAGE (KI-132 helper)
+// Verifies: SYS-REQ-260826-XS91 (KI-132 helper; V-CROSS-SURFACE-POSTURE-TRIAGE)
 function firstRule(source: string): CSSMediaRule | undefined {
   return parse(source).cssRules[0] as CSSMediaRule | undefined;
 }
 
+// Verifies: SYS-REQ-260826-XS91 (control leg)
 test('control: balanced prelude parses to a retained media rule', () => {
   const rule = firstRule('@media ((width)){a{color:red}}');
   assert.ok(rule, 'balanced nesting must be retained');
 });
 
+// Verifies: SYS-REQ-260826-XS91 (control leg: recovery path exists)
 test('control: malformed-but-recoverable condition becomes not all with child kept', () => {
   // MQ4 #error-handling: dangling `or` is replaced by not all; the RULE
   // and its contents must survive. This control proves the retention path
@@ -57,6 +59,7 @@ test('control: malformed-but-recoverable condition becomes not all with child ke
   assert.equal(rule.cssRules.length, 1);
 });
 
+// Verifies: SYS-REQ-260826-XS91 (defect leg: deletion shape 1)
 test('defect: unclosed paren in @media prelude must retain the rule as not all', () => {
   const sheet = parse('@media ((width){a{color:red}}');
   assert.equal(
@@ -65,16 +68,19 @@ test('defect: unclosed paren in @media prelude must retain the rule as not all',
   );
 });
 
+// Verifies: SYS-REQ-260826-XS91 (defect leg: deletion shape 2)
 test('defect: single unclosed paren likewise must not delete the rule', () => {
   const sheet = parse('@media (width{a{color:red}}');
   assert.equal(sheet.cssRules.length, 1);
 });
 
+// Verifies: SYS-REQ-260826-XS91 (defect leg: deletion shape 3)
 test('defect: unclosed paren inside compound condition must not delete the rule', () => {
   const sheet = parse('@media ((width) or (height){a{b:c}}');
   assert.equal(sheet.cssRules.length, 1);
 });
 
+// Verifies: SYS-REQ-260826-XS91 (defect leg: insertRule cross-surface split)
 test('defect: insertRule rejects text MQ4 error handling makes rule-valid', () => {
   // The same malformed text through the mutation surface throws
   // SyntaxError although the media-query layer recovers it to not all;

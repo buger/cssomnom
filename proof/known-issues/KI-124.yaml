@@ -21,6 +21,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Treat parsed declaration values as unvalidated text until grammar validation lands downstream.
 remediation: Validate declaration values against generated per-property grammars during block parsing and drop failures per cssom-1 step 3.1 while keeping neighboring valid declarations.
+notes:
+    - '2026-08-27: Vector campaign reconciliation — this filing owns hunt vector V-MALFORMED-INPUT (reject-or-drop posture across parseRule, Typed OM parse, insertRule, @property, selectors). The declaration-block retention root is this KI with instance slices KI-113/117/105/104; non-declaration surfaces verified compliant in the docs/proof-escape-ki-131-134.md posture matrix; selector error-posture divergence is KI-134.'
 owner: agent:ox-alpha
 review_date: "2026-09-25"
 release_disposition: ship_with_known_issue
@@ -33,6 +35,10 @@ history:
       by: agent:ox-alpha
       action: refresh-evidence
       detail: proof/evidence/ki-124.yaml
+    - at: "2026-08-27T01:48:28Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true

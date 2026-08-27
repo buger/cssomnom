@@ -35,11 +35,12 @@ import { parse, tokenize, CSSStyleSheet } from '../../src/index.ts';
 
 const DEEP = 20000;
 
-// Verifies: V-DOS-PARSE (KI-131 helper: balanced control at same depth)
+// Verifies: SYS-REQ-260826-D5W2 (KI-131 helper: balanced media query at depth; V-DOS-PARSE)
 function buildMediaQuery(depth: number): string {
   return '@media ' + '('.repeat(depth) + 'width' + ')'.repeat(depth) + '{a{b:c}}';
 }
 
+// Verifies: SYS-REQ-260826-D5W2 (control leg)
 test('control: tokenizer is iterative and survives deep parenthesis nesting', () => {
   // css-syntax-3 consume-a-simple-block is iterative in our tokenizer; the
   // crash therefore cannot originate below the parser boundary.
@@ -47,17 +48,20 @@ test('control: tokenizer is iterative and survives deep parenthesis nesting', ()
   assert.ok(tokens.length > 2 * DEEP);
 });
 
+// Verifies: SYS-REQ-260826-D5W2 (control leg)
 test('control: moderately nested media conditions parse cleanly', () => {
   const sheet = parse(buildMediaQuery(100));
   assert.equal(sheet.cssRules.length, 1);
 });
 
+// Verifies: SYS-REQ-260826-D5W2 (control leg)
 test('control: shallow balanced nesting round-trips through insertRule', () => {
   const sheet = new CSSStyleSheet();
   sheet.insertRule(buildMediaQuery(50), 0);
   assert.equal(sheet.cssRules.length, 1);
 });
 
+// Verifies: SYS-REQ-260826-D5W2 (defect leg: parse)
 test('defect: parse() must not leak a raw RangeError on deep media parens', () => {
   let outcome = '';
   try {
@@ -75,6 +79,7 @@ test('defect: parse() must not leak a raw RangeError on deep media parens', () =
   );
 });
 
+// Verifies: SYS-REQ-260826-D5W2 (defect leg: insertRule)
 test('defect: insertRule() must not leak a raw RangeError on deep media parens', () => {
   const sheet = new CSSStyleSheet();
   let outcome = '';

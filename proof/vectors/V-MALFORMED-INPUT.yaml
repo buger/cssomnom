@@ -2,8 +2,16 @@ id: V-MALFORMED-INPUT
 title: Malformed CSS input reject-or-drop hunt
 description: Hunt campaign for high-severity malformed_input on parseRule, Typed OM parse, insertRule, @property, and selectors. Not yet executed.
 priority: P1
-status: unresearched
+status: closed-ki
 related_obligation_classes:
     - malformed_input
 stacks:
     - typescript
+related_known_issues:
+    - KI-124
+close_note: 'Hunt exit 2026-08-26: reject-or-drop posture hunted across parseRule/Typed OM parse/insertRule/@property/selectors; generic root defect filed as KI-124 (declaration-block retains grammar-invalid values, invalid-superset oracle 6627 instances/811 properties) with instance slices KI-113/117/105/104; non-declaration surfaces verified compliant in the docs/proof-escape-ki-131-134.md posture matrix; selector error-posture divergence owned by KI-134. Campaign owned by the KI-124 root.'
+campaign_log:
+    - at: "2026-08-27T01:48:12Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-26: reject-or-drop posture hunted across parseRule/Typed OM parse/insertRule/@property/selectors; generic root defect filed as KI-124 (declaration-block retains grammar-invalid values, invalid-superset oracle 6627 instances/811 properties) with instance slices KI-113/117/105/104; non-declaration surfaces verified compliant in the docs/proof-escape-ki-131-134.md posture matrix; selector error-posture divergence owned by KI-134. Campaign owned by the KI-124 root.'
+      actor: agent:champ

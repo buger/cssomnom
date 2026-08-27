@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-133-supports-invalid-rule-retained-overlay-260826.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-26T11:34:42Z"
+executed_at: "2026-08-27T02:03:43Z"
 input_set:
     - proof/reproducers/KI-133-supports-invalid-rule-retained-overlay-260826.ts
 freshness_hashes:
-    proof/reproducers/KI-133-supports-invalid-rule-retained-overlay-260826.ts: sha256:6b3a9291549160b0ff658aa21b8a8c0e6713a9fc029ddb6afc3b006fbea15f17
+    proof/reproducers/KI-133-supports-invalid-rule-retained-overlay-260826.ts: sha256:53d9dd5e08a4cba27727701c87a94978c189630857b741e5c9f99eeed411f232
 known_issues:
     - KI-133

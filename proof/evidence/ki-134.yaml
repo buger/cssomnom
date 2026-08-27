@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-134-matcher-silent-forgiveness-divergence-overlay-260826.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-26T11:34:42Z"
+executed_at: "2026-08-27T02:03:44Z"
 input_set:
     - proof/reproducers/KI-134-matcher-silent-forgiveness-divergence-overlay-260826.ts
 freshness_hashes:
-    proof/reproducers/KI-134-matcher-silent-forgiveness-divergence-overlay-260826.ts: sha256:8d6f82c00887dd726d64dbf3256d6051324fee99975320a9bb493279b7ff6301
+    proof/reproducers/KI-134-matcher-silent-forgiveness-divergence-overlay-260826.ts: sha256:ee72147a911353ff5b6cf94779f68d4ffbc58e50a28dbd1eafb7ceedca3f2e62
 known_issues:
     - KI-134

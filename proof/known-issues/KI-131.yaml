@@ -44,7 +44,73 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-131.yaml
+    - at: "2026-08-27T01:39:00Z"
+      by: agent:champ
+      action: edit
+      detail: add poc_quality block (ACC-15) + set-affected-file src/MediaParser.ts (ACC-08 kill_domain split vs KI-18 src/parser.ts)
+    - at: "2026-08-27T02:03:42Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-131.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse(), tokenize(), and CSSStyleSheet.insertRule()
+        imported from src/index.ts only — no mocks, no private hooks; the reproducer
+        exercises the shipped ingest path exactly as a host calls it.
+        quantitative_impact: DEEP=20000 balanced parentheses in a @media prelude throw
+        RangeError through parse() and through insertRule(); controls in the same run
+        show depth 100 parses to one rule, depth 50 inserts cleanly, and tokenize()
+        survives 20000-deep nesting iteratively (asserted > 2*DEEP tokens), isolating
+        the recursion to MediaParser condition descent.
+        control_test: three green controls (tokenizer iterative, moderate nesting,
+        shallow insertRule round-trip) prove balanced inputs behave, so the two red
+        legs are not setup failures.
+        untrusted_attacker: stylesheet text is the only trust boundary; a few KB of
+        attacker-chosen parentheses reaches the sink through any host that parses
+        untrusted CSS (library has no privileged roles; Web3-only framing does not
+        apply to this codebase).
+        current_deployment_relevance: parse() is the headline ingest API of this
+        release; crash threshold ~2200 nested parens measured at HEAD on Node
+        v24.11.1 before filing, evidence refreshed after the final edit.
+        honest_severity: medium availability — one parse call aborts with a raw
+        engine RangeError; no memory corruption, no data exposure, no RCE.
+        attacker_profitability: a few-KB stylesheet yields a reliable single-request
+        CPU/abort primitive against parsing workers; the impact is denial of
+        service only (this library custodies no deployed value).
+        reproducible: reproducer command exits 1 on both defect legs; it ran twice
+        before filing and again after the final edit; evidence manifest
+        proof/evidence/ki-131.yaml records status fail / known_issue_reproduced
+        with freshness hash equal to the final reproducer bytes.
+        no_inflation: severity_basis is reproducer with the executed manifest
+        attached; risk names availability honestly; cve_surface none.
+        operational_path_verified: the failing tests are the exact product path a
+        host calls (parse / insertRule); no debug-only or gated path involved.
+        reachability_verified: the public entry points are the entire surface —
+        any caller passing attacker CSS reaches MediaParser with zero additional
+        privileges; no ingress access-control layer exists between host and parser.
+dedup_armor: |
+    Three distinct recursive subsystems under one hazard class, now split by
+    affected_file basename. KI-18 pins the consume-algorithms stack in
+    src/parser.ts: nested style rules (a{a{...}}) and nested grouping at-rules
+    (@media all{...}) overflow inside
+    consumeBlockContents/consumeNestedQualifiedRuleFromStream, with no media
+    parsing involved. KI-22 pins the math expression parser on nested calc()
+    input. KI-131 pins MediaParser condition descent in src/MediaParser.ts over
+    nested parenthesis blocks in the @media prelude, where the crash survives
+    with a single qualified rule as body. A fix threading a depth counter
+    through one subsystem performs no work on the others; each filing keeps its
+    own tripwire legs and must not cross-close.
 kill_domain: resource_exhaustion
 do_not_refile_as: KI-18 covers consumeBlockContents/consumeAtRule recursion on nested style rules and grouping at-rules; KI-22 covers math expression recursion. Both name different recursive subsystems and different defect legs than this media-condition parser crash.
-dedup_armor: |
-    Three distinct recursive subsystems under one hazard class. KI-18 pins the consume-algorithms stack: nested style rules (a{a{...}}) and nested grouping at-rules (@media all{...}) overflow inside consumeBlockContents/consumeNestedQualifiedRuleFromStream, with no media parsing involved. KI-22 pins the math expression parser on nested calc() input. KI-131 pins MediaParser condition descent over nested parenthesis blocks in the @media prelude, where the crash survives with a single qualified rule as body. A fix threading a depth counter through one subsystem performs no work on the others; each filing keeps its own tripwire legs and must not cross-close.
+affected_file: src/MediaParser.ts

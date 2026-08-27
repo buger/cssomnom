@@ -45,14 +45,6 @@ function firstStyleOf(cssText: string) {
   return (sheet.cssRules[0] as CSSStyleRule).style;
 }
 
-const BORDER_IMAGE_LONGHANDS = [
-  'border-image-source',
-  'border-image-slice',
-  'border-image-width',
-  'border-image-outset',
-  'border-image-repeat',
-] as const;
-
 // ---------------------------------------------------------------------------
 // Green controls.
 // ---------------------------------------------------------------------------

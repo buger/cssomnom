@@ -30,7 +30,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { matches, querySelectorAll } from '../../src/index.ts';
 
-// Verifies: V-SELECTOR-FORGIVENESS-DIVERGENCE (KI-134 helper: mock element)
+// Verifies: SYS-REQ-260826-J4NJ (KI-134 helper: minimal element fixture; V-SELECTOR-FORGIVENESS-DIVERGENCE)
 function makeElement(tag: string, parent?: { children: unknown[] }): Record<string, unknown> {
   const el: Record<string, unknown> = {
     nodeType: 1,
@@ -50,17 +50,20 @@ const tree = { children: [] as unknown[] } as { children: unknown[] };
 const div = makeElement('div', tree) as never;
 const span = makeElement('span', tree) as never;
 
+// Verifies: SYS-REQ-260826-J4NJ (control leg)
 test('control: valid selector still matches and queries', () => {
   assert.equal(matches(span, 'span'), true);
   assert.equal(querySelectorAll(tree as never, 'div').length, 1);
 });
 
+// Verifies: SYS-REQ-260826-J4NJ (control leg: forgiving semantics preserved)
 test('control: forgiving :is() keeps matching valid members of mixed lists', () => {
   // selectors-4 forgiving-list semantics must survive any fix here.
   assert.equal(matches(span, ':is(span,>>>)'), true);
   assert.equal(matches(span, ':where(div,>>>)'), false);
 });
 
+// Verifies: SYS-REQ-260826-J4NJ (KI-134 helper: error-class capture)
 function throwsSyntaxLike(fn: () => unknown): string {
   try {
     fn();
@@ -70,16 +73,19 @@ function throwsSyntaxLike(fn: () => unknown): string {
   }
 }
 
+// Verifies: SYS-REQ-260826-J4NJ (defect leg: matches)
 test('defect: matches() must throw for a selector that cannot parse', () => {
   const outcome = throwsSyntaxLike(() => matches(span, '..dots'));
   assert.equal(outcome, 'SyntaxError', `matches() returned silently (${outcome})`);
 });
 
+// Verifies: SYS-REQ-260826-J4NJ (defect leg: querySelectorAll)
 test('defect: querySelectorAll() must throw for a fully-invalid selector', () => {
   const outcome = throwsSyntaxLike(() => querySelectorAll(tree as never, '>>>'));
   assert.equal(outcome, 'SyntaxError', `querySelectorAll() returned silently (${outcome})`);
 });
 
+// Verifies: SYS-REQ-260826-J4NJ (defect leg: non-forgiving plain list)
 test('defect: mixed valid+invalid plain list is not a forgiving context', () => {
   // DOM throws for 'div,:pseudoclass'; silent all-or-nothing false hides
   // author typos instead of surfacing them.

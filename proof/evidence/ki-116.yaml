@@ -7,10 +7,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T22:25:07Z"
+executed_at: "2026-08-27T02:03:44Z"
 input_set:
     - proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts
 freshness_hashes:
-    proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts: sha256:215f579c8dcc70d0d987a39d55ff4c1206d385c570892c4658646e59d4a591e2
+    proof/reproducers/KI-116-border-image-url-fixpoint-overlay-260823.ts: sha256:22503acc7e01e26f5d85d3678d72535ee0e5e0bd252eb73dfa0b8309c07753f2
 known_issues:
     - KI-116

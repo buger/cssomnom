@@ -1,9 +1,17 @@
 id: V-CROSS-SURFACE-POSTURE-TRIAGE
 title: Cross-surface malformed-input posture triage hunt
-description: 'The same malformed text takes different verdicts at each ingestion surface (stylesheet ingest recovers-drops, insertRule throws SyntaxError, setProperty ignores silently, Parser API returns null/throws), and this campaign triages that matrix against the declared posture table in proof/surfaces/threat-surface.yaml. Any UNCAUGHT exception type (RangeError, TypeError from internals) at any surface is a finding regardless of declared posture, as is a verdict not explainable by legitimate layer-context differences (a declaration body valid for setProperty but not insertRule). Malformed input must recover or error loudly per its surface contract — never crash incidentally. Not yet executed.'
+description: The same malformed text takes different verdicts at each ingestion surface (stylesheet ingest recovers-drops, insertRule throws SyntaxError, setProperty ignores silently, Parser API returns null/throws), and this campaign triages that matrix against the declared posture table in proof/surfaces/threat-surface.yaml. Any UNCAUGHT exception type (RangeError, TypeError from internals) at any surface is a finding regardless of declared posture, as is a verdict not explainable by legitimate layer-context differences (a declaration body valid for setProperty but not insertRule). Malformed input must recover or error loudly per its surface contract — never crash incidentally. Not yet executed.
 priority: P2
-status: unresearched
+status: closed-ki
 related_obligation_classes:
     - malformed_recovers_or_errors_loudly
 stacks:
     - typescript
+related_known_issues:
+    - KI-132
+close_note: 'Hunt exit 2026-08-26: 40 malformed inputs x 9 ingestion surfaces classified at HEAD (docs/proof-escape-ki-131-134.md posture matrix). Product defect filed as KI-132 (unclosed-paren @media prelude deleted at ingest while insertRule throws for MQ4-recovered text); remaining divergences filed as KI-131/KI-133/KI-134; all other verdicts match docs/threat-surface.md section 1 posture table.'
+campaign_log:
+    - at: "2026-08-27T01:48:12Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-26: 40 malformed inputs x 9 ingestion surfaces classified at HEAD (docs/proof-escape-ki-131-134.md posture matrix). Product defect filed as KI-132 (unclosed-paren @media prelude deleted at ingest while insertRule throws for MQ4-recovered text); remaining divergences filed as KI-131/KI-133/KI-134; all other verdicts match docs/threat-surface.md section 1 posture table.'
+      actor: agent:champ

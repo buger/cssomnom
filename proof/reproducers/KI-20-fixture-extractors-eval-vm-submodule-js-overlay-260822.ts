@@ -43,7 +43,6 @@ import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as vm from 'node:vm';
 
-const here = path.dirname(fileURLToPath(import.meta.url));
 const SINK_NV_CSSOM = 'scripts/external_suites/extract_nv_cssom.ts:55';
 const SINK_RRWEB = 'scripts/external_suites/extract_rrweb.ts:49';
 const SINK_WPT = 'scripts/external_suites/extract_wpt.ts:126/:257';

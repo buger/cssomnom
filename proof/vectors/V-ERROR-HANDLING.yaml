@@ -2,8 +2,14 @@ id: V-ERROR-HANDLING
 title: CSSOM/parser error-handling contract hunt
 description: Hunt campaign for high-severity error_handling on insertRule, grouping parse callback, origin-clean, and STK BQKD/AMK6. Not yet executed.
 priority: P1
-status: unresearched
+status: closed-null
 related_obligation_classes:
     - error_handling
 stacks:
     - typescript
+close_note: 'Hunted clean 2026-08-26 (null is success): insertRule guard chain verified working (IndexSize/SyntaxError/HierarchyRequest per DOM); no new error-handling defect surfaced beyond the filed KI-131..134 legs. Evidence: docs/proof-escape-ki-131-134.md posture matrix + null-hunt results.'
+campaign_log:
+    - at: "2026-08-27T01:48:22Z"
+      status: closed-null
+      note: 'Hunted clean 2026-08-26 (null is success): insertRule guard chain verified working (IndexSize/SyntaxError/HierarchyRequest per DOM); no new error-handling defect surfaced beyond the filed KI-131..134 legs. Evidence: docs/proof-escape-ki-131-134.md posture matrix + null-hunt results.'
+      actor: agent:champ

@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-132-media-unclosed-prelude-rule-deletion-overlay-260826.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-26T11:39:14Z"
+executed_at: "2026-08-27T02:03:43Z"
 input_set:
     - proof/reproducers/KI-132-media-unclosed-prelude-rule-deletion-overlay-260826.ts
 freshness_hashes:
-    proof/reproducers/KI-132-media-unclosed-prelude-rule-deletion-overlay-260826.ts: sha256:ac5d895bb06a368e0f0ad046628a28ea92765e15a02636b16ab007e09407ea20
+    proof/reproducers/KI-132-media-unclosed-prelude-rule-deletion-overlay-260826.ts: sha256:868f49a5971b8f0c5968380609ac170a99ad6be3cbf50aeafee54c756d5117bc
 known_issues:
     - KI-132

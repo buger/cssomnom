@@ -2,7 +2,14 @@ id: V-SELECTOR-FORGIVENESS-DIVERGENCE
 title: Selector forgiveness boundary divergence hunt (DOM SyntaxError vs silent swallow)
 description: 'Our matcher never throws: fully-invalid selector lists return false/[] and invalid-selector AST nodes are skipped mid-list, while DOM matches() throws SyntaxError for some of those forms. Classify each boundary case as documented intentional deviation vs conformance gap against selectors-4 forgiving-list semantics (:is()/:where() containment; valid members of mixed lists must still match). README deviation stance must be verified during filing/research — do not presume it. Serialization of partially-invalid lists via selectorText makes the swallow observable even when matching looks correct. Not yet executed.'
 priority: P2
-status: unresearched
-related_obligation_classes: []
+status: closed-ki
 stacks:
     - typescript
+related_known_issues:
+    - KI-134
+close_note: 'Hunt exit 2026-08-26: DOM throw-vs-silent-swallow posture of matches()/querySelectorAll()/querySelector() hunted; product defect filed as KI-134 (silent false where DOM mandates SyntaxError; :is()/:where() forgiving semantics verified correct). See docs/proof-escape-ki-131-134.md.'
+campaign_log:
+    - at: "2026-08-27T01:48:12Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-26: DOM throw-vs-silent-swallow posture of matches()/querySelectorAll()/querySelector() hunted; product defect filed as KI-134 (silent false where DOM mandates SyntaxError; :is()/:where() forgiving semantics verified correct). See docs/proof-escape-ki-131-134.md.'
+      actor: agent:champ

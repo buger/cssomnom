@@ -1,8 +1,13 @@
 id: V-REGISTRY-SEQUENCE-CONTAMINATION
 title: Global PropertyRegistry sequence-contamination hunt
-description: 'The PropertyRegistry registry is a module-global Map mutated by registerProperty/unregisterProperty/clear(), by @property rules parsed from ANY stylesheet, and implicitly across unrelated parses in one process. Hunt mutation sequences (register/re-register, @property ingest interleaved with API calls, unregister-then-parse, clear mid-sequence) for state that leaks into or contaminates subsequent, logically unrelated parses or tests. Sequence-sensitive global state is where cross-test flakiness hides; every ordering finding reproduces only under a specific sequence. Not yet executed.'
+description: The PropertyRegistry registry is a module-global Map mutated by registerProperty/unregisterProperty/clear(), by @property rules parsed from ANY stylesheet, and implicitly across unrelated parses in one process. Hunt mutation sequences (register/re-register, @property ingest interleaved with API calls, unregister-then-parse, clear mid-sequence) for state that leaks into or contaminates subsequent, logically unrelated parses or tests. Sequence-sensitive global state is where cross-test flakiness hides; every ordering finding reproduces only under a specific sequence. Not yet executed.
 priority: P2
-status: unresearched
-related_obligation_classes: []
+status: closed-null
 stacks:
     - typescript
+close_note: 'Hunted clean 2026-08-26 (null is success): 10 sequence probes clean — top-level @property registers (spec-correct), nested-in-@media does not, invalid @property drops AND leaves no registry zombie, css-over-css last-wins, js/js IME per KI-4, clear()/wrong-origin-unregister behave as designed, setProperty accepting mismatched custom-prop values is correct (invalid-at-computed-value-time). Cascade-side gap is KI-38-owned. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+campaign_log:
+    - at: "2026-08-27T01:48:22Z"
+      status: closed-null
+      note: 'Hunted clean 2026-08-26 (null is success): 10 sequence probes clean — top-level @property registers (spec-correct), nested-in-@media does not, invalid @property drops AND leaves no registry zombie, css-over-css last-wins, js/js IME per KI-4, clear()/wrong-origin-unregister behave as designed, setProperty accepting mismatched custom-prop values is correct (invalid-at-computed-value-time). Cascade-side gap is KI-38-owned. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+      actor: agent:champ

@@ -6,10 +6,10 @@ requirements:
 command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/KI-131-media-paren-depth-rangeerror-overlay-260826.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-26T11:34:41Z"
+executed_at: "2026-08-27T02:03:42Z"
 input_set:
     - proof/reproducers/KI-131-media-paren-depth-rangeerror-overlay-260826.ts
 freshness_hashes:
-    proof/reproducers/KI-131-media-paren-depth-rangeerror-overlay-260826.ts: sha256:24e3213f71330a77c67bc50d5748e991316b24f5007970f283162211b4818ede
+    proof/reproducers/KI-131-media-paren-depth-rangeerror-overlay-260826.ts: sha256:f07d67aec9f01d22c5b355603312f2821ee6cfee3efd4c227df4d17dfbb5d189
 known_issues:
     - KI-131

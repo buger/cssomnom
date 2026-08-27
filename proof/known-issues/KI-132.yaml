@@ -48,5 +48,59 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-132.yaml
+    - at: "2026-08-27T01:40:00Z"
+      by: agent:champ
+      action: edit
+      detail: add poc_quality block (ACC-15)
+    - at: "2026-08-27T02:03:43Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-132.yaml
+poc_quality:
+    real_infrastructure: true
+    quantitative_impact: true
+    control_test: true
+    untrusted_attacker: true
+    current_deployment_relevance: true
+    honest_severity: true
+    attacker_profitability: true
+    reproducible: true
+    no_inflation: true
+    operational_path_verified: true
+    reachability_verified: true
+    notes: |
+        real_infrastructure: public parse() and CSSStyleSheet.insertRule() imported
+        from src/index.ts only — the CSSOM ingest layer and the mutation surface a
+        host actually calls; no mocks.
+        quantitative_impact: three unclosed-paren prelude shapes return
+        cssRules.length 0 where mediaqueries-4 #error-handling requires exactly 1
+        retained not-all rule with contents, and insertRule() throws SyntaxError
+        for text the media layer itself recovers to a valid rule — count deltas
+        and a throw, not a vibe.
+        control_test: two green controls in the same run — a balanced prelude is
+        retained, and '@media screen or {' already survives as "not all" with its
+        child intact, proving the retention path exists on this entry point and
+        only the unclosed-paren shape is deleted.
+        untrusted_attacker: ordinary malformed stylesheet text (an author typo) is
+        the trigger; no attacker or privilege needed — a correctness defect on the
+        ingest surface, not an exploit against a role model.
+        current_deployment_relevance: parse() and insertRule() are the shipped
+        core APIs; behavior verified at HEAD on Node v24.11.1 and re-verified via
+        evidence refresh after the final edit.
+        honest_severity: medium correctness — silent whole-rule loss plus a
+        cross-surface ingest/insertRule split; no security boundary crossed.
+        attacker_profitability: none claimed — no revenue model applies to silent
+        rule deletion; impact is lost styles and divergent API verdicts.
+        reproducible: reproducer command exits 1 on all four defect legs; it ran
+        twice before filing and twice again after the final byte edit; evidence
+        manifest proof/evidence/ki-132.yaml records status fail /
+        known_issue_reproduced with freshness hash equal to final bytes.
+        no_inflation: severity_basis is reproducer with the executed manifest
+        attached; risk names correctness honestly; cve_surface none.
+        operational_path_verified: failing legs are the exact product paths
+        (stylesheet ingest via parse(), rule insertion via insertRule()); the
+        control legs prove the intended path stays green.
+        reachability_verified: public parse()/insertRule() are the entire surface;
+        no ingress guard is bypassed and no harness starts mid-pipeline.
 kill_domain: silent_structural_loss
 do_not_refile_as: KI-5 owns serializeMediaQuery emitting (()) for unclosed constructs and landed that fix; this defect is whole-rule deletion during CSSOM ingestion, a different observable on a different layer. KI-31 covers condition serialization dropping parentheses on valid conditions, not rule deletion.

@@ -26,34 +26,39 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from '../../src/index.ts';
 
-// Verifies: V-MALFORMED-RECOVER (KI-133 helper: count rules for one text)
+// Verifies: SYS-REQ-260826-0MVR (KI-133 helper: count rules for one text)
 function ruleCount(source: string): number {
   return parse(source).cssRules.length;
 }
 
-// Verifies: V-MALFORMED-RECOVER (KI-133 helper: inner rules of first rule)
+// Verifies: SYS-REQ-260826-0MVR (KI-133 helper: inner rules of first rule)
 function innerCount(source: string): number {
   const outer = parse(source).cssRules[0] as unknown as { cssRules?: { length: number } };
   return outer?.cssRules?.length ?? -1;
 }
 
+// Verifies: SYS-REQ-260826-0MVR (control leg)
 test('control: valid @supports rule is retained', () => {
   assert.equal(ruleCount('@supports (top:0){div{color:red}}'), 1);
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: empty declaration value inside feature (WPT at-supports-019)', () => {
   assert.equal(ruleCount('@supports (margin: ) { div{top:0} }'), 0,
     '( <declaration> ) requires a non-empty value; rule must be ignored');
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: trailing close paren after condition (WPT at-supports-020)', () => {
   assert.equal(ruleCount('@supports (margin: 2px) ) { div{top:0} }'), 0);
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: bracket block instead of parens (WPT at-supports-022)', () => {
   assert.equal(ruleCount('@supports [margin: 0] { div{top:0} }'), 0);
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: nested trailing paren (WPT at-supports-023 shape)', () => {
   // Outer @media is valid and survives; the grammatically-invalid inner
   // @supports must be ignored (its contents dropped with it).
@@ -61,6 +66,7 @@ test('defect: nested trailing paren (WPT at-supports-023 shape)', () => {
     'inner invalid @supports must be ignored inside the retained @media');
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: bracket feature inside and-chain (WPT at-supports-025)', () => {
   assert.equal(
     innerCount('@media screen { @supports ((margin:0) and [padding:0]) { div{top:0} } }'),
@@ -68,14 +74,17 @@ test('defect: bracket feature inside and-chain (WPT at-supports-025)', () => {
   );
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: mismatched closer inside feature (WPT at-supports-026)', () => {
   assert.equal(ruleCount('@supports (margin: 0]) { div{top:0} }'), 0);
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: operand-less not matches no production', () => {
   assert.equal(ruleCount('@supports not { div{top:0} }'), 0);
 });
 
+// Verifies: SYS-REQ-260826-0MVR (defect leg)
 test('defect: dangling and without right operand', () => {
   assert.equal(ruleCount('@supports (top:0) and { div{top:0} }'), 0);
 });

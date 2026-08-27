@@ -2,8 +2,16 @@ id: V-MALFORMED-RECOVER
 title: Malformed CSS recover-or-loud-error hunt
 description: Hunt campaign for high-severity malformed_recovers_or_errors_loudly on media not-all, CSS.supports boolean, invalid @property drop, and Syntax-3 recovery. Not yet executed.
 priority: P1
-status: unresearched
+status: closed-ki
 related_obligation_classes:
     - malformed_recovers_or_errors_loudly
 stacks:
     - typescript
+related_known_issues:
+    - KI-133
+close_note: 'Hunt exit 2026-08-26: recover-or-loud-error posture hunted across @supports/@media malformed shapes; product defect filed as KI-133 (eight grammatically invalid @supports conditions retained, WPT at-supports-019..026) with secondary coverage on KI-132 (@media not-all recovery). See docs/proof-escape-ki-131-134.md.'
+campaign_log:
+    - at: "2026-08-27T01:48:12Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-26: recover-or-loud-error posture hunted across @supports/@media malformed shapes; product defect filed as KI-133 (eight grammatically invalid @supports conditions retained, WPT at-supports-019..026) with secondary coverage on KI-132 (@media not-all recovery). See docs/proof-escape-ki-131-134.md.'
+      actor: agent:champ

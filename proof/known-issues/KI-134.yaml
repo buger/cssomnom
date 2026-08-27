@@ -44,5 +44,9 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-134.yaml
+    - at: "2026-08-27T02:03:44Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-134.yaml
 kill_domain: error_posture_divergence
 do_not_refile_as: KI-16 owns missing match-complexity budgets and KI-32/KI-34 own specific matching semantics (case sensitivity, wildcard lang). No existing KI owns the throw-versus-swallow error posture of the top-level matcher APIs.

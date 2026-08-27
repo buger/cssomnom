@@ -2,8 +2,16 @@ id: V-DOS-PARSE
 title: CSS parse/tokenize denial-of-service bound hunt
 description: 'Hunt campaign for high-severity denial_of_service_resistant on tokenizer/parser (SBJ7/7521/7M07/QV2H/HHVE): unbounded CSS text must not pin CPU or heap. Not yet executed.'
 priority: P1
-status: unresearched
+status: closed-ki
 related_obligation_classes:
     - denial_of_service_resistant
 stacks:
     - typescript
+related_known_issues:
+    - KI-131
+close_note: 'Hunt exit 2026-08-26: deep-paren @media prelude crashes parse()/insertRule() with a raw RangeError (MediaParser condition recursion, ~2200 depth); filed as KI-131 (source_vector back-link). Tokenizer-side DoS bounded: tokenize() is iterative, survives 50k depth. See docs/proof-escape-ki-131-134.md.'
+campaign_log:
+    - at: "2026-08-27T01:47:36Z"
+      status: closed-ki
+      note: 'Hunt exit 2026-08-26: deep-paren @media prelude crashes parse()/insertRule() with a raw RangeError (MediaParser condition recursion, ~2200 depth); filed as KI-131 (source_vector back-link). Tokenizer-side DoS bounded: tokenize() is iterative, survives 50k depth. See docs/proof-escape-ki-131-134.md.'
+      actor: agent:champ

@@ -2,7 +2,12 @@ id: V-SHORTHAND-EXPANSION-EQUIVALENCE
 title: cssText round-trip drift and shorthand/longhand expansion equivalence hunt
 description: 'Folds two blind proposals (PROPOSED-csstext-roundtrip-drift + the shorthand/longhand expansion equivalence oracle family): parse -> cssText -> re-parse must not drift via shorthand expand/contract asymmetry, and setProperty(shorthand, v) read back per-longhand must equal directly setting each longhand to expand(v); removeProperty(shorthand) clears exactly its longhands. Values containing var()/env() intentionally store as-is without eager expansion and are whitelisted, not findings. The declaration object carries a documented past bug of exactly this class ("Drop a stored all" regression comment), so prior probability is high. Not yet executed.'
 priority: P2
-status: unresearched
-related_obligation_classes: []
+status: closed-null
 stacks:
     - typescript
+close_note: 'Hunted clean 2026-08-26 (null is success): expansion/contraction/removeProperty contracts hold for table-backed shorthands incl. slash-form border-radius, flex, background with position/size, inset, logical shorthands; non-expansion of place-items/place-content/grid-area/gap/transition is KI-36-owned (already tracked), so no novel mechanism found. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+campaign_log:
+    - at: "2026-08-27T01:48:22Z"
+      status: closed-null
+      note: 'Hunted clean 2026-08-26 (null is success): expansion/contraction/removeProperty contracts hold for table-backed shorthands incl. slash-form border-radius, flex, background with position/size, inset, logical shorthands; non-expansion of place-items/place-content/grid-area/gap/transition is KI-36-owned (already tracked), so no novel mechanism found. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+      actor: agent:champ

@@ -2,8 +2,14 @@ id: V-ACCESS-DENIED
 title: Origin-clean cssRules SecurityError hunt
 description: 'Hunt campaign for high-severity access_denied on SYS-X3KX / SW-6951: cssRules must throw SecurityError when origin-clean is false. Not yet executed.'
 priority: P1
-status: unresearched
+status: closed-null
 related_obligation_classes:
     - access_denied
 stacks:
     - typescript
+close_note: 'Hunted clean 2026-08-26 (null is success): origin-clean guards EXIST and fire at three sites (src/CSSOM.ts:242, 409, 483), but _originCleanFlag = false is unreachable from any public API (only createInternal sets it; the sole call passes default true). No public-surface defect to file; CORS-driven flag flips are browser-host concerns outside the Node library surface. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+campaign_log:
+    - at: "2026-08-27T01:48:22Z"
+      status: closed-null
+      note: 'Hunted clean 2026-08-26 (null is success): origin-clean guards EXIST and fire at three sites (src/CSSOM.ts:242, 409, 483), but _originCleanFlag = false is unreachable from any public API (only createInternal sets it; the sole call passes default true). No public-surface defect to file; CORS-driven flag flips are browser-host concerns outside the Node library surface. Evidence: docs/proof-escape-ki-131-134.md null-hunt results.'
+      actor: agent:champ
