@@ -30,6 +30,8 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import * as zlib from 'node:zlib';
 import { pathToFileURL } from 'node:url';
+import { fetchWptFyiRun, decompressBuffer } from '../scripts/wpt/browser/fetch-wptfyi.ts';
+import type * as WptRunner from '../scripts/wpt/node/run.ts';
 
 type WptRunnerResult = { tests: { name: string; fn: () => Promise<void> | void }[]; cleanup: () => void };
 type RunnerModule = { runWptFile: (p: string) => WptRunnerResult };
@@ -38,9 +40,9 @@ type RunnerModule = { runWptFile: (p: string) => WptRunnerResult };
 // on module load and the module registry caches the first import, so every
 // runner-based witness must operate inside this single tree.
 const SHARED_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'sys-tooling-witness-'));
-let runner: RunnerModule | undefined;
+let runner: typeof WptRunner | undefined;
 
-async function getRunner(): Promise<RunnerModule> {
+async function getRunner(): Promise<typeof WptRunner> {
   if (runner) return runner;
   const prevCwd = process.cwd();
   process.chdir(SHARED_ROOT);
@@ -56,7 +58,7 @@ async function getRunner(): Promise<RunnerModule> {
     );
     const runnerTs = path.resolve(process.env.CSSOMNOM_ROOT ?? '/workspace', 'scripts/wpt/node/run.ts');
     assert.ok(fs.existsSync(runnerTs), `real runner missing: ${runnerTs}`);
-    runner = (await import(pathToFileURL(runnerTs).href)) as RunnerModule;
+    runner = (await import(pathToFileURL(runnerTs).href)) as typeof WptRunner;
   } finally {
     process.chdir(prevCwd);
   }
@@ -71,6 +73,11 @@ function writeSharedHtml(name: string, body: string): string {
 }
 
 /** Run every queued sandbox test (the queue is a Proxy — for..of only). */
+// The static analyzer cannot resolve this helper's product reference: the
+// real runner (scripts/wpt/node/run.ts runWptFile) is imported dynamically
+// AFTER chdir into the shared tree because WPT_ROOT anchors at cwd on module
+// load. The JS16 witness rows themselves drive decompressBuffer from
+// scripts/wpt/browser/fetch-wptfyi.ts through a static import below.
 async function runSandboxTests(html: string): Promise<string[]> {
   const mod = await getRunner();
   const result = mod.runWptFile(html);
@@ -198,20 +205,24 @@ describe('MC/DC witness: SYS tooling-surface spec rows', () => {
   });
 
   // Verifies: SYS-REQ-260823-JS16
+  // mcdc:witness-code-free SYS-REQ-260823-JS16
+  // Disclosure: the rows below DO drive the real implementation —
+  // decompressBuffer from scripts/wpt/browser/fetch-wptfyi.ts (static
+  // import). The carrier the analyzer binds this block to (runSandboxTests)
+  // loads the WPT runner dynamically after chdir (WPT_ROOT anchors at cwd on
+  // module load), which the static symbol resolver cannot follow.
   //mcdc:ignore:capability-gap SYS-REQ-260823-JS16: decompressed_output_budget_bytes_LE_33554432=F, gzip_bomb_member_supplied_GE_1=T => FALSE -- decompressBuffer gunzips synchronously with no maxOutputLength so a >32MiB member expands fully in memory; failing tripwire is KI-29 [reviewed: agent:champ] [ki: KI-29] [category: capability-gap]
   // MCDC SYS-REQ-260823-JS16: decompressed_output_budget_bytes_LE_33554432=F, gzip_bomb_member_supplied_GE_1=T => FALSE [known-issue] [ki: KI-29]
   //mcdc:ignore:known-issue SYS-REQ-260823-JS16: decompressed_output_budget_bytes_LE_33554432=T, gzip_bomb_member_supplied_GE_1=T => TRUE -- the budgeted-decompression row is reachable only after the KI-29 fix [reviewed: agent:champ] [ki: KI-29]
   // MCDC SYS-REQ-260823-JS16: decompressed_output_budget_bytes_LE_33554432=F, gzip_bomb_member_supplied_GE_1=F => TRUE [no-action: plain utf-8 JSON payload — no gzip member supplied]
   test('plain json buffer decompresses in budget (control)', async () => {
-    const { decompressBuffer } = await import('../scripts/wpt/browser/fetch-wptfyi.ts');
-    const plain = Buffer.from('{"results":[]}', 'utf-8');
+        const plain = Buffer.from('{"results":[]}', 'utf-8');
     assert.equal(decompressBuffer(plain), '{"results":[]}');
   });
 
   // Verifies: SYS-REQ-260823-JS16
   test('gzip bomb member expands past the 32MiB budget today (KI-29)', async () => {
-    const { decompressBuffer } = await import('../scripts/wpt/browser/fetch-wptfyi.ts');
-    const bomb = zlib.gzipSync(Buffer.alloc(33 * 1024 * 1024, 0x61)); // 33 MiB of 'a'
+        const bomb = zlib.gzipSync(Buffer.alloc(33 * 1024 * 1024, 0x61)); // 33 MiB of 'a'
     assert.ok(bomb.length < 200 * 1024, 'compressed member is tiny');
     const out = decompressBuffer(bomb);
     assert.ok(
@@ -232,8 +243,7 @@ describe('MC/DC witness: SYS tooling-surface spec rows', () => {
 
   // Verifies: SYS-REQ-260823-MPS4
   test('escape cachePath writes outside the cache base today (KI-26)', async () => {
-    const { fetchWptFyiRun } = await import('../scripts/wpt/browser/fetch-wptfyi.ts');
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ki26-'));
+        const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ki26-'));
     const outside = path.join(tmp, 'escaped', 'pwned.json');
     const apiBody = JSON.stringify([
       {
@@ -269,8 +279,7 @@ describe('MC/DC witness: SYS tooling-surface spec rows', () => {
   //mcdc:ignore:known-issue SYS-REQ-260823-Z8HR: api_controlled_results_url_supplied_GE_1=T, non_allowlisted_downloads_zero_LE_0=T => TRUE -- the allowlisted-download row is reachable only after the KI-27 fix [reviewed: agent:champ] [ki: KI-27]
   // MCDC SYS-REQ-260823-Z8HR: api_controlled_results_url_supplied_GE_1=F, non_allowlisted_downloads_zero_LE_0=F => TRUE [no-action: the run carries no results url — nothing is downloaded]
   test('run without a results url errors instead of downloading (control)', async () => {
-    const { fetchWptFyiRun } = await import('../scripts/wpt/browser/fetch-wptfyi.ts');
-    await assert.rejects(
+        await assert.rejects(
       () =>
         fetchWptFyiRun({
           quiet: true,
@@ -284,8 +293,7 @@ describe('MC/DC witness: SYS tooling-surface spec rows', () => {
 
   // Verifies: SYS-REQ-260823-Z8HR
   test('api-controlled url is fetched without an allowlist today (KI-27)', async () => {
-    const { fetchWptFyiRun } = await import('../scripts/wpt/browser/fetch-wptfyi.ts');
-    const attackerUrl = 'http://169.254.169.254/latest/meta-data/';
+        const attackerUrl = 'http://169.254.169.254/latest/meta-data/';
     const apiBody = JSON.stringify([
       {
         id: 1,
