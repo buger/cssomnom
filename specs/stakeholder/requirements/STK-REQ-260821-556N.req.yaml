@@ -61,6 +61,7 @@ acceptance_review:
     reviewed_by: agent:ac-sweep
     disposition: reviewed
     notes: conformance_owner README deviations (CSSImportRule.styleSheet, getComputedStyle) and dedicated acceptance lock of api-surface snapshot plus public keys. Dual-surface N/A.
+verification_state: failing
 stakeholder:
     persona: Spec maintainer
     story: As a maintainer I treat WPT as the primary oracle and keep intentional deviations documented.
@@ -100,3 +101,8 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
+        - date: "2026-08-27T02:25:48Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=4; known_issue:KI-24=failing | known_issue:KI-25=failing | known_issue:KI-26=failing | known_issue:KI-27=failing
+          changed_by: agent:champ

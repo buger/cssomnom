@@ -1,9 +1,5 @@
 component: parser
 variables:
-    - name: at_keyword_case_folded
-      type: bool
-      direction: input
-      description: 'True when the at-rule keyword is folded to ASCII lowercase before handler-table lookup (css-syntax-3 infra #ascii-case-insensitive).'
     - name: consume_step
       type: bool
       direction: internal

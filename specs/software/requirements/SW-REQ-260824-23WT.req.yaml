@@ -33,29 +33,41 @@ verification:
         reviewer: agent:champ
         reviewed_at: "2026-08-24T12:36:51Z"
         ai_generated: false
-    gaps_reviewed_at: "2026-08-25T00:54:48.409534369Z"
+    gaps_reviewed_at: "2026-08-27T02:55:31.89267598Z"
     gaps_reviewed_by: agent:champ
     gap_reviews:
         - check: ambiguity
           issue_key: ambiguity|cascade|SW-REQ-260822-1REE|SW-REQ-260824-23WT
           reviewer: agent:champ
-          reason: 'HSL hue-sector family reviewed across all twelve flagged pairs. The six requirements partition normalized hue into disjoint chroma-assignment sectors per css-color-4 hslToRgb: red [0,60) owned by SYS-REQ-260822-CFRA (restated at SW by SW-REQ-260822-1REE), green [60,180) by SYS-REQ-260824-4RGN (restated by SW-REQ-260824-JS91), blue [180,300) by SYS-REQ-260824-BRYV (restated by SW-REQ-260824-23WT). Every flagged pair joins two different sectors: hue_degrees and hsl_component_count are the shared input-domain guard (3 or 4 components), while the consequents assign chroma to disjoint channel outputs red_from_chroma vs green_from_chroma vs blue_from_chroma. Same-sector parent-child rows carry direct traces.satisfies links and are not part of this finding set. No formula crosses a sector boundary; no contradictory consequents.'
-          reviewed_at: "2026-08-25T00:54:48.409534369Z"
+          reason: 'Layered domain-vs-sector guarantee, not ambiguity: CAHE owns the normalized-hue output domain (parseHue modulo 360 pins hue_degrees in [0,360) for every parsed list); the sector requirements own chroma-channel assignment inside that domain, with disjoint hue windows and distinct channel consequents (red/green/blue_from_chroma). No contradictory consequents.'
+          reviewed_at: "2026-08-27T02:55:30.895798035Z"
+        - check: ambiguity
+          issue_key: ambiguity|cascade|SW-REQ-260824-23WT|SW-REQ-260824-CAHE
+          reviewer: agent:champ
+          reason: 'Layered domain-vs-sector guarantee, not ambiguity: CAHE owns the normalized-hue output domain (parseHue modulo 360 pins hue_degrees in [0,360) for every parsed list); the sector requirements own chroma-channel assignment inside that domain, with disjoint hue windows and distinct channel consequents (red/green/blue_from_chroma). No contradictory consequents.'
+          reviewed_at: "2026-08-27T02:55:31.89267598Z"
         - check: ambiguity
           issue_key: ambiguity|cascade|SW-REQ-260824-23WT|SW-REQ-260824-JS91
           reviewer: agent:champ
-          reason: 'HSL hue-sector family reviewed across all twelve flagged pairs. The six requirements partition normalized hue into disjoint chroma-assignment sectors per css-color-4 hslToRgb: red [0,60) owned by SYS-REQ-260822-CFRA (restated at SW by SW-REQ-260822-1REE), green [60,180) by SYS-REQ-260824-4RGN (restated by SW-REQ-260824-JS91), blue [180,300) by SYS-REQ-260824-BRYV (restated by SW-REQ-260824-23WT). Every flagged pair joins two different sectors: hue_degrees and hsl_component_count are the shared input-domain guard (3 or 4 components), while the consequents assign chroma to disjoint channel outputs red_from_chroma vs green_from_chroma vs blue_from_chroma. Same-sector parent-child rows carry direct traces.satisfies links and are not part of this finding set. No formula crosses a sector boundary; no contradictory consequents.'
-          reviewed_at: "2026-08-25T00:54:48.409534369Z"
+          reason: 'Layered domain-vs-sector guarantee, not ambiguity: CAHE owns the normalized-hue output domain (parseHue modulo 360 pins hue_degrees in [0,360) for every parsed list); the sector requirements own chroma-channel assignment inside that domain, with disjoint hue windows and distinct channel consequents (red/green/blue_from_chroma). No contradictory consequents.'
+          reviewed_at: "2026-08-27T02:55:31.383574424Z"
         - check: ambiguity
           issue_key: ambiguity|cascade|SW-REQ-260824-23WT|SYS-REQ-260822-CFRA
           reviewer: agent:champ
-          reason: 'HSL hue-sector family reviewed across all twelve flagged pairs. The six requirements partition normalized hue into disjoint chroma-assignment sectors per css-color-4 hslToRgb: red [0,60) owned by SYS-REQ-260822-CFRA (restated at SW by SW-REQ-260822-1REE), green [60,180) by SYS-REQ-260824-4RGN (restated by SW-REQ-260824-JS91), blue [180,300) by SYS-REQ-260824-BRYV (restated by SW-REQ-260824-23WT). Every flagged pair joins two different sectors: hue_degrees and hsl_component_count are the shared input-domain guard (3 or 4 components), while the consequents assign chroma to disjoint channel outputs red_from_chroma vs green_from_chroma vs blue_from_chroma. Same-sector parent-child rows carry direct traces.satisfies links and are not part of this finding set. No formula crosses a sector boundary; no contradictory consequents.'
-          reviewed_at: "2026-08-25T00:54:48.409534369Z"
+          reason: 'Layered domain-vs-sector guarantee, not ambiguity: CAHE owns the normalized-hue output domain (parseHue modulo 360 pins hue_degrees in [0,360) for every parsed list); the sector requirements own chroma-channel assignment inside that domain, with disjoint hue windows and distinct channel consequents (red/green/blue_from_chroma). No contradictory consequents.'
+          reviewed_at: "2026-08-27T02:55:31.89267598Z"
         - check: ambiguity
           issue_key: ambiguity|cascade|SW-REQ-260824-23WT|SYS-REQ-260824-4RGN
           reviewer: agent:champ
-          reason: 'HSL hue-sector family reviewed across all twelve flagged pairs. The six requirements partition normalized hue into disjoint chroma-assignment sectors per css-color-4 hslToRgb: red [0,60) owned by SYS-REQ-260822-CFRA (restated at SW by SW-REQ-260822-1REE), green [60,180) by SYS-REQ-260824-4RGN (restated by SW-REQ-260824-JS91), blue [180,300) by SYS-REQ-260824-BRYV (restated by SW-REQ-260824-23WT). Every flagged pair joins two different sectors: hue_degrees and hsl_component_count are the shared input-domain guard (3 or 4 components), while the consequents assign chroma to disjoint channel outputs red_from_chroma vs green_from_chroma vs blue_from_chroma. Same-sector parent-child rows carry direct traces.satisfies links and are not part of this finding set. No formula crosses a sector boundary; no contradictory consequents.'
-          reviewed_at: "2026-08-25T00:54:48.409534369Z"
+          reason: 'Layered domain-vs-sector guarantee, not ambiguity: CAHE owns the normalized-hue output domain (parseHue modulo 360 pins hue_degrees in [0,360) for every parsed list); the sector requirements own chroma-channel assignment inside that domain, with disjoint hue windows and distinct channel consequents (red/green/blue_from_chroma). No contradictory consequents.'
+          reviewed_at: "2026-08-27T02:55:30.895798035Z"
+    not_modeled:
+        - predicate: h < 120
+          reason: "HSL hue-sector 30-degree ladder bound internal to hslToRgb color conversion; the hue-sector contract for this bound is owned by its sibling hue-sector requirement at this layer, not a separate contract domain [structural]"
+        - predicate: h < 240
+          reason: "HSL hue-sector 30-degree ladder bound internal to hslToRgb color conversion; the hue-sector contract for this bound is owned by its sibling hue-sector requirement at this layer, not a separate contract domain [structural]"
+        - predicate: h < 60
+          reason: "HSL hue-sector 30-degree ladder bound internal to hslToRgb color conversion; the hue-sector contract for this bound is owned by its sibling hue-sector requirement at this layer, not a separate contract domain [structural]"
 history:
     created_by: human:Leonid Bugaev
     created_at: "2026-08-24T12:11:23Z"

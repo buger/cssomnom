@@ -1,0 +1,6 @@
+id: ME-260827-TOKCAP
+kind: manual_qa
+affected_requirements:
+    - SW-REQ-260822-7R6Z
+signed_by: agent:champ
+description: 'Manual QA observation (2026-08-27, agent:champ): tokenize(''\1234567'') yields [ident U+FFFD followed by literal 7, EOF] — css-syntax-3 4.3.7 consume-escaped-code-point caps the consumed hex run at 6 digits, so escaped_hex_digits never exceeds 6 in any drivable scenario. SW-REQ-260822-7R6Z row 3 (escaped_hex_digits_LE_6=F antecedent-false arm) therefore has no caller-level scenario; it exists only as the covered full-escape row''s unique-cause pair. Positive row witnessed at tests/mcdc-witness-domain-bounds.test.ts:130.'

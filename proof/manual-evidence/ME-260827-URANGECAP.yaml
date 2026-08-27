@@ -1,0 +1,6 @@
+id: ME-260827-URANGECAP
+kind: manual_qa
+affected_requirements:
+    - INT-REQ-260821-ZP03
+signed_by: agent:champ
+description: 'Manual QA observation (2026-08-27, agent:champ): tokenize(''U+1234567'', true) splits into the delim ''U+123456'' plus the number token 7 — the urange scanner caps the hex run at 6 digits, so urange_hex_digits never exceeds 6 in any drivable scenario. INT-REQ-260821-ZP03 row 5 (urange_hex_digits_LE_6=F antecedent-false arm) therefore has no caller-level scenario; it exists only as the covered register-property row''s unique-cause pair. Positive row witnessed at tests/mcdc-witness-parser-api.test.ts:118.'

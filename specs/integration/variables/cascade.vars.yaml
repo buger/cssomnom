@@ -12,13 +12,10 @@ variables:
       type: bool
       direction: input
       description: True when two matching declarations tie on importance, layer, origin, and specificity.
-    - name: hsl_component_count
-      type: int
+    - name: hsl_arity_out_of_bounds
+      type: bool
       direction: input
-      description: Count of hsl()/hsla() components after slash split (css-color-4 admits 3 or 4).
-      range:
-        max: 5
-        min: 0
+      description: True when the hsl()/hsla() component count after slash split falls outside the css-color-4 3-4 window (count < 3 or count > 4).
     - name: hsl_parsed
       type: bool
       direction: output

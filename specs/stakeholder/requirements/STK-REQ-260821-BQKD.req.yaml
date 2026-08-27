@@ -48,6 +48,7 @@ acceptance_review:
     reviewed_by: agent:ac-sweep
     disposition: reviewed
     notes: cssom_consumer parse/getPropertyValue/invalid-drop/insertRule SyntaxError. Dual-surface N/A (library API, not authz enforce/project).
+verification_state: failing
 stakeholder:
     persona: Node.js library consumer
     story: As a Node.js caller I parse CSS text into a CSSStyleSheet and read declarations through CSSOM methods.
@@ -223,3 +224,8 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
+        - date: "2026-08-27T02:25:48Z"
+          from: verification=not_started
+          to: verification=failing
+          reason: auto-derived [not_started→failing] signals=32; evidence_profile:ki-101=failing | evidence_profile:ki-103=failing | evidence_profile:ki-104=failing | known_issue:KI-101=failing | known_issue:KI-103=failing | known_issue:KI-104=failing | known_issue:KI-107=failing | known_issue:KI-108=failing | known_issue:KI-109=failing | known_issue:KI-110=failing | known_issue:KI-112=failing | known_issue:KI-113=failing | known_issue:KI-114=failing | known_issue:KI-115=failing | known_issue:KI-116=failing | known_issue:KI-117=failing | known_issue:KI-118=failing | known_issue:KI-119=failing | known_issue:KI-120=failing | known_issue:KI-121=failing | known_issue:KI-122=failing | known_issue:KI-16=failing | known_issue:KI-32=failing | known_issue:KI-33=failing | known_issue:KI-34=failing | known_issue:KI-35=failing | known_issue:KI-36=failing | known_issue:KI-38=failing | known_issue:KI-40=failing | known_issue:KI-41=failing | known_issue:KI-42=failing | known_issue:KI-43=failing
+          changed_by: agent:champ

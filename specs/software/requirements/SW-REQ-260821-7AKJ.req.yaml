@@ -19,9 +19,6 @@ variables:
     - parse_style_value
     - invalid_typed_input
     - parse_throws
-audit_ignore:
-    - check: under_modeled_requirements_clean
-      reason: "Intentionally coarse throw contract: 7AKJ pins invalid-input TypeError plus valid-window no-throw behavior witnessed by tests/mcdc-witness-typed-om.test.ts; the shared style-value-parser/typed-om facade complexity is owned by the finer-grained typed-om value requirements (E5D5, 9SGA)."
 references:
     - type: document
       id: README.md
@@ -49,14 +46,14 @@ verification:
               ref: DEFECT-260821-KESF
               superseded_at: "2026-08-22T06:56:43Z"
               superseded_by: agent:grok-4.6
-    gaps_reviewed_at: "2026-08-25T00:55:09.402508229Z"
+    gaps_reviewed_at: "2026-08-27T02:12:49.690689519Z"
     gaps_reviewed_by: agent:champ
     gap_reviews:
         - check: ambiguity
           issue_key: ambiguity|typed_om|SW-REQ-260821-7AKJ|SW-REQ-260822-Z6J1
           reviewer: agent:champ
-          reason: 'Typed OM parse family reviewed. SYS-REQ-260821-HGFK owns the loud-failure path: invalid_typed_input -> parse_throws. SYS-REQ-260822-SNP4 owns the complementary success path: a reifiable 1-to-4 component position (position_reifies within arity bounds 1..4) -> !parse_throws. The antecedent sets are mutually exclusive by construction - one demands invalid input, the other successful position reification - so the throw and no-throw consequents never contend on the same input. SW-REQ-260821-7AKJ and SW-REQ-260822-Z6J1 restate each path through the parse_style_value entry point (CSSStyleValue.parse). Every flagged pair is a positive/negative-path pairing or its cross-level ancestor/descendant view; no contradictory consequents.'
-          reviewed_at: "2026-08-25T00:55:09.402508229Z"
+          reason: 'Layered V-model guarantee, not ambiguity: HGFK owns the coarse invalid-input-throws contract; Z6J1 is the valid-position SW decomposition proving the negative; antecedents are disjoint input classes.'
+          reviewed_at: "2026-08-27T02:12:49.690689519Z"
         - check: ambiguity
           issue_key: ambiguity|typed_om|SW-REQ-260821-7AKJ|SYS-REQ-260822-SNP4
           reviewer: agent:champ
@@ -95,3 +92,6 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T12:00:00Z comment="Class-closure DEFECT-KESF: invalid object-position parse throws TypeError.")'
           changed_by: agent:grok-4.6
+audit_ignore:
+    - check: under_modeled_requirements_clean
+      reason: "Intentionally coarse throw contract: 7AKJ pins invalid-input TypeError plus valid-window no-throw behavior witnessed by tests/mcdc-witness-typed-om.test.ts; the shared style-value-parser/typed-om facade complexity is owned by the finer-grained typed-om value requirements (E5D5, 9SGA)."

@@ -26,8 +26,8 @@ variables:
       description: Boolean flag layout performed for component cascade.
     - name: hue_degrees
       type: real
-      direction: input
-      description: HSL hue in degrees after css-color-4 modulo-360 normalization (color-resolver hslToRgb).
+      direction: internal
+      description: 'HSL hue in degrees after css-color-4 modulo-360 normalization (color-resolver parseHue output feeding the hslToRgb sector ladder): produced inside the component from the authored hue, never chosen by the environment.'
       range:
         max: 360
         min: 0

@@ -1,0 +1,7 @@
+id: ME-260827-BOXREJ
+kind: manual_qa
+affected_requirements:
+    - SW-REQ-260822-YBF2
+    - INT-REQ-260821-30ZA
+signed_by: agent:champ
+description: 'Manual QA observation (2026-08-27, agent:champ): setProperty(''margin'',''1px bogus'') and setProperty(''margin'',''1px 2px 3px bogus'') both drop the whole declaration (length 0) — a box shorthand is either expanded into longhands or rejected wholesale, never both, and rejection never leaves longhands behind. The satisfied rows SW-REQ-260822-YBF2 row 9 and INT-REQ-260821-30ZA row 8 (four_longhands_assigned=T with shorthand_rejected=T) therefore have no drivable scenario; they are unique-cause pairs of the witnessed expansion rows (margin: 1px assigns all four longhands).'

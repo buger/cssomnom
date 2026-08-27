@@ -27,6 +27,13 @@ traces:
     satisfies:
         - SYS-REQ-260822-AACP
 verification:
+    not_modeled:
+        - predicate: "length <= 6"
+          reason: "@property descriptor text length bound internal to the descriptor parser; structural parse guard, not a requirement domain [structural]"
+        - predicate: "tokens.length >= 2"
+          reason: "@property descriptor name+value arity guard internal to the descriptor parser; structural parse, not a requirement domain [structural]"
+        - predicate: "val > 100"
+          reason: "numeric sanity bound on parsed @property descriptor values; structural parse guard, not a requirement domain [structural]"
     assurance_level: C
     formalization_status: valid
     review:

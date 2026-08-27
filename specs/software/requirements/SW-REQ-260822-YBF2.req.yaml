@@ -30,6 +30,17 @@ traces:
     satisfies:
         - SYS-REQ-260822-5V7N
 verification:
+    not_modeled:
+        - predicate: "2 < tokens.length"
+          reason: "shorthand component-list arity guard internal to the expansion tables; structural parse, not a requirement domain [structural]"
+        - predicate: "data.length > 2"
+          reason: "shorthand component-list arity guard internal to the expansion tables; structural parse, not a requirement domain [structural]"
+        - predicate: "data.length > 3"
+          reason: "shorthand component-list arity guard internal to the expansion tables; structural parse, not a requirement domain [structural]"
+        - predicate: "filtered.length > 2"
+          reason: "shorthand component-list arity guard internal to the expansion tables; structural parse, not a requirement domain [structural]"
+        - predicate: "filtered.length > 3"
+          reason: "shorthand component-list arity guard internal to the expansion tables; structural parse, not a requirement domain [structural]"
     assurance_level: C
     formalization_status: valid
     review:
@@ -37,14 +48,14 @@ verification:
         reviewer: agent:grok-4.6
         reviewed_at: "2026-08-22T10:01:32Z"
         ai_generated: true
-    gaps_reviewed_at: "2026-08-25T00:54:39.504039989Z"
+    gaps_reviewed_at: "2026-08-27T02:12:49.831755571Z"
     gaps_reviewed_by: agent:champ
     gap_reviews:
         - check: ambiguity
           issue_key: ambiguity|cssom|INT-REQ-260821-30ZA|SW-REQ-260822-YBF2
           reviewer: agent:champ
-          reason: 'Box-shorthand expansion family reviewed. SYS-REQ-260822-5V7N owns the expansion contract on the declared domain (box_side_count<=4, position_token_count<=4, keyframe_offset_percent<=100, font_weight_number<=1000 -> four_longhands_assigned & (shorthand_expanded | shorthand_rejected)); its child SW-REQ-260822-YBF2 pins the implemented lower bound box_side_count>=1 since expandBox rejects empty side lists. INT-REQ-260821-30ZA governs a different layer and entry point: the insertRule pathway, whose distinctive obligations are parse_hooks_consume_rule_called & !parser_imported (ParseHooks dependency inversion - no parser import cycle). Both flagged pairs join the insertRule view with a direct-assignment view: trigger windows differ (insert_rule_path vs shorthand assignment) and the shared expansion outputs carry consistent consequents within the same domain bounds.'
-          reviewed_at: "2026-08-25T00:54:39.504039989Z"
+          reason: 'Layered interface wrapper, not ambiguity: INT-REQ-260821-30ZA adds the insert_rule_path interface context (parse_hooks_consume_rule_called, !parser_imported) around the same SW guarantee body that YBF2 owns; traces.satisfies records the derivation.'
+          reviewed_at: "2026-08-27T02:12:49.831755571Z"
 history:
     created_by: human:cli
     created_at: "2026-08-22T09:37:49Z"
