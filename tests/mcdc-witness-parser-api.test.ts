@@ -22,7 +22,6 @@ import {
   Parser,
   tokenize,
   CSSParserAtRule,
-  CSSParserDeclaration,
   CSSParserQualifiedRule,
   CSSParserRule,
   parseComponentValueSync,
@@ -430,6 +429,10 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE -- toParserRule loses declaration content for qualified rules (empty body); failing public-API tripwire is KI-40 [reviewed: agent:champ] [ki: KI-40] [category: capability-gap]
     // MCDC SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE [known-issue] [ki: KI-40]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=T => FALSE -- qualified-rule bodies are empty so nested declaration counts stay under minimum; failing public-API tripwire is KI-40 [reviewed: agent:ox-alpha] [ki: KI-40] [category: capability-gap]
+    // MCDC SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=F, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=T => FALSE [known-issue] [ki: KI-40]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=T, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE -- dropped style-rule declarations keep top-level body counts under minimum; failing public-API tripwire is KI-40 [reviewed: agent:ox-alpha] [ki: KI-40] [category: capability-gap]
+    // MCDC SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=T, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=F => FALSE [known-issue] [ki: KI-40]
     //mcdc:ignore:known-issue SYS-REQ-260823-QBD2: nested_body_declaration_count_GE_nested_body_declarations_min=T, style_rule_parsed=T, top_level_body_declaration_count_GE_top_level_body_declarations_min=T => TRUE -- the satisfied body rows are reachable only after the KI-40 fix [reviewed: agent:champ] [ki: KI-40]
 
     // Verifies: SYS-REQ-260823-PRT3
@@ -449,6 +452,9 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => FALSE -- parseComponentValueSync accepts a <bad-url-token> instead of rejecting; failing public-API tripwire is KI-42 [reviewed: agent:champ] [ki: KI-42] [category: capability-gap]
     // MCDC SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => FALSE [known-issue] [ki: KI-42]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=T => FALSE -- parseComponentValueSync accepts the truncated <bad-url-token> payload; failing public-API tripwire is KI-42 [reviewed: agent:ox-alpha] [ki: KI-42] [category: capability-gap]
+    // MCDC SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=F, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=T => FALSE [known-issue] [ki: KI-42]
+    //mcdc:ignore:defensive SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=T, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=F => FALSE -- parseComponentValueSync's trailing-content guard rejects multi-value input (SyntaxError for "10% 20%") on a path independent of bad-url acceptance, so once the KI-42 fix drives acceptances to zero the control rejections stay at or above minimum; the mixed state cannot occur in a correct build [reviewed: agent:champ]
     //mcdc:ignore:known-issue SYS-REQ-260823-BTC4: bad_url_acceptances_LE_0=T, bad_url_component_value_parsed=T, multi_value_control_rejections_GE_multi_value_control_rejections_min=T => TRUE -- the satisfied rows are reachable only after the KI-42 fix [reviewed: agent:champ] [ki: KI-42]
 
     // Verifies: SYS-REQ-260823-PVE7
@@ -458,6 +464,10 @@ describe('requirement-level MC/DC witnesses (parser_api)', { concurrency: 1 }, (
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE -- CSS.parseValue still truncates trailing garbage leniently instead of rejecting; failing public-API tripwire is KI-45 [reviewed: agent:champ] [ki: KI-45] [category: capability-gap]
     // MCDC SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE [known-issue] [ki: KI-45]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=T, trailing_garbage_value_parsed=T => FALSE -- trailing-garbage values are accepted leniently keeping the acceptance budget above zero; failing public-API tripwire is KI-45 [reviewed: agent:ox-alpha] [ki: KI-45] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=F, rejecting_apis_GE_rejecting_apis_min=T, trailing_garbage_value_parsed=T => FALSE [known-issue] [ki: KI-45]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=T, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE -- the lenient parse surface keeps the rejecting-API count under minimum; failing public-API tripwire is KI-45 [reviewed: agent:ox-alpha] [ki: KI-45] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=T, rejecting_apis_GE_rejecting_apis_min=F, trailing_garbage_value_parsed=T => FALSE [known-issue] [ki: KI-45]
     //mcdc:ignore:known-issue SYS-REQ-260823-PVE7: lenient_acceptances_LE_0=T, rejecting_apis_GE_rejecting_apis_min=T, trailing_garbage_value_parsed=T => TRUE -- the satisfied rejection rows are reachable only after the KI-45 fix [reviewed: agent:champ] [ki: KI-45]
   });
 });

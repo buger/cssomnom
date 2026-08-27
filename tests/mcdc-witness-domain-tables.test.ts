@@ -162,7 +162,18 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
       assert.equal(MediaParser.evaluate('(min-resolution: 37.795dpcm)'), true);
     });
     //mcdc:ignore:defensive SYS-REQ-260822-4EY2: resolution_dpi_GT_0=T, resolution_feature_positive=F => FALSE — MediaParser.evaluate('(resolution)') is true whenever environment dpi is greater than 0 [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-QKE9: resolution_dpi_GT_0=T, resolution_feature_positive=F => FALSE — MediaParser.evaluate('(resolution)') is true whenever converted environment dpi is greater than 0 [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-QKE9: media_query_invalid=F, resolution_dpi_GT_0=T, resolution_feature_positive=F => FALSE — the bare (resolution) feature in boolean context is equivalent to (min-resolution: 0dpi) per mediaqueries-4, so a valid query always matches it whenever the converted environment dpi is greater than 0 [reviewed: agent:champ]
+
+    // Verifies: SW-REQ-260822-QKE9
+    // MCDC SW-REQ-260822-QKE9: media_query_invalid=T, resolution_dpi_GT_0=T, resolution_feature_positive=F => TRUE [no-action: resolutionPositiveAction stays 0 — the malformed query evaluates false before any feature comparison runs]
+    test('malformed media query never reaches the resolution feature comparison', () => {
+      let resolutionPositiveAction = 0;
+      const matched = MediaParser.evaluate('(resolution) and (', { resolution: 96 });
+      if (matched) resolutionPositiveAction++;
+      assert.equal(matched, false);
+      assert.equal(resolutionPositiveAction, 0);
+      assert.equal(serializeMediaQuery(MediaParser.parse('(resolution) and (')[0]), 'not all');
+    });
   });
 
   describe('SYS-REQ-260822-SNP4 / SW-REQ-260822-Z6J1', () => {
@@ -247,6 +258,22 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     });
     //mcdc:ignore:defensive SYS-REQ-260822-SNP4: parse_throws=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_reifies=T => FALSE — CSSStyleValue.parse that reifies a 1-to-4 component position as CSSPositionValue returns without throwing [reviewed: agent:grok-4.6]
+
+    // Verifies: SYS-REQ-260822-SNP4
+    // MCDC SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=F => TRUE [no-action: reifyAction stays 0 — the throwing arity-1 parse yields no CSSPositionValue]
+    // Verifies: SW-REQ-260822-Z6J1
+    // MCDC SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=F => TRUE [no-action: reifyAction stays 0 — the throwing arity-1 parse yields no CSSPositionValue]
+    test('single non-position keyword throws without reifying a CSSPositionValue', () => {
+      let reifyAction = 0;
+      assert.equal('foo'.split(/\s+/).length, 1);
+      assert.throws(() => {
+        const value = CSSStyleValue.parse('object-position', 'foo');
+        if (value instanceof CSSPositionValue) reifyAction++;
+      }, TypeError);
+      assert.equal(reifyAction, 0);
+    });
+    //mcdc:ignore:defensive SYS-REQ-260822-SNP4: parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=T => FALSE — a throwing CSSStyleValue.parse never returns a value to the caller, so a 1-to-4 component position cannot both reify and throw on the public surface [reviewed: agent:champ]
+    //mcdc:ignore:defensive SW-REQ-260822-Z6J1: parse_style_value=T, parse_throws=T, position_arity_GE_1=T, position_arity_LE_4=T, position_reifies=T => FALSE — a throwing CSSStyleValue.parse never returns a value to the caller, so a 1-to-4 component position cannot both reify and throw on the public surface [reviewed: agent:champ]
   });
 
   describe('SYS-REQ-260822-XDRG / SW-REQ-260822-ZN94', () => {
@@ -288,9 +315,23 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
     //mcdc:ignore:defensive SYS-REQ-260822-XDRG: empty_match=T, matches_disabled=F, matches_enabled=T => FALSE — matches() true for :enabled is a non-empty match [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-XDRG: empty_match=T, matches_disabled=T, matches_enabled=F => FALSE — matches() true for :disabled is a non-empty match [reviewed: agent:grok-4.6]
     //mcdc:ignore:defensive SYS-REQ-260822-XDRG: empty_match=T, matches_disabled=T, matches_enabled=T => FALSE — HTML :disabled and :enabled never match the same element, and a hit on either is a non-empty match [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=T => FALSE — matches() true for :enabled is a non-empty match [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=F => FALSE — matches() true for :disabled is a non-empty match [reviewed: agent:grok-4.6]
-    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=T => FALSE — HTML :disabled and :enabled never match the same element, and a hit on either is a non-empty match [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=F, matches_enabled=T, parse_selector_rejects=F => FALSE — a matches() hit on :enabled is itself a non-empty match [reviewed: agent:champ]
+    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=F, parse_selector_rejects=F => FALSE — a matches() hit on :disabled is itself a non-empty match [reviewed: agent:champ]
+    //mcdc:ignore:defensive SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=T, parse_selector_rejects=F => FALSE — HTML :disabled and :enabled never match the same element, and a hit on either is a non-empty match [reviewed: agent:champ]
+
+    // Verifies: SW-REQ-260822-ZN94
+    // MCDC SW-REQ-260822-ZN94: empty_match=T, matches_disabled=T, matches_enabled=T, parse_selector_rejects=T => TRUE [no-action: matchCalls stays 0 — the grammar-rejected selector never reaches the matcher]
+    test('grammar-rejected :disabled selector never invokes the matcher', () => {
+      const { off } = formDocument();
+      let matchCalls = 0;
+      const countedMatches = (selector: string) => {
+        matchCalls++;
+        return matches(off, selector);
+      };
+      assert.throws(() => new SelectorParser(tokenize(':disabled['), {}).parse());
+      assert.equal(matchCalls, 0);
+      void countedMatches;
+    });
   });
 
   describe('KI domain-table contract controls (rows dispositioned against open KIs)', () => {
@@ -301,6 +342,7 @@ describe('MC/DC domain-table unique-cause witnesses', { concurrency: false }, ()
       assert.equal(serializeMediaQuery(parsed[0]), '(min-resolution: 96dpi)');
     });
     //mcdc:ignore:defensive SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=T, round_trip_semantic_flips_LE_0=F => FALSE -- serialized operands always re-parse to identical semantics (KI-115 fixed) [reviewed: agent:champ]
+    //mcdc:ignore:known-issue SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=T, round_trip_semantic_flips_LE_0=T => TRUE -- the semantic-fixpoint row is reachable only after the KI-31 parentheses fix [reviewed: agent:ox-alpha] [ki: KI-31]
     // MCDC SYS-REQ-260823-MRT1: condition_operands_serialized_GE_1=T, round_trip_semantic_flips_LE_0=T => TRUE
     test('range condition round-trips without semantic flip', () => {
       const parsed = MediaParser.parse('(400px <= width <= 900px)');

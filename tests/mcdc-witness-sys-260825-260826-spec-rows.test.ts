@@ -22,7 +22,7 @@
 // disclose the debt. Rows are copied verbatim from `proof mcdc show`.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parse, CSSStyleValue, CSSUnitValue, CSSMathSum } from '../src/index.ts';
+import { parse, CSSStyleValue, CSSUnitValue } from '../src/index.ts';
 import { CSSStyleDeclaration } from '../src/CSSStyleDeclaration.ts';
 import { StylePropertyMap } from '../src/typed-om.ts';
 import { CSSSupportsRule } from '../src/CSSOM.ts';

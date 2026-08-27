@@ -54,74 +54,69 @@ history:
       action: created
       detail: |
         Documented offline-parser capability gap vs full CSSOM import loading: CSSImportRule.styleSheet is README-null / HEAD empty placeholder; @import never fetches. Filed against SYS-REQ-260821-H3BD, SW-REQ-260821-5W6X, and every requirement that currently carries a defensive unique-cause FALSE ignore so those rows are KI-tracked, not silent. Distinct from KI-1 (setProperty all), KI-2 (replace queueMicrotask), KI-3 (typed OM object-position), KI-4 (registerProperty after @property), KI-5 (invalid media not-all), and KI-6 (parser-api type 0). No product change.
-
     - at: "2026-08-21T20:11:54Z"
       by: agent:grok-4.6
       action: edit
       detail: set-description,append-note
-
     - at: "2026-08-21T20:20:17Z"
       by: agent:grok-4.6
       action: capture-evidence
       detail: proof/evidence/ki-7.yaml
-
     - at: "2026-08-21T20:32:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
-
     - at: "2026-08-21T21:10:00Z"
       by: agent:grok-4.6
       action: edited
       detail: |
         Narrowed affected_requirements to SYS-REQ-260821-H3BD and SW-REQ-260821-5W6X only. Removed dumpster tracking of unrelated defensive unique-cause FALSE ignores. KI-7 is solely the offline @import / CSSImportRule.styleSheet-null hole. No product change.
-
     - at: "2026-08-22T07:13:44Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note,set-release-disposition=ship_with_known_issue
-
     - at: "2026-08-22T09:15:43Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note,add-command
-
     - at: "2026-08-22T10:20:27Z"
       by: agent:grok-4.6
       action: edit
       detail: append-note
-
     - at: "2026-08-23T00:00:00Z"
       by: agent:champ
       action: scope-amendment-approved
       detail: |
         User authorized closing the KI-7 object-graph defect offline (2026-08-23): CSSImportRule.styleSheet must be the real associated stylesheet per cssom-1 § 6.4.3 #the-cssimportrule-interface — an empty stylesheet is the legitimate browser pre-load state for an unloaded import — while fetching href content stays excluded PERMANENTLY as a documented deviation. The original two-leg loaded-sheet contract encoded a banned-fetch stalemate and could never pass honestly; overlay reproducers were rewritten to the amended contract.
-
     - at: "2026-08-24T07:04:24Z"
       by: agent:champ
       action: refresh-evidence
       detail: proof/evidence/ki-7.yaml
-
     - at: "2026-08-24T07:05:00Z"
       by: agent:champ
       action: fixed
       detail: |
         Class-fix landed in src/CSSOM.ts (CSSImportRule.styleSheet getter): associated sheet now built via the constructed constructor path, _ownerRule set, child href synced, parentStyleSheet resolved live through ownerRule (stale cached field removed). replaceSync()/replace() work on the associated sheet so hosts supply content offline; no fetch anywhere. Verified: both reproducers exit 1 x2 on parent code (isolated copy of HEAD), exit 0 x2 on fixed HEAD; full unit suite import-related failures all green. Problem report: DEFECT (see proof/problem-reports/). Status open -> fixed; release_disposition ship_with_known_issue -> fixed.
-
     - at: "2026-08-24T08:57:49Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-7.yaml
-
     - at: "2026-08-24T16:29:55Z"
       by: agent:champ
       action: edit
       detail: set-attacker-input,set-minimization-status=not_applicable
-
     - at: "2026-08-24T16:30:11Z"
       by: agent:champ
       action: edit
       detail: append-note
+    - at: "2026-08-26T15:05:12Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-7.yaml
+    - at: "2026-08-26T19:26:00Z"
+      by: agent:champ
+      action: refresh-evidence
+      detail: proof/evidence/ki-7.yaml
 poc_quality:
     real_infrastructure: true
     quantitative_impact: false

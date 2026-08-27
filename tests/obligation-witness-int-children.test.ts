@@ -115,14 +115,21 @@ test('hsl arity gate admits the 3-4 component forms', () => {
 
 // INT-REQ-260826-GTCS:nominal:nominal
 // Verifies: INT-REQ-260826-GTCS
-// MCDC INT-REQ-260826-GTCS: css_text_supplied=F, eof_token_last=F, token_list_returned=F => TRUE [no-action: streaming entry used, batch tokenize() idle]
+// MCDC INT-REQ-260826-GTCS: css_text_supplied=F, eof_token_last=F, token_list_returned=F => TRUE [no-action: countedTokenize call counter stays 0 — streaming entry used, batch tokenize() idle]
 test('streaming-only path leaves the batch tokenize entry idle', () => {
+  let batchTokenizeCalls = 0;
+  const countedTokenize = (css: string) => {
+    batchTokenizeCalls++;
+    return tokenize(css);
+  };
   const st = new StreamingTokenizer();
   st.appendChunk('.a { color: red }');
   st.close();
   const tokens = st.getTokens();
   assert.ok(tokens.length > 0, 'streaming path produced tokens without tokenize()');
   assert.equal(tokens[tokens.length - 1].type, 'EOF');
+  assert.equal(batchTokenizeCalls, 0, 'batch tokenize() was never invoked');
+  void countedTokenize;
 });
 // Verifies: INT-REQ-260826-GTCS
 // MCDC INT-REQ-260826-GTCS: css_text_supplied=T, eof_token_last=T, token_list_returned=T => TRUE

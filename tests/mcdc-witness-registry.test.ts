@@ -317,6 +317,9 @@ describe('MC/DC property_registry witnesses', { concurrency: false }, () => {
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=F => FALSE -- brace-multiplier syntax strings such as <length>{2} are still accepted into the registry; failing public-API tripwire is KI-35 [reviewed: agent:champ] [ki: KI-35] [category: capability-gap]
     // MCDC SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=F => FALSE [known-issue] [ki: KI-35]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=T => FALSE -- illegal brace-multiplier syntax strings are still accepted into the registry; failing public-API tripwire is KI-35 [reviewed: agent:ox-alpha] [ki: KI-35] [category: capability-gap]
+    // MCDC SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=F, legal_multipliers_accepted_GE_2=T => FALSE [known-issue] [ki: KI-35]
+    //mcdc:ignore:defensive SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=T, legal_multipliers_accepted_GE_2=F => FALSE -- rejecting the illegal brace multiplier (the KI-35 fix) targets the {m,n} multiplier form only, leaving the closed-set # and + multipliers of the css-properties-values-api-1 grammar accepted, so legal acceptance cannot fall below 2 in a correct build [reviewed: agent:champ]
     //mcdc:ignore:known-issue SYS-REQ-260823-PMB5: illegal_brace_multipliers_GE_1=T, illegal_multipliers_accepted_LE_0=T, legal_multipliers_accepted_GE_2=T => TRUE -- the satisfied rows are reachable only after the KI-35 fix [reviewed: agent:champ] [ki: KI-35]
   });
 });

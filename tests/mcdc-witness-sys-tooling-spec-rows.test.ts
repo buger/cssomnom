@@ -33,8 +33,16 @@ import { pathToFileURL } from 'node:url';
 import { fetchWptFyiRun, decompressBuffer } from '../scripts/wpt/browser/fetch-wptfyi.ts';
 import type * as WptRunner from '../scripts/wpt/node/run.ts';
 
-type WptRunnerResult = { tests: { name: string; fn: () => Promise<void> | void }[]; cleanup: () => void };
-type RunnerModule = { runWptFile: (p: string) => WptRunnerResult };
+// Rebuilds the shipped guard's regex literal without eval: the literal is
+// sliced into body and flags and handed to the RegExp constructor.
+function guardImportPattern(guardSrc: string): RegExp {
+  const m = /const IMPORT_PATTERN = (\/.*\/);/.exec(guardSrc);
+  assert.ok(m, 'guard defines IMPORT_PATTERN');
+  const literal = m[1];
+  const lastSlash = literal.lastIndexOf('/');
+  return new RegExp(literal.slice(1, lastSlash), literal.slice(lastSlash + 1));
+}
+
 
 // One shared synthetic WPT tree + ONE runner import: WPT_ROOT anchors at cwd
 // on module load and the module registry caches the first import, so every
@@ -351,18 +359,14 @@ describe('MC/DC witness: SYS tooling-surface spec rows', () => {
   // MCDC SYS-REQ-260823-486K: nonliteral_import_form_present_GE_1=F, undetected_child_process_imports_zero_LE_0=F => TRUE [no-action: no nonliteral import form present — the bypass never runs]
   test('literal child_process import lines are still flagged (control)', async () => {
     const guardSrc = fs.readFileSync(path.resolve(process.env.CSSOMNOM_ROOT ?? '/workspace', 'scripts/ci/check-safe-exec.ts'), 'utf-8');
-    const m = /const IMPORT_PATTERN = (\/.*\/);/.exec(guardSrc);
-    assert.ok(m, 'guard defines IMPORT_PATTERN');
-    const IMPORT_PATTERN = eval(m[1]) as RegExp;
+    const IMPORT_PATTERN = guardImportPattern(guardSrc);
     assert.ok(IMPORT_PATTERN.test(`import { execSync } from 'node:child_process';`), 'literal imports are flagged');
   });
 
   // Verifies: SYS-REQ-260823-486K
   test('computed-specifier dynamic import slips past the guard today (KI-30)', async () => {
     const guardSrc = fs.readFileSync(path.resolve(process.env.CSSOMNOM_ROOT ?? '/workspace', 'scripts/ci/check-safe-exec.ts'), 'utf-8');
-    const m = /const IMPORT_PATTERN = (\/.*\/);/.exec(guardSrc);
-    assert.ok(m, 'guard defines IMPORT_PATTERN');
-    const IMPORT_PATTERN = eval(m[1]) as RegExp;
+    const IMPORT_PATTERN = guardImportPattern(guardSrc);
     const computed = `const mod = 'child' + '_process'; await import(mod);`;
     assert.equal(
       IMPORT_PATTERN.test(computed),

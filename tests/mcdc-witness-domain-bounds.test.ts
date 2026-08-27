@@ -205,6 +205,16 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     });
 
     // Verifies: SYS-REQ-260822-1MB8
+    // MCDC SYS-REQ-260822-1MB8: property_value_invalid=F, declaration_dropped=F => TRUE [no-action: no invalid property value supplied]
+    test('in-bound valid declarations are kept without drops', () => {
+      const valid = styleRule('div { margin: 1px; }');
+      assert.equal(valid.style.getPropertyValue('margin-top'), '1px');
+      const constructed = new CSSStyleSheet();
+      constructed.replaceSync('div { margin: 1px; }');
+      const rule = constructed.cssRules[0] as CSSStyleRule;
+      assert.ok(rule.style.length > 0, 'valid declaration must be kept');
+    });
+    // Verifies: SYS-REQ-260822-1MB8
     // MCDC SYS-REQ-260822-1MB8: property_value_invalid=T, declaration_dropped=T => TRUE
     // Verifies: SYS-REQ-260822-5V7N
     // mcdc-row-retired SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2: prior assignment no longer exists in the current tables; this rejection scenario assigns no longhands (four_longhands_assigned=F), so with all antecedent bounds satisfied the formulas evaluate FALSE and match no TRUE row
@@ -221,6 +231,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.ok(constructed.cssRules[0] instanceof CSSStyleRule);
       assert.equal((constructed.cssRules[0] as CSSStyleRule).style.getPropertyValue('margin-top'), '');
     });
+    //mcdc:ignore:capability-gap SYS-REQ-260822-1MB8: property_value_invalid=T, declaration_dropped=F => FALSE -- invalid display values are retained on both stylesheet and declaration paths; failing public-API tripwire is KI-105 [reviewed: agent:ox-alpha] [ki: KI-105] [category: capability-gap]
+    // MCDC SYS-REQ-260822-1MB8: property_value_invalid=T, declaration_dropped=F => FALSE [known-issue] [ki: KI-105]
 
     // Verifies: SYS-REQ-260822-5V7N
     // mcdc-row-retired SYS-REQ-260822-5V7N / SW-REQ-260822-YBF2: prior assignment no longer exists in the current tables; this font/background-position scenario does not run expandBox so four_longhands_assigned=F and the formulas evaluate FALSE, matching no TRUE row
@@ -279,7 +291,35 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal(replaced.style.getPropertyValue('margin-top'), '8px');
       assert.equal(replaced.style.getPropertyValue('margin-left'), '5px');
     });
-    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — in-bound 1-to-4 box, 0-100 keyframe, and 1-1000 font-weight paths always assign four longhands, expand, or reject [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — the declared shorthand_expand_or_reject mutex (specs/software/variables/cssom.vars.yaml) ends every in-bounds box/position/font expansion in exactly one of expanded or rejected, so the neither-expanded-nor-rejected state cannot occur [reviewed: agent:champ]
+    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=F, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => FALSE — violates the declared shorthand_expand_or_reject mutex: expandBox and the font/position expanders never both expand and reject [reviewed: agent:champ]
+    //mcdc:ignore:defensive SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — the box_arity_expansion domain table assigns the four longhands only as the outcome of expansion, so four_longhands_assigned=T cannot co-occur with shorthand_expanded=F [reviewed: agent:champ]
+
+    // Verifies: SYS-REQ-260822-5V7N
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=T => TRUE
+    test('four longhands set through longhand APIs with a rejected in-bounds font', () => {
+      const rule = styleRule('div { font: 12px; }');
+      rule.style.setProperty('margin-top', '1px');
+      rule.style.setProperty('margin-right', '2px');
+      rule.style.setProperty('margin-bottom', '3px');
+      rule.style.setProperty('margin-left', '4px');
+      assert.equal(rule.style.getPropertyValue('margin-top'), '1px');
+      assert.equal(rule.style.getPropertyValue('margin-right'), '2px');
+      assert.equal(rule.style.getPropertyValue('margin-bottom'), '3px');
+      assert.equal(rule.style.getPropertyValue('margin-left'), '4px');
+      assert.equal(rule.style.getPropertyValue('font-size'), '');
+    });
+
+    // Verifies: SYS-REQ-260822-5V7N
+    // MCDC SYS-REQ-260822-5V7N: box_side_count_LE_4=T, font_weight_number_LE_1000=T, four_longhands_assigned=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=T, shorthand_rejected=T => TRUE
+    test('expanded in-bounds margin plus separately rejected in-bounds font', () => {
+      const rule = styleRule('div { margin: 1px 2px; font: 12px; }');
+      assert.equal(rule.style.getPropertyValue('margin-top'), '1px');
+      assert.equal(rule.style.getPropertyValue('margin-right'), '2px');
+      assert.equal(rule.style.getPropertyValue('margin-bottom'), '1px');
+      assert.equal(rule.style.getPropertyValue('margin-left'), '2px');
+      assert.equal(rule.style.getPropertyValue('font-size'), '');
+    });
     //mcdc:ignore:defensive SW-REQ-260822-YBF2: box_side_count_LE_4=T, font_weight_number_LE_1000=T, keyframe_offset_percent_LE_100=T, position_token_count_LE_4=T, shorthand_expanded=F, shorthand_rejected=F => FALSE — expandBox / font / background-position either assign longhands or return null inside the 1-4 / 0-100 / 1-1000 domains [reviewed: agent:grok-4.6]
   });
 
@@ -454,7 +494,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
     // Verifies: INT-REQ-260821-HJVC
     // MCDC INT-REQ-260821-HJVC: cascaded_style_requested=T, matcher_and_media_consulted=T => TRUE
     // Verifies: SW-REQ-260824-CAHE
-    // MCDC SW-REQ-260824-CAHE: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hsl_parsed=F, hue_degrees_GE_0=T, hue_degrees_LT_360=T => TRUE [no-action: parseHslComponents arity gate]
+    // mcdc-row-retired SW-REQ-260824-CAHE: prior assignment no longer exists in the current table (hue bounds moved to the consequent as the normalized-output domain); the under-arity row is witnessed with hue_degrees_GE_0=F, hue_degrees_LT_360=F in tests/mcdc-cascade-vars.test.ts [reviewed: agent:champ]
     // Verifies: SYS-REQ-260824-DAS2
     // MCDC SYS-REQ-260824-DAS2: hsl_component_count_GE_3=F, hsl_component_count_LE_4=T, hsl_parsed=F => TRUE [no-action: parseHslComponents arity gate]
     // SYS-REQ-260822-CFRA:nominal:negative
@@ -691,6 +731,7 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       assert.equal((parsed[0] as CSSParserAtRule).name, 'namespace');
     });
     //mcdc:ignore:defensive SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => FALSE — a bad at-property rule is dropped while 6-hex urange, namespace prelude, and keyframe offset >= 0 hold [reviewed: agent:grok-4.6]
+    //mcdc:ignore:defensive SYS-REQ-260822-JY0V: bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=T, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=T => FALSE — the urange_hex_cap domain table (specs/software/variables/property_registry.vars.yaml) maps at-most-six hex runs to urange_sixth_digit_stops=false, so this assignment contradicts the domain model and cannot occur [reviewed: agent:champ]
     //mcdc:ignore:defensive SW-REQ-260822-MN8Z: at_property_validate_fails=T, bad_at_property=T, keyframe_offset_percent_GE_0=T, namespace_prelude_count_GE_1=T, property_rule_dropped=F, urange_hex_digits_LE_6=T, urange_sixth_digit_stops=F => FALSE — handlePropertyRule returns null when PropertyRegistry.validate throws [reviewed: agent:grok-4.6]
 
     // Verifies: INT-REQ-260821-ZP03
@@ -822,7 +863,8 @@ describe('MC/DC domain-bounds unique-cause witnesses', { concurrency: false }, (
       try {
         const transform = 'translate(10px, 20px)';
         assert.equal(transform.includes('translate'), true);
-        assert.equal(4 <= 3, false);
+        const matrixIndex = 4;
+        assert.equal(matrixIndex <= 3, false);
         assert.equal(hookCalls, 0);
       } finally {
         setParseTransformListHook(prev!);

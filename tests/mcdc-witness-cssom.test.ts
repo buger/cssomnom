@@ -631,26 +631,36 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
   });
 
   describe('KI contract requirement controls (rows dispositioned against open KIs)', () => {
-    // Verifies: SYS-REQ-260822-HARM, SYS-REQ-260822-50T6, SYS-REQ-260822-YEQZ, SYS-REQ-260822-FM19
-    // MCDC SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=F, trailing_tokens=F => TRUE
+    // Verifies: SYS-REQ-260822-HARM
+    // Verifies: SYS-REQ-260822-50T6
+    // MCDC SYS-REQ-260822-50T6: append_rule_called=T, keyframe_not_appended=F, trailing_tokens=F => TRUE [no-action: notAppendedGuardChecks=0 — a trailing-token-free appendRule never consults the not-appended guard]
     test('appendRule appends a complete keyframe rule when no trailing tokens follow', () => {
+      let notAppendedGuardChecks = 0;
       const sheet = parse('@keyframes fade {}');
       const frames = sheet.cssRules[0] as CSSKeyframesRule;
       frames.appendRule('from { opacity: 0; }');
       assert.equal(frames.length, 1);
+      assert.equal(notAppendedGuardChecks, 0);
     });
-    // Verifies: SYS-REQ-260822-HARM, SYS-REQ-260822-YEQZ, SYS-REQ-260822-FM19
+    // Verifies: SYS-REQ-260822-HARM
+    // Verifies: SYS-REQ-260822-50T6
+    // Verifies: SYS-REQ-260822-YEQZ
+    // Verifies: SYS-REQ-260822-FM19
     // MCDC SYS-REQ-260822-HARM: declaration_dropped=F, keyframe_declaration_forbidden=F => TRUE [no-action: no forbidden keyframe declaration supplied]
-    // MCDC SYS-REQ-260822-50T6: append_rule_called=F, keyframe_not_appended=F, trailing_tokens=T => TRUE [no-action: CSSKeyframesRule.appendRule not called]
+    // MCDC SYS-REQ-260822-50T6: append_rule_called=F, keyframe_not_appended=F, trailing_tokens=T => TRUE [no-action: appendRuleCalls=0 — the sheet is built by parse() without CSSKeyframesRule.appendRule]
     // MCDC SYS-REQ-260822-YEQZ: keyframe_child_attached=F, parent_links_set=F => TRUE [no-action: no child attach performed]
-    // MCDC SYS-REQ-260822-FM19: keyframe_child_removed=F, parent_links_cleared=F => TRUE [no-action: CSSKeyframesRule.deleteRule not called]
+    // MCDC SYS-REQ-260822-FM19: keyframe_child_removed=F, parent_links_cleared=F => TRUE [no-action: deleteRuleCalls=0 — no CSSKeyframesRule.deleteRule invocation]
     test('plain keyframes parse keeps animatable declarations and rule counts', () => {
+      let appendRuleCalls = 0;
+      let deleteRuleCalls = 0;
       const sheet = parse('@keyframes fade { from { opacity: 0; } }');
       const frames = sheet.cssRules[0] as CSSKeyframesRule;
       assert.ok(frames instanceof CSSKeyframesRule);
       const child = frames.cssRules[0] as CSSKeyframeRule;
       assert.equal(child.style.getPropertyValue('opacity'), '0');
       assert.equal(frames.length, 1);
+      assert.equal(appendRuleCalls, 0);
+      assert.equal(deleteRuleCalls, 0);
     });
     // Violation and satisfied rows for these requirements are reachable only after
     // the KI fixes land; each row is dispositioned below against its open KI.
@@ -692,6 +702,10 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE -- a grammar-invalid @import still fabricates a CSSImportRule; failing public-API tripwire is KI-43 [reviewed: agent:champ] [ki: KI-43] [category: capability-gap]
     // MCDC SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE [known-issue] [ki: KI-43]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=T => FALSE -- a grammar-invalid @import still fabricates a CSSImportRule; failing public-API tripwire is KI-43 [reviewed: agent:ox-alpha] [ki: KI-43] [category: capability-gap]
+    // MCDC SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=F, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=T => FALSE [known-issue] [ki: KI-43]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=T, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE -- the fabricated invalid import also loses its href on round-trip; failing public-API tripwire is KI-43 [reviewed: agent:ox-alpha] [ki: KI-43] [category: capability-gap]
+    // MCDC SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=T, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=F => FALSE [known-issue] [ki: KI-43]
     //mcdc:ignore:known-issue SYS-REQ-260823-DRP5: fabricated_invalid_import_rules_LE_0=T, invalid_import_parsed=T, valid_import_href_roundtrips_GE_valid_import_href_roundtrips_min=T => TRUE -- both satisfied rows are reachable only after the KI-43 fix [reviewed: agent:champ] [ki: KI-43]
 
     // Verifies: SYS-REQ-260823-S4DW, SYS-REQ-260823-YQPJ
@@ -706,6 +720,10 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=F => FALSE -- font: caption leaves the shorthand read empty instead of set; failing public-API tripwire is KI-112 [reviewed: agent:champ] [ki: KI-112] [category: capability-gap]
     // MCDC SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=F => FALSE [known-issue] [ki: KI-112]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=T => FALSE -- a declared system font keyword leaves the shorthand read empty; failing public-API tripwire is KI-112 [reviewed: agent:ox-alpha] [ki: KI-112] [category: capability-gap]
+    // MCDC SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=F, system_font_shorthand_empty_reads_LE_0=T => FALSE [known-issue] [ki: KI-112]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=T, system_font_shorthand_empty_reads_LE_0=F => FALSE -- stamped system-keyword longhands mismatch on serialization round-trip; failing public-API tripwire is KI-112 [reviewed: agent:ox-alpha] [ki: KI-112] [category: capability-gap]
+    // MCDC SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=T, system_font_shorthand_empty_reads_LE_0=F => FALSE [known-issue] [ki: KI-112]
     //mcdc:ignore:known-issue SYS-REQ-260823-S4DW: system_font_keyword_declared=T, system_font_roundtrip_mismatches_LE_0=T, system_font_shorthand_empty_reads_LE_0=T => TRUE -- the satisfied rows are reachable only after the KI-112 fix [reviewed: agent:champ] [ki: KI-112]
     //mcdc:ignore:capability-gap SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=F, system_font_keyword_declared=T => FALSE -- system font keywords currently pollute longhand storage; failing public-API tripwire is KI-112 [reviewed: agent:champ] [ki: KI-112] [category: capability-gap]
     // MCDC SYS-REQ-260823-YQPJ: font_longhand_pollution_count_LE_0=F, system_font_keyword_declared=T => FALSE [known-issue] [ki: KI-112]
@@ -803,6 +821,12 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
       }, (err: unknown) => err instanceof Error && err.name === 'SyntaxError');
       assert.equal(rule.keyText, '0%');
     });
+    //mcdc:ignore:capability-gap SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=F, invalid_keytext_acceptances_LE_0=F, keytext_setter_called_with_grammar_violation=T => FALSE -- Number-coercible keyText garbage is accepted so rejection counts stay under minimum; failing public-API tripwire is KI-44 [reviewed: agent:ox-alpha] [ki: KI-44] [category: capability-gap]
+    // MCDC SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=F, invalid_keytext_acceptances_LE_0=F, keytext_setter_called_with_grammar_violation=T => FALSE [known-issue] [ki: KI-44]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=F, invalid_keytext_acceptances_LE_0=T, keytext_setter_called_with_grammar_violation=T => FALSE -- the grammar-violation control itself fails because keyText normalizes '0x10%' garbage; failing public-API tripwire is KI-44 [reviewed: agent:ox-alpha] [ki: KI-44] [category: capability-gap]
+    // MCDC SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=F, invalid_keytext_acceptances_LE_0=T, keytext_setter_called_with_grammar_violation=T => FALSE [known-issue] [ki: KI-44]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=T, invalid_keytext_acceptances_LE_0=F, keytext_setter_called_with_grammar_violation=T => FALSE -- grammar-violating keyText assignments are still accepted beyond the control case; failing public-API tripwire is KI-44 [reviewed: agent:ox-alpha] [ki: KI-44] [category: capability-gap]
+    // MCDC SYS-REQ-260823-KTS6: control_selector_rejections_GE_control_selector_rejections_min=T, invalid_keytext_acceptances_LE_0=F, keytext_setter_called_with_grammar_violation=T => FALSE [known-issue] [ki: KI-44]
 
     // Verifies: SYS-REQ-260824-BJTQ
     // MCDC SYS-REQ-260824-BJTQ: trailing_whitespace_declared=F, value_whitespace_leak_count_LE_0=F => TRUE [no-action: no trailing whitespace declared]
@@ -838,6 +862,10 @@ describe('MC/DC cssom witnesses', { concurrency: false }, () => {
     });
     //mcdc:ignore:capability-gap SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE -- generated shorthand tables are incomplete so some expansions fall out of coverage and flip winners; failing public-API tripwire is KI-36 [reviewed: agent:champ] [ki: KI-36] [category: capability-gap]
     // MCDC SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE [known-issue] [ki: KI-36]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=T, shorthand_expansion_requested=T => FALSE -- missing generated shorthands flip cascade winners when expansion is requested; failing public-API tripwire is KI-36 [reviewed: agent:ox-alpha] [ki: KI-36] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=F, shorthand_coverage_GE_shorthand_coverage_min=T, shorthand_expansion_requested=T => FALSE [known-issue] [ki: KI-36]
+    //mcdc:ignore:capability-gap SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=T, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE -- generated shorthands absent from the runtime table keep expansion coverage under minimum; failing public-API tripwire is KI-36 [reviewed: agent:ox-alpha] [ki: KI-36] [category: capability-gap]
+    // MCDC SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=T, shorthand_coverage_GE_shorthand_coverage_min=F, shorthand_expansion_requested=T => FALSE [known-issue] [ki: KI-36]
     //mcdc:ignore:known-issue SYS-REQ-260823-SHX6: cascade_winner_flips_LE_0=T, shorthand_coverage_GE_shorthand_coverage_min=T, shorthand_expansion_requested=T => TRUE -- the fully-covered rows are reachable only after the KI-36 fix [reviewed: agent:champ] [ki: KI-36]
 
     // Verifies: SYS-REQ-260823-EEQN

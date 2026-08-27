@@ -45,13 +45,14 @@ import '../src/parser.ts';
 import {
   CSS,
   CSSStyleValue,
+  CSSNumericValue,
   CSSUnitValue,
   CSSMathSum,
   CSSMathClamp,
   CSSVariableReferenceValue,
 } from '../src/typed-om.ts';
 import { CSSKeyframesRule } from '../src/CSSOM.ts';
-import { toParserRule } from '../src/parser-api.ts';
+import { CSSParserAtRule, CSSParserQualifiedRule, toParserRule } from '../src/parser-api.ts';
 import { parse } from '../src/parser.ts';
 import { DOMMatrix, DOMMatrixReadOnly } from '../src/DOMMatrix.ts';
 import { PropertyRegistry } from '../src/PropertyRegistry.ts';
@@ -71,10 +72,13 @@ describe('MC/DC witness: typed-om numeric, transform, and matrix rows', () => {
   // (isMin F with a CSSMathMin child) and a nested max inside max.
   test('max(min(...)) and max(max(...)) flatten through to()', () => {
     const nestedMin = CSSStyleValue.parse('width', 'max(min(1px, 2px), 3px)');
+    assert.ok(nestedMin instanceof CSSNumericValue, `expected CSSNumericValue, got ${nestedMin.constructor.name}`);
     assert.equal(String(nestedMin.to('px')), '3px');
     const nestedMax = CSSStyleValue.parse('width', 'max(max(1px, 2px), 3px)');
+    assert.ok(nestedMax instanceof CSSNumericValue, `expected CSSNumericValue, got ${nestedMax.constructor.name}`);
     assert.equal(String(nestedMax.to('px')), '3px');
     const minMax = CSSStyleValue.parse('width', 'min(max(1px, 2px), 3px)');
+    assert.ok(minMax instanceof CSSNumericValue, `expected CSSNumericValue, got ${minMax.constructor.name}`);
     assert.equal(String(minMax.to('px')), '2px');
   });
 
@@ -176,6 +180,7 @@ describe('MC/DC witness: typed-om numeric, transform, and matrix rows', () => {
   // via both the CSSKeyframesRule instance and the type-8 duck route.
   test('keyframes rule with empty name yields empty prelude', () => {
     const rule = toParserRule(new CSSKeyframesRule('', []));
+    assert.ok(rule instanceof CSSParserAtRule, `expected CSSParserAtRule, got ${rule?.constructor.name}`);
     assert.equal(rule.name, 'keyframes');
     assert.deepEqual(rule.prelude, []);
     const duck = toParserRule({
@@ -183,6 +188,7 @@ describe('MC/DC witness: typed-om numeric, transform, and matrix rows', () => {
       keyText: '',
       style: { cssText: '', length: 0 },
     });
+    assert.ok(duck instanceof CSSParserQualifiedRule, `expected CSSParserQualifiedRule, got ${duck?.constructor.name}`);
     assert.deepEqual(duck.prelude, []);
   });
 

@@ -199,5 +199,7 @@ describe('MC/DC cascade witnesses', { concurrency: false }, () => {
       const cs = getCascadedStyle(el, sheet.cssRules);
       assert.equal(cs.getPropertyValue('width'), '10px');
     });
+    //mcdc:ignore:capability-gap SYS-REQ-260822-EGPW: acyclic_custom_property_chain_supplied_GE_1=T, substitution_size_bounded_LE_10000=F => FALSE -- acyclic var() substitution still expands without a size budget; failing public-API tripwire is KI-17 [reviewed: agent:ox-alpha] [ki: KI-17] [category: capability-gap]
+    // MCDC SYS-REQ-260822-EGPW: acyclic_custom_property_chain_supplied_GE_1=T, substitution_size_bounded_LE_10000=F => FALSE [known-issue] [ki: KI-17]
   });
 });
