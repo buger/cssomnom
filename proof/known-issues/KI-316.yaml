@@ -1,0 +1,34 @@
+id: KI-316
+title: :defined always matches, including never-defined custom elements
+description: 'matchPseudoClassSelector returns true unconditionally for :defined (src/matcher.ts:665-667). html#selector-defined limits :defined to defined elements: built-ins and successfully upgraded custom elements. An autonomous custom element with a valid name and no definition must not match. The matcher reads no defined flag or registry, so ''my-el'' matches :defined before any upgrade.'
+affected_requirements:
+    - SW-REQ-260822-ZN94
+evidence_manifests:
+    - proof/evidence/ki-316.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches(element, ':defined') (src/matcher.ts)
+attacker_input: selector text using :defined against uncustomized custom elements; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-defined-pseudo.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on :defined distinguishing uncustomized custom elements until a defined signal exists.
+remediation: Treat hyphenated local names that no registry defines as not defined, or expose a defined/registry hook on DOMElement for hosts to supply.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:22:12Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:22:28Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-316.yaml
+kill_domain: defined_state_signal_missing
+source_claim: CRS-0046/C13

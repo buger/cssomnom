@@ -1,0 +1,36 @@
+id: KI-313
+title: getElementSiblings omits the element for children-less parents, killing :disabled/:enabled
+description: The parentElement branch of getElementSiblings returns parentElement.children without a membership check (src/matcher.ts:768-770). The child-index guard at src/matcher.ts:527 then returns false before the form-state arms run. The exported DOMElement type marks children optional, and the parentNode branch falls back to [element]. A parent without children therefore makes :disabled miss a disabled input and :enabled miss an enabled one. html#selector-disabled requires actually disabled elements to match.
+affected_requirements:
+    - SW-REQ-260822-ZN94
+evidence_manifests:
+    - proof/evidence/ki-313.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: matches(element, ':disabled' | ':enabled') / getElementSiblings (src/matcher.ts)
+attacker_input: duck-typed DOMElement trees whose parent lacks a children list; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-siblings-membership.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Provide children on every parentElement, or keep the element in its parent's children list.
+remediation: Verify membership after Array.from(parentElement.children) and fall back to [element], mirroring the parentNode branch; the mcdc comment at src/matcher.ts:568 then holds again.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:21:32Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:22:27Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-313.yaml
+kill_domain: sibling_list_membership
+source_claim:
+    - CRS-0046/C01
+    - CRS-0046/C05

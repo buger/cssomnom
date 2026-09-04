@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-ZN94
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-option-disabled-barriers.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:22:27Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-314` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-option-disabled-barriers.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0046-option-disabled-barriers.ts
+      freshness_hashes:
+        proof/known-issues/KI-314.yaml: ki-content-v1:sha256:159abc4cf45b0a76a6c5b9bc5e73a83d2d8b4df816c5e4f873e9289f1bd5b2c8
+        proof/reproducers/CRS-0046-option-disabled-barriers.ts: sha256:363968f355a04d9cefa787ca1c4561d40f4e5375b93a53857a5a51bad21b140e
+      known_issues:
+        - KI-314

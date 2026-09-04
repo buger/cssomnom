@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-ZN94
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-disabled-hasattribute-fallback.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:22:27Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-315` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0046-disabled-hasattribute-fallback.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0046-disabled-hasattribute-fallback.ts
+      freshness_hashes:
+        proof/known-issues/KI-315.yaml: ki-content-v1:sha256:81343efe82452b7f2962ca13fb26910a5125c271dfdd295991d66976ed52da99
+        proof/reproducers/CRS-0046-disabled-hasattribute-fallback.ts: sha256:c49295366e7972b9eee0aa0e5d3a5d5acd7686ee64fc02839b118a621efa3629
+      known_issues:
+        - KI-315

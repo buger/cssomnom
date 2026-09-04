@@ -52,6 +52,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-04T19:23:44Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0046/C24
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -78,3 +82,4 @@ poc_quality:
         reachability_verified: public matches() import reaches the lowercase comparison directly; zero additional privileges required.
 kill_domain: selector_case_sensitivity
 do_not_refile_as: case-insensitive type selector matching for non-HTML namespaces
+source_claim: CRS-0046/C24

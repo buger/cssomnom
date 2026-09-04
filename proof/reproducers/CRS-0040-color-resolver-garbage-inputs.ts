@@ -53,6 +53,14 @@ test('CRS-0040/C11+C14: modern 4-component form requires the slash', () => {
   assert.equal(normalizeComputedColor('hsl(0 50% 50% 0.5)'), 'hsl(0 50% 50% 0.5)');
 });
 
+test('CRS-0047/C05: a trailing comma in legacy rgb() is invalid', () => {
+  assert.equal(normalizeComputedColor('rgb(255, 0, 0,)'), 'rgb(255, 0, 0,)');
+});
+
+test('CRS-0047/C09: legacy rgb() cannot mix numbers and percentages', () => {
+  assert.equal(normalizeComputedColor('rgb(255, 50%, 0)'), 'rgb(255, 50%, 0)');
+});
+
 test('control: valid colors keep normalizing', () => {
   assert.equal(normalizeComputedColor('hsl(0, 100%, 50%)'), 'rgb(255, 0, 0)');
   assert.equal(normalizeComputedColor('rgb(255 0 0 / 0.5)'), 'rgba(255, 0, 0, 0.5)');

@@ -30,6 +30,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-304.yaml
+    - at: "2026-09-04T19:23:37Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-304.yaml
+    - at: "2026-09-04T19:23:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0047/C04,add-source-claim=CRS-0047/C05,add-source-claim=CRS-0047/C06,add-source-claim=CRS-0047/C07,add-source-claim=CRS-0047/C08,add-source-claim=CRS-0047/C09,add-source-claim=CRS-0047/C11,add-source-claim=CRS-0047/C12,add-source-claim=CRS-0047/C13,add-source-claim=CRS-0047/C14,add-source-claim=CRS-0047/C16,add-source-claim=CRS-0047/C17,add-source-claim=CRS-0047/C22,add-source-claim=CRS-0047/C25
 source_claim:
     - CRS-0040/C03
     - CRS-0040/C04
@@ -44,3 +52,17 @@ source_claim:
     - CRS-0040/C15
     - CRS-0040/C16
     - CRS-0040/C20
+    - CRS-0047/C04
+    - CRS-0047/C05
+    - CRS-0047/C06
+    - CRS-0047/C07
+    - CRS-0047/C08
+    - CRS-0047/C09
+    - CRS-0047/C11
+    - CRS-0047/C12
+    - CRS-0047/C13
+    - CRS-0047/C14
+    - CRS-0047/C16
+    - CRS-0047/C17
+    - CRS-0047/C22
+    - CRS-0047/C25

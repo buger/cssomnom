@@ -27,4 +27,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-232.yaml
-source_claim: CRS-0020/C23
+    - at: "2026-09-04T19:23:44Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0046/C09
+source_claim:
+    - CRS-0020/C23
+    - CRS-0046/C09
