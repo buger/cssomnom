@@ -30,6 +30,11 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0037/C19
+    - at: "2026-09-04T19:56:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0051/C05
 source_claim:
     - CRS-0001/C10
     - CRS-0037/C19
+    - CRS-0051/C05

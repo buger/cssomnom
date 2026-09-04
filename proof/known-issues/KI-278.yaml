@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-278.yaml
+    - at: "2026-09-04T19:56:14Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0053/C40
 kill_domain: registration_lifecycle
 do_not_refile_as: 'group-rule @property never registered (KI-189): construction path, not deletion'
-source_claim: CRS-0031/C16
+source_claim:
+    - CRS-0031/C16
+    - CRS-0053/C40

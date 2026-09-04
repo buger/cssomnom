@@ -39,6 +39,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-213.yaml
+    - at: "2026-09-04T19:56:14Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0053/C35
 source_claim:
     - CRS-0019/C09
     - CRS-0019/C10
@@ -49,3 +53,4 @@ source_claim:
     - CRS-0028/C37
     - CRS-0031/C18
     - CRS-0035/C13
+    - CRS-0053/C35

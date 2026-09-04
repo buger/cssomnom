@@ -30,6 +30,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-309.yaml
+    - at: "2026-09-04T19:56:06Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0052/C27,add-source-claim=CRS-0052/C37
 kill_domain: resource_exhaustion
 do_not_refile_as: 'parse()-time stack overflow (KI-18): that KI owns the consume walk; this KI owns the resolve-time walkers'
-source_claim: CRS-0069/C30
+source_claim:
+    - CRS-0069/C30
+    - CRS-0052/C27
+    - CRS-0052/C37

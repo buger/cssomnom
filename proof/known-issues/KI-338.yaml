@@ -1,0 +1,50 @@
+id: KI-338
+title: Unknown media queries stay unfolded across CSSOM media surfaces
+description: 'MediaParser.parse never replaces unknown-valued queries with not all. mediaqueries-4 § 3.2 #error-handling requires that fold at parse time. MediaList.mediaText, item(), the iterator, toString, and the mediaText setter leak the raw feature text. appendMedium stores two unknown queries that must compare equal as not all. deleteMedium misses a stored not all because its argument serializes unfolded. CSSMediaRule.cssText and conditionText, CSSImportRule.cssText, and CSSStyleSheet media leak the same text. Same root as KI-139, which pins the serializeMediaQuery entry alone.'
+affected_requirements:
+    - SYS-REQ-260821-5283
+    - INT-REQ-260821-MZW3
+evidence_manifests:
+    - proof/evidence/ki-338.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: MediaList media serialization and the rules consuming media.mediaText (src/CSSOM.ts)
+attacker_input: caller-supplied media text with unknown media features; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0051-not-all-cssom-surfaces.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Serialize media through a hasUnknownFeature pass that substitutes not all before comparing or emitting.
+remediation: 'Fold unknown-valued queries to the invalid not-all form at the end of normalizeAndValidate, per mediaqueries-4 § 3.2 #error-handling. The fold fixes every CSSOM surface.'
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:54:46Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:54:50Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-338.yaml
+do_not_refile_as: 'unknown-value fold pinned at serializeMediaQuery (KI-139): that KI owns the serializer entry; this KI owns the CSSOM media surfaces'
+source_claim:
+    - CRS-0051/C04
+    - CRS-0051/C06
+    - CRS-0051/C08
+    - CRS-0051/C11
+    - CRS-0051/C12
+    - CRS-0051/C16
+    - CRS-0051/C17
+    - CRS-0051/C18
+    - CRS-0051/C19
+    - CRS-0051/C20
+    - CRS-0051/C22
+    - CRS-0051/C23
+    - CRS-0051/C25
+    - CRS-0051/C26
+    - CRS-0051/C30

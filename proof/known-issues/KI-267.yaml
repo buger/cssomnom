@@ -26,5 +26,11 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-267.yaml
+    - at: "2026-09-04T19:56:14Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0053/C09
 kill_domain: error_handling
-source_claim: CRS-0028/C06
+source_claim:
+    - CRS-0028/C06
+    - CRS-0053/C09

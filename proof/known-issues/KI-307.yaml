@@ -30,6 +30,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-307.yaml
+    - at: "2026-09-04T19:56:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0052/C16
 kill_domain: resource_exhaustion
 do_not_refile_as: 'stylesheet-level stack overflow (KI-18): that KI owns parse/replaceSync; this KI owns the parse-a-rule entries'
 source_claim:
@@ -38,3 +42,4 @@ source_claim:
     - CRS-0069/C23
     - CRS-0069/C24
     - CRS-0069/C26
+    - CRS-0052/C16
