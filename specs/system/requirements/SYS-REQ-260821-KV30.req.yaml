@@ -53,3 +53,5 @@ defect_review:
     via: cli-session
     counts:
         emitted: 28
+        verified: 1
+        dismissed: 27

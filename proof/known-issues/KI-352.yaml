@@ -1,0 +1,34 @@
+id: KI-352
+title: CSS.supports rejects !important inside a parenthesized supports-decl
+description: 'The declaration arm of evalSupportsInParens serializes the tokens after the colon and calls evaluateSupportsDeclaration without splitting the !important flag (src/parser-api.ts ~715). The flag delims reach matchesSyntax, so the declaration reports unsupported. css-conditional-3 defines supports-decl as a parenthesized css-syntax-3 declaration, which carries an optional !important. WPT css-conditional/css-supports-004.xht requires @supports (color: green !important) to apply. The two-argument form must keep rejecting !important, so the two entry points need different handling.'
+affected_requirements:
+    - SW-REQ-260821-HW77
+evidence_manifests:
+    - proof/evidence/ki-352.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.supports condition form / evalSupportsInParens declaration arm (src/parser-api.ts)
+attacker_input: caller-supplied supports condition strings carrying !important declarations; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0064-supports-important-in-condition.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Strip a trailing !important before probing the condition form, or query declarations without the flag.
+remediation: Split an optional !important suffix off the value tokens in the condition-form declaration arm, then hand the bare value to the declaration evaluator.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T20:34:37Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:35:03Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-352.yaml
+kill_domain: correctness
+source_claim: CRS-0064/C15

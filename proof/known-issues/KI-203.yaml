@@ -34,9 +34,14 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C01,add-source-claim=CRS-0059/C03
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C19
 kill_domain: error_signaling
 source_claim:
     - CRS-0014/C01
     - CRS-0015/C20
     - CRS-0059/C01
     - CRS-0059/C03
+    - CRS-0063/C19

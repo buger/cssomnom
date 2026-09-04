@@ -1,0 +1,37 @@
+id: KI-350
+title: CSS.supports throws TypeError for property names that hit Object.prototype
+description: evaluateSupportsDeclaration looks up SHORTHANDS with a raw bracket read (src/parser-api.ts ~649,670). SHORTHANDS is a plain object, so names like constructor and __proto__ resolve inherited members. The isSupported gate then passes, and the shorthand arm calls shorthand.expand on the inherited Object value, which has no expand method. CSS.supports('constructor','foo') throws TypeError instead of returning false. css-conditional-3 supports and SYS-REQ-260821-SMW6 require a boolean with no exception. STANDARD_PROPERTIES_SYNTAX carries the same inherited-lookup shape.
+affected_requirements:
+    - SYS-REQ-260821-SMW6
+    - SW-REQ-260821-HW77
+evidence_manifests:
+    - proof/evidence/ki-350.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+cve_surface: none
+affected_api: CSS.supports / evaluateSupportsDeclaration SHORTHANDS and STANDARD_PROPERTIES_SYNTAX lookups (src/parser-api.ts)
+attacker_input: caller-supplied property names equal to Object.prototype members; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0064-supports-prototype-key-throw.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Call supports with authored CSS property names; avoid Object.prototype member names as property arguments.
+remediation: Guard both lookups with Object.hasOwn, or store the tables in null-prototype records or Maps, so inherited members never reach the shorthand expand call.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T20:34:16Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:35:03Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-350.yaml
+kill_domain: oracle_manipulation
+source_claim:
+    - CRS-0064/C03
+    - CRS-0064/C04

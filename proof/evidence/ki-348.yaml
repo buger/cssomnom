@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-NHZ8
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0062-unknown-atrule-decls-through-group-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:32:55Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-348` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0062-unknown-atrule-decls-through-group-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0062-unknown-atrule-decls-through-group-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-348.yaml: ki-content-v1:sha256:11a0ddcde9a2fbb2b6aba3f2b123c9c4ad0cd33df64189bc4d11943970b6757d
+        proof/reproducers/CRS-0062-unknown-atrule-decls-through-group-rule.ts: sha256:233bde1677b28cec10b573816ed3d5923b299a90cb38c6f268ebb7938759038f
+      known_issues:
+        - KI-348

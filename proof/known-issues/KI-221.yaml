@@ -27,8 +27,18 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-221.yaml
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0062/C04
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0062/C05
 kill_domain: run_accounting
 do_not_refile_as: KI-181 covers bad-declaration remnants reparsed as fresh declarations; this filing covers the missing flush and reparse of block-bearing constructs
 source_claim:
     - CRS-0017/C04
     - CRS-0017/C05
+    - CRS-0062/C04
+    - CRS-0062/C05

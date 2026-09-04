@@ -39,6 +39,18 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C10
+    - at: "2026-09-04T20:33:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C05
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C23
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C15,add-source-claim=CRS-0063/C25
 do_not_refile_as: KI-40 covers qualified-rule bodies; this filing covers at-rule descriptor bodies
 source_claim:
     - CRS-0068/C05
@@ -46,3 +58,7 @@ source_claim:
     - CRS-0030/C12
     - CRS-0030/C21
     - CRS-0059/C10
+    - CRS-0061/C05
+    - CRS-0061/C23
+    - CRS-0063/C15
+    - CRS-0063/C25

@@ -39,9 +39,21 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C07
+    - at: "2026-09-04T20:33:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C04
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C04,add-source-claim=CRS-0063/C22,add-source-claim=CRS-0064/C11
 do_not_refile_as: KI-126 covers the parse()/cascade visibility of CSSAtRule.childRules, not the Parser API body
 source_claim:
     - CRS-0068/C09
     - CRS-0029/C05
     - CRS-0030/C03
     - CRS-0059/C07
+    - CRS-0061/C04
+    - CRS-0063/C04
+    - CRS-0063/C22
+    - CRS-0064/C11

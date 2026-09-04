@@ -29,9 +29,15 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-346.yaml
+    - at: "2026-09-04T20:35:28Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0065/C24,add-source-claim=CRS-0065/C25
 kill_domain: constructor_argument_aliasing
 do_not_refile_as: 'KI-216: that pins CSSStyleDeclaration renaming caller Declaration objects; KI-213: that pins indexed-proxy key handling'
 source_claim:
     - CRS-0056/C11
     - CRS-0056/C13
     - CRS-0056/C14
+    - CRS-0065/C24
+    - CRS-0065/C25

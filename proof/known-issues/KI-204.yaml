@@ -38,9 +38,20 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C12
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C06
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C11,add-source-claim=CRS-0064/C07
 kill_domain: condition_parsing
 source_claim:
     - CRS-0014/C09
     - CRS-0015/C08
     - CRS-0029/C16
     - CRS-0059/C12
+    - CRS-0061/C06
+    - CRS-0063/C11
+    - CRS-0064/C07

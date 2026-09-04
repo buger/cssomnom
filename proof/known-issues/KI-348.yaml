@@ -1,0 +1,29 @@
+id: KI-348
+title: Unknown at-rule inside a group rule loses block declarations from cssText
+description: 'consumeAtRuleFromStream''s fallback parses unknown at-rule blocks with nested=false (src/parser.ts ~L1311). consumeBlockContents then drops declaration runs, so childRules keep only rules. CSSAtRule.cssText serializes non-empty childRules and silently deletes the declarations. ''@media screen { @foo { .a { color: blue } color: red; } }'' loses ''color: red;''. css-syntax-3 #consume-an-at-rule preserves unrecognized at-rules; the token-stream path already keeps raw text.'
+affected_requirements:
+    - SYS-REQ-260821-NHZ8
+evidence_manifests:
+    - proof/evidence/ki-348.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: Parser.consumeAtRuleFromStream fallback / CSSAtRule.cssText for unknown at-rules in group rules
+attacker_input: stylesheet text with an unrecognized block at-rule nested in a group rule; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0062-unknown-atrule-decls-through-group-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Preserve the raw block text for unknown at-rules like the token-stream fallback does.
+remediation: Keep unrecognized at-rule blocks verbatim in the stream path; serialize unknown at-rules from the raw block, not from childRules.
+status: open
+history:
+    - at: "2026-09-04T20:32:43Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:32:55Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-348.yaml
+source_claim: CRS-0062/C07

@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-275.yaml
+    - at: "2026-09-04T20:35:28Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0065/C19
 kill_domain: cssom_rule_serialization
 do_not_refile_as: 'case-sensitive url() names in preludes (KI-161): different symptom, prelude matching'
-source_claim: CRS-0031/C07
+source_claim:
+    - CRS-0031/C07
+    - CRS-0065/C19

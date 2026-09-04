@@ -31,7 +31,18 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-197.yaml
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C08
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C09,add-source-claim=CRS-0064/C14
 do_not_refile_as: KI-107 covers malformed var() values; this filing covers the missing grammar row for known properties
 source_claim:
     - CRS-0068/C18
     - CRS-0029/C12
+    - CRS-0061/C08
+    - CRS-0063/C09
+    - CRS-0064/C14

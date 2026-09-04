@@ -27,7 +27,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-226.yaml
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0062/C10
 kill_domain: nested_context_loss
 source_claim:
     - CRS-0017/C02
     - CRS-0017/C06
+    - CRS-0062/C10

@@ -31,8 +31,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-219.yaml
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C24
 kill_domain: error_signaling
 do_not_refile_as: KI-203 covers parseRuleSync null signaling; this filing covers parseDeclarationSync at-rule prefixes
 source_claim:
     - CRS-0015/C10
     - CRS-0029/C11
+    - CRS-0063/C24

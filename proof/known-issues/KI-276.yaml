@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-276.yaml
+    - at: "2026-09-04T20:35:27Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0065/C02
 kill_domain: webidl_index_conversion
 do_not_refile_as: 'insertRule raw range check (KI-163): sibling method, insert path already owned there'
-source_claim: CRS-0031/C10
+source_claim:
+    - CRS-0031/C10
+    - CRS-0065/C02

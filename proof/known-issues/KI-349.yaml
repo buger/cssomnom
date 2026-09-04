@@ -1,0 +1,29 @@
+id: KI-349
+title: Declaration value loop swallows a stray close-curly token and trailing declarations
+description: 'consumeDeclarationFromStream breaks its value loop only on EOF or semicolon (src/parser.ts ~L1106-1109). css-syntax-3 #consume-a-declaration step 5 consumes the value with nested=true; #consume-a-list-of-component-values returns at a close-curly when nested. The public parseBlockContents(''color: red } background: blue'') therefore stores ''red } background: blue'' as the color value. The lookahead at ~L1030 already treats the close-curly as a declaration end.'
+affected_requirements:
+    - SYS-REQ-260821-NHZ8
+evidence_manifests:
+    - proof/evidence/ki-349.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: Parser.parseBlockContents / consumeDeclarationFromStream value loop
+attacker_input: declaration-list input with an unbalanced close-curly token; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0062-decl-value-close-curly.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Stop the declaration value at '}' on block-contents streams, mirroring the lookahead.
+remediation: Thread the nested flag into consumeDeclarationFromStream and stop its value loop at '}' like consume-a-list-of-component-values.
+status: open
+history:
+    - at: "2026-09-04T20:32:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:32:55Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-349.yaml
+source_claim: CRS-0062/C08

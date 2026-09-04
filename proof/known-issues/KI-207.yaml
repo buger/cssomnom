@@ -42,6 +42,14 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C23
+    - at: "2026-09-04T20:33:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C14
+    - at: "2026-09-04T20:35:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C20,add-source-claim=CRS-0064/C13
 kill_domain: resource_cleanup
 source_claim:
     - CRS-0014/C14
@@ -49,3 +57,6 @@ source_claim:
     - CRS-0029/C10
     - CRS-0030/C10
     - CRS-0059/C23
+    - CRS-0061/C14
+    - CRS-0063/C20
+    - CRS-0064/C13

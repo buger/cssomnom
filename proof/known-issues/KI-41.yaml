@@ -70,6 +70,22 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0059/C04,add-source-claim=CRS-0059/C05
+    - at: "2026-09-04T20:33:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C01
+    - at: "2026-09-04T20:33:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C02
+    - at: "2026-09-04T20:33:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0061/C26
+    - at: "2026-09-04T20:35:21Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0063/C01,add-source-claim=CRS-0063/C02,add-source-claim=CRS-0063/C40,add-source-claim=CRS-0064/C08,add-source-claim=CRS-0064/C09
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -111,3 +127,11 @@ source_claim:
     - CRS-0030/C05
     - CRS-0059/C04
     - CRS-0059/C05
+    - CRS-0061/C01
+    - CRS-0061/C02
+    - CRS-0061/C26
+    - CRS-0063/C01
+    - CRS-0063/C02
+    - CRS-0063/C40
+    - CRS-0064/C08
+    - CRS-0064/C09
