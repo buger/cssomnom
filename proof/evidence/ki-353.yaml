@@ -5,12 +5,12 @@ results:
       command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0065-layer-namelist-aliasing.ts
       status: fail
       observed_result: known_issue_reproduced
-      executed_at: "2026-09-04T20:35:04Z"
+      executed_at: "2026-09-04T20:42:31Z"
       input_set:
         - 'Captured by `proof evidence capture KI-353` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0065-layer-namelist-aliasing.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
         - proof/reproducers/CRS-0065-layer-namelist-aliasing.ts
       freshness_hashes:
-        proof/known-issues/KI-353.yaml: ki-content-v1:sha256:b529989e343b37817903f21edd92b3093ee080d47d39d5c3393e64c42beba009
+        proof/known-issues/KI-353.yaml: ki-content-v1:sha256:0d7fcd450df5a1bc330cf7ec294375b7bd38f5b08a9f63b553d36b1020a5db63
         proof/reproducers/CRS-0065-layer-namelist-aliasing.ts: sha256:31fd15e59187c53ee3e15abbc62261a73b024be63ac449bed7a2fe324b150fe9
       known_issues:
         - KI-353

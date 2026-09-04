@@ -18,6 +18,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Use the two-argument form for custom property probing until the condition parser classifies declaration blocks first.
 remediation: Try the colon-delimited supports-decl classification before the operator heuristic in evalSupportsInParens, so declaration values never masquerade as condition operators.
+notes:
+    - 'Distinct from KI-352: this KI pins the operator-ident heuristic routing a custom-property supports-decl into condition parsing. KI-352 pins the !important flag reaching the value matcher. Different grammar sites in evalSupportsInParens.'
 owner: agent:adjudicator
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -30,6 +32,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-351.yaml
-kill_domain: correctness
+    - at: "2026-09-04T20:41:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note,kill-domain=supports_declaration_misrouting
+    - at: "2026-09-04T20:42:30Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-351.yaml
+kill_domain: supports_declaration_misrouting
 do_not_refile_as: 'KI-204: that pins the unparenthesized declaration shortcut; this is the parenthesized supports-decl classification'
 source_claim: CRS-0064/C06

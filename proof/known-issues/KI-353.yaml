@@ -18,6 +18,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Pass a freshly built array to the constructor and never retain it on the caller side.
 remediation: Copy the argument and freeze the stored array, matching the FrozenArray contract the cssText getter already assumes.
+notes:
+    - 'Distinct from KI-346: that pins Rule[] backing stores for cssRules mutation. This KI pins the css-cascade-5 FrozenArray nameList attribute exposing a live caller array. Different attribute and different IDL contract.'
 owner: agent:adjudicator
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -30,6 +32,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-353.yaml
-kill_domain: constructor_argument_aliasing
+    - at: "2026-09-04T20:41:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note,kill-domain=frozen_array_snapshot_aliasing
+    - at: "2026-09-04T20:42:31Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-353.yaml
+kill_domain: frozen_array_snapshot_aliasing
 do_not_refile_as: 'KI-346: that pins rule-list constructor aliasing; this is the FrozenArray nameList attribute'
 source_claim: CRS-0065/C17

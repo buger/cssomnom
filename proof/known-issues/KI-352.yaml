@@ -18,6 +18,8 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Strip a trailing !important before probing the condition form, or query declarations without the flag.
 remediation: Split an optional !important suffix off the value tokens in the condition-form declaration arm, then hand the bare value to the declaration evaluator.
+notes:
+    - 'Distinct from KI-351: this KI pins the !important suffix surviving into the value matcher. KI-351 pins the operator-ident heuristic misrouting a supports-decl. Different grammar sites in evalSupportsInParens.'
 owner: agent:adjudicator
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -30,5 +32,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-352.yaml
-kill_domain: correctness
+    - at: "2026-09-04T20:41:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note,kill-domain=declaration_flag_loss
+    - at: "2026-09-04T20:42:31Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-352.yaml
+kill_domain: declaration_flag_loss
 source_claim: CRS-0064/C15
