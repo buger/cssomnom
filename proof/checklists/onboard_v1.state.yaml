@@ -1,5 +1,5 @@
 checklist: onboard_v1
-updated_at: "2026-09-03T21:38:51Z"
+updated_at: "2026-09-04T20:56:00Z"
 steps:
     ac-sweep:
         status: confirmed
@@ -10,10 +10,10 @@ steps:
         check_results:
             - id: acceptance_criteria_witnessed
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: acceptance_witness_quality
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     annotations-heavy:
         status: confirmed
         confirmed_at: "2026-08-27T08:09:06Z"
@@ -23,24 +23,14 @@ steps:
         check_results:
             - id: annotation_validity
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: obligation_witness_grounded
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     coverage:
         status: pending
     debt-standing:
-        status: confirmed
-        confirmed_at: "2026-08-27T08:09:48Z"
-        confirmed_by: agent:champ
-        note: '2026-08-27: 64 active KIs visible with quality floor met (known_issues_reviewed green; ACC-08 dedup advisory cleared via affected_file split parser.ts vs MediaParser.ts); no active waivers (waivers_reviewed green); open debt is the tracked KI ledger + vector exits, all with owners and review dates.'
-        check_results:
-            - id: known_issues_reviewed
-              status: pass
-              at: "2026-09-03T21:38:17Z"
-            - id: waivers_reviewed
-              status: pass
-              at: "2026-09-03T21:38:17Z"
+        status: pending
     defect-review:
         status: pending
     hazard:
@@ -52,19 +42,9 @@ steps:
         check_results:
             - id: spec_lint_hazard_consequence
               status: info
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     history-mine:
-        status: confirmed
-        confirmed_at: "2026-08-27T08:09:45Z"
-        confirmed_by: agent:champ
-        note: '2026-08-27: 17 problem reports all dispositioned; change evidence complete for every in-branch-changed change-typed review; recent hunt waves (KI-113..134, vector campaign N1) are mined into the KI ledger with evidence manifests and requirement anchors.'
-        check_results:
-            - id: problem_reports_reviewed
-              status: pass
-              at: "2026-09-03T21:38:17Z"
-            - id: change_evidence_complete
-              status: pass
-              at: "2026-09-03T21:38:17Z"
+        status: pending
     init:
         status: not_applicable
         confirmed_at: "2026-08-21T12:22:39Z"
@@ -95,7 +75,7 @@ steps:
         check_results:
             - id: residual_kill_hygiene
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     skeleton:
         status: not_applicable
         confirmed_at: "2026-08-21T12:42:21Z"
@@ -122,16 +102,16 @@ steps:
         check_results:
             - id: spec_lint_decomposition_adds_refinement
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: spec_lint_formalization_quality
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: solver_modeling_opportunity
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: under_modeled_requirements_clean
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     spec-review-2:
         status: confirmed
         confirmed_at: "2026-08-27T08:57:21Z"
@@ -140,10 +120,10 @@ steps:
         check_results:
             - id: spec_lint_spec_conformance_review_grounded
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: software_formalization_complete
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     surface-matrix:
         status: confirmed
         confirmed_at: "2026-08-21T13:56:35Z"
@@ -159,7 +139,7 @@ steps:
         check_results:
             - id: spec_lint_threat_surface_present
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
     traces-light:
         status: pending
     variables:
@@ -170,10 +150,10 @@ steps:
         check_results:
             - id: variable_orphans_clean
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: variables_declared
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
             - id: variable_drift
               status: pass
-              at: "2026-09-03T21:38:17Z"
+              at: "2026-09-04T20:55:30Z"
