@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-YMEY
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-insertrule-nonstring-typeerror.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:46:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-356` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-insertrule-nonstring-typeerror.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0067-insertrule-nonstring-typeerror.ts
+      freshness_hashes:
+        proof/known-issues/KI-356.yaml: ki-content-v1:sha256:0281d8c6bc70ec424fae7590b695d4bcb3557639cd687578433c364f7e7ac5ea
+        proof/reproducers/CRS-0067-insertrule-nonstring-typeerror.ts: sha256:e5f236379548843fc26abcfe783408d399eb60830d33447b1867d737bbbe0fd5
+      known_issues:
+        - KI-356

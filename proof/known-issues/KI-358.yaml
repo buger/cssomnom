@@ -1,0 +1,32 @@
+id: KI-358
+title: CSSPageRule.insertRule admits style and grouping rules the css-page grammar excludes
+description: CSSPageRule inherits CSSGroupingRule.insertRule, which only rejects @import and @namespace. css-page-3 at-page-rule allows only page properties and margin at-rules inside @page. cssom-1 6.5.3 insert-a-css-rule step 5 must throw HierarchyRequestError when CSS constraints forbid the insertion. A style rule or grouping at-rule instead inserts and re-serializes into the sheet.
+affected_requirements:
+    - SYS-REQ-260821-YMEY
+evidence_manifests:
+    - proof/evidence/ki-358.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSPageRule.insertRule via CSSGroupingRule.insertRule (src/CSSOM.ts)
+attacker_input: caller-supplied insertRule text nesting style or group rules inside @page; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-page-insertrule-nested-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Insert only declarations-producing margin at-rules through @page insertRule.
+remediation: Reject rules the css-page grammar excludes when the parent rule is a CSSPageRule, throwing HierarchyRequestError.
+status: open
+history:
+    - at: "2026-09-04T20:45:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:46:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-358.yaml
+kill_domain: hierarchy_constraint_skipped
+do_not_refile_as: 'KI-334: that pins the same grammar violation on the parser ingest path; this is the insertRule path'
+source_claim: CRS-0067/C25

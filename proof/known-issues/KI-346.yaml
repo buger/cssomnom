@@ -33,6 +33,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0065/C24,add-source-claim=CRS-0065/C25
+    - at: "2026-09-04T20:46:16Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0067/C30
 kill_domain: constructor_argument_aliasing
 do_not_refile_as: 'KI-216: that pins CSSStyleDeclaration renaming caller Declaration objects; KI-213: that pins indexed-proxy key handling'
 source_claim:
@@ -41,3 +45,4 @@ source_claim:
     - CRS-0056/C14
     - CRS-0065/C24
     - CRS-0065/C25
+    - CRS-0067/C30

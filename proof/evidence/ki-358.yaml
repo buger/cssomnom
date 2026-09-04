@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-YMEY
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-page-insertrule-nested-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:46:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-358` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-page-insertrule-nested-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0067-page-insertrule-nested-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-358.yaml: ki-content-v1:sha256:b388fd5988f883af79b18f522e100ebb6218050325cf1eacf89ef8e94ef0002e
+        proof/reproducers/CRS-0067-page-insertrule-nested-rule.ts: sha256:1fd6a2d86279031c0c042ac05d161abda421da9549fd6f2f7e1608a4b8adc1ea
+      known_issues:
+        - KI-358

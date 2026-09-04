@@ -30,6 +30,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-289.yaml
+    - at: "2026-09-04T20:46:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0067/C07,add-source-claim=CRS-0067/C08
 kill_domain: consume_failure_swallowed
 do_not_refile_as: 'constructed-sheet insertRule trailing garbage (KI-160): default _parseRule path, not the grouping empty catch'
-source_claim: CRS-0035/C04
+source_claim:
+    - CRS-0035/C04
+    - CRS-0067/C07
+    - CRS-0067/C08

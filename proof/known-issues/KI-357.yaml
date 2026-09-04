@@ -1,0 +1,32 @@
+id: KI-357
+title: CSSGroupingRule.insertRule applies the raw JS range check before WebIDL unsigned long conversion
+description: CSSGroupingRule.insertRule compares the raw index value before parsing. WebIDL types index as unsigned long, so ToUint32 maps 0.5 to 0 and NaN to 0. The fractional index therefore throws IndexSizeError before the parse can throw SyntaxError, and NaN bypasses the bounds check and returns NaN as the insertion index.
+affected_requirements:
+    - SYS-REQ-260821-YMEY
+evidence_manifests:
+    - proof/evidence/ki-357.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSGroupingRule.insertRule index handling (src/CSSOM.ts)
+attacker_input: caller-supplied fractional or NaN index; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-grouping-insertrule-index-uint32.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass integer indices to grouping-rule insertRule.
+remediation: Convert the index through WebIDL unsigned long conversion before the bounds check, matching CSSStyleSheet.insertRule's required behavior.
+status: open
+history:
+    - at: "2026-09-04T20:45:51Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:46:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-357.yaml
+kill_domain: webidl_conversion_missing
+do_not_refile_as: 'KI-163: that pins the raw range check on CSSStyleSheet.insertRule; this is the grouping-rule copy'
+source_claim: CRS-0067/C15

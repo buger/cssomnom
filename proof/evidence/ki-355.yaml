@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-HGFK
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0066-nonposition-list-empty-commas.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:46:01Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-355` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0066-nonposition-list-empty-commas.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0066-nonposition-list-empty-commas.ts
+      freshness_hashes:
+        proof/known-issues/KI-355.yaml: ki-content-v1:sha256:32366dc41a0202b977443a0ca385d15ebabe71aa43f83898f1f6c69dbb83a6c5
+        proof/reproducers/CRS-0066-nonposition-list-empty-commas.ts: sha256:5234f344fde0c207a67aa1cb8a647986a32142d6531f9fc8f76c34987204fd72
+      known_issues:
+        - KI-355

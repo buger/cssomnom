@@ -1,0 +1,32 @@
+id: KI-355
+title: Typed OM parse drops empty comma items on non-position list properties instead of throwing
+description: 'The non-position LIST_PROPERTIES comma branch filters empty segments before calling createValueFromTokens. css-values-4 2.2 #comb-comma types these properties as #-multiplied lists with no empty items. A leading, trailing, or doubled comma invalidates the whole value, so css-typed-om-1 6.6 parse-a-cssstylevalue step 3 must throw TypeError. The parse drops the empty items and returns the surviving values.'
+affected_requirements:
+    - SYS-REQ-260821-HGFK
+evidence_manifests:
+    - proof/evidence/ki-355.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse / parseAll non-position list branch (src/typed-om/values/style-value-parser.ts)
+attacker_input: caller-supplied comma-separated list values with an empty item; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0066-nonposition-list-empty-commas.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid empty items in comma-separated non-position list values.
+remediation: Throw TypeError when any comma segment trims to zero components on the non-position list branch, before createValueFromTokens runs.
+status: open
+history:
+    - at: "2026-09-04T20:45:42Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:46:01Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-355.yaml
+kill_domain: empty_list_item_swallowed
+do_not_refile_as: 'KI-340: that pins the empty-item drop on the POSITION list branch; this is the non-position branch'
+source_claim: CRS-0066/C14

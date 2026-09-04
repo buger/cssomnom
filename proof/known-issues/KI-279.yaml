@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-279.yaml
+    - at: "2026-09-04T20:46:12Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0067/C09
 kill_domain: unknown_property_retention
 do_not_refile_as: 'grammar-invalid values retained (KI-124): value grammar, not property-name support'
-source_claim: CRS-0031/C17
+source_claim:
+    - CRS-0031/C17
+    - CRS-0067/C09

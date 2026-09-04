@@ -1,0 +1,32 @@
+id: KI-356
+title: insertRule leaks a raw TypeError for non-string rule arguments instead of SyntaxError
+description: CSSStyleSheet.insertRule forwards the raw rule argument to _parseRule, and tokenize dereferences it. WebIDL types rule as CSSOMString, so undefined converts to the string undefined and null to null. cssom-1 6.5.3 insert-a-css-rule steps 3-5 must then throw a SyntaxError DOMException. The raw engine TypeError escapes instead.
+affected_requirements:
+    - SYS-REQ-260821-YMEY
+evidence_manifests:
+    - proof/evidence/ki-356.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleSheet.insertRule rule argument handling (src/CSSOM.ts)
+attacker_input: caller-supplied non-string rule argument; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-insertrule-nonstring-typeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Always pass a string to insertRule.
+remediation: Coerce the rule argument through CSSOMString conversion before parsing, or catch parser exceptions and rethrow a SyntaxError DOMException.
+status: open
+history:
+    - at: "2026-09-04T20:45:46Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:46:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-356.yaml
+kill_domain: webidl_conversion_missing
+do_not_refile_as: 'KI-267: setProperty non-string TypeError; KI-273: CSS.supports non-string TypeError; both are different methods'
+source_claim: CRS-0067/C03

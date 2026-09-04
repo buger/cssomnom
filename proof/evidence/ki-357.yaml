@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-YMEY
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-grouping-insertrule-index-uint32.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:46:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-357` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0067-grouping-insertrule-index-uint32.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0067-grouping-insertrule-index-uint32.ts
+      freshness_hashes:
+        proof/known-issues/KI-357.yaml: ki-content-v1:sha256:e1facd42d1a70990736783b50b9ca1af011e1ab2cfafde4e70c2cb75e51bff4b
+        proof/reproducers/CRS-0067-grouping-insertrule-index-uint32.ts: sha256:7f9b90f983ce8bd786ee6a6bdad1454a0bc7d075e142056c1d59dc265ac4f4eb
+      known_issues:
+        - KI-357
