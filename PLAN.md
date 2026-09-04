@@ -4923,3 +4923,12 @@ Goal: reduce requirement-side mcdc_coverage debt (56 stale witness lines; 55 req
 - KI ledger: 178 new campaign KIs (KI-135..KI-312) + 113 source_claim links onto existing KIs; known-issue check clean; all evidence captured (red-reproducer polarity)
 - Remaining: CRS-0042..CRS-0067 (26 sessions) adjudication waves in flight
 - Upstream fixes from campaign: reqproof PR #1127 (surgical stamp writes) + PR #1128 (governance-tree annotation skip)
+
+### ✅ Defect-review campaign COMPLETE (2026-09-04/05)
+- **defect_review_current GREEN: 67/67 specs claim-reviewed, 881 verified = 881 promoted, 988 dismissed, 0 deferred, 0 stale**
+- 69 sessions total: 68 grok dispatches ($13.19) + 1 route-B agent-review ($0 after grok credits ran out), 0 failures
+- 1,869 claims adjudicated by 20+ disposition subagent waves (doctrine: /tmp/opencode/disposition-doctrine.md; flock-serialized KI filings)
+- KI ledger grew 64 → 303 open issues: 223 campaign KIs (KI-135..KI-358) + 266 source_claim links onto pre-existing KIs
+- Every new KI: twice-red reproducer + captured known_issue_reproduced evidence; known-issue check clean throughout
+- 2 upstream reqproof fixes born live from the campaign: PR #1127 (surgical stamp writes) + PR #1128 (governance-tree annotation skip)
+- 1 informational disclosure: 1 schema-invalid emit (KRK)
