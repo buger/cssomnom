@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-03VA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-page-nested-rules.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:45:01Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-334` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-page-nested-rules.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0050-page-nested-rules.ts
+      freshness_hashes:
+        proof/known-issues/KI-334.yaml: ki-content-v1:sha256:2cf0a1d75948b67ef6409f883701daeb088670c39caee5c1d5525efb0143dc2a
+        proof/reproducers/CRS-0050-page-nested-rules.ts: sha256:0bfb612503490eed6e9c18592d8391ca3a8b9f8c4ae2e6e5b632b0569a481ef6
+      known_issues:
+        - KI-334

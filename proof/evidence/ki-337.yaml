@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-03VA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-font-feature-values-empty-family.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:45:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-337` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-font-feature-values-empty-family.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0050-font-feature-values-empty-family.ts
+      freshness_hashes:
+        proof/known-issues/KI-337.yaml: ki-content-v1:sha256:179ecd88c17ebe319d0d16e02a840bfd0c4d2070a79c389a928b2ccd28a355dd
+        proof/reproducers/CRS-0050-font-feature-values-empty-family.ts: sha256:e0c106e755f80f7416ad8e0ebfc9ae48a6e25f17a8add58571ac37077c4d30f1
+      known_issues:
+        - KI-337

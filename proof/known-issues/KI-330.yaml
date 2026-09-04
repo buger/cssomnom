@@ -1,0 +1,35 @@
+id: KI-330
+title: Unknown at-rule preservation broken for '-keyframes' and '--' names
+description: 'getAtRuleHandler routes every at-name ending in ''-keyframes'' into handleKeyframesRule (src/parser.ts:91-92). ''@not-keyframes foo {}'' constructs a CSSKeyframesRule; a prelude-free ''@not-keyframes {}'' drops. isSupportedAtRule also returns false for every at-name starting with ''--'' (src/parser.ts:108), so ''@--foo {}'' drops. css-syntax-3 #consume-at-rule returns unrecognized at-rules and cssom-1 reports them as type 0. The parser must preserve them as generic at-rules. The mediaall twin of this class is KI-176.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-330.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.getAtRuleHandler / Parser.isSupportedAtRule (src/parser.ts)
+attacker_input: stylesheet text using non-vendor *-keyframes names or dashed at-names; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-unknown-atrule-preservation.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Use exact or vendor-prefixed keyframes names and avoid dashed at-names.
+remediation: Match only keyframes plus a single vendor prefix, and drop the '--' rejection so dashed names take the generic at-rule path.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:44:59Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-330.yaml
+source_claim:
+    - CRS-0050/C07
+    - CRS-0050/C44

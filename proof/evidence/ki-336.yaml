@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-03VA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-namespace-extra-tokens.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:45:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-336` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-namespace-extra-tokens.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0050-namespace-extra-tokens.ts
+      freshness_hashes:
+        proof/known-issues/KI-336.yaml: ki-content-v1:sha256:b8bb270bb706475a57810553fbba5b1c19bb7c56b86cb261caeeb8e586ec4c4b
+        proof/reproducers/CRS-0050-namespace-extra-tokens.ts: sha256:4cbc3049cc6a210a63d548a2c8df0ba5783232fbd471490c7874ea7e03abc648
+      known_issues:
+        - KI-336

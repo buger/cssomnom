@@ -1,0 +1,35 @@
+id: KI-329
+title: Blockful @namespace and @custom-media rules are kept; handlers ignore the block
+description: 'AT_RULE_HANDLERS.namespace and .custom-media drop the block parameter (src/parser.ts:76,79). consumeAtRule consumes the block and still calls the handler. The handlers construct the rule and never reject a block. css-namespaces-3 #syntax types @namespace as a semicolon-terminated statement; mediaqueries-5 2.3 #custom-mq does the same for @custom-media. A syntactically invalid rule must be ignored. ''@namespace "u" { }'' and ''@custom-media --q screen { }'' survive instead of dropping. KI-183 pins the @import leg of this mechanism.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-329.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleNamespaceRule / Parser.handleCustomMediaRule (src/parser.ts)
+attacker_input: stylesheet text giving the statement at-rules a block; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-blockful-statement-atrules.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not write blocks onto @namespace or @custom-media preludes.
+remediation: Pass the block to the statement handlers and return null whenever one is present.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:44:59Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-329.yaml
+source_claim:
+    - CRS-0050/C05
+    - CRS-0050/C31

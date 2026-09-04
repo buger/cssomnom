@@ -1,0 +1,33 @@
+id: KI-335
+title: Custom at-rule typing leaks raw ASTAtRule objects into CSSStyleSheet.cssRules
+description: consumeAtRule returns the raw ASTAtRule cast as a Rule when atRuleTypes types a custom at-rule (src/parser.ts:398-405). parseStyleSheet passes that plain object to CSSStyleSheet.createInternal. cssRules[0] then serializes as '[object Object]' instead of a CSSRule. The documented atRules option on the public Parser constructor produces a broken stylesheet.
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-335.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.consumeAtRule custom atRules typing / Parser.parseStyleSheet (src/parser.ts)
+attacker_input: ParserOptions.atRules entries used with parseStyleSheet; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-atrules-ast-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consume custom-typed at-rules through the parser-api surface instead of parseStyleSheet.
+remediation: Wrap the typed branch in a CSSAtRule carrying the consumed children as CSSRule objects.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:45:01Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-335.yaml
+source_claim: CRS-0050/C37

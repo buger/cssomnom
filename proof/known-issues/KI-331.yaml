@@ -1,0 +1,33 @@
+id: KI-331
+title: Margin at-rules are accepted outside @page as CSSMarginRule
+description: 'isSupportedAtRule returns true for MARGIN_RULE_NAMES before any parent-context check (src/parser.ts:109). handleMarginRule then constructs a CSSMarginRule wherever the name appears (src/parser.ts:641-643). css-page-3 #at-page-rule allows margin at-rules only inside @page. A top-level ''@top-left {}'' therefore reports a CSSMarginRule instead of a preserved unknown at-rule.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-331.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.isSupportedAtRule / Parser.handleMarginRule (src/parser.ts)
+attacker_input: stylesheet text placing margin at-keywords outside @page; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-margin-rule-outside-page.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write margin at-rules only inside @page blocks.
+remediation: Gate margin names on the parent being @page and route outside occurrences to the generic unknown at-rule.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:45:00Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-331.yaml
+source_claim: CRS-0050/C08

@@ -1,0 +1,35 @@
+id: KI-333
+title: Keyframes and counter-style names skip custom-ident keyword exclusions
+description: 'handleKeyframesRule rejects none/initial/inherit/unset/revert/default but omits revert-layer (src/parser.ts:511-513). handleCounterStyleRule performs no name check at all (src/parser.ts:648-650). css-values-4 #custom-ident excludes the CSS-wide keywords and default from every <custom-ident>; css-cascade-5 lists revert-layer as CSS-wide. css-counter-styles-3 #counter-style also excludes none and requires a name. ''@keyframes revert-layer {}'' and ''@counter-style none {}'' therefore survive.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-333.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleKeyframesRule / Parser.handleCounterStyleRule (src/parser.ts)
+attacker_input: stylesheet text naming keyframes or counter styles after excluded keywords; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-atrule-name-keyword-exclusions.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid CSS-wide keywords and none as keyframes or counter-style names.
+remediation: Validate both names against the full custom-ident exclusion set and return null on failure.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:45:01Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-333.yaml
+source_claim:
+    - CRS-0050/C17
+    - CRS-0050/C34

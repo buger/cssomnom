@@ -1,0 +1,33 @@
+id: KI-332
+title: '@view-transition keeps a non-empty prelude its grammar forbids'
+description: 'handleViewTransitionRule never inspects rule.prelude (src/parser.ts:497-499). The handler constructs the rule from the block alone. css-view-transitions-2 #view-transition-rule types ''@view-transition { <declaration-list> }'' with an empty prelude, so extra prelude tokens invalidate the rule. ''@view-transition foo { navigation: auto }'' survives and silently drops the prelude from its serialized form.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-332.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleViewTransitionRule (src/parser.ts)
+attacker_input: stylesheet text with tokens between @view-transition and its block; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-view-transition-prelude.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write @view-transition with an empty prelude.
+remediation: Return null from handleViewTransitionRule when the prelude holds non-whitespace tokens.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:45:00Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-332.yaml
+source_claim: CRS-0050/C16

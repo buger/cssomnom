@@ -1,0 +1,33 @@
+id: KI-336
+title: '@namespace ignores trailing prelude tokens after the URI'
+description: 'handleNamespaceRule reads tokens[0] and tokens[1] and never inspects the remaining prelude (src/parser.ts:859-868). css-namespaces-3 #syntax allows one optional prefix and exactly one URI, and requires a syntactically invalid @namespace to be ignored. ''@namespace "a" "b";'' therefore survives with the second string silently dropped. KI-169 pins the missing-URI leg of the same handler.'
+affected_requirements:
+    - SYS-REQ-260821-03VA
+evidence_manifests:
+    - proof/evidence/ki-336.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleNamespaceRule (src/parser.ts)
+attacker_input: stylesheet text with extra tokens after the @namespace URI; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-namespace-extra-tokens.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write exactly one prefix and one URI in @namespace rules.
+remediation: Reject the rule when any prelude token remains after the prefix and URI.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:44:51Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:45:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-336.yaml
+source_claim: CRS-0050/C38

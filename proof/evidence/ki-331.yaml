@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-03VA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-margin-rule-outside-page.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:45:00Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-331` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0050-margin-rule-outside-page.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0050-margin-rule-outside-page.ts
+      freshness_hashes:
+        proof/known-issues/KI-331.yaml: ki-content-v1:sha256:219773d0390c39d16277ba6c8aa1c8c92afb158fba0d26fba215e4bdca93ff34
+        proof/reproducers/CRS-0050-margin-rule-outside-page.ts: sha256:e7465e39adcd100878a69aa3594f16c9800c64af2e27ea35a0dc69d40a87df5c
+      known_issues:
+        - KI-331
