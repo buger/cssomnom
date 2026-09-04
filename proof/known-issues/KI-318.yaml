@@ -1,0 +1,31 @@
+id: KI-318
+title: Keyframes offset overflow parses to NaN% and throws out of parseStyleSheet
+description: consumeNumber saturates a 400-digit integer to Infinity, then multiplies by an underflowed 10^-400 factor, yielding NaN. css-syntax-3 consume-a-number reads the digits in real arithmetic, so 9...9e-400 is about 1. handleKeyframesRule compares the NaN against 0 and 100; both fail, so 'NaN%' reaches the CSSKeyframeRule constructor and its keyText setter throws. parseStyleSheet therefore throws instead of ignoring the offset as css-animations-1 keyframes requires.
+affected_requirements:
+    - SW-REQ-260822-MN8Z
+evidence_manifests:
+    - proof/evidence/ki-318.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.parseStyleSheet / parse on @keyframes with a numeric-overflow percentage offset (src/parser.ts handleKeyframesRule, src/AbstractTokenizer.ts consumeNumber)
+attacker_input: stylesheet text with an exponent-balanced huge integer offset such as 400 nines followed by e-400%; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-keyframes-nan-offset-parse-throw.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid exponent-balanced huge integer offsets in @keyframes selectors; write plain percentages.
+remediation: Compute the number token magnitude without intermediate overflow (accumulate mantissa and exponent separately) and reject non-finite offsets in handleKeyframesRule.
+status: open
+history:
+    - at: "2026-09-04T19:33:33Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:06Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-318.yaml
+kill_domain: correctness_divergence
+source_claim: CRS-0043/C02

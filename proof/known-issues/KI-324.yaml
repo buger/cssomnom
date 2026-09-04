@@ -1,0 +1,40 @@
+id: KI-324
+title: expandBox runs no token grammar for border-width, border-style, and border-color
+description: 'isLengthBox matches only margin, padding, top, and scroll prefixes. border-width, border-style, and border-color therefore skip the side-value gate entirely and accept any one to four tokens. css-backgrounds-3 defines border-width as line-width, border-style as line-style, and border-color as color. ''border-width: auto'', ''border-color: 1px'', ''border-style: foo'', and ''border-color: logical junk junk'' expand junk into the four longhands instead of rejecting.'
+affected_requirements:
+    - SW-REQ-260822-YBF2
+evidence_manifests:
+    - proof/evidence/ki-324.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: expandBox isLengthBox gate for border box shorthands (src/shorthands.ts); setProperty on border-width/style/color
+attacker_input: junk tokens in border box shorthands; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-nonlength-box-no-grammar.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write grammar-valid border component values.
+remediation: Add per-family component validators for line-width, line-style, and color, and run them on both physical and logical paths.
+status: open
+history:
+    - at: "2026-09-04T19:34:27Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-324.yaml
+    - at: "2026-09-04T19:38:20Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-description
+    - at: "2026-09-04T19:38:28Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-324.yaml
+source_claim:
+    - CRS-0044/C04
+    - CRS-0044/C25

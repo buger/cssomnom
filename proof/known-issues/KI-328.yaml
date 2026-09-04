@@ -1,0 +1,38 @@
+id: KI-328
+title: 'keyText accepts a space before the percent: ''50 %'' normalizes to ''50%'''
+description: normalizeKeyframeSelector slices the trailing percent and trims the rest, so '50 %' becomes Number('50') inside the range check and stores '50%'. css-animations-1 requires a SyntaxError for an invalid keyframe selector, and the selector grammar is from, to, or one percentage token. A CSSOM parse of '50 %' yields a number token plus a percent delim. KI-44 pins the JS-radix leg; this pins the whitespace leg.
+affected_requirements:
+    - SW-REQ-260822-YBF2
+evidence_manifests:
+    - proof/evidence/ki-328.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: normalizeKeyframeSelector via CSSKeyframeRule.keyText setter, findRule, deleteRule (src/CSSOM.ts)
+attacker_input: keyText writes with a space between the number and the percent sign; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-keytext-space-percent.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write keyframe selectors as single percentage tokens.
+remediation: Parse the selector with the CSS tokenizer instead of endsWith and Number, rejecting any part that is not from, to, or a percentage token.
+status: open
+history:
+    - at: "2026-09-04T19:34:59Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-328.yaml
+    - at: "2026-09-04T19:38:20Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-description
+    - at: "2026-09-04T19:38:29Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-328.yaml
+source_claim: CRS-0044/C08

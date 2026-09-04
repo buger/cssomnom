@@ -1,0 +1,30 @@
+id: KI-327
+title: 'expandFont drops the oblique angle: 10deg becomes font-size and 16px joins the family'
+description: 'The preamble loop records ''oblique'' as font-style and continues without peeking at a following angle token. css-fonts-4 font-style is ''normal | italic | oblique <angle>{1,2}'', and the font shorthand consumes font-style as one component. ''font: oblique 10deg 16px Arial'' therefore stores font-size 10deg and pushes 16px into the family list.'
+affected_requirements:
+    - SW-REQ-260822-YBF2
+evidence_manifests:
+    - proof/evidence/ki-327.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: expandFont preamble loop oblique handling (src/shorthands.ts); setProperty on font
+attacker_input: valid font shorthand declarations using oblique with an angle; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-font-oblique-angle-size.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write 'oblique 10deg' as the style component only when the serializer already stored it; avoid re-expanding font with angles.
+remediation: After consuming oblique, consume up to two following angle dimension tokens into styleVal before scanning the size.
+status: open
+history:
+    - at: "2026-09-04T19:34:52Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-327.yaml
+source_claim: CRS-0044/C15

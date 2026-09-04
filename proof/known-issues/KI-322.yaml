@@ -1,0 +1,40 @@
+id: KI-322
+title: expandBox and background center alias one component-value list across longhands
+description: expandBox assigns the same ComponentValue[] object to every side that repeats a value. One-value padding shares top's array with right, bottom, and left; two-value forms alias bottom to top and left to right; logical forms alias the same way. normalizePositionTokens returns [t0, t0] for a lone center, sharing one token object across both axes. Mutating one longhand's list rewrites the aliased sides; each longhand must own an independent list.
+affected_requirements:
+    - SW-REQ-260822-YBF2
+evidence_manifests:
+    - proof/evidence/ki-322.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: SHORTHANDS expandBox physical/logical assignment and normalizePositionTokens center path (src/shorthands.ts)
+attacker_input: caller mutation of shorthand expansion results obtained from SHORTHANDS or the expansion pipeline; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-box-expander-aliases-arrays.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat expansion results as read-only.
+remediation: Allocate a fresh array for each repeated side and clone the center token for the second axis.
+status: open
+history:
+    - at: "2026-09-04T19:34:05Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:08Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-322.yaml
+    - at: "2026-09-04T19:38:20Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-description
+    - at: "2026-09-04T19:38:28Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-322.yaml
+source_claim:
+    - CRS-0044/C01
+    - CRS-0044/C20

@@ -38,6 +38,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0047/C04,add-source-claim=CRS-0047/C05,add-source-claim=CRS-0047/C06,add-source-claim=CRS-0047/C07,add-source-claim=CRS-0047/C08,add-source-claim=CRS-0047/C09,add-source-claim=CRS-0047/C11,add-source-claim=CRS-0047/C12,add-source-claim=CRS-0047/C13,add-source-claim=CRS-0047/C14,add-source-claim=CRS-0047/C16,add-source-claim=CRS-0047/C17,add-source-claim=CRS-0047/C22,add-source-claim=CRS-0047/C25
+    - at: "2026-09-04T19:43:00Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0048/C01,add-source-claim=CRS-0048/C02,add-source-claim=CRS-0048/C03,add-source-claim=CRS-0048/C05,add-source-claim=CRS-0048/C06,add-source-claim=CRS-0048/C07,add-source-claim=CRS-0048/C08,add-source-claim=CRS-0048/C10,add-source-claim=CRS-0048/C11,add-source-claim=CRS-0048/C13,add-source-claim=CRS-0048/C14,add-source-claim=CRS-0048/C15,add-source-claim=CRS-0048/C17,add-source-claim=CRS-0049/C03,add-source-claim=CRS-0049/C04,add-source-claim=CRS-0049/C05,add-source-claim=CRS-0049/C06,add-source-claim=CRS-0049/C07,add-source-claim=CRS-0049/C08,add-source-claim=CRS-0049/C11,add-source-claim=CRS-0049/C12,add-source-claim=CRS-0049/C13,add-source-claim=CRS-0049/C14,add-source-claim=CRS-0049/C16,add-source-claim=CRS-0049/C17,add-source-claim=CRS-0049/C18,add-source-claim=CRS-0049/C20,add-source-claim=CRS-0049/C23,add-source-claim=CRS-0049/C24,add-source-claim=CRS-0049/C28,add-source-claim=CRS-0049/C29,add-source-claim=CRS-0049/C30
 source_claim:
     - CRS-0040/C03
     - CRS-0040/C04
@@ -66,3 +70,35 @@ source_claim:
     - CRS-0047/C17
     - CRS-0047/C22
     - CRS-0047/C25
+    - CRS-0048/C01
+    - CRS-0048/C02
+    - CRS-0048/C03
+    - CRS-0048/C05
+    - CRS-0048/C06
+    - CRS-0048/C07
+    - CRS-0048/C08
+    - CRS-0048/C10
+    - CRS-0048/C11
+    - CRS-0048/C13
+    - CRS-0048/C14
+    - CRS-0048/C15
+    - CRS-0048/C17
+    - CRS-0049/C03
+    - CRS-0049/C04
+    - CRS-0049/C05
+    - CRS-0049/C06
+    - CRS-0049/C07
+    - CRS-0049/C08
+    - CRS-0049/C11
+    - CRS-0049/C12
+    - CRS-0049/C13
+    - CRS-0049/C14
+    - CRS-0049/C16
+    - CRS-0049/C17
+    - CRS-0049/C18
+    - CRS-0049/C20
+    - CRS-0049/C23
+    - CRS-0049/C24
+    - CRS-0049/C28
+    - CRS-0049/C29
+    - CRS-0049/C30

@@ -26,5 +26,11 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-266.yaml
+    - at: "2026-09-04T19:43:08Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0050/C15
 kill_domain: grammar_gate_bypass
-source_claim: CRS-0027/C24
+source_claim:
+    - CRS-0027/C24
+    - CRS-0050/C15

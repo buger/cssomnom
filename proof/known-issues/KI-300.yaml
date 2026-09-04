@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-300.yaml
+    - at: "2026-09-04T19:43:08Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0050/C19
 kill_domain: parse_rule_error_surface
 do_not_refile_as: 'parser-api parseRuleSync (KI-203): that KI owns the parser-api entry point; this one pins the instance method'
-source_claim: CRS-0038/C18
+source_claim:
+    - CRS-0038/C18
+    - CRS-0050/C19

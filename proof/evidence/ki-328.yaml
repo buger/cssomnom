@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-YBF2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-keytext-space-percent.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:38:29Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-328` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-keytext-space-percent.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0044-keytext-space-percent.ts
+      freshness_hashes:
+        proof/known-issues/KI-328.yaml: ki-content-v1:sha256:c7e5531585aac1a43518583b09560336201974cdc46b16367348550cff7fc499
+        proof/reproducers/CRS-0044-keytext-space-percent.ts: sha256:21ea469b918d75256c7c6bb361fffc1d86524c466890288d88fc6f89c5c64751
+      known_issues:
+        - KI-328

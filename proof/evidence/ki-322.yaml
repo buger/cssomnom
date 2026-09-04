@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-YBF2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-box-expander-aliases-arrays.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:38:28Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-322` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-box-expander-aliases-arrays.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0044-box-expander-aliases-arrays.ts
+      freshness_hashes:
+        proof/known-issues/KI-322.yaml: ki-content-v1:sha256:717a973d060b04de847af2cf401e19de38717d9f30c21edfd061018d227b2fc7
+        proof/reproducers/CRS-0044-box-expander-aliases-arrays.ts: sha256:6c1658a72fa1e75750aacd89746e69bc98b1391099948337e5487cfeb2494d60
+      known_issues:
+        - KI-322

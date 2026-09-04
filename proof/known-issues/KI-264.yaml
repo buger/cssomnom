@@ -38,6 +38,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0047/C10,add-source-claim=CRS-0047/C15
+    - at: "2026-09-04T19:43:07Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0048/C04,add-source-claim=CRS-0049/C09,add-source-claim=CRS-0049/C15
 kill_domain: angle_unit_conversion
 source_claim:
     - CRS-0026/C27
@@ -45,3 +49,6 @@ source_claim:
     - CRS-0040/C02
     - CRS-0047/C10
     - CRS-0047/C15
+    - CRS-0048/C04
+    - CRS-0049/C09
+    - CRS-0049/C15

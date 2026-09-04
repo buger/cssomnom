@@ -56,6 +56,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0038/C01
+    - at: "2026-09-04T19:43:08Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0050/C12
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -118,4 +122,6 @@ dedup_armor: |
 kill_domain: resource_exhaustion
 do_not_refile_as: KI-18 covers consumeBlockContents/consumeAtRule recursion on nested style rules and grouping at-rules; KI-22 covers math expression recursion. Both name different recursive subsystems and different defect legs than this media-condition parser crash.
 affected_file: src/MediaParser.ts
-source_claim: CRS-0038/C01
+source_claim:
+    - CRS-0038/C01
+    - CRS-0050/C12

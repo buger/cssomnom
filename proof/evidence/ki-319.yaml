@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-MN8Z
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-property-inherits-case-sensitive.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:35:07Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-319` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-property-inherits-case-sensitive.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0043-property-inherits-case-sensitive.ts
+      freshness_hashes:
+        proof/known-issues/KI-319.yaml: ki-content-v1:sha256:51c49662858121046f750490bf1060d63119c3fe410ddf3a44c9f84db172c005
+        proof/reproducers/CRS-0043-property-inherits-case-sensitive.ts: sha256:5452a335aa4f6e14d0fa8fc09e39431d5ec403bd189f1761198a840dfb9e7035
+      known_issues:
+        - KI-319

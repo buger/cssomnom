@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-YBF2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-nonlength-box-no-grammar.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:38:28Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-324` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-nonlength-box-no-grammar.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0044-nonlength-box-no-grammar.ts
+      freshness_hashes:
+        proof/known-issues/KI-324.yaml: ki-content-v1:sha256:85398cb68d1e4642f6907ae193ee24040054c5791cdb21c5813b8c31333bfae0
+        proof/reproducers/CRS-0044-nonlength-box-no-grammar.ts: sha256:5789ce5b8723f33761ae42365d0eb2f4206dac73d75fcf5c6f4334906fe4a4c7
+      known_issues:
+        - KI-324

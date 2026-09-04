@@ -30,6 +30,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-312.yaml
+    - at: "2026-09-04T19:43:08Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0050/C14
 kill_domain: consume_failure_swallowed
 do_not_refile_as: 'KI-160 and KI-289 insertRule trailing garbage: those own CSSOM insert paths, not the @scope prelude'
-source_claim: CRS-0069/C48
+source_claim:
+    - CRS-0069/C48
+    - CRS-0050/C14

@@ -26,7 +26,12 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-243.yaml
+    - at: "2026-09-04T19:43:08Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0050/C25
 kill_domain: invalid_rule_recovery
 source_claim:
     - CRS-0023/C07
     - CRS-0023/C15
+    - CRS-0050/C25

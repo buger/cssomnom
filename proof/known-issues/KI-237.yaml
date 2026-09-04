@@ -26,8 +26,15 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-237.yaml
+    - at: "2026-09-04T19:35:25Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0042/C01,add-source-claim=CRS-0042/C02,add-source-claim=CRS-0042/C10
 kill_domain: token_stream_loss
 source_claim:
     - CRS-0022/C07
     - CRS-0022/C08
     - CRS-0022/C09
+    - CRS-0042/C01
+    - CRS-0042/C02
+    - CRS-0042/C10

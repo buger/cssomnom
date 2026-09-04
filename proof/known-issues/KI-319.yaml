@@ -1,0 +1,30 @@
+id: KI-319
+title: '@property inherits keywords matched case-sensitively drop valid registrations'
+description: 'handlePropertyRule compares the serialized descriptor value with === ''true'' and === ''false''. css-values-4 keywords and css-properties-values-api inherits-descriptor grammar make the keywords ASCII case-insensitive. ''inherits: TRUE'' therefore leaves inherits null and drops a valid @property rule that browsers keep.'
+affected_requirements:
+    - SW-REQ-260822-MN8Z
+evidence_manifests:
+    - proof/evidence/ki-319.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handlePropertyRule inherits descriptor parsing (src/parser.ts)
+attacker_input: stylesheets writing the inherits descriptor with uppercase keywords; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-property-inherits-case-sensitive.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write the inherits keyword lowercase.
+remediation: Lowercase the serialized descriptor value before the true/false comparison, as the layer and supports comparisons already do.
+status: open
+history:
+    - at: "2026-09-04T19:33:43Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:07Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-319.yaml
+source_claim: CRS-0043/C07

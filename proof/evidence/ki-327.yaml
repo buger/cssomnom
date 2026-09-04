@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-YBF2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-font-oblique-angle-size.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:35:10Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-327` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-font-oblique-angle-size.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0044-font-oblique-angle-size.ts
+      freshness_hashes:
+        proof/known-issues/KI-327.yaml: ki-content-v1:sha256:17674bba3f0bd5ecc1a55fb4772aec7d417c4e5f7b74cf17c88beb47e89583f1
+        proof/reproducers/CRS-0044-font-oblique-angle-size.ts: sha256:9a37a215d18140602b35857754ce6d4dade96a3a24402d9f3bc9ff76808968bd
+      known_issues:
+        - KI-327

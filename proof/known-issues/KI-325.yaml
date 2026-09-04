@@ -1,0 +1,53 @@
+id: KI-325
+title: expandBackground expands grammar-invalid layers instead of rejecting
+description: expandBackground classifies tokens by keyword tables and only length-caps the position list at four. css-backgrounds-3 gives each layer one position, one slash size, one repeat-style, and one attachment. The expander instead accepts three or four bare lengths, bare cover, contain, or auto as position, and left right or top bottom pairs. It also joins three repeat keywords into the default repeat, keeps repeat-x beside a second keyword, joins two attachments, and lets a third value after the size slash fall into the position. Every listed form must reject the declaration.
+affected_requirements:
+    - SW-REQ-260822-YBF2
+evidence_manifests:
+    - proof/evidence/ki-325.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: expandBackground, normalizePositionTokens, parseRepeatTokens, extractSizeTokens (src/shorthands.ts); setProperty on background
+attacker_input: grammar-invalid background shorthand declarations; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-background-layer-grammar.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write each background component per its css-backgrounds-3 grammar.
+remediation: Validate the assembled position against the bg-position grammar, cap repeat and attachment counts, reject repeat-x in two-value forms, and reject leftover tokens after the slash size.
+status: open
+history:
+    - at: "2026-09-04T19:34:36Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:35:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-325.yaml
+    - at: "2026-09-04T19:38:20Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-description
+    - at: "2026-09-04T19:38:29Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-325.yaml
+    - at: "2026-09-04T19:42:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-title
+    - at: "2026-09-04T19:42:44Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-325.yaml
+source_claim:
+    - CRS-0044/C11
+    - CRS-0044/C12
+    - CRS-0044/C13
+    - CRS-0044/C16
+    - CRS-0044/C26
+    - CRS-0044/C27
+    - CRS-0044/C30

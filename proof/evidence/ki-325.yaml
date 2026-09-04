@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-YBF2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-background-layer-grammar.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:42:44Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-325` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0044-background-layer-grammar.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0044-background-layer-grammar.ts
+      freshness_hashes:
+        proof/known-issues/KI-325.yaml: ki-content-v1:sha256:75c9d68b10c3c0b6b808177045f5fa1ff05fe04ba17254c907fcc3feb6095ab4
+        proof/reproducers/CRS-0044-background-layer-grammar.ts: sha256:77aa8e59f73f922a909eb7e81992a4f6ae87fee65f1beeb35eef7f3d2d155d86
+      known_issues:
+        - KI-325

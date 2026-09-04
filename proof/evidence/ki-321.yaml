@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-MN8Z
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-urange-seven-digit-reencode.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:38:28Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-321` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0043-urange-seven-digit-reencode.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0043-urange-seven-digit-reencode.ts
+      freshness_hashes:
+        proof/known-issues/KI-321.yaml: ki-content-v1:sha256:5341c519cacf5061db4a7395f71b1f065f3bc8799e78e4bc04299f7799850d66
+        proof/reproducers/CRS-0043-urange-seven-digit-reencode.ts: sha256:b10c3ac0e7782a8ad46c72190837a00c35e1d72281af278f511487b2d9aba431
+      known_issues:
+        - KI-321
