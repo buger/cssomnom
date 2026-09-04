@@ -1,0 +1,61 @@
+id: KI-153
+title: DOMMatrix transform methods pre-multiply instead of post-multiplying
+description: 'translateSelf, scaleSelf, rotateSelf, rotateAxisAngleSelf, skewXSelf and skewYSelf apply their transform on the left of the stored matrix (src/DOMMatrix.ts:606-808). multiplySelf and preMultiplySelf implement each other''s contract. flipX and flipY negate the wrong stored column set. geometry-1 #mutable-transformation-methods requires post-multiplication for every transform and swaps the two multiply methods. The spec example scaleSelf(2); translateSelf(20,20) must yield matrix(2, 0, 0, 2, 40, 40); this build yields matrix(2, 0, 0, 2, 20, 20).'
+affected_requirements:
+    - INT-REQ-260821-JTY2
+evidence_manifests:
+    - proof/evidence/ki-153.yaml
+severity: high
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: DOMMatrix.multiplySelf, preMultiplySelf, translateSelf, scaleSelf, rotateSelf, skewXSelf, skewYSelf, flipX, flipY
+attacker_input: geometry call sequences from callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-premultiply-convention.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Compose transforms with the immutable methods and verify the spec examples before relying on this build's matrix composition.
+remediation: Post-multiply every transform in the mutable methods, swap the multiplySelf and preMultiplySelf operand order, and negate m11/m12 for flipX and m21/m22 for flipY.
+owner: maintainer:conformance_owner
+review_date: "2026-09-03"
+status: reviewed
+history:
+    - at: "2026-09-03T21:15:13Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-153.yaml
+    - at: "2026-09-03T21:21:23Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-owner
+    - at: "2026-09-03T21:22:04Z"
+      by: human:Leonid Bugaev
+      action: review
+      detail: reviewer=agent:adjudicator,new_review_date=2026-09-03
+    - at: "2026-09-03T21:22:05Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-153.yaml
+    - at: "2026-09-04T10:41:09Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-cve-surface=none
+    - at: "2026-09-04T10:41:20Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-153.yaml
+source_claim:
+    - CRS-0005/C07
+    - CRS-0005/C08
+    - CRS-0005/C09
+    - CRS-0005/C10
+    - CRS-0005/C11
+    - CRS-0005/C12
+    - CRS-0005/C13
+    - CRS-0005/C14
+    - CRS-0005/C15

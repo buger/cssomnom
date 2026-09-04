@@ -1,0 +1,30 @@
+id: KI-241
+title: consumeQualifiedRule ignores the nested flag for custom-property preludes
+description: 'The ''{'' arm of consumeQualifiedRule runs the consume-a-block path for every custom-property-shaped prelude and returns null (src/parser.ts:932-936). css-syntax-3 consume-a-qualified-rule requires the remnants of a bad declaration when nested is true, so the whole construct is swallowed through its ending semicolon. consumeRule(true) on ''--foo: { a: b } .bar { color: blue; }'' leaves ''.bar'' in the stream, and a caller loop then parses it as a fresh valid rule.'
+affected_requirements:
+    - SW-REQ-260821-9KNX
+evidence_manifests:
+    - proof/evidence/ki-241.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: Parser.consumeRule(nested=true) qualified-rule custom-property arm (src/parser.ts consumeQualifiedRule)
+attacker_input: rule text whose prelude is a dashed ident followed by a colon and a block; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-nested-custom-prop-block.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Drive nested parsing through consumeBlockContents rather than consumeRule(true) on custom-property-shaped input.
+remediation: Branch on the nested flag in consumeQualifiedRule and run consumeRemnantsOfABadDeclaration with nested true.
+status: open
+history:
+    - at: "2026-09-03T22:59:05Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:21Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-241.yaml
+kill_domain: invalid_rule_recovery
+source_claim: CRS-0023/C01

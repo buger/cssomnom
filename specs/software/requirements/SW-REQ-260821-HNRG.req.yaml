@@ -102,3 +102,12 @@ lifecycle:
           to: verification=failing
           reason: auto-derived [not_started→failing] signals=6; review_record:REVIEW-25=present | review_record:REVIEW-31=present | review_record:REVIEW-33=present | evidence_profile:ki-105=failing | known_issue:KI-1=none | known_issue:KI-105=failing
           changed_by: agent:auto-derive
+defect_review:
+    reviewed_at: "2026-09-03T21:43:19Z"
+    session: CRS-0028
+    fingerprint_sha: sha256:a84d1c484165ec24b1b141e3b425762aede3e8a541e1191149c3f13224ff4a6d
+    via: cli-session
+    counts:
+        emitted: 40
+        verified: 21
+        dismissed: 19

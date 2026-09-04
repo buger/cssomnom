@@ -1,0 +1,42 @@
+id: KI-194
+title: Parser API drops unknown at-rule block contents into an empty body
+description: 'The token-stream fallback in consumeAtRule constructs CSSAtRule with the block only and leaves childRules unset. cssomAtRuleFromFields then computes the body as `cssRules ?? []` and never walks at.block. parseStylesheetSync(''@foo { bar: baz; }'') serializes as ''@foo{}'' and nested qualified rules vanish the same way. css-syntax-3 #consume-an-at-rule retains unknown at-rules in full, and the #serialization round-trip requirement plus INT-REQ-260821-WTPD forbid the loss. The block text survives in CSSAtRule.cssText, so re-parsing cssText recovers the content.'
+affected_requirements:
+    - INT-REQ-260821-WTPD
+evidence_manifests:
+    - proof/evidence/ki-194.yaml
+severity: medium
+severity_basis: risk
+risk: data_integrity
+cve_surface: none
+affected_api: parseStylesheetSync/toParserRule -> cssomAtRuleFromFields CSSAtRule arm (src/parser-api.ts, src/parser.ts consumeAtRule)
+attacker_input: ordinary stylesheet text with unrecognized at-rule names carrying a block; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-unknown-atrule-block-dropped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Re-parse the at-rule cssText or use options.atRules to type the rule until the adapter walks the block.
+remediation: Populate childRules in the token-stream fallback exactly as the stream path does, and fall back to mapping at.block.value in cssomAtRuleFromFields.
+status: open
+history:
+    - at: "2026-09-03T22:14:12Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0029/C05
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C03
+    - at: "2026-09-04T10:40:03Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-194.yaml
+do_not_refile_as: KI-126 covers the parse()/cascade visibility of CSSAtRule.childRules, not the Parser API body
+source_claim:
+    - CRS-0068/C09
+    - CRS-0029/C05
+    - CRS-0030/C03

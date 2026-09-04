@@ -1,0 +1,30 @@
+id: CRS-0048
+spec_reqids:
+    - SW-REQ-260824-CAHE
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260824-CAHE
+      dir: .proof/defect-sessions/CRS-0048/cells/SW-REQ-260824-CAHE
+      status: complete
+      attempts: 1
+      elapsed_secs: 717.471791089
+      artifact_hashes:
+        deliverable.md: sha256:7d6ec378864df60dd2271b767c119c9bc15a14bf4fc9c362784c320eac42705b
+        ledger.jsonl: sha256:39a15b576a86bd04e77c433a8436b823b93fef33d215caf7d4261bdfd11de512
+        reviewed-list.txt: sha256:003de8d47530e0825ba2ef9d7d843c57f0b075cb8fe14b85c5477523f2860746
+input_fingerprint:
+    spec_yaml_sha: sha256:cbb21d76abbd870a14afcd350f6b1953735a2100e0fb10ce24d971903367eb2b
+    code_fingerprints:
+        src/cascade/color-resolver.ts: sha256:1664634565f01527c5d01b29a5137d15778f96cae221300adf5bfee14e6f7d36
+    claims_sha: sha256:e123b3798aa691cce3f657cf9ffc62dad0f58e87135617c053d9d607eef27a63
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 98267
+    output_tokens: 39957
+    cost_usd: 0.10689396
+    wall_secs: 717.471791089
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T22:38:57Z"

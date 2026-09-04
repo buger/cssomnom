@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-7521
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-scope-prelude-trailing-junk.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:06:06Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-312` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-scope-prelude-trailing-junk.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0069-scope-prelude-trailing-junk.ts
+      freshness_hashes:
+        proof/known-issues/KI-312.yaml: ki-content-v1:sha256:f809f28f389a77cf0dce40ead825da3d9a3bf243d7bd160bcf8fddc55eaa1269
+        proof/reproducers/CRS-0069-scope-prelude-trailing-junk.ts: sha256:b4594342bf7d9aad69d283e392cd3a43fef2f96bff13c75cbc93a9fb0ea4d111
+      known_issues:
+        - KI-312

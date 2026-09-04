@@ -1,0 +1,35 @@
+id: KI-251
+title: CSSUnitValue constructor stores NaN and Infinity instead of throwing TypeError
+description: The CSSUnitValue constructor assigns value without a finite check. css-typed-om-1 IDL types the constructor argument and the value attribute as plain double. WebIDL double conversion throws TypeError for NaN, +Infinity and -Infinity. new CSSUnitValue(NaN,'px') succeeds and toString() serializes calc(nan * 1px).
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-251.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSUnitValue constructor (src/typed-om/numeric/CSSUnitValue.ts)
+attacker_input: non-finite numbers passed to the constructor; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-unitvalue-nan-infinity.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate finiteness before constructing unit values.
+remediation: Throw TypeError when Number.isFinite(value) is false, matching WebIDL double conversion.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:24Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-251.yaml
+kill_domain: idl_type_conversion
+do_not_refile_as: 'browser-entry CSS.px factories skipping ToNumber (KI-200): different entry point, same WebIDL family'
+source_claim: CRS-0025/C07

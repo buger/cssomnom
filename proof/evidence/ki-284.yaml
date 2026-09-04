@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PD6M
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-register-name-key-aliasing.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:38Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-284` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-register-name-key-aliasing.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0032-register-name-key-aliasing.ts
+      freshness_hashes:
+        proof/known-issues/KI-284.yaml: ki-content-v1:sha256:3ae03a4ff90a3f0ada637fd90e429e76b4d63acedcd996414a327278ecfbcce6
+        proof/reproducers/CRS-0032-register-name-key-aliasing.ts: sha256:62ea90ebd66919d06db0ffbd732be7246fad18fd2cb957857ef365cd6fc91d23
+      known_issues:
+        - KI-284

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-WTPD
+      command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-atrule-descriptor-body-dropped.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:03Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-193` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-atrule-descriptor-body-dropped.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0068-atrule-descriptor-body-dropped.ts
+      freshness_hashes:
+        proof/known-issues/KI-193.yaml: ki-content-v1:sha256:8fbc3b26b6a5a7c92d1e9ac6c57530ae0de5bd77126f19bb5bfc558e1b826008
+        proof/reproducers/CRS-0068-atrule-descriptor-body-dropped.ts: sha256:be76490986f188e9fc18a8b81fd72abbd6e083cf73cd7155e984a83da05bd5b8
+      known_issues:
+        - KI-193

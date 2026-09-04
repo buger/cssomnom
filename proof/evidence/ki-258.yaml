@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-FWNH
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-revert-rule-same-rule-fallthrough.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:27Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-258` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-revert-rule-same-rule-fallthrough.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0026-revert-rule-same-rule-fallthrough.ts
+      freshness_hashes:
+        proof/known-issues/KI-258.yaml: ki-content-v1:sha256:3fa1fde6f73556a1e774bc7714b72756e0b6284854890dd4713c9b9bafd6bcc1
+        proof/reproducers/CRS-0026-revert-rule-same-rule-fallthrough.ts: sha256:7276acd189caaf3b7e650e708d1af62a6b772960e92c119c99a77659536db639
+      known_issues:
+        - KI-258

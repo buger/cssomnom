@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-JTY2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-fromfloat-arity-layout.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:11Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-155` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-fromfloat-arity-layout.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0005-fromfloat-arity-layout.ts
+      freshness_hashes:
+        proof/known-issues/KI-155.yaml: ki-content-v1:sha256:3d91daf8cc6a7a7f304bee21d10930e61ce117b20b94b0e78df0f2c251a0b306
+        proof/reproducers/CRS-0005-fromfloat-arity-layout.ts: sha256:c9e7250298d7352667495a8a7bfcec1fa591ca1b1d1c7a39afe15fda820a8cf6
+      known_issues:
+        - KI-155

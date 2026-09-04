@@ -1,0 +1,29 @@
+id: KI-151
+title: Upright forced-LTR logical mapping disagrees with the computed-style logical accessor
+description: getCascadedStyle forces the mapping direction to ltr under text-orientation:upright and vertical writing modes (src/cascade/index.ts:243-245), which matches the used-value rule in css-writing-modes-3. CSSComputedStyleDeclaration.getPropertyValue then re-resolves logical names with the computed direction rtl (src/cascade/computed-style.ts:145-152). The accessor looks up margin-bottom while the emitted physical declaration is margin-top, so getPropertyValue('margin-inline-start') returns the empty string for a declared 1px value.
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-151.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: getCascadedStyle / CSSComputedStyleDeclaration.getPropertyValue logical property resolution
+attacker_input: stylesheets combining text-orientation:upright with direction:rtl and logical properties; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-upright-logical-accessor.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read the physical twin (margin-top) instead of the logical name while upright overrides the used direction.
+remediation: Share one mapping context between the emitted physical names and the accessor, or return the stored logical declaration value before re-resolving physical twins.
+status: open
+history:
+    - at: "2026-09-03T21:14:59Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-151.yaml
+source_claim: CRS-0004/C16

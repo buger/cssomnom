@@ -1,0 +1,51 @@
+id: KI-213
+title: Indexed rule lists resolve non-canonical keys like "" and hide indices from in/keys
+description: createIndexedProxy, createStyleProxy, and the CSSKeyframesRule proxy test Number(prop) truthiness instead of WebIDL canonical numeric indices (src/utils.ts:32, src/CSSStyleDeclaration.ts:34, src/CSSOM.ts:1187). Keys '', ' ', '0x0', '0.0' therefore resolve rules. The proxies define only a get trap, so 0 in cssRules is false and Object.keys leaks internals instead of index names.
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-213.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSRuleList / MediaList / StyleSheetList / CSSStyleDeclaration / CSSKeyframesRule indexed access
+attacker_input: caller-supplied property keys on list objects; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-indexed-proxy-webidl-divergence.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Access list members through item(), index numbers, or canonical decimal strings only.
+remediation: Gate indexed getters on the canonical numeric index test (String(ToUint32(p)) === p) and add has/ownKeys traps that expose real indices.
+status: open
+history:
+    - at: "2026-09-03T22:41:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C09,add-source-claim=CRS-0028/C10,add-source-claim=CRS-0028/C37
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C18
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C13
+    - at: "2026-09-04T10:40:11Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-213.yaml
+source_claim:
+    - CRS-0019/C09
+    - CRS-0019/C10
+    - CRS-0019/C11
+    - CRS-0019/C20
+    - CRS-0028/C09
+    - CRS-0028/C10
+    - CRS-0028/C37
+    - CRS-0031/C18
+    - CRS-0035/C13

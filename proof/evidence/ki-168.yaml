@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-translate-comma-arity-bypass.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:32Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-168` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-translate-comma-arity-bypass.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0003-translate-comma-arity-bypass.ts
+      freshness_hashes:
+        proof/known-issues/KI-168.yaml: ki-content-v1:sha256:21ea2ae2e6917000d81c80ae78f71cc2e49eeae02e1168adf4a7e3b390862049
+        proof/reproducers/CRS-0003-translate-comma-arity-bypass.ts: sha256:685f5639fb81ee798be2fab6d50fbb1296e3f37de4cafb3bb4d77693bff48a5e
+      known_issues:
+        - KI-168

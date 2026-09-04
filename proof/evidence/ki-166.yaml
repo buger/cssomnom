@@ -1,0 +1,18 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirements:
+        - INT-REQ-260821-30ZA
+        - INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-property-inherits-case.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:32Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-166` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-property-inherits-case.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0002-property-inherits-case.ts
+      freshness_hashes:
+        proof/known-issues/KI-166.yaml: ki-content-v1:sha256:ca26d4e915888e07151d77d1d1708599afc11948778514817331da7b06d9b805
+        proof/reproducers/CRS-0002-property-inherits-case.ts: sha256:88226c6a8becf0751d082532788269ca28198d2a86fdedeb9260d3dbfe880270
+      known_issues:
+        - KI-166

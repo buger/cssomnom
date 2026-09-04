@@ -1,0 +1,35 @@
+id: KI-308
+title: resolveVariables skips mixed-case VAR() and ENV() in custom properties
+description: 'The parser resolver compares function names with === ''var'' / === ''env'' (src/parser.ts:1721-1724). Custom properties keep raw author text, so uppercase spellings survive to substitution. css-values-4 4.1 #keywords makes function names ASCII case-insensitive. Parser.resolveVariables returns the literal reference instead of the substituted value.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-308.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: 'Parser.resolveVariables / #resolveOneVariable (src/parser.ts)'
+attacker_input: custom property values written with mixed-case VAR() or ENV(); local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-resolve-variables-mixedcase.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write var() and env() in lowercase inside custom property values.
+remediation: Compare the lowercased function name at the resolver dispatch, mirroring validateVarFunction.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:05:19Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:06:05Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-308.yaml
+kill_domain: ascii_case_insensitive_dispatch
+do_not_refile_as: 'KI-109 cascade substitution gate and KI-150 cascade substring test: those pin src/cascade; this KI pins the parser resolver'
+source_claim: CRS-0069/C29

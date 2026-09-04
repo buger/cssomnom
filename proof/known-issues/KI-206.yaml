@@ -1,0 +1,41 @@
+id: KI-206
+title: CSS.supports returns true for any value of the five -webkit-box properties that lack a grammar row
+description: evaluateSupportsDeclaration ends in an unconditional return true (src/parser-api.ts:681). The arm fires when a property sits in SUPPORTED_PROPERTIES but not in STANDARD_PROPERTIES_SYNTAX or SHORTHANDS. Five legacy -webkit-box properties fill that gap. CSS.supports('-webkit-box-align', 'definitely-not-a-valid-value') therefore returns true. css-conditional-3 requires a known property and a value that matches its grammar.
+affected_requirements:
+    - SW-REQ-260821-2Z0N
+evidence_manifests:
+    - proof/evidence/ki-206.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: CSS.supports two-argument form via evaluateSupportsDeclaration (src/parser-api.ts L655-682)
+attacker_input: property and value strings naming a syntax-less property; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-supports-unknown-syntax-true.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject values for those five properties at the call site until the grammar tables cover them.
+remediation: Return false when the property has no grammar row, and extend the generated syntax table for the legacy -webkit-box aliases.
+status: open
+history:
+    - at: "2026-09-03T22:19:46Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:53Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0015/C09
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C19
+    - at: "2026-09-04T10:40:08Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-206.yaml
+kill_domain: data_table_gap
+source_claim:
+    - CRS-0014/C13
+    - CRS-0015/C09
+    - CRS-0030/C19

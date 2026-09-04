@@ -1,0 +1,37 @@
+id: KI-165
+title: Counter-style and view-transition descriptor names compared case-sensitively
+description: 'CSSCounterStyleRule and CSSViewTransitionRule constructors compare declaration names verbatim. CSS declaration names are identifiers matched ASCII case-insensitively, and handlePropertyRule in the same parser already lowercases descriptor names. SYSTEM: cyclic and Navigation: auto leave the getters on defaults while cssText still shows the declarations.'
+affected_requirements:
+    - INT-REQ-260821-30ZA
+evidence_manifests:
+    - proof/evidence/ki-165.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSCounterStyleRule / CSSViewTransitionRule constructors (src/CSSOM.ts)
+attacker_input: stylesheet text with mixed-case descriptor names; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-descriptor-name-case.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write descriptor names in lowercase until the constructors lowercase before matching.
+remediation: Compare d.name.toLowerCase() against the descriptor names in both constructors.
+status: open
+history:
+    - at: "2026-09-03T21:27:10Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:31Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-165.yaml
+    - at: "2026-09-03T22:03:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0008/C23
+source_claim:
+    - CRS-0002/C16
+    - CRS-0002/C17
+    - CRS-0008/C23

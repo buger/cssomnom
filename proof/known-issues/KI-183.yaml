@@ -1,0 +1,40 @@
+id: KI-183
+title: AT_RULE_HANDLERS.import keeps a blockful @import and discards the block
+description: 'AT_RULE_HANDLERS.import drops the block parameter (src/parser.ts:75). consumeAtRule consumes the style block and still calls the handler (src/parser.ts:385-390). handleImportRule never inspects a block and always constructs a CSSImportRule (src/parser.ts:836). css-cascade-5 #at-import defines @import as a semicolon-terminated statement without a block form. css-syntax-3 #consume-at-rule returns nothing when the rule is invalid in the current context, so the blockful import must be dropped.'
+affected_requirements:
+    - INT-REQ-260821-N2VE
+evidence_manifests:
+    - proof/evidence/ki-183.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: handleImportRule via consumeAtRule block dispatch
+attacker_input: stylesheet text with '@import <url> { ... }'; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-import-block-kept.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Terminate every @import with a semicolon until the handler rejects block forms.
+remediation: Make the import handler return null when consumeAtRule passes a block, matching the statement-only @import grammar.
+status: open
+history:
+    - at: "2026-09-03T21:53:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:57:29Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-183.yaml
+    - at: "2026-09-03T23:25:33Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C05
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C15
+source_claim:
+    - CRS-0007/C22
+    - CRS-0027/C05
+    - CRS-0041/C15

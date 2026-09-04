@@ -82,3 +82,10 @@ lifecycle:
           to: review
           reason: '[agent:champ] variable model cleanup batch: sector and arity guarantees mirror reviewed siblings SYS-REQ-260822-CFRA and SW-REQ-260822-1REE with test witnesses cited in rationale'
           changed_by: human:Leonid Bugaev
+defect_review:
+    reviewed_at: "2026-09-03T22:36:39Z"
+    session: CRS-0047
+    fingerprint_sha: sha256:e9ee11a078dd0cc0772a303a1f9ef7675b605676faa0d5aa0bce6e7b4b105f86
+    via: cli-session
+    counts:
+        emitted: 25

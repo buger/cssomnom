@@ -1,0 +1,42 @@
+id: KI-199
+title: 'browser-entry wrappers break WebIDL interface-object contract: arity 0, constructible abstracts, copied statics'
+description: wrapConstructor reads arity from an expectedLengths table and defaults missing keys to zero (src/browser-entry.ts:93). WebIDL 3.10.1 sets interface-object length to the count of required arguments. CSSUnitValue reports 0 instead of 2 and CSSMathClamp reports 0 instead of 3. The Wrapper also constructs interfaces that carry no IDL constructor, so new CSSStyleValue() succeeds instead of throwing. copyStaticMethods copies ancestor static operations onto every child Wrapper as own properties. Native WebIDL keeps parse and parseAll on the declaring interface object only.
+affected_requirements:
+    - SW-REQ-260821-1E5K
+evidence_manifests:
+    - proof/evidence/ki-199.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: src/browser-entry.ts wrapConstructor (expectedLengths, Wrapper, copyStaticMethods) installed on window by the IIFE bundle
+attacker_input: browser bundle consumers probing constructor length, constructing abstract interfaces, or enumerating constructor own properties; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-wrapper-webidl-fidelity.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read arity from the WebIDL table per class and add an illegal-constructor guard for interfaces without constructors.
+remediation: Complete expectedLengths, fall back to OriginalClass.length instead of zero, reject construction of no-constructor interfaces, and stop copying ancestor statics.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0016/C01,add-source-claim=CRS-0016/C02,add-source-claim=CRS-0016/C03,add-source-claim=CRS-0016/C24
+    - at: "2026-09-04T10:40:05Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-199.yaml
+kill_domain: idl_surface_fidelity
+source_claim:
+    - CRS-0013/C01
+    - CRS-0013/C02
+    - CRS-0013/C03
+    - CRS-0013/C19
+    - CRS-0016/C01
+    - CRS-0016/C02
+    - CRS-0016/C03
+    - CRS-0016/C24

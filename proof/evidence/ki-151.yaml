@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-HJVC
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-upright-logical-accessor.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:10Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-151` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-upright-logical-accessor.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0004-upright-logical-accessor.ts
+      freshness_hashes:
+        proof/known-issues/KI-151.yaml: ki-content-v1:sha256:5311cafdf46f05a2d43ec9712d574b9dac818e4e6a4142ba2ce157754a28f526
+        proof/reproducers/CRS-0004-upright-logical-accessor.ts: sha256:18f8c916679154e4b0e07632078a98a8ce2d657b0250b66826fb4c1a1e3d3619
+      known_issues:
+        - KI-151

@@ -1,0 +1,37 @@
+id: KI-297
+title: Declared-known -webkit and ua-color-scheme media features never evaluate
+description: The generated media-features table lists -webkit-device-pixel-ratio in KNOWN_FEATURES and RANGE_FEATURES, -webkit-transform-3d as integer, and ua-color-scheme and shape with allowed idents. evaluateMediaFeature has no case for those names in getActualNumeric, parseValueForFeature or the discrete-ident switch (src/MediaParser.ts:1210-1246,1292-1378). MediaParser.parse accepts the queries as media features and evaluate then returns unknown, so they never match. MediaEnvironment carries uaColorScheme and resolution, so the environment can answer.
+affected_requirements:
+    - SW-REQ-260821-W8S1
+evidence_manifests:
+    - proof/evidence/ki-297.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: MediaParser.evaluateMediaFeature feature mapping (src/MediaParser.ts)
+attacker_input: caller-supplied media query text using the declared -webkit or ua-color-scheme features; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-unevaluated-known-features.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on -webkit-device-pixel-ratio or ua-color-scheme queries; use resolution and prefers-color-scheme.
+remediation: Map -webkit-device-pixel-ratio onto env.resolution in dppx, -webkit-transform-3d onto a capability value, and read env.uaColorScheme in the ident switch.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:43Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-297.yaml
+kill_domain: known_feature_evaluation_gap
+do_not_refile_as: 'viewport-segments legs (KI-136): that KI owns the two viewport-segments features of the same mechanism'
+source_claim:
+    - CRS-0037/C04
+    - CRS-0037/C05

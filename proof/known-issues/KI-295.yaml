@@ -1,0 +1,34 @@
+id: KI-295
+title: matchesSyntax counts insignificant tokens, so supports() rejects valid values
+description: 'matchesSyntax hands its raw component-value list to checkItem, which requires exactly one token (src/PropertyRegistry.ts:203). Whitespace and comments are insignificant in declaration values, so ''1 /*c*/'' must match ''<integer>''. parser-api passes the unfiltered list to matchesSyntax (src/parser-api.ts:677), so CSS.supports(''z-index'', ''1 /*c*/'') returns false. css-conditional-3 #the-css-namespace rules make comments insignificant in supported declaration values.'
+affected_requirements:
+    - SW-REQ-260821-V5GA
+evidence_manifests:
+    - proof/evidence/ki-295.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.matchesSyntax reached from CSS.supports (src/parser-api.ts)
+attacker_input: declaration values carrying comments passed to CSS.supports; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-matches-syntax-insignificant-tokens.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Strip comments from values passed to CSS.supports until the matcher skips insignificant tokens.
+remediation: Filter whitespace and comment component values inside matchesSyntax before matching, as validate() already does at src/PropertyRegistry.ts:328.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:37Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:42Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-295.yaml
+kill_domain: insignificant_token_matching
+source_claim: CRS-0036/C22

@@ -1,0 +1,30 @@
+id: KI-233
+title: isInsideFirstLegend requires legend.contains and disables legend children without it
+description: 'isInsideFirstLegend computes containment only through legend.contains?.(element) (src/matcher.ts:847-849). The exported DOMElement type marks contains optional, and the focus-within path already falls back to a parent-chain walk. A host DOM without contains returns false, so html #concept-fe-disabled marks inputs inside the first legend of a disabled fieldset as disabled. Residual edge of the fixed KI-10.'
+affected_requirements:
+    - SW-REQ-260821-6D9T
+evidence_manifests:
+    - proof/evidence/ki-233.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: isInsideFirstLegend / :disabled matching (src/matcher.ts)
+attacker_input: duck-typed DOM trees whose nodes omit Node.contains; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-first-legend-contains-required.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Provide contains on DOM nodes, or avoid :disabled against contains-less trees.
+remediation: Walk parentElement/parentNode from the element up to the legend when contains is absent, mirroring the focus-within fallback.
+status: open
+history:
+    - at: "2026-09-03T22:42:05Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:18Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-233.yaml
+source_claim: CRS-0020/C28

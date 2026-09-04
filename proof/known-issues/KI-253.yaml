@@ -1,0 +1,34 @@
+id: KI-253
+title: CSSUnitValue.to returns the same object for identity conversions, enabling aliasing
+description: 'CSSUnitValue.to returns this when the target unit equals the stored unit. css-typed-om-1 #convert-a-cssunitvalue step 3 returns a new CSSUnitValue on every call. value is a public writable field. Mutating an identity-conversion result therefore mutates the original value.'
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-253.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSUnitValue.to identity path (src/typed-om/numeric/CSSUnitValue.ts)
+attacker_input: callers that mutate to() results; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-to-identity-aliasing.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Copy unit values before mutating results of to().
+remediation: Allocate a new CSSUnitValue for the identity conversion instead of returning this.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:56Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-253.yaml
+kill_domain: value_aliasing
+source_claim: CRS-0025/C06

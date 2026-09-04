@@ -4916,3 +4916,10 @@ Goal: reduce requirement-side mcdc_coverage debt (56 stale witness lines; 55 req
 - [ ] Disposition waves (subagents, max 2 parallel, flock-serialized KI filing): CRS-0002..CRS-0067 (~1,900 claims). Doctrine: /tmp/opencode/disposition-doctrine.md
 - [ ] Final audit: defect_review_current green (67/67 claim-reviewed)
 - [ ] Publish baseline + record in wpt-progress if relevant
+
+### Defect-review campaign status (2026-09-04)
+- Dispatch: 69 sessions complete (68 grok @ $13.19 + 1 route-B agent-review @ $0 after grok credits ran out), 0 failures
+- Adjudicated: CRS-0001..0041 + CRS-0068 + CRS-0069 — ~1,083 claims: 534 verified / 549 dismissed / 0 deferred
+- KI ledger: 178 new campaign KIs (KI-135..KI-312) + 113 source_claim links onto existing KIs; known-issue check clean; all evidence captured (red-reproducer polarity)
+- Remaining: CRS-0042..CRS-0067 (26 sessions) adjudication waves in flight
+- Upstream fixes from campaign: reqproof PR #1127 (surgical stamp writes) + PR #1128 (governance-tree annotation skip)

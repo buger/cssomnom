@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-5W6X
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0018-import-nested-in-grouping-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:09Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-210` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0018-import-nested-in-grouping-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0018-import-nested-in-grouping-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-210.yaml: ki-content-v1:sha256:4bab5aa0310fd2c24bb70d43bf15b43cc1af60d6674ce1a5fe26067f9ffa7b7a
+        proof/reproducers/CRS-0018-import-nested-in-grouping-rule.ts: sha256:f23fc468bcbe6be47e08d6bcf621adfb1463564166619a36f60506dfd11085ed
+      known_issues:
+        - KI-210

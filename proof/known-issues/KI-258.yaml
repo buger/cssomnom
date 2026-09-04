@@ -1,0 +1,34 @@
+id: KI-258
+title: revert-rule falls through to the same rule's shorthand expansion instead of unsetting
+description: 'processStandardDeclarations treats revert-rule as a plain continue. css-cascade-5 #revert-rule-keyword computes the value as if the whole style rule were absent. The continue lands on longhands the SAME rule contributed through a shorthand. margin-block plus margin-top: revert-rule in one rule returns 10px instead of the initial value.'
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-258.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: processStandardDeclarations revert-rule handling (src/cascade/value-processor.ts)
+attacker_input: style rules combining shorthands with revert-rule longhands; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-revert-rule-same-rule-fallthrough.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not pair revert-rule with a shorthand inside the same style rule.
+remediation: Tag matched declarations with their originating rule and skip every declaration of that rule for revert-rule.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:40Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:27Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-258.yaml
+kill_domain: cascade_keyword_rollback
+source_claim: CRS-0026/C29

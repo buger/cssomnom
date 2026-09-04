@@ -58,6 +58,14 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C24
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C21
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -84,3 +92,7 @@ poc_quality:
         reachability_verified: public CSSOM IS the product surface; nothing stands between a host and normalizeKeyframeSelector.
 kill_domain: input_validation_bypass
 do_not_refile_as: KI-101 child-rule link attachment; KI-103 appendRule trailing garbage; KI-104 forbidden animation declarations - all different contracts; this is the SETTER selector grammar using JS coercion instead of the grammar
+source_claim:
+    - CRS-0002/C09
+    - CRS-0028/C24
+    - CRS-0031/C21

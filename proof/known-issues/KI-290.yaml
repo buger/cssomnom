@@ -1,0 +1,34 @@
+id: KI-290
+title: CSSContainerRule stores a style() query fragment as the container name
+description: 'The CSSContainerRule constructor splits an unnamed container query on the first space when the text lacks a parenthesized opener. css-containers-2 #container-rule types the optional name as a custom-ident before the query. A style(...) or scroll-state(...) query therefore lands in containerName as the fragment before the first inner space, here ''style(color:''. The rule reports a name that is not an identifier and splits one function across two attributes.'
+affected_requirements:
+    - SW-REQ-260821-TF5T
+evidence_manifests:
+    - proof/evidence/ki-290.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSContainerRule constructor containerName/containerQuery split (src/CSSOM.ts)
+attacker_input: 'stylesheet text with a function-token container query such as @container style(color: red); local library input'
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0035-container-style-query-misread-as-name.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read conditionText instead of containerName for style() and scroll-state() queries.
+remediation: Tokenize the prelude and store a name only when a leading custom-ident precedes the query.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:45:48Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:40Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-290.yaml
+kill_domain: prelude_string_splitting
+source_claim: CRS-0035/C08

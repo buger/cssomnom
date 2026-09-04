@@ -1,0 +1,35 @@
+id: KI-140
+title: Boolean min-/max- features stay general-enclosed instead of invalidating the query
+description: 'mediaqueries-4 #mq-min-max states that evaluating a min- or max-prefixed feature in boolean context is invalid and a syntax error. validateMediaInParens skips the media-feature arm for these names and parseRangeContext returns null, so (min-width) becomes general-enclosed (src/MediaParser.ts:524-551). The query stays valid, serializes as (min-width), and (color) or (min-width) evaluates true instead of false.'
+affected_requirements:
+    - SW-REQ-260822-QKE9
+evidence_manifests:
+    - proof/evidence/ki-140.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: MediaParser.parse media condition validation
+attacker_input: caller-supplied media query text with bare min-/max- features; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-boolean-minmax-syntax-error.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Authors can write (min-width: 0) instead of (min-width) until validation rejects the boolean form.'
+remediation: Mark a lone min-/max- feature name whose base feature is known as invalid in validateMediaInParens so normalizeAndValidate returns the not-all query.
+status: open
+history:
+    - at: "2026-09-03T20:30:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:43:26Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-140.yaml
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C19
+source_claim:
+    - CRS-0001/C10
+    - CRS-0037/C19

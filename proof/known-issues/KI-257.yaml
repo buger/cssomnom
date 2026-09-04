@@ -1,0 +1,36 @@
+id: KI-257
+title: revert-layer !important skips every weaker important layer and falls off the array
+description: 'The revert-layer rollback skips while the candidate layerOrder is greater than or equal to the winner''s. css-cascade-5 #revert-layer rolls back to the value from the previous cascade layer. Important declarations reverse the layer order, so the next candidate carries a HIGHER layerOrder. The loop discards every weaker important layer and returns the UA or parent value. Standard and custom properties both lose layer b''s red.'
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-257.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: processStandardDeclarations / resolveCustomProperties revert-layer rollback (src/cascade)
+attacker_input: stylesheets combining revert-layer with !important across layers; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-revert-layer-important-skip.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid revert-layer inside important declarations until the direction is fixed.
+remediation: Invert the layerOrder comparison for important declarations so the rollback walks toward weaker important layers.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:40Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:27Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-257.yaml
+kill_domain: cascade_keyword_rollback
+source_claim:
+    - CRS-0026/C05
+    - CRS-0026/C06

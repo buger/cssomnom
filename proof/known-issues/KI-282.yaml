@@ -1,0 +1,39 @@
+id: KI-282
+title: VALID_COMPONENTS lists <flex>, so the unsupported <flex> syntax string registers
+description: 'css-properties-values-api #supported-names closes the supported syntax component names without <flex>. consumeSyntaxComponent accepts the name because VALID_COMPONENTS contains ''flex''. CSS.registerProperty({syntax:''<flex>'', initialValue:''calc(0)''}) therefore registers, since checkItem accepts every math function for flex.'
+affected_requirements:
+    - SW-REQ-260821-PD6M
+evidence_manifests:
+    - proof/evidence/ki-282.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry VALID_COMPONENTS / consumeSyntaxComponent (src/PropertyRegistry.ts)
+attacker_input: property definitions using the <flex> syntax component; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-flex-syntax-name.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Register only names from the #supported-names list.'
+remediation: Remove 'flex' from VALID_COMPONENTS so consumeSyntaxComponent fails the data type name.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:36:58Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:37:32Z"
+      by: agent:adjudicator
+      action: edit
+      detail: do-not-refile-as
+    - at: "2026-09-04T10:40:37Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-282.yaml
+kill_domain: syntax_string_grammar_gate
+do_not_refile_as: 'matcher gaps (KI-111, KI-275+matcher KI): those cover initial-value matching, not the component-name set; matcher argument/result checks (KI-283): initial-value matching, not the component-name set'
+source_claim: CRS-0032/C10

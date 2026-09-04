@@ -1,0 +1,46 @@
+id: KI-216
+title: CSSStyleDeclaration constructor renames caller-owned Declaration objects in place
+description: addDeclarationRecursive assigns decl.name = normalizedName on the objects taken from the caller's array (src/CSSStyleDeclaration.ts:130). The constructor never copies declarations, so constructing a block renames the caller's AST nodes. Sharing one declaration array between two blocks lets the first construction change what the second observes.
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-216.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleDeclaration constructor (src/CSSStyleDeclaration.ts)
+attacker_input: caller-supplied Declaration arrays handed to the public constructor; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-constructor-mutates-caller-declarations.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass freshly parsed declarations; do not reuse AST arrays across CSSStyleDeclaration constructions.
+remediation: Normalize into a copied declaration object before storing, leaving the caller's nodes untouched.
+status: open
+history:
+    - at: "2026-09-03T22:41:25Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C11
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C04
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C07
+    - at: "2026-09-04T10:40:12Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-216.yaml
+source_claim:
+    - CRS-0019/C15
+    - CRS-0028/C11
+    - CRS-0031/C04
+    - CRS-0035/C07

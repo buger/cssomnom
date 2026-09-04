@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6D9T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-first-legend-contains-required.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:18Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-233` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-first-legend-contains-required.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0020-first-legend-contains-required.ts
+      freshness_hashes:
+        proof/known-issues/KI-233.yaml: ki-content-v1:sha256:af5a71919213d5418c09a0f5392e6ab514fa5bcc984d026731ff8f0eb01085bf
+        proof/reproducers/CRS-0020-first-legend-contains-required.ts: sha256:bd08a8e9d4f4e00adeff7593c86b170202bd8f9b49293c3d0a86b14a4579b2ca
+      known_issues:
+        - KI-233

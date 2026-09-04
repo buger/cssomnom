@@ -1,0 +1,35 @@
+id: KI-311
+title: '@custom-media with no query fabricates a rule with an empty MediaList'
+description: 'handleCustomMediaRule builds MediaList('''') when the prelude ends after the name (src/parser.ts:892-893). mediaqueries-5 2.3 #custom-mq requires the query alternative. The empty arm skips the validation the non-empty arm runs. ''@custom-media --foo;'' must be dropped like any invalid at-rule.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-311.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleCustomMediaRule empty-query arm (src/parser.ts)
+attacker_input: stylesheet text with an @custom-media prelude carrying only a name; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-custom-media-empty-query.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Always write a query list or true/false after the custom media name.
+remediation: Return null from the empty arm so the rule drops, matching the invalid-list rejection beside it.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:05:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:06:06Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-311.yaml
+kill_domain: grammar_gate_bypass
+do_not_refile_as: 'KI-173 bare ''--'' name leg: that KI owns the name check, not the missing query'
+source_claim: CRS-0069/C40

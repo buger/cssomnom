@@ -1,0 +1,38 @@
+id: KI-214
+title: parseValueSync returns the leading whitespace token as the parsed value
+description: parseValueSync calls consumeComponentValue directly with no leading-whitespace discard. css-syntax-3 5.4.8 parse-a-component-value discards whitespace before consuming the single value. parseValueSync('  red') returns a CSSParserToken serializing to a single space instead of the ident 'red'. The sibling parseComponentValueSync applies the discard and returns 'red'. css-syntax-3 5.4.8 step 2 mandates the discard for every entry point wrapping the algorithm.
+affected_requirements:
+    - SW-REQ-260821-3553
+evidence_manifests:
+    - proof/evidence/ki-214.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseValue -> parseValueSync (src/parser-api.ts L569-574)
+attacker_input: value strings with leading whitespace; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0015-parsevalue-leading-whitespace.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Trim leading whitespace before calling parseValueSync, or use parseComponentValueSync which discards it.
+remediation: Discard leading whitespace before consuming the component value in parseValueSync, matching css-syntax-3 5.4.8 step 2.
+status: open
+history:
+    - at: "2026-09-03T22:41:13Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C07
+    - at: "2026-09-04T10:40:11Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-214.yaml
+kill_domain: error_signaling
+do_not_refile_as: KI-45 covers trailing-garbage leniency of parseValueSync; this filing covers the leading-whitespace leg
+source_claim:
+    - CRS-0015/C06
+    - CRS-0030/C07

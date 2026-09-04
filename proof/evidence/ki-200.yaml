@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-1E5K
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-unit-factory-double-conversion.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:05Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-200` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-unit-factory-double-conversion.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0013-unit-factory-double-conversion.ts
+      freshness_hashes:
+        proof/known-issues/KI-200.yaml: ki-content-v1:sha256:62402ff8cdc9dd34ce58bad9deb561fadac849092c9f4dca98146c02d2cb196f
+        proof/reproducers/CRS-0013-unit-factory-double-conversion.ts: sha256:653aa0665a54f34242d3c1e334d4a42f7414a64bf312a247c24a3bd792178363
+      known_issues:
+        - KI-200

@@ -1,0 +1,33 @@
+id: KI-185
+title: StylePropertyMap var() substring checks throw spec-absent TypeErrors on quoted strings
+description: StylePropertyMap detects var() with substring tests over serialized text. append() rejects an incoming string whose characters contain var( inside a <string> token. append() also rejects a stored value with the same characters. _checkPendingSubstitution rejects longhand writes when the serialized shorthand merely contains the characters. css-typed-om-1 append steps 5 and 7 throw only for real var() references or unparsed objects. The set algorithm carries no such throw step. Quoted strings such as "var(foo)" are valid values that the map wrongly rejects.
+affected_requirements:
+    - INT-REQ-260821-WQX9
+evidence_manifests:
+    - proof/evidence/ki-185.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: StylePropertyMap.set/append/delete var() gating (src/typed-om/style-map/StylePropertyMap.ts)
+attacker_input: style values containing the characters var( inside quoted strings or urls; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0008-stylemap-var-substring.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid values whose text contains the characters var( inside quoted strings when appending.
+remediation: Detect var() on parsed component values (token-level) instead of String.includes on serialized text; drop the non-spec pending-substitution guard or scope it to real references.
+status: open
+history:
+    - at: "2026-09-03T22:02:51Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:03:22Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-185.yaml
+source_claim:
+    - CRS-0008/C05
+    - CRS-0008/C06
+    - CRS-0008/C07

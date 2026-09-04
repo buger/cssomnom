@@ -1,0 +1,35 @@
+id: KI-299
+title: Empty-parentheses media query becomes not all instead of general-enclosed
+description: 'validateMediaInParens returns null when the filtered inner token list is empty (src/MediaParser.ts:492). mediaqueries-4 #mq-syntax defines <general-enclosed> = [ ( <any-value>? ) ], where the any-value is optional, so ''()'' is a valid general-enclosed query that evaluates unknown. normalizeAndValidate instead flags the query invalid and serializeMediaQuery emits ''not all''. The same validator accepts ''func()'' as general-enclosed, so the empty form alone is rejected.'
+affected_requirements:
+    - SW-REQ-260821-W8S1
+evidence_manifests:
+    - proof/evidence/ki-299.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: MediaQueryValidator.validateMediaInParens empty-list guard (src/MediaParser.ts)
+attacker_input: caller-supplied media query text using empty parentheses; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-empty-parens-not-all.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid empty parentheses in media query text; 'func()' already round-trips.
+remediation: Return a general-enclosed node for an empty inner token list instead of null, matching the function-token arm.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:02:05Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:43Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-299.yaml
+kill_domain: general_enclosed_empty_form
+do_not_refile_as: 'unbalanced-paren invalid mapping (KI-5): that KI pins unclosed constructs, this KI pins the balanced empty form'
+source_claim: CRS-0037/C10

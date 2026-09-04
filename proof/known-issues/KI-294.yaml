@@ -1,0 +1,35 @@
+id: KI-294
+title: matchesSyntax named-color probe uses in, so constructor counts as a color
+description: The <color> arm tests membership with 'val in NAMED_COLORS' on a prototype-bearing object literal (src/PropertyRegistry.ts:230). The lowercased identifiers 'constructor' and '__proto__' collide with Object.prototype keys, so the probe passes and matchesSyntax accepts them as colors. registerProperty({syntax:'<color>', initialValue:'constructor'}) registers instead of throwing SyntaxError. register-a-custom-property step 4 must parse initialValue against the syntax definition.
+affected_requirements:
+    - SW-REQ-260821-V5GA
+evidence_manifests:
+    - proof/evidence/ki-294.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.matchesSyntax <color> arm (src/PropertyRegistry.ts)
+attacker_input: registered initial values using prototype-key names as color identifiers; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-color-ident-in-probe.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid color identifiers that collide with Object.prototype keys.
+remediation: Use Object.hasOwn(val, NAMED_COLORS) for the named-color membership test, mirroring the SYSTEM_COLORS Set.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:31Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:42Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-294.yaml
+kill_domain: prototype_key_color_probe
+do_not_refile_as: 'normalizeComputedColor prototype crash (KI-260): different file and a TypeError symptom, not silent acceptance'
+source_claim: CRS-0036/C15

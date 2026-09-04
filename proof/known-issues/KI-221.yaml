@@ -1,0 +1,34 @@
+id: KI-221
+title: consumeBlockContents skips declaration-run flushes on failed reparses and dropped at-rules
+description: 'Two arms skip the declaration-run flush that css-syntax-3 consume-block-contents mandates. The nested isDecl arm never restores the mark to reparse a failed declaration as a qualified rule, so ''color: red { x: y; }'' merges the surrounding runs instead of flushing. The at-keyword arm flushes only when the at-rule object is non-null, but the spec flushes before consuming every at-rule. ''color: red; @charset "x"; background: blue;'' therefore keeps one merged CSSNestedDeclarations where the spec emits two.'
+affected_requirements:
+    - SW-REQ-260821-39E0
+evidence_manifests:
+    - proof/evidence/ki-221.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.consumeBlockContents isDecl and at-keyword arms (src/parser.ts L1004-1073)
+attacker_input: nested rule bodies with declaration-shaped invalid rules or dropped at-rules between declarations; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0017-blockcontents-missing-flush.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat merged CSSNestedDeclarations runs around invalid constructs as expected until the flush lands.
+remediation: Restore the mark and reparse failed declarations as qualified rules, and flush decls in the at-keyword arm before consuming the at-rule, matching the spec switch.
+status: open
+history:
+    - at: "2026-09-03T22:41:38Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:14Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-221.yaml
+kill_domain: run_accounting
+do_not_refile_as: KI-181 covers bad-declaration remnants reparsed as fresh declarations; this filing covers the missing flush and reparse of block-bearing constructs
+source_claim:
+    - CRS-0017/C04
+    - CRS-0017/C05

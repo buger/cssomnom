@@ -59,6 +59,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-04T19:06:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C37
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -85,3 +89,4 @@ poc_quality:
         reachability_verified: public parser IS the product surface; nothing stands between a host and the fabrication.
 kill_domain: rule_fabrication
 do_not_refile_as: 'KI-7 styleSheet=null offline deviation (documented, excluded); KI-8 missing unquoted <url-token> branch for VALID urls (fixed): this is fabrication of rules from INVALID preludes'
+source_claim: CRS-0069/C37

@@ -1,0 +1,18 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirements:
+        - INT-REQ-260821-30ZA
+        - INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-unicode-range-number-tostring16.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:31Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-164` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-unicode-range-number-tostring16.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0002-unicode-range-number-tostring16.ts
+      freshness_hashes:
+        proof/known-issues/KI-164.yaml: ki-content-v1:sha256:812e3229de37997d943096b4fa722f1ab98c158b00e138bf3e589b85f76255ee
+        proof/reproducers/CRS-0002-unicode-range-number-tostring16.ts: sha256:3a19f28ffe31ab957b820282a6e57d1df1f1e166a255c5fdacba3bcaf794b5fe
+      known_issues:
+        - KI-164

@@ -1,0 +1,46 @@
+id: KI-182
+title: validateVarFunction accepts non-dashed var() names in retained declarations
+description: 'validateVarFunction rejects only an empty name and curly-block mixes (src/parser.ts:1887-1911). var(foo) and var(123) pass the gate. css-variables-1 #defining-custom-properties makes a custom property with an invalid var() reference invalid and requires ignoring it. The parser retains ''--x: var(foo)'' verbatim in cssText instead. The CSS.supports surface of the same grammar gap is KI-107.'
+affected_requirements:
+    - INT-REQ-260821-N2VE
+evidence_manifests:
+    - proof/evidence/ki-182.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: validateVarFunction declaration filtering (src/parser.ts)
+attacker_input: stylesheet text using var() whose first argument is not a dashed ident; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-var-nondashed-name-accepted.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write var() names as dashed idents until the gate enforces the custom-property-name grammar.
+remediation: Require isValidDashedIdent on the var() first argument in validateVarFunction and ignore custom properties carrying invalid var() references.
+status: open
+history:
+    - at: "2026-09-03T21:53:47Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:57:29Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-182.yaml
+    - at: "2026-09-03T23:25:40Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C08
+    - at: "2026-09-04T00:02:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0038/C16
+    - at: "2026-09-04T19:00:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C10,add-source-claim=CRS-0041/C30
+source_claim:
+    - CRS-0007/C13
+    - CRS-0027/C08
+    - CRS-0038/C16
+    - CRS-0041/C10
+    - CRS-0041/C30

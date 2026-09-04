@@ -1,0 +1,37 @@
+id: KI-291
+title: register validates before the duplicate check; duplicate JS register throws SyntaxError
+description: PropertyRegistry.register calls this.validate(definition) before it reads the registry (src/PropertyRegistry.ts:354-359). register-a-custom-property step 2 throws InvalidModificationError for a name already in [[registeredPropertySet]] and exits before step 3 consumes a syntax definition. A duplicate JS registration with an invalid syntax string or a missing initialValue therefore reports SyntaxError instead of InvalidModificationError.
+affected_requirements:
+    - SW-REQ-260821-V5GA
+evidence_manifests:
+    - proof/evidence/ki-291.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.register / CSS.registerProperty (src/PropertyRegistry.ts)
+attacker_input: property definition dictionaries re-registering a name with invalid syntax or without initialValue; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-duplicate-register-ime-order.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Register duplicate names with a fully valid definition; the second call still fails, only with the wrong exception name.
+remediation: Move the registry.get duplicate check immediately after the name-string check, before validate() consumes syntax and initialValue.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:00:57Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:40Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-291.yaml
+kill_domain: duplicate_register_exception_order
+do_not_refile_as: 'registry key aliasing (KI-284): that KI pins the Map key, this one pins the check order'
+source_claim:
+    - CRS-0036/C01
+    - CRS-0036/C21

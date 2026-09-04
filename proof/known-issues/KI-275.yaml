@@ -1,0 +1,35 @@
+id: KI-275
+title: CSSNamespaceRule.cssText interpolates the raw URI, emitting an unterminated url string
+description: 'cssom-1 #serialize-a-css-rule serializes the namespaceURI with serialize-a-URL, which escapes string quotes. CSSNamespaceRule.cssText interpolates the URI verbatim inside url("..."). A URI containing a double quote therefore emits @namespace url("foo"bar"); and the tokenizer reports an unterminated string plus stray tokens. The serialized rule no longer re-parses to the same namespace.'
+affected_requirements:
+    - SW-REQ-260821-PAKB
+evidence_manifests:
+    - proof/evidence/ki-275.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSNamespaceRule.cssText (src/CSSOM.ts)
+attacker_input: any parsed or constructed @namespace rule whose URI contains a double quote; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-namespace-uri-unescaped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Construct CSSNamespaceRule only with URIs free of double quotes until serialization escapes them.
+remediation: Serialize the namespaceURI with serializeString inside the url() wrapper, matching CSSImportRule.cssText.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:35:56Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:34Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-275.yaml
+kill_domain: cssom_rule_serialization
+do_not_refile_as: 'case-sensitive url() names in preludes (KI-161): different symptom, prelude matching'
+source_claim: CRS-0031/C07

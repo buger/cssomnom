@@ -1,0 +1,31 @@
+id: CRS-0010
+spec_reqids:
+    - INT-REQ-260821-ZMZR
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: INT-REQ-260821-ZMZR
+      dir: .proof/defect-sessions/CRS-0010/cells/INT-REQ-260821-ZMZR
+      status: complete
+      attempts: 1
+      elapsed_secs: 623.22422712
+      artifact_hashes:
+        deliverable.md: sha256:733e5093dc4c3266a80b1887c6a060c43d7eb72d0d448f279d3f44cd2ca5e35a
+        ledger.jsonl: sha256:a1d15d027e7e534ebe717649a620f1e4e0dc6ebba1d89eabbeccfd869a322794
+        reviewed-list.txt: sha256:27f08d9981fa023afe96e87527bcef6b0d579a7c3be2e383250bb5ab190c6906
+input_fingerprint:
+    spec_yaml_sha: sha256:3a4a7e73f75623f13813b6573644f927d4758b3e5f58d1df9e0672f789bb846e
+    code_fingerprints:
+        src/CSSOM.ts: sha256:aba23234f0cb5d9c362457e895efacb86ccd55595842205a78f3021cc15d9318
+        src/parser.ts: sha256:6c048c4a9f3a1edc0174ab9a2914b41671c85907e7fce299c7ebca1e8b7e88a4
+    claims_sha: sha256:545b0789864f6490cca43b71d81eb4a9811f4042dded836cb157cca01b1f7600
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 161805
+    output_tokens: 40873
+    cost_usd: 0.16714128
+    wall_secs: 623.22422712
+    cells_metered: 1
+created_at: "2026-09-03T20:15:59Z"
+updated_at: "2026-09-03T20:46:55Z"

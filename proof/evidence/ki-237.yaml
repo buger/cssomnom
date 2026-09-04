@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-7M07
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-urange-delim-guard.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:20Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-237` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-urange-delim-guard.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0022-urange-delim-guard.ts
+      freshness_hashes:
+        proof/known-issues/KI-237.yaml: ki-content-v1:sha256:792301cd108ebc9138b10433b55479dcc43882e9ae121e9c5f2a38f95058e7c9
+        proof/reproducers/CRS-0022-urange-delim-guard.ts: sha256:0afdd1bb034674afd5fa8102a52752b032391fceb905de9bb2dadb290fb667f7
+      known_issues:
+        - KI-237

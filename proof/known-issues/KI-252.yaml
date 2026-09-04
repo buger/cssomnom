@@ -1,0 +1,34 @@
+id: KI-252
+title: div() throws a spec-absent RangeError when a zero divisor carries a unit
+description: 'numericDiv''s paired fast path throws RangeError for any zero divisor before checking units. css-typed-om-1 #dom-cssnumericvalue-div inverts each divisor and multiplies. The invert algorithm throws RangeError only for unit ''number'' with value 0. CSSUnitValue(10,''px'').div(CSSUnitValue(0,''px'')) must return a product with an invert node, not a RangeError.'
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-252.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSNumericValue.div (src/typed-om/numeric/numeric-methods.ts)
+attacker_input: zero-valued CSSUnitValue divisors with units; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-div-zero-rangeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Guard divisors with CSSUnitValue(0,'number') to keep the spec RangeError path.
+remediation: Restrict the fast-path zero check to unit 'number' and let other units flow into the invert branch.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-252.yaml
+kill_domain: spec_absent_exceptions
+source_claim: CRS-0025/C13

@@ -1,0 +1,41 @@
+id: KI-264
+title: parseHue treats grad hues as degrees, resolving the wrong hsl() color
+description: 'parseHue strips only deg, rad and turn suffixes before parseFloat. css-values-4 #angle defines grad as a full angle unit with 400grad = 360deg. hsl(100grad, 50%, 50%) therefore has hue 90deg, but the parser reads 100 and resolves the 100deg color. The wrong color is returned silently instead of converting or failing.'
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-264.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: normalizeComputedColor / parseHue (src/cascade/color-resolver.ts)
+attacker_input: hsl() or hwb() values using grad or turn hues; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-hsl-grad-unit-ignored.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Express hues in deg or rad until grad conversion lands.
+remediation: Convert grad (and turn) suffixes through the css-values-4 angle ratios inside parseHue.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:15:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:30Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-264.yaml
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0040/C01,add-source-claim=CRS-0040/C02
+kill_domain: angle_unit_conversion
+source_claim:
+    - CRS-0026/C27
+    - CRS-0040/C01
+    - CRS-0040/C02

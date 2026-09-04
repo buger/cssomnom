@@ -61,3 +61,10 @@ lifecycle:
           to: review
           reason: Domain-model requirements authored for CSS ranges, mutexes, and decision tables.
           changed_by: human:cli
+defect_review:
+    reviewed_at: "2026-09-03T22:31:45Z"
+    session: CRS-0046
+    fingerprint_sha: sha256:0442c97794eb52f0f0471ff53cf70de2e6f304c994faa97050f4a4012c3749a9
+    via: cli-session
+    counts:
+        emitted: 25

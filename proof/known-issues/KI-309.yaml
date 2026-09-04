@@ -1,0 +1,35 @@
+id: KI-309
+title: resolveVariables overflows the stack on deeply nested values parse() accepts
+description: 'The resolver serializes the stored value, then the serializer and resolver walkers recurse once per nesting level with no depth budget (src/serializer.ts:164-251; src/parser.ts:1727-1740). A 4000-deep calc() value parses cleanly but resolveVariables throws a raw RangeError. css-values-4 #calc-syntax admits arbitrarily nested calc(); the resolver must fail closed. This is the resolve-time sibling of the parse-time overflow in KI-18.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-309.yaml
+severity: low
+severity_basis: risk
+risk: availability
+cve_surface: none
+affected_api: 'Parser.resolveVariables / #resolveVariablesInString plus serializeNode (src/parser.ts, src/serializer.ts)'
+attacker_input: declaration values with deeply nested functions passed to resolveVariables; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-resolve-variables-deep-recursion.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Bound input nesting depth before resolving values that came from untrusted stylesheets.
+remediation: Thread a depth budget through serializeNode and the resolver walkers, mirroring the KI-18 remediation on the resolve path.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:05:26Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:06:05Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-309.yaml
+kill_domain: resource_exhaustion
+do_not_refile_as: 'parse()-time stack overflow (KI-18): that KI owns the consume walk; this KI owns the resolve-time walkers'
+source_claim: CRS-0069/C30

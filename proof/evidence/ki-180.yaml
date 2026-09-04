@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-N2VE
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-var-malformed-spliced.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:57:28Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-180` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-var-malformed-spliced.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0007-var-malformed-spliced.ts
+      freshness_hashes:
+        proof/known-issues/KI-180.yaml: ki-content-v1:sha256:f1ec396973f399584cefb3fc38960e0ebf4f7ade00d0fcdf71c228f79bece5f5
+        proof/reproducers/CRS-0007-var-malformed-spliced.ts: sha256:4b378e487089c32487c451642b886b287ebf1c73fad2ff6e1e796a93736e0728
+      known_issues:
+        - KI-180

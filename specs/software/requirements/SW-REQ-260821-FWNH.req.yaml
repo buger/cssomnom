@@ -82,3 +82,12 @@ lifecycle:
 audit_ignore:
     - check: under_modeled_requirements_clean
       reason: "Intentionally coarse no-layout sorter contract: compareCascadeDeclarations picks the specificity winner with zero layout calls; witnessed by tests/mcdc-witness-cascade.test.ts and tests/cascade.test.ts. Layer/specificity arithmetic detail is shared cascade infrastructure."
+defect_review:
+    reviewed_at: "2026-09-03T21:32:59Z"
+    session: CRS-0026
+    fingerprint_sha: sha256:a349be80c3c1e2d8e81ef0e1fbbb78eb39af9b1af549259733c977986a745382
+    via: cli-session
+    counts:
+        emitted: 30
+        verified: 15
+        dismissed: 15

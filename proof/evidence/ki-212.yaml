@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6951
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-setproperty-priority-order-and-trim.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:10Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-212` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-setproperty-priority-order-and-trim.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0019-setproperty-priority-order-and-trim.ts
+      freshness_hashes:
+        proof/known-issues/KI-212.yaml: ki-content-v1:sha256:d8b933448c69c32b9e6c3a75b51fe3e47880f88581346298c96965aa4d329671
+        proof/reproducers/CRS-0019-setproperty-priority-order-and-trim.ts: sha256:0100670f604663e091116fe499eef6448b3f1435b87e26f9e2a0805a18bef4df
+      known_issues:
+        - KI-212

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-V5GA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-get-leaks-registry-record.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:41Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-292` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-get-leaks-registry-record.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0036-get-leaks-registry-record.ts
+      freshness_hashes:
+        proof/known-issues/KI-292.yaml: ki-content-v1:sha256:b52fa9092245f870b75089cdec796b5f4e5576dc151d9c08f2fb090f5aa6caa5
+        proof/reproducers/CRS-0036-get-leaks-registry-record.ts: sha256:39b5249afe37e01a1ba8be71f8a97dc34705851b36d9e194dcf7728c1dbc432e
+      known_issues:
+        - KI-292

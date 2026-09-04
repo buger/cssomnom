@@ -1,0 +1,41 @@
+id: KI-176
+title: Hard-coded mediaall rejection drops an unknown at-rule every other name keeps
+description: isSupportedAtRule rejects the literal name 'mediaall' before the unknown-at-rule fallback. css-syntax-3 consume-at-rule returns unknown at-rules, and cssom-1 the-cssrule-interface expects such rules to report type 0. '@mediaall {}' is dropped while '@foo {}' survives as CSSAtRule, so one arbitrary name diverges. The special case exists to satisfy the external nv/rrweb fixture, which records CSSOM.js behavior rather than the spec.
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-176.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.isSupportedAtRule mediaall special case (src/parser.ts)
+attacker_input: stylesheet text using the @mediaall at-keyword; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-mediaall-unknown-atrule-specialcase.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: No author-facing workaround; the name filter applies only to the literal mediaall spelling.
+remediation: Remove the mediaall branch and reconcile the external fixture expectation with the uniform unknown-at-rule path.
+status: open
+history:
+    - at: "2026-09-03T21:28:21Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:36Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-176.yaml
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C01
+    - at: "2026-09-04T19:06:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C27
+source_claim:
+    - CRS-0003/C38
+    - CRS-0041/C01
+    - CRS-0069/C27

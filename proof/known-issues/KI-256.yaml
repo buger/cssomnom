@@ -1,0 +1,41 @@
+id: KI-256
+title: Custom-property var() substitution reads the last-encountered value, ignoring importance
+description: getCascadedStyle fills rawCustomProps from the last grouped declaration in encounter order. substituteVariables resolves var() inside custom properties through that unsorted map. css-variables-1 cascades custom properties normally, so an important --a beats a later normal --a. WPT variable-reference-13.html and -14.html expect green. A custom property referencing --a sees 'crimson' while a standard property sees the correct 'green'.
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-256.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: getCascadedStyle rawCustomProps map / substituteVariables (src/cascade)
+attacker_input: stylesheets declaring the same custom property with mixed importance; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-custom-prop-substitution-last-wins.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reference important custom properties only from standard properties until the map is cascade-sorted.
+remediation: Build rawCustomProps from compareCascadeDeclarations winners and feed resolveCustomProperties' output into substituteVariables.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:40Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0034/C03
+    - at: "2026-09-04T10:40:26Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-256.yaml
+kill_domain: cascade_order_custom_properties
+source_claim:
+    - CRS-0026/C03
+    - CRS-0026/C08
+    - CRS-0034/C03

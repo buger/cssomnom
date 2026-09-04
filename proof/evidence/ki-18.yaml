@@ -6,10 +6,10 @@ requirements:
 command: node --experimental-strip-types --test proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
 status: fail
 observed_result: known_issue_reproduced
-executed_at: "2026-08-24T22:24:56Z"
+executed_at: "2026-09-04T10:41:20Z"
 input_set:
     - proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts
 freshness_hashes:
-    proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts: sha256:47edfcf6757f90a26697dca2c71a7309da22f1d68cb8e5af8b93ddbde03092d8
+    proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts: sha256:78de10a4a9b9dbe4b0bab9e69eb79b82f33b28c3d3c3531914a81398e040312b
 known_issues:
     - KI-18

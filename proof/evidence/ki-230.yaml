@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6D9T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-trailing-comma-selector-list.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:17Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-230` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-trailing-comma-selector-list.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0020-trailing-comma-selector-list.ts
+      freshness_hashes:
+        proof/known-issues/KI-230.yaml: ki-content-v1:sha256:181bd137313bb92f2c9efb1f8caf58fae9a65be79d0bd6b8cc5fd3357c5e1a8f
+        proof/reproducers/CRS-0020-trailing-comma-selector-list.ts: sha256:41a2e0c74f1c54e71b80b6f547174776876fa9da55b38e4af03c162bc457b2fd
+      known_issues:
+        - KI-230

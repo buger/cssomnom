@@ -42,6 +42,18 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0068/C13
+    - at: "2026-09-03T22:19:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0014/C10
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C07
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -68,3 +80,7 @@ poc_quality:
         reachability_verified: public CSS namespace IS the product surface; nothing stands between a host and parseValueSync.
 kill_domain: api_inconsistency
 do_not_refile_as: 'KI-42 lone <bad-url-token> inside a single component value: this issue is VALID single values followed by REMAINDER input rejected at the EOF step'
+source_claim:
+    - CRS-0068/C13
+    - CRS-0014/C10
+    - CRS-0030/C07

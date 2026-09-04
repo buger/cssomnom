@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-FWNH
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-parent-cycle-stack-overflow.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:30Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-263` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-parent-cycle-stack-overflow.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0026-parent-cycle-stack-overflow.ts
+      freshness_hashes:
+        proof/known-issues/KI-263.yaml: ki-content-v1:sha256:cd6ad4d869a61fd0b017ec76f9bf93b2b318f7432a7a4c2aed4b45c0df1c21a6
+        proof/reproducers/CRS-0026-parent-cycle-stack-overflow.ts: sha256:d53b97aa7621d8f8148957e34b9f8550fadb5579133e32c426abfe3747f3c0a0
+      known_issues:
+        - KI-263

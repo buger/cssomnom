@@ -1,0 +1,29 @@
+id: KI-146
+title: normalizePseudoElement accepts unterminated functional pseudo-elements as valid and known
+description: normalizePseudoElement checks only whether the last token is ')' (src/cascade/index.ts:122-124). Without the paren, argTokens still slice the ident and the function returns valid and known at line 133. CSS Syntax cannot produce a complete pseudo-element selector from '::highlight(foo'. getCascadedStyle then matches rules for a selector CSSOM parsing rejects.
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-146.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: normalizePseudoElement / getCascadedStyle pseudo-element gate
+attacker_input: pseudo-element strings supplied by callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-pseudo-unterminated.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject pseudo-element strings whose functional argument lacks a closing parenthesis.
+remediation: Require hasCloseParen before the known-function path and return valid:false when the token stream ends inside the function block.
+status: open
+history:
+    - at: "2026-09-03T21:14:39Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:07Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-146.yaml
+source_claim: CRS-0004/C04

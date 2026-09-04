@@ -1,0 +1,41 @@
+id: KI-284
+title: register keys the registry by the raw name; object-valued names alias the string key
+description: WebIDL stringifies PropertyDefinition.name before registerProperty runs. PropertyRegistry.validate checks nameStr = definition.name.toString() but stores and looks up entries by definition.name itself. Registering a String object or coercible object naming '--x' then registering the string '--x' misses the existing entry. The duplicate registration stores without InvalidModificationError and leaves two live entries for one property.
+affected_requirements:
+    - SW-REQ-260821-PD6M
+evidence_manifests:
+    - proof/evidence/ki-284.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.register (src/PropertyRegistry.ts)
+attacker_input: property definitions whose name is a String object or coercible object; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-register-name-key-aliasing.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass primitive string names to registerProperty.
+remediation: Stringify definition.name once at entry and use that value for every registry get and set.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:37:20Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T00:02:26Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C02
+    - at: "2026-09-04T10:40:38Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-284.yaml
+kill_domain: registry_key_identity
+do_not_refile_as: 'origin-policy overwrite rules (spec-mandated): JS-over-CSS overwrite is required behavior'
+source_claim:
+    - CRS-0032/C20
+    - CRS-0036/C02

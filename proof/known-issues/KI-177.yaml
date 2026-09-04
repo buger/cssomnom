@@ -1,0 +1,30 @@
+id: KI-177
+title: Unhyphenated font-feature aliases fill character-variant and historical-forms maps
+description: handleFontFeatureValuesRule accepts 'charactervariant' and 'historicalforms' alongside the spec spellings. css-fonts-4 font-feature-values-syntax names feature value blocks with the hyphenated <font-feature-value-type> keywords, and unrecognized blocks must be ignored. The alias blocks populate maps that stay empty per spec.
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-177.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleFontFeatureValuesRule block dispatch (src/parser.ts)
+attacker_input: stylesheet text using unhyphenated feature value block names; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-font-feature-unhyphenated-alias.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write the hyphenated feature type names until the alias branches are removed.
+remediation: Drop the unhyphenated comparisons so unrecognized feature value blocks are ignored.
+status: open
+history:
+    - at: "2026-09-03T21:28:27Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:36Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-177.yaml
+source_claim: CRS-0003/C39

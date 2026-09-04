@@ -1,5 +1,5 @@
 checklist: onboard_v1
-updated_at: "2026-08-27T09:03:24Z"
+updated_at: "2026-09-03T21:38:51Z"
 steps:
     ac-sweep:
         status: confirmed
@@ -10,10 +10,10 @@ steps:
         check_results:
             - id: acceptance_criteria_witnessed
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: acceptance_witness_quality
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     annotations-heavy:
         status: confirmed
         confirmed_at: "2026-08-27T08:09:06Z"
@@ -23,41 +23,12 @@ steps:
         check_results:
             - id: annotation_validity
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: obligation_witness_grounded
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     coverage:
-        status: confirmed
-        confirmed_at: "2026-08-27T08:09:21Z"
-        confirmed_by: agent:champ
-        note: '2026-08-27: code-level MC/DC measurement established — code_mcdc_measure RAW for js target cssomnom-src (1454/1454 functions traced, orphan_code_clean and orphan_tests_clean both green under the coverage verify gate); tests_pass green across the full suite; code_mcdc_coverage remains the ongoing 95%-policy metric and is tracked separately (8 partial-row-coverage rows over limit, reported honestly, not gated here per checklist design).'
-        verify_result:
-            exit_code: 0
-            passed: true
-            at: "2026-08-27T08:56:04Z"
-            output: |
-                Verification scope: include=README.md, docs/**, proof/reproducers/**, src/**, tests/**
-
-
-                Requirements: 160 total
-
-                  ━━━ IMPLEMENTATION ━━━
-                Refreshing trace index + annotations (160 requirements)…
-                    ▶ running orphan_tests_clean…
-                    ✓ orphan_tests_clean             2462 test functions scanned, 0 orphans  (47ms)
-                    ▶ running orphan_code_clean…
-                    ✓ orphan_code_clean              1454/1454 code functions traced  (0ms)
-
-                  Errors: 0  Warnings: 0
-
-                Help: proof help audit
-                  Cache: 0 hits / 2 fresh / 2 stored (computed in 22s)
-        scope_key: cssomnom
-        check_results:
-            - id: code_mcdc_measure
-              status: pass
-              at: "2026-08-27T09:02:58Z"
+        status: pending
     debt-standing:
         status: confirmed
         confirmed_at: "2026-08-27T08:09:48Z"
@@ -66,10 +37,12 @@ steps:
         check_results:
             - id: known_issues_reviewed
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: waivers_reviewed
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
+    defect-review:
+        status: pending
     hazard:
         status: confirmed
         confirmed_at: "2026-08-21T14:08:39Z"
@@ -79,7 +52,7 @@ steps:
         check_results:
             - id: spec_lint_hazard_consequence
               status: info
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     history-mine:
         status: confirmed
         confirmed_at: "2026-08-27T08:09:45Z"
@@ -88,10 +61,10 @@ steps:
         check_results:
             - id: problem_reports_reviewed
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: change_evidence_complete
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     init:
         status: not_applicable
         confirmed_at: "2026-08-21T12:22:39Z"
@@ -122,7 +95,7 @@ steps:
         check_results:
             - id: residual_kill_hygiene
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     skeleton:
         status: not_applicable
         confirmed_at: "2026-08-21T12:42:21Z"
@@ -149,16 +122,16 @@ steps:
         check_results:
             - id: spec_lint_decomposition_adds_refinement
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: spec_lint_formalization_quality
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: solver_modeling_opportunity
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: under_modeled_requirements_clean
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     spec-review-2:
         status: confirmed
         confirmed_at: "2026-08-27T08:57:21Z"
@@ -167,10 +140,10 @@ steps:
         check_results:
             - id: spec_lint_spec_conformance_review_grounded
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: software_formalization_complete
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
     surface-matrix:
         status: confirmed
         confirmed_at: "2026-08-21T13:56:35Z"
@@ -186,20 +159,9 @@ steps:
         check_results:
             - id: spec_lint_threat_surface_present
               status: pass
-              at: "2026-08-27T08:06:59Z"
+              at: "2026-09-03T21:38:17Z"
     traces-light:
-        status: confirmed
-        confirmed_at: "2026-08-27T08:56:36Z"
-        confirmed_by: agent:champ
-        note: '2026-08-27: light code-to-spec graph green — orphan_code_clean 1454/1454 code functions traced and annotation_validity green over 160 requirements; source_native traces (Implements/Documents) established since the skeleton wave and re-verified on HEAD after the final MC/DC row closures.'
-        scope_key: cssomnom
-        check_results:
-            - id: annotation_validity
-              status: pass
-              at: "2026-08-27T09:02:58Z"
-            - id: orphan_code_clean
-              status: pass
-              at: "2026-08-27T09:02:58Z"
+        status: pending
     variables:
         status: confirmed
         confirmed_at: "2026-08-27T08:56:45Z"
@@ -208,10 +170,10 @@ steps:
         check_results:
             - id: variable_orphans_clean
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: variables_declared
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"
             - id: variable_drift
               status: pass
-              at: "2026-08-27T09:02:58Z"
+              at: "2026-09-03T21:38:17Z"

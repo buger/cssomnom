@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-39E0
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0017-blockcontents-nothing-flush.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:13Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-220` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0017-blockcontents-nothing-flush.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0017-blockcontents-nothing-flush.ts
+      freshness_hashes:
+        proof/known-issues/KI-220.yaml: ki-content-v1:sha256:b1bb2cd7f5fcd7d2dbc3883c4a48ddb840ab0bd6ce4c8524cf1d4789d58a49b6
+        proof/reproducers/CRS-0017-blockcontents-nothing-flush.ts: sha256:ff302f2ec021b34e156a3654c0f7f8fe6baad8e9f0554aaa9d1ebbdf1f2b46a8
+      known_issues:
+        - KI-220

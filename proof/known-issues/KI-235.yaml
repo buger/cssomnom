@@ -1,0 +1,32 @@
+id: KI-235
+title: Typed OM parse accepts grammar-invalid var() as CSSUnparsedValue
+description: _parseAll returns a CSSUnparsedValue whenever hasVarFunction sees a function named var (src/typed-om/values/style-value-parser.ts:201-203). tokensToUnparsedSegments then serializes an invalid var() as a plain string segment (src/typed-om/values/CSSUnparsedValue.ts:120-126). css-variables-1 funcdef-var requires var( custom-property-name , declaration-value? ). var(foo), var(--), and var() are syntax errors, so css-typed-om-1 parse-a-cssstylevalue step 3 must throw TypeError. The parse instead succeeds.
+affected_requirements:
+    - SW-REQ-260821-7AKJ
+evidence_manifests:
+    - proof/evidence/ki-235.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: CSSStyleValue.parse / parseAll var() short-circuit (src/typed-om/values/style-value-parser.ts, CSSUnparsedValue.ts)
+attacker_input: caller-supplied property values containing malformed var() calls; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0021-invalid-var-unparsed.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject var() calls whose first argument is not a dashed ident before accepting the unparsed value.
+remediation: Validate the var() grammar in hasVarFunction or tokensToUnparsedSegments and throw TypeError on a non-dashed, bare --, or empty name.
+status: open
+history:
+    - at: "2026-09-03T22:58:30Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:19Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-235.yaml
+kill_domain: grammar_gate_bypass
+source_claim:
+    - CRS-0021/C05
+    - CRS-0021/C07

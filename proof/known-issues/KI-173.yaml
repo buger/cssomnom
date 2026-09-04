@@ -1,0 +1,41 @@
+id: KI-173
+title: Bare '--' accepted as a custom media name in @custom-media
+description: handleCustomMediaRule accepts any ident starting with '--'. mediaqueries-5 custom-mq names custom media with <dashed-ident>, and a bare '--' is not an ident per css-syntax-3 would-start-an-identifier. '@custom-media -- true;' fabricates CSSCustomMediaRule('--', true) although Parser.isValidDashedIdent rejects the name.
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-173.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleCustomMediaRule name check (src/parser.ts)
+attacker_input: stylesheet text using '--' as a custom media name; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-custom-media-bare-dashes-name.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Give every custom media a real dashed name beyond the two hyphens.
+remediation: Route the name through Parser.isValidDashedIdent before constructing CSSCustomMediaRule.
+status: open
+history:
+    - at: "2026-09-03T21:28:02Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:34Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-173.yaml
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C27
+    - at: "2026-09-04T00:02:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0038/C20
+source_claim:
+    - CRS-0003/C32
+    - CRS-0027/C27
+    - CRS-0038/C20

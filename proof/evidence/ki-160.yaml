@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-30ZA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-trailing-garbage-constructed.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-160` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-trailing-garbage-constructed.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0002-insert-rule-trailing-garbage-constructed.ts
+      freshness_hashes:
+        proof/known-issues/KI-160.yaml: ki-content-v1:sha256:c58eea8819fad033ea98c6ad4e1640c3f1a8237c914fab72635e42b0a732b7bc
+        proof/reproducers/CRS-0002-insert-rule-trailing-garbage-constructed.ts: sha256:140432d8e312f95b65f108ed357eaf63cbe5732f069af575f154b6d7543a5f6c
+      known_issues:
+        - KI-160

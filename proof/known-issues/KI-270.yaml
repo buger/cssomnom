@@ -1,0 +1,36 @@
+id: KI-270
+title: '@page keeps an invalid page selector the css-page-3 grammar forbids'
+description: 'The CSSPageRule constructor stores the raw selector text when parsePageSelectorList returns null (src/CSSOM.ts:1639); the setter correctly ignores null. css-page-3 #syntax-page-selector restricts <<pseudo-page>> to :left, :right, :first and :blank. parse(''@page :bogus { margin: 1px }'') therefore returns a CSSPageRule with selectorText '':bogus'' instead of dropping the rule.'
+affected_requirements:
+    - SW-REQ-260821-HNRG
+evidence_manifests:
+    - proof/evidence/ki-270.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: parse() / insertRule() @page handling (src/CSSOM.ts CSSPageRule constructor)
+attacker_input: stylesheet text with an off-grammar @page prelude; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-page-invalid-selector-kept.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Discard @page rules whose selector fails to parse.
+remediation: Return null from the CSSPageRule construction path when parsePageSelectorList fails, matching the selectorText setter.
+status: open
+history:
+    - at: "2026-09-03T23:24:58Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C30
+    - at: "2026-09-04T10:40:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-270.yaml
+kill_domain: grammar_gate_bypass
+source_claim:
+    - CRS-0028/C25
+    - CRS-0031/C30

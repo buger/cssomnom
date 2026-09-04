@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PD6M
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-flex-syntax-name.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:37Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-282` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-flex-syntax-name.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0032-flex-syntax-name.ts
+      freshness_hashes:
+        proof/known-issues/KI-282.yaml: ki-content-v1:sha256:c1ddfe9ee049667ee99eeeea05755a7b101b1a64778ff7956c7969a6d3f13405
+        proof/reproducers/CRS-0032-flex-syntax-name.ts: sha256:82da4329e8c47edaea43c14c0cd0ab59466921d77d8412018a366ff914be2c76
+      known_issues:
+        - KI-282

@@ -20,6 +20,8 @@ mitigation: Do not expose parse()/replaceSync() to untrusted CSS without a proce
 remediation: Thread a nesting-depth counter through consumeBlockContents/consumeNestedQualifiedRuleFromStream/consumeAtRule/consumeComponentValue and fail closed with a structured parse error before the engine stack is exhausted.
 notes:
     - '2026-08-26: Vector campaign reconciliation — this filing owns hunt vector V-RECURSION-DEPTH (recursion_depth_bounded on nested grouping rules and CSSNestedDeclarations consume). The blind onboarding probe (parse() RangeError at >=~1000 nested blocks, tokenize() iterative at 50k depth) is recorded in proof/vectors/V-RECURSION-DEPTH.yaml notes. Media-condition parenthesis recursion is a distinct mechanism filed separately as KI-131.'
+    - 'CRS-0031/C03: the same recursion RangeError escapes CSSStyleSheet.replace() as a rejected promise; cssom-1 #dom-cssstylesheet-replace must resolve. Entry-point reproducer: proof/reproducers/CRS-0031-replace-rejects-rangeerror.ts'
+    - 'CRS-0069: family widened. Verified second-walk legs: deep calc() values die in validateDeclarationValue (~6000) and validateCustomPropertyValue (~5000) after the consume walk completed. Nested-selector preludes die in hasAmpersand (~3500). The consumeFunction arm (deep calc, C10) shares the component-value hub. All reach parse() and leak the same raw RangeError.'
 owner: agent:champ
 review_date: "2026-09-22"
 release_disposition: ship_with_known_issue
@@ -48,6 +50,30 @@ history:
       by: agent:champ
       action: edit
       detail: set-dedup-armor + set-affected-file src/parser.ts (ACC-08 kill_domain split vs KI-131 src/MediaParser.ts)
+    - at: "2026-09-03T23:25:33Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C02,add-source-claim=CRS-0027/C03,add-source-claim=CRS-0027/C28,add-source-claim=CRS-0027/C32
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C03
+    - at: "2026-09-03T23:38:53Z"
+      by: agent:adjudicator
+      action: edit
+      detail: append-note
+    - at: "2026-09-04T10:41:20Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-18.yaml
+    - at: "2026-09-04T19:06:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C01,add-source-claim=CRS-0069/C02,add-source-claim=CRS-0069/C03,add-source-claim=CRS-0069/C04,add-source-claim=CRS-0069/C05,add-source-claim=CRS-0069/C06,add-source-claim=CRS-0069/C07,add-source-claim=CRS-0069/C08,add-source-claim=CRS-0069/C09,add-source-claim=CRS-0069/C10,add-source-claim=CRS-0069/C11,add-source-claim=CRS-0069/C12,add-source-claim=CRS-0069/C13,add-source-claim=CRS-0069/C14,add-source-claim=CRS-0069/C15,add-source-claim=CRS-0069/C16,add-source-claim=CRS-0069/C17,add-source-claim=CRS-0069/C18,add-source-claim=CRS-0069/C19,add-source-claim=CRS-0069/C20,add-source-claim=CRS-0069/C25,add-source-claim=CRS-0069/C33,add-source-claim=CRS-0069/C34,add-source-claim=CRS-0069/C35
+    - at: "2026-09-04T19:07:07Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: append-note
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -86,8 +112,6 @@ poc_quality:
         reachability_verified: public entry points ARE the product surface here — any caller
         passing attacker CSS to parse()/replaceSync() reaches the recursion with zero additional
         privileges; no ingress ACL layer exists between host and parser.
-kill_domain: resource_exhaustion
-do_not_refile_as: parser stack overflow via nested rules/blocks
 dedup_armor: |
     Two distinct recursive subsystems share the resource_exhaustion kill_domain and
     now carry distinct affected_file basenames. KI-18 pins the css-syntax-3 consume
@@ -102,4 +126,36 @@ dedup_armor: |
     subsystems and different sinks: a depth counter threaded through one performs
     no work on the others; each filing keeps its own tripwire legs and must not
     cross-close.
+kill_domain: resource_exhaustion
+do_not_refile_as: parser stack overflow via nested rules/blocks
 affected_file: src/parser.ts
+source_claim:
+    - CRS-0027/C02
+    - CRS-0027/C03
+    - CRS-0027/C28
+    - CRS-0027/C32
+    - CRS-0031/C03
+    - CRS-0069/C01
+    - CRS-0069/C02
+    - CRS-0069/C03
+    - CRS-0069/C04
+    - CRS-0069/C05
+    - CRS-0069/C06
+    - CRS-0069/C07
+    - CRS-0069/C08
+    - CRS-0069/C09
+    - CRS-0069/C10
+    - CRS-0069/C11
+    - CRS-0069/C12
+    - CRS-0069/C13
+    - CRS-0069/C14
+    - CRS-0069/C15
+    - CRS-0069/C16
+    - CRS-0069/C17
+    - CRS-0069/C18
+    - CRS-0069/C19
+    - CRS-0069/C20
+    - CRS-0069/C25
+    - CRS-0069/C33
+    - CRS-0069/C34
+    - CRS-0069/C35

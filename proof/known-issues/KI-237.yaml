@@ -1,0 +1,33 @@
+id: KI-237
+title: Unicode-range tokenizer guards emit delim U and swallow the range digits
+description: consumeUnicodeRangeToken returns {type:'delim', value:'U'} when start or end exceeds U+10FFFF or end < start (src/AbstractTokenizer.ts:546-577). The caller already consumed U, +, the hex digits, question marks, and the hyphen range, so those code points vanish from the stream. css-syntax-3 consume-a-unicode-range-token steps 3, 5.3, and 6 always return a unicode-range token; range validity belongs to the font descriptor layer. U+A?????, U+110000, U+10-5, and U+1-110000 therefore lose the token list css-syntax-3 defines.
+affected_requirements:
+    - SW-REQ-260821-7M07
+evidence_manifests:
+    - proof/evidence/ki-237.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: Tokenize with unicodeRangesAllowed=true (src/AbstractTokenizer.ts consumeUnicodeRangeToken; @font-face unicode-range descriptor re-tokenization)
+attacker_input: unicode-range descriptor text with out-of-range or inverted values; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-urange-delim-guard.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject invalid ranges at the @font-face descriptor layer after tokenization.
+remediation: Return the unicode-range token with the parsed start and end and drop the 0x10FFFF and end<start guards from the tokenizer.
+status: open
+history:
+    - at: "2026-09-03T22:58:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:20Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-237.yaml
+kill_domain: token_stream_loss
+source_claim:
+    - CRS-0022/C07
+    - CRS-0022/C08
+    - CRS-0022/C09

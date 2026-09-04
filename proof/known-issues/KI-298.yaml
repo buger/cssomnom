@@ -1,0 +1,34 @@
+id: KI-298
+title: dynamic-range boolean context reports false on a standard display
+description: 'The boolean-context switch returns env.dynamicRange === ''high'' for dynamic-range and the same for video-dynamic-range (src/MediaParser.ts:1193-1194). mediaqueries-4 #evaluating Media Features in a Boolean Context makes a feature true whenever it would be true for any value other than 0, a zero dimension, or the keyword none. Both features have no ''none'' value, so a standard display must report true, exactly like the neighbouring color-gamut and scan arms. (dynamic-range) currently returns false while (dynamic-range: standard) returns true.'
+affected_requirements:
+    - SW-REQ-260821-W8S1
+evidence_manifests:
+    - proof/evidence/ki-298.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: MediaParser.evaluateMediaFeature boolean-context switch (src/MediaParser.ts)
+attacker_input: caller-supplied media query text using the boolean form of dynamic-range; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-dynamic-range-boolean.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Write the explicit value form ''(dynamic-range: standard)'' instead of the boolean form.'
+remediation: Return true for the boolean form of dynamic-range and video-dynamic-range, matching the no-none-value arms such as color-gamut and scan.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:43Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-298.yaml
+kill_domain: boolean_context_evaluation
+source_claim: CRS-0037/C17

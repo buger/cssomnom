@@ -1,0 +1,36 @@
+id: KI-250
+title: toSum fails for the resolution unit x because the compatible-unit list omits it
+description: 'isCompatible lists dppx, dpi and dpcm but omits ''x''. css-values-4 #resolution defines x as the dppx unit''s serialization and CSSUnitValue.to converts x like dppx. numericToSum drops every x value into the leftover bucket. CSSUnitValue(1,''x'').toSum(''x'') therefore throws ''Remaining units: dppx'' even for the identity conversion.'
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-250.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSNumericValue.toSum resolution-unit gate (src/typed-om/numeric/numeric-methods.ts)
+attacker_input: toSum calls targeting the x unit; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-resolution-x-tosum-fails.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Use dppx instead of x in toSum target lists.
+remediation: Add 'x' to the absolute-resolution list in isCompatible, matching to()'s toDppx table.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:24Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-250.yaml
+kill_domain: incomplete_unit_conversion_table
+source_claim:
+    - CRS-0025/C08
+    - CRS-0025/C09

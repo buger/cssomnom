@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-7AKJ
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0021-transform-parse-lenient.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:19Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-234` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0021-transform-parse-lenient.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0021-transform-parse-lenient.ts
+      freshness_hashes:
+        proof/known-issues/KI-234.yaml: ki-content-v1:sha256:3dd4f03614ec5d42d5597f33a4e39ce7bac7c653d1ac5409f6a1a0e24e8a4206
+        proof/reproducers/CRS-0021-transform-parse-lenient.ts: sha256:c581aece2115ce6a82664925d7ef78f0ca71f8537807d6454b2b511e1c8655db
+      known_issues:
+        - KI-234

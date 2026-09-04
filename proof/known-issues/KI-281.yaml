@@ -1,0 +1,41 @@
+id: KI-281
+title: parseSyntax accepts an unterminated '{' multiplier that EOF silently closes
+description: 'The brace-multiplier loop breaks on either ''}'' or EOF and then assigns multiplier ''+''. Brace repetition is absent from the css-properties-values-api #syntax-strings grammar, and an unclosed brace is a truncated definition regardless. CSS.registerProperty({syntax:''<length>{2''}) therefore registers instead of throwing SyntaxError.'
+affected_requirements:
+    - SW-REQ-260821-PD6M
+evidence_manifests:
+    - proof/evidence/ki-281.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.consumeSyntaxComponent brace branch (src/PropertyRegistry.ts)
+attacker_input: syntax strings with an unclosed '{'; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-syntax-unterminated-brace.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Close every brace range, or avoid brace multipliers entirely (they are not valid syntax strings).
+remediation: 'Reject the brace branch: braces are not a multiplier in syntax strings, and EOF must never close one.'
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:36:49Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T00:02:26Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C08
+    - at: "2026-09-04T10:40:36Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-281.yaml
+kill_domain: syntax_string_grammar_gate
+do_not_refile_as: 'closed brace multipliers (KI-35): that KI covers {N}/{N,M} forms; this one pins the EOF closer'
+source_claim:
+    - CRS-0032/C06
+    - CRS-0036/C08

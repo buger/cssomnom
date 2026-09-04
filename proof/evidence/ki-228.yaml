@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6D9T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-attribute-selector-grammar-gaps.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:16Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-228` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-attribute-selector-grammar-gaps.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0020-attribute-selector-grammar-gaps.ts
+      freshness_hashes:
+        proof/known-issues/KI-228.yaml: ki-content-v1:sha256:9d47257c2f0fc98a018a8804bf13ec870853d1d8214063ae5e9b5e42b47ac98f
+        proof/reproducers/CRS-0020-attribute-selector-grammar-gaps.ts: sha256:3626e43ce4abf34187417ef66253130e526f1558e7433a0d4745b0ece31fe8d9
+      known_issues:
+        - KI-228

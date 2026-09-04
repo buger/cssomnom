@@ -1,0 +1,30 @@
+id: KI-272
+title: '@view-transition keeps an off-grammar navigation descriptor value'
+description: 'handleViewTransitionRule assigns the serialized declaration value unconditionally (src/CSSOM.ts:1130). css-view-transitions-2 #view-transition-navigation-descriptor types navigation as ''auto | none'' and requires off-grammar descriptors to be ignored in their entirety. The getter then returns the empty string because no descriptor exists. parse(''@view-transition { navigation: bogus }'') therefore reports navigation ''bogus'' and re-serializes it.'
+affected_requirements:
+    - SW-REQ-260821-HNRG
+evidence_manifests:
+    - proof/evidence/ki-272.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: parse() @view-transition handling (src/CSSOM.ts handleViewTransitionRule)
+attacker_input: stylesheet text with an invalid @view-transition navigation value; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-view-transition-invalid-navigation.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Ignore @view-transition rules whose navigation value is not auto or none.
+remediation: Parse the navigation declaration against the css-view-transitions-2 grammar and skip off-grammar descriptors.
+status: open
+history:
+    - at: "2026-09-03T23:25:09Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:33Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-272.yaml
+kill_domain: grammar_gate_bypass
+source_claim: CRS-0028/C33

@@ -1,0 +1,60 @@
+id: KI-164
+title: assembleUnicodeRanges re-encodes number token values as hex digits, rewriting U+26 to U+1A
+description: The ident-u branch of assembleUnicodeRanges rebuilds the hex segment from the numeric token value using toString(16). Decimal digits are re-encoded as hexadecimal, so a split 'U+26' assembles as U+1A. css-syntax-3 consume-unicode-range-token reads the hex digits from the source code points. Live parser paths re-tokenize in urange mode, so the wrong leg fires for direct and hook callers.
+affected_requirements:
+    - INT-REQ-260821-30ZA
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-164.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: assembleUnicodeRanges / ParseHooks.assembleUnicodeRanges (src/parser.ts)
+attacker_input: component values tokenized outside urange mode and passed to the assembler; library-internal input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-unicode-range-number-tostring16.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Feed the assembler only urange-mode tokens until the hex reconstruction uses original text.
+remediation: Preserve the original source text of number and dimension tokens and join those digits instead of re-encoding the numeric value.
+status: open
+history:
+    - at: "2026-09-03T21:27:03Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:31Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-164.yaml
+    - at: "2026-09-03T21:54:10Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0007/C12
+    - at: "2026-09-03T22:14:38Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0011/C10,add-source-claim=CRS-0011/C13,add-source-claim=CRS-0011/C23
+    - at: "2026-09-03T23:25:33Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C07
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C11
+    - at: "2026-09-04T19:06:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C42
+source_claim:
+    - CRS-0002/C14
+    - CRS-0003/C15
+    - CRS-0007/C12
+    - CRS-0011/C10
+    - CRS-0011/C13
+    - CRS-0011/C23
+    - CRS-0027/C07
+    - CRS-0041/C11
+    - CRS-0069/C42

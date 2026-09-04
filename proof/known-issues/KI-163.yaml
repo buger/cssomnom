@@ -1,0 +1,52 @@
+id: KI-163
+title: insertRule applies the raw JS range check before WebIDL unsigned long conversion
+description: CSSStyleSheet.insertRule checks index with a raw numeric comparison before any WebIDL conversion. The interface types index as unsigned long, so Infinity and NaN convert through ToUint32 to 0. cssom-1 dom-cssstylesheet-insertrule must therefore insert at 0, but the code throws IndexSizeError. Browsers wrap the index per WebIDL first.
+affected_requirements:
+    - INT-REQ-260821-30ZA
+evidence_manifests:
+    - proof/evidence/ki-163.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleSheet.insertRule index handling (src/CSSOM.ts)
+attacker_input: caller-supplied non-integer or infinite index value; local API input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-index-infinity.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass integral indices in the 0..length range.
+remediation: Apply ToUint32 to index at the top of insertRule, then run the range check against the wrapped value.
+status: open
+history:
+    - at: "2026-09-03T21:26:57Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:30Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-163.yaml
+    - at: "2026-09-03T22:03:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0008/C15
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C22
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C11,add-source-claim=CRS-0031/C33
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C10
+source_claim:
+    - CRS-0002/C13
+    - CRS-0008/C15
+    - CRS-0028/C22
+    - CRS-0031/C11
+    - CRS-0031/C33
+    - CRS-0035/C10

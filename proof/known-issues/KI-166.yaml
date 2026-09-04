@@ -1,0 +1,58 @@
+id: KI-166
+title: Mixed-case inherits descriptor discards the whole @property rule
+description: 'handlePropertyRule compares the serialized inherits value with === ''true'' and === ''false''. css-properties-values-api-1 types the descriptor as true | false, and css-values-4 keywords require ASCII case-insensitive matching. inherits: True leaves inherits null, so line 749 drops the rule and insertRule throws SyntaxError for valid CSS.'
+affected_requirements:
+    - INT-REQ-260821-30ZA
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-166.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handlePropertyRule inherits descriptor parsing (src/parser.ts)
+attacker_input: 'stylesheet or insertRule text with inherits: True or inherits: FALSE; local library input'
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-property-inherits-case.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Write inherits: true or inherits: false in lowercase until the descriptor match is case-insensitive.'
+remediation: Lowercase the serialized value before the true/false comparison, as the descriptor name already is.
+status: open
+history:
+    - at: "2026-09-03T21:27:15Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-166.yaml
+    - at: "2026-09-03T21:54:10Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0007/C11
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0011/C18
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C09
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C12
+    - at: "2026-09-04T19:06:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C39
+source_claim:
+    - CRS-0002/C22
+    - CRS-0003/C13
+    - CRS-0007/C11
+    - CRS-0011/C18
+    - CRS-0024/C09
+    - CRS-0041/C12
+    - CRS-0069/C39

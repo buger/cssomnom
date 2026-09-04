@@ -1,0 +1,41 @@
+id: KI-137
+title: Integer media features admit math-function values that parseInteger cannot evaluate
+description: 'matchesType accepts any number-typed math function for integer features (src/MediaParser.ts:733-734). parseInteger then accepts only number tokens, so (color: calc(8)) evaluates unknown instead of comparing against env.color. WPT css/mediaqueries/mq-calc-sign-function-003/004.html feed (grid: calc(...)) and require evaluation. MediaParser.evaluate(''(color: calc(8))'', {color: 8}) returns false instead of true.'
+affected_requirements:
+    - SW-REQ-260822-QKE9
+evidence_manifests:
+    - proof/evidence/ki-137.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: MediaParser.evaluate integer feature evaluation
+attacker_input: caller-supplied media query text with calc() values in integer features; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-integer-calc-unknown.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Authors can write integer feature values as plain number tokens until evaluation supports math functions.
+remediation: Extend parseInteger to simplify function operands through parseMathFunction and simplify, and reject non-integer results as invalid values.
+status: open
+history:
+    - at: "2026-09-03T20:30:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:43:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-137.yaml
+    - at: "2026-09-03T21:54:06Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0006/C14,add-source-claim=CRS-0006/C15
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C09
+source_claim:
+    - CRS-0001/C07
+    - CRS-0006/C14
+    - CRS-0006/C15
+    - CRS-0037/C09

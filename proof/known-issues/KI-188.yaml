@@ -1,0 +1,30 @@
+id: KI-188
+title: Parser instance parseRule drops this.options and loses custom at-rule types
+description: 'The Parser.parseRule instance method builds a fresh Parser without forwarding this.options (src/parser.ts:198). The constructor''s atRuleTypes map is lost, so parseRule classifies custom at-rules through the default path. parseStyleSheet and consumeRule on the same instance honor the option, and parser-api parseRuleSync forwards options too. A Parser constructed with atRules {foo: rule} silently loses the configuration on parseRule alone.'
+affected_requirements:
+    - INT-REQ-260821-ZMZR
+evidence_manifests:
+    - proof/evidence/ki-188.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.prototype.parseRule (src/parser.ts:195-211)
+attacker_input: custom at-rule options passed to the Parser constructor; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-parser-parerule-drops-options.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Use Parser.consumeRule or the parser-api parseRuleSync entry points when atRules options matter.
+remediation: Pass this.options into the inner Parser construction inside the instance parseRule method.
+status: open
+history:
+    - at: "2026-09-03T22:03:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:03:23Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-188.yaml
+source_claim: CRS-0010/C15

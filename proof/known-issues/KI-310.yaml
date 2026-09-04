@@ -1,0 +1,35 @@
+id: KI-310
+title: Nested cycle sentinels leak into serialized resolved values
+description: '#resolveVariablesInString scans only top-level values for the sentinel idents (src/parser.ts:1706). #resolveOneVariable buries markers inside function and block values (1727-1740), so the scan misses them. serialize then emits the NUL-derived sentinel into the computed value. css-variables-1 #guaranteed-invalid makes the containing property resolve to the empty invalid signal.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-310.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: 'Parser.resolveVariables / #resolveVariablesInString sentinel scan (src/parser.ts)'
+attacker_input: declarations whose failing var() sits inside a function or block, for example calc(1px + var(--undef))
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-cycle-sentinel-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep failing var() references at the top level until the scan covers nested values.
+remediation: Scan the resolved tree recursively for sentinel idents, or propagate an invalid flag instead of token markers.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:05:34Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:06:06Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-310.yaml
+kill_domain: substitution_sentinel_leak
+do_not_refile_as: 'KI-174 env() splice and KI-180 var() splice: those drop tokens; this KI leaks the sentinel itself'
+source_claim: CRS-0069/C31

@@ -1,0 +1,36 @@
+id: KI-181
+title: consumeBlockContents reparses bad-declaration remnants as fresh declarations
+description: 'The nested isDecl arm treats a leading ''--*'' ident as a declaration without a colon lookahead (src/parser.ts:1016-1017). consumeDeclarationFromStream then consumes only the ident and returns null at the colon check. consumeBlockContents leaves the remnants in the stream, so ''bar: red;'' after ''--foo bar'' parses as a new declaration. css-syntax-3 #consume-a-declaration requires consuming the remnants of a bad declaration up to the next semicolon. The sibling consumeDeclarationsFromBlockContents implements that skip (src/parser.ts:970-977).'
+affected_requirements:
+    - INT-REQ-260821-N2VE
+evidence_manifests:
+    - proof/evidence/ki-181.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: Parser.consumeBlockContents nested declaration parsing
+attacker_input: nested style-rule body with a dashed ident not followed by a colon; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-bad-decl-remnants-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep dashed idents followed by a colon until the failed declaration consumes its remnants.
+remediation: Consume the remnants of a bad declaration up to the next semicolon before resuming the consumeBlockContents loop.
+status: open
+history:
+    - at: "2026-09-03T21:53:42Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:57:28Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-181.yaml
+    - at: "2026-09-03T23:25:40Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C09,add-source-claim=CRS-0027/C29
+source_claim:
+    - CRS-0007/C07
+    - CRS-0027/C09
+    - CRS-0027/C29

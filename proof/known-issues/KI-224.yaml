@@ -1,0 +1,30 @@
+id: KI-224
+title: expandLineClamp stores junk tokens in max-lines instead of rejecting line-clamp
+description: 'expandLineClamp returns the leftover token list as max-lines without any type check (src/shorthands.ts:1764-1768). css-overflow-4 #line-clamp grammar is none | [<integer [1,infinity]> || <''block-ellipsis''>]. line-clamp: 3 foo therefore stores max-lines ''3 foo'', and a stylesheet comment inside the value even serializes into the longhand.'
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-224.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: line-clamp shorthand expansion (src/shorthands.ts)
+attacker_input: declaration values for the line-clamp shorthand; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-line-clamp-junk-max-lines.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Use only an integer, none, or a css-wide keyword for line-clamp.
+remediation: Validate the remaining tokens against the line-clamp grammar and return null when they do not match, dropping the declaration.
+status: open
+history:
+    - at: "2026-09-03T22:41:40Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:15Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-224.yaml
+source_claim: CRS-0019/C22

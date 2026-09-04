@@ -1,0 +1,46 @@
+id: KI-186
+title: CSSFontFeatureValuesMap.set stores NaN and cssText serializes the bare token NaN
+description: 'CSSFontFeatureValuesMap.set coerces values with Number() and stores the result without integer or finite validation. WebIDL types the values argument as unsigned long or a sequence of unsigned long, and ToUint32 maps NaN to +0. The map stores NaN instead. CSSFontFeatureValuesRule.cssText then emits entries like swish: NaN, which is not valid CSS output.'
+affected_requirements:
+    - INT-REQ-260821-WQX9
+evidence_manifests:
+    - proof/evidence/ki-186.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSFontFeatureValuesMap.set / CSSFontFeatureValuesRule.cssText (src/CSSOM.ts)
+attacker_input: non-numeric or undefined feature values passed to the map setter; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0008-font-feature-nan.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass integers to CSSFontFeatureValuesMap.set and never read cssText from a polluted map.
+remediation: Validate Number.isInteger(Number(v)) in set() and map NaN to 0 per WebIDL unsigned long conversion.
+status: open
+history:
+    - at: "2026-09-03T22:02:58Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:03:22Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-186.yaml
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C19
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C35
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C25
+source_claim:
+    - CRS-0008/C22
+    - CRS-0028/C19
+    - CRS-0031/C35
+    - CRS-0035/C25

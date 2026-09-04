@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-2Z0N
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-rule-null-not-syntax-error.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:07Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-203` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-rule-null-not-syntax-error.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0014-parse-rule-null-not-syntax-error.ts
+      freshness_hashes:
+        proof/known-issues/KI-203.yaml: ki-content-v1:sha256:fb1c1fd638ab0bc1809c0d1bd23658456b881ed5b8b76c52fb6b139d414f223a
+        proof/reproducers/CRS-0014-parse-rule-null-not-syntax-error.ts: sha256:6f304af6fee6fe0f365ec0e59f2014280af5ec79e980f1568fb3e06b063d7225
+      known_issues:
+        - KI-203

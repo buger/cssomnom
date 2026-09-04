@@ -1,0 +1,21 @@
+id: CRS-0069
+spec_reqids:
+    - SYS-REQ-260821-7521
+state: complete
+backend: grok
+model: Gemini 3 Pro (defect-reviewer subagent, agent-review route)
+cells:
+    - req_id: SYS-REQ-260821-7521
+      dir: .proof/defect-sessions/CRS-0069/cells/SYS-REQ-260821-7521
+      status: complete
+      artifact_hashes:
+        ledger.jsonl: sha256:09f351bb95b114fb3ef5181400340a1723e401701592cb37e72f01608b98c1c8
+input_fingerprint:
+    spec_yaml_sha: sha256:69c65d44a9a47649cf04788005f2d4a5d159863432dafd3af0bf48f327a0301e
+    code_fingerprints:
+        src/parser.ts: sha256:6c048c4a9f3a1edc0174ab9a2914b41671c85907e7fce299c7ebca1e8b7e88a4
+        src/types.ts: sha256:e4f30d8f352aae9230e9ef124ef333b09641296fc7b9699a6c2f2110ecb81632
+    claims_sha: sha256:608492a3ee340898ba96b56784ad3072e582a70b6ce132981cfd6aa797fd65c6
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+created_at: "2026-09-04T18:24:47Z"
+updated_at: "2026-09-04T18:42:27Z"

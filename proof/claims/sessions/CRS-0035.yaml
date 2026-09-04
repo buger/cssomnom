@@ -1,0 +1,31 @@
+id: CRS-0035
+spec_reqids:
+    - SW-REQ-260821-TF5T
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-TF5T
+      dir: .proof/defect-sessions/CRS-0035/cells/SW-REQ-260821-TF5T
+      status: complete
+      attempts: 1
+      elapsed_secs: 894.057496397
+      artifact_hashes:
+        deliverable.md: sha256:53d68ffd3dc37e4fc4a44fd88014a640c16ade7dd5e93ae104fb23c76c1c6baf
+        ledger.jsonl: sha256:022ee264e53e8c1666c16b0c72bc3fe197f3f84422727d79f61943ce93b8d739
+        reviewed-list.txt: sha256:99f04edb123c09480724b6847af5a91d4830efa74dc06a7caafab32e24ee4539
+input_fingerprint:
+    spec_yaml_sha: sha256:0137afae569d85932444475d8b72b5e4e80965857e60c2ffda6093a406da44dd
+    code_fingerprints:
+        src/CSSOM.ts: sha256:aba23234f0cb5d9c362457e895efacb86ccd55595842205a78f3021cc15d9318
+        src/CSSStyleDeclaration.ts: sha256:91f559f394fb37eabf6ecbc1d57c60737007a99320659d3a2229121cbb5ef554
+    claims_sha: sha256:b36a52f02142170fe53b85cbeba2008e72f2a82047f8cf768adc79880bdcac9c
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 240744
+    output_tokens: 51316
+    cost_usd: 0.341666
+    wall_secs: 894.057496397
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T21:58:13Z"

@@ -61,6 +61,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C02
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -87,3 +91,4 @@ poc_quality:
         reachability_verified: public parse()/conditionText ARE the product surface; no gating layer in between.
 kill_domain: media_negation_roundtrip_collapse
 do_not_refile_as: 'KI-31 (serializer drops grouping parens around nested or/and operands - mixed-chain corruption) and KI-5 (unbalanced-paren input recovery): this KI pins media-not-under-grouping round-trip collapse specifically'
+source_claim: CRS-0037/C02

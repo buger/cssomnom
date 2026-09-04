@@ -1,0 +1,37 @@
+id: KI-249
+title: CSSUnitValue.to throws TypeError for every hz/khz frequency conversion
+description: 'CSSUnitValue.to implements only length, angle, time and resolution arms. css-typed-om-1 #convert-a-cssunitvalue converts between any compatible units, and css-values-4 makes hz and khz one frequency family. new CSSUnitValue(1000,''hz'').to(''khz'') throws ''Unsupported conversion for frequency''. isCompatible(''hz'',''khz'') reports true, so toSum and numericTo advertise conversions the converter cannot perform.'
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-249.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSNumericValue.to / toSum frequency conversion (src/typed-om/numeric/CSSUnitValue.ts)
+attacker_input: frequency values passed to to() or toSum(); local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-frequency-conversion-typeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Convert frequency values manually through hz until a conversion arm exists.
+remediation: Add a frequency arm to CSSUnitValue.to using the 1000 ratio between hz and khz.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:24Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-249.yaml
+kill_domain: incomplete_unit_conversion_table
+source_claim:
+    - CRS-0025/C04
+    - CRS-0025/C10
+    - CRS-0025/C33

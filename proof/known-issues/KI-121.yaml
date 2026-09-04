@@ -53,6 +53,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0039/C15
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -79,3 +83,4 @@ poc_quality:
         reachability_verified: public declaration API IS the product surface; no gating between host and serializer.
 kill_domain: serializer_equivalence
 do_not_refile_as: cssText structural breakout via escaped identifiers (KI-21)
+source_claim: CRS-0039/C15

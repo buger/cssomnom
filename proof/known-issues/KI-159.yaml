@@ -1,0 +1,29 @@
+id: KI-159
+title: fromMatrix parses CSS strings instead of requiring a DOMMatrixInit dictionary
+description: 'fromMatrix forwards its argument straight into the constructor (src/DOMMatrix.ts:340-342,513-515). A string therefore takes the CSS transform parse branch and returns a translated matrix. geometry-1 #dommatrix-frommatrix creates the matrix from the dictionary other. WebIDL dictionary conversion of a string primitive throws TypeError, which browsers do here.'
+affected_requirements:
+    - INT-REQ-260821-JTY2
+evidence_manifests:
+    - proof/evidence/ki-159.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: DOMMatrixReadOnly.fromMatrix / DOMMatrix.fromMatrix
+attacker_input: init values supplied by callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-frommatrix-string.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass dictionaries or matrix instances to fromMatrix.
+remediation: Validate the argument as a DOMMatrixInit dictionary in fromMatrix and throw TypeError for non-dictionary values.
+status: open
+history:
+    - at: "2026-09-03T21:15:37Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:12Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-159.yaml
+source_claim: CRS-0005/C27

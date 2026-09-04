@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-FWNH
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-iacvt-rollback-instead-of-unset.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:26Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-255` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-iacvt-rollback-instead-of-unset.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0026-iacvt-rollback-instead-of-unset.ts
+      freshness_hashes:
+        proof/known-issues/KI-255.yaml: ki-content-v1:sha256:142ff49e53117d457d0bd7518fda5670e6d83dbee9fd3e8493fbabeaabb9432e
+        proof/reproducers/CRS-0026-iacvt-rollback-instead-of-unset.ts: sha256:97978f0426646025900b067dea0e2a7d46c32f783b7a357f5d6155825f71a0da
+      known_issues:
+        - KI-255

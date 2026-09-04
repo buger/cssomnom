@@ -1,0 +1,36 @@
+id: KI-301
+title: Shorthand contraction crosses intervening all and side shorthands, flipping the cascade
+description: 'checkIntervening skips any intervening declaration without a propertyToGroup entry (src/serializer.ts:563-564). ''all'' and same-side shorthands like ''border-top'' carry no entry, so the [''all'',''border''] and startsWith guards never fire. serializeDeclarations then emits the contracted shorthand at the first longhand, ahead of the reset. Re-parsing the cssText lets all:unset or the later shorthand win, dropping declarations that won in the source. css-syntax-3 #serialization requires round-trip fidelity.'
+affected_requirements:
+    - SW-REQ-260821-YTV6
+evidence_manifests:
+    - proof/evidence/ki-301.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: serializeDeclarations / checkIntervening (src/serializer.ts)
+attacker_input: declaration lists mixing longhands with all or side shorthands between them; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0039-shorthand-contraction-crosses-all.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep 'all' and side shorthands outside the longhand span until checkIntervening learns ungrouped resetters.
+remediation: Map 'all' and side shorthands in propertyToGroup or test them before the !interveningGroup continue; include the exact side name in the prefix check.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T18:57:39Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T18:58:21Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-301.yaml
+source_claim:
+    - CRS-0039/C09
+    - CRS-0039/C19
+    - CRS-0039/C25

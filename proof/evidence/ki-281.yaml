@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PD6M
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-syntax-unterminated-brace.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:36Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-281` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-syntax-unterminated-brace.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0032-syntax-unterminated-brace.ts
+      freshness_hashes:
+        proof/known-issues/KI-281.yaml: ki-content-v1:sha256:8c9352544aa6fd09d225acd6f5b0d9efb66fa70cc3edf340cf71e270637014a7
+        proof/reproducers/CRS-0032-syntax-unterminated-brace.ts: sha256:b65537bec66deb436e3c6c66180754947d9622e989432ba12b2ff8dd3ec9167c
+      known_issues:
+        - KI-281

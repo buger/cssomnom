@@ -1,0 +1,38 @@
+id: KI-219
+title: parseDeclarationSync skips at-rule prefixes and returns null instead of a syntax error
+description: 'parseDeclarationSync reuses the declaration-list parser and returns list[0]. css-syntax-3 5.4.7 parse-a-declaration consumes one declaration and returns a syntax error when nothing comes back. A leading at-keyword fails consume-a-declaration, so ''@media all { } color: red'' is a syntax error. The impl drops the at-rule and returns ''color: red''. Unparseable input such as ''div'' returns null instead of an error. The WICG parseDeclaration return type is non-nullable CSSParserDeclaration.'
+affected_requirements:
+    - SW-REQ-260821-3553
+evidence_manifests:
+    - proof/evidence/ki-219.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.parseDeclaration -> parseDeclarationSync (src/parser-api.ts L560-563)
+attacker_input: declaration strings with at-rule prefixes or non-declaration content; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0015-parsedeclaration-atrule-prefix.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pre-validate the string with parseDeclarationListSync or wrap parseDeclarationSync in a null check that throws.
+remediation: 'Run css-syntax-3 5.4.7 directly: consume one declaration and throw a SyntaxError DOMException when nothing returns. Returning the first declaration of a multi-declaration string stays conformant.'
+status: open
+history:
+    - at: "2026-09-03T22:41:26Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0029/C11
+    - at: "2026-09-04T10:40:13Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-219.yaml
+kill_domain: error_signaling
+do_not_refile_as: KI-203 covers parseRuleSync null signaling; this filing covers parseDeclarationSync at-rule prefixes
+source_claim:
+    - CRS-0015/C10
+    - CRS-0029/C11

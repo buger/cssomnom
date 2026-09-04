@@ -46,6 +46,26 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0068/C01,add-source-claim=CRS-0068/C02
+    - at: "2026-09-03T22:19:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0014/C04,add-source-claim=CRS-0014/C05,add-source-claim=CRS-0014/C06
+    - at: "2026-09-03T22:41:53Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0015/C01,add-source-claim=CRS-0015/C02
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0029/C02,add-source-claim=CRS-0029/C03
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C05
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -74,3 +94,14 @@ dedup_armor: |
     CSSParserAtRule.toString/tokensToPrelude join prelude tokens with '' dropping whitespace ('@mediascreen'). Parser-API adapter layer; distinct from KI-31 (condition semantics inside MediaParser) and KI-21 (identifier escaping in serializer). Do not merge into serializer escaping work.
 kill_domain: data_corruption
 do_not_refile_as: 'media-condition text corruption inside MediaParser/CSSOM (KI-31/KI-115): this is the Parser-API adapter layer losing the keyword/prelude separator itself'
+source_claim:
+    - CRS-0068/C01
+    - CRS-0068/C02
+    - CRS-0014/C04
+    - CRS-0014/C05
+    - CRS-0014/C06
+    - CRS-0015/C01
+    - CRS-0015/C02
+    - CRS-0029/C02
+    - CRS-0029/C03
+    - CRS-0030/C05

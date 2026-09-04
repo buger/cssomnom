@@ -49,3 +49,12 @@ lifecycle:
           to: review
           reason: 'Onboard skeleton believed: four-layer graph linked to research map'
           changed_by: agent:grok-4.6
+defect_review:
+    reviewed_at: "2026-09-03T22:00:53Z"
+    session: CRS-0036
+    fingerprint_sha: sha256:2553072bc838bfb96ccf481c9f20531eb8aab0cd61afcf3588bf8b7aa41e2883
+    via: cli-session
+    counts:
+        emitted: 25
+        verified: 15
+        dismissed: 10

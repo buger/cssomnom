@@ -1,0 +1,37 @@
+id: KI-200
+title: browser-entry CSS unit factories skip WebIDL double conversion and the required-argument check
+description: installUnitFactories forwards the raw argument into CSSUnitValue (src/browser-entry.ts:198). css-typed-om-1 numeric factory functions take a WebIDL double, so ToNumber must run at the boundary. CSS.px('10') therefore stores the string '10' and serializes to nanpx. WebIDL double rejects NaN, so CSS.px('foo') must throw TypeError. CSS.px() with no argument constructs a value of undefined instead of throwing the arity TypeError.
+affected_requirements:
+    - SW-REQ-260821-1E5K
+evidence_manifests:
+    - proof/evidence/ki-200.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: src/browser-entry.ts installUnitFactories CSS unit factory functions installed on the CSS namespace
+attacker_input: host code calling CSS unit factories with strings, non-numeric strings, or no argument; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-unit-factory-double-conversion.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Call the factories with numbers, and check the argument count before calling.
+remediation: Convert the argument with Number at the factory boundary, throw TypeError on NaN, and enforce the single required argument. The generated CSSFactories table in src/data/gen/css-factories.ts needs the same conversion.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0016/C11
+    - at: "2026-09-04T10:40:05Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-200.yaml
+kill_domain: idl_type_conversion
+source_claim:
+    - CRS-0013/C10
+    - CRS-0013/C11
+    - CRS-0016/C11

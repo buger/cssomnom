@@ -1,0 +1,42 @@
+id: KI-167
+title: Typed OM parse skips the property-grammar gate on four ungated paths
+description: 'css-typed-om-1 parse-a-cssstylevalue step 3 throws TypeError when the value fails the property grammar. _parseAll returns before the matchesSyntax gate on four paths: comma-split LIST_PROPERTIES segments, shouldFallbackToCSSStyleValue, the declaration-count-only shorthand check, and properties lacking a syntax entry. Invalid values reify as raw CSSStyleValue instead of throwing.'
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-167.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse / _parseAll grammar gate (src/typed-om/values/style-value-parser.ts)
+attacker_input: caller-supplied property and value strings passed to Typed OM parse; local API input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-typed-om-grammar-gate-bypasses.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate values against the property syntax before relying on the parsed result.
+remediation: Run matchesSyntax per segment before every early return, and validate unsupported-syntax properties against their generated grammar.
+status: open
+history:
+    - at: "2026-09-03T21:27:21Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-167.yaml
+    - at: "2026-09-03T22:59:19Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0021/C03,add-source-claim=CRS-0021/C04,add-source-claim=CRS-0021/C20,add-source-claim=CRS-0021/C24
+source_claim:
+    - CRS-0003/C01
+    - CRS-0003/C03
+    - CRS-0003/C07
+    - CRS-0003/C30
+    - CRS-0021/C03
+    - CRS-0021/C04
+    - CRS-0021/C20
+    - CRS-0021/C24

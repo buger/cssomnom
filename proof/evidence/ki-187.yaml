@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-ZMZR
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-grouping-insertrule-nested-flag.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T22:03:23Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-187` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-grouping-insertrule-nested-flag.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0010-grouping-insertrule-nested-flag.ts
+      freshness_hashes:
+        proof/known-issues/KI-187.yaml: ki-content-v1:sha256:c28ae12dd8fd8060139a1b7c81dc76b69df9e4b43f05ea308769993172eef4ac
+        proof/reproducers/CRS-0010-grouping-insertrule-nested-flag.ts: sha256:c8f01994f5c448a99c0989d94ee7650817a2957c9a95e226c7f0a2eb59abe3ee
+      known_issues:
+        - KI-187

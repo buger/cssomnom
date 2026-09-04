@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-RPSA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0034-parentless-root-custom-prop-leak.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:39Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-287` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0034-parentless-root-custom-prop-leak.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0034-parentless-root-custom-prop-leak.ts
+      freshness_hashes:
+        proof/known-issues/KI-287.yaml: ki-content-v1:sha256:0eff63e20e2700a74e63b07de10c9aae4843f630c4399ad63ac89fae930bd9d4
+        proof/reproducers/CRS-0034-parentless-root-custom-prop-leak.ts: sha256:8536fb35f3979cd216acf77225620ab7ae767e13f95adc0850b7365793acf35f
+      known_issues:
+        - KI-287

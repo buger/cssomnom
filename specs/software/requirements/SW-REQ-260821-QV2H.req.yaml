@@ -87,3 +87,12 @@ lifecycle:
 audit_ignore:
     - check: under_modeled_requirements_clean
       reason: "Intentionally coarse streaming-chunk contract: complete chunks drain tokens while incomplete ones hold NeedMoreData within the depth-80 fuzz gate; witnessed by tests/css-fuzz-cssomnom.test.ts and tests/mcdc-witness-tokenizer.test.ts. Stream rewind mechanics are shared tokenizer infrastructure."
+defect_review:
+    reviewed_at: "2026-09-03T21:58:31Z"
+    session: CRS-0033
+    fingerprint_sha: sha256:98db9a110168df08ae68e266028b95a0ef7208afdfaf17c43c8eefa2d6735d9f
+    via: cli-session
+    counts:
+        emitted: 31
+        verified: 13
+        dismissed: 18

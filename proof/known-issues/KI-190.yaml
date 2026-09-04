@@ -1,0 +1,46 @@
+id: KI-190
+title: 'registerProperty accepts syntax: "" as universal instead of throwing SyntaxError'
+description: 'PropertyRegistry.validate coerces the syntax member with `definition.syntax || ''*''`. css-properties-values-api #consume-a-syntax-definition step 2 returns failure for an empty string. #register-a-custom-property step 3 must turn that failure into a SyntaxError. The WebIDL default ''*'' applies only when the member is absent, not when it is the empty string. CSS.registerProperty({syntax: ''''}) therefore stores a registration whose syntax is the empty string.'
+affected_requirements:
+    - INT-REQ-260821-ZP03
+evidence_manifests:
+    - proof/evidence/ki-190.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.registerProperty / PropertyRegistry.validate syntax defaulting (src/PropertyRegistry.ts)
+attacker_input: property definition dictionaries passing syntax as the empty string; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0011-empty-syntax-string-accepted.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass a non-empty syntax string, or omit the member to get the universal syntax.
+remediation: Default the syntax only when definition.syntax is undefined, then let validateSyntax reject the empty string.
+status: open
+history:
+    - at: "2026-09-03T22:13:51Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C01
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C01
+    - at: "2026-09-04T00:02:27Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C09
+    - at: "2026-09-04T10:40:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-190.yaml
+source_claim:
+    - CRS-0011/C02
+    - CRS-0024/C01
+    - CRS-0032/C01
+    - CRS-0036/C09

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-ZP03
+      command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0011-revert-rule-syntax-literal.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:02Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-192` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0011-revert-rule-syntax-literal.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0011-revert-rule-syntax-literal.ts
+      freshness_hashes:
+        proof/known-issues/KI-192.yaml: ki-content-v1:sha256:d791c06357b9044edeeb215870c5e65dcc5b2a4f57fd2416f419d7e6a5abe5be
+        proof/reproducers/CRS-0011-revert-rule-syntax-literal.ts: sha256:17bd861c24bd70307a3cb47228e905cbd8c73572357d1d702c15613101243079
+      known_issues:
+        - KI-192

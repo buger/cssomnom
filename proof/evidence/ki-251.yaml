@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-E5D5
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-unitvalue-nan-infinity.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:24Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-251` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-unitvalue-nan-infinity.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0025-unitvalue-nan-infinity.ts
+      freshness_hashes:
+        proof/known-issues/KI-251.yaml: ki-content-v1:sha256:69597c3c098ad57431b5fa9ca727657f83cb9fd793c35d10a6e47f308c8e1ca1
+        proof/reproducers/CRS-0025-unitvalue-nan-infinity.ts: sha256:c1d35e11b2dab112d4d46d175943a33cc245473e5ace9ce329d620ea4ae20a84
+      known_issues:
+        - KI-251

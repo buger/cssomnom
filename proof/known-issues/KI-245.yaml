@@ -1,0 +1,41 @@
+id: KI-245
+title: Universal-syntax @property skips the computational-independence check on initial values
+description: 'PropertyRegistry.validate skips isComputationallyIndependent when the syntax is the universal ''*''. css-properties-values-api #register-a-custom-property step 4 requires independence whenever initialValue is present. CSS.registerProperty({syntax:''*'', initialValue:''var(--y)''}) stores the registration. The @property rule with initial-value: var(--y) survives too. WPT at-property.html line 148 expects that rule invalid.'
+affected_requirements:
+    - SW-REQ-260821-ARC1
+evidence_manifests:
+    - proof/evidence/ki-245.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS.registerProperty / PropertyRegistry.validate universal-syntax arm (src/PropertyRegistry.ts)
+attacker_input: property definitions with universal syntax and a substitution-dependent initial value; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-universal-syntax-independence.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Register typed initial values only, or omit initialValue with the universal syntax.
+remediation: Run isComputationallyIndependent on the parsed initialValue for every syntax, including the universal definition.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:21Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C07
+    - at: "2026-09-04T10:40:22Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-245.yaml
+kill_domain: registered_initial_value_independence
+do_not_refile_as: 'empty-string syntax coercion (KI-190) and matcher gaps (KI-111): different validate arms'
+source_claim:
+    - CRS-0024/C02
+    - CRS-0032/C07

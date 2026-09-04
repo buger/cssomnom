@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-N2VE
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-import-block-kept.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:57:29Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-183` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-import-block-kept.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0007-import-block-kept.ts
+      freshness_hashes:
+        proof/known-issues/KI-183.yaml: ki-content-v1:sha256:a1b578a8bad67331b88f9fd9395d4badfe2129e5e3681f0007ee411408f51bcf
+        proof/reproducers/CRS-0007-import-block-kept.ts: sha256:c54483457701cbac20f6ccbfd9737987f8200b9ad099b3841ce97d343059d285
+      known_issues:
+        - KI-183

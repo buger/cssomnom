@@ -1,0 +1,41 @@
+id: KI-260
+title: normalizeComputedColor crashes on Object.prototype color identifiers like constructor
+description: 'normalizeComputedColor tests membership with ''lower in NAMED_COLORS'' on a prototype-bearing object. CSS identifiers such as constructor and valueOf collide with Object.prototype keys. NAMED_COLORS[lower] then yields a function and the destructuring throws TypeError. getCascadedStyle crashes for the stylesheet value color: constructor.'
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-260.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: normalizeComputedColor / getCascadedStyle color path (src/cascade/color-resolver.ts)
+attacker_input: stylesheets using prototype-key names as color identifiers; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-color-ident-prototype-crash.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid color identifiers that collide with Object.prototype keys.
+remediation: Use Object.hasOwn for the NAMED_COLORS and SYSTEM_COLORS membership checks.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:28Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-260.yaml
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0040/C12,add-source-claim=CRS-0040/C19
+kill_domain: prototype_key_lookup
+source_claim:
+    - CRS-0026/C16
+    - CRS-0040/C12
+    - CRS-0040/C19

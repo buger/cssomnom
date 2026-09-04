@@ -1,0 +1,34 @@
+id: KI-296
+title: orientation media feature derives from width/height and ignores env.orientation
+description: 'evaluateMediaFeature hardcodes actualIdent = env.width > env.height ? ''landscape'' : ''portrait'' (src/MediaParser.ts:1293-1294). MediaEnvironment declares an orientation field and DEFAULT_MEDIA_ENV sets it, but the switch never reads it. MediaParser.evaluate(''(orientation: portrait)'', { width: 800, height: 600, orientation: ''portrait'' }) therefore returns false. mediaqueries-4 #orientation defines the feature from the page orientation this API exposes through MediaEnvironment.'
+affected_requirements:
+    - SW-REQ-260821-W8S1
+evidence_manifests:
+    - proof/evidence/ki-296.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: MediaParser.evaluateMediaFeature orientation arm (src/MediaParser.ts)
+attacker_input: caller-supplied media query text using orientation with a caller-supplied MediaEnvironment; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-orientation-ignores-env.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Set width and height to match the orientation you want until the arm reads env.orientation.
+remediation: Read env.orientation in the orientation case and fall back to the width/height derivation only when the field is absent.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:43Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:42Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-296.yaml
+kill_domain: environment_field_wiring
+source_claim: CRS-0037/C03

@@ -1,0 +1,35 @@
+id: KI-254
+title: Typed OM parse skips math-function argument validation outside calc/min/max/clamp
+description: 'validateMathFunctions only parses calc, min, max and clamp. Other math functions such as sin() and hypot() recurse into children without argument validation. CSSStyleValue.parse(''width'',''sin(garbage)'') reifies a CSSMathFunction although garbage is not a calculation for any property. ''width: calc(garbage)'' throws for the same reason.'
+affected_requirements:
+    - SW-REQ-260821-E5D5
+evidence_manifests:
+    - proof/evidence/ki-254.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse / validateMathFunctions grammar gate (src/typed-om/values/style-value-parser.ts)
+attacker_input: property values containing math functions with invalid arguments
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-math-function-validation-gap.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate math-function values independently before trusting parsed results.
+remediation: Run parseMathFunction on every css-values-4 math function in validateMathFunctions, not only calc/min/max/clamp.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:11Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-254.yaml
+kill_domain: math_function_grammar_gate
+do_not_refile_as: 'matcher accepting any math function for <length> (KI-111): registry matcher, different module'
+source_claim: CRS-0025/C28

@@ -1,0 +1,41 @@
+id: KI-259
+title: Logical mapping context picks the last writing-mode declaration, not the cascade winner
+description: getCascadedStyle reads the last grouped writing-mode declaration before any cascade sort. groupDeclarationsByProperty appends in encounter order. CSS Logical 1 maps logical properties against the computed writing-mode. An earlier important vertical-rl therefore loses to a later normal horizontal-tb, and margin-block-start maps to margin-top instead of margin-right.
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-259.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: getCascadedStyle logical property context (src/cascade/index.ts)
+attacker_input: stylesheets declaring writing-mode or direction more than once; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-writing-mode-context-encounter-order.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Declare writing-mode once per element until the context is cascade-sorted.
+remediation: Pick the mapping context with compareCascadeDeclarations over the grouped declarations, before reading .at(-1).
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0034/C02
+    - at: "2026-09-04T10:40:28Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-259.yaml
+kill_domain: cascade_order_logical_context
+do_not_refile_as: 'unresolved inherit/var mapping context (KI-149): sorting gap, not substitution gap'
+source_claim:
+    - CRS-0026/C02
+    - CRS-0034/C02

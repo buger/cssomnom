@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-JTY2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-frommatrix-string.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:12Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-159` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-frommatrix-string.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0005-frommatrix-string.ts
+      freshness_hashes:
+        proof/known-issues/KI-159.yaml: ki-content-v1:sha256:1e8151e03bebf8af6d520e2c522ca2891171bd2cd5248768224e6dfa986c3cc5
+        proof/reproducers/CRS-0005-frommatrix-string.ts: sha256:c9c04ce94ba81dbecc0e01ea6a5928e5839b2a1b8cf3712acd5116639f49ae25
+      known_issues:
+        - KI-159

@@ -1,0 +1,36 @@
+id: KI-152
+title: DOMMatrix string parser accepts invalid CSS transform syntax without SyntaxError
+description: 'parseMatrixString trims before the empty-string identity test, and the native matrix()/matrix3d() paths split arguments on /\s,]+/ and coerce with Number() (src/DOMMatrix.ts:81-124,136). Whitespace-only strings become identity. Space-separated, collapsed and trailing comma lists parse as numbers. ''Infinity'' passes the isNaN gate. The native paths also run before the typed-om hook, so these strings never reach CSSTransformValue.parse. geometry-1 #dommatrix-parse rewrites only the exact empty string and requires a valid CSS transform list. setMatrixValue shares the parser.'
+affected_requirements:
+    - INT-REQ-260821-JTY2
+evidence_manifests:
+    - proof/evidence/ki-152.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: DOMMatrix(string) constructor and DOMMatrix.setMatrixValue transform list parsing
+attacker_input: transform strings supplied by callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-transform-string-lenient.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate transform strings with a conforming CSS parser before constructing matrices.
+remediation: Route every transform string through the CSS transform grammar (the typed-om hook) and keep only the exact empty string and none as identity fast paths.
+status: open
+history:
+    - at: "2026-09-03T21:15:13Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-152.yaml
+source_claim:
+    - CRS-0005/C02
+    - CRS-0005/C03
+    - CRS-0005/C04
+    - CRS-0005/C05
+    - CRS-0005/C06
+    - CRS-0005/C28
+    - CRS-0005/C30

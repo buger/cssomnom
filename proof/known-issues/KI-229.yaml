@@ -1,0 +1,32 @@
+id: KI-229
+title: isStringToken accepts bad-string tokens in attribute values and :lang arguments
+description: isStringToken returns true for type 'bad-string' (src/SelectorParser.ts:47-48). css-syntax-3 emits a <bad-string-token> for an unterminated string, and selectors-4 grammars require a <string-token>. '[attr="unclosed]' and ':lang("en)' therefore parse instead of failing.
+affected_requirements:
+    - SW-REQ-260821-6D9T
+evidence_manifests:
+    - proof/evidence/ki-229.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: SelectorParser.isStringToken used by attribute selectors and :lang validation (src/SelectorParser.ts)
+attacker_input: selector strings with unterminated quotes; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-bad-string-accepted.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Terminate every quoted string in selector text before matching.
+remediation: Restrict isStringToken to type 'string' so bad-string tokens fail selector parsing per css-syntax-3.
+status: open
+history:
+    - at: "2026-09-03T22:41:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:17Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-229.yaml
+source_claim:
+    - CRS-0020/C08
+    - CRS-0020/C21

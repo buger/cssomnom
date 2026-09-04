@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-E5D5
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-to-identity-aliasing.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-253` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-to-identity-aliasing.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0025-to-identity-aliasing.ts
+      freshness_hashes:
+        proof/known-issues/KI-253.yaml: ki-content-v1:sha256:7235ff2b9af5b1620a145032afa76ed9ac2a23613abf6c071b1f9f3a38cc27bd
+        proof/reproducers/CRS-0025-to-identity-aliasing.ts: sha256:b305f18e6547197a18834e13d387559cb1867ac2d248a903441d2da35054b53f
+      known_issues:
+        - KI-253

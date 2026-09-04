@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-font-feature-unhyphenated-alias.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:36Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-177` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-font-feature-unhyphenated-alias.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0003-font-feature-unhyphenated-alias.ts
+      freshness_hashes:
+        proof/known-issues/KI-177.yaml: ki-content-v1:sha256:bb3c5a7767037f117c451e9ed2218f10152fd084b0baec44142f2f62a4e632d3
+        proof/reproducers/CRS-0003-font-feature-unhyphenated-alias.ts: sha256:47836ee4a252f35aad2b79090d302d6f9186ed91235ecaae8a62ac4d7657fee1
+      known_issues:
+        - KI-177

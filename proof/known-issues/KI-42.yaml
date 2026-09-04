@@ -60,6 +60,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0068/C14
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -86,3 +90,4 @@ poc_quality:
         reachability_verified: public Parser API IS the product surface; nothing stands between a host and the length-check filter.
 kill_domain: grammar_closed_set_validation
 do_not_refile_as: 'valid url() href extraction loss in @import/border-image (KI-8 fixed; KI-114/KI-116): those cover VALID urls losing content; this is an always-parse-error bad token that must be REJECTED'
+source_claim: CRS-0068/C14

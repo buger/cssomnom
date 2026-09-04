@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-QKE9
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-custom-media-cycle-overflow.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:43:27Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-144` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-custom-media-cycle-overflow.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0001-custom-media-cycle-overflow.ts
+      freshness_hashes:
+        proof/known-issues/KI-144.yaml: ki-content-v1:sha256:0f5f192b4bf46b9aac2fbdd758c340529b7732688e54bd30c6e6914a3e845b68
+        proof/reproducers/CRS-0001-custom-media-cycle-overflow.ts: sha256:935fe26fc6d6f16b383c96c54eea28f2b342868299941565d6d48ac698c4cf16
+      known_issues:
+        - KI-144

@@ -1,0 +1,41 @@
+id: KI-144
+title: Custom media query cycles overflow the JS stack in evaluate without a visited set
+description: 'evaluateMediaFeature re-parses custom media string values and re-evaluates them against the same environment (src/MediaParser.ts:1133-1140). A custom media entry that references itself recurses without a visited set until the engine stack overflows, and a raw RangeError escapes MediaParser.evaluate. mediaqueries-5 #custom-mq requires loops to fail to be defined, so the feature must evaluate unknown and the query must not match. The mechanism differs from the parenthesis-depth recursion of KI-131: this recursion lives in evaluation, not in condition parsing.'
+affected_requirements:
+    - SW-REQ-260822-QKE9
+evidence_manifests:
+    - proof/evidence/ki-144.yaml
+severity: medium
+severity_basis: risk
+risk: availability
+affected_api: MediaParser.evaluate custom media (--name) evaluation
+attacker_input: caller-supplied customMedia map whose entries reference themselves or each other; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-custom-media-cycle-overflow.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate customMedia maps for cycles before wiring them into an environment.
+remediation: 'Thread a visited set through evaluateMediaFeature custom media expansion and return unknown for any name already on the stack, per mediaqueries-5 #custom-mq loop handling.'
+status: open
+history:
+    - at: "2026-09-03T20:31:12Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:43:27Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-144.yaml
+    - at: "2026-09-03T21:54:06Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0006/C16
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C07
+kill_domain: resource_exhaustion
+source_claim:
+    - CRS-0001/C19
+    - CRS-0006/C16
+    - CRS-0037/C07

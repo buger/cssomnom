@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-7521
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-cycle-sentinel-leak.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T19:06:06Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-310` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-cycle-sentinel-leak.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0069-cycle-sentinel-leak.ts
+      freshness_hashes:
+        proof/known-issues/KI-310.yaml: ki-content-v1:sha256:f1445ec4fd88ea12ed422c30a6e382da7ec9d9224fe4fe6a4c2092e3ba8dccc1
+        proof/reproducers/CRS-0069-cycle-sentinel-leak.ts: sha256:a6fe3dcc8569abd83b3cab9e854c11cc4b1e36c8b8780f6b4a503cc60f638343
+      known_issues:
+        - KI-310

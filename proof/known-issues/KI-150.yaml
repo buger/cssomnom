@@ -1,0 +1,29 @@
+id: KI-150
+title: Custom property values keep uppercase VAR() references unsubstituted
+description: 'collectInlineDeclarations treats a declaration raw value as resolved when it lacks the substring ''var('' (src/cascade/rule-filter.ts:645). resolveCustomProperties applies the same case-sensitive test before substituting (src/cascade/variable-resolver.ts:263). An ASCII uppercase VAR() inside a custom property value therefore stays verbatim. CSS function names are ASCII case-insensitive, so ''--a: VAR(--c)'' must resolve like its lowercase twin.'
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-150.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: getCascadedStyle custom property resolution (collectInlineDeclarations, resolveCustomProperties)
+attacker_input: style attributes and stylesheets with mixed-case var() in custom property values; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-var-case-raw-substitution.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write var() in lowercase inside custom property values that this cascade must resolve.
+remediation: Detect var() references with an ASCII case-insensitive token match instead of a case-sensitive substring test on raw declaration text.
+status: open
+history:
+    - at: "2026-09-03T21:14:59Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-150.yaml
+source_claim: CRS-0004/C13

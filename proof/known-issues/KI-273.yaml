@@ -1,0 +1,33 @@
+id: KI-273
+title: CSS.supports throws on non-string arguments instead of WebIDL CSSOMString conversion
+description: supports dispatches on typeof value === 'string' and trims propertyOrCondition raw (src/parser-api.ts:766-769,635). The IDL types both arguments as CSSOMString, so WebIDL converts null, undefined and numbers before the algorithm runs. CSS.supports(null) and CSS.supports(undefined, 'red') therefore throw TypeError on trim, and CSS.supports('opacity', 0.5) takes the one-argument path and returns false.
+affected_requirements:
+    - SW-REQ-260821-HW77
+evidence_manifests:
+    - proof/evidence/ki-273.yaml
+severity: medium
+severity_basis: reproducer
+risk: correctness
+affected_api: CSS.supports / supports (src/parser-api.ts)
+attacker_input: caller-supplied non-string supports arguments through any host binding; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0029-supports-nonstring-typeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Coerce supports() arguments with String() at the binding boundary.
+remediation: Apply the WebIDL CSSOMString conversion to both arguments before choosing the one- or two-argument overload.
+status: open
+history:
+    - at: "2026-09-03T23:25:15Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:33Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-273.yaml
+kill_domain: error_handling
+source_claim:
+    - CRS-0029/C15
+    - CRS-0029/C17
+    - CRS-0029/C30

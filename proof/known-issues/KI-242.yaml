@@ -1,0 +1,30 @@
+id: KI-242
+title: Grouping-rule custom-property remnant consumption eats the following valid rule
+description: 'consumeNestedQualifiedRuleFromStream runs consumeRemnantsOfABadDeclaration for custom-property-shaped preludes regardless of the nested flag (src/parser.ts:1244-1246). A top-level @media body parses with nested false, where css-syntax-3 consume-a-qualified-rule requires consume-a-block and return nothing. The remnants instead swallow tokens through the next semicolon or EOF. ''@media all { --foo:hover { color: blue } div { color: red } }'' therefore drops the div rule the spec keeps.'
+affected_requirements:
+    - SW-REQ-260821-9KNX
+evidence_manifests:
+    - proof/evidence/ki-242.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: Parser.consumeBlockContents rule-list arm via consumeNestedQualifiedRuleFromStream (src/parser.ts)
+attacker_input: grouping-rule bodies mixing custom-property-shaped rules with valid rules; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-grouping-cprop-eats-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid custom-property-shaped preludes directly inside top-level grouping-rule bodies.
+remediation: Skip remnant consumption when nested is false and consume only the block, matching css-syntax-3 consume-a-qualified-rule.
+status: open
+history:
+    - at: "2026-09-03T22:59:10Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:21Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-242.yaml
+kill_domain: invalid_rule_recovery
+source_claim: CRS-0023/C04

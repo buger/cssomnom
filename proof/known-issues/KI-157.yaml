@@ -1,0 +1,29 @@
+id: KI-157
+title: DOMMatrix stringifier emits NaN and Infinity instead of throwing InvalidStateError
+description: 'toString interpolates components without a finiteness check (src/DOMMatrix.ts:491-497). A matrix holding NaN prints ''matrix(NaN, 0, 0, 1, 0, 0)''. A singular invertSelf fills NaN and then stringifies. geometry-1 #dommatrix-readonly stringification step 1 requires an InvalidStateError DOMException when any component from m11 to m44 is non-finite.'
+affected_requirements:
+    - INT-REQ-260821-JTY2
+evidence_manifests:
+    - proof/evidence/ki-157.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: DOMMatrixReadOnly.toString / toJSON stringification path
+attacker_input: matrices with non-finite components from parsing or inversion; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-stringifier-nonfinite.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Check Number.isFinite on components before stringifying matrices.
+remediation: Test every component for finiteness in the stringifier and throw an InvalidStateError DOMException before formatting.
+status: open
+history:
+    - at: "2026-09-03T21:15:37Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:11Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-157.yaml
+source_claim: CRS-0005/C23

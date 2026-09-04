@@ -52,6 +52,22 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0011/C07
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C07
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C04,add-source-claim=CRS-0032/C09
+    - at: "2026-09-04T00:02:26Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C08
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -78,3 +94,9 @@ poc_quality:
         reachability_verified: one public API call reaches the grammar hole; no privilege or configuration gate exists.
 kill_domain: grammar_closed_set_validation
 do_not_refile_as: registered initial-value validation against declared syntax (KI-111)
+source_claim:
+    - CRS-0011/C07
+    - CRS-0024/C07
+    - CRS-0032/C04
+    - CRS-0032/C09
+    - CRS-0036/C08

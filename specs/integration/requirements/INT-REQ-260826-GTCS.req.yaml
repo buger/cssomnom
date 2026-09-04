@@ -79,3 +79,12 @@ lifecycle:
           to: review
           reason: 'witness-backed causal decomposition of the under-modeled tokenizer/cascade families; every clause verified live against the public API before authoring'
           changed_by: agent:champ
+defect_review:
+    reviewed_at: "2026-09-03T20:59:13Z"
+    session: CRS-0012
+    fingerprint_sha: sha256:35583b727c462c8294eaa3107fb15ce719af08b65d0b473bd57237ab45d3a82b
+    via: cli-session
+    counts:
+        emitted: 16
+        verified: 4
+        dismissed: 12

@@ -1,0 +1,36 @@
+id: KI-202
+title: browser-entry installs non-WebIDL module exports such as createCSSStyleValue onto window
+description: installGlobalClasses spreads every module export into the classes object and installs all of them on window (src/browser-entry.ts:163-187). The comment says classes, but the object is a namespace dump with no interface filter. src/typed-om/index.ts exports the module helper createCSSStyleValue, so the browser bundle leaks an internal factory as a window global. No WebIDL interface declares that name.
+affected_requirements:
+    - SW-REQ-260821-1E5K
+evidence_manifests:
+    - proof/evidence/ki-202.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: src/browser-entry.ts installGlobalClasses window installation loop
+attacker_input: browser bundle load; no attacker required, the pollution is unconditional
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-global-namespace-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Ignore the leaked global; it shadows nothing the platform defines.
+remediation: Install an explicit list of WebIDL interface names instead of spreading the module namespaces.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0016/C06
+    - at: "2026-09-04T10:40:06Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-202.yaml
+kill_domain: global_surface_pollution
+source_claim:
+    - CRS-0013/C07
+    - CRS-0016/C06

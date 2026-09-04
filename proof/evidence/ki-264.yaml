@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-FWNH
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-hsl-grad-unit-ignored.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:30Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-264` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-hsl-grad-unit-ignored.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0026-hsl-grad-unit-ignored.ts
+      freshness_hashes:
+        proof/known-issues/KI-264.yaml: ki-content-v1:sha256:db2b93d61df66e196e375441807d1fa4f1987aa09b8b03087b854537c162f735
+        proof/reproducers/CRS-0026-hsl-grad-unit-ignored.ts: sha256:9c6142987c40ec0df058822f286fc338d987ee89d926a4f23eaa9c5a1478b450
+      known_issues:
+        - KI-264

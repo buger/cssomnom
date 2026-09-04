@@ -1,0 +1,33 @@
+id: KI-303
+title: serializeUrlToken backslash-escapes url control characters into invalid tokens
+description: 'serializeUrlToken escapes code points <= 0x20 with a bare backslash (src/serializer.ts:454-463). Backslash followed by newline is not a valid escape inside an unquoted url, so the value re-tokenizes as a bad-url token. A U+FFFD in the value (from a \0 escape) bypasses the originalText fast path. Custom-property serialization reaches this path with preserveCase=true. css-syntax-3 #serialization requires round-trip fidelity.'
+affected_requirements:
+    - SW-REQ-260821-YTV6
+evidence_manifests:
+    - proof/evidence/ki-303.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: serializeUrlToken via serialize(., preserveCase=true) (src/serializer.ts)
+attacker_input: url values carrying escaped control characters inside custom properties; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0039-url-control-char-escape-lost.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not put control characters or NULL escapes inside url() values.
+remediation: Emit hex escapes for non-printable code points and replace NULL with U+FFFD in serializeUrlToken.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T18:57:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T18:58:22Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-303.yaml
+source_claim: CRS-0039/C12

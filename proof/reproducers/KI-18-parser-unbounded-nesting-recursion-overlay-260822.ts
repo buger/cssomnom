@@ -33,6 +33,13 @@ function nestMedia(depth: number): string {
   return '@media all{'.repeat(depth) + '}'.repeat(depth);
 }
 
+// CRS-0027/C02: consumeComponentValue recurses through consumeBlock on
+// nested ()/[]/{} simple blocks inside a value or prelude with the same
+// unbounded consume stack (css-syntax-3 #consume-a-component-value).
+function nestParens(depth: number): string {
+  return 'div{color:'.repeat(1) + '('.repeat(depth) + ')'.repeat(depth) + '}';
+}
+
 function assertNotRangeError(fn: () => unknown, label: string): void {
   let threw: unknown;
   try {
@@ -79,6 +86,21 @@ describe('KI-18 e2e parser nesting depth budget', () => {
       assertNotRangeError(() => {
         throw e;
       }, 'parse(nestMedia(2000))');
+      return;
+    }
+    assert.ok(sheet instanceof CSSStyleSheet);
+  });
+
+  // Reproduces: KI-18 (CRS-0027/C02 nested () blocks in a declaration value)
+  // Verifies: SYS-REQ-260821-7521
+  test('deeply nested parentheses in a value do not overflow the JS stack via parse()', () => {
+    let sheet: unknown;
+    try {
+      sheet = parse(nestParens(20000));
+    } catch (e) {
+      assertNotRangeError(() => {
+        throw e;
+      }, 'parse(nestParens(20000))');
       return;
     }
     assert.ok(sheet instanceof CSSStyleSheet);

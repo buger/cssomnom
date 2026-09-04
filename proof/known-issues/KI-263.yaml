@@ -1,0 +1,40 @@
+id: KI-263
+title: Cyclic parentElement drives getCascadedStyle into a stack overflow
+description: getCascadedStyle recurses into parentNode and parentElement with no visited set. A duck-typed element whose parentElement is itself recurses until the engine throws RangeError. The crash escapes the public cascade API instead of terminating the ancestor walk.
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-263.yaml
+severity: low
+severity_basis: risk
+risk: availability
+cve_surface: none
+affected_api: getCascadedStyle ancestor recursion (src/cascade/index.ts)
+attacker_input: host-supplied duck-typed element graphs with cyclic parents; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-parent-cycle-stack-overflow.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate element graphs for cycles before requesting cascaded style.
+remediation: Track visited ancestors during the parent walk and stop recursion on revisits.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0034/C04
+    - at: "2026-09-04T10:40:30Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-263.yaml
+kill_domain: unbounded_recursion
+source_claim:
+    - CRS-0026/C24
+    - CRS-0034/C04

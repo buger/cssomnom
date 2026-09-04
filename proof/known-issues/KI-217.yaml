@@ -1,0 +1,30 @@
+id: KI-217
+title: contractFlex serializes flex 0 1 auto as the css-wide keyword initial
+description: 'contractFlex returns the literal string ''initial'' when grow is 0, shrink is 1, and basis is auto (src/shorthands.ts:1699-1701). cssom-1 #serialize-a-css-value may emit a css-wide keyword only when the longhand values are that keyword. Browsers serialize the specified longhands (''0 auto''), so getPropertyValue(''flex'') fabricates a keyword the author never wrote.'
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-217.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: getPropertyValue('flex') / flex shorthand serialization (src/shorthands.ts)
+attacker_input: declaration values for the flex shorthand; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-flex-01auto-serializes-initial.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: 'Do not treat flex: 0 1 auto output as evidence that initial was specified.'
+remediation: Drop the 'initial' shortcut and serialize the longhands per the flex grammar, reserving keywords for genuinely keyword-valued longhands.
+status: open
+history:
+    - at: "2026-09-03T22:41:25Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:12Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-217.yaml
+source_claim: CRS-0019/C16

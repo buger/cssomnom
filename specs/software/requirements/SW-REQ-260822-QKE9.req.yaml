@@ -40,6 +40,15 @@ history:
     last_modified_at: "2026-08-26T15:04:29Z"
 obligation_checklist:
     - nominal
+defect_review:
+    reviewed_at: "2026-09-03T19:23:59Z"
+    session: CRS-0001
+    fingerprint_sha: sha256:550c89d2f4d1bb5229a2cf2266cf8a4af91a72df7d4d9d7551d4d8e18299faf7
+    via: cli-session
+    counts:
+        emitted: 23
+        verified: 11
+        dismissed: 12
 lifecycle:
     change_history:
         - date: "2026-08-22T09:19:21Z"

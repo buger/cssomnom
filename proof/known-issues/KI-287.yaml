@@ -1,0 +1,34 @@
+id: KI-287
+title: Parentless element inherits documentElement custom properties instead of guaranteed-invalid
+description: getCascadedStyle copies documentElement custom properties into rawCustomProps whenever parentCascaded is null and rootNode differs from the element. css-variables-1 defines custom-property inheritance from the parent element, so a parentless element holds the guaranteed-invalid initial value. A parentless connected element therefore resolves var(--x) inside custom properties against the root value. The leak only reaches custom-property substitution; standard properties keep the fallback.
+affected_requirements:
+    - SW-REQ-260821-RPSA
+evidence_manifests:
+    - proof/evidence/ki-287.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: getCascadedStyle root custom-property fallback (src/cascade/index.ts)
+attacker_input: host-supplied parentless duck-typed elements with an ownerDocument documentElement; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0034-parentless-root-custom-prop-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Give every element a parent before requesting cascaded style.
+remediation: Drop the documentElement fallback branch and let parentless elements start from an empty custom-property map.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:45:47Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:39Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-287.yaml
+kill_domain: inheritance_scope_leak
+source_claim: CRS-0034/C10

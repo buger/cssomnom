@@ -1,0 +1,30 @@
+id: KI-208
+title: CSSImportRule.media is a private MediaList, never the associated sheet media
+description: 'CSSImportRule builds its own MediaList from the constructor mediaText (src/CSSOM.ts:1438). cssom-1 #dom-cssimportrule-media requires the attribute to return the associated sheet media value. The associated sheet keeps a default empty media, so rule.media and rule.styleSheet.media diverge and are distinct objects. A host reading styleSheet.media after parse(''@import url(a.css) print'') gets an empty string.'
+affected_requirements:
+    - SW-REQ-260821-5W6X
+evidence_manifests:
+    - proof/evidence/ki-208.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSImportRule.media / CSSImportRule.styleSheet.media (src/CSSOM.ts)
+attacker_input: stylesheet text with a media-conditioned @import; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0018-import-media-not-associated-sheet.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read import media from rule.media; do not rely on styleSheet.media until the associated sheet is created with the import media.
+remediation: Pass the import MediaList into the associated CSSStyleSheet (options.media) and return that sheet media object from CSSImportRule.media per cssom-1.
+status: open
+history:
+    - at: "2026-09-03T22:40:52Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-208.yaml
+source_claim: CRS-0018/C07

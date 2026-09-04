@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6951
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-indexed-proxy-webidl-divergence.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:11Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-213` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-indexed-proxy-webidl-divergence.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0019-indexed-proxy-webidl-divergence.ts
+      freshness_hashes:
+        proof/known-issues/KI-213.yaml: ki-content-v1:sha256:1ac8f0199f08424a81f03f15a394301c947a4d7a21ae5841d8288f0f40496b4c
+        proof/reproducers/CRS-0019-indexed-proxy-webidl-divergence.ts: sha256:0d93f0469ac71304b3d1bf6c6b3c11912b73b7497268e3e18980754a63068168
+      known_issues:
+        - KI-213

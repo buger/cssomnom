@@ -1,0 +1,32 @@
+id: KI-187
+title: Grouping-rule insertRule prefixes the nesting selector when no style rule encloses it
+description: CSSGroupingRule.insertRule derives its nested flag from this instanceof CSSStyleRule or parentRule !== null. A media rule nested inside a media rule therefore parses inserted text as nested block contents. normalizeNestedSelector prepends the implicit ampersand, so insertRule('div {}') yields '& div'. cssom-1 insert-a-css-rule parses the text with the css-syntax-3 parse-a-rule steps. css-nesting-1 conditionals applies block-contents parsing only inside style rules. The same text parsed in place keeps 'div', so insertRule disagrees with the initial parse.
+affected_requirements:
+    - INT-REQ-260821-ZMZR
+evidence_manifests:
+    - proof/evidence/ki-187.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSGroupingRule.insertRule nested flag (src/CSSOM.ts:692) and Parser.parseRuleInBlockText
+attacker_input: insertRule text on grouping rules nested inside other group rules; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-grouping-insertrule-nested-flag.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Insert rules into group-under-group targets with an explicit ampersand, or reparse the stylesheet.
+remediation: Set the nested flag only when this or an ancestor rule is a CSSStyleRule, matching css-nesting-1 nested group rules.
+status: open
+history:
+    - at: "2026-09-03T22:03:03Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:03:23Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-187.yaml
+source_claim:
+    - CRS-0010/C01
+    - CRS-0010/C17

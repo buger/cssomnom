@@ -1,0 +1,30 @@
+id: KI-236
+title: CSSColorValue.parse accepts non-hex hash tokens and returns NaN channels
+description: reifyColor admits hash tokens of length 3, 4, 6, or 8 without checking for hex digits, then parseInt on non-hex text yields NaN (src/typed-om/color/color-reify.ts:40-48). CSSColorValue.parse('#ggg') and ('#xyz') return rgb(nan,nan,nan). css-color-4 hex-notation allows hexadecimal digits only, so css-typed-om-1 parse-a-cssstylevalue step 3 must throw. The typed-om parse entry instead succeeds with NaN channels.
+affected_requirements:
+    - SW-REQ-260821-7AKJ
+evidence_manifests:
+    - proof/evidence/ki-236.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: CSSColorValue.parse hash-token reification (src/typed-om/color/color-reify.ts)
+attacker_input: caller-supplied color strings with non-hex characters in hash tokens; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0021-hex-nan-color.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Check hash token contents against hex digits before reifying a color.
+remediation: Require /^[0-9a-fA-F]+$/ for hash token values in reifyColor and throw SyntaxError or TypeError otherwise.
+status: open
+history:
+    - at: "2026-09-03T22:58:35Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:19Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-236.yaml
+kill_domain: grammar_gate_bypass
+source_claim: CRS-0021/C09

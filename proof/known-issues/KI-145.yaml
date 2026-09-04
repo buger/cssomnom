@@ -1,0 +1,31 @@
+id: KI-145
+title: normalizePseudoElement rejects spec-valid ::slotted and ::part argument grammars
+description: 'normalizePseudoElement gates known functional pseudo-elements on one ident token (src/cascade/index.ts:126). css-shadow-1 #slotted-pseudo defines ::slotted( <compound-selector> ). css-shadow-1 #part-pseudo defines ::part( <ident>+ ). The gate returns invalid for ::slotted(*), ::slotted(div.foo) and ::part(tab active). getCascadedStyle then serves the empty pseudo-element style for selectors the scoping spec accepts.'
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-145.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: normalizePseudoElement / getCascadedStyle(element, rules, pseudoElement)
+attacker_input: pseudo-element strings supplied by callers of the exported cascade API; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-slotted-part-args.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass compound selectors and ident lists through getCascadedStyle by matching rules before pseudo normalization, or extend the argument grammar.
+remediation: 'Parse the argument of known functional pseudo-elements with their spec grammar: a compound selector for ::slotted() and an ident list for ::part().'
+status: open
+history:
+    - at: "2026-09-03T21:14:30Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:03Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-145.yaml
+source_claim:
+    - CRS-0004/C01
+    - CRS-0004/C02

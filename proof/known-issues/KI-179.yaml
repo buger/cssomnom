@@ -1,0 +1,29 @@
+id: KI-179
+title: Parser.resolveVariables uses the var() fallback for a specified-empty custom property
+description: '#resolveVarFunction gates substitution on rawValue truthiness plus a non-blank trim (src/parser.ts:1769-1770). A declared ''--x:;'' therefore falls through to the fallback arm. css-variables-1 #guaranteed-invalid defines an empty specified value as a valid value, not the guaranteed-invalid value. var(--x, red) must substitute empty and leave the property invalid at computed-value time. The resolver returns ''red'' instead.'
+affected_requirements:
+    - INT-REQ-260821-N2VE
+evidence_manifests:
+    - proof/evidence/ki-179.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: Parser.resolveVariables custom property substitution
+attacker_input: stylesheet text declaring an empty custom property consumed by a var() with fallback; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0007-empty-custom-prop-fallback.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Declare a non-empty value or omit the property until empty specified values stop selecting the fallback.
+remediation: Distinguish a declared empty custom property from an unset one and substitute it as empty, using the fallback only for the guaranteed-invalid value.
+status: open
+history:
+    - at: "2026-09-03T21:53:32Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:57:28Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-179.yaml
+source_claim: CRS-0007/C04

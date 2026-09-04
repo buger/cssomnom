@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-ARC1
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-syntax-multiplier-whitespace-qmark.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:23Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-246` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-syntax-multiplier-whitespace-qmark.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0024-syntax-multiplier-whitespace-qmark.ts
+      freshness_hashes:
+        proof/known-issues/KI-246.yaml: ki-content-v1:sha256:b272eb22ba4cbd06c06b29deb5dea79464a4a0aa92c8099819ec4eabcc89771c
+        proof/reproducers/CRS-0024-syntax-multiplier-whitespace-qmark.ts: sha256:de3084eaecf86bbfb0022f32dc9b31e7704d623c984968de11d9515f5755fe4d
+      known_issues:
+        - KI-246

@@ -1,0 +1,46 @@
+id: KI-304
+title: Color resolver rewrites grammar-invalid rgb()/hsl() components into bogus colors
+description: 'parseRgbComponents and parseHslComponents parseFloat every component and never reject NaN (src/cascade/color-resolver.ts:92-183). Garbage text resolves silently: hsl(0, foo, 50%) becomes rgb(NaN, NaN, NaN) and hsl(nope, 100%, 50%) becomes red. Invalid alpha coerces to opaque 1. Four space-separated components parse although the modern syntax requires a slash before alpha. Comma syntax silently drops a slash alpha, and unitless s/l values read as 0-1 fractions. Modern ''none'' components are rejected instead of computing as 0. css-color-4 #funcdef-rgb and #funcdef-hsl type every component, so invalid input must stay untouched.'
+affected_requirements:
+    - SW-REQ-260822-1REE
+evidence_manifests:
+    - proof/evidence/ki-304.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: normalizeComputedColor / parseRgbComponents / parseHslComponents (src/cascade/color-resolver.ts)
+attacker_input: color declarations with off-grammar rgb()/hsl() component text; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0040-color-resolver-garbage-inputs.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate rgb()/hsl() component text against the css-color-4 grammar before trusting computed colors.
+remediation: Reject non-numeric components and trailing junk, handle none as 0, require the slash for alpha, and return null so normalizeComputedColor passes the original text through.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T18:58:04Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T18:58:22Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-304.yaml
+source_claim:
+    - CRS-0040/C03
+    - CRS-0040/C04
+    - CRS-0040/C05
+    - CRS-0040/C06
+    - CRS-0040/C07
+    - CRS-0040/C08
+    - CRS-0040/C09
+    - CRS-0040/C10
+    - CRS-0040/C11
+    - CRS-0040/C14
+    - CRS-0040/C15
+    - CRS-0040/C16
+    - CRS-0040/C20

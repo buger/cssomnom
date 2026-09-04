@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-2Z0N
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-component-value-empty-null.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:07Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-205` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-component-value-empty-null.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0014-parse-component-value-empty-null.ts
+      freshness_hashes:
+        proof/known-issues/KI-205.yaml: ki-content-v1:sha256:b2baa92442b8e0b3fcae79584fa62fa8a2b5a370e31d937e73e2cb1f58187540
+        proof/reproducers/CRS-0014-parse-component-value-empty-null.ts: sha256:fdafc1533ac2c787bbfb297f6cbff6533ec76a991d0b6f502e831416ba9d45a6
+      known_issues:
+        - KI-205

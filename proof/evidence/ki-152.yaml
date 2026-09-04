@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-JTY2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-transform-string-lenient.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:10Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-152` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-transform-string-lenient.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0005-transform-string-lenient.ts
+      freshness_hashes:
+        proof/known-issues/KI-152.yaml: ki-content-v1:sha256:aa755290fe58b9834a1fdc991eb40de8ccc5f14bbffb1f77e18e5a2bf653ca31
+        proof/reproducers/CRS-0005-transform-string-lenient.ts: sha256:bef8d35da7149f8962d3a8bedf80132635fa0ee25adbd77ecab106423e40a3e6
+      known_issues:
+        - KI-152

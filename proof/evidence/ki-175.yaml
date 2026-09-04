@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-parse-invalid-custom-property-name.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:35Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-175` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-parse-invalid-custom-property-name.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0003-parse-invalid-custom-property-name.ts
+      freshness_hashes:
+        proof/known-issues/KI-175.yaml: ki-content-v1:sha256:877b44b9705749912169e9fc5f85025814873d2bc55b9af0d5eff581b1639afd
+        proof/reproducers/CRS-0003-parse-invalid-custom-property-name.ts: sha256:700d591f5b6e3c428eea0cab42ab97c333feba7b377a9c1ec7d609427cf05834
+      known_issues:
+        - KI-175

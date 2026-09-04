@@ -1,0 +1,35 @@
+id: KI-288
+title: Text-orientation mapping context reads the last collected declaration, not the cascade winner
+description: 'getCascadedStyle picks the text-orientation mapping context with declarationsByProperty.get(''text-orientation'')?.at(-1) before any cascade sort. css-writing-modes-4 #text-orientation forces the used direction to ltr under upright text-orientation in vertical writing modes, which drives logical inline mapping. A lower-priority text-orientation collected later hides the winning upright declaration, so the forced-LTR mapping is skipped. Identical cascade winners map margin-inline-start to opposite physical sides depending only on collection order. Same unsorted-context root as KI-259, which pins the writing-mode leg; this KI pins the text-orientation leg.'
+affected_requirements:
+    - SW-REQ-260821-RPSA
+evidence_manifests:
+    - proof/evidence/ki-288.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: getCascadedStyle logical property mapping context (src/cascade/index.ts)
+attacker_input: stylesheets declaring text-orientation more than once with mixed priority; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0034-text-orientation-context-encounter-order.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Declare text-orientation once per element until the context is cascade-sorted.
+remediation: Pick every mapping-context property with compareCascadeDeclarations winners, covering writing-mode, direction, and text-orientation in one sort.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:45:47Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:39Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-288.yaml
+kill_domain: cascade_order_logical_context
+do_not_refile_as: 'writing-mode context unsorted (KI-259): same root line, writing-mode leg pinned there'
+source_claim: CRS-0034/C15

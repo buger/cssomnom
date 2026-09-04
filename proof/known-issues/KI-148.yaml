@@ -1,0 +1,40 @@
+id: KI-148
+title: getCascadedStyle drops rules, inline style and inheritance for disconnected elements
+description: collectStyleSheetsAndRules returns null whenever element.isConnected is false (src/cascade/rule-filter.ts:86-88). getCascadedStyle then returns a bare empty CSSStyleDeclaration at src/cascade/index.ts:187-189. Explicitly passed rules, the element style attribute and parent inheritance are skipped, and matcher, MediaParser and supports run never. Browsers apply stylesheet rules, inline style and inheritance to detached elements, and the connected twin of each fixture resolves correctly.
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-148.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: getCascadedStyle(element, rules) disconnected-element path
+attacker_input: host-supplied duck-typed or detached DOM elements; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-disconnected-element-empty.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Attach elements before requesting cascaded style, or resolve detached subtrees without the connectivity guard.
+remediation: Keep the explicit rules argument authoritative when the caller passes it, and fall back to a computed-style declaration for detached elements instead of an empty mutable one.
+status: open
+history:
+    - at: "2026-09-03T21:14:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:08Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-148.yaml
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0026/C30
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0034/C06
+source_claim:
+    - CRS-0004/C07
+    - CRS-0026/C30
+    - CRS-0034/C06

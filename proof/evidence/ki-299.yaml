@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-W8S1
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-empty-parens-not-all.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:43Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-299` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0037-empty-parens-not-all.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0037-empty-parens-not-all.ts
+      freshness_hashes:
+        proof/known-issues/KI-299.yaml: ki-content-v1:sha256:c9d088d2f89445a4fa3f0fa433c3daddaf69fe1ec09dbd8d8a5d8315dafd89b2
+        proof/reproducers/CRS-0037-empty-parens-not-all.ts: sha256:9ad9a25fc8f8202570938457b67b55cd9c7155f9f9b6e43d66e28f404f3b0fdf
+      known_issues:
+        - KI-299

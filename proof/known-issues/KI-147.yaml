@@ -1,0 +1,29 @@
+id: KI-147
+title: normalizePseudoElement drops arguments of unknown functional pseudo-elements
+description: The unknown-function path returns '::' plus the lowercased name and empty parentheses (src/cascade/index.ts:119-120). It never reads the argument tokens. '::unknown(foo)' normalizes to '::unknown()'. Selectors 4 preserves unknown pseudo-elements for forward compatibility, so a normalizer must keep the argument list.
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-147.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: normalizePseudoElement exported helper
+attacker_input: pseudo-element strings supplied by callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-unknown-pseudo-drops-args.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not consume the exported normalized form for round-tripping unknown pseudo-elements.
+remediation: Serialize the argument tokens of unknown functional pseudo-elements into the normalized string instead of emitting empty parentheses.
+status: open
+history:
+    - at: "2026-09-03T21:14:40Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:08Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-147.yaml
+source_claim: CRS-0004/C03

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-HNRG
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-counter-style-setters-no-validation.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:32Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-269` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-counter-style-setters-no-validation.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0028-counter-style-setters-no-validation.ts
+      freshness_hashes:
+        proof/known-issues/KI-269.yaml: ki-content-v1:sha256:8808c847e32d37586f50e3cc90f3e66b028bef0d190b333753cffbbb7861be52
+        proof/reproducers/CRS-0028-counter-style-setters-no-validation.ts: sha256:60efcc64743177380f6d45ba1c1838d3332194f733662f8ff7d9dc4d037a97af
+      known_issues:
+        - KI-269

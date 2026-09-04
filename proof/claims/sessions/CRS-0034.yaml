@@ -1,0 +1,31 @@
+id: CRS-0034
+spec_reqids:
+    - SW-REQ-260821-RPSA
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-RPSA
+      dir: .proof/defect-sessions/CRS-0034/cells/SW-REQ-260821-RPSA
+      status: complete
+      attempts: 1
+      elapsed_secs: 996.533267973
+      artifact_hashes:
+        deliverable.md: sha256:b7e042ba4f72c9d19a461aac436ee1966a4e94103e083b5716e7e512b312ddad
+        ledger.jsonl: sha256:57b22332c7d72c3e6256955ac490e8097bed62df61a0c334de8255721cad5414
+        reviewed-list.txt: sha256:49a8c85eaf9b0c0fb0b0e3c0bd8fb855c011025c58947b93e2a43c0231abe73f
+input_fingerprint:
+    spec_yaml_sha: sha256:e9703549ef497bf4685c04cbe9cf721e5d2b3e48a2ccb10e94eb0a6d51111f9c
+    code_fingerprints:
+        src/cascade.ts: sha256:bf2562bf564ebdc2238d54028ec52c9f3aa1bf9e6f728f14a16423fcb9dd450f
+        src/cascade/index.ts: sha256:0c4f4db620cf0e6e6cae775a79a9ad3fb0875ded2a5271ed1f030d5096799262
+    claims_sha: sha256:734e77d6789c179338d66591d39e6734d01b9ecfce62f2c5bc0c41bf8a50db97
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 327805
+    output_tokens: 43765
+    cost_usd: 0.298078
+    wall_secs: 996.533267973
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T21:59:50Z"

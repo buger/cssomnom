@@ -1,0 +1,38 @@
+id: KI-283
+title: matchesSyntax accepts calc(1.5), rgb() and rotate() as matching initial values
+description: 'checkItem accepts a function token when its name appears in a known-name set. The <integer>/<length>/... arms return true for every math function without a result-type check, so calc(1.5) and sin(1) count as integers. The <color> and <transform-list> arms match rgb() and rotate() with no arguments. css-properties-values-api #the-registerproperty-function must parse initial values against the syntax definition and throw SyntaxError.'
+affected_requirements:
+    - SW-REQ-260821-PD6M
+evidence_manifests:
+    - proof/evidence/ki-283.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.matchesSyntax checkItem (src/PropertyRegistry.ts)
+attacker_input: registered initial values using argumentless or wrong-result functions; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-matcher-function-arguments.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Validate registered initial values against the real grammar before relying on them.
+remediation: Parse function arguments and math result types in checkItem instead of matching on the function name.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:37:10Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:37Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-283.yaml
+kill_domain: registered_initial_value_matching
+do_not_refile_as: 'length/image function-shape matching (KI-111): those types; this KI owns integer/color/transform argument and result checks'
+source_claim:
+    - CRS-0032/C16
+    - CRS-0032/C17
+    - CRS-0032/C29

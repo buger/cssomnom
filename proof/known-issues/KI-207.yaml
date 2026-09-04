@@ -1,0 +1,46 @@
+id: KI-207
+title: sourceToString never releases the ReadableStream reader when a read rejects
+description: 'sourceToString takes a reader and loops over read with no try or finally (src/parser-api.ts:490-501). When a chunk read rejects, the loop propagates the error and leaves the stream locked. A later getReader on the same stream throws Invalid state: ReadableStream is locked. The streams spec expects a consumer to release the lock when it stops reading.'
+affected_requirements:
+    - SW-REQ-260821-2Z0N
+evidence_manifests:
+    - proof/evidence/ki-207.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: parseStylesheet and parseRuleList stream entry via sourceToString (src/parser-api.ts L488-501)
+attacker_input: a ReadableStream that errors mid-transfer; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-stream-reader-lock-leak.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Create a fresh stream per parse call instead of reusing an errored one.
+remediation: Wrap the read loop in try or finally and call reader.releaseLock, plus cancel the stream on error paths.
+status: open
+history:
+    - at: "2026-09-03T22:19:46Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:53Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0015/C15
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0029/C10
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C10
+    - at: "2026-09-04T10:40:08Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-207.yaml
+kill_domain: resource_cleanup
+source_claim:
+    - CRS-0014/C14
+    - CRS-0015/C15
+    - CRS-0029/C10
+    - CRS-0030/C10

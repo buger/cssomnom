@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PAKB
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-nested-declarations-unsupported-names.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:36Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-279` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-nested-declarations-unsupported-names.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0031-nested-declarations-unsupported-names.ts
+      freshness_hashes:
+        proof/known-issues/KI-279.yaml: ki-content-v1:sha256:b6e4371f12b5cd30a734a42fadff029f9255999a3560b50ba6d8fb90b8f81bbc
+        proof/reproducers/CRS-0031-nested-declarations-unsupported-names.ts: sha256:e84948a8618ef8f8ca137143ecebb6b0810adcac58b1f4155c7ad357f5da350d
+      known_issues:
+        - KI-279

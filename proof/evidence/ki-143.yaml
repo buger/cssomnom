@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-QKE9
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-sign-calc-never-simplifies.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:43:27Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-143` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-sign-calc-never-simplifies.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0001-sign-calc-never-simplifies.ts
+      freshness_hashes:
+        proof/known-issues/KI-143.yaml: ki-content-v1:sha256:7640a82f0a4d6f4424a1b1507f5d157eabbc04033e7b4d1c0583bfb5780542d4
+        proof/reproducers/CRS-0001-sign-calc-never-simplifies.ts: sha256:5825627e8a38ced49942c17af43ee47abb06b19a9e09664855788f05638d84c8
+      known_issues:
+        - KI-143

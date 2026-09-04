@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-ARC1
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-padded-universal-syntax-drops-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:23Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-247` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-padded-universal-syntax-drops-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0024-padded-universal-syntax-drops-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-247.yaml: ki-content-v1:sha256:64d3afe2de2718b1efe04459ee06b4855fbf2236b83a4d8c5c0f017d9ef70e4f
+        proof/reproducers/CRS-0024-padded-universal-syntax-drops-rule.ts: sha256:0e22a577f9a178dc7334aeff88501cae093e81f11baa05efe8c124d9d3154765
+      known_issues:
+        - KI-247

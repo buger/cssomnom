@@ -1,0 +1,31 @@
+id: KI-209
+title: CSS namespace omits parseRuleListSync while README documents it as bound
+description: The CSS namespace literal binds the async parseRuleList but omits its Sync sibling. README.md lists CSS.parseRuleListSync in the Parser API method table and documents Sync variants for async parse methods. SW-REQ-260821-3553 requires the CSS object to bind the parse methods. The standalone parseRuleListSync export exists at src/parser-api.ts L519, so CSS.parseRuleListSync is undefined while CSS.parseStylesheetSync is present. Hosts that call CSS.parseRuleListSync through the namespace get undefined.
+affected_requirements:
+    - SW-REQ-260821-3553
+evidence_manifests:
+    - proof/evidence/ki-209.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSS namespace literal (src/parser-api.ts L791-816)
+attacker_input: host code calling CSS.parseRuleListSync; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0015-css-namespace-parserulelistsync.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Import the standalone parseRuleListSync export instead of reading it off the CSS namespace.
+remediation: Add parseRuleListSync (and the other documented Sync names) to the CSS namespace literal in src/parser-api.ts.
+status: open
+history:
+    - at: "2026-09-03T22:41:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-209.yaml
+kill_domain: namespace_binding_completeness
+source_claim: CRS-0015/C04

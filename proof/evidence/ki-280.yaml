@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PD6M
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-syntax-trailing-combinator.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:36Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-280` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0032-syntax-trailing-combinator.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0032-syntax-trailing-combinator.ts
+      freshness_hashes:
+        proof/known-issues/KI-280.yaml: ki-content-v1:sha256:12d7185b88a12f45b8f88129e8cf2b7488d09a672866b86979d17a3e6ca41fd3
+        proof/reproducers/CRS-0032-syntax-trailing-combinator.ts: sha256:e6544a6436bb2c6aba02129891d59f657690d5f55682c8398001b74c9d9165f1
+      known_issues:
+        - KI-280

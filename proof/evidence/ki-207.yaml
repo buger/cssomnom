@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-2Z0N
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-stream-reader-lock-leak.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:08Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-207` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-stream-reader-lock-leak.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0014-stream-reader-lock-leak.ts
+      freshness_hashes:
+        proof/known-issues/KI-207.yaml: ki-content-v1:sha256:8d660f478f656b6c31b9bec21805409dcbee864df5f0ec02611683202b427bf9
+        proof/reproducers/CRS-0014-stream-reader-lock-leak.ts: sha256:6e9efabdcc24710da9f4665ba284a40997e300eeab125b93b0439b1b3de2bbd5
+      known_issues:
+        - KI-207

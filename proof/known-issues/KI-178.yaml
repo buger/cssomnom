@@ -1,0 +1,35 @@
+id: KI-178
+title: MediaList.deleteMedium throws NotFoundError for input that does not parse as one media query
+description: 'deleteMedium parses its argument with the list parser MediaParser.parse and throws NotFoundError whenever the result length is not 1 (src/CSSOM.ts:129-135). cssom-1 #dom-medialist-deletemedium step 2 returns silently when parsing the value yields null. An empty string or a comma-separated list fails single-query parsing, so the method must return without throwing. The list-length gate fires first, so the NotFoundError escapes before any comparison runs.'
+affected_requirements:
+    - INT-REQ-260821-MZW3
+evidence_manifests:
+    - proof/evidence/ki-178.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: MediaList.deleteMedium(medium)
+attacker_input: caller-supplied medium string that is empty or holds several queries; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0006-deletemedium-unparseable-throws.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Call deleteMedium only with single-query strings until the argument routes through single-query parsing.
+remediation: 'Parse the deleteMedium argument as one media query and return silently when the parse yields null, per cssom-1 #dom-medialist-deletemedium step 2.'
+status: open
+history:
+    - at: "2026-09-03T21:53:26Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:57:27Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-178.yaml
+    - at: "2026-09-03T22:42:17Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0019/C14
+source_claim:
+    - CRS-0006/C09
+    - CRS-0019/C14

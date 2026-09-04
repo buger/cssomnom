@@ -1,0 +1,49 @@
+id: KI-246
+title: Syntax strings accept '?', '*' and whitespace-separated multipliers
+description: 'consumeSyntaxComponent accepts ''?'', ''*'' and a multiplier after whitespace. css-properties-values-api #multipliers closes the multiplier set to ''+'' and ''#'' and requires immediate adjacency. #consume-a-syntax-definition must fail on the leftover multiplier token. CSS.registerProperty({syntax:''<length>?''}) and ''<length> +'' register instead of throwing SyntaxError.'
+affected_requirements:
+    - SW-REQ-260821-ARC1
+evidence_manifests:
+    - proof/evidence/ki-246.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.parseSyntax / consumeSyntaxComponent (src/PropertyRegistry.ts)
+attacker_input: property definitions with out-of-grammar multiplier syntax strings; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0024-syntax-multiplier-whitespace-qmark.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Restrict syntax strings to the '+' and '#' multipliers written directly after the component name.
+remediation: Accept only U+002B and U+0023 immediately after the component name and let parseSyntax reject the leftover token.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:13:21Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C03,add-source-claim=CRS-0032/C05
+    - at: "2026-09-04T00:02:26Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C06,add-source-claim=CRS-0036/C07
+    - at: "2026-09-04T10:40:23Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-246.yaml
+kill_domain: grammar_closed_set_validation
+do_not_refile_as: 'brace multipliers {N}/{N,M} (KI-35): same grammar family, already filed'
+source_claim:
+    - CRS-0024/C05
+    - CRS-0024/C06
+    - CRS-0032/C03
+    - CRS-0032/C05
+    - CRS-0036/C06
+    - CRS-0036/C07

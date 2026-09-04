@@ -44,6 +44,26 @@ history:
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-111.yaml
+    - at: "2026-09-03T22:14:39Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0011/C20
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C03
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C04
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C08
+    - at: "2026-09-04T00:02:27Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C13
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -70,3 +90,9 @@ poc_quality:
         reachability_verified: public CSS namespace IS the product surface; no gating between host and matcher.
 kill_domain: registered_initial_value_matching
 do_not_refile_as: 'syntax-string consumption checks (already validated elsewhere) and StylePropertyMap.set storage-time range wrapping (KI-122): different API and lifecycle stage'
+source_claim:
+    - CRS-0011/C20
+    - CRS-0024/C03
+    - CRS-0024/C04
+    - CRS-0032/C08
+    - CRS-0036/C13

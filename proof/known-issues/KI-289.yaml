@@ -1,0 +1,35 @@
+id: KI-289
+title: Grouping-rule insertRule swallows the parse-rule SyntaxError for trailing garbage
+description: 'CSSGroupingRule.insertRule wraps ParseHooks.parseRule in an empty catch and always proceeds to _parseRuleInBlock. cssom-1 #insert-a-css-rule steps 3-5 require parse a CSS rule, which css-syntax-3 #parse-a-rule fails on trailing tokens, followed by a SyntaxError throw. The nested-declaration recovery must not run for a non-nested grouping rule such as @media. consumeBlockContents keeps the leading qualified rule and swallows the garbage, so insertRule succeeds and mutates cssRules. Distinct from KI-160, which pins the constructed CSSStyleSheet default _parseRule.'
+affected_requirements:
+    - SW-REQ-260821-TF5T
+evidence_manifests:
+    - proof/evidence/ki-289.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSGroupingRule.insertRule (src/CSSOM.ts)
+attacker_input: caller-supplied insertRule text with a complete rule followed by garbage; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0035-grouping-insertrule-swallows-syntaxerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Insert exactly one complete rule text per call into grouping rules.
+remediation: Propagate the parseRule SyntaxError for non-nested grouping rules and run declaration-block recovery only under the nested flag.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:45:48Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:40Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-289.yaml
+kill_domain: consume_failure_swallowed
+do_not_refile_as: 'constructed-sheet insertRule trailing garbage (KI-160): default _parseRule path, not the grouping empty catch'
+source_claim: CRS-0035/C04

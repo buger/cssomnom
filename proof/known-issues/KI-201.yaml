@@ -1,0 +1,39 @@
+id: KI-201
+title: browser-entry style maps cache in enumerable expandos and add a non-spec Element.styleMap
+description: patchStyleMaps stores the map in an own enumerable expando named _attributeStyleMap (src/browser-entry.ts:220-223). css-typed-om-1 marks attributeStyleMap SameObject, which is an internal slot, so the map must not appear in Object.keys of the host. The same code installs a styleMap accessor on HTMLElement, SVGElement and MathMLElement. css-typed-om-1 exposes no element styleMap, only CSSStyleRule.styleMap and attributeStyleMap. The extra accessor builds a second map over the same inline style. The brand check uses instanceof only, so Object.create(HTMLElement.prototype) returns a map instead of throwing TypeError.
+affected_requirements:
+    - SW-REQ-260821-1E5K
+evidence_manifests:
+    - proof/evidence/ki-201.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: src/browser-entry.ts patchStyleMaps attributeStyleMap and styleMap accessors on HTMLElement, SVGElement, MathMLElement
+attacker_input: host code reading attributeStyleMap or styleMap on elements, or probing the accessor on a brandless prototype child; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-stylemap-expando-caches.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Cache maps in a WeakMap keyed by host and read attributeStyleMap only.
+remediation: Replace the expando caches with a WeakMap, drop the element styleMap accessor, and reject receivers that fail a real platform brand check.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0016/C15,add-source-claim=CRS-0016/C16
+    - at: "2026-09-04T10:40:06Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-201.yaml
+kill_domain: idl_attribute_semantics
+source_claim:
+    - CRS-0013/C15
+    - CRS-0013/C16
+    - CRS-0013/C26
+    - CRS-0016/C15
+    - CRS-0016/C16

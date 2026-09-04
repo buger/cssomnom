@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-JTY2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-stringifier-nonfinite.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:11Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-157` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-stringifier-nonfinite.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0005-stringifier-nonfinite.ts
+      freshness_hashes:
+        proof/known-issues/KI-157.yaml: ki-content-v1:sha256:a4f070c1bcaeb0460692bfb9c5c1e1193f15277b0cd66b3c22dda4281303438e
+        proof/reproducers/CRS-0005-stringifier-nonfinite.ts: sha256:7308c817e15cdcb2144364a0b6d5e5deb4149c83a054f059ffe84321f2d2b166
+      known_issues:
+        - KI-157

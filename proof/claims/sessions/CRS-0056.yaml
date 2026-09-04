@@ -1,0 +1,31 @@
+id: CRS-0056
+spec_reqids:
+    - SYS-REQ-260821-GR67
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SYS-REQ-260821-GR67
+      dir: .proof/defect-sessions/CRS-0056/cells/SYS-REQ-260821-GR67
+      status: complete
+      attempts: 1
+      elapsed_secs: 831.150562043
+      artifact_hashes:
+        deliverable.md: sha256:54493b02ba7fa17288794e87adc241802ca026651bd9098087f0359ba037e6a5
+        ledger.jsonl: sha256:c59add7c23ef03f897713d908811ea2a187940b9be0c4b55de5b363d0484a970
+        reviewed-list.txt: sha256:57bf3c6b42f800864283446f93a4e8e963392eebbd15d1817b5d389257cd8e16
+input_fingerprint:
+    spec_yaml_sha: sha256:b51d1a8c9dd2d26ddd6a3db965b6b60790f11c400985fa6b029854fb53a88b15
+    code_fingerprints:
+        src/CSSOM.ts: sha256:aba23234f0cb5d9c362457e895efacb86ccd55595842205a78f3021cc15d9318
+        src/CSSStyleDeclaration.ts: sha256:91f559f394fb37eabf6ecbc1d57c60737007a99320659d3a2229121cbb5ef554
+    claims_sha: sha256:b36a52f02142170fe53b85cbeba2008e72f2a82047f8cf768adc79880bdcac9c
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 117345
+    output_tokens: 47658
+    cost_usd: 0.15602974
+    wall_secs: 831.150562043
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T23:03:54Z"

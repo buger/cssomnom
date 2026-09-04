@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-ZMZR
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-nested-at-property-unregistered.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T22:03:24Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-189` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-nested-at-property-unregistered.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0010-nested-at-property-unregistered.ts
+      freshness_hashes:
+        proof/known-issues/KI-189.yaml: ki-content-v1:sha256:d4ae4e4775690ac7eb81b3a105fef44c84454f8ee8b1350226f689d1c8a38561
+        proof/reproducers/CRS-0010-nested-at-property-unregistered.ts: sha256:51940ceb57c9c4266f131f39f398b212efec10228be64b32b0e3258c9bbf3a8d
+      known_issues:
+        - KI-189

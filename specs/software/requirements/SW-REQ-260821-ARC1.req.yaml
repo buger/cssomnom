@@ -75,3 +75,12 @@ lifecycle:
 audit_ignore:
     - check: under_modeled_requirements_clean
       reason: "Intentionally coarse at-property drop contract: bad descriptors drop the rule and leave PropertyRegistry untouched; witnessed by tests/mcdc-witness-registry.test.ts and tests/mcdc-property-registry-leftover-unique-cause.test.ts. Descriptor grammar depth is owned by SYS-REQ-260822-JY0V models."
+defect_review:
+    reviewed_at: "2026-09-03T21:28:51Z"
+    session: CRS-0024
+    fingerprint_sha: sha256:0ce7601562210d0c8f593a3f7b1358d150ef381603ebe092c1e9493a803e6a6e
+    via: cli-session
+    counts:
+        emitted: 18
+        verified: 10
+        dismissed: 8

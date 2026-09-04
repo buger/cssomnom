@@ -1,0 +1,35 @@
+id: KI-138
+title: calc() ratio operands in aspect-ratio type-check but evaluate unknown
+description: 'isValidRatioOperand admits math functions with a number type as ratio operands (src/MediaParser.ts:706-718). parseRatio accepts only number tokens, so (aspect-ratio: calc(4) / calc(3)) parses as a known feature and then evaluates unknown. WPT css/mediaqueries/mq-calc-008.html requires calc() ratio operands to compare. Against the default 800x600 environment the query (aspect-ratio: calc(4) / calc(3)) must match and currently returns false.'
+affected_requirements:
+    - SW-REQ-260822-QKE9
+evidence_manifests:
+    - proof/evidence/ki-138.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: MediaParser.evaluate aspect-ratio feature evaluation
+attacker_input: caller-supplied media query text with calc() ratio operands; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-aspect-ratio-calc-unknown.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Authors can rewrite calc() ratio operands as plain numbers until evaluation supports math functions.
+remediation: Teach parseRatio to simplify function operands through parseMathFunction and simplify, mirroring the parseLengthToPx math arm.
+status: open
+history:
+    - at: "2026-09-03T20:30:24Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:43:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-138.yaml
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C08
+source_claim:
+    - CRS-0001/C05
+    - CRS-0037/C08

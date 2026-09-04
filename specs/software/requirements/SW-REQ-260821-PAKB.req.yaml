@@ -68,3 +68,12 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-21T21:18:11Z comment="Class-closure DEFECT-QHWP: replace() parses via replaceSync then Promise.resolve.")'
           changed_by: agent:grok-4.6
+defect_review:
+    reviewed_at: "2026-09-03T21:48:02Z"
+    session: CRS-0031
+    fingerprint_sha: sha256:7cb3af3299f4b324fa4672fee5d5f78d6db7498b901f5248d3b20bbea509ddb2
+    via: cli-session
+    counts:
+        emitted: 35
+        verified: 19
+        dismissed: 16

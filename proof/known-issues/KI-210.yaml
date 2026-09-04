@@ -1,0 +1,37 @@
+id: KI-210
+title: Parser retains @import nested inside grouping rules instead of dropping it
+description: 'consumeBlockContents parses grouping-rule bodies with isNestedStyleRule false, so isSupportedAtRule(''import'', false) returns true. css-cascade-5 #at-import invalidates an @import that does not precede all other rules, and WPT css/CSS2/syntax/at-rule-004.xht asserts @import inside a block is ignored. The parser keeps a CSSImportRule inside CSSMediaRule.cssRules, while CSSGroupingRule.insertRule rejects the same insertion with HierarchyRequestError.'
+affected_requirements:
+    - SW-REQ-260821-5W6X
+evidence_manifests:
+    - proof/evidence/ki-210.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.consumeBlockContents / Parser.isSupportedAtRule (src/parser.ts)
+attacker_input: stylesheet text placing @import inside @media or @supports blocks; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0018-import-nested-in-grouping-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep @import at stylesheet top level; ignore grouping-nested import rules when walking cssRules.
+remediation: Treat @import as unsupported inside grouping-rule blocks (drop the rule), matching css-cascade-5 and the existing insertRule hierarchy check.
+status: open
+history:
+    - at: "2026-09-03T22:41:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:33Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C04,add-source-claim=CRS-0027/C25
+    - at: "2026-09-04T10:40:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-210.yaml
+source_claim:
+    - CRS-0018/C10
+    - CRS-0027/C04
+    - CRS-0027/C25

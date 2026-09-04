@@ -1,0 +1,37 @@
+id: KI-269
+title: CSSCounterStyleRule setters store invalid names and descriptor values the spec ignores
+description: 'Every CSSCounterStyleRule attribute setter assigns the raw string (src/CSSOM.ts:1799-1839). css-counter-styles-3 #cssom requires the name setter to do nothing for ''none'' and each descriptor setter to parse the value and abort on grammar failure. rule.name = ''none'' and rule.system = ''not-a-system-keyword'' therefore stick and re-serialize into invalid @counter-style text.'
+affected_requirements:
+    - SW-REQ-260821-HNRG
+evidence_manifests:
+    - proof/evidence/ki-269.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: CSSCounterStyleRule name and descriptor setters (src/CSSOM.ts)
+attacker_input: caller-supplied counter-style attribute values; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-counter-style-setters-no-validation.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat counter-style attribute assignments as unvalidated until the grammar lands.
+remediation: Parse each setter value against its css-counter-styles-3 descriptor grammar and return without mutation on failure.
+status: open
+history:
+    - at: "2026-09-03T23:24:53Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C29
+    - at: "2026-09-04T10:40:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-269.yaml
+kill_domain: grammar_gate_bypass
+source_claim:
+    - CRS-0028/C14
+    - CRS-0028/C15
+    - CRS-0031/C29

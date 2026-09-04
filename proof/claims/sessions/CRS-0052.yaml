@@ -1,0 +1,32 @@
+id: CRS-0052
+spec_reqids:
+    - SYS-REQ-260821-7521
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SYS-REQ-260821-7521
+      dir: .proof/defect-sessions/CRS-0052/cells/SYS-REQ-260821-7521
+      status: complete
+      attempts: 1
+      elapsed_secs: 678.373326879
+      artifact_hashes:
+        deliverable.md: sha256:6f1a5ae038dfbcfa9654cf5603358bc16a173e0b640ccc9b1a7e9605639b0997
+        ledger.jsonl: sha256:7099ecf2e6ac36e30cfeed3e4d7f8b980d88c85e1e9939243e78abaa9d0ba991
+        reviewed-list.txt: sha256:ae509934ed2537912bc356abdb4ffa4a12c9a4664c3e1c3643ff0e8db28432e0
+input_fingerprint:
+    spec_yaml_sha: sha256:69c65d44a9a47649cf04788005f2d4a5d159863432dafd3af0bf48f327a0301e
+    code_fingerprints:
+        proof/reproducers/KI-18-parser-unbounded-nesting-recursion-overlay-260822.ts: sha256:47edfcf6757f90a26697dca2c71a7309da22f1d68cb8e5af8b93ddbde03092d8
+        src/parser.ts: sha256:6c048c4a9f3a1edc0174ab9a2914b41671c85907e7fce299c7ebca1e8b7e88a4
+        src/types.ts: sha256:e4f30d8f352aae9230e9ef124ef333b09641296fc7b9699a6c2f2110ecb81632
+    claims_sha: sha256:9b9f0dd671c2a8c8de77d5db159b6f474aee6b61b7f6ddd2b6c99aea8c7b04da
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 226066
+    output_tokens: 37349
+    cost_usd: 0.17403682
+    wall_secs: 678.373326879
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T22:50:16Z"

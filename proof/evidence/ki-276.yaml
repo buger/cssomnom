@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-PAKB
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-deleterule-noninteger-typeerror.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:35Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-276` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-deleterule-noninteger-typeerror.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0031-deleterule-noninteger-typeerror.ts
+      freshness_hashes:
+        proof/known-issues/KI-276.yaml: ki-content-v1:sha256:380f03b0ea67813b632144732ac2a12b972d30ff26ef2acf03d03a362f6da42c
+        proof/reproducers/CRS-0031-deleterule-noninteger-typeerror.ts: sha256:cc6f6e99f01c1051bc25400f50032f424d0bffc22f56b1b9b72e94db09ac7d20
+      known_issues:
+        - KI-276

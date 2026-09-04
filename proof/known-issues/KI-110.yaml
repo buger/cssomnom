@@ -76,3 +76,5 @@ poc_quality:
         reachability_verified: public CSS/Parser surfaces ARE the product path; no gating layer between host and grammar check.
 kill_domain: environment_function_grammar
 do_not_refile_as: 'mixed-case VAR()/ENV() dispatch casing (KI-109) and CSS.supports malformed var() grammar (KI-107): different function grammars and different observables'
+source_claim:
+    - CRS-0003/C20

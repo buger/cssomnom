@@ -1,0 +1,34 @@
+id: KI-262
+title: Nested declarations inside @scope lose their selector specificity
+description: 'walkRules threads scopeNode from any ancestor @scope into every descendant. The CSSNestedDeclarations arm zeroes specificity whenever scopeNode is truthy. css-cascade-5 #cascade-sort sorts declarations by their originating selector''s specificity. Declarations nested after an at-rule inside a scoped .foo rule therefore lose to a later div rule.'
+affected_requirements:
+    - SW-REQ-260821-FWNH
+evidence_manifests:
+    - proof/evidence/ki-262.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: collectMatchedDeclarations CSSNestedDeclarations arm (src/cascade/rule-filter.ts)
+attacker_input: nested style rules inside @scope blocks; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-scope-nested-declaration-specificity.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Declare nested values directly in the style rule instead of after a nested at-rule inside @scope.
+remediation: Zero specificity only when the CSSNestedDeclarations rule's direct parent is the CSSScopeRule, not for any scoped ancestor.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:14:41Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:29Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-262.yaml
+kill_domain: selector_specificity_bookkeeping
+source_claim: CRS-0026/C20

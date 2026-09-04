@@ -1,0 +1,30 @@
+id: KI-189
+title: '@property inside group rules constructs the rule but never registers it'
+description: CSSStyleSheet.createInternal registers CSSPropertyRule instances only while iterating top-level rules (src/CSSOM.ts:331-336). The parser accepts @property inside group rules and constructs a CSSPropertyRule child there. The nested rule never reaches PropertyRegistry, so its syntax and inheritance stay unregistered. replaceSync and deleteRule bookkeeping never track it either. css-properties-values-api requires every valid @property rule to register the custom property it names.
+affected_requirements:
+    - INT-REQ-260821-ZMZR
+evidence_manifests:
+    - proof/evidence/ki-189.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleSheet.createInternal/_registerRuleProperties recursion (src/CSSOM.ts)
+attacker_input: stylesheet text placing @property inside @media or other group rules; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0010-nested-at-property-unregistered.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep @property rules at the stylesheet top level.
+remediation: Walk grouping-rule cssRules during registration, or drop nested @property rules at parse time so the OM never carries an unregistered registration rule.
+status: open
+history:
+    - at: "2026-09-03T22:03:15Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:03:24Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-189.yaml
+source_claim: CRS-0010/C18

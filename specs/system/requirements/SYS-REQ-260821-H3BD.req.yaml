@@ -67,3 +67,10 @@ lifecycle:
           to: verification=failing
           reason: auto-derived [not_started→failing] signals=1; known_issue:KI-7=failing
           changed_by: agent:grok-4.6
+defect_review:
+    reviewed_at: "2026-09-03T23:01:12Z"
+    session: CRS-0057
+    fingerprint_sha: sha256:b9226c0957cc989233f810bd3299cf48500f4d788bc9eb8d94454d707b208ff6
+    via: cli-session
+    counts:
+        emitted: 22

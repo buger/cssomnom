@@ -1,0 +1,33 @@
+id: CRS-0033
+spec_reqids:
+    - SW-REQ-260821-QV2H
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-QV2H
+      dir: .proof/defect-sessions/CRS-0033/cells/SW-REQ-260821-QV2H
+      status: complete
+      attempts: 1
+      elapsed_secs: 942.862114264
+      artifact_hashes:
+        deliverable.md: sha256:de74cc44772d17bd1296203d67940c8f2ee023747b33e4952d40a6e9edd5b00e
+        ledger.jsonl: sha256:eb72922d6ddcc71651441d75ce967bd442353fc6afa2b5e67f127cdc7553f475
+        reviewed-list.txt: sha256:5764fc431e88a40c23e11741b20e9e94b3210e0997c57fe8348e174a16fa3b56
+input_fingerprint:
+    spec_yaml_sha: sha256:f8baf2172f736736c2bb16f98cba572f2326bfbb564c73e3268c7d4a02bed39e
+    code_fingerprints:
+        src/AbstractTokenizer.ts: sha256:d38a36b831b7e7fdf24046da5bf8b35559fe4a24d866c2c9727f8d6c1f111a22
+        src/TokenStream.ts: sha256:13e22231ee7804d2e49b24a4c2687f2f7b224dac797fc4bdea78cc084ad80d27
+        src/streaming-tokenizer.ts: sha256:415b8d1f0bb9706c435d663789f7bc15f86d79916d409b525b18e06cd4c033c8
+        src/tokenizer.ts: sha256:f440ae0dd3f8627c3ded1a9703aefced894d81076b070070a08cc1f49934b03d
+    claims_sha: sha256:d1b52224d65d2e829a6c1a912b3cdc31d1dd633974bed879295a8c72e5df8976
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 115299
+    output_tokens: 53614
+    cost_usd: 0.12837754
+    wall_secs: 942.862114264
+    cells_metered: 1
+created_at: "2026-09-03T20:16:00Z"
+updated_at: "2026-09-03T21:58:31Z"

@@ -1,0 +1,35 @@
+id: KI-279
+title: insertRule keeps unsupported property names on inserted CSSNestedDeclarations
+description: CSSGroupingRule.insertRule filters parsedRule.style.declarations only to decide whether all declarations are invalid. CSS error recovery (CSS 2.1 4.2) ignores declarations with unknown property names, and the cssText setter in the same class enforces that filter. Inserting nested declarations with one valid plus one unsupported name therefore keeps both and re-serializes the unsupported name into the sheet.
+affected_requirements:
+    - SW-REQ-260821-PAKB
+evidence_manifests:
+    - proof/evidence/ki-279.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSGroupingRule.insertRule nested-declarations arm (src/CSSOM.ts)
+attacker_input: insertRule text mixing supported and unsupported property names; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0031-nested-declarations-unsupported-names.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Insert only known property names through nested insertRule.
+remediation: Filter unsupported property names from CSSNestedDeclarations before splicing the rule, mirroring the cssText setter.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-03T23:36:32Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:36Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-279.yaml
+kill_domain: unknown_property_retention
+do_not_refile_as: 'grammar-invalid values retained (KI-124): value grammar, not property-name support'
+source_claim: CRS-0031/C17

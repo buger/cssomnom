@@ -106,3 +106,12 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T06:56:44Z comment="Class-closure DEFECT-T0AR: type-0 at-rules map to CSSParserAtRule.")'
           changed_by: agent:grok-4.6
+defect_review:
+    reviewed_at: "2026-09-03T21:44:38Z"
+    session: CRS-0068
+    fingerprint_sha: sha256:81f8161e063d2af483520a64cdc339e8b67a0a41f52999a1f825375d8e583a74
+    via: cli-session
+    counts:
+        emitted: 25
+        verified: 14
+        dismissed: 11

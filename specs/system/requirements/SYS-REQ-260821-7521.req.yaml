@@ -100,3 +100,12 @@ lifecycle:
           to: verification=failing
           reason: auto-derived [passing→failing] signals=4; evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing | known_issue:KI-12=none | known_issue:KI-18=failing | known_issue:KI-8=none
           changed_by: agent:auto-derive
+defect_review:
+    reviewed_at: "2026-09-04T18:42:33Z"
+    session: CRS-0069
+    fingerprint_sha: sha256:3793a23aa5aec25590c9fcf41f42a7c3e23cef1210f742acb0ac9321e5c39c4a
+    via: agent-review
+    counts:
+        emitted: 50
+        verified: 41
+        dismissed: 9

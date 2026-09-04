@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-WTPD
+      command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-unknown-atrule-block-dropped.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:03Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-194` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-unknown-atrule-block-dropped.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0068-unknown-atrule-block-dropped.ts
+      freshness_hashes:
+        proof/known-issues/KI-194.yaml: ki-content-v1:sha256:2e2ea20565b1a380ca0853b79c96a74b23955e161f8938d459ecdab658bfb817
+        proof/reproducers/CRS-0068-unknown-atrule-block-dropped.ts: sha256:e7269dfe5c18fb3c5b0d1fdcec3877be9062d4df577ea6763b443665afdfebd0
+      known_issues:
+        - KI-194

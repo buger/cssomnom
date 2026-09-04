@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6951
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-flex-01auto-serializes-initial.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:12Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-217` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-flex-01auto-serializes-initial.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0019-flex-01auto-serializes-initial.ts
+      freshness_hashes:
+        proof/known-issues/KI-217.yaml: ki-content-v1:sha256:703493daa99e3af49dcdd92e5dee3faa01b11ece28186a8a055e933c26f7c0d1
+        proof/reproducers/CRS-0019-flex-01auto-serializes-initial.ts: sha256:6fb96534c07ae645b4fbbe89447ca57499a1b94a366d4ebebecb64e0c53cd293
+      known_issues:
+        - KI-217

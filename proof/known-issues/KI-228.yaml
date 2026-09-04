@@ -1,0 +1,33 @@
+id: KI-228
+title: consumeAttributeSelector accepts matcherless values, bare flags, and non-matcher delims
+description: 'consumeAttributeSelector stores any delim as the operator and copies an ident or string as the value without cross-checks (src/SelectorParser.ts:505-533). selectors-4 #attribute-selector requires a value after every <attr-matcher> and allows a modifier only after that value; <attr-matcher> is exactly [ ''~'' | ''|'' | ''^'' | ''$'' | ''*'' ]? ''=''. ''[attr=]'', ''[foo i]'', and ''[attr==x]'' all parse, and the first two then match elements.'
+affected_requirements:
+    - SW-REQ-260821-6D9T
+evidence_manifests:
+    - proof/evidence/ki-228.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: SelectorParser.consumeAttributeSelector (src/SelectorParser.ts)
+attacker_input: malformed attribute selector strings; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-attribute-selector-grammar-gaps.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep attribute selectors to the documented matcher forms with an explicit value.
+remediation: Reject operators outside the six matcher spellings, require a value after a matcher, and allow flags only after a value.
+status: open
+history:
+    - at: "2026-09-03T22:41:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:16Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-228.yaml
+source_claim:
+    - CRS-0020/C05
+    - CRS-0020/C06
+    - CRS-0020/C07

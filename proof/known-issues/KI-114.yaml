@@ -60,6 +60,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:42:17Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0019/C13
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -88,3 +92,4 @@ dedup_armor: |
     expandBorderImage (src/shorthands.ts ~955-1001) launders a GRAMMATICALLY VALID border-image declaration into an all-initial expansion at FIRST parse whenever the url source arrives as a function token named url (the quoted form css-syntax-3 #consume-ident-like-token produces), and additionally discards numeric slice components without invalidating the partial result. Distinct from KI-116 (same trigger surface but the violated contract there is one-cycle fixpoint stability of our own serializer output) and from KI-112/KI-113/KI-36 (font shorthand family, different subsystem). Do not merge into a generic shorthand-data-loss framing without first-parse retention evidence for quoted urls AND slice application; merging would hide that leg 4 (slice truncation) survives even once quoted urls are recognized.
 kill_domain: shorthand_expansion_data_loss
 do_not_refile_as: 'fixpoint instability across re-parse cycles (KI-116: distinct violated contract - round-trip stability vs first-parse retention) and the font shorthand family (KI-112 system-keyword serialization, KI-113 invalid-mix retention, KI-36 missing expansion table)'
+source_claim: CRS-0019/C13

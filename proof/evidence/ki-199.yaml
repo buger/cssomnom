@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-1E5K
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-wrapper-webidl-fidelity.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:05Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-199` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-wrapper-webidl-fidelity.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0013-wrapper-webidl-fidelity.ts
+      freshness_hashes:
+        proof/known-issues/KI-199.yaml: ki-content-v1:sha256:6e9e6b19d1c98a7a741dfd4f3d8d0e69fbd1bcbd7ca6388544498504189bc8f2
+        proof/reproducers/CRS-0013-wrapper-webidl-fidelity.ts: sha256:24caad26280129d7c16934225aa0c937dfe7a945bf8b2affac3b613edc120e85
+      known_issues:
+        - KI-199

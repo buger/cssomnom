@@ -1,0 +1,39 @@
+id: KI-220
+title: consumeBlockContents flushes leftover declarations when a qualified rule returns nothing
+description: 'consumeNestedQualifiedRuleFromStream returns null both for the stop-token nothing case and for a rejected selector after a block. css-syntax-3 consume-block-contents distinguishes them: nothing means do nothing, an invalid rule error flushes the declaration run. The else arm at src/parser.ts L1070-1072 flushes on both nulls. ''.a { .b {} color: red; div; background: blue; }'' therefore emits two CSSNestedDeclarations where the spec keeps one consecutive run. SW-REQ-260821-39E0 requires the consecutive-run wrapping.'
+affected_requirements:
+    - SW-REQ-260821-39E0
+evidence_manifests:
+    - proof/evidence/ki-220.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.consumeBlockContents else arm via consumeNestedQualifiedRuleFromStream (src/parser.ts L1064-1073, L1229-1259)
+attacker_input: nested style-rule bodies mixing declarations with a stop-token prelude like 'div;'; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0017-blockcontents-nothing-flush.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read nested declaration runs from the merged style or re-merge consecutive CSSNestedDeclarations consumers after parse.
+remediation: Return a discriminated result from consumeNestedQualifiedRuleFromStream and flush only on the invalid-rule-error and rule outcomes, per css-syntax-3 consume-block-contents.
+status: open
+history:
+    - at: "2026-09-03T22:41:32Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:59:22Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0023/C06,add-source-claim=CRS-0023/C13
+    - at: "2026-09-04T10:40:13Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-220.yaml
+kill_domain: run_accounting
+source_claim:
+    - CRS-0017/C01
+    - CRS-0017/C08
+    - CRS-0023/C06
+    - CRS-0023/C13

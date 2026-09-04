@@ -1,0 +1,49 @@
+id: KI-212
+title: setProperty checks priority before the empty-value removal and trims the priority string
+description: 'setProperty normalizes priority with trim().toLowerCase() and returns early when it is not '''' or ''important'' (src/CSSStyleDeclaration.ts:486-490). cssom-1 #dom-cssstyledeclaration-setproperty runs the empty-value removal before the priority gate, so setProperty(''color'','''',''bogus'') must still remove color. The spec compares the raw priority string, so '' important '' must fail the ASCII case-insensitive match; the trim makes it register as important.'
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-212.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleDeclaration.setProperty (src/CSSStyleDeclaration.ts)
+attacker_input: caller-supplied setProperty value and priority strings; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-setproperty-priority-order-and-trim.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass '' or 'important' exactly as the priority; empty out values through removeProperty.
+remediation: Reorder the steps (empty-value removal first) and compare the raw priority without trim, per cssom-1 setProperty steps.
+status: open
+history:
+    - at: "2026-09-03T22:41:08Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C07
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C01,add-source-claim=CRS-0031/C12
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C05,add-source-claim=CRS-0035/C06
+    - at: "2026-09-04T10:40:10Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-212.yaml
+source_claim:
+    - CRS-0019/C01
+    - CRS-0019/C02
+    - CRS-0028/C07
+    - CRS-0031/C01
+    - CRS-0031/C12
+    - CRS-0035/C05
+    - CRS-0035/C06

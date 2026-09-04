@@ -1,0 +1,30 @@
+id: KI-267
+title: setProperty throws a raw TypeError on non-string values instead of WebIDL conversion
+description: 'setProperty reads value.includes(''var('') without coercing the argument (src/CSSStyleDeclaration.ts:521). The IDL types the argument as CSSOMString, so WebIDL converts numbers and string-coercible objects before the algorithm runs. setProperty(''margin'', 123), setProperty(''color'', {toString(){return ''blue''}}) and style.margin = 123 therefore throw TypeError: input.replace is not a function instead of converting and ignoring the invalid value.'
+affected_requirements:
+    - SW-REQ-260821-HNRG
+evidence_manifests:
+    - proof/evidence/ki-267.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: CSSStyleDeclaration.setProperty and the style proxy set trap (src/CSSStyleDeclaration.ts)
+attacker_input: caller-supplied non-string property values through setProperty or the style proxy; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-setproperty-nonstring-typeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Coerce values with String(value) before calling setProperty.
+remediation: Apply the WebIDL CSSOMString conversion at the setProperty entry and in the proxy set trap.
+status: open
+history:
+    - at: "2026-09-03T23:24:42Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:31Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-267.yaml
+kill_domain: error_handling
+source_claim: CRS-0028/C06

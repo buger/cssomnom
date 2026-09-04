@@ -1,0 +1,62 @@
+id: KI-169
+title: Missing-URI @namespace fabricates CSSNamespaceRule and registers the prefix
+description: handleNamespaceRule never verifies that extractUri found a string or url. css-namespaces-3 syntax requires [ <string> | <url> ] and says an invalid @namespace rule must be ignored. '@namespace foo;' constructs CSSNamespaceRule('foo','') and adds the prefix to declaredNamespaces, so later selectors resolve against an empty namespace.
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-169.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleNamespaceRule (src/parser.ts)
+attacker_input: stylesheet text with a prefix-only @namespace prelude; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-namespace-missing-uri-fabricates-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Always declare a string or url() URI in @namespace rules.
+remediation: Return null from handleNamespaceRule when namespaceURI stays empty, before constructing the rule or mutating declaredNamespaces.
+status: open
+history:
+    - at: "2026-09-03T21:27:36Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:33Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-169.yaml
+    - at: "2026-09-03T21:54:10Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0007/C17
+    - at: "2026-09-03T22:14:38Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0011/C15,add-source-claim=CRS-0011/C16
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C14
+    - at: "2026-09-04T00:02:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0038/C21
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C17
+    - at: "2026-09-04T19:06:43Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0069/C38
+source_claim:
+    - CRS-0003/C11
+    - CRS-0007/C17
+    - CRS-0011/C15
+    - CRS-0011/C16
+    - CRS-0027/C14
+    - CRS-0038/C21
+    - CRS-0041/C17
+    - CRS-0069/C38

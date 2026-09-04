@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-TF5T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0035-container-style-query-misread-as-name.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:40Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-290` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0035-container-style-query-misread-as-name.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0035-container-style-query-misread-as-name.ts
+      freshness_hashes:
+        proof/known-issues/KI-290.yaml: ki-content-v1:sha256:0f0b5eada4b807fecf8b7b07623ecf3ac75847c7302bf03878609430e4ebfc72
+        proof/reproducers/CRS-0035-container-style-query-misread-as-name.ts: sha256:caf4d47ba64db628630e517632b45e8efcc21a43c5e8d6b1a3930d1866fd2037
+      known_issues:
+        - KI-290

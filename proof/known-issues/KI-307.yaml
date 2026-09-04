@@ -1,0 +1,40 @@
+id: KI-307
+title: parse-a-rule entries overflow with a raw RangeError instead of SyntaxError
+description: 'Parser.parseRuleText, the instance parseRule, and parseRuleInBlockText run the unbounded consume walk (src/parser.ts:1646-1681, 195-211). Deeply nested rule text escapes as a raw RangeError before any SyntaxError path runs. css-syntax-3 5.4.6 #parse-rule returns a syntax error; cssom-1 #parse-a-css-rule throws DOMException SyntaxError. The grouping-rule insertRule wiring stores parseRuleInBlock on every constructed rule, so insertRule paths inherit the leak.'
+affected_requirements:
+    - SYS-REQ-260821-7521
+evidence_manifests:
+    - proof/evidence/ki-307.yaml
+severity: medium
+severity_basis: reproducer
+risk: availability
+cve_surface: none
+affected_api: Parser.parseRuleText / Parser.parseRule / Parser.parseRuleInBlockText and their module exports (src/parser.ts)
+attacker_input: rule text with deeply nested style rules passed to any parse-a-rule entry, including insertRule paths
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0069-parse-rule-entries-rangeerror.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Cap input nesting depth before calling parse-a-rule entries, or wrap calls in a stack guard.
+remediation: Thread a nesting-depth budget through the consume walk and convert overflow into the DOMException SyntaxError the entries already promise.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T19:05:12Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T19:06:04Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-307.yaml
+kill_domain: resource_exhaustion
+do_not_refile_as: 'stylesheet-level stack overflow (KI-18): that KI owns parse/replaceSync; this KI owns the parse-a-rule entries'
+source_claim:
+    - CRS-0069/C21
+    - CRS-0069/C22
+    - CRS-0069/C23
+    - CRS-0069/C24
+    - CRS-0069/C26

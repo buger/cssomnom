@@ -95,3 +95,12 @@ lifecycle:
 audit_ignore:
     - check: under_modeled_requirements_clean
       reason: "Intentionally coarse throw contract: 7AKJ pins invalid-input TypeError plus valid-window no-throw behavior witnessed by tests/mcdc-witness-typed-om.test.ts; the shared style-value-parser/typed-om facade complexity is owned by the finer-grained typed-om value requirements (E5D5, 9SGA)."
+defect_review:
+    reviewed_at: "2026-09-03T21:15:56Z"
+    session: CRS-0021
+    fingerprint_sha: sha256:b17206a185d79b5638caf384070bf8f8b47bb522c24fb19725d241b929de01ef
+    via: cli-session
+    counts:
+        emitted: 26
+        verified: 15
+        dismissed: 11

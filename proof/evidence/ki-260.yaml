@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-FWNH
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-color-ident-prototype-crash.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:28Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-260` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0026-color-ident-prototype-crash.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0026-color-ident-prototype-crash.ts
+      freshness_hashes:
+        proof/known-issues/KI-260.yaml: ki-content-v1:sha256:c7a07a9f6ab4ccc66f2d5faa739115c1f5819b5cb6e2ca5589bc2da32f6e8963
+        proof/reproducers/CRS-0026-color-ident-prototype-crash.ts: sha256:8d3295103f99690f08b07371b17a363027682ac618e11b6350a729a7978e8636
+      known_issues:
+        - KI-260

@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-QKE9
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-viewport-segments-unknown.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:43:24Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-136` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-viewport-segments-unknown.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0001-viewport-segments-unknown.ts
+      freshness_hashes:
+        proof/known-issues/KI-136.yaml: ki-content-v1:sha256:b580fb4c2e13d8ba8f133d2f88524e11c543f236041ff707430fd76dd7c91044
+        proof/reproducers/CRS-0001-viewport-segments-unknown.ts: sha256:823078e33d1e792e92b937d7b46086550a2a8593d5535d159ee0ba752a09dffa
+      known_issues:
+        - KI-136

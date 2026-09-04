@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-7M07
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-comment-span-attribution.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:20Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-240` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-comment-span-attribution.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0022-comment-span-attribution.ts
+      freshness_hashes:
+        proof/known-issues/KI-240.yaml: ki-content-v1:sha256:7d52ea7bbcc4bff9c86355173d75d6fe230cb69e9e147fafc6efc5f1a415a1d4
+        proof/reproducers/CRS-0022-comment-span-attribution.ts: sha256:d6afb438585dbf338debac3e818e114aa5e24e13d53b531d844a283541fd2381
+      known_issues:
+        - KI-240

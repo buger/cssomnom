@@ -1,0 +1,33 @@
+id: KI-226
+title: Grouping at-rules inside @scope or parseBlockContents drop nested declarations
+description: 'handleScopeRule hardcodes consumeBlockContents(values, true, false) and forwards isNestedStyleRule=false into consumeAtRuleFromStream. The public parseBlockContents entry hardcodes the same pair. A grouping at-rule reached through either path parses its body with nested=false, so the declaration lookahead never runs. css-nesting-1 3.3 parses nested group rule bodies as block-contents, keeping declarations as CSSNestedDeclarations. ''.a { @scope (.foo) { @media (width > 0px) { color: red; .b {} background: blue; } } }'' drops both declarations. Direct nesting keeps them.'
+affected_requirements:
+    - SW-REQ-260821-39E0
+evidence_manifests:
+    - proof/evidence/ki-226.yaml
+severity: medium
+severity_basis: risk
+risk: data_integrity
+cve_surface: none
+affected_api: Parser.handleScopeRule and Parser.parseBlockContents forwarding into consumeBlockContents (src/parser.ts L241, L444, L1005)
+attacker_input: nested stylesheets nesting conditional at-rules inside @scope, or hosts using Parser.parseBlockContents; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0017-scope-nested-grouping-decls-dropped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Nest conditional at-rules directly in the style rule instead of inside @scope until the flag forwarding is fixed.
+remediation: Forward the enclosing nested context into grouping at-rule bodies in handleScopeRule and parseBlockContents so their bodies parse as block-contents.
+status: open
+history:
+    - at: "2026-09-03T22:41:44Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:15Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-226.yaml
+kill_domain: nested_context_loss
+source_claim:
+    - CRS-0017/C02
+    - CRS-0017/C06

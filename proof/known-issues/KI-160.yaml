@@ -1,0 +1,42 @@
+id: KI-160
+title: Constructed-sheet insertRule accepts trailing garbage instead of throwing SyntaxError
+description: The constructed-sheet default _parseRule runs ParseHooks.consumeRule and skips the trailing-token check. cssom-1 insert-a-css-rule step 3 requires css-syntax-3 parse-a-rule, which fails unless the input is exactly one rule. A second rule or garbage text is silently discarded instead of throwing SyntaxError. WPT insertRule-syntax-error-01.html pins the required throw.
+affected_requirements:
+    - INT-REQ-260821-30ZA
+evidence_manifests:
+    - proof/evidence/ki-160.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleSheet.insertRule on constructed sheets (src/CSSOM.ts CSSStyleSheet constructor _parseRule)
+attacker_input: insertRule text containing more than one rule; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-trailing-garbage-constructed.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Call Parser.parseRuleText (or add an EOF check) in the constructed-sheet _parseRule before returning the rule.
+remediation: Route the constructed default _parseRule through the same parse-a-rule entry that enforces EOF, matching parser-created sheets.
+status: open
+history:
+    - at: "2026-09-03T21:26:31Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-160.yaml
+    - at: "2026-09-03T22:03:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0010/C04
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C01,add-source-claim=CRS-0035/C03
+source_claim:
+    - CRS-0002/C01
+    - CRS-0010/C04
+    - CRS-0035/C01
+    - CRS-0035/C03

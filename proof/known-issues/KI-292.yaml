@@ -1,0 +1,34 @@
+id: KI-292
+title: get returns the live registry record; mutating origin defeats the duplicate-JS gate
+description: PropertyRegistry.get returns the Map value by reference and register stores { ...definition, origin } without freezing (src/PropertyRegistry.ts:364,374-376). register gates the JS-then-JS InvalidModificationError throw on existing.origin === 'js' (src/PropertyRegistry.ts:357-359). A caller that writes origin='css' on the object handed out by get() flips the gate and the next duplicate JS registration overwrites silently. SW-REQ-260821-V5GA requires the InvalidModificationError guarantee for every duplicate JS registration.
+affected_requirements:
+    - SW-REQ-260821-V5GA
+evidence_manifests:
+    - proof/evidence/ki-292.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.get / PropertyRegistry.register (src/PropertyRegistry.ts)
+attacker_input: library callers mutating the registration object returned by PropertyRegistry.get; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-get-leaks-registry-record.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat the object returned by get() as read-only.
+remediation: Store a frozen internal record and have get() return a copy that omits the origin field.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:04Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:41Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-292.yaml
+kill_domain: registry_record_encapsulation
+source_claim: CRS-0036/C03

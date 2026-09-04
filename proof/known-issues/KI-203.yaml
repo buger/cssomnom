@@ -1,0 +1,36 @@
+id: KI-203
+title: parseRuleSync returns null for empty and unparseable input instead of a syntax error
+description: parseRuleSync maps a null consumeRule result to null and skips the EOF check (src/parser-api.ts:536-538). css-syntax-3 5.4.6 parse-a-rule step 3 returns a syntax error when the next token is EOF. Step 4 returns a syntax error when consume a qualified rule yields nothing. parseRuleSync('') and parseRuleSync('div') therefore return null, so callers cannot separate an empty stylesheet from an invalid one. Trailing garbage already throws through ensureEOF.
+affected_requirements:
+    - SW-REQ-260821-2Z0N
+evidence_manifests:
+    - proof/evidence/ki-203.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: CSS.parseRule / parseRuleSync (src/parser-api.ts L534-546)
+attacker_input: empty, whitespace-only, comment-only, or block-less rule text passed to parseRule; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-rule-null-not-syntax-error.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat a null parseRuleSync result as a syntax error at the call site.
+remediation: Throw a SyntaxError DOMException when consumeRule returns null, matching css-syntax-3 5.4.6 steps 3 and 4.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T22:41:53Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0015/C20
+    - at: "2026-09-04T10:40:07Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-203.yaml
+kill_domain: error_signaling
+source_claim:
+    - CRS-0014/C01
+    - CRS-0015/C20

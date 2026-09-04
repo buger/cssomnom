@@ -79,3 +79,10 @@ lifecycle:
           to: verification=failing
           reason: auto-derived [not_started→failing] signals=3; evidence_profile:ki-105=failing | known_issue:KI-1=none | known_issue:KI-105=failing
           changed_by: agent:auto-derive
+defect_review:
+    reviewed_at: "2026-09-03T22:54:43Z"
+    session: CRS-0053
+    fingerprint_sha: sha256:b0a5c555a4a65e52e4e45588cf650321427cb5a86cf9c9758c4d601b3deac970
+    via: cli-session
+    counts:
+        emitted: 40

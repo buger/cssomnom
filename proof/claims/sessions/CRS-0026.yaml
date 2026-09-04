@@ -1,0 +1,38 @@
+id: CRS-0026
+spec_reqids:
+    - SW-REQ-260821-FWNH
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-FWNH
+      dir: .proof/defect-sessions/CRS-0026/cells/SW-REQ-260821-FWNH
+      status: complete
+      attempts: 1
+      elapsed_secs: 929.987027218
+      artifact_hashes:
+        deliverable.md: sha256:e69a869788512ca2b2fc2d69ffa5b9e09cfd540ccdcafc50bcb162e8ec8172ab
+        ledger.jsonl: sha256:6721049e866fa1443be28497fd1c9dace627f80278adce1a602604e65188948f
+        reviewed-list.txt: sha256:2070b6fd8c98b8c8235015e1d86a82b2464891544692cd60553d7a470c31ab34
+input_fingerprint:
+    spec_yaml_sha: sha256:63ee22f8bfe5df928626a9681c2359586d129f44820b0bd4497e2e6d7c09a2df
+    code_fingerprints:
+        src/cascade/cascade-sorter.ts: sha256:d234edb52d5afff4094610e7643c84b785cbe66393e3be331e13055bac493f46
+        src/cascade/color-resolver.ts: sha256:1664634565f01527c5d01b29a5137d15778f96cae221300adf5bfee14e6f7d36
+        src/cascade/computed-style.ts: sha256:dd9fa9c430f52e60ac95560d6b9ab3737e8e71df1b609a4e31fdbe53f0e9f9f4
+        src/cascade/index.ts: sha256:0c4f4db620cf0e6e6cae775a79a9ad3fb0875ded2a5271ed1f030d5096799262
+        src/cascade/layer-manager.ts: sha256:5be474b1cd955d3d374d57071886bc08a50a9ded9a11f35b93d02594bd718711
+        src/cascade/rule-filter.ts: sha256:730e98d39d385a18cf357978cfe2c8857da467c6d8dd966c04deddaa22663d16
+        src/cascade/types.ts: sha256:4b00984ae7617413b4fe666c9b81a0d3c25e9aea07a6d87eaaacb01ee0713ad0
+        src/cascade/value-processor.ts: sha256:951136992802f578f585d18bb878ff02fdc04a943148917cd032d1fd36cd5098
+        src/cascade/variable-resolver.ts: sha256:10bdf1bf45a6288d7cf1dbcde3bd30b315aa7c51b1306507b7f19ac6f309ddd4
+    claims_sha: sha256:f322577b31e886c2e3f25721658a7c426d0a56d553d4168dc8c46a9b87764f0d
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 104231
+    output_tokens: 50533
+    cost_usd: 0.18101804
+    wall_secs: 929.987027218
+    cells_metered: 1
+created_at: "2026-09-03T20:15:59Z"
+updated_at: "2026-09-03T21:32:58Z"

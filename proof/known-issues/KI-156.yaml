@@ -1,0 +1,31 @@
+id: KI-156
+title: toFloat32Array and toFloat64Array return a transposed matrix layout
+description: 'Both serializers return transpose(this._values) (src/DOMMatrix.ts:483-489). _values already stores m11 through m44 in column-major order, so the extra transpose moves m41 from index 12 to index 3. geometry-1 #dommatrix-readonly requires toFloat32Array and toFloat64Array to serialize m11 to m44 in column-major order. Round trips only appear correct because fromFloat64Array transposes too.'
+affected_requirements:
+    - INT-REQ-260821-JTY2
+evidence_manifests:
+    - proof/evidence/ki-156.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: DOMMatrixReadOnly.toFloat32Array / toFloat64Array
+attacker_input: matrices serialized by callers; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-tofloat-layout.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read components through the m41 style accessors instead of the serialized arrays.
+remediation: Return a copy of this._values from both serializers and keep the column-major order intact.
+status: open
+history:
+    - at: "2026-09-03T21:15:37Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:11Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-156.yaml
+source_claim:
+    - CRS-0005/C21
+    - CRS-0005/C22

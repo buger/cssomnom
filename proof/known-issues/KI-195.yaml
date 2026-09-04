@@ -1,0 +1,38 @@
+id: KI-195
+title: toParserRule turns CSSNestedDeclarations into an empty CSSParserRawRule
+description: 'CSSNestedDeclarations has CSSRule.type 0 and a cssText that holds a plain declaration list. toParserRule routes it into the type-0 at-rule arm, every instanceof check fails, and atRulePartsFromCssText returns null because no at-keyword exists. The record lands on the CSSParserRawRule fallback, which calls serialize() on the CSSOM object itself and yields an empty string. parseStylesheetSync(''div { color: red; span { color: blue } color: green }'') drops the trailing color: green. css-nesting-1 keeps those declarations, and INT-REQ-260821-WTPD requires parser_ast_adapted.'
+affected_requirements:
+    - INT-REQ-260821-WTPD
+evidence_manifests:
+    - proof/evidence/ki-195.yaml
+severity: medium
+severity_basis: risk
+risk: data_integrity
+cve_surface: none
+affected_api: parseStylesheetSync/toParserRule declaration fallback for CSSNestedDeclarations (src/parser-api.ts)
+attacker_input: ordinary stylesheet text using nested style rules with trailing declarations; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-nested-declarations-rawrule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep nested declarations out of stylesheets parsed through the Parser API, or read them from the CSSOM .style.
+remediation: Map CSSNestedDeclarations to CSSParserDeclaration nodes from .style before the type-0 at-rule arm, and stop calling serialize() on non-component-value objects.
+status: open
+history:
+    - at: "2026-09-03T22:14:18Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C02
+    - at: "2026-09-04T10:40:04Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-195.yaml
+do_not_refile_as: KI-40 covers qualified-rule body declarations; this filing covers the nested-declaration record landing on the raw-rule fallback
+source_claim:
+    - CRS-0068/C06
+    - CRS-0068/C24
+    - CRS-0030/C02

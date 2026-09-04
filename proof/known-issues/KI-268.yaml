@@ -1,0 +1,30 @@
+id: KI-268
+title: setProperty drops mixed-case VAR() shorthand values that CSS types case-insensitively
+description: 'The shorthand branch detects substitution with the case-sensitive substring value.includes(''var('') (src/CSSStyleDeclaration.ts:521). css-values-4 #keywords makes function names ASCII case-insensitive, so ''VAR(--m)'' is a substitution. expand() rejects the tokens, the !stub arm returns, and the declaration vanishes. setProperty(''margin'', ''VAR(--m)'') therefore stores nothing while the lowercase control stores ''margin: var(--m)''.'
+affected_requirements:
+    - SW-REQ-260821-HNRG
+evidence_manifests:
+    - proof/evidence/ki-268.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: CSSStyleDeclaration.setProperty shorthand branch (src/CSSStyleDeclaration.ts)
+attacker_input: caller-supplied shorthand values written with mixed-case VAR() or ENV(); local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0028-setproperty-mixedcase-var-dropped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write shorthands in lowercase before storing values that contain var().
+remediation: Detect var()/env() with an ASCII case-insensitive scan over the parsed component values instead of a raw substring.
+status: open
+history:
+    - at: "2026-09-03T23:24:48Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-268.yaml
+kill_domain: grammar_gate_bypass
+source_claim: CRS-0028/C08

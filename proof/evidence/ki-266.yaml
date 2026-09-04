@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-HHVE
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0027-layer-block-comma-list.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:31Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-266` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0027-layer-block-comma-list.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0027-layer-block-comma-list.ts
+      freshness_hashes:
+        proof/known-issues/KI-266.yaml: ki-content-v1:sha256:ad80da43d32f7379ceed189ed55ad18e426ecaec734f4036857e1f546f2e8871
+        proof/reproducers/CRS-0027-layer-block-comma-list.ts: sha256:80606e2ca7f52af4be60f5e9db844c8364bd00d95860edddec1683986206cda3
+      known_issues:
+        - KI-266

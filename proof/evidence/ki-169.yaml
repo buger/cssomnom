@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-namespace-missing-uri-fabricates-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:33Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-169` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-namespace-missing-uri-fabricates-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0003-namespace-missing-uri-fabricates-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-169.yaml: ki-content-v1:sha256:97973ad49ab07f9d115a394fe000eb6aaaf0f6e6f173752bf266441282082c9a
+        proof/reproducers/CRS-0003-namespace-missing-uri-fabricates-rule.ts: sha256:9b16148e1f549eb45f45a660c2a5a66a1ca305a1410da0c250c1ca1cba937897
+      known_issues:
+        - KI-169

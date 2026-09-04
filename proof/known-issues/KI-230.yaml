@@ -1,0 +1,30 @@
+id: KI-230
+title: SelectorParser.parse accepts a trailing comma in selector lists
+description: 'SelectorParser.parse pushes the selector before a comma and exits the loop once the cursor is exhausted, never noticing a dangling separator (src/SelectorParser.ts:185-216). selectors-4 #grouping invalidates a list containing an empty selector, and engines throw SyntaxError for ''div,''. matches() and querySelectorAll() return the preceding selectors instead of the empty match. Sibling of KI-172, which pins the rule-parse path (normalizeNestedSelector).'
+affected_requirements:
+    - SW-REQ-260821-6D9T
+evidence_manifests:
+    - proof/evidence/ki-230.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: SelectorParser.parse / matches / querySelectorAll (src/SelectorParser.ts, src/matcher.ts)
+attacker_input: selector lists ending with a comma; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-trailing-comma-selector-list.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Trim trailing commas from selector strings before matching.
+remediation: After consuming a comma, require another complex selector before the list ends; throw when the loop terminates right after a separator.
+status: open
+history:
+    - at: "2026-09-03T22:41:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:17Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-230.yaml
+source_claim: CRS-0020/C09

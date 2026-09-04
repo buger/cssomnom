@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-YTV6
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0039-shorthand-contraction-crosses-all.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T18:58:21Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-301` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0039-shorthand-contraction-crosses-all.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0039-shorthand-contraction-crosses-all.ts
+      freshness_hashes:
+        proof/known-issues/KI-301.yaml: ki-content-v1:sha256:3fd317b6af0431431751757a5420ab603a3cc9321b2e7e0e6709a2a903bcb8bd
+        proof/reproducers/CRS-0039-shorthand-contraction-crosses-all.ts: sha256:3e9f6b6588bb78add584ac8ccf1192b7401d3d706c524dc9d24dea707c7ecfee
+      known_issues:
+        - KI-301

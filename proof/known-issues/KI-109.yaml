@@ -75,3 +75,6 @@ poc_quality:
         reachability_verified: public cascade surface IS the product path; no gating between ingestion and dispatch.
 kill_domain: ascii_case_insensitive_dispatch
 do_not_refile_as: author-cased serialization of custom-property names (casing preservation is spec-correct) and nested-name substitution order (KI-108)
+source_claim:
+    - CRS-0002/C15
+    - CRS-0003/C12

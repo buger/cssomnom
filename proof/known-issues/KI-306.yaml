@@ -1,0 +1,33 @@
+id: KI-306
+title: '@layer statement keeps layer-name lists the grammar rejects'
+description: 'handleLayerRule splits the serialized prelude on commas and constructs CSSLayerStatementRule unconditionally (src/parser.ts:437-438). ''@layer foo bar;'' therefore survives with the bogus name ''foo bar''. css-cascade-5 #layer-empty types the statement as <layer-name>#, and <layer-name> = <ident> [''.'' <ident>]*, so the rule must be ignored.'
+affected_requirements:
+    - SW-REQ-260822-73TM
+evidence_manifests:
+    - proof/evidence/ki-306.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleLayerRule statement branch (src/parser.ts)
+attacker_input: stylesheet text with a malformed @layer statement name list; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0041-layer-statement-name-grammar.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write only grammatical layer names in @layer statements.
+remediation: Validate each comma segment against the <layer-name> grammar and return null when any segment fails.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T18:58:16Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T18:58:23Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-306.yaml
+source_claim: CRS-0041/C29

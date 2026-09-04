@@ -83,3 +83,12 @@ lifecycle:
           to: verification=passing
           reason: auto-derived [not_started→passing] signals=2; review_record:REVIEW-1=present | evidence_profile:css-fuzz:tests/css-fuzz-cssomnom.test.ts=passing
           changed_by: agent:grok-4.6
+defect_review:
+    reviewed_at: "2026-09-03T21:31:01Z"
+    session: CRS-0022
+    fingerprint_sha: sha256:db713688ba84f69add0dbe961f3dae29d77f10d5affc9c6a78fe4119c47a07f7
+    via: cli-session
+    counts:
+        emitted: 18
+        verified: 6
+        dismissed: 12

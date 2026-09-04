@@ -1,0 +1,36 @@
+id: KI-196
+title: Parser API declaration adapter drops the !important flag
+description: 'The Parser stores importance in Declaration.important and splices the ''! important'' tokens out of the value. toParserRule maps only decl.value, so CSSParserDeclaration never sees the flag. parseDeclarationListSync(''color: red !important'') serializes as ''color: red;''. The internal serializer emits '' !important'' from the same flag, so the adapter loses data the rest of the pipeline keeps. css-syntax-3 #serialization requires the round trip to preserve a declaration''s importance.'
+affected_requirements:
+    - INT-REQ-260821-WTPD
+evidence_manifests:
+    - proof/evidence/ki-196.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: parseDeclarationListSync/toParserRule declaration arm (src/parser-api.ts)
+attacker_input: declaration lists containing !important parsed through the Parser API; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-important-dropped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Recover importance from the CSSOM layer or re-parse the cssText instead of relying on the Parser API declaration body.
+remediation: Append the '! important' tokens to the mapped CSSParserDeclaration body when decl.important is true, so serialization round-trips.
+status: open
+history:
+    - at: "2026-09-03T22:14:23Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C04
+    - at: "2026-09-04T10:40:04Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-196.yaml
+source_claim:
+    - CRS-0068/C07
+    - CRS-0030/C04

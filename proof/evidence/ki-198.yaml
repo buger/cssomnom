@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260826-GTCS
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0012-eof-span-comments.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:05Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-198` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0012-eof-span-comments.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0012-eof-span-comments.ts
+      freshness_hashes:
+        proof/known-issues/KI-198.yaml: ki-content-v1:sha256:60bc5c036bf67386815e9716b89e83883ad03f3d2396c0d0e9cc8690fe21c4b4
+        proof/reproducers/CRS-0012-eof-span-comments.ts: sha256:c4c5213ba4eec7b31d92e74d87577b4b29f1bcb9ab46b273cba54c6da681a1eb
+      known_issues:
+        - KI-198

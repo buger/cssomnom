@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6D9T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-bad-string-accepted.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:17Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-229` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-bad-string-accepted.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0020-bad-string-accepted.ts
+      freshness_hashes:
+        proof/known-issues/KI-229.yaml: ki-content-v1:sha256:e0f4bf73395443f00eb39f0c7777b9a1f93b9e2879da3c50371f2720608a10b9
+        proof/reproducers/CRS-0020-bad-string-accepted.ts: sha256:436d5fa93da7c817a76aebc20ca1c39b9b7a2464f80ca736428d9e155665a890
+      known_issues:
+        - KI-229

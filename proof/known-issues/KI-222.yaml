@@ -1,0 +1,30 @@
+id: KI-222
+title: selectorText walks the origin-clean cssRules getter and throws SecurityError
+description: 'CSSStyleRule._getNamespaceContext iterates sheet.cssRules to find @namespace rules (src/CSSOM.ts:794). That getter throws SecurityError when the sheet is not origin-clean. cssom-1 #dom-cssstylerule-selectortext defines no SecurityError, so reading selectorText on a rule of a sheet built with CSSStyleSheet.createInternal(rules, parse, false) throws instead of serializing.'
+affected_requirements:
+    - SW-REQ-260821-6951
+evidence_manifests:
+    - proof/evidence/ki-222.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleRule.selectorText via _getNamespaceContext (src/CSSOM.ts)
+attacker_input: host-built non-origin-clean sheets created through createInternal; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0019-selector-text-security-error.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read selectorText before attaching rules to a tainted sheet, or re-serialize from the stored text.
+remediation: Walk the internal _rules list (or accept a rules accessor) for namespace context instead of the origin-clean gated cssRules getter.
+status: open
+history:
+    - at: "2026-09-03T22:41:39Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:14Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-222.yaml
+source_claim: CRS-0019/C18

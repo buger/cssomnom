@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-9KNX
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-grouping-cprop-eats-rule.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:21Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-242` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-grouping-cprop-eats-rule.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0023-grouping-cprop-eats-rule.ts
+      freshness_hashes:
+        proof/known-issues/KI-242.yaml: ki-content-v1:sha256:65d62c8ac5bbcb6339e0567a923c51c4fecf5fdc7be53e1d780054a4fc24ea89
+        proof/reproducers/CRS-0023-grouping-cprop-eats-rule.ts: sha256:3c57e120d9a358161635406913084f8e8ca7adbe0c49c1f4d8e650d141ddc47f
+      known_issues:
+        - KI-242

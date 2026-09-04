@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-E5D5
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-div-zero-rangeerror.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-252` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0025-div-zero-rangeerror.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0025-div-zero-rangeerror.ts
+      freshness_hashes:
+        proof/known-issues/KI-252.yaml: ki-content-v1:sha256:6f301105f44f073d2c3ca8847d0847d8e1051789a31bcf5fde6a8b19525167b6
+        proof/reproducers/CRS-0025-div-zero-rangeerror.ts: sha256:48ebc29212486b06c7d10f6da73f208436ce37a4b36ee32a715907ef230d628e
+      known_issues:
+        - KI-252

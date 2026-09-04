@@ -1,0 +1,30 @@
+id: KI-266
+title: '@layer block keeps a comma-separated prelude that css-cascade-5 restricts to one name'
+description: 'handleLayerRule forwards any serialized prelude into handleGroupingAtRule when a block follows (src/parser.ts:434-435). css-cascade-5 #layer-block types the block form as ''@layer <layer-name>? { <rule-list> }''. Only the statement form takes a comma list. parse(''@layer foo, bar { div { color: red } }'') therefore returns a CSSLayerBlockRule named ''foo, bar'' instead of dropping the rule.'
+affected_requirements:
+    - SW-REQ-260821-HHVE
+evidence_manifests:
+    - proof/evidence/ki-266.yaml
+severity: low
+severity_basis: reproducer
+risk: correctness
+affected_api: parse() @layer block handling (src/parser.ts handleLayerRule)
+attacker_input: stylesheet text with a comma list in an @layer block prelude; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0027-layer-block-comma-list.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Reject @layer blocks whose prelude contains a comma before dispatching.
+remediation: 'Validate the block prelude as a single <layer-name> per css-cascade-5 #layer-block and return null on failure.'
+status: open
+history:
+    - at: "2026-09-03T23:24:36Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:31Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-266.yaml
+kill_domain: grammar_gate_bypass
+source_claim: CRS-0027/C24

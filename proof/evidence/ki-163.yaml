@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-30ZA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-index-infinity.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:30Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-163` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-insert-rule-index-infinity.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0002-insert-rule-index-infinity.ts
+      freshness_hashes:
+        proof/known-issues/KI-163.yaml: ki-content-v1:sha256:2835f2b60bfd2889d80f1ee3221bb7e75e00315d20b41f2c9480e68a2565ca78
+        proof/reproducers/CRS-0002-insert-rule-index-infinity.ts: sha256:5f2826e2683c4d192c09fe0b82a1f1a75ef881e0f0d8b6bb4b4d8a9f60d6d68c
+      known_issues:
+        - KI-163

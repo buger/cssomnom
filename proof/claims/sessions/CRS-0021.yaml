@@ -1,0 +1,61 @@
+id: CRS-0021
+spec_reqids:
+    - SW-REQ-260821-7AKJ
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-7AKJ
+      dir: .proof/defect-sessions/CRS-0021/cells/SW-REQ-260821-7AKJ
+      status: complete
+      attempts: 1
+      elapsed_secs: 690.92510264
+      artifact_hashes:
+        deliverable.md: sha256:0ef20da10f54d3bc58cc7143ac7568e616472fee5a01499c3de8885701f25d4c
+        ledger.jsonl: sha256:72b83951536c6cf5b71c7367ff3d83624e0eb3a2cf88cd68066eef61f0922a13
+        reviewed-list.txt: sha256:fb881d97b3fc6ec73e3492a6621cfa25edce7d6ca4b9e3303a98b57b2d4ee463
+input_fingerprint:
+    spec_yaml_sha: sha256:3e92a2b760f654a6f762405bf8f9abd8f5d07c80060e33d2663e41ca6ba1db6a
+    code_fingerprints:
+        src/math-parser.ts: sha256:d9d6067c785f508f61d6af11eb9807b205075f5b65979afe900a4327b389349b
+        src/typed-om.ts: sha256:6dea988858f89247325768f7a3b8cba56f2269ddc4440a24b3d946a48b7e12e0
+        src/typed-om/color/CSSColorValue.ts: sha256:fa48fd374122eb89814847642776a395c7520ff415a5cf32a33fc06aece0d9da
+        src/typed-om/color/color-rectify.ts: sha256:fdf0d690e035187655c1b8c07bffc00be9e2ae332f17d2a330accf29b81e7e07
+        src/typed-om/color/color-reify.ts: sha256:359b2d487e45cf9f5697bf5d262f7bb9cb2ae293e7400c2590adf3d8dcc17193
+        src/typed-om/color/color-spaces.ts: sha256:9c00178057cc5dd9d31d32ace25e4b8e89c76fdef202a74d3207aedb4a0567bc
+        src/typed-om/index.ts: sha256:19fe9e43f1c81257c073589432c95878e12ce017d7159f7c5f52a4cf1d07c485
+        src/typed-om/numeric/CSSNumericArray.ts: sha256:158c598a01f916c9bbbc52fbfc47315ced9af26b8437f24027021fc0263801f2
+        src/typed-om/numeric/CSSNumericType.ts: sha256:10833e2b20fdfe9b1f871097c2d87a1db556873a63fa849b2277541f92c7f878
+        src/typed-om/numeric/CSSNumericValue.ts: sha256:61356e0a149138a49cea719fba961598abbbd441e4cf6a5beea626a376c7e551
+        src/typed-om/numeric/math/CSSMathOperations.ts: sha256:b6900357d05e017345f931d95d91667b94c664fb1601d11c2a9fdd04602365da
+        src/typed-om/numeric/math/CSSMathValue.ts: sha256:d27a746c6a064c4203f85461a9ae5a6524cbe4137648a7f8d6fa50710324b6e1
+        src/typed-om/numeric/math/math-sorting.ts: sha256:5d8ff6828829cf91447cb69d6a80d0a059551d80fa6e1414466548d9105efd90
+        src/typed-om/position/CSSPositionValue.ts: sha256:f2f34a4de52041a6c76c820aa6458748b11821589dd291a53cf197c325e9bf00
+        src/typed-om/position/position-parser.ts: sha256:effd0e0eaba50fe2f73e5dc81a47ecac69b1522ab3c37cdc0dd550f23a675f22
+        src/typed-om/style-map/StylePropertyMap.ts: sha256:04356b1e4cbad039f5842e08cfc8cfdbe06548dacac95743268ebd6994947ff1
+        src/typed-om/style-map/StylePropertyMapReadOnly.ts: sha256:79f350749cf9efb70d8214f8d09e1cd16e119725114eb60fb4413696132ebd82
+        src/typed-om/style-map/style-validation.ts: sha256:604626fc47a3a112dc07cabadb5f8101241aca753a2d6b38a3d21236aaee5d24
+        src/typed-om/transform/CSSTransformComponent.ts: sha256:e5b2b6eaa1af61c4d16a2efe072a4c08cd3de1958dd873ec0fd29b51d9ab64a4
+        src/typed-om/transform/CSSTransformValue.ts: sha256:5a44e5ee9b0eacf92f3e5eae4a5b3ee50bd7993b8a43e565675623e1eec0a93b
+        src/typed-om/transform/transform-components.ts: sha256:6e8e5d5f1205471004734126934a0bac2820d8463fe4937ec633aa8a0b24db5d
+        src/typed-om/transform/transform-parser.ts: sha256:c5a8ae8e2cec286507915b05f7b81cb4d7f9eecd6e3b4b229cff88fe8e7ba845
+        src/typed-om/utils/formatting.ts: sha256:cc794acf5afb976edce53823a83a0509941f5b1890350dbb99c7ce35b9037318
+        src/typed-om/utils/type-guards.ts: sha256:3ce97ef08b1dcb032aa200a9b89e2ac3ed4ed0d79fa3779bf604ca4a663ef5b3
+        src/typed-om/utils/validation.ts: sha256:bed4abe7b5fde4c18a0bc883b0382fbda2f63052aab1a1ec9d11c4cbc2e057f0
+        src/typed-om/values/CSSImageValue.ts: sha256:c61388d7965ec141dff9c085daf171fc79625a0dd755b75c75d4e43bdc132aeb
+        src/typed-om/values/CSSKeywordValue.ts: sha256:86d209cc5ef45b371b6b3402c3def63f632dda1a60977de1e4720235c8668339
+        src/typed-om/values/CSSStyleValue.ts: sha256:a5022d23445cd5cd2fc8badfb285f0d72cbe1f4f09a0b6c315d4471c6db35681
+        src/typed-om/values/CSSUnparsedValue.ts: sha256:68dab42583a38bd0ac848df18f88c12ab6ddaf9ecf0086ac1f7617124b2adcec
+        src/typed-om/values/CSSVariableReferenceValue.ts: sha256:ed46d5f7d01235894a44917c56f0f2d395b94bb9aa9cfb2ec72c471ff86acfe3
+        src/typed-om/values/style-value-factory.ts: sha256:37f466ca9c568001ea45caf88a8ec793ad5d621765fdf1cc81f022459e239051
+        src/typed-om/values/style-value-parser.ts: sha256:8fa997a621d6aa6df83e75fd47a6c7521ab776214c8e3cead13eef9f4ef8e690
+    claims_sha: sha256:f6b12a1955fe35bd261b60916fd797a50fd5d91cefe0e1da9db1ddabd2d32d3d
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 131289
+    output_tokens: 36397
+    cost_usd: 0.19092224
+    wall_secs: 690.92510264
+    cells_metered: 1
+created_at: "2026-09-03T20:15:59Z"
+updated_at: "2026-09-03T21:15:56Z"

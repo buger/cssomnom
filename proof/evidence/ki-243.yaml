@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-9KNX
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-failed-decl-mark-restore.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:21Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-243` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0023-failed-decl-mark-restore.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0023-failed-decl-mark-restore.ts
+      freshness_hashes:
+        proof/known-issues/KI-243.yaml: ki-content-v1:sha256:69fee6c5df4489583cc688183cbe663cd673b68e33525bf7ae35e33558312f8b
+        proof/reproducers/CRS-0023-failed-decl-mark-restore.ts: sha256:5f29b4609397d2f600f1a4c434488fe082c5721e6fbb458a37c047fa05e17951
+      known_issues:
+        - KI-243

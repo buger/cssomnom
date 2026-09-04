@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-1E5K
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-global-namespace-leak.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:06Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-202` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0013-global-namespace-leak.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0013-global-namespace-leak.ts
+      freshness_hashes:
+        proof/known-issues/KI-202.yaml: ki-content-v1:sha256:bb445094dc21a3a57b0b1730e12b98ad05eb1669006e4fe8f188c6cc54ba0e4e
+        proof/reproducers/CRS-0013-global-namespace-leak.ts: sha256:01246fb5d054ba7accba8e95c7522c20506bd620a12bf2d02a2b432c4b583569
+      known_issues:
+        - KI-202

@@ -1,0 +1,29 @@
+id: KI-149
+title: Cascade maps logical properties with specified writing-mode and direction values
+description: 'getCascadedStyle assigns the raw specified winner to its logical mapping context (src/cascade/index.ts:234-241). ''inherit'' and ''var(--wm)'' therefore map logical properties through the horizontal-tb ltr defaults. The emitted writing-mode and direction resolve correctly, so only the physical names go wrong: margin-inline-start maps to margin-left under a computed vertical-rl. CSS Logical 1 and CSS Writing Modes 4 define logical mapping against computed values.'
+affected_requirements:
+    - INT-REQ-260821-HJVC
+evidence_manifests:
+    - proof/evidence/ki-149.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+affected_api: getCascadedStyle logical property mapping context
+attacker_input: stylesheets and style attributes using CSS-wide keywords or var() in writing-mode, direction or text-orientation; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0004-logical-mapping-specified-values.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Avoid CSS-wide keywords and var() in writing-mode, direction and text-orientation while resolving logical properties through this API.
+remediation: Compute the winning writing-mode, direction and text-orientation through the same substitution and inheritance pass that produces the emitted values before calling resolveLogicalProperty.
+status: open
+history:
+    - at: "2026-09-03T21:14:50Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:19:09Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-149.yaml
+source_claim: CRS-0004/C08

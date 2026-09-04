@@ -34,6 +34,10 @@ history:
       by: agent:champ
       action: edit
       detail: set-sanitizer
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0039/C08
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -75,3 +79,4 @@ poc_quality:
         serializes parsed attacker CSS and re-reads it reaches the breakout with no extra privileges.
 kill_domain: injection_breakout
 do_not_refile_as: serializer identifier-context escape omission (hash/function)
+source_claim: CRS-0039/C08

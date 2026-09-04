@@ -49,6 +49,14 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:03:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0010/C14
+    - at: "2026-09-03T22:42:17Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0019/C21
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -73,3 +81,6 @@ poc_quality:
         no_inflation: severity medium matches blast radius (correctness-only, recoverable by re-parsing).
         operational_path_verified: reproducer drives the real parse->append->delete lifecycle through public CSSOM methods.
         reachability_verified: N/A-eligible local-behavioral finding (no trust-boundary crossing beyond stylesheet text ingestion); still reproduced through the real parse() entry point.
+source_claim:
+    - CRS-0010/C14
+    - CRS-0019/C21

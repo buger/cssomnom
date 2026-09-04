@@ -1,0 +1,47 @@
+id: KI-191
+title: matchesSyntax compares the <url> function name case-sensitively, rejecting Url("x")
+description: 'The <url> branch of matchesSyntax compares the function token name with === ''url''. css-values-4 #functional-notation makes function names ASCII case-insensitive. A registered <url> property rejects initialValue ''Url("sheet.png")'' with a SyntaxError. Unquoted URL(x) still works because the tokenizer folds it into a <url-token>. Only the quoted functional form hits the comparison.'
+affected_requirements:
+    - INT-REQ-260821-ZP03
+evidence_manifests:
+    - proof/evidence/ki-191.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.matchesSyntax <url> branch (src/PropertyRegistry.ts)
+attacker_input: registered property definitions using the quoted Url() spelling; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0011-url-syntax-function-case.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write url() in lowercase inside registered initial values until the comparison lowercases the name.
+remediation: Compare (t as CSSFunction).name.toLowerCase() === 'url' in matchesSyntax, mirroring the color and transform branches.
+status: open
+history:
+    - at: "2026-09-03T22:13:56Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:14:50Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0024/C11
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0032/C18
+    - at: "2026-09-04T00:02:27Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0036/C12
+    - at: "2026-09-04T10:40:02Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-191.yaml
+do_not_refile_as: KI-161 covers the parser @import/@namespace prelude handlers, not the registered-syntax matcher
+source_claim:
+    - CRS-0011/C06
+    - CRS-0024/C11
+    - CRS-0032/C18
+    - CRS-0036/C12

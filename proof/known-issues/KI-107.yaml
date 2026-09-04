@@ -49,6 +49,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-requirement
+    - at: "2026-09-03T22:41:53Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0015/C07
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -75,3 +79,4 @@ poc_quality:
         reachability_verified: public CSS namespace IS the product surface; no ingress layer exists between host and the supports() algorithm.
 kill_domain: feature_query_grammar_validity
 do_not_refile_as: generic supports() boolean plumbing or trailing-garbage value parsing (parser_api supports_throws surface); mixed-case VAR()/ENV() dispatch is KI-109 - this KI pins malformed substitution-function grammar only
+source_claim: CRS-0015/C07

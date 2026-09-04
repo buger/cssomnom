@@ -1,0 +1,63 @@
+id: KI-162
+title: Missing-URL @import fabricates a CSSImportRule with empty href
+description: handleImportRule leaves href empty when the prelude carries no <url> or <string> and still constructs a CSSImportRule. css-cascade-6 at-import makes the URL mandatory, so @import; and @import screen; must be ignored. The fabricated rule reaches cssRules with href ''. KI-43 pins the bad-url leg of the same handler; this pins the missing-URL leg.
+affected_requirements:
+    - INT-REQ-260821-30ZA
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-162.yaml
+severity: medium
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: Parser.handleImportRule (src/parser.ts)
+attacker_input: stylesheet or insertRule text with an @import prelude lacking a URL; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0002-import-missing-url-fabricates-rule.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Always include a string or url() in @import preludes.
+remediation: Track whether a URL was found and return null from handleImportRule when the prelude never matched a <url> or <string>.
+status: open
+history:
+    - at: "2026-09-03T21:26:49Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:07Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-title
+    - at: "2026-09-03T21:41:30Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-162.yaml
+    - at: "2026-09-03T21:54:10Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0007/C08
+    - at: "2026-09-03T22:42:17Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0018/C03,add-source-claim=CRS-0018/C18
+    - at: "2026-09-03T23:25:33Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0027/C06
+    - at: "2026-09-04T00:02:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0038/C08
+    - at: "2026-09-04T19:00:46Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0041/C08
+source_claim:
+    - CRS-0002/C11
+    - CRS-0003/C09
+    - CRS-0007/C08
+    - CRS-0018/C03
+    - CRS-0018/C18
+    - CRS-0027/C06
+    - CRS-0038/C08
+    - CRS-0041/C08

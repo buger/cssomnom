@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260821-6D9T
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-relative-selector-matches.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T10:40:15Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-225` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0020-relative-selector-matches.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0020-relative-selector-matches.ts
+      freshness_hashes:
+        proof/known-issues/KI-225.yaml: ki-content-v1:sha256:ac0607291d3d08b4335eefebd1728df09765b35eb4cc92247f8614ed21cb1ed4
+        proof/reproducers/CRS-0020-relative-selector-matches.ts: sha256:99de5c3aa7495cd378e058272f777be02f31456d424b26bfaf9a0f167687779a
+      known_issues:
+        - KI-225

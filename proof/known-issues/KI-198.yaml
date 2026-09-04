@@ -1,0 +1,34 @@
+id: KI-198
+title: Tokenizer folds trailing comments into the EOF token span instead of an empty span
+description: Tokenizer.tokenize captures the position before consumeToken (src/tokenizer.ts:59). consumeToken eats trailing comments first, then returns the EOF token. tokenize then paints the consumed comment bytes onto startIndex, endIndex and originalText. css-syntax-3 4.3.1 consume-token returns an EOF token with no associated data. INT-REQ-260826-GTCS requires exactly one EOF token with an empty span at end of input. tokenize('ident/*c*/') reports EOF.originalText with span [5,10]. Comment-only input and unclosed trailing comments hit the same wiring.
+affected_requirements:
+    - INT-REQ-260826-GTCS
+evidence_manifests:
+    - proof/evidence/ki-198.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: Tokenizer.tokenize and the public tokenize() wrapper (src/tokenizer.ts L55-70)
+attacker_input: CSS text ending in a comment, including comment-only and unclosed comments; local library input, no trust boundary crossed
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0012-eof-span-comments.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Consumers that need an empty EOF span should slice tokens themselves and ignore the last token's originalText.
+remediation: After consumeToken returns EOF, reset the token span so originalText stays empty and startIndex equals endIndex.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:05Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-198.yaml
+kill_domain: span_accounting
+source_claim:
+    - CRS-0012/C01
+    - CRS-0012/C02
+    - CRS-0012/C03
+    - CRS-0012/C04

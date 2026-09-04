@@ -1,0 +1,30 @@
+id: KI-238
+title: consumeNumber drifts from the decimal literal for fractional inputs like 0.3
+description: consumeNumber accumulates the significand as an integer and scales with Math.pow(10, power) (src/AbstractTokenizer.ts:455-492). css-syntax-3 consume-a-number step 5 interprets the number part as a base-10 number, which yields Number('0.3') === 0.3. The scaling instead computes 3 * 10^-1 = 0.30000000000000004, and 0.6 drifts the same way. Numeric token values then disagree with the decimal literal the author wrote.
+affected_requirements:
+    - SW-REQ-260821-7M07
+evidence_manifests:
+    - proof/evidence/ki-238.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: Tokenizer numeric token value (src/AbstractTokenizer.ts consumeNumber)
+attacker_input: any stylesheet fractional or scientific-notation number; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-number-float-drift.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Round-trip numeric strings through Number() when exact decimal equality matters.
+remediation: Build the number-part string and call Number() on it, matching css-syntax-3 step 5 base-10 interpretation.
+status: open
+history:
+    - at: "2026-09-03T22:58:46Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:20Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-238.yaml
+kill_domain: numeric_precision
+source_claim: CRS-0022/C05

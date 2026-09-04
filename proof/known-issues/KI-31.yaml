@@ -59,6 +59,10 @@ history:
       by: agent:ox-alpha
       action: edit
       detail: append-note
+    - at: "2026-09-04T00:02:32Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0037/C01
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -87,3 +91,4 @@ dedup_armor: |
     serializeMediaCondition drops grouping parentheses between and/or operands, corrupting condition semantics on re-parse. Distinct from KI-5 (unbalanced-paren input recovery) and KI-41 (Parser-API adapter joins prelude tokens with '' - token-stream layer). Do not merge into generic media-text normalization without re-parse semantic-equivalence evidence.
 kill_domain: condition_serialization_equivalence
 do_not_refile_as: 'unbalanced-paren ''(( media query serialization as not all (KI-5); grouped-negation media-condition round-trip collapse (canonical: KI-115): same serializeMediaCondition paren-loss subsystem; this KI pins nested or/and operand grouping specifically'
+source_claim: CRS-0037/C01

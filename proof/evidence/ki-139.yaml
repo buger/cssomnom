@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SW-REQ-260822-QKE9
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-unknown-query-not-folded.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:43:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-139` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0001-unknown-query-not-folded.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0001-unknown-query-not-folded.ts
+      freshness_hashes:
+        proof/known-issues/KI-139.yaml: ki-content-v1:sha256:9dba1fe1025a726fc15b57f63193831a8621fa6199ecf8ab6b6ac7ec80941f82
+        proof/reproducers/CRS-0001-unknown-query-not-folded.ts: sha256:0ba6c580a52791f4bb713e0e5b594b10d6b77a158f6f930e9fdbe7ca2e9a8afe
+      known_issues:
+        - KI-139

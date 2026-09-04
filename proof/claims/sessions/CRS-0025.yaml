@@ -1,0 +1,33 @@
+id: CRS-0025
+spec_reqids:
+    - SW-REQ-260821-E5D5
+state: complete
+backend: grok
+model: grok-4.6
+cells:
+    - req_id: SW-REQ-260821-E5D5
+      dir: .proof/defect-sessions/CRS-0025/cells/SW-REQ-260821-E5D5
+      status: complete
+      attempts: 1
+      elapsed_secs: 919.077340643
+      artifact_hashes:
+        deliverable.md: sha256:20a8c941fdb7c39563e74a42a4620ce5e16566179f89c5aabbc200e75739be57
+        ledger.jsonl: sha256:0e48c2feda5a369deac3844b3198db58292bb0f6019f8bfa16d532db4b38d894
+        reviewed-list.txt: sha256:7c00f56b3e564b802c2d138b7c9a2c2cddcfc73dc32ee8cd2b312078cc14cbde
+input_fingerprint:
+    spec_yaml_sha: sha256:3d2ae9734111e0f2d2fe5f0e0ff0b9b2528a5500c0425002aaea69f6121396e5
+    code_fingerprints:
+        src/typed-om/numeric/CSSUnitValue.ts: sha256:8ff4fb86459bd2b049fadaa220c2d3d4c86697c53c374f73efd339767e6b68ab
+        src/typed-om/numeric/numeric-methods.ts: sha256:292e375742e16e9f6d2e2d27b3c2332b02aa05669059abe9b8320ef9216bbc75
+        src/typed-om/position/position-parser.ts: sha256:effd0e0eaba50fe2f73e5dc81a47ecac69b1522ab3c37cdc0dd550f23a675f22
+        src/typed-om/values/style-value-parser.ts: sha256:8fa997a621d6aa6df83e75fd47a6c7521ab776214c8e3cead13eef9f4ef8e690
+    claims_sha: sha256:b797ee0c2dd44d32dbca8b69fc24263f3e33426fea7af74263cc04c9706568f0
+    prompt_sha: 615a808bdaf817ea584d2ec0d63075a4a2cb89830d87461c99da7493ea247131
+usage:
+    input_tokens: 105639
+    output_tokens: 53376
+    cost_usd: 0.1594923
+    wall_secs: 919.077340643
+    cells_metered: 1
+created_at: "2026-09-03T20:15:59Z"
+updated_at: "2026-09-03T21:31:34Z"

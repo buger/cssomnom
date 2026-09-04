@@ -81,3 +81,12 @@ lifecycle:
           to: approved
           reason: 're-approve (prior: role="spec-conformance" reviewer="agent:grok-4.6" at=2026-08-22T06:56:42Z comment="Class-closure DEFECT-3T1G: @import url-token copies into href.")'
           changed_by: human:Leonid Bugaev
+defect_review:
+    reviewed_at: "2026-09-03T21:11:45Z"
+    session: CRS-0018
+    fingerprint_sha: sha256:4519bc0e0c6e47ea7975529775b60acbb4bb5ae0ed3902a9879feef187b64b20
+    via: cli-session
+    counts:
+        emitted: 18
+        verified: 7
+        dismissed: 11

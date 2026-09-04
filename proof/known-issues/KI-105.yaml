@@ -22,6 +22,33 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Treat style values read from parsed stylesheets as unvalidated when property-specific validity matters.
 remediation: Apply the property grammar during stylesheet declaration parsing and drop a declaration whose entire value is invalid, while preserving neighboring valid declarations.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+    - Root KI after deduplicating retired KI-106; parser, setProperty, and cssText branches are independently exercised.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:41Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:48:00Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-105.yaml
+    - at: "2026-08-22T16:51:40Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement
+    - at: "2026-08-22T17:13:10Z"
+      by: agent:codex
+      action: edit
+      detail: set-title,set-description,set-affected-api,append-note,add-requirement
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C02,add-source-claim=CRS-0028/C04,add-source-claim=CRS-0028/C13,add-source-claim=CRS-0028/C31
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -46,26 +73,8 @@ poc_quality:
         no_inflation: one property family, three surfaces, medium ceiling.
         operational_path_verified: all three real ingestion paths exercised end-to-end.
         reachability_verified: N/A-eligible local-behavioral finding through real parse/setProperty/cssText entries.
-notes:
-    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
-    - Root KI after deduplicating retired KI-106; parser, setProperty, and cssText branches are independently exercised.
-owner: agent:codex
-review_date: "2026-09-22"
-release_disposition: ship_with_known_issue
-status: open
-history:
-    - at: "2026-08-22T16:47:41Z"
-      by: agent:codex
-      action: created
-    - at: "2026-08-22T16:48:00Z"
-      by: human:cli
-      action: capture-evidence
-      detail: proof/evidence/ki-105.yaml
-    - at: "2026-08-22T16:51:40Z"
-      by: agent:codex
-      action: edit
-      detail: append-note,add-requirement
-    - at: "2026-08-22T17:13:10Z"
-      by: agent:codex
-      action: edit
-      detail: set-title,set-description,set-affected-api,append-note,add-requirement
+source_claim:
+    - CRS-0028/C02
+    - CRS-0028/C04
+    - CRS-0028/C13
+    - CRS-0028/C31

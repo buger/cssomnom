@@ -1,0 +1,30 @@
+id: KI-168
+title: translate/rotate/scale arity check strips commas so invalid comma values parse
+description: 'The individual transform branches filter comma tokens out of the value before the arity check. css-transforms-2 types these properties as space-separated grammars, so a comma invalidates the value. translate: 10px, 20px reifies as CSSTranslate instead of throwing TypeError per css-typed-om-1 parse-a-cssstylevalue step 3.'
+affected_requirements:
+    - INT-REQ-260821-9SGA
+evidence_manifests:
+    - proof/evidence/ki-168.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse translate/rotate/scale branches (src/typed-om/values/style-value-parser.ts)
+attacker_input: caller-supplied transform values containing commas; local API input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-translate-comma-arity-bypass.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Write space-separated transform values until commas fail the parse.
+remediation: Reject the value when a top-level comma appears in the translate, rotate, or scale grammar before filtering.
+status: open
+history:
+    - at: "2026-09-03T21:27:29Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T21:41:32Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-168.yaml
+source_claim: CRS-0003/C06

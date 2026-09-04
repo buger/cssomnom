@@ -1,0 +1,30 @@
+id: KI-240
+title: Tokenizer folds leading comments into the next token span and originalText
+description: tokenize snapshots start before consumeToken runs consumeComments, so a preceding comment joins the following token's startIndex, endIndex, and originalText (src/tokenizer.ts:59-63). The ident in '/*c*/ foo' reports originalText '/*c*/foo' and startIndex 0. The span no longer describes the token's own source segment and disagrees with token.value.
+affected_requirements:
+    - SW-REQ-260821-7M07
+evidence_manifests:
+    - proof/evidence/ki-240.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: Token span metadata returned by tokenize (src/tokenizer.ts tokenize; startIndex/endIndex/originalText)
+attacker_input: any stylesheet containing comments before tokens; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0022-comment-span-attribution.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Do not rely on originalText or indices for tokens that follow comments; re-derive from value.
+remediation: Capture start after consumeComments clears leading trivia inside consumeToken, or adjust spans in tokenize.
+status: open
+history:
+    - at: "2026-09-03T22:58:55Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:20Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-240.yaml
+kill_domain: span_attribution
+source_claim: CRS-0022/C13

@@ -1,0 +1,30 @@
+id: KI-205
+title: parseComponentValueSync returns null for empty input instead of a syntax error
+description: parseComponentValueSync returns null when only whitespace and comments remain (src/parser-api.ts:603-605). css-syntax-3 5.4.8 parse-a-component-value step 3 returns a syntax error for empty input after discarding whitespace. The same function already throws for leftover tokens at step 6, so the empty arm is inconsistent with its own leftover check.
+affected_requirements:
+    - SW-REQ-260821-2Z0N
+evidence_manifests:
+    - proof/evidence/ki-205.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: CSS.parseComponentValue / parseComponentValueSync (src/parser-api.ts L599-612)
+attacker_input: empty, whitespace-only, or comment-only strings passed to parseComponentValue; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0014-parse-component-value-empty-null.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Check for null results at the call site and treat them as syntax errors.
+remediation: Throw a SyntaxError DOMException when the filtered token list is empty, matching css-syntax-3 5.4.8 step 3.
+status: open
+history:
+    - at: "2026-09-03T22:19:45Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:07Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-205.yaml
+kill_domain: error_signaling
+source_claim: CRS-0014/C11

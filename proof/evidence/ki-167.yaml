@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-9SGA
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-typed-om-grammar-gate-bypasses.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:41:32Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-167` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0003-typed-om-grammar-gate-bypasses.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0003-typed-om-grammar-gate-bypasses.ts
+      freshness_hashes:
+        proof/known-issues/KI-167.yaml: ki-content-v1:sha256:8920a888897e36c6bef0e40dc16c30d7f1923bf62fa3dbdb2e36979655b80bf3
+        proof/reproducers/CRS-0003-typed-om-grammar-gate-bypasses.ts: sha256:a8a0866b3b7edbf1c3384eca7ec6c89853322dd0457c23fcce65549addc29e5f
+      known_issues:
+        - KI-167

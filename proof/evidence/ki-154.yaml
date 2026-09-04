@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-JTY2
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-rotateaxisangle-is2d.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T21:19:10Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-154` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-rotateaxisangle-is2d.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0005-rotateaxisangle-is2d.ts
+      freshness_hashes:
+        proof/known-issues/KI-154.yaml: ki-content-v1:sha256:69192d5f0e35b3f0a218a5b6721e4a4ea3841f33f35ce5d4a0b29dfc381edbdc
+        proof/reproducers/CRS-0005-rotateaxisangle-is2d.ts: sha256:69b2b5505eaef3021f9d9fd872052f871ca3911dcabdd4ac5bbe6571576af1fa
+      known_issues:
+        - KI-154

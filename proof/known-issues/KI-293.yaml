@@ -1,0 +1,34 @@
+id: KI-293
+title: matchesSyntax ignores multipliers on ident-literal components and rejects valid lists
+description: 'consumeSyntaxComponent records the ''+'' and ''#'' multiplier for ident-literal syntax components (src/PropertyRegistry.ts:142-144). matchesSyntax''s ident branch requires exactly one ident token and never reads comp.multiplier (src/PropertyRegistry.ts:262-265). css-properties-values-api #multipliers defines ''<ident>+'' as a space-separated list and ''<ident>#'' as a comma-separated list. registerProperty({syntax:''foo+'', initialValue:''foo foo''}) therefore throws ''does not match syntax'' instead of registering.'
+affected_requirements:
+    - SW-REQ-260821-V5GA
+evidence_manifests:
+    - proof/evidence/ki-293.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: PropertyRegistry.matchesSyntax ident-literal arm (src/PropertyRegistry.ts)
+attacker_input: 'property definitions whose syntax string repeats a literal with the + or # multiplier; local library input'
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0036-ident-literal-multiplier.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Use <custom-ident>+ instead of a literal with a multiplier until the matcher handles the list forms.
+remediation: Apply the same '#'/'+' branching the <type> arm uses to the ident-literal arm of matchesSyntax.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T00:01:18Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T10:40:41Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-293.yaml
+kill_domain: literal_multiplier_matching
+source_claim: CRS-0036/C11

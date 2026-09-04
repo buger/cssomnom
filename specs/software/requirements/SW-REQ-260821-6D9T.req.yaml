@@ -86,3 +86,12 @@ lifecycle:
 audit_ignore:
     - check: under_modeled_requirements_clean
       reason: "Intentionally coarse forgiving-selector contract: rejected selectors yield empty matches instead of throwing; witnessed by tests/mcdc-witness-selectors-media.test.ts and tests/mcdc-is-valid-selector-unique-cause.test.ts. Selector grammar depth is owned by the SelectorParser family models."
+defect_review:
+    reviewed_at: "2026-09-03T21:17:28Z"
+    session: CRS-0020
+    fingerprint_sha: sha256:7c5b495181a1f258fc105a24a747fcc213a3ad359601ee6923bafa3005ca7247
+    via: cli-session
+    counts:
+        emitted: 30
+        verified: 17
+        dismissed: 13

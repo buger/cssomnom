@@ -1,0 +1,43 @@
+id: KI-193
+title: Parser API drops every @font-face, @property, @counter-style and @page descriptor
+description: 'cssomAtRuleFromFields carries no arm for descriptor-bearing rule classes. The cssText fallback sets hasBody from the ''{'' block and then uses `cssRules ?? []` for the body. CSSFontFaceRule, CSSPropertyRule, CSSCounterStyleRule and CSSPageRule keep descriptors in .style, not cssRules, so the body stays empty. parseStylesheetSync(''@font-face { src: url(x); }'') serializes as ''@font-face{}''. css-syntax-3 #serialization requires the round trip to keep the content, and INT-REQ-260821-WTPD guarantees parser_ast_adapted. The CSSOM layer still holds the descriptors, so only the Parser API loses them.'
+affected_requirements:
+    - INT-REQ-260821-WTPD
+evidence_manifests:
+    - proof/evidence/ki-193.yaml
+severity: medium
+severity_basis: risk
+risk: data_integrity
+cve_surface: none
+affected_api: parseStylesheetSync/toParserRule -> cssomAtRuleFromFields descriptor at-rules (src/parser-api.ts)
+attacker_input: ordinary stylesheet text with @font-face, @property, @counter-style or @page rules; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types proof/reproducers/CRS-0068-atrule-descriptor-body-dropped.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Read descriptors from the CSSOM .style of those rules instead of the Parser API body.
+remediation: Add instanceof arms for the descriptor at-rules and map .style through styleToParserDeclarations so the body carries CSSParserDeclaration nodes.
+status: open
+history:
+    - at: "2026-09-03T22:14:07Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-03T23:25:41Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0029/C06
+    - at: "2026-09-03T23:37:55Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0030/C12,add-source-claim=CRS-0030/C21
+    - at: "2026-09-04T10:40:03Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-193.yaml
+do_not_refile_as: KI-40 covers qualified-rule bodies; this filing covers at-rule descriptor bodies
+source_claim:
+    - CRS-0068/C05
+    - CRS-0029/C06
+    - CRS-0030/C12
+    - CRS-0030/C21

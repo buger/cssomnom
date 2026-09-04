@@ -20,6 +20,40 @@ defect_class: latent
 minimization_status: minimized
 mitigation: Read the descriptor getter rather than cssText after a CSSCounterStyleRule setter.
 remediation: Make each valid descriptor setter update the associated declaration state used by CSSRule.cssText serialization; reject invalid values per the descriptor grammar.
+notes:
+    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
+owner: agent:codex
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-08-22T16:47:14Z"
+      by: agent:codex
+      action: created
+    - at: "2026-08-22T16:47:59Z"
+      by: human:cli
+      action: capture-evidence
+      detail: proof/evidence/ki-102.yaml
+    - at: "2026-08-22T16:51:39Z"
+      by: agent:codex
+      action: edit
+      detail: append-note,add-requirement
+    - at: "2026-09-03T22:03:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0008/C14
+    - at: "2026-09-03T23:25:47Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0028/C16
+    - at: "2026-09-03T23:38:05Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0031/C05
+    - at: "2026-09-03T23:45:58Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0035/C09
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -44,21 +78,8 @@ poc_quality:
         no_inflation: single-descriptor scope keeps severity at medium.
         operational_path_verified: real setter->getter path through the public rule object.
         reachability_verified: N/A-eligible local-behavioral finding; reached through genuine CSSOM accessors.
-notes:
-    - Bound to a narrowly modeled draft requirement created through Proof because no existing requirement honestly covered this API-specific conformance contract.
-owner: agent:codex
-review_date: "2026-09-22"
-release_disposition: ship_with_known_issue
-status: open
-history:
-    - at: "2026-08-22T16:47:14Z"
-      by: agent:codex
-      action: created
-    - at: "2026-08-22T16:47:59Z"
-      by: human:cli
-      action: capture-evidence
-      detail: proof/evidence/ki-102.yaml
-    - at: "2026-08-22T16:51:39Z"
-      by: agent:codex
-      action: edit
-      detail: append-note,add-requirement
+source_claim:
+    - CRS-0008/C14
+    - CRS-0028/C16
+    - CRS-0031/C05
+    - CRS-0035/C09

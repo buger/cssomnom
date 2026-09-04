@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: INT-REQ-260821-WQX9
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0008-font-feature-nan.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-03T22:03:22Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-186` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0008-font-feature-nan.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
+        - proof/reproducers/CRS-0008-font-feature-nan.ts
+      freshness_hashes:
+        proof/known-issues/KI-186.yaml: ki-content-v1:sha256:59ededccd49e7a270eb374c7f247b03aecd6a25b3ea2f0297df7d9667427a0b9
+        proof/reproducers/CRS-0008-font-feature-nan.ts: sha256:c485fd99b7ef2c38ee5fe8af7214ffc8ff7cd2779b038ea26bb7673fc788302b
+      known_issues:
+        - KI-186
