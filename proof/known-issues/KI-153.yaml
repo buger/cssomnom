@@ -6,13 +6,14 @@ affected_requirements:
 evidence_manifests:
     - proof/evidence/ki-153.yaml
 severity: high
-severity_basis: risk
+severity_basis: reproducer
 risk: correctness
 cve_surface: none
 affected_api: DOMMatrix.multiplySelf, preMultiplySelf, translateSelf, scaleSelf, rotateSelf, skewXSelf, skewYSelf, flipX, flipY
 attacker_input: geometry call sequences from callers; local library input, no trust boundary crossed
 sanitizer: manual:logic
 reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-premultiply-convention.ts
+tripwire_mutation: 'Post-multiply every mutable transform method in src/DOMMatrix.ts (translateSelf, scaleSelf, rotateSelf, rotateAxisAngleSelf, skewXSelf, skewYSelf), swap the multiplySelf and preMultiplySelf operand order, and negate m11/m12 for flipX and m21/m22 for flipY per geometry-1 #mutable-transformation-methods'
 introduced_in: inception
 defect_class: latent
 minimization_status: minimized
@@ -20,7 +21,7 @@ mitigation: Compose transforms with the immutable methods and verify the spec ex
 remediation: Post-multiply every transform in the mutable methods, swap the multiplySelf and preMultiplySelf operand order, and negate m11/m12 for flipX and m21/m22 for flipY.
 owner: maintainer:conformance_owner
 review_date: "2026-09-03"
-status: reviewed
+status: open
 history:
     - at: "2026-09-03T21:15:13Z"
       by: human:Leonid Bugaev
@@ -46,6 +47,18 @@ history:
       action: edit
       detail: set-cve-surface=none
     - at: "2026-09-04T10:41:20Z"
+      by: human:Leonid Bugaev
+      action: refresh-evidence
+      detail: proof/evidence/ki-153.yaml
+    - at: "2026-09-04T20:59:52Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-status=open
+    - at: "2026-09-04T21:00:11Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: set-severity-basis=reproducer,set-tripwire-mutation
+    - at: "2026-09-04T21:00:12Z"
       by: human:Leonid Bugaev
       action: refresh-evidence
       detail: proof/evidence/ki-153.yaml

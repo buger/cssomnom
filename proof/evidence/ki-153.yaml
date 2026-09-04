@@ -5,12 +5,12 @@ results:
       command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-premultiply-convention.ts
       status: fail
       observed_result: known_issue_reproduced
-      executed_at: "2026-09-04T10:41:20Z"
+      executed_at: "2026-09-04T21:00:12Z"
       input_set:
         - 'Captured by `proof evidence capture KI-153` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0005-premultiply-convention.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: assumed: the KnownIssue declares no tripwire_mutation and no polarity flag was passed.'
         - proof/reproducers/CRS-0005-premultiply-convention.ts
       freshness_hashes:
-        proof/known-issues/KI-153.yaml: ki-content-v1:sha256:fdc3aa0518ffb7b4243cf115a4ca3e5a28f349e660971c90b609a916f00756dc
+        proof/known-issues/KI-153.yaml: ki-content-v1:sha256:e8f2613364a3e04307a199b08dec939dae32584dcb11450abcdbb601510ea8a9
         proof/reproducers/CRS-0005-premultiply-convention.ts: sha256:6317384d2c20474d706154e2417f0e1b4bd63e969ad6367844f736c1e8defcce
       known_issues:
         - KI-153
