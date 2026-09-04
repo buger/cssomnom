@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-9YM3
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0054-at-property-syntax-holes-kept.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:12:24Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-339` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0054-at-property-syntax-holes-kept.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0054-at-property-syntax-holes-kept.ts
+      freshness_hashes:
+        proof/known-issues/KI-339.yaml: ki-content-v1:sha256:5c4ab03f49665f6fcc19399e06c8434c1b8a8a204e5a1305bae8387ab05d096e
+        proof/reproducers/CRS-0054-at-property-syntax-holes-kept.ts: sha256:398a1c31cafe05a05046cc662c739c47975b50c26513790fb49039e57ebfe4a6
+      known_issues:
+        - KI-339

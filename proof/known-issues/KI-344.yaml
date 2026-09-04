@@ -1,0 +1,34 @@
+id: KI-344
+title: PropertyRegistry.get returns the live record; mutating origin bypasses the duplicate check
+description: PropertyRegistry.get returns the Map value by reference, including the internal origin tag. A caller that flips record.origin to 'css' defeats the JS-then-JS duplicate branch. The second register of the same name then overwrites silently. register-a-custom-property step 2 requires InvalidModificationError for any repeated name.
+affected_requirements:
+    - SYS-REQ-260821-EGCP
+evidence_manifests:
+    - proof/evidence/ki-344.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: PropertyRegistry.get / PropertyRegistry.register (src/PropertyRegistry.ts)
+attacker_input: mutation of the object returned by PropertyRegistry.get; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0055-registry-get-alias-bypass.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Treat the object returned by get() as read-only.
+remediation: Return a copy without the origin member from get(), or freeze the stored record at registration time.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T20:12:05Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:12:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-344.yaml
+kill_domain: registry_state_aliasing
+do_not_refile_as: 'KI-284: that pins the raw-name Map key; this KI pins the get() aliasing of the stored record'
+source_claim: CRS-0055/C30

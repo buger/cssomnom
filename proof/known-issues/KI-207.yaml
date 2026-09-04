@@ -38,9 +38,14 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-207.yaml
+    - at: "2026-09-04T20:12:44Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0059/C23
 kill_domain: resource_cleanup
 source_claim:
     - CRS-0014/C14
     - CRS-0015/C15
     - CRS-0029/C10
     - CRS-0030/C10
+    - CRS-0059/C23

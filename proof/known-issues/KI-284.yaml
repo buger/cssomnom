@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-284.yaml
+    - at: "2026-09-04T20:12:49Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0055/C20
 kill_domain: registry_key_identity
 do_not_refile_as: 'origin-policy overwrite rules (spec-mandated): JS-over-CSS overwrite is required behavior'
 source_claim:
     - CRS-0032/C20
     - CRS-0036/C02
+    - CRS-0055/C20

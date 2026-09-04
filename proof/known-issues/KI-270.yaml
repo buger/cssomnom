@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0053/C18
+    - at: "2026-09-04T20:12:49Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0056/C21
 kill_domain: grammar_gate_bypass
 source_claim:
     - CRS-0028/C25
     - CRS-0031/C30
     - CRS-0053/C18
+    - CRS-0056/C21

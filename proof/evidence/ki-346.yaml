@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-GR67
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-rule-list-constructors-alias-caller-arrays.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:12:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-346` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-rule-list-constructors-alias-caller-arrays.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0056-rule-list-constructors-alias-caller-arrays.ts
+      freshness_hashes:
+        proof/known-issues/KI-346.yaml: ki-content-v1:sha256:1c68c2497844a9344b44108377531a0f29f7e7ddeadb6d0277c13a4c0c6d15ae
+        proof/reproducers/CRS-0056-rule-list-constructors-alias-caller-arrays.ts: sha256:085e96d4ca80e26891eb0d842171c1148f3b7e0c7ff5b7365fd3450d588491c1
+      known_issues:
+        - KI-346

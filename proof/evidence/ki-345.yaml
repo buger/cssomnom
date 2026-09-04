@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-GR67
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-property-rule-csstext-missing-space.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:12:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-345` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-property-rule-csstext-missing-space.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0056-property-rule-csstext-missing-space.ts
+      freshness_hashes:
+        proof/known-issues/KI-345.yaml: ki-content-v1:sha256:2bf430ade93a2295a8c1d5b4437a508a356bda0013deb1566a88468fbc6bd036
+        proof/reproducers/CRS-0056-property-rule-csstext-missing-space.ts: sha256:935225aa4f8b3037ddb695235ea27d96ade21cbbc95e8e219bc6188a9440e3ec
+      known_issues:
+        - KI-345

@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-245.yaml
+    - at: "2026-09-04T20:12:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0054/C06
 kill_domain: registered_initial_value_independence
 do_not_refile_as: 'empty-string syntax coercion (KI-190) and matcher gaps (KI-111): different validate arms'
 source_claim:
     - CRS-0024/C02
     - CRS-0032/C07
+    - CRS-0054/C06

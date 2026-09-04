@@ -39,8 +39,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-216.yaml
+    - at: "2026-09-04T20:12:49Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0056/C12
 source_claim:
     - CRS-0019/C15
     - CRS-0028/C11
     - CRS-0031/C04
     - CRS-0035/C07
+    - CRS-0056/C12

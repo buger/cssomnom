@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-247.yaml
+    - at: "2026-09-04T20:12:49Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0055/C12
 kill_domain: reject_valid_syntax_strings
 do_not_refile_as: 'empty-string syntax coercion (KI-190): opposite direction, accept-invalid vs reject-valid'
 source_claim:
     - CRS-0024/C14
     - CRS-0036/C10
+    - CRS-0055/C12

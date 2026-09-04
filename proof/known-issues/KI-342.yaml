@@ -1,0 +1,30 @@
+id: KI-342
+title: Typed OM parse skips calc/min/max/clamp grammar when the math function contains var()
+description: validateMathFunctions bypasses parseMathFunction whenever a math-function argument contains var(). calc(var(--x) + ) ends with a dangling operator, so no substitution can ever satisfy the css-values-4 calc grammar. css-typed-om-1 6.6 parse-a-cssstylevalue step 3 must throw TypeError, matching the var()-free twin calc(1px + ). The parse returns a CSSUnparsedValue instead.
+affected_requirements:
+    - SYS-REQ-260821-HGFK
+evidence_manifests:
+    - proof/evidence/ki-342.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+cve_surface: none
+affected_api: CSSStyleValue.parse / _parseAll validateMathFunctions (src/typed-om/values/style-value-parser.ts)
+attacker_input: caller-supplied property values embedding var() inside calc, min, max, or clamp; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0058-calc-var-skips-math-validation.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Keep var()-bearing math functions structurally valid; the dangling-operator forms parse silently today.
+remediation: Run parseMathFunction on the non-var() structure of calc/min/max/clamp, or throw when the residual operator sequence cannot close for any substitution.
+status: open
+history:
+    - at: "2026-09-04T20:11:54Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:11:59Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-342.yaml
+source_claim: CRS-0058/C16

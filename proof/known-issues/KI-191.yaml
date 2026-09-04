@@ -39,9 +39,15 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-191.yaml
+    - at: "2026-09-04T20:12:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0054/C10,add-source-claim=CRS-0055/C08
 do_not_refile_as: KI-161 covers the parser @import/@namespace prelude handlers, not the registered-syntax matcher
 source_claim:
     - CRS-0011/C06
     - CRS-0024/C11
     - CRS-0032/C18
     - CRS-0036/C12
+    - CRS-0054/C10
+    - CRS-0055/C08

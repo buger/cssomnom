@@ -1,0 +1,34 @@
+id: KI-345
+title: CSSPropertyRule.cssText omits the space between inherits and initial-value
+description: 'The cssText getter appends ''initial-value: ...'' directly after ''inherits: <v>;'' with no separator. cssom-1 #serializing-css-declarations requires each declaration to serialize as name, '': '', value, ''; ''. The rule therefore serializes as ''inherits: false;initial-value: 0;'', which is not canonical @property text.'
+affected_requirements:
+    - SYS-REQ-260821-GR67
+evidence_manifests:
+    - proof/evidence/ki-345.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: CSSPropertyRule.cssText (src/CSSOM.ts)
+attacker_input: any @property rule with an initial-value descriptor; no attacker required
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-property-rule-csstext-missing-space.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Re-serialize cssText output before echoing it into stylesheets.
+remediation: Append the initial-value clause with a leading space, mirroring the other descriptor clauses.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T20:12:11Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:12:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-345.yaml
+kill_domain: css_canonical_serialization
+do_not_refile_as: 'KI-275 and KI-21: those pin CSSNamespaceRule.cssText and hash/function identifier escaping, not @property cssText'
+source_claim: CRS-0056/C17

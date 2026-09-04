@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-EGCP
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0055-color-ident-prototype-match.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:12:24Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-343` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0055-color-ident-prototype-match.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0055-color-ident-prototype-match.ts
+      freshness_hashes:
+        proof/known-issues/KI-343.yaml: ki-content-v1:sha256:34a518df25a0a1dd70117b8b19d1af5199faddd57f58b96484ba02ed4303efb4
+        proof/reproducers/CRS-0055-color-ident-prototype-match.ts: sha256:9bd5e7000b9ad4feb62d0771984ae477159c8934d84d54ca9ca5b9880c776789
+      known_issues:
+        - KI-343

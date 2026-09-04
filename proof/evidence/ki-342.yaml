@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-HGFK
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0058-calc-var-skips-math-validation.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:11:59Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-342` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0058-calc-var-skips-math-validation.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0058-calc-var-skips-math-validation.ts
+      freshness_hashes:
+        proof/known-issues/KI-342.yaml: ki-content-v1:sha256:2080b307257ea9576a45bec01d319c85c7e4d76106d6a81e284a167c6f201b16
+        proof/reproducers/CRS-0058-calc-var-skips-math-validation.ts: sha256:d8b4669fdfebf8a3b0a0a0d7ff4dfb71122255c49311a98f31a8698478476d66
+      known_issues:
+        - KI-342

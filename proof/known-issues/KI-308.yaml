@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0043/C18
+    - at: "2026-09-04T20:12:37Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0057/C09
 kill_domain: ascii_case_insensitive_dispatch
 do_not_refile_as: 'KI-109 cascade substitution gate and KI-150 cascade substring test: those pin src/cascade; this KI pins the parser resolver'
 source_claim:
     - CRS-0069/C29
     - CRS-0043/C18
+    - CRS-0057/C09

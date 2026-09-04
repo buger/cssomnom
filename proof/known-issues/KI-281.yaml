@@ -34,8 +34,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-281.yaml
+    - at: "2026-09-04T20:12:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0055/C03
 kill_domain: syntax_string_grammar_gate
 do_not_refile_as: 'closed brace multipliers (KI-35): that KI covers {N}/{N,M} forms; this one pins the EOF closer'
 source_claim:
     - CRS-0032/C06
     - CRS-0036/C08
+    - CRS-0055/C03

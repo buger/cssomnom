@@ -1,0 +1,16 @@
+schema_version: proof.evidence_profile.v1
+results:
+    - profile: known_issue_reproducer
+      requirement: SYS-REQ-260821-EGCP
+      command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0055-registry-get-alias-bypass.ts
+      status: fail
+      observed_result: known_issue_reproduced
+      executed_at: "2026-09-04T20:12:25Z"
+      input_set:
+        - 'Captured by `proof evidence capture KI-344` from the KnownIssue''s reproducer command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0055-registry-get-alias-bypass.ts. The command exited fail; read as RED reproducer (asserts the correct behavior, so it FAILS while the defect is present), so this run is recorded as observed_result: known_issue_reproduced. Polarity basis: stated by the caller via --red-reproducer.'
+        - proof/reproducers/CRS-0055-registry-get-alias-bypass.ts
+      freshness_hashes:
+        proof/known-issues/KI-344.yaml: ki-content-v1:sha256:3007d8df7fd032cc848b14aaa7f416d255405f53f8d8ce7463df9f219d5dd6a2
+        proof/reproducers/CRS-0055-registry-get-alias-bypass.ts: sha256:914e0a4f25aa92e2efb562e60a3178fbb8d6e63d745285d78145f768156c9cdc
+      known_issues:
+        - KI-344

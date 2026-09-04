@@ -1,0 +1,37 @@
+id: KI-346
+title: Rule-list constructors alias caller arrays (keyframes, grouping, sheet list)
+description: CSSKeyframesRule, CSSGroupingRule subclasses such as CSSMediaRule, and StyleSheetList store the caller-supplied array by reference. insertRule, appendRule and later caller pushes therefore mutate the same array from both sides. The classes ship as public API through src/index.ts, and CSSStyleSheet.createInternal copies with push(...), so the aliasing is an isolation gap.
+affected_requirements:
+    - SYS-REQ-260821-GR67
+evidence_manifests:
+    - proof/evidence/ki-346.yaml
+severity: low
+severity_basis: risk
+risk: correctness
+affected_api: CSSKeyframesRule / CSSGroupingRule / StyleSheetList constructors (src/CSSOM.ts)
+attacker_input: caller-supplied rule arrays handed to the exported constructors; local library input
+sanitizer: manual:logic
+reproducer_command: /opt/node24/bin/node --experimental-strip-types --test proof/reproducers/CRS-0056-rule-list-constructors-alias-caller-arrays.ts
+introduced_in: inception
+defect_class: latent
+minimization_status: minimized
+mitigation: Pass freshly built arrays to these constructors; never share an array with the object model.
+remediation: Copy the argument in each constructor before storing it, as createInternal already does.
+owner: agent:adjudicator
+review_date: "2026-09-22"
+release_disposition: ship_with_known_issue
+status: open
+history:
+    - at: "2026-09-04T20:12:19Z"
+      by: human:Leonid Bugaev
+      action: created
+    - at: "2026-09-04T20:12:25Z"
+      by: human:Leonid Bugaev
+      action: capture-evidence
+      detail: proof/evidence/ki-346.yaml
+kill_domain: constructor_argument_aliasing
+do_not_refile_as: 'KI-216: that pins CSSStyleDeclaration renaming caller Declaration objects; KI-213: that pins indexed-proxy key handling'
+source_claim:
+    - CRS-0056/C11
+    - CRS-0056/C13
+    - CRS-0056/C14

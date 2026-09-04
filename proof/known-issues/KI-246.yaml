@@ -38,6 +38,10 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-246.yaml
+    - at: "2026-09-04T20:12:48Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0054/C18,add-source-claim=CRS-0055/C06
 kill_domain: grammar_closed_set_validation
 do_not_refile_as: 'brace multipliers {N}/{N,M} (KI-35): same grammar family, already filed'
 source_claim:
@@ -47,3 +51,5 @@ source_claim:
     - CRS-0032/C05
     - CRS-0036/C06
     - CRS-0036/C07
+    - CRS-0054/C18
+    - CRS-0055/C06

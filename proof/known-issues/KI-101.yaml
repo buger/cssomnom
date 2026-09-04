@@ -57,6 +57,10 @@ history:
       by: human:Leonid Bugaev
       action: edit
       detail: add-source-claim=CRS-0019/C21
+    - at: "2026-09-04T20:12:49Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0056/C23
 poc_quality:
     real_infrastructure: true
     quantitative_impact: true
@@ -84,3 +88,4 @@ poc_quality:
 source_claim:
     - CRS-0010/C14
     - CRS-0019/C21
+    - CRS-0056/C23

@@ -30,7 +30,13 @@ history:
       by: human:Leonid Bugaev
       action: capture-evidence
       detail: proof/evidence/ki-203.yaml
+    - at: "2026-09-04T20:12:44Z"
+      by: human:Leonid Bugaev
+      action: edit
+      detail: add-source-claim=CRS-0059/C01,add-source-claim=CRS-0059/C03
 kill_domain: error_signaling
 source_claim:
     - CRS-0014/C01
     - CRS-0015/C20
+    - CRS-0059/C01
+    - CRS-0059/C03
